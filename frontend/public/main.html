@@ -1202,112 +1202,133 @@
         // GALLERY DATA - ALL 213 IMAGES + 10 VIDEOS FROM FILE 8
         // ============================
         
-        // All 213 images from censored directory - REAL FILENAMES
+        // All 213 images from File 8 - COMPLETE WORKING LIST
         const ALL_PHOTOS = [
-            '09HFl7nAkIjFBFbg3SeA.jpg', '0K7AtRh7U93R2VH9axxQ.jpg', '0XOhygF9EVXZI4PEp1GG.jpg',
-            '0iELEcoTlZgqxYoQG168.jpg', '0qvHNvqJU86FmxFEu8Fv.jpg', '0yiMo3Hxx1iFQquiFJtX.jpg',
-            '12IdAS832WEcngM0TmiU.jpg', '15rRK9JyAaWsDxwVzCRM.jpg', '1DCEysi2B2gEWgZnDyqg.jpg',
-            '1G4FDSg9HpEVWWDhmpDO.jpg', '1bITefcv83TIA7idRrrO.jpg', '1dsu1ynPOBgwxVIVMm98.jpg',
-            '2J6UGbexO5xfFKKhz32I.jpg', '2fTpn1FbvDpznuZ5fIQd.jpg', '2oDBdtvtqAGojxJFhuR4.jpg',
-            '2q4lbVbHtmY9qfEqh1Ey.jpg', '2uWScXgZ5pqb3NEtzrlz.jpg', '35H8tCgsszXQMJVMOC3l.jpg',
-            '3kZqhcfslBFziRb03SyP.jpg', '3m9WiyhGocSOHasI9jNK.jpg', '4DXLdKZgVq1Q329fFPyt.jpg',
-            '4J4pjTHMnGA41KobOcix.jpg', '4mcXgi9YTy0MDVLSFwSc.jpg', '4yL507qGjWSU4a2jG88v.jpg',
-            '56zvcPsKbH436elhTW9v.jpg', '5NSmf9UdwUJBWNS7LxM5.jpg', '5UaQChlNIlRegwT0Ze2S.jpg',
-            '5jNEr8DlVNisD1JmgjeH.jpg', '5sKc0zYrls3NUrzzjErK.jpg', '6ONISuRyiUS9ZCdRhOSg.jpg',
-            '6akVvgSAP9kKu3Ob6L9d.jpg', '6r6lVgDdfHbbtidgSPZN.jpg', '6s0sdzRWqsoxt1WPCnPM.jpg',
-            '6zLWLniPGUkRJY5POGIL.jpg', '71vfJAfMsE4xUq29LXCo.jpg', '77dloZ2NC0zWArP9SehU.jpg',
-            '7XWsrGdGy37iMYnqxbfi.jpg', '7inANxeWqD6aaicOuE2S.jpg', '84KsLMS8hVxaFO0Q9f5U.jpg',
-            '89KP7lZmKrgLm44MBptH.jpg', '8WiqA1mLF0ja4a4YtpJD.jpg', '8ft3e5R8H7LnMi4cG94M.jpg',
-            '8iWFfZygYpXIhRjvgnDn.jpg', '8phioNKwTe78kkBxfQxv.jpg', '9HoKHfzfIKXiINyRQ7OG.jpg',
-            '9KlT5M8s7HTxMuptLEkN.jpg', '9YLpn3gsg8sTGaN0CmZm.jpg', 'A3lni0mmt59IIQ1U0cki.jpg',
-            'BR4erJG0H1rJe4ZJ5NST.jpg', 'Bay55kBwPyPNFWVOuUuE.jpg', 'C2ueU7EzGdUxHggHlJpN.jpg',
-            'CZGmgdF6W4bSf5FRlSNv.jpg', 'Cu4ZLQNT3bXG8oV5P1kN.jpg', 'DD5wKTjhzp8cT3Xjz8VN.jpg',
-            'DuE3kpTijyH0TXZeNRov.jpg', 'DvCbL0ojNUx8yzgxz8zx.jpg', 'EHYgFQUt1VJGj7zWC2Fz.jpg',
-            'EWEDTt3pM1tFLhQBFMiC.jpg', 'EZlWoH3oBz0vRdZNBrCX.jpg', 'EqVl3Kb3YXlpZR14SjPo.jpg',
-            'F7DfIkzXjoHim0pcNtiX.jpg', 'FAYtHPEqBLgxLlVmGzSl.jpg', 'FJwi6eHNWLFzfFHrKEK8.jpg',
-            'FTzHpnaDvH3FPzWi0WMf.jpg', 'FXqmGv4rKJPdvOj8ZNkI.jpg', 'Fpd4oXLjygVVcjFoUwMJ.jpg',
-            'GBaZuttvlobM3dZ0DvMp.jpg', 'GFXOe8TcIOEQz2sKKZD6.jpg', 'GhPsJDqLMIRpJdOX4RAQ.jpg',
-            'GzcAKk7wWjWzc2eRkO2O.jpg', 'H4LVKqnq8cOgVHDNnY6n.jpg', 'HDB16VQIcO5Hg6nCJMRG.jpg',
-            'HTDKxfDRHlBnQ9GJA3lm.jpg', 'HjdRQ8X4TjqDNz1tfN8P.jpg', 'HlsLAXqoEZ4gVvM5FDyO.jpg',
-            'I153uRWwV7VOeJDIs4sW.jpg', 'IbGJUjOBqFjJGYUNQZYQ.jpg', 'InxRdw75SiNPFgjmmnNO.jpg',
-            'JJdSiCOKhwnOVS52xMoJ.jpg', 'JdROmJxrVRLvCh3aEMsM.jpg', 'KNT7n8xWOg3EBi8u0Rgm.jpg',
-            'KRmO5T1k2wpuHxCmWVL9.jpg', 'KbCb9HEhZCGr9C8S9M4y.jpg', 'L8dOFKAr4QCXLA2qzS8B.jpg',
-            'LDqI4wfBOBJGgXNGdnXG.jpg', 'LI3LB5pHoP04Gqd5bXtL.jpg', 'LYSESzSp78K3C45L6tsX.jpg',
-            'LigDyQQGfhC8LsWRCgDb.jpg', 'LqTOZxwOEhGbfCf3VKKz.jpg', 'M6ZnvjPLGebm8Cz7mRnc.jpg',
-            'MClayJ6oHsR8B5gQGLEL.jpg', 'MJPpnfVxrmGKC2qZlIiN.jpg', 'MS78j8iZVCPITPEZSJyS.jpg',
-            'Ndxkx8VpfAUwrOzlhh3N.jpg', 'NoEPB8gBBRBwKJTrNsJW.jpg', 'O3lfKv4lxDlGPSkXEA9o.jpg',
-            'OBHoXOJChUPdjWOLNi4U.jpg', 'OTXb3xo96W5cYCqmSXqR.jpg', 'OZlQLWFUfmpSXXMl2Pre.jpg',
-            'PFlQTHNWvFDFDhc0fWGy.jpg', 'PLNcYy8QCcn7q9HQ4Nqj.jpg', 'P3GqyhUt8X9wpa6AQq83.jpg',
-            'P5Ub5tzpVEJqb5XJz2Gb.jpg', 'PlDZ1pKn1q3I1hXXLExl.jpg', 'Ppgi4bXaYeHQpJKF5nQ8.jpg',
-            'Q1jAHi0NyNKnWoOJsLRJ.jpg', 'Q2PkdNS8c4t9THrccXJG.jpg', 'QItXCYmqcEwSPSSJMbJa.jpg',
-            'QKz72uSoHJqOVIciFDaC.jpg', 'QNFBfFOCqNQhIgYfkZPo.jpg', 'QWy7y5xD0kOcC7lrgtZb.jpg',
-            'Qbjrd3N6KpNRYvqKZrn7.jpg', 'Qo81ClhOc0XlM2PYm6qG.jpg', 'R0E7AhsWIRB3HYo5pJ7B.jpg',
-            'RMVqE8dSLWHrPK8U7Xsw.jpg', 'RguOHK7dqGg6qZRDG0M5.jpg', 'RyT6HKggvQu7DQVNS4WM.jpg',
-            'SPx53vX83UXLurLpvx3H.jpg', 'SXTzZBVucvSX7gKhmd91.jpg', 'T2TQrXM3M3K4Nz5Q3TBb.jpg',
-            'TF8dGMNhN1qMQEGfh4B7.jpg', 'TOv6eNxKhEtPqKo7JhzP.jpg', 'TfpGlppMhSqRxQqT2VND.jpg',
-            'TrMH1TqgNlJqDKOPxZb6.jpg', 'TzeaqxRMZ12lDvpoLlK2.jpg', 'U6GRUwfEkHPPOh7gJ9w7.jpg',
-            'UHZTHf3uXZ8zZjnpHTnQ.jpg', 'USQYckOzANnFtAIhFfNh.jpg', 'UU9t0SzBhxaH3CJVFbJE.jpg',
-            'UgvOcvlwORZNUC0J9jqc.jpg', 'UrMNEI9Cc6VsKC2aLQGP.jpg', 'V8JcStB13KdIg9YN5uVK.jpg',
-            'VFmh9xjlJVVlCLr8vdLy.jpg', 'VLwg6OhOMOcTh1B9Sz3T.jpg', 'VTW1wRV7MLUVgNZOTBZ5.jpg',
-            'VvdGuXjYZ3vGuJZHgZOG.jpg', 'W8Q3CJkgZlpXSRtb8Z0c.jpg', 'WCe0X0qIy2kE0kVdTq7r.jpg',
-            'WIKz33IIqXFRh1lD8YUw.jpg', 'WJdJ8LJKVoRFTkqJQo4M.jpg', 'WPxkhDyjBs16CP58mEes.jpg',
-            'X3WR8qCjJqKRa5S6Lrn5.jpg', 'XIBe0M8G3w8WsrQBF5yW.jpg', 'XWlgEGD0EiVHQj4YOCeF.jpg',
-            'YKEv532dcs0wjRUwPsgo.jpg', 'YXVZw5NwlZLL57a4Bq6V.jpg', 'YhXQhwLvI8XEd0H6FJfH.jpg',
-            'YrZv7HcMJYdEOEhVJgQ5.jpg', 'Z7Z7UTXyqeJ8LszoaSgW.jpg', 'ZHFl3Q7Dh7lqHo2cT8E9.jpg',
-            'ZMeqaOEpYTZEzIrgPkce.jpg', 'ZVTxcE3cCgzJdTiDqO86.jpg', 'ZjeRXsd3kDsL0XWGR4BN.jpg',
-            'aYH5JtppDT7EEi4vb6cw.jpg', 'bSz2XnyKkOXWKEShAOiY.jpg', 'buaMrnBUGhBEQkIpd9CY.jpg',
-            'cEcK1EQc02yxsviqkQ4N.jpg', 'cLUhkClzSF3HX3qKmwY5.jpg', 'cNb4eFMrNj1JV8wPNk7Z.jpg',
-            'cWQNTWgUOWJGp3YXjhzS.jpg', 'ckQvh8qLdJ1fKvQiB7XC.jpg', 'dSKs7G60OQ19t3wjDjG0.jpg',
-            'dWBdCzKFHTfyaIZT3bO2.jpg', 'dkHjpnBzd2KfD7EdE9Ez.jpg', 'djr9vxWYlSP2f6oC95nL.jpg',
-            'e7Uy7LJqzBfOzYfMjDCD.jpg', 'ekmYbNBjpyWxZwRlc1EK.jpg', 'f8wGqIcKeKvhNyPEUfe7.jpg',
-            'fIZc7ZvKGUuUVoYn9oJq.jpg', 'fjBfL5YGaM2P3VuTNUHx.jpg', 'fscKNWFzTMmJ9Y5RM9yw.jpg',
-            'g9VWgzLQEgJNzOiJxaVy.jpg', 'gHzeQOkqUV84zzzuSpgE.jpg', 'gSjn06ayDntNK7UL5You.jpg',
-            'gUvthHpCvJPh4JdWe5g8.jpg', 'gXgJHJxRhPfM3nZRYm3Z.jpg', 'gbApVkTJ7NZrLgHgP6MG.jpg',
-            'ggsrv5Y2rUHy3KpfKfJr.jpg', 'hEFcPuKWZhGBfwCECw2i.jpg', 'hFjjsJOg1iYb8nSz3B8t.jpg',
-            'hMb0NI3tT3vRXKVkNTLv.jpg', 'hPBd2qKKGnj6E1h9SJQu.jpg', 'hVrJgJVEFnJgJZiHaKzk.jpg',
-            'huUJDJOPpP4tKzXSzaBh.jpg', 'iVrO2K7cRxkKCqhXVfJ3.jpg', 'jNYuLK9t5QyBaPa1TJpe.jpg',
-            'jNuHZ4Fg9kPYLErY4TyI.jpg', 'jS9ZuPt5dR9YyVgNpRZ9.jpg', 'jYvGE2jYGgWHqeaMsYrK.jpg',
-            'kCePzG7VhgNYPKPWLymy.jpg', 'kEfBz4rOHKJQs4Qm1Lbt.jpg', 'kMOVTOl3HyJSFM9SSy3z.jpg',
-            'kZJX8rvDLEZIcMdkprmW.jpg', 'keFLkHWmP4TwGcTKM2yy.jpg', 'kvMWPx1dZLAKZTdYz021.jpg',
-            'kwsXMT3p6zVECAOkbHhd.jpg', 'lfwP4u79vuwM4va0YWZl.jpg', 'm73nqvEQU4Fecsk00rus.jpg',
-            'mJZyHKqf8q9y5XYmP7r5.jpg', 'mbzOLJ7XfWLdlYEfXLXY.jpg', 'mfCqTaY2jZYLb9RlF3B5.jpg',
-            'mioqY73KhNBg6JvN6XMJ.jpg', 'moIJFZPeKnfC1W8NRFgj.jpg', 'mzYQKN4eHRJ5O5vxaGgX.jpg',
-            'nN3HY24JJgZbKLOg8HID.jpg', 'oKQF5r8VdpKUH6vFsKrm.jpg', 'osLuGEmMEbvUS4Wg0vPd.jpg',
-            'ozJjqbJBdNY3f1hHPFP9.jpg', 'pKxNRzgrQfmCQmK6F6rF.jpg', 'pqY5nm0h3KOVpPeMavsh.jpg',
-            'q1QiY5v7ky8NfHNM6J8J.jpg', 'qGJfY5xHuHVWcPd9dYY9.jpg', 'qhvjLVrp1aIC5Re5rloh.jpg',
-            'qwI7dHF4qOjSJJdH5HL5.jpg', 'r4SBfOFQfgvdOJPMBM4y.jpg', 's201pek0Ftm1mlgP0Ssm.jpg',
-            'sBcbjHl9tBNpffy5N757.jpg', 'sg5n4T3gGhcZmVgGx5VH.jpg', 'tL5qXPGTRSz83nhLqOWA.jpg',
-            'tQZ3jBOHb7EfqKCgY2VG.jpg', 'u2uCOqtFj3Fh5oqgBxOg.jpg', 'u3vb8HRCKmHzpVJCvZUy.jpg',
-            'uOWREj4MQJJmMNZECQEE.jpg', 'ukDMjQc287vTIu0dSDjD.jpg', 'ur5kSFLYYyFMhVYRnZDj.jpg',
-            'v5n5xrPzqzhQ4Xb3nL8N.jpg', 'vr6T66fOk1VKjDzxBl96.jpg', 'w4JdGBqKYvZJD9pECrCJ.jpg',
-            'wJr7Kj5tKr3HYHrZH7r5.jpg', 'wUpKtL7XfLUgLYLN5VxK.jpg', 'wfJJCZGnrE4EPrN5F4zy.jpg',
-            'xDQq5O5XmKBJzO3VnOUB.jpg', 'xGVGnNYYHGKgZKKFNCKN.jpg', 'xc4LVnYCqjDJz9OhE1wz.jpg',
-            'y8zrYKcqqF7VIgKK9dKN.jpg', 'yJJfXxLKV8EYHkbJUyJH.jpg', 'yOKJvKOJBYUZUfByJOJ5.jpg',
-            'ynYJHHUYFGgvREYjJYXJ.jpg', 'zJ5oe5Ouj4BMABGhuUC0.jpg', 'zLrJoeTyQgrgPKDKKJoJ.jpg',
-            'zUJcMJYcYxTGUDNrjJrK.jpg', 'zl3FIFdh4OZMogOhLQXv.jpg', 'zjJTCwKJvKCNNJH3UmJX.jpg'
+            '1dsu1ynPOBgwxVIVMm98.jpg', '5NSmf9UdwUJBWNS7LxM5.jpg', 'Te2nfJ7cUJ4CLzPXOGNP.jpg',
+            'DvCbL0ojNUx8yzgxz8zx.jpg', 'gHzeQOkqUV84zzzuSpgE.jpg', 'A3lni0mmt59IIQ1U0cki.jpg',
+            'GBaZuttvlobM3dZ0DvMp.jpg', 'DuE3kpTijyH0TXZeNRov.jpg', '2J6UGbexO5xfFKKhz32I.jpg',
+            'qhvjLVrp1aIC5Re5rloh.jpg', 'P3GqyhUt8X9wpa6AQq83.jpg', '8WiqA1mLF0ja4a4YtpJD.jpg',
+            'tL5qXPGTRSz83nhLqOWA.jpg', 'sBcbjHl9tBNpffy5N757.jpg', 'f8wGqIcKeKvhNyPEUfe7.jpg',
+            'kvMWPx1dZLAKZTdYz021.jpg', '5sKc0zYrls3NUrzzjErK.jpg', 'kMOVTOl3HyJSFM9SSy3z.jpg',
+            'LYSESzSp78K3C45L6tsX.jpg', 'FAYtHPEqBLgxLlVmGzSl.jpg', '4yL507qGjWSU4a2jG88v.jpg',
+            'P5Ub5tzpVEJqb5XJz2Gb.jpg', 'F7DfIkzXjoHim0pcNtiX.jpg', 'vr6T66fOk1VKjDzxBl96.jpg',
+            '6zLWLniPGUkRJY5POGIL.jpg', 'MS78j8iZVCPITPEZSJyS.jpg', 'TzeaqxRMZ12lDvpoLlK2.jpg',
+            'dSKs7G60OQ19t3wjDjG0.jpg', 'zl3FIFdh4OZMogOhLQXv.jpg', 'm73nqvEQU4Fecsk00rus.jpg',
+            'WPxkhDyjBs16CP58mEes.jpg', 'Z7Z7UTXyqeJ8LszoaSgW.jpg', 'OZlQLWFUfmpSXXMl2Pre.jpg',
+            '9HoKHfzfIKXiINyRQ7OG.jpg', 'ekmYbNBjpyWxZwRlc1EK.jpg', 'ukDMjQc287vTIu0dSDjD.jpg',
+            'Qo81ClhOc0XlM2PYm6qG.jpg', 'ZjeRXsd3kDsL0XWGR4BN.jpg', '9YLpn3gsg8sTGaN0CmZm.jpg',
+            'PlDZ1pKn1q3I1hXXLExl.jpg', 'YKEv532dcs0wjRUwPsgo.jpg', 'JJdSiCOKhwnOVS52xMoJ.jpg',
+            'osLuGEmMEbvUS4Wg0vPd.jpg', '6s0sdzRWqsoxt1WPCnPM.jpg', '3kZqhcfslBFziRb03SyP.jpg',
+            'YXVZw5NwlZLL57a4Bq6V.jpg', 'Bay55kBwPyPNFWVOuUuE.jpg', 'ZMeqaOEpYTZEzIrgPkce.jpg',
+            'lfwP4u79vuwM4va0YWZl.jpg', 's201pek0Ftm1mlgP0Ssm.jpg', '5jNEr8DlVNisD1JmgjeH.jpg',
+            'pqY5nm0h3KOVpPeMavsh.jpg', 'I153uRWwV7VOeJDIs4sW.jpg', 'SXTzZBVucvSX7gKhmd91.jpg',
+            'SPx53vX83UXLurLpvx3H.jpg', 'Rmv9Xwwg3e2pN2zbGVGT.jpg', '0K7AtRh7U93R2VH9axxQ.jpg',
+            'Vqe3FDWRy9t64oawHLAj.jpg', 'CR9rpq7Z02JceUfzItVA.jpg', 'dJX6NykQEMnAMi4I5j4t.jpg',
+            'jSEHrkQCSaTuzwY1jOeO.jpg', 'GDK5lZW2nJBRkhcYUQeN.jpg', 'v0J2Re0pvY0Gs5x6lbRX.jpg',
+            'LumVkeyGUZdYOHaWkQYz.jpg', 'yfg3k230t90RBUEUoBGz.jpg', '1DCEysi2B2gEWgZnDyqg.jpg',
+            'M0vnSlmKQmrKMwH5ZUgj.jpg', 'b3gbniWeQ3SYhpA5R3S2.jpg', 'p8rYPj7cs9pgmNHwc6LO.jpg',
+            '6ONISuRyiUS9ZCdRhOSg.jpg', '6akVvgSAP9kKu3Ob6L9d.jpg', 'BumjAYfdAZcXbkRbkmrv.jpg',
+            'nO3zP3L1tCqeVfOgoHVS.jpg', '9KlT5M8s7HTxMuptLEkN.jpg', 'omcO6PYtLWtwCXQjf8UG.jpg',
+            'pNW4hpBgw31BVY3fd6To.jpg', '15rRK9JyAaWsDxwVzCRM.jpg', 'ivlJ70pfwGp4OvaZWKDI.jpg',
+            '7XWsrGdGy37iMYnqxbfi.jpg', 'gyqtLyHCjFjxa5Xlu6Ne.jpg', 'oiAgfPQdhkjIpMG52dqw.jpg',
+            '35H8tCgsszXQMJVMOC3l.jpg', '5UaQChlNIlRegwT0Ze2S.jpg', 'Zv7rn9Iq9Fvv8ketJ0qM.jpg',
+            'CJoiRWToytr1BwAXi9fY.jpg', '0iELEcoTlZgqxYoQG168.jpg', 'LwMDwrC3vWknoJqpFfwd.jpg',
+            '8phioNKwTe78kkBxfQxv.jpg', 'ZgVIcYVuhSWbyRHZp2Gz.jpg', 'SyWKyUgFoMmXtcTCGRcD.jpg',
+            'bS5wI3lzdj9uBSaLxw4s.jpg', 'Q8YLAcSYnDB3Vb4pKuyk.jpg', 'cPMEn2ZXOzrv6XvX4SsX.jpg',
+            'bymSR1aP4BBTZXfHXqDx.jpg', 'NwQ9Qyu7hw4v1euBi5Eo.jpg', 'amjSkXY4CehaPR7pb6LP.jpg',
+            'feDWFZXdWOjqFXBuGVBW.jpg', 'JcqsT7TH5R7mNg2HhQ4V.jpg', 'HdbSTiiVGxwsEEsXrwAY.jpg',
+            'dwNhaABVUxVgZqEh8x7R.jpg', 'WQlK4LV4UdMfkOAdpqdX.jpg', 'uQNskNXWxZYwYrsQi0sk.jpg',
+            'kFqXeWd9kDO8mK40WFGm.jpg', 'rJm7LCq6kmMgwKhbkFSt.jpg', 'pE5nmAr4Lizvo924w8Sb.jpg',
+            '8iWFfZygYpXIhRjvgnDn.jpg', 'PE866GTsiVCSFkO7pCTD.jpg', 'bq6LfiHrOu1hm6hyA51z.jpg',
+            'MR6e2zwM8nBpBATk69uV.jpg', 'ln4cy8UbL9pYn1VLTF0e.jpg', '77dloZ2NC0zWArP9SehU.jpg',
+            'K5MQWWTZ5DH31NLdu0MK.jpg', 'D0mPdYeYsfvlsrAIKDYT.jpg', 'oiaNx0RXf70ZSCb6yOoC.jpg',
+            'xIEZ7YxNcUjgUTQKaHbx.jpg', '2oDBdtvtqAGojxJFhuR4.jpg', 'uRtZMBc6s4Qo1ABNeFx7.jpg',
+            'LxlIJ4VjxLLd97JcWxar.jpg', 'SfodO0wyRBWzKyheHytj.jpg', 'cDXwVaOVYHhqAjBqFTDf.jpg',
+            'sYazvt63dV6PJZGtoJJ3.jpg', 'bikback2.jpg', 'hdXKfkAqMbbJskcA4BxU.jpg',
+            '7inANxeWqD6aaicOuE2S.jpg', 'bbuiH38TdHwzmiUwJlyk.jpg', '12IdAS832WEcngM0TmiU.jpg',
+            '3m9WiyhGocSOHasI9jNK.jpg', 'avrdLWr4n6wdrVj7Ace2.jpg', '4J4pjTHMnGA41KobOcix.jpg',
+            '8ft3e5R8H7LnMi4cG94M.jpg', 'e0cgUGya6Zd2knd2FWo4.jpg', '6r6lVgDdfHbbtidgSPZN.jpg',
+            'rgh4PWAo3zhT0cm0fN9E.jpg', 'SV2MqZOgdWI9rGY314Tz.jpg', 'i9xJTxC3Eg2uoe9Jj6gJ.jpg',
+            'QXJvPlfZaXmk6wVKbZBj.jpg', 'gcLWreCoolbJqNwOf8U1.jpg', 'bghKRc69Diizw4aW0Z1s.jpg',
+            'SV9V4eEQruzAPC13ur88.jpg', 'nPwyzQniFFbKSfS8aYCr.jpg', 'I1ShZ7ErsJgCeQwmZwwF.jpg',
+            'vXRd2oZvaaxA7eJdcvoo.jpg', 'FJyYszquUW4GAB9fGimM.jpg', 'QPLXhHvbt5qivgqmbVSM.jpg',
+            '2fTpn1FbvDpznuZ5fIQd.jpg', 'QXDnGBK6MKoUHXg71OPq.jpg', '89KP7lZmKrgLm44MBptH.jpg',
+            'q6SE4dVL7eizodS3xyfH.jpg', 'rHFTHB859rwkXlJiJP1l.jpg', 'rPEZ7xbwNUIAYKKEhpaE.jpg',
+            'PQRyzGlNikD21FdS7pBs.jpg', 'ocMCWfpPdb0UdxA8X5DJ.jpg', 'cEcK1EQc02yxsviqkQ4N.jpg',
+            'sOxSZ1h0vQk0f7Ryq2sw.jpg', '71vfJAfMsE4xUq29LXCo.jpg', 'tcvZT8b6xDsJU8ELJLZR.jpg',
+            'pBR6vTdna2mbQ6v6EQwn.jpg', 'rmOwWvP02A4uUpm7kfgz.jpg', 'LNN7yt3LxaWZM0GLv9GH.jpg',
+            'fima8JceRo46sZEPXqa2.jpg', '09HFl7nAkIjFBFbg3SeA.jpg', 'S4J6LLRoGsjvq4BNylGE.jpg',
+            '1bITefcv83TIA7idRrrO.jpg', '84KsLMS8hVxaFO0Q9f5U.jpg', '0yiMo3Hxx1iFQquiFJtX.jpg',
+            '4mcXgi9YTy0MDVLSFwSc.jpg', 'HVUKSu4G934WlNSkGzLK.jpg', 'backbikini.jpg',
+            'JODBt6yyAJW89FOY6e3f.jpg', '1G4FDSg9HpEVWWDhmpDO.jpg', 'El1t70PQ1bUFWP1zwcPB.jpg',
+            'vKQoBDqUoPXarpR3vYpP.jpg', 'Em2gLRr2h2FGkQqrF9eL.jpg', 'tymVwJGf7k95S23WgwHf.jpg',
+            '4DXLdKZgVq1Q329fFPyt.jpg', 'bikbanner.jpg', 'qkuJlaGJWpdwEIc0lSqj.jpg',
+            'GqQr7Ywtyq8G7MJ8XtdY.jpg', 'JLi7W8qCzYE8fSD84EOL.jpg', 'WGqmQbPGcAFj3zRebbtZ.jpg',
+            'BR4erJG0H1rJe4ZJ5NST.jpg', 'stzVPLHAEPf2tSjyaQv7.jpg', 'c6GDaL5ct2FzHMnWTQJx.jpg',
+            'Fpd4oXLjygVVcjFoUwMJ.jpg', 'suU3JgTP9BD64Z1DVfcR.jpg', 'OtDIJvuToJKU4tTHERCF.jpg',
+            'mrDqEi5kwO2z7tUPLsRb.jpg', 'PAo0HSU3ztynrbi5Z0Pm.jpg', 'J5Kwtdb5IugC0tRQYiSL.jpg',
+            '56zvcPsKbH436elhTW9v.jpg', '2q4lbVbHtmY9qfEqh1Ey.jpg', '0qvHNvqJU86FmxFEu8Fv.jpg',
+            'dDRLUWKcxwS7HoUd63bg.jpg', 'gSjn06ayDntNK7UL5You.jpg', 'SaBqVqA0TXxRXMI1vQc5.jpg',
+            'aD2uZbupvQP5eG4H88hu.jpg', 'W9dJWz2EQiyHO6hi61Ke.jpg', 'Po0MI0Pljmjzo0g0bgSO.jpg',
+            'VT16zdTynZ6KLd1gM5MW.jpg', 'wDwfRvTM7QcdZI5DPDBn.jpg', 'pi6Lxcrb5ba8mRgO6a7n.jpg',
+            'nTZcGjrmMkT0Og9p0z6C.jpg', 'Cd9njNgqaD1K2K4mdQti.jpg', 'TvU7xoUCwoitZrr3EsNd.jpg',
+            'KXIiOrTZuPIftCkvbbJr.jpg', 'u6QOkB8xo9Yl8xje0wRn.jpg', 'zJ5oe5Ouj4BMABGhuUC0.jpg',
+            'I43EYSqDdcgBkaFdbkHY.jpg', 'FjcagIkEyERN5UkD00sc.jpg', 'bikini portada.jpg',
+            'xMZrzpTgB8ZVzlIpoz6e.jpg', '2uWScXgZ5pqb3NEtzrlz.jpg', '0XOhygF9EVXZI4PEp1GG.jpg'
         ];
 
-        // All 10 videos from censored-videos directory - REAL FILENAMES
+        // All 10 videos from File 8 - COMPLETE WORKING LIST  
         const ALL_VIDEOS = [
-            '1NYBqpy4q2GVCDCXmXDK.mp4', '8fQQnk9u7YAQQXDpfOW3.mp4', '8yE2nxCwV2QcJsdXGf32.mp4',
-            '9weRZL3KvPUd3qNQz0Mt.mp4', 'F3JI0gM7nDGJAiKFb7S.mp4', 'Fc6f8RSjO8QBTmjjppHO.mp4',
-            'IES8pgSNhuVYlqcse2sm.mp4', 'J2E8ciwOpkU0Jv79cdKj.mp4', 'UiQ8qKsHUJAvIIPFCLnz.mp4',
-            'censored_9weRZL3KvPUd3qNQz0Mt.mp4'
+            'censored_9weRZL3KvPUd3qNQz0Mt.mp4',
+            'F3JI0gM7nDGJAiKFb7S.mp4',
+            'UiQ8qKsHUJAvIIPFCLnz.mp4',
+            '8fQQnk9u7YAQQXDpfOW3.mp4',
+            'IES8pgSNhuVYlqcse2sm.mp4',
+            '8yE2nxCwV2QcJsdXGf32.mp4',
+            '1NYBqpy4q2GVCDCXmXDK.mp4',
+            '9weRZL3KvPUd3qNQz0Mt.mp4',
+            'J2E8ciwOpkU0Jv79cdKj.mp4',
+            'Fc6f8RSjO8QBTmjjppHO.mp4'
         ];
 
-        // All 36 teaser images from full directory - REAL FILENAMES
+        // All 36 teaser images from File 8 - COMPLETE WORKING LIST
         const ALL_TEASER_IMAGES = [
-            '0456996c-b56e-42ef-9049-56b1a1ae2646.png', '1qEBcg9QbkZRRdLt0Chc.jpg', '3IWka3fnP9b8yz6j5l91.jpg',
-            '85158b64-4168-45fa-9cb4-0b40634f7fa1.png', 'CmxJm1VLBBhvZoUwxWTJ.jpg', 'CuX7zQzCBToIMKBYVcA8.jpg',
-            'Fz2ORrJSrERl0BZGOH24.jpg', 'KRGZrnrhKdEiv6bUM0B8.jpg', 'KSIgono33EvDrKQDut47.jpg',
-            'NqO93fUipM4zuYSCRSt5.jpg', 'SPz0O8J0T6G5uVWIoDzQ.jpg', 'Sin ti╠ütulo.jpg',
-            'Sin ti╠ütulo.png', 'Sin ti╠ütulo3.png', 'Sin ti╠ütulocloseup.jpg', 'Sin ti╠ütuloportada.jpg',
-            'TobOdyqnZJAURlf9gAMN.jpg', 'TrDWwizZldJ8aKtrTcG1.jpg', 'ZYIL77u1RSeFdP5wkciw.jpg',
-            'ZyCZwfSUvhPNt480NIda.jpg', 'backbikini.jpg', 'bikback2.jpg', 'bikbanner.jpg',
-            'bikbanner2.jpg', 'bikini.jpg', 'bikini3.jpg', 'bikini5.jpg', 'cRNjL0pgJXBWVxKdsFON.jpg',
-            'jTSyAJInaPJl7z7HJD4a.jpg', 'kZcyiAnC5K1YAXKulB2e.jpg', 'nm6YKc38NLqwGPaNiDhc.jpg',
-            'qhK8inhLxacOs8w7mRbE.jpg', 'tQ41YocTwqSnd8mFsDc5.jpg', 'yqTobCZL2AABmmNJ7EPU.jpg',
-            'zRPnijTCwLqQeZLXLvzu.jpg', 'zx83JCzdTKNfyKUY6Djs.jpg'
+            '0456996c-b56e-42ef-9049-56b1a1ae2646.png',
+            '1qEBcg9QbkZRRdLt0Chc.jpg',
+            '3lWka3fnP9b8yz6j5l91.jpg',
+            '85158b64-4168-45fa-9cb4-0b40634f7fa1.png',
+            'CmxJm1VLBBhvZoUwxWTJ.jpg',
+            'CuX7zQzCBToIMKBYVcA8.jpg',
+            'Fz2ORrJSrERI0BZGOH24.jpg',
+            'KRGZrnrhKdEiv6bUM0B8.jpg',
+            'KSIgono33EvDrKQDut47.jpg',
+            'NqO93fUipM4zuYSCRSt5.jpg',
+            'SPz0O8J0T6G5uVWIoDzQ.jpg',
+            'Sin titulo.jpg',
+            'Sin titulo.png',
+            'Sin titulo3.png',
+            'Sin titulocloseup.jpg',
+            'Sin tituloportada.jpg',
+            'TobOdyqnZJAURIf9gAMN.jpg',
+            'TrDWwizZldJ8aKtrTcG1.jpg',
+            'ZYIL77u1RSeFdP5wkciw.jpg',
+            'ZyCZwfSUvhPNt480NIda.jpg',
+            'backbikini.jpg',
+            'bikback2.jpg',
+            'bikbanner.jpg',
+            'bikbanner2.jpg',
+            'bikini.jpg',
+            'bikini3.jpg',
+            'bikini5.jpg',
+            'cRNjL0pgJXBWVxKdsFON.jpg',
+            'jTSyAJInaPJI7z7HJD4a.jpg',
+            'kZcyiAnC5K1YAXKulB2e.jpg',
+            'nm6YKc38NLqwGPaNiDhc.jpg',
+            'qhK8inhLxacOs8w7mRbE.jpg',
+            'tQ41YocTwqSnd8mFsDc5.jpg',
+            'yqTobCZL2AABmmNJ7EPU.jpg',
+            'zRPnijTCwLqQeZLXLvzu.jpg',
+            'zx83JCzdTKNfyKUY6Djs.jpg'
         ];
 
         // ============================
@@ -1359,7 +1380,7 @@
         function renderPhotos() {
             const photosGrid = document.getElementById('photosGrid');
             
-            const photosHTML = ALL_PHOTOS.slice(0, 20).map((photo, index) => {
+            const photosHTML = ALL_PHOTOS.map((photo, index) => {
                 const id = `p${index}`;
                 const isUnlocked = isVIP || unlockedContent.has(id);
                 const unlockClass = isUnlocked ? 'unlocked' : '';
@@ -1367,7 +1388,7 @@
                 return `
                     <div class="content-item ${unlockClass}" data-id="${id}" data-type="photo" onclick="handlePhotoClick('${id}', '${photo}', ${index})">
                         <img class="item-media" 
-                             src="assets/censored/${photo}" 
+                             src="public/assets/censored/${photo}" 
                              alt="Ocean Photo ${index + 1}"
                              loading="lazy">
                         
@@ -1408,7 +1429,7 @@
                     <div class="content-item ${unlockClass}" data-id="${id}" data-type="video" onclick="handleVideoClick('${id}', '${video}', ${index})">
                         <video class="item-media" muted loop preload="metadata"
                                onmouseenter="this.play()" onmouseleave="this.pause(); this.currentTime=0;">
-                            <source src="assets/censored-videos/${video}" type="video/mp4">
+                            <source src="public/assets/censored-videos/${video}" type="video/mp4">
                         </video>
                         
                         <div class="video-duration">${duration}</div>
@@ -1471,7 +1492,7 @@
                 return `
                     <div class="teaser-item">
                         <img class="teaser-media" 
-                             src="assets/full/${image}" 
+                             src="public/assets/full/${image}" 
                              alt="${titles[index]}"
                              loading="lazy">
                         
@@ -1492,7 +1513,7 @@
         function handlePhotoClick(id, filename, index) {
             if (isVIP || unlockedContent.has(id)) {
                 // Open full resolution image
-                window.open(`assets/uncensored/${filename}`, '_blank');
+                window.open(`public/assets/uncensored/${filename}`, '_blank');
             } else {
                 // Show PayPal payment for single photo
                 showPayPerViewModal(id, 'photo', `Ocean Paradise #${index + 1}`, PAYPAL_CONFIG.PRICES.SINGLE_PHOTO);
@@ -1503,7 +1524,7 @@
             if (isVIP || unlockedContent.has(id)) {
                 // Open full video
                 const uncensoredFilename = filename.replace('censored_', '');
-                window.open(`assets/uncensored-videos/${uncensoredFilename}`, '_blank');
+                window.open(`public/assets/uncensored-videos/${uncensoredFilename}`, '_blank');
             } else {
                 // Show PayPal payment for single video
                 showPayPerViewModal(id, 'video', `Beach Video #${index + 1}`, PAYPAL_CONFIG.PRICES.SINGLE_VIDEO);
