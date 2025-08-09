@@ -51,6 +51,29 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="canonical" href="https://ibizagirl.pics/main.html">
     
+    <!-- Google Analytics (Replace GA_MEASUREMENT_ID with your actual ID) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID', {
+            page_title: 'Ocean Paradise Gallery - IbizaGirl.pics',
+            page_location: window.location.href,
+            custom_map: {
+                'content_type': 'gallery',
+                'photo_count': '213',
+                'video_count': '10'
+            }
+        });
+        
+        // Track gallery interactions
+        gtag('event', 'page_view', {
+            event_category: 'gallery',
+            event_label: 'main_gallery_loaded'
+        });
+    </script>
+    
     <style>
         :root {
             /* Ocean & Maritime Blue Theme */
