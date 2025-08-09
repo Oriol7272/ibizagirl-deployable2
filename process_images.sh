@@ -9,8 +9,8 @@ total_images=$(find extracted_arxiu/ -name "*.jpg" | wc -l)
 
 echo "Total images to process: $total_images"
 
-# Process each image
-for img_path in extracted_arxiu/*.jpg; do
+# Process each image using find command
+find extracted_arxiu/ -name "*.jpg" | while read img_path; do
     if [ -f "$img_path" ]; then
         # Get just the filename without path
         filename=$(basename "$img_path")
