@@ -9,8 +9,8 @@ total_videos=$(find extracted_arxiu/ -name "*.mp4" | wc -l)
 
 echo "Total videos to process: $total_videos"
 
-# Process each video
-for video_path in extracted_arxiu/*.mp4; do
+# Process each video using find command
+find extracted_arxiu/ -name "*.mp4" | while read video_path; do
     if [ -f "$video_path" ]; then
         # Get just the filename without path
         filename=$(basename "$video_path")
