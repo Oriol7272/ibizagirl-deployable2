@@ -1359,7 +1359,7 @@
         function renderPhotos() {
             const photosGrid = document.getElementById('photosGrid');
             
-            const photosHTML = ALL_PHOTOS.slice(0, 20).map((photo, index) => {
+            const photosHTML = ALL_PHOTOS.map((photo, index) => {
                 const id = `p${index}`;
                 const isUnlocked = isVIP || unlockedContent.has(id);
                 const unlockClass = isUnlocked ? 'unlocked' : '';
