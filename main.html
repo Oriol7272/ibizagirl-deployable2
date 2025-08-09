@@ -66,12 +66,6 @@
                 'video_count': '10'
             }
         });
-        
-        // Track gallery interactions
-        gtag('event', 'page_view', {
-            event_category: 'gallery',
-            event_label: 'main_gallery_loaded'
-        });
     </script>
     
     <style>
@@ -109,8 +103,203 @@
         }
 
         /* ============================
-           OCEAN ANIMATED BACKGROUND
+           AGE VERIFICATION STYLES
            ============================ */
+        .age-verification {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--ocean-deep) 0%, var(--ocean-dark) 50%, var(--ocean-medium) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .age-verification.hidden {
+            opacity: 0;
+            transform: translateY(-100vh);
+            pointer-events: none;
+        }
+
+        .ocean-waves {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%230077be" fill-opacity="0.2" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,133.3C960,128,1056,96,1152,90.7C1248,85,1344,107,1392,117.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat;
+            background-position: bottom;
+            background-size: cover;
+            z-index: -1;
+            animation: wave 10s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .gradient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                circle at center,
+                rgba(0, 168, 204, 0.3) 0%,
+                rgba(0, 119, 190, 0.2) 25%,
+                rgba(0, 212, 255, 0.1) 50%,
+                transparent 70%
+            );
+            z-index: -1;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .verification-container {
+            background: rgba(0, 51, 102, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid var(--aqua-light);
+            border-radius: 30px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 
+                0 25px 80px rgba(0, 212, 255, 0.4),
+                0 0 100px rgba(0, 119, 190, 0.3);
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-section .logo {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--aqua-light), var(--ocean-bright), var(--sunset-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
+        }
+
+        .logo-section .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        .warning-icon {
+            font-size: 5rem;
+            margin: 2rem 0;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        .verification-container h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--sunset-gold);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .age-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            min-width: 150px;
+        }
+
+        .btn-enter {
+            background: linear-gradient(135deg, var(--ocean-light), var(--ocean-bright), var(--aqua-light));
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 168, 204, 0.4);
+        }
+
+        .btn-enter:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.6);
+        }
+
+        .btn-exit {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 2px solid rgba(127, 219, 255, 0.3);
+        }
+
+        .btn-exit:hover {
+            background: rgba(127, 219, 255, 0.1);
+            border-color: var(--aqua-light);
+            color: white;
+        }
+
+        .legal-text {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(127, 219, 255, 0.2);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ============================
+           MAIN GALLERY STYLES (HIDDEN INITIALLY)
+           ============================ */
+        .main-gallery {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .main-gallery.active {
+            display: block;
+        }
+
+        /* Ocean Animated Background */
         .ocean-background {
             position: fixed;
             top: 0;
@@ -138,36 +327,7 @@
             animation: wave 10s ease-in-out infinite;
         }
 
-        @keyframes wave {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .gradient-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(
-                circle at 30% 40%,
-                rgba(0, 168, 204, 0.3) 0%,
-                rgba(0, 119, 190, 0.2) 25%,
-                rgba(0, 212, 255, 0.1) 50%,
-                transparent 70%
-            );
-            z-index: -9;
-            animation: gradientShift 20s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.6; }
-        }
-
-        /* ============================
-           AD ZONES STYLING
-           ============================ */
+        /* Ad Zones */
         .ad-zone {
             background: rgba(0, 119, 190, 0.05);
             border: 1px solid var(--glass-border);
@@ -206,9 +366,95 @@
             min-height: 100px;
         }
 
-        /* ============================
-           ENHANCED BANNER WITH YOUR IMAGES
-           ============================ */
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: rgba(0, 51, 102, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3rem;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(0, 119, 190, 0.3);
+        }
+
+        .header .logo {
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--aqua-light), var(--ocean-bright), var(--sunset-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            animation: logoShine 3s ease-in-out infinite;
+        }
+
+        @keyframes logoShine {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3) drop-shadow(0 0 20px var(--aqua-light)); }
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .stats-display {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--aqua-light);
+            text-shadow: 0 0 10px var(--aqua-light);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .vip-btn {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--ocean-light), var(--ocean-bright), var(--aqua-light));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 168, 204, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .vip-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.6);
+        }
+
+        /* Banner */
         .mega-banner {
             height: 500px;
             position: relative;
@@ -298,99 +544,7 @@
             text-transform: uppercase;
         }
 
-        /* ============================
-           HEADER WITH OCEAN GLASS EFFECT
-           ============================ */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 80px;
-            background: rgba(0, 51, 102, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 3rem;
-            z-index: 1000;
-            box-shadow: 0 8px 32px rgba(0, 119, 190, 0.3);
-        }
-
-        .logo {
-            font-size: 2.2rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--aqua-light), var(--ocean-bright), var(--sunset-gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 2px;
-            animation: logoShine 3s ease-in-out infinite;
-        }
-
-        @keyframes logoShine {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.3) drop-shadow(0 0 20px var(--aqua-light)); }
-        }
-
-        .nav-controls {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .stats-display {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .stat-box {
-            text-align: center;
-            padding: 0.5rem 1rem;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-
-        .stat-number {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: var(--aqua-light);
-            text-shadow: 0 0 10px var(--aqua-light);
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .vip-btn {
-            padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, var(--ocean-light), var(--ocean-bright), var(--aqua-light));
-            border: none;
-            border-radius: 50px;
-            color: white;
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(0, 168, 204, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .vip-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.6);
-        }
-
-        /* ============================
-           MAIN LAYOUT WITH AD SIDEBARS
-           ============================ */
+        /* Main Layout */
         .main-container {
             display: flex;
             min-height: calc(100vh - 580px);
@@ -402,7 +556,6 @@
             margin-right: auto;
         }
 
-        /* Left and Right Ad Sidebars */
         .ad-sidebar {
             width: 200px;
             display: flex;
@@ -418,7 +571,6 @@
             order: 3;
         }
 
-        /* Main Content Area */
         .content-wrapper {
             flex: 1;
             order: 2;
@@ -426,9 +578,7 @@
             gap: 2rem;
         }
 
-        /* ============================
-           SIDEBARS WITH OCEAN THEME (Photos/Videos)
-           ============================ */
+        /* Sidebars */
         .sidebar {
             width: 400px;
             background: linear-gradient(180deg, 
@@ -618,9 +768,7 @@
             color: var(--text-secondary);
         }
 
-        /* ============================
-           CENTER AREA - TEASER GALLERY
-           ============================ */
+        /* Center Area */
         .center-area {
             flex: 1;
             background: linear-gradient(180deg, 
@@ -731,9 +879,7 @@
             line-height: 1.4;
         }
 
-        /* ============================
-           MODAL SYSTEM
-           ============================ */
+        /* Modal System */
         .modal {
             display: none;
             position: fixed;
@@ -820,9 +966,7 @@
             background: rgba(0, 212, 255, 0.1);
         }
 
-        /* ============================
-           LOADING ANIMATION
-           ============================ */
+        /* Loading Screen */
         .loading-screen {
             position: fixed;
             top: 0;
@@ -865,14 +1009,7 @@
             animation: pulse 2s ease-in-out infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
-        }
-
-        /* ============================
-           SCROLLBAR STYLING
-           ============================ */
+        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -891,9 +1028,7 @@
             background: linear-gradient(135deg, var(--ocean-bright), var(--aqua-light));
         }
 
-        /* ============================
-           RESPONSIVE DESIGN
-           ============================ */
+        /* Responsive Design */
         @media (max-width: 1400px) {
             .sidebar {
                 width: 350px;
@@ -970,6 +1105,14 @@
             .mega-banner {
                 height: 300px;
             }
+
+            .button-container {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
         }
 
         @media (max-width: 640px) {
@@ -978,7 +1121,7 @@
                 padding: 0 1rem;
             }
             
-            .logo {
+            .header .logo {
                 font-size: 1.8rem;
             }
             
@@ -1010,110 +1153,96 @@
                 width: 130px;
                 height: 130px;
             }
+
+            .verification-container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .logo-section .logo {
+                font-size: 2.5rem;
+            }
+
+            .warning-icon {
+                font-size: 4rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loader"></div>
-        <div class="loading-text">Loading Paradise Gallery...</div>
-    </div>
-
-    <!-- Ocean Background System -->
-    <div class="ocean-background"></div>
-    <div class="wave-animation"></div>
-    <div class="gradient-overlay"></div>
-
-    <!-- TOP HEADER AD ZONE -->
-    <div class="ad-zone header-ad">
-        <!-- Ero-Advertising Banner -->
-        <div id="sp_8177575_node">&nbsp;</div>
-        <script type="text/javascript" charset="utf-8">
-        if (typeof eaCtrl =="undefined"){
-            var eaCtrlRecs=[];
-            var eaCtrl = {add:function(ag){eaCtrlRecs.push(ag)}};
-            var js = document.createElement('script');
-            js.setAttribute("src","//go.easrv.cl/loadeactrl.go?pid=152716&spaceid=8177575&ctrlid=798544");
-            document.head.appendChild(js);
-        }
-        eaCtrl.add({"display":"sp_8177575_node","sid":8177575,"plugin":"banner"});
-        </script>
+    <!-- Age Verification Overlay (Shown First) -->
+    <div class="age-verification" id="ageVerification">
+        <div class="ocean-waves"></div>
+        <div class="gradient-overlay"></div>
         
-        <!-- ExoClick Header Banner -->
-        <div id="exo-header-banner">
-            <script type="text/javascript">
-                if (typeof(exoJsPop101) == "undefined") {
-                    exoJsPop101=true;
-                    var script = document.createElement("script");
-                    script.src = "//a.exdynsrv.com/ad-provider.js"; 
-                    script.onload = function(){
-                        try{ExoLoader.serve({"gclid":"","src":"https:\/\/a.exdynsrv.com\/ads-by-exoclick.js","adId":"5347189","sub":"0","keywords":"","h":"728","w":"90","cookieconsent":"true","mainstream":"1"}); }catch(e){}
-                    };
-                    document.head.appendChild(script);
-                }
-            </script>
-        </div>
-    </div>
-
-    <!-- Header -->
-    <div class="header">
-        <div class="logo">🌊 IbizaGirl.pics</div>
-        <div class="nav-controls">
-            <div class="stats-display">
-                <div class="stat-box">
-                    <div class="stat-number" id="photoCount">213</div>
-                    <div class="stat-label">Photos</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number" id="videoCount">10</div>
-                    <div class="stat-label">Videos</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number" id="totalViews">2.1M</div>
-                    <div class="stat-label">Views</div>
-                </div>
+        <div class="verification-container">
+            <div class="logo-section">
+                <div class="logo">🌊 IbizaGirl.pics</div>
+                <div class="subtitle">Exclusive Paradise Content</div>
             </div>
-            <button class="vip-btn" id="vipBtn" onclick="showVIPModal()">
-                🔓 VIP Access €10/month
-            </button>
-        </div>
-    </div>
 
-    <!-- Mega Banner with Ocean Theme -->
-    <div class="mega-banner">
-        <div class="banner-bg-slideshow">
-            <div class="banner-slide active"></div>
-            <div class="banner-slide"></div>
-            <div class="banner-slide"></div>
-            <div class="banner-slide"></div>
-        </div>
-        <div class="banner-content">
-            <h1 class="banner-title">OCEAN PARADISE</h1>
-            <p class="banner-subtitle">Exclusive Mediterranean Collection</p>
-        </div>
-    </div>
+            <div class="warning-icon">🔞</div>
 
-    <!-- Main Layout: Ads | Photos | Teasers | Videos | Ads -->
-    <div class="main-container">
-        <!-- Left Ad Sidebar -->
-        <div class="ad-sidebar left">
-            <!-- JuicyAds Left -->
-            <div class="ad-zone sidebar-ad">
-                <script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
-                <ins id="1098519" data-width="160" data-height="600"></ins>
-                <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1098519});</script>
-            </div>
+            <h1>Age Verification Required</h1>
             
-            <!-- ExoClick Left Sidebar -->
-            <div class="ad-zone sidebar-ad">
+            <p class="age-text">
+                This website contains adult content.<br>
+                You must be at least 18 years old to enter.
+            </p>
+
+            <div class="button-container">
+                <button class="btn btn-enter" onclick="verifyAge()">
+                    I am 18+
+                </button>
+                <button class="btn btn-exit" onclick="exitSite()">
+                    Exit
+                </button>
+            </div>
+
+            <div class="legal-text">
+                By entering this site, you confirm that you are of legal age in your jurisdiction 
+                and accept our Terms of Service and Privacy Policy.
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Gallery (Hidden Initially) -->
+    <div class="main-gallery" id="mainGallery">
+        <!-- Loading Screen -->
+        <div class="loading-screen" id="loadingScreen">
+            <div class="loader"></div>
+            <div class="loading-text">Loading Paradise Gallery...</div>
+        </div>
+
+        <!-- Ocean Background System -->
+        <div class="ocean-background"></div>
+        <div class="wave-animation"></div>
+        <div class="gradient-overlay"></div>
+
+        <!-- TOP HEADER AD ZONE -->
+        <div class="ad-zone header-ad">
+            <!-- Ero-Advertising Banner -->
+            <div id="sp_8177575_node">&nbsp;</div>
+            <script type="text/javascript" charset="utf-8">
+            if (typeof eaCtrl =="undefined"){
+                var eaCtrlRecs=[];
+                var eaCtrl = {add:function(ag){eaCtrlRecs.push(ag)}};
+                var js = document.createElement('script');
+                js.setAttribute("src","//go.easrv.cl/loadeactrl.go?pid=152716&spaceid=8177575&ctrlid=798544");
+                document.head.appendChild(js);
+            }
+            eaCtrl.add({"display":"sp_8177575_node","sid":8177575,"plugin":"banner"});
+            </script>
+            
+            <!-- ExoClick Header Banner -->
+            <div id="exo-header-banner">
                 <script type="text/javascript">
-                    if (typeof(exoJsPop102) == "undefined") {
-                        exoJsPop102=true;
+                    if (typeof(exoJsPop101) == "undefined") {
+                        exoJsPop101=true;
                         var script = document.createElement("script");
                         script.src = "//a.exdynsrv.com/ad-provider.js"; 
                         script.onload = function(){
-                            try{ExoLoader.serve({"gclid":"","src":"https:\/\/a.exdynsrv.com\/ads-by-exoclick.js","adId":"5347190","sub":"0","keywords":"","h":"600","w":"160","cookieconsent":"true","mainstream":"1"}); }catch(e){}
+                            try{ExoLoader.serve({"gclid":"","src":"https:\/\/a.exdynsrv.com\/ads-by-exoclick.js","adId":"5347189","sub":"0","keywords":"","h":"728","w":"90","cookieconsent":"true","mainstream":"1"}); }catch(e){}
                         };
                         document.head.appendChild(script);
                     }
@@ -1121,97 +1250,163 @@
             </div>
         </div>
 
-        <!-- Content Wrapper -->
-        <div class="content-wrapper">
-            <!-- Left Sidebar: Photos -->
-            <div class="sidebar">
-                <div class="sidebar-header">
-                    <h2 class="sidebar-title">📸 Photos (213)</h2>
-                    <p class="sidebar-subtitle">Premium ocean collection</p>
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">🌊 IbizaGirl.pics</div>
+            <div class="nav-controls">
+                <div class="stats-display">
+                    <div class="stat-box">
+                        <div class="stat-number" id="photoCount">213</div>
+                        <div class="stat-label">Photos</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="videoCount">10</div>
+                        <div class="stat-label">Videos</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="totalViews">2.1M</div>
+                        <div class="stat-label">Views</div>
+                    </div>
                 </div>
-                <div class="sidebar-content">
-                    <div class="content-grid" id="photosGrid">
-                        <!-- Photos will be loaded here -->
+                <button class="vip-btn" id="vipBtn" onclick="showVIPModal()">
+                    🔓 VIP Access €10/month
+                </button>
+            </div>
+        </div>
+
+        <!-- Mega Banner with Ocean Theme -->
+        <div class="mega-banner">
+            <div class="banner-bg-slideshow">
+                <div class="banner-slide active"></div>
+                <div class="banner-slide"></div>
+                <div class="banner-slide"></div>
+                <div class="banner-slide"></div>
+            </div>
+            <div class="banner-content">
+                <h1 class="banner-title">OCEAN PARADISE</h1>
+                <p class="banner-subtitle">Exclusive Mediterranean Collection</p>
+            </div>
+        </div>
+
+        <!-- Main Layout: Ads | Photos | Teasers | Videos | Ads -->
+        <div class="main-container">
+            <!-- Left Ad Sidebar -->
+            <div class="ad-sidebar left">
+                <!-- JuicyAds Left -->
+                <div class="ad-zone sidebar-ad">
+                    <script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
+                    <ins id="1098519" data-width="160" data-height="600"></ins>
+                    <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1098519});</script>
+                </div>
+                
+                <!-- ExoClick Left Sidebar -->
+                <div class="ad-zone sidebar-ad">
+                    <script type="text/javascript">
+                        if (typeof(exoJsPop102) == "undefined") {
+                            exoJsPop102=true;
+                            var script = document.createElement("script");
+                            script.src = "//a.exdynsrv.com/ad-provider.js"; 
+                            script.onload = function(){
+                                try{ExoLoader.serve({"gclid":"","src":"https:\/\/a.exdynsrv.com\/ads-by-exoclick.js","adId":"5347190","sub":"0","keywords":"","h":"600","w":"160","cookieconsent":"true","mainstream":"1"}); }catch(e){}
+                            };
+                            document.head.appendChild(script);
+                        }
+                    </script>
+                </div>
+            </div>
+
+            <!-- Content Wrapper -->
+            <div class="content-wrapper">
+                <!-- Left Sidebar: Photos -->
+                <div class="sidebar">
+                    <div class="sidebar-header">
+                        <h2 class="sidebar-title">📸 Photos (213)</h2>
+                        <p class="sidebar-subtitle">Premium ocean collection</p>
+                    </div>
+                    <div class="sidebar-content">
+                        <div class="content-grid" id="photosGrid">
+                            <!-- Photos will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center: Teaser Gallery -->
+                <div class="center-area">
+                    <div class="center-header">
+                        <h2 class="center-title">🏝️ Paradise Teasers</h2>
+                        <p class="center-subtitle">Preview our exclusive ocean collection</p>
+                    </div>
+                    <div class="teaser-gallery">
+                        <div class="teaser-grid" id="teaserGrid">
+                            <!-- ALL 36 teasers will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar: Videos -->
+                <div class="sidebar right">
+                    <div class="sidebar-header">
+                        <h2 class="sidebar-title">🎬 Videos (10)</h2>
+                        <p class="sidebar-subtitle">Premium beach videos</p>
+                    </div>
+                    <div class="sidebar-content">
+                        <div class="content-grid" id="videosGrid">
+                            <!-- Videos will be loaded here -->
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Center: Teaser Gallery -->
-            <div class="center-area">
-                <div class="center-header">
-                    <h2 class="center-title">🏝️ Paradise Teasers</h2>
-                    <p class="center-subtitle">Preview our exclusive ocean collection</p>
+            <!-- Right Ad Sidebar -->
+            <div class="ad-sidebar right">
+                <!-- JuicyAds Right -->
+                <div class="ad-zone sidebar-ad">
+                    <script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
+                    <ins id="1098520" data-width="160" data-height="600"></ins>
+                    <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1098520});</script>
                 </div>
-                <div class="teaser-gallery">
-                    <div class="teaser-grid" id="teaserGrid">
-                        <!-- ALL 36 teasers will be loaded here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Sidebar: Videos -->
-            <div class="sidebar right">
-                <div class="sidebar-header">
-                    <h2 class="sidebar-title">🎬 Videos (10)</h2>
-                    <p class="sidebar-subtitle">Premium beach videos</p>
-                </div>
-                <div class="sidebar-content">
-                    <div class="content-grid" id="videosGrid">
-                        <!-- Videos will be loaded here -->
-                    </div>
+                
+                <!-- ExoClick Right Sidebar -->
+                <div class="ad-zone sidebar-ad">
+                    <script type="text/javascript">
+                        if (typeof(exoJsPop103) == "undefined") {
+                            exoJsPop103=true;
+                            var script = document.createElement("script");
+                            script.src = "//a.exdynsrv.com/ad-provider.js"; 
+                            script.onload = function(){
+                                try{ExoLoader.serve({"gclid":"","src":"https:\/\/a.exdynsrv.com\/ads-by-exoclick.js","adId":"5347191","sub":"0","keywords":"","h":"600","w":"160","cookieconsent":"true","mainstream":"1"}); }catch(e){}
+                            };
+                            document.head.appendChild(script);
+                        }
+                    </script>
                 </div>
             </div>
         </div>
 
-        <!-- Right Ad Sidebar -->
-        <div class="ad-sidebar right">
-            <!-- JuicyAds Right -->
-            <div class="ad-zone sidebar-ad">
-                <script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
-                <ins id="1098520" data-width="160" data-height="600"></ins>
-                <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1098520});</script>
-            </div>
+        <!-- FOOTER BANNER AD ZONE -->
+        <div class="ad-zone footer-ad">
+            <!-- Ero-Advertising Footer Banner -->
+            <div id="sp_8177575_footer">&nbsp;</div>
+            <script type="text/javascript" charset="utf-8">
+            if (typeof eaCtrl !="undefined"){
+                eaCtrl.add({"display":"sp_8177575_footer","sid":8177575,"plugin":"banner"});
+            }
+            </script>
             
-            <!-- ExoClick Right Sidebar -->
-            <div class="ad-zone sidebar-ad">
+            <!-- ExoClick Footer Banner -->
+            <div id="exo-footer-banner">
                 <script type="text/javascript">
-                    if (typeof(exoJsPop103) == "undefined") {
-                        exoJsPop103=true;
+                    if (typeof(exoJsPop104) == "undefined") {
+                        exoJsPop104=true;
                         var script = document.createElement("script");
                         script.src = "//a.exdynsrv.com/ad-provider.js"; 
                         script.onload = function(){
-                            try{ExoLoader.serve({"gclid":"","src":"https:\/\/a.exdynsrv.com\/ads-by-exoclick.js","adId":"5347191","sub":"0","keywords":"","h":"600","w":"160","cookieconsent":"true","mainstream":"1"}); }catch(e){}
+                            try{ExoLoader.serve({"gclid":"","src":"https:\/\/a.exdynsrv.com\/ads-by-exoclick.js","adId":"5347192","sub":"0","keywords":"","h":"90","w":"728","cookieconsent":"true","mainstream":"1"}); }catch(e){}
                         };
                         document.head.appendChild(script);
                     }
                 </script>
             </div>
-        </div>
-    </div>
-
-    <!-- FOOTER BANNER AD ZONE -->
-    <div class="ad-zone footer-ad">
-        <!-- Ero-Advertising Footer Banner -->
-        <div id="sp_8177575_footer">&nbsp;</div>
-        <script type="text/javascript" charset="utf-8">
-        if (typeof eaCtrl !="undefined"){
-            eaCtrl.add({"display":"sp_8177575_footer","sid":8177575,"plugin":"banner"});
-        }
-        </script>
-        
-        <!-- ExoClick Footer Banner -->
-        <div id="exo-footer-banner">
-            <script type="text/javascript">
-                if (typeof(exoJsPop104) == "undefined") {
-                    exoJsPop104=true;
-                    var script = document.createElement("script");
-                    script.src = "//a.exdynsrv.com/ad-provider.js"; 
-                    script.onload = function(){
-                        try{ExoLoader.serve({"gclid":"","src":"https:\/\/a.exdynsrv.com\/ads-by-exoclick.js","adId":"5347192","sub":"0","keywords":"","h":"90","w":"728","cookieconsent":"true","mainstream":"1"}); }catch(e){}
-                    };
-                    document.head.appendChild(script);
-                }
-            </script>
         </div>
     </div>
 
@@ -1264,7 +1459,7 @@
 
     <script>
         // ============================
-        // GALLERY DATA - ALL 213 IMAGES + 10 VIDEOS FROM FILE 8
+        // GALLERY DATA - ALL CONTENT FROM FILE 8
         // ============================
         
         // All 213 images from File 8 - COMPLETE WORKING LIST
@@ -1397,7 +1592,7 @@
         ];
 
         // ============================
-        // STATE MANAGEMENT (From File 8)
+        // STATE MANAGEMENT
         // ============================
         let isVIP = false;
         let unlockedContent = new Set();
@@ -1415,10 +1610,75 @@
         };
 
         // ============================
+        // AGE VERIFICATION FUNCTIONS
+        // ============================
+        function verifyAge() {
+            // Store age verification
+            localStorage.setItem('ibiza_age_verified', 'true');
+            localStorage.setItem('ibiza_verification_time', Date.now().toString());
+            
+            // Track event
+            if (window.gtag) {
+                window.gtag('event', 'age_verification', {
+                    'event_category': 'engagement',
+                    'event_label': 'verified'
+                });
+            }
+            
+            // Show gallery
+            showMainGallery();
+        }
+
+        function exitSite() {
+            // Track exit
+            if (window.gtag) {
+                window.gtag('event', 'age_verification', {
+                    'event_category': 'engagement',
+                    'event_label': 'exited'
+                });
+            }
+            
+            // Redirect to a safe site
+            window.location.href = 'https://www.google.com';
+        }
+
+        function showMainGallery() {
+            // Hide age verification
+            document.getElementById('ageVerification').classList.add('hidden');
+            
+            // Show main gallery
+            setTimeout(() => {
+                document.getElementById('mainGallery').classList.add('active');
+                initializeGallery();
+            }, 800);
+        }
+
+        // ============================
         // INITIALIZATION
         // ============================
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('🌊 Initializing Ocean Paradise Gallery with Ads...');
+            console.log('🌊 Initializing Ocean Paradise Gallery...');
+            
+            // Check if user has already verified age
+            const ageVerified = localStorage.getItem('ibiza_age_verified');
+            const verificationTime = localStorage.getItem('ibiza_verification_time');
+            
+            if (ageVerified === 'true' && verificationTime) {
+                const daysSince = (Date.now() - parseInt(verificationTime)) / (1000 * 60 * 60 * 24);
+                
+                // Auto-verify if verified within last 30 days
+                if (daysSince < 30) {
+                    showMainGallery();
+                    return;
+                }
+            }
+            
+            // Show age verification by default
+            console.log('🔞 Age verification required');
+        });
+
+        function initializeGallery() {
+            console.log('🎨 Initializing gallery content...');
             
             // Load saved state
             loadSavedState();
@@ -1434,13 +1694,13 @@
             // Hide loading screen
             setTimeout(() => {
                 document.getElementById('loadingScreen').classList.add('hidden');
-            }, 2000);
+            }, 1000);
             
             console.log('✅ Gallery loaded: 213 photos, 10 videos, 36 teasers + ADS!');
-        });
+        }
 
         // ============================
-        // RENDER FUNCTIONS (From File 8)
+        // RENDER FUNCTIONS
         // ============================
         function renderPhotos() {
             const photosGrid = document.getElementById('photosGrid');
@@ -1573,7 +1833,7 @@
         }
 
         // ============================
-        // EVENT HANDLERS (From File 8)
+        // EVENT HANDLERS
         // ============================
         function handlePhotoClick(id, filename, index) {
             if (isVIP || unlockedContent.has(id)) {
@@ -1597,7 +1857,7 @@
         }
 
         // ============================
-        // MODAL FUNCTIONS (From File 8)
+        // MODAL FUNCTIONS
         // ============================
         function showVIPModal() {
             document.getElementById('vipModal').classList.add('active');
@@ -1618,7 +1878,7 @@
         }
 
         // ============================
-        // PAYPAL INTEGRATION (From File 8)
+        // PAYPAL INTEGRATION
         // ============================
         function renderPayPalSubscriptionButton() {
             const container = document.getElementById('paypalContainer');
@@ -1723,7 +1983,7 @@
         }
 
         // ============================
-        // PAYMENT SUCCESS HANDLERS (From File 8)
+        // PAYMENT SUCCESS HANDLERS
         // ============================
         function handleSubscriptionSuccess(data) {
             console.log('🎉 VIP Ocean Access activated');
@@ -1754,7 +2014,7 @@
         }
 
         // ============================
-        // UNLOCK FUNCTIONS (From File 8)
+        // UNLOCK FUNCTIONS
         // ============================
         function unlockAllContent() {
             console.log('🔓 Unlocking ALL ocean content - VIP mode');
@@ -1796,7 +2056,7 @@
         }
 
         // ============================
-        // UTILITY FUNCTIONS (From File 8)
+        // UTILITY FUNCTIONS
         // ============================
         function loadSavedState() {
             // Load VIP status
