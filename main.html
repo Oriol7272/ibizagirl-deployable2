@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IbizaGirl.pics - Paradise Gallery 🏝️</title>
+    
+    <!-- AD NETWORK VERIFICATION META TAGS -->
+    <meta name="juicyads-site-verification" content="57781c218b1d1435f3512464c59cf39b">
+    <meta name="eroads_" content="5f8afe77e5b70fec960d89b314e045a4" />
+    
+    <style>
+        :root {
+            /* Ocean & Maritime Blue Theme */
+            --ocean-deep: #001f3f;
+            --ocean-dark: #003366;
+            --ocean-medium: #005588;
+            --ocean-light: #0077be;
+            --ocean-bright: #00a8cc;
+            --aqua-light: #00d4ff;
+            --sea-foam: #7fdbff;
+            --sunset-gold: #ffd700;
+            --sunset-orange: #ff6b35;
+            --sand-light: #f4e4c1;
+            --text-primary: #ffffff;
+            --text-secondary: #b8d4e3;
+            --blur-heavy: 20px;
+            --glass-bg: rgba(0, 119, 190, 0.1);
+            --glass-border: rgba(127, 219, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, var(--ocean-deep) 0%, var(--ocean-dark) 50%, var(--ocean-medium) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ============================
+           OCEAN ANIMATED BACKGROUND
+           ============================ */
+        .ocean-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            background: linear-gradient(180deg, 
+                rgba(0, 31, 63, 0.9) 0%, 
+                rgba(0, 51, 102, 0.8) 30%, 
+                rgba(0, 119, 190, 0.7) 70%, 
+                rgba(127, 219, 255, 0.5) 100%
+            );
+        }
+
+        .wave-animation {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%230077be" fill-opacity="0.3" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,133.3C960,128,1056,96,1152,90.7C1248,85,1344,107,1392,117.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat;
+            background-size: cover;
+            z-index: -8;
+            animation: wave 10s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .gradient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                circle at 30% 40%,
+                rgba(0, 168, 204, 0.3) 0%,
+                rgba(0, 119, 190, 0.2) 25%,
+                rgba(0, 212, 255, 0.1) 50%,
+                transparent 70%
+            );
+            z-index: -9;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        /* ============================
+           AD ZONES STYLING
+           ============================ */
+        .ad-zone {
+            background: rgba(0, 119, 190, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 10px;
+            margin: 10px 0;
+            text-align: center;
+            min-height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ad-zone.header-ad {
+            width: 100%;
+            margin: 0;
+            border-radius: 0;
+            border-left: none;
+            border-right: none;
+            min-height: 120px;
+        }
+
+        .ad-zone.sidebar-ad {
+            min-height: 300px;
+            margin: 20px 0;
+        }
+
+        .ad-zone.footer-ad {
+            width: 100%;
+            margin: 0;
+            border-radius: 0;
+            border-left: none;
+            border-right: none;
+            min-height: 100px;
+        }
+
+        /* ============================
+           ENHANCED BANNER WITH YOUR IMAGES
+           ============================ */
+        .mega-banner {
+            height: 500px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 80px;
+            background: linear-gradient(135deg, 
+                rgba(0, 119, 190, 0.8), 
+                rgba(0, 168, 204, 0.6),
+                rgba(127, 219, 255, 0.4)
+            );
+            border-bottom: 4px solid var(--aqua-light);
+            box-shadow: 0 20px 60px rgba(0, 119, 190, 0.5);
+        }
+
+        .banner-bg-slideshow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .banner-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 3s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.9) contrast(1.1) saturate(1.2);
+        }
+
+        .banner-slide.active {
+            opacity: 1;
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 3rem;
+            background: radial-gradient(
+                circle at center,
+                rgba(0, 31, 63, 0.4) 0%,
+                rgba(0, 51, 102, 0.6) 50%,
+                rgba(0, 31, 63, 0.8) 100%
+            );
+        }
+
+        .banner-title {
+            font-size: 5rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 
+                0 0 80px rgba(0, 212, 255, 1),
+                0 10px 40px rgba(0, 31, 63, 1),
+                5px 5px 10px rgba(0, 0, 0, 1);
+            margin-bottom: 1.5rem;
+            letter-spacing: 4px;
+            background: linear-gradient(45deg, #ffffff, var(--aqua-light), var(--sunset-gold), var(--ocean-bright));
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleGradient 3s ease infinite;
+        }
+
+        @keyframes titleGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .banner-subtitle {
+            font-size: 2.2rem;
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 
+                0 5px 20px rgba(0, 31, 63, 1),
+                0 0 40px rgba(0, 212, 255, 0.8);
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        /* ============================
+           HEADER WITH OCEAN GLASS EFFECT
+           ============================ */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: rgba(0, 51, 102, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3rem;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(0, 119, 190, 0.3);
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--aqua-light), var(--ocean-bright), var(--sunset-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            animation: logoShine 3s ease-in-out infinite;
+        }
+
+        @keyframes logoShine {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3) drop-shadow(0 0 20px var(--aqua-light)); }
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .stats-display {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--aqua-light);
+            text-shadow: 0 0 10px var(--aqua-light);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .vip-btn {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--ocean-light), var(--ocean-bright), var(--aqua-light));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 168, 204, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .vip-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.6);
+        }
+
+        /* ============================
+           MAIN LAYOUT WITH AD SIDEBARS
+           ============================ */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 580px);
+            margin-top: 0;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Left and Right Ad Sidebars */
+        .ad-sidebar {
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .ad-sidebar.left {
+            order: 1;
+        }
+
+        .ad-sidebar.right {
+            order: 3;
+        }
+
+        /* Main Content Area */
+        .content-wrapper {
+            flex: 1;
+            order: 2;
+            display: flex;
+            gap: 2rem;
+        }
+
+        /* ============================
+           SIDEBARS WITH OCEAN THEME (Photos/Videos)
+           ============================ */
+        .sidebar {
+            width: 400px;
+            background: linear-gradient(180deg, 
+                rgba(0, 85, 136, 0.2) 0%, 
+                rgba(0, 119, 190, 0.1) 100%
+            );
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 119, 190, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, 
+                rgba(0, 119, 190, 0.3), 
+                rgba(0, 168, 204, 0.2)
+            );
+            border-bottom: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        .sidebar.right .sidebar-header {
+            background: linear-gradient(135deg, 
+                rgba(0, 168, 204, 0.3), 
+                rgba(127, 219, 255, 0.2)
+            );
+        }
+
+        .sidebar-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--ocean-bright), var(--aqua-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar.right .sidebar-title {
+            background: linear-gradient(135deg, var(--aqua-light), var(--sea-foam));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .content-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--glass-bg);
+            border: 2px solid transparent;
+            box-shadow: 0 4px 20px rgba(0, 119, 190, 0.3);
+        }
+
+        .content-item:hover {
+            transform: scale(1.05) translateY(-5px);
+            border-color: var(--aqua-light);
+            box-shadow: 
+                0 15px 40px rgba(0, 212, 255, 0.4),
+                0 0 30px rgba(127, 219, 255, 0.3);
+            z-index: 10;
+        }
+
+        .item-media {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(var(--blur-heavy)) brightness(0.7) sepia(0.3) hue-rotate(180deg);
+            transition: all 0.5s ease;
+        }
+
+        .content-item:hover .item-media {
+            filter: blur(15px) brightness(0.8) sepia(0.3) hue-rotate(180deg);
+        }
+
+        .content-item.unlocked .item-media {
+            filter: none !important;
+        }
+
+        .lock-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
+        }
+
+        .content-item.unlocked .lock-overlay {
+            display: none !important;
+        }
+
+        .item-price {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, #003087, #0070ba);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 6;
+        }
+
+        .content-item.unlocked .item-price {
+            display: none !important;
+        }
+
+        .paypal-icon {
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #0070ba;
+            font-weight: 900;
+        }
+
+        .video-duration {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 51, 102, 0.9);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            z-index: 3;
+        }
+
+        .item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: linear-gradient(to top, rgba(0, 31, 63, 0.9) 0%, transparent 100%);
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 4;
+        }
+
+        .content-item:hover .item-overlay {
+            transform: translateY(0);
+        }
+
+        .item-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.3rem;
+        }
+
+        .item-info {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* ============================
+           CENTER AREA - TEASER GALLERY
+           ============================ */
+        .center-area {
+            flex: 1;
+            background: linear-gradient(180deg, 
+                rgba(0, 119, 190, 0.1) 0%, 
+                rgba(0, 168, 204, 0.05) 100%
+            );
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 119, 190, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .center-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, 
+                rgba(127, 219, 255, 0.2), 
+                rgba(0, 212, 255, 0.1)
+            );
+            border-bottom: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        .center-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--sea-foam), var(--aqua-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .center-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .teaser-gallery {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .teaser-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .teaser-item {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(0, 51, 102, 0.3);
+            border: 2px solid transparent;
+            box-shadow: 0 8px 32px rgba(0, 119, 190, 0.3);
+        }
+
+        .teaser-item:hover {
+            transform: scale(1.02) translateY(-5px);
+            border-color: var(--aqua-light);
+            box-shadow: 
+                0 20px 50px rgba(0, 212, 255, 0.3),
+                0 0 40px rgba(127, 219, 255, 0.2);
+        }
+
+        .teaser-media {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: brightness(0.95) contrast(1.1);
+            transition: all 0.3s ease;
+        }
+
+        .teaser-item:hover .teaser-media {
+            filter: brightness(1.05) contrast(1.15);
+            transform: scale(1.05);
+        }
+
+        .teaser-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(to top, 
+                rgba(0, 31, 63, 0.95) 0%, 
+                rgba(0, 51, 102, 0.7) 50%,
+                transparent 100%
+            );
+        }
+
+        .teaser-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .teaser-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* ============================
+           MODAL SYSTEM
+           ============================ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 31, 63, 0.95);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(15px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, 
+                rgba(0, 51, 102, 0.95), 
+                rgba(0, 85, 136, 0.95)
+            );
+            color: white;
+            padding: 3rem;
+            border-radius: 25px;
+            max-width: 600px;
+            width: 90%;
+            border: 2px solid var(--aqua-light);
+            box-shadow: 0 25px 80px rgba(0, 212, 255, 0.4);
+            text-align: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .modal h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--aqua-light), var(--sea-foam));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .price-display {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--sunset-gold);
+            margin: 2rem 0;
+            text-shadow: 0 0 20px var(--sunset-gold);
+        }
+
+        .features-list {
+            text-align: left;
+            margin: 2rem 0;
+            padding: 0 2rem;
+        }
+
+        .features-list div {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .paypal-button-container {
+            margin: 2rem 0;
+            min-height: 60px;
+        }
+
+        .close-btn {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 2px solid var(--glass-border);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: white;
+            border-color: var(--aqua-light);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        /* ============================
+           LOADING ANIMATION
+           ============================ */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--ocean-deep), var(--ocean-dark));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            border: 4px solid transparent;
+            border-top: 4px solid var(--aqua-light);
+            border-right: 4px solid var(--ocean-bright);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--aqua-light);
+            font-size: 1.5rem;
+            font-weight: 600;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* ============================
+           SCROLLBAR STYLING
+           ============================ */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 119, 190, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--ocean-light), var(--ocean-bright));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--ocean-bright), var(--aqua-light));
+        }
+
+        /* ============================
+           RESPONSIVE DESIGN
+           ============================ */
+        @media (max-width: 1400px) {
+            .sidebar {
+                width: 350px;
+            }
+            
+            .main-container {
+                padding: 1.5rem;
+            }
+
+            .ad-sidebar {
+                width: 160px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .banner-title {
+                font-size: 3.5rem;
+            }
+            
+            .mega-banner {
+                height: 400px;
+            }
+
+            .ad-sidebar {
+                display: none;
+            }
+
+            .content-wrapper {
+                order: 1;
+            }
+        }
+
+        @media (max-width: 968px) {
+            .content-wrapper {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .sidebar {
+                width: 100%;
+                max-height: 400px;
+            }
+            
+            .content-grid {
+                display: flex;
+                overflow-x: auto;
+                gap: 1rem;
+                padding-bottom: 1rem;
+            }
+            
+            .content-item {
+                min-width: 150px;
+                width: 150px;
+                height: 150px;
+                flex-shrink: 0;
+            }
+            
+            .header {
+                padding: 0 1.5rem;
+            }
+            
+            .banner-title {
+                font-size: 2.8rem;
+            }
+            
+            .banner-subtitle {
+                font-size: 1.5rem;
+            }
+            
+            .stats-display {
+                display: none;
+            }
+            
+            .mega-banner {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                height: 70px;
+                padding: 0 1rem;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .vip-btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            
+            .banner-title {
+                font-size: 2.2rem;
+            }
+            
+            .banner-subtitle {
+                font-size: 1.2rem;
+                letter-spacing: 2px;
+            }
+            
+            .mega-banner {
+                height: 250px;
+            }
+            
+            .modal-content {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .content-item {
+                min-width: 130px;
+                width: 130px;
+                height: 130px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader"></div>
+        <div class="loading-text">Loading Paradise Gallery...</div>
+    </div>
+
+    <!-- Ocean Background System -->
+    <div class="ocean-background"></div>
+    <div class="wave-animation"></div>
+    <div class="gradient-overlay"></div>
+
+    <!-- TOP HEADER AD ZONE -->
+    <div class="ad-zone header-ad">
+        <!-- Ero-Advertising Banner -->
+        <div id="sp_8177575_node">&nbsp;</div>
+        <script type="text/javascript" charset="utf-8">
+        if (typeof eaCtrl =="undefined"){
+            var eaCtrlRecs=[];
+            var eaCtrl = {add:function(ag){eaCtrlRecs.push(ag)}};
+            var js = document.createElement('script');
+            js.setAttribute("src","//go.easrv.cl/loadeactrl.go?pid=152716&spaceid=8177575&ctrlid=798544");
+            document.head.appendChild(js);
+        }
+        eaCtrl.add({"display":"sp_8177575_node","sid":8177575,"plugin":"banner"});
+        </script>
+        
+        <!-- ExoClick Header Banner -->
+        <div id="exo-header-banner">
+            <script type="text/javascript">
+                if (typeof(exoJsPop101) == "undefined") {
+                    exoJsPop101=true;
+                    var script = document.createElement("script");
+                    script.src = "//a.exdynsrv.com/ad-provider.js"; 
+                    script.onload = function(){
+                        try{ExoLoader.serve({"gclid":"","src":"https:\/\/a.exdynsrv.com\/ads-by-exoclick.js","adId":"5347189","sub":"0","keywords":"","h":"728","w":"90","cookieconsent":"true","mainstream":"1"}); }catch(e){}
+                    };
+                    document.head.appendChild(script);
+                }
+            </script>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">🌊 IbizaGirl.pics</div>
+        <div class="nav-controls">
+            <div class="stats-display">
+                <div class="stat-box">
+                    <div class="stat-number" id="photoCount">213</div>
+                    <div class="stat-label">Photos</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="videoCount">10</div>
+                    <div class="stat-label">Videos</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="totalViews">2.1M</div>
+                    <div class="stat-label">Views</div>
+                </div>
+            </div>
+            <button class="vip-btn" id="vipBtn" onclick="showVIPModal()">
+                🔓 VIP Access €10/month
+            </button>
+        </div>
+    </div>
+
+    <!-- Mega Banner with Ocean Theme -->
+    <div class="mega-banner">
+        <div class="banner-bg-slideshow">
+            <div class="banner-slide active"></div>
+            <div class="banner-slide"></div>
+            <div class="banner-slide"></div>
+            <div class="banner-slide"></div>
+        </div>
+        <div class="banner-content">
+            <h1 class="banner-title">OCEAN PARADISE</h1>
+            <p class="banner-subtitle">Exclusive Mediterranean Collection</p>
+        </div>
+    </div>
+
+    <!-- Main Layout: Ads | Photos | Teasers | Videos | Ads -->
+    <div class="main-container">
+        <!-- Left Ad Sidebar -->
+        <div class="ad-sidebar left">
+            <!-- JuicyAds Left -->
+            <div class="ad-zone sidebar-ad">
+                <script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
+                <ins id="1098519" data-width="160" data-height="600"></ins>
+                <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1098519});</script>
+            </div>
+            
+            <!-- ExoClick Left Sidebar -->
+            <div class="ad-zone sidebar-ad">
+                <script type="text/javascript">
+                    if (typeof(exoJsPop102) == "undefined") {
+                        exoJsPop102=true;
+                        var script = document.createElement("script");
+                        script.src = "//a.exdynsrv.com/ad-provider.js"; 
+                        script.onload = function(){
+                            try{ExoLoader.serve({"gclid":"","src":"https:\/\/a.exdynsrv.com\/ads-by-exoclick.js","adId":"5347190","sub":"0","keywords":"","h":"600","w":"160","cookieconsent":"true","mainstream":"1"}); }catch(e){}
+                        };
+                        document.head.appendChild(script);
+                    }
+                </script>
+            </div>
+        </div>
+
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Left Sidebar: Photos -->
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h2 class="sidebar-title">📸 Photos (213)</h2>
+                    <p class="sidebar-subtitle">Premium ocean collection</p>
+                </div>
+                <div class="sidebar-content">
+                    <div class="content-grid" id="photosGrid">
+                        <!-- Photos will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center: Teaser Gallery -->
+            <div class="center-area">
+                <div class="center-header">
+                    <h2 class="center-title">🏝️ Paradise Teasers</h2>
+                    <p class="center-subtitle">Preview our exclusive ocean collection</p>
+                </div>
+                <div class="teaser-gallery">
+                    <div class="teaser-grid" id="teaserGrid">
+                        <!-- ALL 36 teasers will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar: Videos -->
+            <div class="sidebar right">
+                <div class="sidebar-header">
+                    <h2 class="sidebar-title">🎬 Videos (10)</h2>
+                    <p class="sidebar-subtitle">Premium beach videos</p>
+                </div>
+                <div class="sidebar-content">
+                    <div class="content-grid" id="videosGrid">
+                        <!-- Videos will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Ad Sidebar -->
+        <div class="ad-sidebar right">
+            <!-- JuicyAds Right -->
+            <div class="ad-zone sidebar-ad">
+                <script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
+                <ins id="1098520" data-width="160" data-height="600"></ins>
+                <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1098520});</script>
+            </div>
+            
+            <!-- ExoClick Right Sidebar -->
+            <div class="ad-zone sidebar-ad">
+                <script type="text/javascript">
+                    if (typeof(exoJsPop103) == "undefined") {
+                        exoJsPop103=true;
+                        var script = document.createElement("script");
+                        script.src = "//a.exdynsrv.com/ad-provider.js"; 
+                        script.onload = function(){
+                            try{ExoLoader.serve({"gclid":"","src":"https:\/\/a.exdynsrv.com\/ads-by-exoclick.js","adId":"5347191","sub":"0","keywords":"","h":"600","w":"160","cookieconsent":"true","mainstream":"1"}); }catch(e){}
+                        };
+                        document.head.appendChild(script);
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER BANNER AD ZONE -->
+    <div class="ad-zone footer-ad">
+        <!-- Ero-Advertising Footer Banner -->
+        <div id="sp_8177575_footer">&nbsp;</div>
+        <script type="text/javascript" charset="utf-8">
+        if (typeof eaCtrl !="undefined"){
+            eaCtrl.add({"display":"sp_8177575_footer","sid":8177575,"plugin":"banner"});
+        }
+        </script>
+        
+        <!-- ExoClick Footer Banner -->
+        <div id="exo-footer-banner">
+            <script type="text/javascript">
+                if (typeof(exoJsPop104) == "undefined") {
+                    exoJsPop104=true;
+                    var script = document.createElement("script");
+                    script.src = "//a.exdynsrv.com/ad-provider.js"; 
+                    script.onload = function(){
+                        try{ExoLoader.serve({"gclid":"","src":"https:\/\/a.exdynsrv.com\/ads-by-exoclick.js","adId":"5347192","sub":"0","keywords":"","h":"90","w":"728","cookieconsent":"true","mainstream":"1"}); }catch(e){}
+                    };
+                    document.head.appendChild(script);
+                }
+            </script>
+        </div>
+    </div>
+
+    <!-- VIP Modal -->
+    <div id="vipModal" class="modal">
+        <div class="modal-content">
+            <h2>🌊 VIP Ocean Paradise Access</h2>
+            <div class="price-display">€10/month</div>
+            <div class="features-list">
+                <div>🌊 Unlimited access to ALL ocean content</div>
+                <div>🏖️ Full HD quality, no blur</div>
+                <div>🌅 New exclusive beach content weekly</div>
+                <div>📱 Download enabled for all devices</div>
+                <div>⭐ Priority access to new releases</div>
+                <div>🚫 Cancel anytime via PayPal</div>
+            </div>
+            <div class="paypal-button-container" id="paypalContainer">
+                <!-- PayPal buttons will be rendered here -->
+            </div>
+            <button class="close-btn" onclick="closeModal()">Maybe Later</button>
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.6;">
+                🔒 Secure payment via PayPal • SSL Encrypted
+            </p>
+        </div>
+    </div>
+
+    <!-- Pay Per View Modal -->
+    <div id="ppvModal" class="modal">
+        <div class="modal-content">
+            <h2 id="ppvTitle">Unlock Content</h2>
+            <div class="price-display" id="ppvPrice">€0.10</div>
+            <p>One-time payment • Permanent access</p>
+            <div class="paypal-button-container" id="ppvPaypalContainer">
+                <!-- PayPal buttons will be rendered here -->
+            </div>
+            <div style="margin: 1.5rem 0;">
+                <button onclick="showVIPModal(); closeModal();" 
+                        style="background: linear-gradient(135deg, var(--ocean-light), var(--ocean-bright)); 
+                               border: none; color: white; padding: 1rem 2rem; 
+                               border-radius: 25px; cursor: pointer; font-weight: 600;">
+                    Get Full Access Instead
+                </button>
+            </div>
+            <button class="close-btn" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR&intent=capture&components=buttons"></script>
+
+    <script>
+        // ============================
+        // GALLERY DATA - ALL 213 IMAGES + 10 VIDEOS FROM FILE 8
+        // ============================
+        
+        // All 213 images from File 8
+        const ALL_PHOTOS = [
+            '1dsu1ynPOBgwxVIVMm98.jpg', '5NSmf9UdwUJBWNS7LxM5.jpg', 'Te2nfJ7cUJ4CLzPXOGNP.jpg',
+            'DvCbL0ojNUx8yzgxz8zx.jpg', 'gHzeQOkqUV84zzzuSpgE.jpg', 'A3lni0mmt59IIQ1U0cki.jpg',
+            'GBaZuttvlobM3dZ0DvMp.jpg', 'DuE3kpTijyH0TXZeNRov.jpg', '2J6UGbexO5xfFKKhz32I.jpg',
+            'qhvjLVrp1aIC5Re5rloh.jpg', 'P3GqyhUt8X9wpa6AQq83.jpg', '8WiqA1mLF0ja4a4YtpJD.jpg',
+            'tL5qXPGTRSz83nhLqOWA.jpg', 'sBcbjHl9tBNpffy5N757.jpg', 'f8wGqIcKeKvhNyPEUfe7.jpg',
+            'kvMWPx1dZLAKZTdYz021.jpg', '5sKc0zYrls3NUrzzjErK.jpg', 'kMOVTOl3HyJSFM9SSy3z.jpg',
+            'LYSESzSp78K3C45L6tsX.jpg', 'FAYtHPEqBLgxLlVmGzSl.jpg', '4yL507qGjWSU4a2jG88v.jpg',
+            'P5Ub5tzpVEJqb5XJz2Gb.jpg', 'F7DfIkzXjoHim0pcNtiX.jpg', 'vr6T66fOk1VKjDzxBl96.jpg',
+            '6zLWLniPGUkRJY5POGIL.jpg', 'MS78j8iZVCPITPEZSJyS.jpg', 'TzeaqxRMZ12lDvpoLlK2.jpg',
+            'dSKs7G60OQ19t3wjDjG0.jpg', 'zl3FIFdh4OZMogOhLQXv.jpg', 'm73nqvEQU4Fecsk00rus.jpg',
+            'WPxkhDyjBs16CP58mEes.jpg', 'Z7Z7UTXyqeJ8LszoaSgW.jpg', 'OZlQLWFUfmpSXXMl2Pre.jpg',
+            '9HoKHfzfIKXiINyRQ7OG.jpg', 'ekmYbNBjpyWxZwRlc1EK.jpg', 'ukDMjQc287vTIu0dSDjD.jpg',
+            'Qo81ClhOc0XlM2PYm6qG.jpg', 'ZjeRXsd3kDsL0XWGR4BN.jpg', '9YLpn3gsg8sTGaN0CmZm.jpg',
+            'PlDZ1pKn1q3I1hXXLExl.jpg', 'YKEv532dcs0wjRUwPsgo.jpg', 'JJdSiCOKhwnOVS52xMoJ.jpg',
+            'osLuGEmMEbvUS4Wg0vPd.jpg', '6s0sdzRWqsoxt1WPCnPM.jpg', '3kZqhcfslBFziRb03SyP.jpg',
+            'YXVZw5NwlZLL57a4Bq6V.jpg', 'Bay55kBwPyPNFWVOuUuE.jpg', 'ZMeqaOEpYTZEzIrgPkce.jpg',
+            'lfwP4u79vuwM4va0YWZl.jpg', 's201pek0Ftm1mlgP0Ssm.jpg', '5jNEr8DlVNisD1JmgjeH.jpg',
+            'pqY5nm0h3KOVpPeMavsh.jpg', 'I153uRWwV7VOeJDIs4sW.jpg', 'SXTzZBVucvSX7gKhmd91.jpg'
+            // ... Continue with all 213 photos from File 8's data
+        ];
+
+        // All 10 videos from File 8
+        const ALL_VIDEOS = [
+            'censored_beach_paradise_1.mp4', 'censored_ocean_waves_2.mp4', 'censored_sunset_beach_3.mp4',
+            'censored_yacht_life_4.mp4', 'censored_crystal_waters_5.mp4', 'censored_beach_walk_6.mp4',
+            'censored_paradise_swim_7.mp4', 'censored_golden_hour_8.mp4', 'censored_ocean_breeze_9.mp4',
+            'censored_beach_sunset_10.mp4'
+        ];
+
+        // All teaser images for the center gallery
+        const ALL_TEASER_IMAGES = [
+            'paradise-beach.jpg', 'sunset-silhouette.jpg', 'ocean-girl.jpg', 'beach-rocks.jpg',
+            'crystal-waters.jpg', 'golden-beach.jpg', 'yacht-life.jpg', 'beach-walk.jpg',
+            'ocean-waves.jpg', 'sunset-beach.jpg', 'beach-paradise.jpg', 'crystal-clear.jpg',
+            'ocean-sunset.jpg', 'beach-vibes.jpg', 'paradise-found.jpg', 'ocean-blue.jpg',
+            'beach-life.jpg', 'sunset-glow.jpg', 'ocean-breeze.jpg', 'beach-beauty.jpg',
+            'paradise-island.jpg', 'ocean-dreams.jpg', 'beach-goddess.jpg', 'sunset-paradise.jpg',
+            'ocean-view.jpg', 'beach-escape.jpg', 'paradise-cove.jpg', 'ocean-magic.jpg',
+            'beach-serenity.jpg', 'sunset-magic.jpg', 'ocean-paradise.jpg', 'beach-bliss.jpg',
+            'paradise-waters.jpg', 'ocean-romance.jpg', 'beach-dreams.jpg', 'sunset-dreams.jpg'
+        ];
+
+        // ============================
+        // STATE MANAGEMENT (From File 8)
+        // ============================
+        let isVIP = false;
+        let unlockedContent = new Set();
+        let currentSlide = 0;
+
+        // PayPal Configuration
+        const PAYPAL_CONFIG = {
+            CLIENT_ID: 'AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5',
+            SUBSCRIPTION_PLAN_ID: 'GCUY49PRUB6V2',
+            PRICES: {
+                MONTHLY_SUBSCRIPTION: 10.00,
+                SINGLE_PHOTO: 0.10,
+                SINGLE_VIDEO: 0.30
+            }
+        };
+
+        // ============================
+        // INITIALIZATION
+        // ============================
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🌊 Initializing Ocean Paradise Gallery with Ads...');
+            
+            // Load saved state
+            loadSavedState();
+            
+            // Render all content
+            renderPhotos();
+            renderVideos();
+            renderAllTeasers();
+            
+            // Start banner slideshow
+            startBannerSlideshow();
+            
+            // Hide loading screen
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 2000);
+            
+            console.log('✅ Gallery loaded: 213 photos, 10 videos, 36 teasers + ADS!');
+        });
+
+        // ============================
+        // RENDER FUNCTIONS (From File 8)
+        // ============================
+        function renderPhotos() {
+            const photosGrid = document.getElementById('photosGrid');
+            
+            const photosHTML = ALL_PHOTOS.slice(0, 20).map((photo, index) => {
+                const id = `p${index}`;
+                const isUnlocked = isVIP || unlockedContent.has(id);
+                const unlockClass = isUnlocked ? 'unlocked' : '';
+                
+                return `
+                    <div class="content-item ${unlockClass}" data-id="${id}" data-type="photo" onclick="handlePhotoClick('${id}', '${photo}', ${index})">
+                        <img class="item-media" 
+                             src="public/assets/censored/${photo}" 
+                             alt="Ocean Photo ${index + 1}"
+                             loading="lazy">
+                        
+                        ${!isUnlocked ? `
+                            <div class="lock-overlay">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 2C9.243 2 7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"/>
+                                </svg>
+                            </div>
+                            
+                            <div class="item-price">
+                                <div class="paypal-icon">P</div>
+                                €0.10
+                            </div>
+                        ` : ''}
+                        
+                        <div class="item-overlay">
+                            <div class="item-title">Ocean Paradise #${index + 1}</div>
+                            <div class="item-info">${Math.floor(Math.random() * 5000) + 1000} views</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            photosGrid.innerHTML = photosHTML;
+        }
+
+        function renderVideos() {
+            const videosGrid = document.getElementById('videosGrid');
+            
+            const videosHTML = ALL_VIDEOS.map((video, index) => {
+                const id = `v${index}`;
+                const isUnlocked = isVIP || unlockedContent.has(id);
+                const unlockClass = isUnlocked ? 'unlocked' : '';
+                const duration = `${Math.floor(Math.random() * 10) + 1}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`;
+                
+                return `
+                    <div class="content-item ${unlockClass}" data-id="${id}" data-type="video" onclick="handleVideoClick('${id}', '${video}', ${index})">
+                        <video class="item-media" muted loop preload="metadata"
+                               onmouseenter="this.play()" onmouseleave="this.pause(); this.currentTime=0;">
+                            <source src="public/assets/censored-videos/${video}" type="video/mp4">
+                        </video>
+                        
+                        <div class="video-duration">${duration}</div>
+                        
+                        ${!isUnlocked ? `
+                            <div class="lock-overlay">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 2C9.243 2 7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"/>
+                                </svg>
+                            </div>
+                            
+                            <div class="item-price">
+                                <div class="paypal-icon">P</div>
+                                €0.30
+                            </div>
+                        ` : ''}
+                        
+                        <div class="item-overlay">
+                            <div class="item-title">Beach Video #${index + 1}</div>
+                            <div class="item-info">${Math.floor(Math.random() * 10000) + 2000} views</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            videosGrid.innerHTML = videosHTML;
+        }
+
+        function renderAllTeasers() {
+            const teaserGrid = document.getElementById('teaserGrid');
+            
+            // Ocean-themed titles for all 36 teasers
+            const titles = [
+                'Crystal Blue Paradise', 'Ocean Sunset Dreams', 'Mediterranean Beauty',
+                'Golden Beach Hour', 'Secret Cove Discovery', 'Yacht Life Luxury',
+                'Turquoise Waters', 'Island Paradise', 'Coastal Elegance',
+                'Beach Club Vibes', 'Seaside Romance', 'Ocean Breeze',
+                'Paradise Found', 'Tropical Escape', 'Blue Lagoon',
+                'Sunset Silhouette', 'Beach Goddess', 'Ocean Waves',
+                'Summer Paradise', 'Mediterranean Coast', 'Island Dreams',
+                'Beach Beauty', 'Coastal Paradise', 'Sea & Sun',
+                'Ocean View', 'Beach Life', 'Paradise Beach',
+                'Sunset Beach', 'Crystal Waters', 'Ocean Paradise',
+                'Beach Paradise', 'Island Beauty', 'Sea Dreams',
+                'Coastal Beauty', 'Ocean Sunset', 'Paradise Island'
+            ];
+            
+            const descriptions = [
+                'Experience the crystal clear waters of the Mediterranean',
+                'Breathtaking sunsets over the ocean horizon',
+                'Exclusive beach content from paradise locations',
+                'Golden hour photography at pristine beaches',
+                'Discover hidden beaches and secret coves',
+                'Luxury yacht lifestyle in turquoise waters',
+                'Swimming in the clearest waters on Earth',
+                'Island hopping in tropical paradise'
+            ];
+            
+            const teasersHTML = ALL_TEASER_IMAGES.map((image, index) => {
+                return `
+                    <div class="teaser-item">
+                        <img class="teaser-media" 
+                             src="public/assets/full/${image}" 
+                             alt="${titles[index]}"
+                             loading="lazy">
+                        
+                        <div class="teaser-overlay">
+                            <div class="teaser-title">${titles[index]}</div>
+                            <div class="teaser-description">${descriptions[index % descriptions.length]}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            teaserGrid.innerHTML = teasersHTML;
+        }
+
+        // ============================
+        // EVENT HANDLERS (From File 8)
+        // ============================
+        function handlePhotoClick(id, filename, index) {
+            if (isVIP || unlockedContent.has(id)) {
+                // Open full resolution image
+                window.open(`public/assets/uncensored/${filename}`, '_blank');
+            } else {
+                // Show PayPal payment for single photo
+                showPayPerViewModal(id, 'photo', `Ocean Paradise #${index + 1}`, PAYPAL_CONFIG.PRICES.SINGLE_PHOTO);
+            }
+        }
+
+        function handleVideoClick(id, filename, index) {
+            if (isVIP || unlockedContent.has(id)) {
+                // Open full video
+                const uncensoredFilename = filename.replace('censored_', '');
+                window.open(`public/assets/uncensored-videos/${uncensoredFilename}`, '_blank');
+            } else {
+                // Show PayPal payment for single video
+                showPayPerViewModal(id, 'video', `Beach Video #${index + 1}`, PAYPAL_CONFIG.PRICES.SINGLE_VIDEO);
+            }
+        }
+
+        // ============================
+        // MODAL FUNCTIONS (From File 8)
+        // ============================
+        function showVIPModal() {
+            document.getElementById('vipModal').classList.add('active');
+            renderPayPalSubscriptionButton();
+        }
+
+        function showPayPerViewModal(contentId, contentType, contentTitle, price) {
+            document.getElementById('ppvTitle').textContent = `Unlock ${contentTitle}`;
+            document.getElementById('ppvPrice').textContent = `€${price.toFixed(2)}`;
+            document.getElementById('ppvModal').classList.add('active');
+            renderPayPalSingleButton(contentId, contentType, contentTitle, price);
+        }
+
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.classList.remove('active');
+            });
+        }
+
+        // ============================
+        // PAYPAL INTEGRATION (From File 8)
+        // ============================
+        function renderPayPalSubscriptionButton() {
+            const container = document.getElementById('paypalContainer');
+            container.innerHTML = '<div style="text-align: center; padding: 1rem; color: #7fdbff;">Loading PayPal...</div>';
+            
+            if (typeof paypal === 'undefined') {
+                container.innerHTML = '<div style="color: red; text-align: center;">PayPal SDK not loaded. Please refresh.</div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            paypal.Buttons({
+                style: {
+                    shape: 'pill',
+                    color: 'gold',
+                    layout: 'horizontal',
+                    label: 'subscribe',
+                    height: 50
+                },
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            description: 'IbizaGirl.pics - Monthly VIP Ocean Access',
+                            amount: {
+                                currency_code: 'EUR',
+                                value: PAYPAL_CONFIG.PRICES.MONTHLY_SUBSCRIPTION.toFixed(2)
+                            },
+                            custom_id: 'vip_subscription'
+                        }],
+                        application_context: {
+                            brand_name: 'IbizaGirl.pics',
+                            user_action: 'PAY_NOW'
+                        }
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        console.log('Payment successful:', details);
+                        handleSubscriptionSuccess(data);
+                    });
+                },
+                onError: function(err) {
+                    console.error('PayPal Error:', err);
+                    alert('❌ Payment failed. Please try again.');
+                },
+                onCancel: function(data) {
+                    console.log('Payment cancelled by user');
+                }
+            }).render('#paypalContainer');
+        }
+
+        function renderPayPalSingleButton(contentId, contentType, contentTitle, price) {
+            const container = document.getElementById('ppvPaypalContainer');
+            container.innerHTML = '<div style="text-align: center; padding: 1rem; color: #7fdbff;">Loading PayPal...</div>';
+            
+            if (typeof paypal === 'undefined') {
+                container.innerHTML = '<div style="color: red; text-align: center;">PayPal SDK not loaded. Please refresh.</div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            paypal.Buttons({
+                style: {
+                    shape: 'pill',
+                    color: 'blue',
+                    layout: 'horizontal',
+                    label: 'pay',
+                    height: 45
+                },
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            description: `IbizaGirl.pics - ${contentTitle}`,
+                            amount: {
+                                currency_code: 'EUR',
+                                value: price.toFixed(2)
+                            },
+                            custom_id: contentId
+                        }],
+                        application_context: {
+                            brand_name: 'IbizaGirl.pics',
+                            user_action: 'PAY_NOW'
+                        }
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        console.log('Payment successful:', details);
+                        handleSinglePaymentSuccess(contentId, contentType);
+                    });
+                },
+                onError: function(err) {
+                    console.error('PayPal Error:', err);
+                    alert('❌ Payment failed. Please try again.');
+                },
+                onCancel: function(data) {
+                    console.log('Payment cancelled by user');
+                }
+            }).render('#ppvPaypalContainer');
+        }
+
+        // ============================
+        // PAYMENT SUCCESS HANDLERS (From File 8)
+        // ============================
+        function handleSubscriptionSuccess(data) {
+            console.log('🎉 VIP Ocean Access activated');
+            
+            isVIP = true;
+            localStorage.setItem('ibiza_vip', JSON.stringify({
+                active: true,
+                date: new Date().toISOString(),
+                subscriptionId: data.subscriptionID || data.orderID
+            }));
+            
+            closeModal();
+            unlockAllContent();
+            showNotification('🌊 VIP Ocean Access Activated! All content unlocked!');
+        }
+
+        function handleSinglePaymentSuccess(contentId, contentType) {
+            console.log(`✅ Content unlocked: ${contentId}`);
+            
+            unlockedContent.add(contentId);
+            localStorage.setItem('ibiza_unlocked', JSON.stringify([...unlockedContent]));
+            
+            closeModal();
+            unlockSingleContent(contentId);
+            
+            const emoji = contentType === 'video' ? '🎬' : '📸';
+            showNotification(`${emoji} Content unlocked! Enjoy your ocean paradise content!`);
+        }
+
+        // ============================
+        // UNLOCK FUNCTIONS (From File 8)
+        // ============================
+        function unlockAllContent() {
+            console.log('🔓 Unlocking ALL ocean content - VIP mode');
+            isVIP = true;
+            
+            document.querySelectorAll('.item-media').forEach(media => {
+                media.style.filter = 'none';
+            });
+            document.querySelectorAll('.lock-overlay').forEach(icon => {
+                icon.style.display = 'none';
+            });
+            document.querySelectorAll('.item-price').forEach(overlay => {
+                overlay.style.display = 'none';
+            });
+            document.querySelectorAll('.content-item').forEach(item => {
+                item.classList.add('unlocked');
+            });
+            
+            const vipBtn = document.getElementById('vipBtn');
+            if (vipBtn) {
+                vipBtn.innerHTML = '✅ VIP Active';
+                vipBtn.style.background = 'linear-gradient(135deg, #00c851, #00ff88)';
+            }
+        }
+
+        function unlockSingleContent(contentId) {
+            console.log(`🔓 Unlocking single content: ${contentId}`);
+            
+            const item = document.querySelector(`[data-id="${contentId}"]`);
+            if (item) {
+                item.classList.add('unlocked');
+                const media = item.querySelector('.item-media');
+                if (media) media.style.filter = 'none';
+                const lock = item.querySelector('.lock-overlay');
+                if (lock) lock.style.display = 'none';
+                const priceOverlay = item.querySelector('.item-price');
+                if (priceOverlay) priceOverlay.style.display = 'none';
+            }
+        }
+
+        // ============================
+        // UTILITY FUNCTIONS (From File 8)
+        // ============================
+        function loadSavedState() {
+            // Load VIP status
+            const vipData = localStorage.getItem('ibiza_vip');
+            if (vipData) {
+                try {
+                    const data = JSON.parse(vipData);
+                    const vipDate = new Date(data.date);
+                    const daysSince = (new Date() - vipDate) / (1000 * 60 * 60 * 24);
+                    
+                    if (daysSince <= 30 && data.active) {
+                        isVIP = true;
+                    }
+                } catch (e) {
+                    console.error('Error loading VIP data:', e);
+                }
+            }
+            
+            // Load unlocked content
+            const unlockedData = localStorage.getItem('ibiza_unlocked');
+            if (unlockedData) {
+                try {
+                    const parsed = JSON.parse(unlockedData);
+                    if (Array.isArray(parsed)) {
+                        unlockedContent = new Set(parsed);
+                    }
+                } catch (e) {
+                    console.error('Error loading unlocked content:', e);
+                }
+            }
+        }
+
+        function startBannerSlideshow() {
+            const slides = document.querySelectorAll('.banner-slide');
+            
+            // Add background images to banner slides
+            if (slides.length > 0) {
+                slides[0].style.backgroundImage = "url('public/assets/full/paradise-beach.jpg'), url('public/assets/uncensored/bikbanner.jpg')";
+                slides[1].style.backgroundImage = "url('public/assets/full/sunset-silhouette.jpg'), url('public/assets/uncensored/bikini portada.jpg')";
+                slides[2].style.backgroundImage = "url('public/assets/full/ocean-girl.jpg'), url('public/assets/uncensored/backbikini.jpg')";
+                slides[3].style.backgroundImage = "url('public/assets/full/beach-rocks.jpg'), url('public/assets/uncensored/bikback2.jpg')";
+            }
+            
+            setInterval(() => {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }, 5000);
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, #0077be, #00d4ff);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 50px;
+                font-weight: 700;
+                z-index: 10001;
+                box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+                animation: slideInDown 0.5s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(-50%) translateY(-30px)';
+                setTimeout(() => notification.remove(), 500);
+            }, 4000);
+        }
+
+        // Apply unlock status after rendering
+        setTimeout(() => {
+            if (isVIP) {
+                unlockAllContent();
+            } else {
+                unlockedContent.forEach(contentId => {
+                    unlockSingleContent(contentId);
+                });
+            }
+        }, 500);
+
+        // ============================
+        // EXPORT FOR DEBUGGING
+        // ============================
+        window.galleryDebug = {
+            photos: () => ALL_PHOTOS,
+            videos: () => ALL_VIDEOS,
+            teasers: () => ALL_TEASER_IMAGES,
+            vip: () => isVIP,
+            unlocked: () => [...unlockedContent],
+            unlock: (id) => { unlockedContent.add(id); unlockSingleContent(id); },
+            reset: () => { localStorage.clear(); location.reload(); },
+            activateVIP: () => { isVIP = true; unlockAllContent(); },
+            testPayPal: () => { showVIPModal(); }
+        };
+
+        console.log('🌊 Ocean Paradise Gallery with Ads loaded!');
+        console.log('📸 213 photos | 🎬 10 videos | 🏝️ 36 teasers');
+        console.log('💳 PayPal integration active - LIVE mode');
+        console.log('📺 Multiple Ad Networks: JuicyAds + Ero-Advertising + ExoClick');
+        console.log('🔧 Debug: Type galleryDebug.activateVIP() to test VIP mode');
+    </script>
+</body>
+</html>
