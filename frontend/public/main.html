@@ -1503,7 +1503,7 @@
             if (isVIP || unlockedContent.has(id)) {
                 // Open full video
                 const uncensoredFilename = filename.replace('censored_', '');
-                window.open(`public/assets/uncensored-videos/${uncensoredFilename}`, '_blank');
+                window.open(`assets/uncensored-videos/${uncensoredFilename}`, '_blank');
             } else {
                 // Show PayPal payment for single video
                 showPayPerViewModal(id, 'video', `Beach Video #${index + 1}`, PAYPAL_CONFIG.PRICES.SINGLE_VIDEO);
