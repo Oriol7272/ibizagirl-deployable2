@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /main.html
+Allow: /public/assets/full/
+Disallow: /public/assets/censored/
+Disallow: /public/assets/uncensored/
+Disallow: /public/assets/censored-videos/
+Disallow: /public/assets/uncensored-videos/
+
+# Google Search Console verification
+Allow: /google2e40209785af1244.html
+
+# Ad network verification files
+Allow: /eroads__5f8afe77e5b70fec960d89b314e045a4.html
+Allow: /97ce8adfbeb6e153ef4ebf2566dfeb7d.html
+Allow: /f67a56f266e834d596c42122f88bb88d.html
+
+Sitemap: https://ibizagirl.pics/sitemap.xml
