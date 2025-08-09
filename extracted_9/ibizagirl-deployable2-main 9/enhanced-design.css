@@ -1,0 +1,569 @@
+/* =============================================
+   Enhanced Visual Design for IbizaGirl.pics
+   CON DECORACIONES Y BANNERS REALES
+   ============================================= */
+
+/* ============================
+   Dynamic Background System with Real Images
+   ============================ */
+body {
+    position: relative;
+    background: #0a0a0a;
+    overflow-x: hidden;
+}
+
+/* Main background using real gallery images */
+.background-main {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -3;
+    opacity: 0.12;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    filter: blur(4px) brightness(0.6);
+}
+
+/* Animated gradient overlay */
+.background-gradient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 0, 110, 0.3) 0%,
+        rgba(139, 0, 255, 0.3) 25%,
+        rgba(255, 215, 0, 0.2) 50%,
+        rgba(255, 0, 110, 0.3) 75%,
+        rgba(139, 0, 255, 0.3) 100%
+    );
+    opacity: 0.4;
+    z-index: -2;
+    animation: gradientShift 20s ease infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { transform: rotate(0deg) scale(1.1); }
+    50% { transform: rotate(180deg) scale(1.3); }
+}
+
+/* ============================
+   BANNER SUPERIOR CON IMAGEN REAL
+   ============================ */
+.top-banner {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 70px;
+    background: linear-gradient(135deg, #ff006e, #ffd700);
+    border-bottom: 2px solid rgba(255, 0, 110, 0.5);
+}
+
+.top-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('public/assets/full/bikbanner.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: blur(2px) brightness(0.7);
+    transform: scale(1.1);
+}
+
+.top-banner::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 0, 110, 0.6),
+        rgba(139, 0, 255, 0.4)
+    );
+}
+
+.banner-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+.banner-title {
+    font-size: 3rem;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #ffffff, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.banner-subtitle {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* ============================
+   DECORACIONES EN LAS ESQUINAS CON IMÁGENES REALES
+   ============================ */
+.corner-decoration {
+    position: fixed;
+    width: 250px;
+    height: 250px;
+    opacity: 0.08;
+    z-index: -1;
+    pointer-events: none;
+    background-size: cover;
+    background-position: center;
+    filter: blur(1px);
+    border-radius: 50%;
+}
+
+.corner-decoration.top-left {
+    top: 80px;
+    left: -50px;
+    background-image: url('public/assets/full/backbikini.jpg');
+    animation: floatTopLeft 25s infinite ease-in-out;
+}
+
+.corner-decoration.top-right {
+    top: 80px;
+    right: -50px;
+    background-image: url('public/assets/full/bikini portada.jpg');
+    animation: floatTopRight 25s infinite ease-in-out reverse;
+}
+
+.corner-decoration.bottom-left {
+    bottom: -50px;
+    left: -50px;
+    background-image: url('public/assets/full/bikback2.jpg');
+    animation: floatBottomLeft 30s infinite ease-in-out;
+}
+
+.corner-decoration.bottom-right {
+    bottom: -50px;
+    right: -50px;
+    background-image: url('public/assets/full/bikini portada.jpg');
+    animation: floatBottomRight 30s infinite ease-in-out reverse;
+}
+
+@keyframes floatTopLeft {
+    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    25% { transform: translate(20px, -10px) rotate(5deg) scale(1.05); }
+    50% { transform: translate(10px, 15px) rotate(-3deg) scale(0.95); }
+    75% { transform: translate(-15px, 5px) rotate(2deg) scale(1.02); }
+}
+
+@keyframes floatTopRight {
+    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    25% { transform: translate(-20px, -10px) rotate(-5deg) scale(1.05); }
+    50% { transform: translate(-10px, 15px) rotate(3deg) scale(0.95); }
+    75% { transform: translate(15px, 5px) rotate(-2deg) scale(1.02); }
+}
+
+@keyframes floatBottomLeft {
+    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    33% { transform: translate(15px, -20px) rotate(3deg) scale(1.03); }
+    66% { transform: translate(-10px, -5px) rotate(-4deg) scale(0.97); }
+}
+
+@keyframes floatBottomRight {
+    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    33% { transform: translate(-15px, -20px) rotate(-3deg) scale(1.03); }
+    66% { transform: translate(10px, -5px) rotate(4deg) scale(0.97); }
+}
+
+/* ============================
+   FLOATING IMAGES DECORATION
+   ============================ */
+.floating-images {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.floating-img {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    opacity: 0.06;
+    filter: blur(2px);
+    animation: floatAcross 40s infinite linear;
+}
+
+.floating-img:nth-child(1) {
+    background-image: url('public/assets/full/bikbanner.jpg');
+    top: 20%;
+    left: -200px;
+    animation-delay: 0s;
+}
+
+.floating-img:nth-child(2) {
+    background-image: url('public/assets/full/backbikini.jpg');
+    top: 60%;
+    right: -200px;
+    animation-delay: 15s;
+    animation-direction: reverse;
+}
+
+.floating-img:nth-child(3) {
+    background-image: url('public/assets/full/bikback2.jpg');
+    top: 40%;
+    left: -200px;
+    animation-delay: 30s;
+}
+
+@keyframes floatAcross {
+    0% {
+        transform: translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.06;
+    }
+    90% {
+        opacity: 0.06;
+    }
+    100% {
+        transform: translateX(calc(100vw + 200px)) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ============================
+   Enhanced Thumbnails - BIGGER
+   ============================ */
+
+/* Increase sidebar width for bigger thumbs */
+.sidebar {
+    width: 420px !important;
+    background: linear-gradient(
+        180deg,
+        rgba(26, 26, 26, 0.96) 0%,
+        rgba(10, 10, 10, 0.98) 100%
+    );
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 0, 110, 0.2);
+    box-shadow: 0 0 40px rgba(255, 0, 110, 0.1);
+    padding: 1.5rem;
+}
+
+.sidebar.right {
+    border-left: 1px solid rgba(139, 0, 255, 0.2);
+    border-right: none;
+    box-shadow: 0 0 40px rgba(139, 0, 255, 0.1);
+}
+
+/* Bigger thumbnail grid */
+.thumb-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+/* Bigger thumbnail items */
+.thumb-item {
+    position: relative;
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        inset 0 0 20px rgba(255, 0, 110, 0.1);
+    min-height: 180px;
+}
+
+/* Enhanced hover effects with image backgrounds */
+.thumb-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(255, 0, 110, 0.2) 50%,
+        transparent 100%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+}
+
+.thumb-item:hover::before {
+    opacity: 1;
+}
+
+.thumb-item:hover {
+    transform: scale(1.08) translateY(-5px);
+    border-color: var(--accent-pink);
+    box-shadow: 
+        0 15px 40px rgba(255, 0, 110, 0.4),
+        inset 0 0 30px rgba(255, 0, 110, 0.2),
+        0 0 50px rgba(255, 0, 110, 0.3);
+    z-index: 10;
+}
+
+/* ============================
+   Enhanced Sidebar Headers with Background Images
+   ============================ */
+.sidebar-header {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 0, 110, 0.15),
+        rgba(139, 0, 255, 0.15)
+    );
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 0, 110, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image: url('public/assets/full/bikbanner.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    filter: blur(3px);
+    animation: slowRotate 60s linear infinite;
+}
+
+@keyframes slowRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.sidebar-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+}
+
+/* ============================
+   Enhanced Preview Area with Decorative Background
+   ============================ */
+.preview-area {
+    position: relative;
+    padding: 2rem;
+    overflow: hidden;
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 0, 110, 0.05) 0%,
+        transparent 50%
+    );
+}
+
+/* Decorative background images in preview area */
+.preview-area::before,
+.preview-area::after {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    opacity: 0.04;
+    filter: blur(4px);
+    z-index: -1;
+}
+
+.preview-area::before {
+    top: -150px;
+    left: -150px;
+    background-image: url('public/assets/full/backbikini.jpg');
+    animation: rotate 50s linear infinite;
+}
+
+.preview-area::after {
+    bottom: -150px;
+    right: -150px;
+    background-image: url('public/assets/full/bikini portada.jpg');
+    animation: rotate 50s linear infinite reverse;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ============================
+   Enhanced Welcome Screen
+   ============================ */
+.welcome-screen {
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 0, 110, 0.1) 0%,
+        transparent 50%
+    );
+    padding: 3rem;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-screen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('public/assets/full/bikbanner.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.05;
+    filter: blur(3px);
+    border-radius: 20px;
+}
+
+/* ============================
+   Responsive Adjustments
+   ============================ */
+@media (max-width: 1400px) {
+    .sidebar {
+        width: 380px !important;
+    }
+    
+    .corner-decoration {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .sidebar {
+        width: 340px !important;
+    }
+    
+    .thumb-item {
+        min-height: 160px;
+    }
+    
+    .top-banner {
+        height: 150px;
+    }
+    
+    .banner-title {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 968px) {
+    .sidebar {
+        width: 100% !important;
+        max-height: 280px;
+    }
+    
+    .thumb-grid {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .thumb-item {
+        min-width: 180px;
+        width: 180px;
+        height: 180px;
+        flex-shrink: 0;
+    }
+    
+    .top-banner {
+        height: 120px;
+    }
+    
+    .banner-title {
+        font-size: 2rem;
+    }
+    
+    .corner-decoration {
+        display: none;
+    }
+    
+    .floating-images {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .thumb-item {
+        min-width: 150px;
+        width: 150px;
+        height: 150px;
+    }
+    
+    .banner-title {
+        font-size: 1.8rem;
+    }
+    
+    .banner-subtitle {
+        font-size: 1rem;
+    }
+}
+
+/* ============================
+   Performance Optimizations
+   ============================ */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Lazy loading for background images */
+.lazy-bg {
+    background-image: none !important;
+    transition: opacity 0.5s ease;
+}
+
+.lazy-bg.loaded {
+    opacity: 1;
+}
