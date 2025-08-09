@@ -1492,7 +1492,7 @@
         function handlePhotoClick(id, filename, index) {
             if (isVIP || unlockedContent.has(id)) {
                 // Open full resolution image
-                window.open(`public/assets/uncensored/${filename}`, '_blank');
+                window.open(`assets/uncensored/${filename}`, '_blank');
             } else {
                 // Show PayPal payment for single photo
                 showPayPerViewModal(id, 'photo', `Ocean Paradise #${index + 1}`, PAYPAL_CONFIG.PRICES.SINGLE_PHOTO);
