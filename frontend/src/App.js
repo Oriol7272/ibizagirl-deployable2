@@ -38,15 +38,18 @@ const Home = () => {
 };
 
 function App() {
+  useEffect(() => {
+    // Redirect to our HTML-based gallery
+    window.location.href = "/index.html";
+  }, [])
+  
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <header className="App-header">
+        <p>
+          🌊 Redirecting to IbizaGirl.pics Ocean Paradise...
+        </p>
+      </header>
     </div>
   );
 }
