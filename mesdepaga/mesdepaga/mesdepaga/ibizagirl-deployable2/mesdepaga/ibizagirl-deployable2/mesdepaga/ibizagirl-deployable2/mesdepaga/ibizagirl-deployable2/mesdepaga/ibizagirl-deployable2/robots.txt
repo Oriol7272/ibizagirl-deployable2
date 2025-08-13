@@ -1,0 +1,63 @@
+# IbizaGirl.pics - Robots.txt Optimizado SEO
+# Última actualización: 2025-01-15
+
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /main.html
+Allow: /public/assets/full/
+Allow: /manifest.json
+Allow: /sw.js
+
+# Contenido premium protegido
+Disallow: /public/assets/censored/
+Disallow: /public/assets/uncensored/
+Disallow: /public/assets/censored-videos/
+Disallow: /public/assets/uncensored-videos/
+
+# Archivos del sistema
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*.json$
+Disallow: /*?*
+Disallow: /search
+
+# Google Search Console verification
+Allow: /google2e40209785af1244.html
+
+# Ad network verification files
+Allow: /eroads__5f8afe77e5b70fec960d89b314e045a4.html
+Allow: /97ce8adfbeb6e153ef4ebf2566dfeb7d.html
+Allow: /f67a56f266e834d596c42122f88bb88d.html
+
+# Configuración específica para motores de búsqueda
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 2
+
+# Bloquear bots maliciosos
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Sitemap principal
+Sitemap: https://ibizagirl.pics/sitemap.xml
+
+# Host preferido (opcional)
+Host: ibizagirl.pics
