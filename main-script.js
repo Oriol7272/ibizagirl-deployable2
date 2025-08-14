@@ -1,10 +1,10 @@
 // ============================
-// IBIZAGIRL.PICS MAIN SCRIPT v18.0.0 COMPLETE WITH ALL FIXES
-// Enhanced with Twitter Bot Fix, Multi-Language Support, Ad Integration
+// IBIZAGIRL.PICS MAIN SCRIPT v19.0.0 COMPLETE
+// Enhanced with All Features, Multi-Language Support, Thumbnails, Gallery
 // Keywords: Ibiza fotos, galería Ibiza, paradise Mediterranean, playas España
 // ============================
 
-console.log('🌊 IbizaGirl.pics v18.0.0 Complete - Loading Paradise Gallery...');
+console.log('🌊 IbizaGirl.pics v19.0.0 Complete - Loading Paradise Gallery...');
 
 // ============================
 // SEO CONFIGURATION & KEYWORDS
@@ -274,6 +274,208 @@ const TRANSLATIONS = {
             "Today's content is 🔥🔥🔥 The best photos from Spanish Mediterranean!",
             "Need help navigating the gallery? I'm here for you, darling! 💕"
         ]
+    },
+    fr: {
+        // Core content
+        loading: "Chargement du paradis...",
+        subtitle: "Contenu Exclusif du Paradis",
+        megapack: "📦 MEGA PACKS -70%",
+        monthly: "💳 €15/Mois",
+        lifetime: "👑 Lifetime €100",
+        welcome: "Bienvenue au Paradis 🌴",
+        daily_content: "200+ photos et 40+ vidéos mises à jour QUOTIDIENNEMENT",
+        unlock_all: "🔓 Tout Débloquer",
+        view_gallery: "📸 Voir la Galerie",
+        photos_today: "Photos du Jour",
+        updated_at: "Mis à jour à",
+        videos_hd: "Vidéos HD",
+        new_content: "NOUVEAU CONTENU!",
+        total_views: "Vues Totales",
+        today: "aujourd'hui",
+        updates: "Mises à jour",
+        always_fresh: "TOUJOURS FRAIS",
+        paradise_photos: "📸 Photos du Paradis",
+        new_today: "NOUVEAU AUJOURD'HUI!",
+        exclusive_videos: "🎬 Vidéos Exclusives",
+        fresh_content: "CONTENU FRAIS!",
+        isabella_title: "Isabella - Votre Guide VIP",
+        vip_info: "💎 Info VIP",
+        news: "📅 Nouveautés",
+        help: "❓ Aide",
+        footer_desc: "Votre destination quotidienne pour du contenu exclusif du paradis méditerranéen.",
+        quick_links: "Liens Rapides",
+        photos: "Photos",
+        videos: "Vidéos",
+        vip_subscription: "Abonnement VIP",
+        mega_packs: "Mega Packs",
+        support: "Support",
+        terms: "Conditions d'utilisation",
+        privacy: "Politique de confidentialité",
+        contact: "Contact",
+        copyright: "© 2025 IbizaGirl.pics - Tous droits réservés | 18+ Adultes uniquement",
+        vip_unlimited: "👑 Accès VIP Illimité",
+        pack_selection: "📦 MEGA PACKS - Économisez 70%",
+        unlock_content: "🔓 Débloquer le Contenu",
+        plan_monthly: "📅 Mensuel",
+        plan_lifetime: "♾️ À vie",
+        best_value: "MEILLEUR RAPPORT",
+        save_yearly: "Économisez €80 par an!",
+        items: "articles",
+        save: "Économiser",
+        payment_error: "⚠️ Erreur de paiement. Veuillez réessayer.",
+        preview_gallery: "🔥 Aperçu Exclusif",
+        
+        // SEO descriptions
+        meta_description: "Galerie premium d'Ibiza avec 400+ photos et 80+ vidéos HD mises à jour quotidiennement.",
+        
+        isabella_messages: [
+            "Salut belle! 😘 Tu cherches les meilleures photos d'Ibiza?",
+            "Pssst... Les membres VIP voient toute la galerie d'Ibiza sans flou! 👀",
+            "Prête à débloquer le paradis méditerranéen? 🌊",
+            "Aujourd'hui nous avons 200 nouvelles photos d'Ibiza! 🎉",
+            "Clique simplement sur n'importe quel contenu flou pour le débloquer! 💕"
+        ]
+    },
+    de: {
+        // Core content
+        loading: "Paradies wird geladen...",
+        subtitle: "Exklusiver Paradies-Inhalt",
+        megapack: "📦 MEGA PACKS -70%",
+        monthly: "💳 €15/Monat",
+        lifetime: "👑 Lifetime €100",
+        welcome: "Willkommen im Paradies 🌴",
+        daily_content: "200+ Fotos und 40+ Videos werden TÄGLICH aktualisiert",
+        unlock_all: "🔓 Alles Freischalten",
+        view_gallery: "📸 Galerie Ansehen",
+        photos_today: "Heutige Fotos",
+        updated_at: "Aktualisiert um",
+        videos_hd: "HD Videos",
+        new_content: "NEUER INHALT!",
+        total_views: "Gesamtansichten",
+        today: "heute",
+        updates: "Updates",
+        always_fresh: "IMMER FRISCH",
+        paradise_photos: "📸 Paradies Fotos",
+        new_today: "NEU HEUTE!",
+        exclusive_videos: "🎬 Exklusive Videos",
+        fresh_content: "FRISCHER INHALT!",
+        isabella_title: "Isabella - Dein VIP Guide",
+        vip_info: "💎 VIP Info",
+        news: "📅 Neuigkeiten",
+        help: "❓ Hilfe",
+        footer_desc: "Ihr tägliches Ziel für exklusive mediterrane Paradiesinhalte.",
+        quick_links: "Schnelllinks",
+        photos: "Fotos",
+        videos: "Videos",
+        copyright: "© 2025 IbizaGirl.pics - Alle Rechte vorbehalten | 18+ Nur für Erwachsene",
+        vip_unlimited: "👑 Unbegrenzter VIP-Zugang",
+        payment_error: "⚠️ Zahlungsfehler. Bitte versuchen Sie es erneut.",
+        preview_gallery: "🔥 Exklusive Vorschau",
+        
+        // SEO descriptions
+        meta_description: "Premium Ibiza Galerie mit 400+ Fotos und 80+ HD Videos täglich aktualisiert.",
+        
+        isabella_messages: [
+            "Hallo Schöne! 😘 Suchst du die besten Ibiza Fotos?",
+            "Pssst... VIP-Mitglieder sehen die gesamte Ibiza-Galerie ohne Unschärfe! 👀",
+            "Bereit, das Mittelmeerparadies freizuschalten? 🌊",
+            "Heute haben wir 200 neue Ibiza Fotos! 🎉",
+            "Klicke einfach auf verschwommene Inhalte zum Freischalten! 💕"
+        ]
+    },
+    it: {
+        // Core content
+        loading: "Caricamento del paradiso...",
+        subtitle: "Contenuto Esclusivo del Paradiso",
+        megapack: "📦 MEGA PACKS -70%",
+        monthly: "💳 €15/Mese",
+        lifetime: "👑 Lifetime €100",
+        welcome: "Benvenuto in Paradiso 🌴",
+        daily_content: "200+ foto e 40+ video aggiornati GIORNALMENTE",
+        unlock_all: "🔓 Sblocca Tutto",
+        view_gallery: "📸 Vedi Galleria",
+        photos_today: "Foto di Oggi",
+        updated_at: "Aggiornato alle",
+        videos_hd: "Video HD",
+        new_content: "NUOVO CONTENUTO!",
+        total_views: "Visualizzazioni Totali",
+        today: "oggi",
+        updates: "Aggiornamenti",
+        always_fresh: "SEMPRE FRESCO",
+        paradise_photos: "📸 Foto del Paradiso",
+        new_today: "NUOVO OGGI!",
+        exclusive_videos: "🎬 Video Esclusivi",
+        fresh_content: "CONTENUTO FRESCO!",
+        isabella_title: "Isabella - La Tua Guida VIP",
+        vip_info: "💎 Info VIP",
+        news: "📅 Novità",
+        help: "❓ Aiuto",
+        footer_desc: "La tua destinazione quotidiana per contenuti esclusivi del paradiso mediterraneo.",
+        quick_links: "Link Rapidi",
+        photos: "Foto",
+        videos: "Video",
+        copyright: "© 2025 IbizaGirl.pics - Tutti i diritti riservati | 18+ Solo adulti",
+        vip_unlimited: "👑 Accesso VIP Illimitato",
+        payment_error: "⚠️ Errore di pagamento. Per favore riprova.",
+        preview_gallery: "🔥 Anteprima Esclusiva",
+        
+        // SEO descriptions
+        meta_description: "Galleria premium di Ibiza con 400+ foto e 80+ video HD aggiornati quotidianamente.",
+        
+        isabella_messages: [
+            "Ciao bella! 😘 Cerchi le migliori foto di Ibiza?",
+            "Pssst... I membri VIP vedono l'intera galleria di Ibiza senza sfocatura! 👀",
+            "Pronta a sbloccare il paradiso mediterraneo? 🌊",
+            "Oggi abbiamo 200 nuove foto di Ibiza! 🎉",
+            "Clicca su qualsiasi contenuto sfocato per sbloccarlo! 💕"
+        ]
+    },
+    pt: {
+        // Core content
+        loading: "Carregando o paraíso...",
+        subtitle: "Conteúdo Exclusivo do Paraíso",
+        megapack: "📦 MEGA PACKS -70%",
+        monthly: "💳 €15/Mês",
+        lifetime: "👑 Lifetime €100",
+        welcome: "Bem-vindo ao Paraíso 🌴",
+        daily_content: "200+ fotos e 40+ vídeos atualizados DIARIAMENTE",
+        unlock_all: "🔓 Desbloquear Tudo",
+        view_gallery: "📸 Ver Galeria",
+        photos_today: "Fotos de Hoje",
+        updated_at: "Atualizado às",
+        videos_hd: "Vídeos HD",
+        new_content: "NOVO CONTEÚDO!",
+        total_views: "Visualizações Totais",
+        today: "hoje",
+        updates: "Atualizações",
+        always_fresh: "SEMPRE FRESCO",
+        paradise_photos: "📸 Fotos do Paraíso",
+        new_today: "NOVO HOJE!",
+        exclusive_videos: "🎬 Vídeos Exclusivos",
+        fresh_content: "CONTEÚDO FRESCO!",
+        isabella_title: "Isabella - Seu Guia VIP",
+        vip_info: "💎 Info VIP",
+        news: "📅 Novidades",
+        help: "❓ Ajuda",
+        footer_desc: "Seu destino diário para conteúdo exclusivo do paraíso mediterrâneo.",
+        quick_links: "Links Rápidos",
+        photos: "Fotos",
+        videos: "Vídeos",
+        copyright: "© 2025 IbizaGirl.pics - Todos os direitos reservados | 18+ Apenas adultos",
+        vip_unlimited: "👑 Acesso VIP Ilimitado",
+        payment_error: "⚠️ Erro no pagamento. Por favor, tente novamente.",
+        preview_gallery: "🔥 Pré-visualização Exclusiva",
+        
+        // SEO descriptions
+        meta_description: "Galeria premium de Ibiza com 400+ fotos e 80+ vídeos HD atualizados diariamente.",
+        
+        isabella_messages: [
+            "Olá linda! 😘 Procurando as melhores fotos de Ibiza?",
+            "Pssst... Membros VIP veem toda a galeria de Ibiza sem desfoque! 👀",
+            "Pronta para desbloquear o paraíso mediterrâneo? 🌊",
+            "Hoje temos 200 novas fotos de Ibiza! 🎉",
+            "Clique em qualquer conteúdo desfocado para desbloquear! 💕"
+        ]
     }
 };
 
@@ -303,16 +505,23 @@ const CONFIG = {
         DAILY_VIDEOS: 40,
         NEW_CONTENT_PERCENTAGE: 0.3,
         BLUR_PHOTO: 10,
-        BLUR_VIDEO: 10
+        BLUR_VIDEO: 10,
+        THUMBNAIL_SIZE: { width: 200, height: 150 },
+        PREVIEW_SIZE: { width: 400, height: 300 }
     },
     SEO: {
         SITE_NAME: 'IbizaGirl.pics',
         PRIMARY_LOCATION: 'Ibiza, Spain',
         CONTENT_TYPE: 'Mediterranean Paradise Gallery',
         UPDATE_FREQUENCY: 'Daily',
-        LANGUAGE_CODES: ['es-ES', 'en-US']
+        LANGUAGE_CODES: ['es-ES', 'en-US', 'fr-FR', 'de-DE', 'it-IT', 'pt-PT']
     },
-    ANALYTICS_ID: 'G-DBXYNPBSPY'
+    ANALYTICS_ID: 'G-DBXYNPBSPY',
+    AD_NETWORKS: {
+        JUICYADS: { id: '57781c218b1d1435f3512464c59cf39b', enabled: true },
+        EXOCLICK: { id: '97ce8adfbeb6e153ef4ebf2566dfeb7d', enabled: true },
+        PREMIUM: { siteId: 5461308, enabled: true }
+    }
 };
 
 // ============================
@@ -557,6 +766,7 @@ let state = {
     lazyLoadObserver: null,
     currentPayPalContentId: null,
     currentPayPalContentType: null,
+    thumbnailCache: new Map(),
     
     // SEO tracking state
     seoMetrics: {
@@ -567,6 +777,35 @@ let state = {
         userIntent: 'browse'
     }
 };
+
+// ============================
+// THUMBNAIL GENERATION SYSTEM
+// ============================
+
+function generateThumbnail(imagePath, type = 'photo') {
+    // Check cache first
+    if (state.thumbnailCache.has(imagePath)) {
+        return state.thumbnailCache.get(imagePath);
+    }
+    
+    // For photos: use censored version as thumbnail
+    if (type === 'photo') {
+        const filename = imagePath.split('/').pop();
+        const thumbnailPath = `public/assets/censored/${filename}`;
+        state.thumbnailCache.set(imagePath, thumbnailPath);
+        return thumbnailPath;
+    }
+    
+    // For videos: use poster image
+    if (type === 'video') {
+        const index = Math.floor(Math.random() * BANNER_IMAGES.length);
+        const posterPath = `public/assets/full/${BANNER_IMAGES[index]}`;
+        state.thumbnailCache.set(imagePath, posterPath);
+        return posterPath;
+    }
+    
+    return imagePath;
+}
 
 // ============================
 // TEASER CAROUSEL FUNCTIONS
@@ -590,7 +829,7 @@ function initializeTeaserCarousel() {
                      data-keywords="${item.keywords}">
                 <img src="public/assets/full/${item.img}" 
                      alt="${seoAltText}"
-                     title="${item.title} - ${trans.seo_keywords?.primary}"
+                     title="${item.title} - ${trans.seo_keywords?.primary || ''}"
                      itemprop="contentUrl"
                      loading="lazy"
                      width="250"
@@ -641,7 +880,12 @@ function changeLanguage(lang) {
     localStorage.setItem('ibiza_language', lang);
     
     // Update page language attribute for SEO
-    document.documentElement.lang = lang === 'es' ? 'es-ES' : 'en-US';
+    document.documentElement.lang = lang === 'es' ? 'es-ES' : 
+                                    lang === 'en' ? 'en-US' :
+                                    lang === 'fr' ? 'fr-FR' :
+                                    lang === 'de' ? 'de-DE' :
+                                    lang === 'it' ? 'it-IT' :
+                                    lang === 'pt' ? 'pt-PT' : 'es-ES';
     
     // Update meta tags for SEO
     updateSEOMetaTags(lang);
@@ -656,7 +900,7 @@ function changeLanguage(lang) {
     
     // Update Isabella bot messages
     if (window.isabellaBot) {
-        isabellaBot.messages = TRANSLATIONS[lang].isabella_messages;
+        isabellaBot.messages = TRANSLATIONS[lang].isabella_messages || [];
     }
     
     // Re-render content with new language keywords
@@ -676,8 +920,10 @@ function changeLanguage(lang) {
     });
     
     // Track SEO keywords for new language
-    const newKeywords = TRANSLATIONS[lang].seo_keywords?.primary;
-    SEO_ANALYTICS.trackKeywordInteraction(newKeywords, 'language_change');
+    const newKeywords = TRANSLATIONS[lang].seo_keywords?.primary || '';
+    if (newKeywords) {
+        SEO_ANALYTICS.trackKeywordInteraction(newKeywords, 'language_change');
+    }
 }
 
 function updateSEOMetaTags(lang) {
@@ -826,22 +1072,25 @@ function renderPhotosProgressive() {
         const isNew = state.dailyContent.newPhotoIndices.has(index);
         const views = Math.floor(Math.random() * 15000) + 5000;
         
+        // Generate thumbnail
+        const thumbnailPath = generateThumbnail(`public/assets/uncensored/${photo}`, 'photo');
+        
         // SEO-optimized alt text with keywords
         const seoAltText = `Foto premium de Ibiza #${index + 1} - Galería mediterránea exclusiva - ${photo}`;
-        const seoTitle = `${trans.seo_keywords?.primary} - Imagen ${index + 1}`;
+        const seoTitle = `${trans.seo_keywords?.primary || ''} - Imagen ${index + 1}`;
         
         photosHTML += `
             <article class="content-item skeleton ${unlockClass}" 
                      data-id="${id}" 
                      data-type="photo" 
-                     data-keywords="${trans.seo_keywords?.primary}"
+                     data-keywords="${trans.seo_keywords?.primary || ''}"
                      itemscope itemtype="https://schema.org/ImageObject"
                      onclick="handlePhotoClick('${id}', '${photo}', ${index})">
                      
-                ${isNew ? `<span class="new-badge">${trans.new_today}</span>` : ''}
+                ${isNew ? `<span class="new-badge">${trans.new_today || 'NEW!'}</span>` : ''}
                 
                 <img class="item-media" 
-                     data-src="public/assets/uncensored/${photo}" 
+                     data-src="${isUnlocked ? `public/assets/uncensored/${photo}` : thumbnailPath}" 
                      alt="${seoAltText}"
                      title="${seoTitle}"
                      itemprop="contentUrl"
@@ -850,7 +1099,7 @@ function renderPhotosProgressive() {
                 
                 <meta itemprop="name" content="Foto Ibiza Premium #${index + 1}">
                 <meta itemprop="description" content="Imagen exclusiva de Ibiza - Galería mediterránea premium">
-                <meta itemprop="keywords" content="${trans.seo_keywords?.primary}">
+                <meta itemprop="keywords" content="${trans.seo_keywords?.primary || ''}">
                 
                 ${!isUnlocked ? `
                     <div class="lock-overlay">
@@ -904,17 +1153,17 @@ function renderVideosProgressive() {
         
         // SEO-optimized video metadata
         const seoAltText = `Video HD de Ibiza #${index + 1} - Contenido exclusivo mediterráneo - ${video}`;
-        const seoTitle = `${trans.seo_keywords?.secondary} - Video ${index + 1}`;
+        const seoTitle = `${trans.seo_keywords?.secondary || ''} - Video ${index + 1}`;
         
         videosHTML += `
             <article class="content-item skeleton ${unlockClass}" 
                      data-id="${id}" 
                      data-type="video" 
-                     data-keywords="${trans.seo_keywords?.secondary}"
+                     data-keywords="${trans.seo_keywords?.secondary || ''}"
                      itemscope itemtype="https://schema.org/VideoObject"
                      onclick="handleVideoClick('${id}', '${video}', ${index})">
                      
-                ${isNew ? `<span class="new-badge">${trans.fresh_content}</span>` : ''}
+                ${isNew ? `<span class="new-badge">${trans.fresh_content || 'NEW!'}</span>` : ''}
                 
                 <video class="item-media" 
                        muted 
@@ -931,7 +1180,7 @@ function renderVideosProgressive() {
                 <meta itemprop="name" content="Video Ibiza HD #${index + 1}">
                 <meta itemprop="description" content="Video exclusivo de Ibiza - Contenido mediterráneo premium">
                 <meta itemprop="duration" content="PT${duration.replace(':', 'M')}S">
-                <meta itemprop="keywords" content="${trans.seo_keywords?.secondary}">
+                <meta itemprop="keywords" content="${trans.seo_keywords?.secondary || ''}">
                 
                 <div class="video-duration" aria-label="Duración del video">${duration}</div>
                 
@@ -975,13 +1224,14 @@ function renderVideosProgressive() {
     // Track content render for SEO
     SEO_ANALYTICS.trackContentEngagement('videos', 'gallery_render', 'videos_loaded');
 }
+
 // ============================
 // SEO-ENHANCED EVENT HANDLERS
 // ============================
 
 function handlePhotoClick(id, filename, index) {
     // Track keyword interaction
-    const keywords = TRANSLATIONS[state.currentLanguage].seo_keywords?.primary;
+    const keywords = TRANSLATIONS[state.currentLanguage].seo_keywords?.primary || '';
     SEO_ANALYTICS.trackKeywordInteraction(keywords, 'photo_click');
     
     // Track content engagement
@@ -1010,7 +1260,7 @@ function handlePhotoClick(id, filename, index) {
 
 function handleVideoClick(id, filename, index) {
     // Track keyword interaction
-    const keywords = TRANSLATIONS[state.currentLanguage].seo_keywords?.secondary;
+    const keywords = TRANSLATIONS[state.currentLanguage].seo_keywords?.secondary || '';
     SEO_ANALYTICS.trackKeywordInteraction(keywords, 'video_click');
     
     // Track content engagement
@@ -1414,14 +1664,18 @@ const isabellaBot = {
     messages: [],
     
     init() {
-        this.messages = TRANSLATIONS[state.currentLanguage].isabella_messages;
+        this.messages = TRANSLATIONS[state.currentLanguage].isabella_messages || [];
+        
+        if (this.messages.length === 0) return;
         
         setTimeout(() => {
             this.showNotification();
             this.addMessage(this.messages[0]);
             
             setTimeout(() => {
-                this.addMessage(this.messages[1]);
+                if (this.messages.length > 1) {
+                    this.addMessage(this.messages[1]);
+                }
             }, 2000);
         }, 5000);
         
@@ -1472,23 +1726,24 @@ function toggleIsabella() {
 }
 
 function isabellaAction(action) {
-    const messages = TRANSLATIONS[state.currentLanguage].isabella_messages;
+    const messages = TRANSLATIONS[state.currentLanguage].isabella_messages || [];
     
     switch(action) {
         case 'vip':
-            isabellaBot.addMessage(messages[2]);
+            if (messages.length > 2) isabellaBot.addMessage(messages[2]);
             setTimeout(() => showVIPModal(), 1000);
             break;
         case 'daily':
-            isabellaBot.addMessage(messages[3]);
+            if (messages.length > 3) isabellaBot.addMessage(messages[3]);
             break;
         case 'help':
-            isabellaBot.addMessage(messages[4]);
+            if (messages.length > 4) isabellaBot.addMessage(messages[4]);
             break;
     }
     
     trackEvent('isabella_action', { action: action });
 }
+
 // ============================
 // SEO STRUCTURED DATA INJECTION
 // ============================
@@ -1500,16 +1755,16 @@ function injectStructuredData() {
         "@context": "https://schema.org",
         "@type": "ImageGallery",
         "name": CONFIG.SEO.SITE_NAME,
-        "description": trans.meta_description,
+        "description": trans.meta_description || '',
         "url": window.location.href,
         "mainEntity": {
             "@type": "WebPage",
-            "name": trans.photos_seo_title,
-            "description": trans.gallery_description,
+            "name": trans.photos_seo_title || '',
+            "description": trans.gallery_description || '',
             "primaryImageOfPage": {
                 "@type": "ImageObject",
                 "url": "https://ibizagirl.pics/public/assets/full/bikini.jpg",
-                "caption": trans.seo_keywords?.primary
+                "caption": trans.seo_keywords?.primary || ''
             }
         },
         "contentLocation": {
@@ -1522,8 +1777,13 @@ function injectStructuredData() {
             }
         },
         "dateModified": new Date().toISOString(),
-        "inLanguage": state.currentLanguage === 'es' ? 'es-ES' : 'en-US',
-        "keywords": trans.seo_keywords?.primary,
+        "inLanguage": state.currentLanguage === 'es' ? 'es-ES' : 
+                      state.currentLanguage === 'en' ? 'en-US' :
+                      state.currentLanguage === 'fr' ? 'fr-FR' :
+                      state.currentLanguage === 'de' ? 'de-DE' :
+                      state.currentLanguage === 'it' ? 'it-IT' :
+                      state.currentLanguage === 'pt' ? 'pt-PT' : 'es-ES',
+        "keywords": trans.seo_keywords?.primary || '',
         "author": {
             "@type": "Organization",
             "name": CONFIG.SEO.SITE_NAME
@@ -1540,6 +1800,136 @@ function injectStructuredData() {
     }
     
     scriptTag.textContent = JSON.stringify(structuredData);
+}
+
+// ============================
+// ENHANCED ADS INITIALIZATION
+// ============================
+
+function initializeAds() {
+    console.log('📢 Initializing enhanced advertisement spaces...');
+    
+    // Check for ad blockers and tracking protection
+    const hasAdBlocker = window.navigator.doNotTrack === "1" || 
+                        window.doNotTrack === "1" ||
+                        typeof window.adsbygoogle === 'undefined';
+    
+    if (hasAdBlocker) {
+        console.warn('⚠️ Ad blocker or tracking protection detected');
+        document.querySelectorAll('.ad-placeholder').forEach(el => {
+            el.innerHTML = `
+                <div style="
+                    padding: 20px;
+                    text-align: center;
+                    color: #999;
+                    font-size: 0.9rem;
+                ">
+                    <p>📢 Ads help keep this content free</p>
+                    <p style="font-size: 0.8rem; margin-top: 10px;">Please consider disabling your ad blocker</p>
+                </div>
+            `;
+        });
+        return;
+    }
+    
+    // Initialize ad spaces with enhanced content
+    const adSpaces = [
+        { id: 'ad-header', type: 'header', size: '728x90' },
+        { id: 'ad-middle', type: 'middle', size: '728x90' },
+        { id: 'ad-footer', type: 'footer', size: '728x90' }
+    ];
+    
+    adSpaces.forEach(ad => {
+        const container = document.getElementById(ad.id);
+        if (container) {
+            // Create enhanced ad placeholder
+            container.innerHTML = `
+                <div class="ad-content" style="
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    text-align: center;
+                    position: relative;
+                    overflow: hidden;
+                    min-height: 90px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                ">
+                    <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">
+                        🌊 Premium Paradise Content
+                    </div>
+                    <div style="font-size: 0.9rem; opacity: 0.9;">
+                        Exclusive Mediterranean Gallery • Daily Updates • VIP Access
+                    </div>
+                    <div style="
+                        position: absolute;
+                        top: 5px;
+                        right: 10px;
+                        font-size: 0.7rem;
+                        opacity: 0.6;
+                    ">
+                        Sponsored
+                    </div>
+                </div>
+            `;
+            
+            // Initialize ad network scripts if enabled
+            if (CONFIG.AD_NETWORKS.JUICYADS.enabled) {
+                initializeJuicyAds(container, ad);
+            }
+            
+            if (CONFIG.AD_NETWORKS.EXOCLICK.enabled) {
+                initializeExoClick(container, ad);
+            }
+            
+            if (CONFIG.AD_NETWORKS.PREMIUM.enabled) {
+                initializePremiumAds(container, ad);
+            }
+            
+            // Track ad view
+            trackEvent('ad_view', { 
+                ad_id: ad.id, 
+                ad_type: ad.type,
+                ad_size: ad.size 
+            });
+        }
+    });
+    
+    console.log('✅ Advertisement spaces initialized');
+}
+
+function initializeJuicyAds(container, adConfig) {
+    // JuicyAds specific initialization
+    if (window.juicyads) {
+        window.juicyads.push({
+            'adzone': adConfig.id,
+            'container': container.id
+        });
+    }
+}
+
+function initializeExoClick(container, adConfig) {
+    // ExoClick specific initialization
+    if (window.ExoLoader) {
+        window.ExoLoader.addZone({
+            'idzone': adConfig.id,
+            'container': container.id
+        });
+    }
+}
+
+function initializePremiumAds(container, adConfig) {
+    // Premium ads network initialization
+    if (window.premiumAds) {
+        window.premiumAds.display({
+            'zone': adConfig.id,
+            'container': container.id,
+            'siteId': CONFIG.AD_NETWORKS.PREMIUM.siteId
+        });
+    }
 }
 
 // ============================
@@ -1680,9 +2070,9 @@ function setupScrollEffects() {
     
     window.addEventListener('scroll', () => {
         if (window.scrollY > 100) {
-            header.classList.add('scrolled');
+            header?.classList.add('scrolled');
         } else {
-            header.classList.remove('scrolled');
+            header?.classList.remove('scrolled');
         }
         
         // Track scroll depth for SEO
@@ -1692,76 +2082,36 @@ function setupScrollEffects() {
 }
 
 // ============================
-// ADS INITIALIZATION
+// LANGUAGE SELECTOR ENHANCEMENT
 // ============================
 
-function initializeAds() {
-    console.log('📢 Initializing advertisement spaces...');
+function populateLanguageSelector() {
+    const selector = document.getElementById('languageSelect');
+    if (!selector) return;
     
-    // Check for ad blockers and tracking protection
-    const hasAdBlocker = window.navigator.doNotTrack === "1" || 
-                        window.doNotTrack === "1" ||
-                        typeof window.adsbygoogle === 'undefined';
+    // Clear existing options
+    selector.innerHTML = '';
     
-    if (hasAdBlocker) {
-        console.warn('⚠️ Ad blocker or tracking protection detected');
-        document.querySelectorAll('.ad-placeholder').forEach(el => {
-            el.textContent = 'Ads blocked by browser protection';
-            el.style.fontSize = '0.8rem';
-            el.style.opacity = '0.5';
-        });
-        return;
-    }
-    
-    // Initialize ad spaces with placeholder content
-    const adSpaces = [
-        { id: 'ad-header', type: 'header', size: '728x90' },
-        { id: 'ad-middle', type: 'middle', size: '728x90' },
-        { id: 'ad-footer', type: 'footer', size: '728x90' }
+    // Add all language options with flags
+    const languages = [
+        { code: 'es', label: '🇪🇸 Español', name: 'Spanish' },
+        { code: 'en', label: '🇬🇧 English', name: 'English' },
+        { code: 'fr', label: '🇫🇷 Français', name: 'French' },
+        { code: 'de', label: '🇩🇪 Deutsch', name: 'German' },
+        { code: 'it', label: '🇮🇹 Italiano', name: 'Italian' },
+        { code: 'pt', label: '🇵🇹 Português', name: 'Portuguese' }
     ];
     
-    adSpaces.forEach(ad => {
-        const container = document.getElementById(ad.id);
-        if (container) {
-            // Add a colorful placeholder that looks like a real ad
-            container.innerHTML = `
-                <div style="
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    color: white;
-                    padding: 20px;
-                    border-radius: 10px;
-                    text-align: center;
-                    position: relative;
-                    overflow: hidden;
-                ">
-                    <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">
-                        🌊 Premium Paradise Content
-                    </div>
-                    <div style="font-size: 0.9rem; opacity: 0.9;">
-                        Exclusive Mediterranean Gallery • Daily Updates • VIP Access
-                    </div>
-                    <div style="
-                        position: absolute;
-                        top: 5px;
-                        right: 10px;
-                        font-size: 0.7rem;
-                        opacity: 0.6;
-                    ">
-                        Sponsored
-                    </div>
-                </div>
-            `;
-            
-            // Track ad view
-            trackEvent('ad_view', { 
-                ad_id: ad.id, 
-                ad_type: ad.type,
-                ad_size: ad.size 
-            });
-        }
+    languages.forEach(lang => {
+        const option = document.createElement('option');
+        option.value = lang.code;
+        option.textContent = lang.label;
+        option.setAttribute('data-name', lang.name);
+        selector.appendChild(option);
     });
     
-    console.log('✅ Advertisement spaces initialized');
+    // Set current language
+    selector.value = state.currentLanguage;
 }
 
 // ============================
@@ -1769,7 +2119,7 @@ function initializeAds() {
 // ============================
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🎨 Initializing SEO-Optimized Paradise Gallery...');
+    console.log('🎨 Initializing SEO-Optimized Paradise Gallery v19.0.0...');
     
     // Initialize SEO tracking
     SEO_ANALYTICS.trackPageDepth();
@@ -1778,9 +2128,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('ibiza_language') || 'es';
     state.currentLanguage = savedLang;
     
-    const langSelect = document.getElementById('languageSelect');
-    if (langSelect) langSelect.value = savedLang;
+    // Populate language selector with all options
+    populateLanguageSelector();
     
+    // Apply saved language
     changeLanguage(savedLang);
     
     // Inject structured data
@@ -1802,7 +2153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Isabella bot
     isabellaBot.init();
     
-    // Initialize ads
+    // Initialize enhanced ads
     initializeAds();
     
     // Render content
@@ -1840,15 +2191,23 @@ document.addEventListener('DOMContentLoaded', () => {
         content_type: 'image_gallery',
         total_photos: state.dailyContent.photos.length,
         total_videos: state.dailyContent.videos.length,
-        primary_keywords: TRANSLATIONS[state.currentLanguage].seo_keywords?.primary
+        primary_keywords: TRANSLATIONS[state.currentLanguage].seo_keywords?.primary || ''
     });
     
+    // Service Worker Registration
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('✅ Service Worker registered'))
+            .catch(err => console.error('❌ Service Worker registration failed:', err));
+    }
+    
     console.log('✅ SEO-Optimized Gallery loaded successfully!');
-    console.log('🌍 Language:', state.currentLanguage);
-    console.log('🔍 SEO Keywords:', TRANSLATIONS[state.currentLanguage].seo_keywords?.primary);
+    console.log('🌐 Language:', state.currentLanguage);
+    console.log('🔍 SEO Keywords:', TRANSLATIONS[state.currentLanguage].seo_keywords?.primary || 'Not set');
     console.log('📊 Analytics:', CONFIG.ANALYTICS_ID);
     console.log('💳 PayPal: Ready');
-    console.log('🌊 Version: 18.0.0 Complete with all fixes');
+    console.log('📢 Ad Networks:', Object.keys(CONFIG.AD_NETWORKS).filter(key => CONFIG.AD_NETWORKS[key].enabled).join(', '));
+    console.log('🌊 Version: 19.0.0 Complete with all features');
 });
 
 // ============================
@@ -1869,5 +2228,5 @@ window.scrollCarousel = scrollCarousel;
 window.isabellaBot = isabellaBot;
 
 // ============================
-// END OF COMPLETE SCRIPT v18.0.0
+// END OF COMPLETE SCRIPT v19.0.0
 // ============================
