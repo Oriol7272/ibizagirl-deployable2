@@ -1,10 +1,10 @@
 // ============================
 // SEO ENHANCEMENTS - LAZY LOADING + OPEN GRAPH + JSON-LD
-// Añadir al final del main-script.js o como archivo separado
+// Version 2.0 - Enhanced with WebP support and Twitter Bot 429 fix
 // ============================
 
 // ============================
-// LAZY LOADING MEJORADO v2.0
+// ENHANCED LAZY LOADING v2.0 WITH THUMBS FIX
 // ============================
 
 function setupAdvancedLazyLoading() {
@@ -27,45 +27,57 @@ function setupAdvancedLazyLoading() {
             if (entry.isIntersecting) {
                 const img = entry.target;
                 
-                // Soporte para WEBP con fallback
-                if (supportsWebP()) {
-                    const webpSrc = img.dataset.src?.replace(/\.(jpg|jpeg|png)$/i, '.webp');
-                    if (webpSrc && webpSrc !== img.dataset.src) {
-                        // Intentar cargar WEBP primero
-                        const webpImg = new Image();
-                        webpImg.onload = () => {
-                            img.src = webpSrc;
-                            img.classList.remove('skeleton', 'lazy');
-                            img.classList.add('loaded');
-                        };
-                        webpImg.onerror = () => {
-                            // Fallback a formato original
+                // Fix para thumbs - asegurar que tengan src
+                if (img.dataset.src) {
+                    // Soporte para WEBP con fallback
+                    if (supportsWebP()) {
+                        const webpSrc = img.dataset.src?.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+                        if (webpSrc && webpSrc !== img.dataset.src) {
+                            // Intentar cargar WEBP primero
+                            const webpImg = new Image();
+                            webpImg.onload = () => {
+                                img.src = webpSrc;
+                                img.classList.remove('skeleton', 'lazy');
+                                img.classList.add('loaded');
+                            };
+                            webpImg.onerror = () => {
+                                // Fallback a formato original
+                                img.src = img.dataset.src;
+                                img.classList.remove('skeleton', 'lazy');
+                                img.classList.add('loaded');
+                            };
+                            webpImg.src = webpSrc;
+                        } else {
                             img.src = img.dataset.src;
                             img.classList.remove('skeleton', 'lazy');
                             img.classList.add('loaded');
-                        };
-                        webpImg.src = webpSrc;
+                        }
                     } else {
                         img.src = img.dataset.src;
                         img.classList.remove('skeleton', 'lazy');
                         img.classList.add('loaded');
                     }
-                } else {
-                    img.src = img.dataset.src;
-                    img.classList.remove('skeleton', 'lazy');
-                    img.classList.add('loaded');
-                }
-                
-                // Performance tracking
-                img.addEventListener('load', () => {
-                    trackEvent('image_loaded', {
-                        src: img.src,
-                        loading_method: 'lazy',
-                        supports_webp: supportsWebP()
+                    
+                    // Performance tracking
+                    img.addEventListener('load', () => {
+                        trackEvent('image_loaded', {
+                            src: img.src,
+                            loading_method: 'lazy',
+                            supports_webp: supportsWebP()
+                        });
                     });
-                });
-                
-                observer.unobserve(img);
+                    
+                    delete img.dataset.src;
+                    observer.unobserve(img);
+                } else if (!img.src || img.src === '') {
+                    // Fallback para imágenes sin data-src
+                    const parentItem = img.closest('.content-item, .teaser-item');
+                    if (parentItem) {
+                        parentItem.classList.remove('skeleton');
+                        parentItem.classList.add('loaded');
+                    }
+                    observer.unobserve(img);
+                }
             }
         });
     }, lazyImageOptions);
@@ -103,13 +115,13 @@ function setupAdvancedLazyLoading() {
         });
     }, lazyVideoOptions);
 
-    // Aplicar observers
-    document.querySelectorAll('img[data-src]').forEach(img => {
+    // Aplicar observers a todas las imágenes y videos
+    document.querySelectorAll('img[data-src], img.lazy').forEach(img => {
         img.classList.add('lazy');
         imageObserver.observe(img);
     });
 
-    document.querySelectorAll('video[data-video-id]').forEach(video => {
+    document.querySelectorAll('video[data-video-id], video.lazy').forEach(video => {
         video.classList.add('lazy');
         videoObserver.observe(video);
     });
@@ -219,7 +231,7 @@ function updateOpenGraph(contentData = {}) {
 }
 
 // ============================
-// JSON-LD AVANZADO
+// JSON-LD AVANZADO CON TODOS LOS IDIOMAS
 // ============================
 
 function injectAdvancedJSONLD() {
@@ -281,7 +293,7 @@ function injectAdvancedJSONLD() {
         "contactPoint": {
             "@type": "ContactPoint",
             "contactType": "customer service",
-            "availableLanguage": ["Spanish", "English"]
+            "availableLanguage": ["Spanish", "English", "French", "German", "Italian"]
         }
     };
 
@@ -525,6 +537,91 @@ function updateBreadcrumbs(currentPage = '') {
 }
 
 // ============================
+// MULTILINGUAL HREFLANG TAGS
+// ============================
+
+function injectHreflangTags() {
+    // Limpiar hreflang existentes
+    document.querySelectorAll('link[hreflang]').forEach(link => link.remove());
+    
+    const languages = {
+        'es': 'https://ibizagirl.pics/',
+        'en': 'https://ibizagirl.pics/en/',
+        'fr': 'https://ibizagirl.pics/fr/',
+        'de': 'https://ibizagirl.pics/de/',
+        'it': 'https://ibizagirl.pics/it/'
+    };
+    
+    // Agregar hreflang para cada idioma
+    Object.entries(languages).forEach(([lang, url]) => {
+        const link = document.createElement('link');
+        link.rel = 'alternate';
+        link.hreflang = lang;
+        link.href = url;
+        document.head.appendChild(link);
+    });
+    
+    // Agregar x-default
+    const defaultLink = document.createElement('link');
+    defaultLink.rel = 'alternate';
+    defaultLink.hreflang = 'x-default';
+    defaultLink.href = 'https://ibizagirl.pics/';
+    document.head.appendChild(defaultLink);
+}
+
+// ============================
+// PERFORMANCE METRICS TRACKING
+// ============================
+
+function setupPerformanceTracking() {
+    // Core Web Vitals
+    if ('PerformanceObserver' in window) {
+        const perfObserver = new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+                if (entry.entryType === 'largest-contentful-paint') {
+                    trackEvent('lcp_measured', { 
+                        value: entry.startTime,
+                        element: entry.element?.tagName || 'unknown'
+                    });
+                }
+                if (entry.entryType === 'first-input') {
+                    trackEvent('fid_measured', { 
+                        value: entry.processingStart - entry.startTime,
+                        input_type: entry.name
+                    });
+                }
+                if (entry.entryType === 'layout-shift') {
+                    trackEvent('cls_measured', { 
+                        value: entry.value,
+                        had_recent_input: entry.hadRecentInput
+                    });
+                }
+            }
+        });
+        
+        perfObserver.observe({ 
+            entryTypes: ['largest-contentful-paint', 'first-input', 'layout-shift'] 
+        });
+    }
+    
+    // Page load timing
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            const navigation = performance.getEntriesByType('navigation')[0];
+            if (navigation) {
+                trackEvent('page_timing', {
+                    'dns_lookup': navigation.domainLookupEnd - navigation.domainLookupStart,
+                    'tcp_connect': navigation.connectEnd - navigation.connectStart,
+                    'server_response': navigation.responseStart - navigation.requestStart,
+                    'dom_interactive': navigation.domInteractive - navigation.navigationStart,
+                    'dom_complete': navigation.domComplete - navigation.navigationStart
+                });
+            }
+        }, 1000);
+    });
+}
+
+// ============================
 // INICIALIZACIÓN GLOBAL
 // ============================
 
@@ -540,27 +637,17 @@ function initializeSEOEnhancements() {
     // JSON-LD avanzado
     injectAdvancedJSONLD();
     
+    // Hreflang tags
+    injectHreflangTags();
+    
     // Service Worker PWA
     registerServiceWorker();
     
     // Breadcrumbs
     updateBreadcrumbs('gallery');
     
-    // Performance observer
-    if ('PerformanceObserver' in window) {
-        const perfObserver = new PerformanceObserver((list) => {
-            for (const entry of list.getEntries()) {
-                if (entry.entryType === 'largest-contentful-paint') {
-                    trackEvent('lcp_measured', { value: entry.startTime });
-                }
-                if (entry.entryType === 'first-input') {
-                    trackEvent('fid_measured', { value: entry.processingStart - entry.startTime });
-                }
-            }
-        });
-        
-        perfObserver.observe({ entryTypes: ['largest-contentful-paint', 'first-input'] });
-    }
+    // Performance tracking
+    setupPerformanceTracking();
     
     console.log('✅ SEO Enhancements initialized');
 }
@@ -576,3 +663,5 @@ if (document.readyState === 'loading') {
 window.updateOpenGraph = updateOpenGraph;
 window.updateBreadcrumbs = updateBreadcrumbs;
 window.initializeSEOEnhancements = initializeSEOEnhancements;
+window.injectAdvancedJSONLD = injectAdvancedJSONLD;
+window.setupAdvancedLazyLoading = setupAdvancedLazyLoading;
