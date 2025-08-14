@@ -1,6 +1,6 @@
 // ============================
-// SEO ENHANCEMENTS - LAZY LOADING + OPEN GRAPH + JSON-LD
-// Añadir al final del main-script.js o como archivo separado
+// SEO ENHANCEMENTS v2.0.0 - CORRECTED
+// Lazy Loading + Open Graph + JSON-LD + Performance
 // ============================
 
 // ============================
@@ -57,29 +57,39 @@ function setupAdvancedLazyLoading() {
 
     // Función auxiliar para cargar imagen original
     function loadOriginalImage(img) {
-        if (img.dataset.src) {
-            const tempImg = new Image();
-            tempImg.onload = () => {
-                img.src = img.dataset.src;
-                img.classList.remove('skeleton', 'lazy');
-                img.classList.add('loaded');
-                
-                // Performance tracking
-                if (window.trackEvent) {
-                    window.trackEvent('image_loaded', {
-                        src: img.src,
-                        loading_method: 'lazy',
-                        supports_webp: supportsWebP()
-                    });
-                }
-            };
-            tempImg.onerror = () => {
-                console.error('Failed to load image:', img.dataset.src);
-                img.classList.remove('skeleton', 'lazy');
-                img.classList.add('error');
-            };
-            tempImg.src = img.dataset.src;
+        if (!img || !img.dataset || !img.dataset.src) {
+            console.warn('Image element missing data-src attribute');
+            return;
         }
+        
+        const tempImg = new Image();
+        
+        tempImg.onload = () => {
+            img.src = img.dataset.src;
+            img.classList.remove('skeleton', 'lazy');
+            img.classList.add('loaded');
+            delete img.dataset.src;
+            
+            // Track performance
+            if (window.trackEvent) {
+                window.trackEvent('image_loaded', {
+                    src: img.src,
+                    loading_method: 'lazy',
+                    supports_webp: supportsWebP()
+                });
+            }
+        };
+        
+        tempImg.onerror = () => {
+            console.error('Failed to load image:', img.dataset.src);
+            img.classList.remove('skeleton', 'lazy');
+            img.classList.add('error');
+            
+            // Try fallback image
+            img.src = 'public/assets/full/bikini.jpg';
+        };
+        
+        tempImg.src = img.dataset.src;
     }
 
     // Observer para videos con preload optimizado
@@ -193,7 +203,12 @@ function updateOpenGraph(contentData = {}) {
         { property: 'og:url', content: data.url },
         { property: 'og:type', content: data.type },
         { property: 'og:site_name', content: 'IbizaGirl.pics' },
-        { property: 'og:locale', content: lang === 'es' ? 'es_ES' : 'en_US' },
+        { property: 'og:locale', content: lang === 'es' ? 'es_ES' : 
+                                        lang === 'en' ? 'en_US' :
+                                        lang === 'fr' ? 'fr_FR' :
+                                        lang === 'de' ? 'de_DE' :
+                                        lang === 'it' ? 'it_IT' :
+                                        lang === 'pt' ? 'pt_PT' : 'es_ES' },
         { property: 'og:updated_time', content: new Date().toISOString() },
         
         // Twitter Cards
@@ -256,7 +271,12 @@ function injectAdvancedJSONLD() {
         "alternateName": ["Galería Ibiza", "Ibiza Photos", "Paradise Gallery"],
         "description": trans.meta_description || "Galería premium de Ibiza con contenido exclusivo",
         "url": "https://ibizagirl.pics/",
-        "inLanguage": lang === 'es' ? 'es-ES' : 'en-US',
+        "inLanguage": lang === 'es' ? 'es-ES' : 
+                      lang === 'en' ? 'en-US' :
+                      lang === 'fr' ? 'fr-FR' :
+                      lang === 'de' ? 'de-DE' :
+                      lang === 'it' ? 'it-IT' :
+                      lang === 'pt' ? 'pt-PT' : 'es-ES',
         "isAccessibleForFree": false,
         "datePublished": "2025-01-15T00:00:00+01:00",
         "dateModified": new Date().toISOString(),
@@ -303,7 +323,7 @@ function injectAdvancedJSONLD() {
         "contactPoint": {
             "@type": "ContactPoint",
             "contactType": "customer service",
-            "availableLanguage": ["Spanish", "English"]
+            "availableLanguage": ["Spanish", "English", "French", "German", "Italian", "Portuguese"]
         }
     };
 
@@ -345,7 +365,12 @@ function injectAdvancedJSONLD() {
             }
         },
         "dateModified": new Date().toISOString(),
-        "inLanguage": lang === 'es' ? 'es-ES' : 'en-US',
+        "inLanguage": lang === 'es' ? 'es-ES' : 
+                      lang === 'en' ? 'en-US' :
+                      lang === 'fr' ? 'fr-FR' :
+                      lang === 'de' ? 'de-DE' :
+                      lang === 'it' ? 'it-IT' :
+                      lang === 'pt' ? 'pt-PT' : 'es-ES',
         "keywords": trans.seo_keywords?.primary || "ibiza photos gallery",
         "author": {
             "@type": "Organization",
@@ -619,7 +644,7 @@ function initPerformanceMonitoring() {
 // ============================
 
 function initializeSEOEnhancements() {
-    console.log('🚀 Initializing SEO Enhancements...');
+    console.log('🚀 Initializing SEO Enhancements v2.0.0...');
     
     // Lazy loading avanzado
     setupAdvancedLazyLoading();
