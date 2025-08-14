@@ -1,10 +1,10 @@
 // ============================
 // SEO ENHANCEMENTS - LAZY LOADING + OPEN GRAPH + JSON-LD
-// Version 2.0 - Enhanced with WebP support and Twitter Bot 429 fix
+// Version 2.1.0 - COMPLETE FIXED with Thumbs Loading + Multi-Language
 // ============================
 
 // ============================
-// ENHANCED LAZY LOADING v2.0 WITH THUMBS FIX
+// ENHANCED LAZY LOADING v2.1 WITH COMPLETE THUMBS FIX
 // ============================
 
 function setupAdvancedLazyLoading() {
@@ -21,15 +21,15 @@ function setupAdvancedLazyLoading() {
         threshold: 0.1
     };
 
-    // Observer para imágenes con soporte WEBP
+    // Observer para imágenes con soporte WEBP y fix completo de thumbs
     const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
                 
-                // Fix para thumbs - asegurar que tengan src
+                // COMPLETE FIX: Manejar todas las posibilidades de carga de imágenes
                 if (img.dataset.src) {
-                    // Soporte para WEBP con fallback
+                    // Caso 1: Imagen con data-src para lazy loading
                     if (supportsWebP()) {
                         const webpSrc = img.dataset.src?.replace(/\.(jpg|jpeg|png)$/i, '.webp');
                         if (webpSrc && webpSrc !== img.dataset.src) {
@@ -39,75 +39,88 @@ function setupAdvancedLazyLoading() {
                                 img.src = webpSrc;
                                 img.classList.remove('skeleton', 'lazy');
                                 img.classList.add('loaded');
+                                trackImageLoad(img, 'webp_success');
                             };
                             webpImg.onerror = () => {
                                 // Fallback a formato original
                                 img.src = img.dataset.src;
                                 img.classList.remove('skeleton', 'lazy');
                                 img.classList.add('loaded');
+                                trackImageLoad(img, 'webp_fallback');
                             };
                             webpImg.src = webpSrc;
                         } else {
                             img.src = img.dataset.src;
                             img.classList.remove('skeleton', 'lazy');
                             img.classList.add('loaded');
+                            trackImageLoad(img, 'standard');
                         }
                     } else {
                         img.src = img.dataset.src;
                         img.classList.remove('skeleton', 'lazy');
                         img.classList.add('loaded');
+                        trackImageLoad(img, 'no_webp');
                     }
-                    
-                    // Performance tracking
-                    img.addEventListener('load', () => {
-                        trackEvent('image_loaded', {
-                            src: img.src,
-                            loading_method: 'lazy',
-                            supports_webp: supportsWebP()
-                        });
-                    });
-                    
                     delete img.dataset.src;
-                    observer.unobserve(img);
-                } else if (!img.src || img.src === '') {
-                    // Fallback para imágenes sin data-src
-                    const parentItem = img.closest('.content-item, .teaser-item');
-                    if (parentItem) {
-                        parentItem.classList.remove('skeleton');
-                        parentItem.classList.add('loaded');
-                    }
-                    observer.unobserve(img);
+                } 
+                else if (img.src && img.src !== '' && !img.src.includes('data:')) {
+                    // Caso 2: Imagen ya tiene src válida
+                    img.classList.remove('skeleton', 'lazy');
+                    img.classList.add('loaded');
+                    trackImageLoad(img, 'already_loaded');
                 }
+                else {
+                    // Caso 3: Imagen sin src válida - remover skeleton
+                    console.warn('Image without valid src detected:', img);
+                    img.classList.remove('skeleton', 'lazy');
+                    
+                    // Intentar cargar una imagen por defecto si está en content-item
+                    const parentItem = img.closest('.content-item, .teaser-item');
+                    if (parentItem && parentItem.dataset.id) {
+                        // Intentar construir una URL válida
+                        const defaultSrc = 'public/assets/full/bikini.jpg';
+                        img.src = defaultSrc;
+                        img.classList.add('loaded');
+                        trackImageLoad(img, 'fallback_default');
+                    }
+                }
+                
+                observer.unobserve(img);
             }
         });
     }, lazyImageOptions);
 
-    // Observer para videos con preload optimizado
+    // Observer para videos con preload optimizado y fix completo
     const videoObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const video = entry.target;
-                const source = video.querySelector('source[data-src]');
+                const source = video.querySelector('source[data-src], source[src]');
                 
-                if (source && source.dataset.src) {
-                    source.src = source.dataset.src;
-                    video.load();
+                if (source) {
+                    if (source.dataset.src) {
+                        // Video con data-src
+                        source.src = source.dataset.src;
+                        video.load();
+                        video.classList.remove('skeleton', 'lazy');
+                        video.classList.add('loaded');
+                        
+                        // Preload metadata para mejor UX
+                        video.preload = 'metadata';
+                        
+                        delete source.dataset.src;
+                        trackVideoLoad(video, 'lazy_loaded');
+                    } else if (source.src && source.src !== '') {
+                        // Video ya tiene src
+                        video.classList.remove('skeleton', 'lazy');
+                        video.classList.add('loaded');
+                        video.preload = 'metadata';
+                        trackVideoLoad(video, 'already_loaded');
+                    }
+                } else {
+                    // Video sin source - remover skeleton
                     video.classList.remove('skeleton', 'lazy');
-                    video.classList.add('loaded');
-                    
-                    // Preload metadata para mejor UX
-                    video.preload = 'metadata';
-                    
-                    delete source.dataset.src;
-                    
-                    // Performance tracking
-                    video.addEventListener('loadedmetadata', () => {
-                        trackEvent('video_loaded', {
-                            src: source.src,
-                            duration: video.duration,
-                            loading_method: 'lazy'
-                        });
-                    });
+                    console.warn('Video without valid source detected:', video);
                 }
                 
                 observer.unobserve(video);
@@ -116,12 +129,12 @@ function setupAdvancedLazyLoading() {
     }, lazyVideoOptions);
 
     // Aplicar observers a todas las imágenes y videos
-    document.querySelectorAll('img[data-src], img.lazy').forEach(img => {
+    document.querySelectorAll('img[data-src], img.lazy, img.skeleton').forEach(img => {
         img.classList.add('lazy');
         imageObserver.observe(img);
     });
 
-    document.querySelectorAll('video[data-video-id], video.lazy').forEach(video => {
+    document.querySelectorAll('video[data-video-id], video.lazy, video.skeleton').forEach(video => {
         video.classList.add('lazy');
         videoObserver.observe(video);
     });
@@ -129,6 +142,7 @@ function setupAdvancedLazyLoading() {
     // Progressive loading para crítico above-the-fold
     loadCriticalImages();
     
+    console.log('✅ Advanced lazy loading setup complete with thumbs fix');
     return { imageObserver, videoObserver };
 }
 
@@ -151,18 +165,54 @@ function loadCriticalImages() {
             img.src = img.dataset.src;
             img.classList.remove('skeleton');
             delete img.dataset.src;
+        } else if (!img.src || img.src === '') {
+            // Asegurar que las imágenes críticas tengan src
+            if (img.closest('.banner-slide')) {
+                img.src = 'public/assets/full/bikbanner.jpg';
+            } else if (img.closest('.teaser-item')) {
+                img.src = 'public/assets/full/bikini.jpg';
+            }
+            img.classList.remove('skeleton');
         }
     });
 }
 
+// Funciones de tracking para debugging
+function trackImageLoad(img, method) {
+    if (window.trackEvent) {
+        window.trackEvent('image_loaded', {
+            src: img.src,
+            loading_method: method,
+            supports_webp: supportsWebP(),
+            has_alt: !!img.alt
+        });
+    }
+    console.log(`📸 Image loaded: ${method} - ${img.src.split('/').pop()}`);
+}
+
+function trackVideoLoad(video, method) {
+    if (window.trackEvent) {
+        window.trackEvent('video_loaded', {
+            loading_method: method,
+            has_poster: !!video.poster,
+            duration: video.duration || 0
+        });
+    }
+    console.log(`🎬 Video loaded: ${method}`);
+}
+
 // ============================
-// OPEN GRAPH DINÁMICO
+// OPEN GRAPH DINÁMICO MEJORADO
 // ============================
 
 function updateOpenGraph(contentData = {}) {
+    // Usar el estado global si está disponible
+    const currentLang = window.state?.currentLanguage || 'es';
+    const trans = window.TRANSLATIONS?.[currentLang] || {};
+    
     const defaultData = {
-        title: 'IbizaGirl.pics - Galería Premium Ibiza | 400+ Fotos Diarias',
-        description: 'Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo español.',
+        title: trans.photos_seo_title || 'IbizaGirl.pics - Galería Premium Ibiza | 400+ Fotos Diarias',
+        description: trans.meta_description || 'Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo español.',
         image: 'https://ibizagirl.pics/public/assets/full/bikini.jpg',
         url: window.location.href,
         type: 'website'
@@ -178,7 +228,7 @@ function updateOpenGraph(contentData = {}) {
         { property: 'og:url', content: data.url },
         { property: 'og:type', content: data.type },
         { property: 'og:site_name', content: 'IbizaGirl.pics' },
-        { property: 'og:locale', content: state.currentLanguage === 'es' ? 'es_ES' : 'en_US' },
+        { property: 'og:locale', content: getOGLocale(currentLang) },
         { property: 'og:updated_time', content: new Date().toISOString() },
         
         // Twitter Cards
@@ -228,6 +278,19 @@ function updateOpenGraph(contentData = {}) {
         document.head.appendChild(canonical);
     }
     canonical.href = data.url;
+    
+    console.log('✅ Open Graph updated for language:', currentLang);
+}
+
+function getOGLocale(lang) {
+    const locales = {
+        'es': 'es_ES',
+        'en': 'en_US',
+        'fr': 'fr_FR',
+        'de': 'de_DE',
+        'it': 'it_IT'
+    };
+    return locales[lang] || 'es_ES';
 }
 
 // ============================
@@ -235,7 +298,9 @@ function updateOpenGraph(contentData = {}) {
 // ============================
 
 function injectAdvancedJSONLD() {
-    const trans = TRANSLATIONS[state.currentLanguage];
+    const currentLang = window.state?.currentLanguage || 'es';
+    const trans = window.TRANSLATIONS?.[currentLang] || {};
+    const dailyContent = window.state?.dailyContent;
     
     // Schema principal del sitio web
     const websiteSchema = {
@@ -243,10 +308,10 @@ function injectAdvancedJSONLD() {
         "@type": "WebSite",
         "@id": "https://ibizagirl.pics/#website",
         "name": "IbizaGirl.pics",
-        "alternateName": ["Galería Ibiza", "Ibiza Photos", "Paradise Gallery"],
-        "description": trans.meta_description,
+        "alternateName": ["Galería Ibiza", "Ibiza Photos", "Paradise Gallery", "Galerie Ibiza", "Ibiza Fotos"],
+        "description": trans.meta_description || "Premium Ibiza gallery with daily updates",
         "url": "https://ibizagirl.pics/",
-        "inLanguage": state.currentLanguage === 'es' ? 'es-ES' : 'en-US',
+        "inLanguage": getSchemaLanguage(currentLang),
         "isAccessibleForFree": false,
         "datePublished": "2025-01-15T00:00:00+01:00",
         "dateModified": new Date().toISOString(),
@@ -266,7 +331,7 @@ function injectAdvancedJSONLD() {
             {
                 "@type": "ViewAction",
                 "target": "https://ibizagirl.pics/main.html",
-                "name": "Ver Galería Premium"
+                "name": trans.view_gallery || "Ver Galería Premium"
             }
         ]
     };
@@ -302,23 +367,23 @@ function injectAdvancedJSONLD() {
         "@context": "https://schema.org",
         "@type": "ImageGallery",
         "@id": "https://ibizagirl.pics/main.html#gallery",
-        "name": trans.photos_seo_title,
-        "description": trans.gallery_description,
+        "name": trans.photos_seo_title || "Galería Premium de Ibiza",
+        "description": trans.gallery_description || "Galería premium con contenido exclusivo de Ibiza",
         "url": "https://ibizagirl.pics/main.html",
         "mainEntity": {
             "@type": "WebPage",
             "@id": "https://ibizagirl.pics/main.html#webpage",
-            "name": trans.photos_seo_title,
-            "description": trans.gallery_description,
+            "name": trans.photos_seo_title || "Galería Premium de Ibiza",
+            "description": trans.gallery_description || "Galería premium con contenido exclusivo de Ibiza",
             "primaryImageOfPage": {
                 "@type": "ImageObject",
                 "url": "https://ibizagirl.pics/public/assets/full/bikini.jpg",
-                "caption": trans.seo_keywords?.primary,
+                "caption": trans.seo_keywords?.primary || "galería premium ibiza",
                 "width": 1200,
                 "height": 800
             }
         },
-        "numberOfItems": state.dailyContent ? state.dailyContent.photos.length : 400,
+        "numberOfItems": dailyContent ? dailyContent.photos.length : 400,
         "contentLocation": {
             "@type": "Place",
             "name": "Ibiza, España",
@@ -335,8 +400,8 @@ function injectAdvancedJSONLD() {
             }
         },
         "dateModified": new Date().toISOString(),
-        "inLanguage": state.currentLanguage === 'es' ? 'es-ES' : 'en-US',
-        "keywords": trans.seo_keywords?.primary,
+        "inLanguage": getSchemaLanguage(currentLang),
+        "keywords": trans.seo_keywords?.primary || "ibiza photos gallery",
         "author": {
             "@type": "Organization",
             "@id": "https://ibizagirl.pics/#organization"
@@ -352,7 +417,7 @@ function injectAdvancedJSONLD() {
         "@context": "https://schema.org",
         "@type": "TouristDestination",
         "name": "Ibiza Paradise Beaches",
-        "description": "Las mejores playas y calas de Ibiza capturadas en nuestra galería premium",
+        "description": getDestinationDescription(currentLang),
         "url": "https://ibizagirl.pics/",
         "image": "https://ibizagirl.pics/public/assets/full/bikbanner.jpg",
         "geo": {
@@ -385,8 +450,8 @@ function injectAdvancedJSONLD() {
     const serviceSchema = {
         "@context": "https://schema.org",
         "@type": "Service",
-        "name": "Galería Premium Ibiza",
-        "description": "Servicio de galería fotográfica premium con contenido exclusivo de Ibiza",
+        "name": getServiceName(currentLang),
+        "description": getServiceDescription(currentLang),
         "provider": {
             "@type": "Organization",
             "@id": "https://ibizagirl.pics/#organization"
@@ -441,7 +506,51 @@ function injectAdvancedJSONLD() {
         scriptTag.textContent = JSON.stringify(schema, null, 2);
     });
 
-    console.log('✅ Advanced JSON-LD schemas injected');
+    console.log('✅ Advanced JSON-LD schemas injected for language:', currentLang);
+}
+
+function getSchemaLanguage(lang) {
+    const languages = {
+        'es': 'es-ES',
+        'en': 'en-US',
+        'fr': 'fr-FR',
+        'de': 'de-DE',
+        'it': 'it-IT'
+    };
+    return languages[lang] || 'es-ES';
+}
+
+function getDestinationDescription(lang) {
+    const descriptions = {
+        'es': "Las mejores playas y calas de Ibiza capturadas en nuestra galería premium",
+        'en': "The best beaches and coves of Ibiza captured in our premium gallery",
+        'fr': "Les meilleures plages et criques d'Ibiza capturées dans notre galerie premium",
+        'de': "Die besten Strände und Buchten von Ibiza in unserer Premium-Galerie eingefangen",
+        'it': "Le migliori spiagge e calette di Ibiza catturate nella nostra galleria premium"
+    };
+    return descriptions[lang] || descriptions['es'];
+}
+
+function getServiceName(lang) {
+    const names = {
+        'es': "Galería Premium Ibiza",
+        'en': "Premium Ibiza Gallery",
+        'fr': "Galerie Premium Ibiza",
+        'de': "Premium Ibiza Galerie",
+        'it': "Galleria Premium Ibiza"
+    };
+    return names[lang] || names['es'];
+}
+
+function getServiceDescription(lang) {
+    const descriptions = {
+        'es': "Servicio de galería fotográfica premium con contenido exclusivo de Ibiza",
+        'en': "Premium photographic gallery service with exclusive Ibiza content",
+        'fr': "Service de galerie photographique premium avec contenu exclusif d'Ibiza",
+        'de': "Premium-Fotogalerie-Service mit exklusiven Ibiza-Inhalten",
+        'it': "Servizio di galleria fotografica premium con contenuti esclusivi di Ibiza"
+    };
+    return descriptions[lang] || descriptions['es'];
 }
 
 // ============================
@@ -510,14 +619,15 @@ function updateBreadcrumbs(currentPage = '') {
     const breadcrumbContainer = document.querySelector('.breadcrumb');
     if (!breadcrumbContainer) return;
 
-    const trans = TRANSLATIONS[state.currentLanguage];
+    const currentLang = window.state?.currentLanguage || 'es';
+    const trans = window.TRANSLATIONS?.[currentLang] || {};
     const breadcrumbs = [
-        { name: 'Inicio', url: '/', position: 1 }
+        { name: trans.home || 'Inicio', url: '/', position: 1 }
     ];
 
     if (currentPage === 'gallery') {
         breadcrumbs.push({ 
-            name: 'Galería Premium Ibiza', 
+            name: trans.photos_seo_title || 'Galería Premium Ibiza', 
             url: '/main.html', 
             position: 2 
         });
@@ -567,6 +677,8 @@ function injectHreflangTags() {
     defaultLink.hreflang = 'x-default';
     defaultLink.href = 'https://ibizagirl.pics/';
     document.head.appendChild(defaultLink);
+    
+    console.log('✅ Hreflang tags injected for all languages');
 }
 
 // ============================
@@ -579,22 +691,28 @@ function setupPerformanceTracking() {
         const perfObserver = new PerformanceObserver((list) => {
             for (const entry of list.getEntries()) {
                 if (entry.entryType === 'largest-contentful-paint') {
-                    trackEvent('lcp_measured', { 
-                        value: entry.startTime,
-                        element: entry.element?.tagName || 'unknown'
-                    });
+                    if (window.trackEvent) {
+                        window.trackEvent('lcp_measured', { 
+                            value: entry.startTime,
+                            element: entry.element?.tagName || 'unknown'
+                        });
+                    }
                 }
                 if (entry.entryType === 'first-input') {
-                    trackEvent('fid_measured', { 
-                        value: entry.processingStart - entry.startTime,
-                        input_type: entry.name
-                    });
+                    if (window.trackEvent) {
+                        window.trackEvent('fid_measured', { 
+                            value: entry.processingStart - entry.startTime,
+                            input_type: entry.name
+                        });
+                    }
                 }
                 if (entry.entryType === 'layout-shift') {
-                    trackEvent('cls_measured', { 
-                        value: entry.value,
-                        had_recent_input: entry.hadRecentInput
-                    });
+                    if (window.trackEvent) {
+                        window.trackEvent('cls_measured', { 
+                            value: entry.value,
+                            had_recent_input: entry.hadRecentInput
+                        });
+                    }
                 }
             }
         });
@@ -608,8 +726,8 @@ function setupPerformanceTracking() {
     window.addEventListener('load', () => {
         setTimeout(() => {
             const navigation = performance.getEntriesByType('navigation')[0];
-            if (navigation) {
-                trackEvent('page_timing', {
+            if (navigation && window.trackEvent) {
+                window.trackEvent('page_timing', {
                     'dns_lookup': navigation.domainLookupEnd - navigation.domainLookupStart,
                     'tcp_connect': navigation.connectEnd - navigation.connectStart,
                     'server_response': navigation.responseStart - navigation.requestStart,
@@ -619,6 +737,8 @@ function setupPerformanceTracking() {
             }
         }, 1000);
     });
+    
+    console.log('✅ Performance tracking setup complete');
 }
 
 // ============================
@@ -626,9 +746,9 @@ function setupPerformanceTracking() {
 // ============================
 
 function initializeSEOEnhancements() {
-    console.log('🚀 Initializing SEO Enhancements...');
+    console.log('🚀 Initializing SEO Enhancements v2.1.0...');
     
-    // Lazy loading avanzado
+    // Lazy loading avanzado con fix completo
     setupAdvancedLazyLoading();
     
     // Open Graph dinámico
@@ -649,7 +769,21 @@ function initializeSEOEnhancements() {
     // Performance tracking
     setupPerformanceTracking();
     
-    console.log('✅ SEO Enhancements initialized');
+    // Monitor for language changes
+    if (window.state) {
+        let lastLang = window.state.currentLanguage;
+        setInterval(() => {
+            if (window.state.currentLanguage !== lastLang) {
+                console.log('Language changed, updating SEO elements...');
+                updateOpenGraph();
+                injectAdvancedJSONLD();
+                updateBreadcrumbs('gallery');
+                lastLang = window.state.currentLanguage;
+            }
+        }, 1000);
+    }
+    
+    console.log('✅ SEO Enhancements v2.1.0 initialized complete');
 }
 
 // Auto-inicializar cuando el DOM esté listo
