@@ -1,41 +1,46 @@
 // ============================
-// IBIZAGIRL.PICS SERVICE WORKER v1.0
+// IBIZAGIRL.PICS SERVICE WORKER v1.3.0
 // PWA + Performance + SEO Optimized
 // ============================
 
-const CACHE_NAME = 'ibizagirl-v1.2.0';
-const STATIC_CACHE = 'ibizagirl-static-v1.2.0';
-const DYNAMIC_CACHE = 'ibizagirl-dynamic-v1.2.0';
-const IMAGE_CACHE = 'ibizagirl-images-v1.2.0';
+const CACHE_VERSION = '1.3.0';
+const CACHE_NAME = `ibizagirl-v${CACHE_VERSION}`;
+const STATIC_CACHE = `ibizagirl-static-v${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `ibizagirl-dynamic-v${CACHE_VERSION}`;
+const IMAGE_CACHE = `ibizagirl-images-v${CACHE_VERSION}`;
 
 // Archivos críticos para cachear
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/main.html',
-  '/main-script.js',
-  '/manifest.json',
-  
-  // Imágenes críticas para SEO
-  '/public/assets/full/bikini.jpg',
-  '/public/assets/full/bikbanner.jpg',
-  '/public/assets/full/bikbanner2.jpg',
-  '/public/assets/full/backbikini.jpg',
-  '/public/assets/full/bikini3.jpg',
-  '/public/assets/full/bikini5.jpg',
-  
-  // Scripts externos críticos
-  'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js',
-  'https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR&components=buttons,funding-eligibility'
+    '/',
+    '/index.html',
+    '/main.html',
+    '/main-script.js',
+    '/seo-enhancements.js',
+    '/manifest.json',
+    
+    // Imágenes críticas para SEO
+    '/public/assets/full/bikini.jpg',
+    '/public/assets/full/bikbanner.jpg',
+    '/public/assets/full/bikbanner2.jpg',
+    '/public/assets/full/backbikini.jpg',
+    '/public/assets/full/bikini3.jpg',
+    '/public/assets/full/bikini5.jpg'
+];
+
+// External scripts to cache
+const EXTERNAL_SCRIPTS = [
+    'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js'
 ];
 
 // URLs que no deben cachearse
 const EXCLUDED_URLS = [
-  '/public/assets/uncensored/',
-  '/public/assets/uncensored-videos/',
-  '/admin',
-  'chrome-extension://',
-  'extension://'
+    '/public/assets/uncensored/',
+    '/public/assets/uncensored-videos/',
+    '/admin',
+    'chrome-extension://',
+    'extension://',
+    'paypal.com',
+    'paypalobjects.com'
 ];
 
 // ============================
@@ -43,27 +48,44 @@ const EXCLUDED_URLS = [
 // ============================
 
 self.addEventListener('install', event => {
-  console.log('🔧 Service Worker: Installing...');
-  
-  event.waitUntil(
-    caches.open(STATIC_CACHE)
-      .then(cache => {
-        console.log('📦 Service Worker: Caching static assets...');
-        return cache.addAll(STATIC_ASSETS.map(url => {
-          return new Request(url, {
-            cache: 'reload'
-          });
-        }));
-      })
-      .then(() => {
-        console.log('✅ Service Worker: Installation complete');
-        // Forzar activación inmediata
-        return self.skipWaiting();
-      })
-      .catch(error => {
-        console.error('❌ Service Worker: Installation failed', error);
-      })
-  );
+    console.log('🔧 Service Worker: Installing version', CACHE_VERSION);
+    
+    event.waitUntil(
+        Promise.all([
+            // Cache static assets
+            caches.open(STATIC_CACHE).then(cache => {
+                console.log('📦 Service Worker: Caching static assets...');
+                return Promise.all(
+                    STATIC_ASSETS.map(url => {
+                        return cache.add(url).catch(err => {
+                            console.warn(`Failed to cache ${url}:`, err);
+                        });
+                    })
+                );
+            }),
+            // Cache external scripts
+            caches.open(STATIC_CACHE).then(cache => {
+                return Promise.all(
+                    EXTERNAL_SCRIPTS.map(url => {
+                        return fetch(url)
+                            .then(response => {
+                                if (response.ok) {
+                                    return cache.put(url, response);
+                                }
+                            })
+                            .catch(err => {
+                                console.warn(`Failed to cache external script ${url}:`, err);
+                            });
+                    })
+                );
+            })
+        ]).then(() => {
+            console.log('✅ Service Worker: Installation complete');
+            return self.skipWaiting();
+        }).catch(error => {
+            console.error('❌ Service Worker: Installation failed', error);
+        })
+    );
 });
 
 // ============================
@@ -71,80 +93,92 @@ self.addEventListener('install', event => {
 // ============================
 
 self.addEventListener('activate', event => {
-  console.log('🚀 Service Worker: Activating...');
-  
-  event.waitUntil(
-    caches.keys()
-      .then(cacheNames => {
-        // Limpiar caches antiguos
-        return Promise.all(
-          cacheNames.map(cacheName => {
-            if (cacheName !== STATIC_CACHE && 
-                cacheName !== DYNAMIC_CACHE && 
-                cacheName !== IMAGE_CACHE) {
-              console.log('🗑️ Service Worker: Deleting old cache:', cacheName);
-              return caches.delete(cacheName);
-            }
-          })
-        );
-      })
-      .then(() => {
-        console.log('✅ Service Worker: Activation complete');
-        // Tomar control inmediato
-        return self.clients.claim();
-      })
-  );
+    console.log('🚀 Service Worker: Activating version', CACHE_VERSION);
+    
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            // Limpiar caches antiguos
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    if (!cacheName.includes(CACHE_VERSION)) {
+                        console.log('🗑️ Service Worker: Deleting old cache:', cacheName);
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        }).then(() => {
+            console.log('✅ Service Worker: Activation complete');
+            return self.clients.claim();
+        })
+    );
 });
 
 // ============================
 // ESTRATEGIAS DE CACHE
 // ============================
 
-// Estrategia: Cache First (para assets estáticos)
-function cacheFirst(request) {
-  return caches.match(request)
-    .then(cached => {
-      if (cached) {
-        return cached;
-      }
-      return fetch(request)
-        .then(response => {
-          const responseClone = response.clone();
-          caches.open(STATIC_CACHE)
-            .then(cache => cache.put(request, responseClone));
-          return response;
-        });
-    });
+// Estrategia: Cache First con timeout
+async function cacheFirstWithTimeout(request, timeout = 3000) {
+    try {
+        const cachePromise = caches.match(request);
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Cache timeout')), timeout)
+        );
+        
+        const cached = await Promise.race([cachePromise, timeoutPromise]);
+        if (cached) {
+            return cached;
+        }
+    } catch (error) {
+        console.log('Cache timeout, fetching from network');
+    }
+    
+    const response = await fetch(request);
+    if (response.ok) {
+        const cache = await caches.open(STATIC_CACHE);
+        cache.put(request, response.clone());
+    }
+    return response;
 }
 
-// Estrategia: Network First (para contenido dinámico)
-function networkFirst(request) {
-  return fetch(request)
-    .then(response => {
-      const responseClone = response.clone();
-      caches.open(DYNAMIC_CACHE)
-        .then(cache => cache.put(request, responseClone));
-      return response;
-    })
-    .catch(() => {
-      return caches.match(request);
-    });
+// Estrategia: Network First con fallback
+async function networkFirstWithFallback(request) {
+    try {
+        const response = await fetch(request);
+        if (response.ok) {
+            const cache = await caches.open(DYNAMIC_CACHE);
+            cache.put(request, response.clone());
+        }
+        return response;
+    } catch (error) {
+        const cached = await caches.match(request);
+        if (cached) {
+            return cached;
+        }
+        
+        // Fallback para páginas HTML
+        if (request.headers.get('accept')?.includes('text/html')) {
+            return caches.match('/index.html');
+        }
+        
+        throw error;
+    }
 }
 
-// Estrategia: Stale While Revalidate (para imágenes)
-function staleWhileRevalidate(request) {
-  return caches.match(request)
-    .then(cached => {
-      const fetchPromise = fetch(request)
-        .then(response => {
-          const responseClone = response.clone();
-          caches.open(IMAGE_CACHE)
-            .then(cache => cache.put(request, responseClone));
-          return response;
-        });
-      
-      return cached || fetchPromise;
-    });
+// Estrategia: Stale While Revalidate
+async function staleWhileRevalidate(request) {
+    const cached = await caches.match(request);
+    
+    // Fetch en background
+    const fetchPromise = fetch(request).then(response => {
+        if (response.ok) {
+            const cache = caches.open(IMAGE_CACHE);
+            cache.then(c => c.put(request, response.clone()));
+        }
+        return response;
+    }).catch(() => cached);
+    
+    return cached || fetchPromise;
 }
 
 // ============================
@@ -152,105 +186,100 @@ function staleWhileRevalidate(request) {
 // ============================
 
 self.addEventListener('fetch', event => {
-  const { request } = event;
-  const url = new URL(request.url);
-  
-  // Ignorar URLs excluidas
-  if (EXCLUDED_URLS.some(excludedUrl => url.pathname.includes(excludedUrl))) {
-    return;
-  }
-  
-  // Ignorar requests que no sean GET
-  if (request.method !== 'GET') {
-    return;
-  }
-  
-  // Ignorar chrome-extension y extension requests
-  if (url.protocol === 'chrome-extension:' || url.protocol === 'extension:') {
-    return;
-  }
-  
-  event.respondWith(
-    (async () => {
-      try {
-        // Estrategia para HTML (Network First)
+    const { request } = event;
+    const url = new URL(request.url);
+    
+    // Ignorar URLs excluidas
+    if (EXCLUDED_URLS.some(excludedUrl => url.href.includes(excludedUrl))) {
+        return;
+    }
+    
+    // Ignorar requests que no sean GET
+    if (request.method !== 'GET') {
+        return;
+    }
+    
+    // Ignorar chrome-extension y extension requests
+    if (url.protocol === 'chrome-extension:' || url.protocol === 'extension:') {
+        return;
+    }
+    
+    event.respondWith(handleFetch(request, url));
+});
+
+async function handleFetch(request, url) {
+    try {
+        // Para HTML - Network First
         if (request.headers.get('accept')?.includes('text/html')) {
-          return await networkFirst(request);
+            return await networkFirstWithFallback(request);
         }
         
-        // Estrategia para imágenes (Stale While Revalidate)
+        // Para imágenes - Stale While Revalidate
         if (request.headers.get('accept')?.includes('image/') || 
-            url.pathname.includes('/public/assets/full/') ||
+            url.pathname.includes('/public/assets/') ||
             url.pathname.match(/\.(jpg|jpeg|png|webp|gif|svg)$/i)) {
-          return await staleWhileRevalidate(request);
+            return await staleWhileRevalidate(request);
         }
         
-        // Estrategia para JavaScript/CSS (Cache First)
+        // Para JavaScript/CSS - Cache First con timeout
         if (url.pathname.includes('.js') || 
             url.pathname.includes('.css') ||
-            url.hostname === 'cdn.jsdelivr.net' ||
-            url.hostname === 'www.paypal.com') {
-          return await cacheFirst(request);
+            url.hostname === 'cdn.jsdelivr.net') {
+            return await cacheFirstWithTimeout(request);
         }
         
-        // Para PayPal y APIs externas (Network First)
-        if (url.hostname !== location.hostname) {
-          return await networkFirst(request);
+        // Para PayPal y APIs externas - Network Only
+        if (url.hostname.includes('paypal') || 
+            url.hostname !== location.hostname) {
+            return await fetch(request);
         }
         
         // Default: Network First
-        return await networkFirst(request);
+        return await networkFirstWithFallback(request);
         
-      } catch (error) {
+    } catch (error) {
         console.error('🚨 Service Worker: Fetch error', error);
         
-        // Fallback para páginas HTML
-        if (request.headers.get('accept')?.includes('text/html')) {
-          return await caches.match('/index.html') || 
-                 await caches.match('/');
-        }
-        
-        // Fallback para imágenes
-        if (request.headers.get('accept')?.includes('image/')) {
-          return await caches.match('/public/assets/full/bikini.jpg');
-        }
-        
-        return new Response('Network error', {
-          status: 408,
-          headers: { 'Content-Type': 'text/plain' }
+        // Retornar respuesta de error
+        return new Response('Network error occurred', {
+            status: 408,
+            statusText: 'Request Timeout',
+            headers: { 'Content-Type': 'text/plain' }
         });
-      }
-    })()
-  );
-});
+    }
+}
 
 // ============================
 // MENSAJES DEL CLIENTE
 // ============================
 
 self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-  
-  if (event.data && event.data.type === 'GET_VERSION') {
-    event.ports[0].postMessage({
-      version: CACHE_NAME,
-      static: STATIC_CACHE,
-      dynamic: DYNAMIC_CACHE,
-      images: IMAGE_CACHE
-    });
-  }
-  
-  if (event.data && event.data.type === 'CLEAR_CACHE') {
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => caches.delete(cacheName))
-      );
-    }).then(() => {
-      event.ports[0].postMessage({ success: true });
-    });
-  }
+    if (event.data && event.data.type === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
+    
+    if (event.data && event.data.type === 'GET_VERSION') {
+        event.ports[0].postMessage({
+            version: CACHE_VERSION,
+            caches: {
+                static: STATIC_CACHE,
+                dynamic: DYNAMIC_CACHE,
+                images: IMAGE_CACHE
+            }
+        });
+    }
+    
+    if (event.data && event.data.type === 'CLEAR_CACHE') {
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cacheName => caches.delete(cacheName))
+            );
+        }).then(() => {
+            if (event.ports[0]) {
+                event.ports[0].postMessage({ success: true });
+            }
+        });
+    }
 });
 
 // ============================
@@ -258,123 +287,94 @@ self.addEventListener('message', event => {
 // ============================
 
 self.addEventListener('sync', event => {
-  if (event.tag === 'analytics-sync') {
-    event.waitUntil(syncAnalytics());
-  }
-  
-  if (event.tag === 'content-preload') {
-    event.waitUntil(preloadTodayContent());
-  }
+    console.log('📡 Background sync triggered:', event.tag);
+    
+    if (event.tag === 'content-preload') {
+        event.waitUntil(preloadContent());
+    }
 });
 
-// Función para sincronizar analytics
-async function syncAnalytics() {
-  try {
-    // Aquí podrías sincronizar datos de analytics offline
-    console.log('📊 Service Worker: Syncing analytics...');
-    
-    // Ejemplo: enviar eventos guardados mientras estaba offline
-    const offlineEvents = await getOfflineEvents();
-    if (offlineEvents.length > 0) {
-      await sendAnalyticsEvents(offlineEvents);
-      await clearOfflineEvents();
+// Función para precargar contenido
+async function preloadContent() {
+    try {
+        console.log('🔄 Service Worker: Preloading content...');
+        
+        const imagesToPreload = [
+            '/public/assets/full/bikini.jpg',
+            '/public/assets/full/bikbanner.jpg',
+            '/public/assets/full/bikini3.jpg'
+        ];
+        
+        const cache = await caches.open(IMAGE_CACHE);
+        
+        await Promise.all(
+            imagesToPreload.map(async url => {
+                try {
+                    const response = await fetch(url);
+                    if (response.ok) {
+                        await cache.put(url, response);
+                    }
+                } catch (err) {
+                    console.warn(`Failed to preload ${url}:`, err);
+                }
+            })
+        );
+        
+        console.log('✅ Service Worker: Content preloaded');
+    } catch (error) {
+        console.error('❌ Service Worker: Preload failed', error);
     }
-  } catch (error) {
-    console.error('❌ Service Worker: Analytics sync failed', error);
-  }
-}
-
-// Función para precargar contenido del día
-async function preloadTodayContent() {
-  try {
-    console.log('🔄 Service Worker: Preloading today content...');
-    
-    // Precargar algunas imágenes de preview
-    const previewImages = [
-      '/public/assets/full/bikini.jpg',
-      '/public/assets/full/bikbanner.jpg',
-      '/public/assets/full/bikini3.jpg'
-    ];
-    
-    const cache = await caches.open(IMAGE_CACHE);
-    await Promise.all(
-      previewImages.map(url => 
-        fetch(url).then(response => {
-          if (response.ok) {
-            cache.put(url, response.clone());
-          }
-          return response;
-        })
-      )
-    );
-    
-    console.log('✅ Service Worker: Content preloaded');
-  } catch (error) {
-    console.error('❌ Service Worker: Preload failed', error);
-  }
-}
-
-// Funciones auxiliares para analytics offline
-async function getOfflineEvents() {
-  // Implementar lógica para obtener eventos offline
-  return [];
-}
-
-async function sendAnalyticsEvents(events) {
-  // Implementar lógica para enviar eventos
-  console.log('📤 Sending offline analytics events:', events);
-}
-
-async function clearOfflineEvents() {
-  // Implementar lógica para limpiar eventos enviados
-  console.log('🗑️ Clearing offline events');
 }
 
 // ============================
-// NOTIFICACIONES PUSH (futuro)
+// NOTIFICACIONES PUSH (Preparado para futuro)
 // ============================
 
 self.addEventListener('push', event => {
-  if (event.data) {
+    if (!event.data) return;
+    
     const data = event.data.json();
     
     const options = {
-      body: data.body || 'Nuevo contenido disponible en IbizaGirl.pics',
-      icon: '/public/assets/full/bikini.jpg',
-      badge: '/public/assets/full/bikini.jpg',
-      image: data.image || '/public/assets/full/bikbanner.jpg',
-      tag: 'ibiza-update',
-      requireInteraction: true,
-      actions: [
-        {
-          action: 'view',
-          title: 'Ver galería',
-          icon: '/public/assets/full/bikini.jpg'
+        body: data.body || 'Nuevo contenido disponible en IbizaGirl.pics',
+        icon: '/public/assets/full/bikini.jpg',
+        badge: '/public/assets/full/bikini.jpg',
+        image: data.image || '/public/assets/full/bikbanner.jpg',
+        tag: 'ibiza-update',
+        requireInteraction: false,
+        data: {
+            url: data.url || '/main.html'
         },
-        {
-          action: 'close',
-          title: 'Cerrar'
-        }
-      ]
+        actions: [
+            {
+                action: 'view',
+                title: 'Ver galería',
+                icon: '/public/assets/full/bikini.jpg'
+            },
+            {
+                action: 'close',
+                title: 'Cerrar'
+            }
+        ]
     };
     
     event.waitUntil(
-      self.registration.showNotification(
-        data.title || 'IbizaGirl.pics - Nuevo contenido',
-        options
-      )
+        self.registration.showNotification(
+            data.title || 'IbizaGirl.pics - Nuevo contenido',
+            options
+        )
     );
-  }
 });
 
 self.addEventListener('notificationclick', event => {
-  event.notification.close();
-  
-  if (event.action === 'view') {
-    event.waitUntil(
-      clients.openWindow('https://ibizagirl.pics/main.html')
-    );
-  }
+    event.notification.close();
+    
+    if (event.action === 'view' || !event.action) {
+        const urlToOpen = event.notification.data?.url || '/main.html';
+        event.waitUntil(
+            clients.openWindow(`https://ibizagirl.pics${urlToOpen}`)
+        );
+    }
 });
 
-console.log('🌊 IbizaGirl.pics Service Worker v1.2.0 loaded successfully');
+console.log(`🌊 IbizaGirl.pics Service Worker v${CACHE_VERSION} loaded successfully`);
