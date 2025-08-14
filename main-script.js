@@ -1,4 +1,4 @@
-// ============================
+﻿// ============================
 // IBIZAGIRL.PICS MAIN SCRIPT v14.0.0 CORRECTED
 // 200 fotos + 40 videos diarios con rotación completa
 // Sistema multiidioma completo + PayPal + Ads mejoradas
