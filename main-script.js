@@ -1641,7 +1641,6 @@ function renderPhotosProgressive() {
     
     console.log('✅ Photos rendered successfully');
 }
-
 function renderVideosProgressive() {
     const videosGrid = document.getElementById('videosGrid');
     if (!videosGrid || !state.dailyContent) return;
@@ -1698,8 +1697,40 @@ function renderVideosProgressive() {
                 ${!isUnlocked ? `
                     <div class="lock-overlay">
                         <svg class="lock-icon" width="30" height="30" viewBox="0 0 24 24" fill="white">
-                            <path d="M12 2C9.243 2 7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654
-                            // ============================
+                            <path d="M12 2C9.243 2 7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="item-price">
+                        €${CONFIG.PAYPAL.PRICES.SINGLE_VIDEO.toFixed(2)}
+                    </div>
+                ` : ''}
+                
+                <div class="item-overlay">
+                    <div class="item-title">Video #${index + 1}</div>
+                    <div class="item-info">
+                        ${views.toLocaleString()} views • ${likes.toLocaleString()} likes
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    videosGrid.innerHTML = videosHTML;
+    
+    // Observe all videos for lazy loading
+    if (state.lazyLoadObserver) {
+        document.querySelectorAll('#videosGrid .content-item').forEach(item => {
+            state.lazyLoadObserver.video.observe(item);
+        });
+    }
+    
+    // Setup video hover preview
+    setupVideoHoverPreview();
+    
+    console.log('✅ Videos rendered successfully');
+}
+
 // PAYPAL INTEGRATION SYSTEM
 // ============================
 
