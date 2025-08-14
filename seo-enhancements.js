@@ -1,6 +1,6 @@
 // ============================
-// SEO ENHANCEMENTS - LAZY LOADING + OPEN GRAPH + JSON-LD
-// Añadir al final del main-script.js o como archivo separado
+// SEO ENHANCEMENTS v2.0.0 - CORRECTED
+// Lazy Loading + Open Graph + JSON-LD + Performance
 // ============================
 
 // ============================
@@ -40,35 +40,57 @@ function setupAdvancedLazyLoading() {
                         };
                         webpImg.onerror = () => {
                             // Fallback a formato original
-                            img.src = img.dataset.src;
-                            img.classList.remove('skeleton', 'lazy');
-                            img.classList.add('loaded');
+                            loadOriginalImage(img);
                         };
                         webpImg.src = webpSrc;
                     } else {
-                        img.src = img.dataset.src;
-                        img.classList.remove('skeleton', 'lazy');
-                        img.classList.add('loaded');
+                        loadOriginalImage(img);
                     }
                 } else {
-                    img.src = img.dataset.src;
-                    img.classList.remove('skeleton', 'lazy');
-                    img.classList.add('loaded');
+                    loadOriginalImage(img);
                 }
-                
-                // Performance tracking
-                img.addEventListener('load', () => {
-                    trackEvent('image_loaded', {
-                        src: img.src,
-                        loading_method: 'lazy',
-                        supports_webp: supportsWebP()
-                    });
-                });
                 
                 observer.unobserve(img);
             }
         });
     }, lazyImageOptions);
+
+    // Función auxiliar para cargar imagen original
+    function loadOriginalImage(img) {
+        if (!img || !img.dataset || !img.dataset.src) {
+            console.warn('Image element missing data-src attribute');
+            return;
+        }
+        
+        const tempImg = new Image();
+        
+        tempImg.onload = () => {
+            img.src = img.dataset.src;
+            img.classList.remove('skeleton', 'lazy');
+            img.classList.add('loaded');
+            delete img.dataset.src;
+            
+            // Track performance
+            if (window.trackEvent) {
+                window.trackEvent('image_loaded', {
+                    src: img.src,
+                    loading_method: 'lazy',
+                    supports_webp: supportsWebP()
+                });
+            }
+        };
+        
+        tempImg.onerror = () => {
+            console.error('Failed to load image:', img.dataset.src);
+            img.classList.remove('skeleton', 'lazy');
+            img.classList.add('error');
+            
+            // Try fallback image
+            img.src = 'public/assets/full/bikini.jpg';
+        };
+        
+        tempImg.src = img.dataset.src;
+    }
 
     // Observer para videos con preload optimizado
     const videoObserver = new IntersectionObserver((entries, observer) => {
@@ -79,23 +101,31 @@ function setupAdvancedLazyLoading() {
                 
                 if (source && source.dataset.src) {
                     source.src = source.dataset.src;
-                    video.load();
-                    video.classList.remove('skeleton', 'lazy');
-                    video.classList.add('loaded');
-                    
-                    // Preload metadata para mejor UX
-                    video.preload = 'metadata';
-                    
                     delete source.dataset.src;
+                    video.load();
                     
-                    // Performance tracking
                     video.addEventListener('loadedmetadata', () => {
-                        trackEvent('video_loaded', {
-                            src: source.src,
-                            duration: video.duration,
-                            loading_method: 'lazy'
-                        });
-                    });
+                        video.classList.remove('skeleton', 'lazy');
+                        video.classList.add('loaded');
+                        
+                        // Preload metadata para mejor UX
+                        video.preload = 'metadata';
+                        
+                        // Performance tracking
+                        if (window.trackEvent) {
+                            window.trackEvent('video_loaded', {
+                                src: source.src,
+                                duration: video.duration,
+                                loading_method: 'lazy'
+                            });
+                        }
+                    }, { once: true });
+                    
+                    video.addEventListener('error', () => {
+                        console.error('Failed to load video:', source.src);
+                        video.classList.remove('skeleton', 'lazy');
+                        video.classList.add('error');
+                    }, { once: true });
                 }
                 
                 observer.unobserve(video);
@@ -136,9 +166,13 @@ function loadCriticalImages() {
     const criticalImages = document.querySelectorAll('.banner-slide img, .teaser-item img');
     criticalImages.forEach(img => {
         if (img.dataset.src) {
-            img.src = img.dataset.src;
-            img.classList.remove('skeleton');
-            delete img.dataset.src;
+            const tempImg = new Image();
+            tempImg.onload = () => {
+                img.src = img.dataset.src;
+                img.classList.remove('skeleton');
+                delete img.dataset.src;
+            };
+            tempImg.src = img.dataset.src;
         }
     });
 }
@@ -148,9 +182,12 @@ function loadCriticalImages() {
 // ============================
 
 function updateOpenGraph(contentData = {}) {
+    const lang = window.state?.currentLanguage || 'es';
+    const trans = window.TRANSLATIONS?.[lang] || {};
+    
     const defaultData = {
-        title: 'IbizaGirl.pics - Galería Premium Ibiza | 400+ Fotos Diarias',
-        description: 'Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo español.',
+        title: trans.photos_seo_title || 'IbizaGirl.pics - Galería Premium Ibiza | 400+ Fotos Diarias',
+        description: trans.meta_description || 'Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente.',
         image: 'https://ibizagirl.pics/public/assets/full/bikini.jpg',
         url: window.location.href,
         type: 'website'
@@ -166,7 +203,12 @@ function updateOpenGraph(contentData = {}) {
         { property: 'og:url', content: data.url },
         { property: 'og:type', content: data.type },
         { property: 'og:site_name', content: 'IbizaGirl.pics' },
-        { property: 'og:locale', content: state.currentLanguage === 'es' ? 'es_ES' : 'en_US' },
+        { property: 'og:locale', content: lang === 'es' ? 'es_ES' : 
+                                        lang === 'en' ? 'en_US' :
+                                        lang === 'fr' ? 'fr_FR' :
+                                        lang === 'de' ? 'de_DE' :
+                                        lang === 'it' ? 'it_IT' :
+                                        lang === 'pt' ? 'pt_PT' : 'es_ES' },
         { property: 'og:updated_time', content: new Date().toISOString() },
         
         // Twitter Cards
@@ -183,13 +225,7 @@ function updateOpenGraph(contentData = {}) {
         
         // Para Pinterest
         { name: 'pinterest-rich-pin', content: 'true' },
-        { name: 'pinterest:description', content: data.description },
-        
-        // Para LinkedIn
-        { property: 'og:video', content: 'https://ibizagirl.pics/preview-video.mp4' },
-        { property: 'og:video:type', content: 'video/mp4' },
-        { property: 'og:video:width', content: '1280' },
-        { property: 'og:video:height', content: '720' }
+        { name: 'pinterest:description', content: data.description }
     ];
 
     metaTags.forEach(tag => {
@@ -223,7 +259,8 @@ function updateOpenGraph(contentData = {}) {
 // ============================
 
 function injectAdvancedJSONLD() {
-    const trans = TRANSLATIONS[state.currentLanguage];
+    const lang = window.state?.currentLanguage || 'es';
+    const trans = window.TRANSLATIONS?.[lang] || {};
     
     // Schema principal del sitio web
     const websiteSchema = {
@@ -232,9 +269,14 @@ function injectAdvancedJSONLD() {
         "@id": "https://ibizagirl.pics/#website",
         "name": "IbizaGirl.pics",
         "alternateName": ["Galería Ibiza", "Ibiza Photos", "Paradise Gallery"],
-        "description": trans.meta_description,
+        "description": trans.meta_description || "Galería premium de Ibiza con contenido exclusivo",
         "url": "https://ibizagirl.pics/",
-        "inLanguage": state.currentLanguage === 'es' ? 'es-ES' : 'en-US',
+        "inLanguage": lang === 'es' ? 'es-ES' : 
+                      lang === 'en' ? 'en-US' :
+                      lang === 'fr' ? 'fr-FR' :
+                      lang === 'de' ? 'de-DE' :
+                      lang === 'it' ? 'it-IT' :
+                      lang === 'pt' ? 'pt-PT' : 'es-ES',
         "isAccessibleForFree": false,
         "datePublished": "2025-01-15T00:00:00+01:00",
         "dateModified": new Date().toISOString(),
@@ -281,7 +323,7 @@ function injectAdvancedJSONLD() {
         "contactPoint": {
             "@type": "ContactPoint",
             "contactType": "customer service",
-            "availableLanguage": ["Spanish", "English"]
+            "availableLanguage": ["Spanish", "English", "French", "German", "Italian", "Portuguese"]
         }
     };
 
@@ -290,23 +332,23 @@ function injectAdvancedJSONLD() {
         "@context": "https://schema.org",
         "@type": "ImageGallery",
         "@id": "https://ibizagirl.pics/main.html#gallery",
-        "name": trans.photos_seo_title,
-        "description": trans.gallery_description,
+        "name": trans.photos_seo_title || "Galería de Fotos de Ibiza",
+        "description": trans.gallery_description || "Colección exclusiva de fotos de Ibiza",
         "url": "https://ibizagirl.pics/main.html",
         "mainEntity": {
             "@type": "WebPage",
             "@id": "https://ibizagirl.pics/main.html#webpage",
-            "name": trans.photos_seo_title,
-            "description": trans.gallery_description,
+            "name": trans.photos_seo_title || "Fotos de Ibiza",
+            "description": trans.gallery_description || "Galería premium",
             "primaryImageOfPage": {
                 "@type": "ImageObject",
                 "url": "https://ibizagirl.pics/public/assets/full/bikini.jpg",
-                "caption": trans.seo_keywords?.primary,
+                "caption": trans.seo_keywords?.primary || "Ibiza paradise gallery",
                 "width": 1200,
                 "height": 800
             }
         },
-        "numberOfItems": state.dailyContent ? state.dailyContent.photos.length : 400,
+        "numberOfItems": window.state?.dailyContent ? window.state.dailyContent.photos.length : 400,
         "contentLocation": {
             "@type": "Place",
             "name": "Ibiza, España",
@@ -323,8 +365,13 @@ function injectAdvancedJSONLD() {
             }
         },
         "dateModified": new Date().toISOString(),
-        "inLanguage": state.currentLanguage === 'es' ? 'es-ES' : 'en-US',
-        "keywords": trans.seo_keywords?.primary,
+        "inLanguage": lang === 'es' ? 'es-ES' : 
+                      lang === 'en' ? 'en-US' :
+                      lang === 'fr' ? 'fr-FR' :
+                      lang === 'de' ? 'de-DE' :
+                      lang === 'it' ? 'it-IT' :
+                      lang === 'pt' ? 'pt-PT' : 'es-ES',
+        "keywords": trans.seo_keywords?.primary || "ibiza photos gallery",
         "author": {
             "@type": "Organization",
             "@id": "https://ibizagirl.pics/#organization"
@@ -455,8 +502,10 @@ function registerServiceWorker() {
                     });
                     
                     // Sincronización en background
-                    if ('sync' in window.ServiceWorkerRegistration.prototype) {
-                        registration.sync.register('content-preload');
+                    if ('sync' in registration) {
+                        registration.sync.register('content-preload').catch(err => {
+                            console.log('Background sync registration failed:', err);
+                        });
                     }
                 })
                 .catch(error => {
@@ -498,14 +547,15 @@ function updateBreadcrumbs(currentPage = '') {
     const breadcrumbContainer = document.querySelector('.breadcrumb');
     if (!breadcrumbContainer) return;
 
-    const trans = TRANSLATIONS[state.currentLanguage];
+    const lang = window.state?.currentLanguage || 'es';
+    const trans = window.TRANSLATIONS?.[lang] || {};
     const breadcrumbs = [
         { name: 'Inicio', url: '/', position: 1 }
     ];
 
     if (currentPage === 'gallery') {
         breadcrumbs.push({ 
-            name: 'Galería Premium Ibiza', 
+            name: trans.photos_seo_title || 'Galería Premium Ibiza', 
             url: '/main.html', 
             position: 2 
         });
@@ -525,11 +575,76 @@ function updateBreadcrumbs(currentPage = '') {
 }
 
 // ============================
+// PERFORMANCE MONITORING
+// ============================
+
+function initPerformanceMonitoring() {
+    if ('PerformanceObserver' in window) {
+        // LCP (Largest Contentful Paint)
+        try {
+            const lcpObserver = new PerformanceObserver((list) => {
+                const entries = list.getEntries();
+                const lastEntry = entries[entries.length - 1];
+                if (window.trackEvent) {
+                    window.trackEvent('lcp_measured', { 
+                        value: lastEntry.startTime,
+                        element: lastEntry.element?.tagName 
+                    });
+                }
+            });
+            lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+        } catch (e) {
+            console.log('LCP observer not supported');
+        }
+
+        // FID (First Input Delay)
+        try {
+            const fidObserver = new PerformanceObserver((list) => {
+                const entries = list.getEntries();
+                entries.forEach(entry => {
+                    if (window.trackEvent) {
+                        window.trackEvent('fid_measured', { 
+                            value: entry.processingStart - entry.startTime,
+                            name: entry.name
+                        });
+                    }
+                });
+            });
+            fidObserver.observe({ entryTypes: ['first-input'] });
+        } catch (e) {
+            console.log('FID observer not supported');
+        }
+
+        // CLS (Cumulative Layout Shift)
+        try {
+            let clsValue = 0;
+            const clsObserver = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    if (!entry.hadRecentInput) {
+                        clsValue += entry.value;
+                    }
+                }
+            });
+            clsObserver.observe({ entryTypes: ['layout-shift'] });
+            
+            // Report CLS when page is hidden
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'hidden' && window.trackEvent) {
+                    window.trackEvent('cls_measured', { value: clsValue });
+                }
+            });
+        } catch (e) {
+            console.log('CLS observer not supported');
+        }
+    }
+}
+
+// ============================
 // INICIALIZACIÓN GLOBAL
 // ============================
 
 function initializeSEOEnhancements() {
-    console.log('🚀 Initializing SEO Enhancements...');
+    console.log('🚀 Initializing SEO Enhancements v2.0.0...');
     
     // Lazy loading avanzado
     setupAdvancedLazyLoading();
@@ -546,21 +661,8 @@ function initializeSEOEnhancements() {
     // Breadcrumbs
     updateBreadcrumbs('gallery');
     
-    // Performance observer
-    if ('PerformanceObserver' in window) {
-        const perfObserver = new PerformanceObserver((list) => {
-            for (const entry of list.getEntries()) {
-                if (entry.entryType === 'largest-contentful-paint') {
-                    trackEvent('lcp_measured', { value: entry.startTime });
-                }
-                if (entry.entryType === 'first-input') {
-                    trackEvent('fid_measured', { value: entry.processingStart - entry.startTime });
-                }
-            }
-        });
-        
-        perfObserver.observe({ entryTypes: ['largest-contentful-paint', 'first-input'] });
-    }
+    // Performance monitoring
+    initPerformanceMonitoring();
     
     console.log('✅ SEO Enhancements initialized');
 }
@@ -575,4 +677,5 @@ if (document.readyState === 'loading') {
 // Exponer funciones globales
 window.updateOpenGraph = updateOpenGraph;
 window.updateBreadcrumbs = updateBreadcrumbs;
+window.updateApp = updateApp;
 window.initializeSEOEnhancements = initializeSEOEnhancements;

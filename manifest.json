@@ -1,0 +1,152 @@
+{
+  "name": "IbizaGirl.pics - Galería Premium Ibiza",
+  "short_name": "IbizaGirl",
+  "description": "Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo español.",
+  "version": "1.2.0",
+  "manifest_version": 2,
+  "start_url": "/?utm_source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0077be",
+  "background_color": "#001f3f",
+  "lang": "es-ES",
+  "dir": "ltr",
+  
+  "icons": [
+    {
+      "src": "/public/assets/full/bikini.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/public/assets/full/bikbanner.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/public/assets/full/bikini3.jpg",
+      "sizes": "144x144",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/public/assets/full/bikini5.jpg",
+      "sizes": "96x96",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/public/assets/full/backbikini.jpg",
+      "sizes": "72x72",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ],
+  
+  "screenshots": [
+    {
+      "src": "/public/assets/full/bikbanner.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Galería principal de fotos de Ibiza"
+    },
+    {
+      "src": "/public/assets/full/bikbanner2.jpg",
+      "sizes": "750x1334",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Vista móvil de la galería Ibiza"
+    }
+  ],
+  
+  "categories": [
+    "photo",
+    "entertainment",
+    "travel",
+    "lifestyle"
+  ],
+  
+  "shortcuts": [
+    {
+      "name": "Ver Galería",
+      "short_name": "Galería",
+      "description": "Acceso directo a la galería de fotos",
+      "url": "/main.html?utm_source=pwa_shortcut",
+      "icons": [
+        {
+          "src": "/public/assets/full/bikini.jpg",
+          "sizes": "192x192",
+          "type": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "name": "VIP Access",
+      "short_name": "VIP",
+      "description": "Acceso VIP ilimitado",
+      "url": "/main.html?utm_source=pwa_vip",
+      "icons": [
+        {
+          "src": "/public/assets/full/bikini3.jpg",
+          "sizes": "192x192",
+          "type": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "name": "Nuevo Contenido",
+      "short_name": "Nuevo",
+      "description": "Ver último contenido añadido",
+      "url": "/main.html?utm_source=pwa_new",
+      "icons": [
+        {
+          "src": "/public/assets/full/bikini5.jpg",
+          "sizes": "192x192",
+          "type": "image/jpeg"
+        }
+      ]
+    }
+  ],
+  
+  "related_applications": [],
+  "prefer_related_applications": false,
+  
+  "protocol_handlers": [
+    {
+      "protocol": "web+ibizagirl",
+      "url": "/?url=%s"
+    }
+  ],
+  
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  
+  "file_handlers": [
+    {
+      "action": "/handle-image",
+      "accept": {
+        "image/*": [".jpg", ".jpeg", ".png", ".webp", ".gif"]
+      }
+    }
+  ],
+  
+  "edge_side_panel": {
+    "preferred_width": 350
+  },
+  
+  "launch_handler": {
+    "client_mode": ["focus-existing", "auto"]
+  }
+}
