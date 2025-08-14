@@ -87,7 +87,7 @@ const SEO_ANALYTICS = {
 };
 
 // ============================
-// COMPLETE MULTI-LANGUAGE TRANSLATIONS (ES, EN, FR, DE, IT)
+// COMPLETE MULTI-LANGUAGE TRANSLATIONS
 // ============================
 
 const TRANSLATIONS = {
@@ -274,261 +274,6 @@ const TRANSLATIONS = {
             "Today's content is 🔥🔥🔥 The best photos from Spanish Mediterranean!",
             "Need help navigating the gallery? I'm here for you, darling! 💕"
         ]
-    },
-    fr: {
-        loading: "Chargement du paradis...",
-        subtitle: "Contenu Exclusif du Paradis",
-        megapack: "📦 MEGA PACKS -70%",
-        monthly: "💳 €15/Mois",
-        lifetime: "👑 Lifetime €100",
-        welcome: "Bienvenue au Paradis 🌴",
-        daily_content: "200+ photos et 40+ vidéos mises à jour QUOTIDIENNEMENT",
-        unlock_all: "🔓 Tout Débloquer",
-        view_gallery: "📸 Voir la Galerie",
-        photos_today: "Photos d'Aujourd'hui",
-        updated_at: "Mis à jour à",
-        videos_hd: "Vidéos HD",
-        new_content: "NOUVEAU CONTENU!",
-        total_views: "Vues Totales",
-        today: "aujourd'hui",
-        updates: "Mises à jour",
-        always_fresh: "TOUJOURS FRAIS",
-        paradise_photos: "📸 Photos du Paradis",
-        new_today: "NOUVEAU AUJOURD'HUI!",
-        exclusive_videos: "🎬 Vidéos Exclusives",
-        fresh_content: "CONTENU FRAIS!",
-        isabella_title: "Isabella - Votre Guide VIP",
-        vip_info: "💎 Info VIP",
-        news: "📅 Nouveautés",
-        help: "❓ Aide",
-        footer_desc: "Votre destination quotidienne pour du contenu exclusif du paradis méditerranéen.",
-        quick_links: "Liens Rapides",
-        photos: "Photos",
-        videos: "Vidéos",
-        vip_subscription: "Abonnement VIP",
-        mega_packs: "Mega Packs",
-        support: "Support",
-        terms: "Conditions d'utilisation",
-        privacy: "Politique de confidentialité",
-        contact: "Contact",
-        copyright: "© 2025 IbizaGirl.pics - Tous droits réservés | 18+ Adultes seulement",
-        vip_unlimited: "👑 Accès VIP Illimité",
-        pack_selection: "📦 MEGA PACKS - Économisez 70%",
-        unlock_content: "🔓 Débloquer le Contenu",
-        plan_monthly: "📅 Mensuel",
-        plan_lifetime: "♾️ À vie",
-        best_value: "MEILLEURE VALEUR",
-        save_yearly: "Économisez 80€ par an!",
-        pack_starter: "Pack Débutant",
-        pack_bronze: "Pack Bronze",
-        pack_silver: "Pack Argent",
-        pack_gold: "Pack Or",
-        items: "contenus",
-        save: "Économiser",
-        unlimited_access: "Accès illimité",
-        hd_videos: "200+ photos HD",
-        daily_updates: "40+ vidéos HD",
-        no_ads: "Sans publicité",
-        all_content: "Tout le contenu actuel et futur",
-        priority_support: "Support prioritaire",
-        exclusive_content: "Contenu VIP exclusif",
-        notification_welcome: "🎉 Bienvenue VIP! Tout le contenu a été débloqué.",
-        notification_pack: "🎉 {credits} crédits ajoutés! Cliquez sur n'importe quel contenu pour débloquer.",
-        notification_unlocked: "{icon} Débloqué! {credits} crédits restants.",
-        payment_error: "⚠️ Erreur de paiement. Veuillez réessayer.",
-        preview_gallery: "🔥 Aperçu Exclusif",
-        meta_description: "Galerie premium d'Ibiza avec 400+ photos et 80+ vidéos HD mises à jour quotidiennement.",
-        photos_seo_title: "Photos d'Ibiza - Galerie Premium Méditerranée 2025",
-        videos_seo_title: "Vidéos HD d'Ibiza - Contenu Exclusif",
-        gallery_description: "Explorez notre collection exclusive de photos d'Ibiza mise à jour chaque jour.",
-        seo_keywords: {
-            primary: "photos ibiza premium galerie méditerranée",
-            secondary: "vidéos HD espagne îles baléares contenu",
-            location: "plages ibiza tourisme espagnol paradis baléare",
-            content: "galerie quotidienne mise à jour premium exclusif"
-        },
-        isabella_messages: [
-            "Salut belle! 😘 Tu cherches les meilleures photos d'Ibiza?",
-            "Pssst... Les membres VIP voient toute la galerie d'Ibiza sans flou! 👀",
-            "Prête à débloquer le paradis méditerranéen? VIP te donne accès instantané à tout! 🌊",
-            "Aujourd'hui nous avons 200 nouvelles photos d'Ibiza et 40 nouvelles vidéos! 🎉",
-            "Clique simplement sur n'importe quel contenu flou pour le débloquer! 💕",
-            "Savais-tu qu'avec Lifetime tu ne paies plus jamais? C'est la meilleure offre! 💎",
-            "Les packs te permettent de débloquer du contenu individuel d'Ibiza! 📦",
-            "Ne manque pas les mises à jour quotidiennes de la galerie à 3h00! ⏰",
-            "Le contenu d'aujourd'hui est 🔥🔥🔥 Les meilleures photos de la Méditerranée!",
-            "Besoin d'aide pour naviguer dans la galerie? Je suis là pour toi, chérie! 💕"
-        ]
-    },
-    de: {
-        loading: "Paradies lädt...",
-        subtitle: "Exklusiver Paradies-Inhalt",
-        megapack: "📦 MEGA PACKS -70%",
-        monthly: "💳 €15/Monat",
-        lifetime: "👑 Lifetime €100",
-        welcome: "Willkommen im Paradies 🌴",
-        daily_content: "200+ Fotos und 40+ Videos TÄGLICH aktualisiert",
-        unlock_all: "🔓 Alles Freischalten",
-        view_gallery: "📸 Galerie Anzeigen",
-        photos_today: "Heutige Fotos",
-        updated_at: "Aktualisiert um",
-        videos_hd: "HD Videos",
-        new_content: "NEUER INHALT!",
-        total_views: "Gesamtansichten",
-        today: "heute",
-        updates: "Updates",
-        always_fresh: "IMMER FRISCH",
-        paradise_photos: "📸 Paradies Fotos",
-        new_today: "NEU HEUTE!",
-        exclusive_videos: "🎬 Exklusive Videos",
-        fresh_content: "FRISCHER INHALT!",
-        isabella_title: "Isabella - Dein VIP Guide",
-        vip_info: "💎 VIP Info",
-        news: "📅 Neuigkeiten",
-        help: "❓ Hilfe",
-        footer_desc: "Dein tägliches Ziel für exklusiven mediterranen Paradies-Inhalt.",
-        quick_links: "Schnelllinks",
-        photos: "Fotos",
-        videos: "Videos",
-        vip_subscription: "VIP Abonnement",
-        mega_packs: "Mega Packs",
-        support: "Support",
-        terms: "Nutzungsbedingungen",
-        privacy: "Datenschutz",
-        contact: "Kontakt",
-        copyright: "© 2025 IbizaGirl.pics - Alle Rechte vorbehalten | 18+ Nur Erwachsene",
-        vip_unlimited: "👑 Unbegrenzter VIP-Zugang",
-        pack_selection: "📦 MEGA PACKS - Spare 70%",
-        unlock_content: "🔓 Inhalt Freischalten",
-        plan_monthly: "📅 Monatlich",
-        plan_lifetime: "♾️ Lebenslang",
-        best_value: "BESTER WERT",
-        save_yearly: "Spare €80 pro Jahr!",
-        pack_starter: "Starter Pack",
-        pack_bronze: "Bronze Pack",
-        pack_silver: "Silber Pack",
-        pack_gold: "Gold Pack",
-        items: "Inhalte",
-        save: "Sparen",
-        unlimited_access: "Unbegrenzter Zugang",
-        hd_videos: "200+ HD Fotos",
-        daily_updates: "40+ HD Videos",
-        no_ads: "Keine Werbung",
-        all_content: "Alle aktuellen und zukünftigen Inhalte",
-        priority_support: "Prioritäts-Support",
-        exclusive_content: "Exklusiver VIP-Inhalt",
-        notification_welcome: "🎉 Willkommen VIP! Alle Inhalte wurden freigeschaltet.",
-        notification_pack: "🎉 {credits} Credits hinzugefügt! Klicke auf beliebigen Inhalt zum Freischalten.",
-        notification_unlocked: "{icon} Freigeschaltet! {credits} Credits verbleibend.",
-        payment_error: "⚠️ Zahlungsfehler. Bitte erneut versuchen.",
-        preview_gallery: "🔥 Exklusive Vorschau",
-        meta_description: "Premium Ibiza Galerie mit 400+ Fotos und 80+ HD Videos täglich aktualisiert.",
-        photos_seo_title: "Ibiza Fotos - Premium Mittelmeer Galerie 2025",
-        videos_seo_title: "Ibiza HD Videos - Exklusiver Inhalt",
-        gallery_description: "Entdecke unsere exklusive Sammlung von Ibiza Fotos, täglich aktualisiert.",
-        seo_keywords: {
-            primary: "ibiza fotos premium galerie mittelmeer",
-            secondary: "HD videos spanien balearen inhalt",
-            location: "ibiza strände spanischer tourismus balearen paradies",
-            content: "tägliche galerie aktualisiert premium exklusiv"
-        },
-        isabella_messages: [
-            "Hallo Schöne! 😘 Suchst du die besten Ibiza Fotos?",
-            "Pssst... VIP-Mitglieder sehen die gesamte Ibiza Galerie ohne Unschärfe! 👀",
-            "Bereit das Mittelmeerparadies freizuschalten? VIP gibt dir sofortigen Zugang zu allem! 🌊",
-            "Heute haben wir 200 neue Ibiza Fotos und 40 neue Videos! 🎉",
-            "Klicke einfach auf verschwommenen Inhalt um ihn freizuschalten! 💕",
-            "Wusstest du, dass du mit Lifetime nie wieder bezahlst? Das ist das beste Angebot! 💎",
-            "Packs lassen dich einzelne Ibiza Inhalte freischalten! 📦",
-            "Verpasse nicht die täglichen Galerie-Updates um 3:00 Uhr! ⏰",
-            "Der heutige Inhalt ist 🔥🔥🔥 Die besten Fotos vom Mittelmeer!",
-            "Brauchst du Hilfe beim Navigieren in der Galerie? Ich bin für dich da, Liebling! 💕"
-        ]
-    },
-    it: {
-        loading: "Caricamento del paradiso...",
-        subtitle: "Contenuto Esclusivo del Paradiso",
-        megapack: "📦 MEGA PACKS -70%",
-        monthly: "💳 €15/Mese",
-        lifetime: "👑 Lifetime €100",
-        welcome: "Benvenuta in Paradiso 🌴",
-        daily_content: "200+ foto e 40+ video aggiornati QUOTIDIANAMENTE",
-        unlock_all: "🔓 Sblocca Tutto",
-        view_gallery: "📸 Vedi Galleria",
-        photos_today: "Foto di Oggi",
-        updated_at: "Aggiornato alle",
-        videos_hd: "Video HD",
-        new_content: "NUOVO CONTENUTO!",
-        total_views: "Visualizzazioni Totali",
-        today: "oggi",
-        updates: "Aggiornamenti",
-        always_fresh: "SEMPRE FRESCO",
-        paradise_photos: "📸 Foto del Paradiso",
-        new_today: "NUOVO OGGI!",
-        exclusive_videos: "🎬 Video Esclusivi",
-        fresh_content: "CONTENUTO FRESCO!",
-        isabella_title: "Isabella - La Tua Guida VIP",
-        vip_info: "💎 Info VIP",
-        news: "📅 Novità",
-        help: "❓ Aiuto",
-        footer_desc: "La tua destinazione quotidiana per contenuti esclusivi del paradiso mediterraneo.",
-        quick_links: "Link Rapidi",
-        photos: "Foto",
-        videos: "Video",
-        vip_subscription: "Abbonamento VIP",
-        mega_packs: "Mega Packs",
-        support: "Supporto",
-        terms: "Termini di Servizio",
-        privacy: "Privacy",
-        contact: "Contatto",
-        copyright: "© 2025 IbizaGirl.pics - Tutti i diritti riservati | 18+ Solo Adulti",
-        vip_unlimited: "👑 Accesso VIP Illimitato",
-        pack_selection: "📦 MEGA PACKS - Risparmia il 70%",
-        unlock_content: "🔓 Sblocca Contenuto",
-        plan_monthly: "📅 Mensile",
-        plan_lifetime: "♾️ A Vita",
-        best_value: "MIGLIOR VALORE",
-        save_yearly: "Risparmia €80 all'anno!",
-        pack_starter: "Starter Pack",
-        pack_bronze: "Bronze Pack",
-        pack_silver: "Silver Pack",
-        pack_gold: "Gold Pack",
-        items: "contenuti",
-        save: "Risparmia",
-        unlimited_access: "Accesso illimitato",
-        hd_videos: "200+ foto HD",
-        daily_updates: "40+ video HD",
-        no_ads: "Senza pubblicità",
-        all_content: "Tutto il contenuto attuale e futuro",
-        priority_support: "Supporto prioritario",
-        exclusive_content: "Contenuto VIP esclusivo",
-        notification_welcome: "🎉 Benvenuto VIP! Tutto il contenuto è stato sbloccato.",
-        notification_pack: "🎉 {credits} crediti aggiunti! Clicca su qualsiasi contenuto per sbloccare.",
-        notification_unlocked: "{icon} Sbloccato! {credits} crediti rimanenti.",
-        payment_error: "⚠️ Errore di pagamento. Riprova.",
-        preview_gallery: "🔥 Anteprima Esclusiva",
-        meta_description: "Galleria premium di Ibiza con 400+ foto e 80+ video HD aggiornati quotidianamente.",
-        photos_seo_title: "Foto di Ibiza - Galleria Premium Mediterraneo 2025",
-        videos_seo_title: "Video HD di Ibiza - Contenuto Esclusivo",
-        gallery_description: "Esplora la nostra collezione esclusiva di foto di Ibiza aggiornate ogni giorno.",
-        seo_keywords: {
-            primary: "foto ibiza premium galleria mediterraneo",
-            secondary: "video HD spagna baleari contenuto",
-            location: "spiagge ibiza turismo spagnolo paradiso baleari",
-            content: "galleria quotidiana aggiornata premium esclusivo"
-        },
-        isabella_messages: [
-            "Ciao bella! 😘 Cerchi le migliori foto di Ibiza?",
-            "Pssst... I membri VIP vedono l'intera galleria di Ibiza senza sfocatura! 👀",
-            "Pronta a sbloccare il paradiso mediterraneo? VIP ti dà accesso istantaneo a tutto! 🌊",
-            "Oggi abbiamo 200 nuove foto di Ibiza e 40 nuovi video! 🎉",
-            "Clicca semplicemente su qualsiasi contenuto sfocato per sbloccarlo! 💕",
-            "Sapevi che con Lifetime non paghi mai più? È la migliore offerta! 💎",
-            "I pack ti permettono di sbloccare contenuti individuali di Ibiza! 📦",
-            "Non perdere gli aggiornamenti quotidiani della galleria alle 3:00! ⏰",
-            "Il contenuto di oggi è 🔥🔥🔥 Le migliori foto del Mediterraneo!",
-            "Hai bisogno di aiuto per navigare nella galleria? Sono qui per te, tesoro! 💕"
-        ]
     }
 };
 
@@ -565,23 +310,15 @@ const CONFIG = {
         PRIMARY_LOCATION: 'Ibiza, Spain',
         CONTENT_TYPE: 'Mediterranean Paradise Gallery',
         UPDATE_FREQUENCY: 'Daily',
-        LANGUAGE_CODES: ['es-ES', 'en-US', 'fr-FR', 'de-DE', 'it-IT']
+        LANGUAGE_CODES: ['es-ES', 'en-US']
     },
-    ANALYTICS_ID: 'G-DBXYNPBSPY',
-    TWITTER_BOT: {
-        ENABLED: true,
-        RETRY_AFTER_429: true,
-        DEFAULT_RETRY_DELAY: 3600000 // 1 hour in milliseconds
-    }
+    ANALYTICS_ID: 'G-DBXYNPBSPY'
 };
 
-// [RESTO DEL CÓDIGO CONTINÚA IGUAL DESDE AQUÍ...]
-// (Incluye todas las funciones, content pools, etc. del paste.txt)
 // ============================
-// COMPLETE CONTENT POOLS
+// COMPLETE CONTENT POOLS - ALL 400+ PHOTOS
 // ============================
 
-// ALL PHOTOS FROM /uncensored/ (400+ photos)
 const ALL_PHOTOS_POOL = [
     '00wd2wVE89BJnQVenuNP.jpg', '01CTDHff9PmCsZqjjCoO.jpg', '02gNvnd7bLJgBX7wvQ2r.jpg',
     '081YXXFwiGwFJpJCqkV9.jpg', '08cuJR4dA17oVjLQcQd7.jpg', '09HFl7nAkIjFBFbg3SeA.jpg',
@@ -751,7 +488,10 @@ const ALL_PHOTOS_POOL = [
     'zl3FIFdh4OZMogOhLQXv.jpg', 'zqpBmzZ1EfnsMxLnnSNS.jpg'
 ];
 
-// ALL VIDEOS FROM /uncensored-videos/ (80+ videos)
+// ============================
+// COMPLETE VIDEOS POOL - ALL 80+ VIDEOS
+// ============================
+
 const ALL_VIDEOS_POOL = [
     '0nF138CMxl1eGWUxaG2d.mp4', '0xXK6PxXSv6cpYxvI7HX.mp4', '1NYBqpy4q2GVCDCXmXDK.mp4',
     '1SZsGxjFfrA7diW05Yvj.mp4', '2FO1Ra6RDA8FjGWmDv8d.mp4', '3W7GxdRyaPj0uAK9fD4I.mp4',
@@ -762,28 +502,31 @@ const ALL_VIDEOS_POOL = [
     'Fc6f8RSjO8QBTmjjppHO.mp4', 'G4LILz0eqoh4m3YOZ2WK.mp4', 'G4XjXiZIHZZRsKwlDYCp.mp4',
     'Hn9Su6XHo4m7EGiR9f5S.mp4', 'IES8pgSNhuVYlqcse2sm.mp4', 'ImHBnXCOaNfqltnBwcUh.mp4',
     'J2E8ciwOpkU0Jv79cdKj.mp4', 'JswE4SwqdmsQfLef3PzC.mp4', 'Jz7oLnRbSV732OCdu3u9.mp4',
-    'M6TEA1f8hNdjol3Wi1se.mp4', 'MCZSxdyGPDN7E7Mkdj8F.mp4', 'MOsBiYkWV6VFfK2P0Pxz.mp4',
-    'MaV4A0BTJiYg1UThuwHk.mp4', 'MkWQbiVWaJbShjipx4Kq.mp4', 'N6j12lQQ199vM8HTZw1O.mp4',
-    'NTGWrlYi5RltnwhDSO6R.mp4', 'Nnb48ZgMp3tNboq4uXWb.mp4', 'Ocb0MqRnLH1pezhcgpHh.mp4',
-    'P6FrIUZnYN1l3N7AKjX0.mp4', 'PiMHNagAFVaFtqmYvimt.mp4', 'QGeTBD8xHjPvnqA72uiF.mp4',
-    'RzI8s0b5kfP9tVnoGbAd.mp4', 'S7cVIsUsWJ1Nnf31dhTq.mp4', 'T6auQxu1yZKCGPqVJ7ue.mp4',
-    'THeZZmwgwAViHxyn8bA1.mp4', 'UQGldJ8bdBrYyWDP0MEN.mp4', 'UiQ8qKsHUJAvIIPFCLnz.mp4',
-    'VijVO7RT6KjdzwE1iFRi.mp4', 'W1vTYUeyTSl8Pvv72sPW.mp4', 'XEW69wj2uK8Bu6NwHuce.mp4',
-    'XRCoUfkNLzwUepShH19v.mp4', 'Z8C1oBoK0vERMZ2g8aD9.mp4', 'ZPPOJjpdigAhYYekcnPx.mp4',
-    'ZaszI9a5huBi41yXZq2w.mp4', 'ahLNYijoKI9YoYoGToLK.mp4', 'beSTk3pKEdHZJSH7rwHs.mp4',
-    'eXZcQY7SeVHjcgwv8hHn.mp4', 'ebNx2Mft0L7qtcGy2sUy.mp4', 'f8FbeCjEOwLRvwIgfK8l.mp4',
-    'fCE3ydur09Lbf0hxFHyD.mp4', 'g9fe19vfWl138v5dqou2.mp4', 'gII1RvXkZk6Szauv9cDp.mp4',
-    'iniuJRrZzzGp74LWfZYy.mp4', 'juHQDjTQ8HeFlLsuDhzS.mp4', 'k7mErb1EfpdRUhafYFS5.mp4',
-    'kAU1KdI09ffEf1fjCgPC.mp4', 'kfDFWczYHsZXjtwmMsP4.mp4', 'n4DaX8Nwj1glWI1Oe9vj.mp4',
-    'nLejk9R1jPVuOpyrlrAN.mp4', 'o8cMQhNaSZiO0d0NoshF.mp4', 'owT8LTlvFEfwHj5cOtbc.mp4',
-    'peTmHJhWF44gaz25ACCr.mp4', 'qEOel0dBNRP2ttJtVUcQ.mp4', 'r14kVENgyJthsXKP4ckJ.mp4',
-    'rBSogUSRYAorst0XO7oy.mp4', 'rWwDSNSYmt9jpPd2ngiI.mp4', 'raKwkNU85MId6acMS6a0.mp4',
-    'udkEtFkLN2SKU1I3aSIT.mp4', 'vF3JI0gM7nDGJAiKFb7S.mp4', 'vhDZYiY0UkTLtmu7HrfF.mp4',
-    'wtcVFSKn4McI9xahFEGr.mp4', 'ymdZTKkujrU5ON7ZB66H.mp4', 'zB6YDw2LZ6BZl8CbXMiV.mp4',
-    'zX53TSjhlQj4Gy76iK0H.mp4'
+    'M6TEA1f8hNdjol3Wi1se.mp4', 'MCZSxdyGPDN7E7Mkdj8F.mp4',
+    'MOsBiYkWV6VFfK2P0Pxz.mp4', 'MaV4A0BTJiYg1UThuwHk.mp4', 'MkWQbiVWaJbShjipx4Kq.mp4',
+    'N6j12lQQ199vM8HTZw1O.mp4', 'NTGWrlYi5RltnwhDSO6R.mp4', 'Nnb48ZgMp3tNboq4uXWb.mp4',
+    'Ocb0MqRnLH1pezhcgpHh.mp4', 'P6FrIUZnYN1l3N7AKjX0.mp4', 'PiMHNagAFVaFtqmYvimt.mp4',
+    'QGeTBD8xHjPvnqA72uiF.mp4', 'RzI8s0b5kfP9tVnoGbAd.mp4', 'S7cVIsUsWJ1Nnf31dhTq.mp4',
+    'T6auQxu1yZKCGPqVJ7ue.mp4', 'THeZZmwgwAViHxyn8bA1.mp4', 'UQGldJ8bdBrYyWDP0MEN.mp4',
+    'UiQ8qKsHUJAvIIPFCLnz.mp4', 'VijVO7RT6KjdzwE1iFRi.mp4', 'W1vTYUeyTSl8Pvv72sPW.mp4',
+    'XEW69wj2uK8Bu6NwHuce.mp4', 'XRCoUfkNLzwUepShH19v.mp4', 'Z8C1oBoK0vERMZ2g8aD9.mp4',
+    'ZPPOJjpdigAhYYekcnPx.mp4', 'ZaszI9a5huBi41yXZq2w.mp4', 'ahLNYijoKI9YoYoGToLK.mp4',
+    'beSTk3pKEdHZJSH7rwHs.mp4', 'eXZcQY7SeVHjcgwv8hHn.mp4', 'ebNx2Mft0L7qtcGy2sUy.mp4',
+    'f8FbeCjEOwLRvwIgfK8l.mp4', 'fCE3ydur09Lbf0hxFHyD.mp4', 'g9fe19vfWl138v5dqou2.mp4',
+    'gII1RvXkZk6Szauv9cDp.mp4', 'iniuJRrZzzGp74LWfZYy.mp4', 'juHQDjTQ8HeFlLsuDhzS.mp4',
+    'k7mErb1EfpdRUhafYFS5.mp4', 'kAU1KdI09ffEf1fjCgPC.mp4', 'kfDFWczYHsZXjtwmMsP4.mp4',
+    'n4DaX8Nwj1glWI1Oe9vj.mp4', 'nLejk9R1jPVuOpyrlrAN.mp4', 'o8cMQhNaSZiO0d0NoshF.mp4',
+    'owT8LTlvFEfwHj5cOtbc.mp4', 'peTmHJhWF44gaz25ACCr.mp4', 'qEOel0dBNRP2ttJtVUcQ.mp4',
+    'r14kVENgyJthsXKP4ckJ.mp4', 'rBSogUSRYAorst0XO7oy.mp4', 'rWwDSNSYmt9jpPd2ngiI.mp4',
+    'raKwkNU85MId6acMS6a0.mp4', 'udkEtFkLN2SKU1I3aSIT.mp4', 'vF3JI0gM7nDGJAiKFb7S.mp4',
+    'vhDZYiY0UkTLtmu7HrfF.mp4', 'wtcVFSKn4McI9xahFEGr.mp4', 'ymdZTKkujrU5ON7ZB66H.mp4',
+    'zB6YDw2LZ6BZl8CbXMiV.mp4', 'zX53TSjhlQj4Gy76iK0H.mp4'
 ];
 
-// BANNER & TEASER IMAGES FROM /full/
+// ============================
+// BANNER & TEASER IMAGES
+// ============================
+
 const BANNER_IMAGES = [
     'bikbanner.jpg', 'bikbanner2.jpg', 'backbikini.jpg', 'bikini.jpg', 'bikini3.jpg', 'bikini5.jpg'
 ];
@@ -821,7 +564,7 @@ let state = {
         contentInteractions: 0,
         keywordTriggers: 0,
         scrollDepth: 0,
-        userIntent: 'browse' // browse, purchase, explore
+        userIntent: 'browse'
     }
 };
 
@@ -1025,20 +768,38 @@ function setupLazyLoading() {
                 
                 if (media && media.dataset.src) {
                     if (media.tagName === 'IMG') {
-                        media.src = media.dataset.src;
-                        media.onload = () => {
+                        // Create new image to test loading
+                        const img = new Image();
+                        img.onload = () => {
+                            media.src = media.dataset.src;
                             item.classList.remove('skeleton');
+                            delete media.dataset.src;
                         };
+                        img.onerror = () => {
+                            console.error('Failed to load image:', media.dataset.src);
+                            item.classList.remove('skeleton');
+                            item.classList.add('error');
+                        };
+                        img.src = media.dataset.src;
                     } else if (media.tagName === 'VIDEO') {
                         const source = media.querySelector('source');
                         if (source && source.dataset.src) {
                             source.src = source.dataset.src;
+                            delete source.dataset.src;
                             media.load();
-                            item.classList.remove('skeleton');
+                            
+                            media.addEventListener('loadeddata', () => {
+                                item.classList.remove('skeleton');
+                            }, { once: true });
+                            
+                            media.addEventListener('error', () => {
+                                console.error('Failed to load video:', source.src);
+                                item.classList.remove('skeleton');
+                                item.classList.add('error');
+                            }, { once: true });
                         }
                     }
                     
-                    delete media.dataset.src;
                     observer.unobserve(item);
                 }
             }
@@ -1214,7 +975,6 @@ function renderVideosProgressive() {
     // Track content render for SEO
     SEO_ANALYTICS.trackContentEngagement('videos', 'gallery_render', 'videos_loaded');
 }
-
 // ============================
 // SEO-ENHANCED EVENT HANDLERS
 // ============================
@@ -1729,7 +1489,6 @@ function isabellaAction(action) {
     
     trackEvent('isabella_action', { action: action });
 }
-
 // ============================
 // SEO STRUCTURED DATA INJECTION
 // ============================
@@ -2060,6 +1819,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Setup scroll effects
     setupScrollEffects();
     
+    // Update photo and video counts
+    const photoCount = document.getElementById('photoCount');
+    const videoCount = document.getElementById('videoCount');
+    if (photoCount) photoCount.textContent = state.dailyContent.photos.length;
+    if (videoCount) videoCount.textContent = state.dailyContent.videos.length;
+    
     // Hide loading screen
     setTimeout(() => {
         const loadingScreen = document.getElementById('loadingScreen');
@@ -2083,7 +1848,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🔍 SEO Keywords:', TRANSLATIONS[state.currentLanguage].seo_keywords?.primary);
     console.log('📊 Analytics:', CONFIG.ANALYTICS_ID);
     console.log('💳 PayPal: Ready');
-    console.log('🌊 Version: 17.0.0 SEO Optimized Complete');
+    console.log('🌊 Version: 18.0.0 Complete with all fixes');
 });
 
 // ============================
@@ -2104,5 +1869,5 @@ window.scrollCarousel = scrollCarousel;
 window.isabellaBot = isabellaBot;
 
 // ============================
-// END OF SEO OPTIMIZED COMPLETE SCRIPT
+// END OF COMPLETE SCRIPT v18.0.0
 // ============================
