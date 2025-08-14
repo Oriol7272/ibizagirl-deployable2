@@ -8,6 +8,7 @@ Allow: /main.html
 Allow: /public/assets/full/
 Allow: /manifest.json
 Allow: /sw.js
+Allow: /sitemap.xml
 
 # Contenido premium protegido
 Disallow: /public/assets/censored/
@@ -35,11 +36,19 @@ User-agent: Googlebot
 Allow: /
 Crawl-delay: 1
 
+User-agent: Googlebot-Image
+Allow: /public/assets/full/
+Allow: /
+
 User-agent: Bingbot
 Allow: /
 Crawl-delay: 2
 
 User-agent: Slurp
+Allow: /
+Crawl-delay: 2
+
+User-agent: Yandex
 Allow: /
 Crawl-delay: 2
 
@@ -56,8 +65,11 @@ Disallow: /
 User-agent: DotBot
 Disallow: /
 
+User-agent: PetalBot
+Disallow: /
+
 # Sitemap principal
 Sitemap: https://ibizagirl.pics/sitemap.xml
 
-# Host preferido (opcional)
+# Host preferido
 Host: ibizagirl.pics
