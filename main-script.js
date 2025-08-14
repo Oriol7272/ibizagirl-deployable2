@@ -1729,7 +1729,7 @@ function renderVideosProgressive() {
     
     console.log('✅ Videos rendered successfully');
 }
-
+    
 // PAYPAL INTEGRATION SYSTEM
 // ============================
 
