@@ -1,4 +1,4 @@
-﻿// ============================
+// ============================
 // IBIZAGIRL.PICS MAIN SCRIPT v14.0.0 CORRECTED
 // 200 fotos + 40 videos diarios con rotación completa
 // Sistema multiidioma completo + PayPal + Ads mejoradas
@@ -19,7 +19,7 @@ const ENVIRONMENT = {
     get isProduction() { return !this.isDevelopment; }
 };
 
-console.log('🌐 Environment:', ENVIRONMENT.isDevelopment ? 'Development' : 'Production');
+console.log('🌍 Environment:', ENVIRONMENT.isDevelopment ? 'Development' : 'Production');
 
 // ============================
 // MULTI-LANGUAGE TRANSLATIONS (COMPLETO)
@@ -271,7 +271,7 @@ const TRANSLATIONS = {
             "Der heutige Inhalt ist 🔥🔥🔥 Verpasse es nicht!",
             "Brauchst du Hilfe? Ich bin für dich da, Liebling! 💕"
         ]
-    },
+    }
     it: {
         loading: "Caricamento del paradiso...",
         subtitle: "Contenuto Esclusivo del Paradiso",
@@ -860,7 +860,7 @@ function changeLanguage(lang) {
     }
     
     trackEvent('language_changed', { language: lang });
-    console.log(`🌐 Language changed to: ${lang}`);
+    console.log(`🌍 Language changed to: ${lang}`);
 }
 
 function updateSEOForLanguage(lang) {
@@ -2258,7 +2258,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🎨 Initializing Paradise Gallery v14.0.0...');
     
     // Initialize environment and config
-    console.log('🌐 Environment:', ENVIRONMENT.isDevelopment ? 'Development' : 'Production');
+    console.log('🌍 Environment:', ENVIRONMENT.isDevelopment ? 'Development' : 'Production');
     console.log('📊 Analytics ID:', CONFIG.ANALYTICS_ID);
     console.log('💳 PayPal Client ID:', CONFIG.PAYPAL.CLIENT_ID.substring(0, 20) + '...');
     
@@ -2450,7 +2450,7 @@ window.galleryDebug = {
     setLanguage: (lang) => {
         if (TRANSLATIONS[lang]) {
             changeLanguage(lang);
-            console.log(`🌐 Language changed to: ${lang}`);
+            console.log(`🌍 Language changed to: ${lang}`);
         } else {
             console.error(`❌ Language not supported: ${lang}`);
             console.log('Available languages:', Object.keys(TRANSLATIONS));
@@ -2617,7 +2617,7 @@ console.log(`
    • Lazy loading avanzado
    
    🛠️  Debug tools: galleryDebug
-   🌐 Environment: ${ENVIRONMENT.isDevelopment ? 'Development' : 'Production'}
+   🌍 Environment: ${ENVIRONMENT.isDevelopment ? 'Development' : 'Production'}
    
    Try: galleryDebug.contentStats()
         galleryDebug.testAds()
