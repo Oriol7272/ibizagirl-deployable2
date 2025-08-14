@@ -1569,7 +1569,9 @@ window.showVIPModal = showVIPModal;
 window.showPackModal = showPackModal;
 window.closeModal = closeModal;
 window.selectPlan = selectPlan;
-window.selectPack = selectPack;// ============================
+window.selectPack = selectPack;
+
+// ============================
 // RENDER FUNCTIONS (SISTEMA COMPLETO DE RENDERIZADO)
 // ============================
 
@@ -1608,17 +1610,16 @@ function renderPhotosProgressive() {
                      style="filter: ${isUnlocked ? 'none' : `blur(${CONFIG.CONTENT.BLUR_PHOTO}px)`};"
                      loading="lazy">
                 
-                ${!isUnlocked ? `
-                    <div class="lock-overlay">
-                        <svg class="lock-icon" width="30" height="30" viewBox="0 0 24 24" fill="white">
-                            <path d="M12 2C9.243 2 7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"/>
-                        </svg>
-                    </div>
-                    
-                    <div class="item-price">
-                        €${CONFIG.PAYPAL.PRICES.SINGLE_PHOTO.toFixed(2)}
-                    </div>
-                ` : ''}
+                ${!isUnlocked ? 
+                    '<div class="lock-overlay">' +
+                        '<svg class="lock-icon" width="30" height="30" viewBox="0 0 24 24" fill="white">' +
+                            '<path d="M12 2C9.243 2 7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"></path>' +
+                        '</svg>' +
+                    '</div>' +
+                    '<div class="item-price">' +
+                        '€' + CONFIG.PAYPAL.PRICES.SINGLE_PHOTO.toFixed(2) +
+                    '</div>' 
+                : ''}
                 
                 <div class="item-overlay">
                     <div class="item-title">Paradise #${index + 1}</div>
@@ -1641,6 +1642,7 @@ function renderPhotosProgressive() {
     
     console.log('✅ Photos rendered successfully');
 }
+
 function renderVideosProgressive() {
     const videosGrid = document.getElementById('videosGrid');
     if (!videosGrid || !state.dailyContent) return;
@@ -1729,10 +1731,231 @@ function renderVideosProgressive() {
     
     console.log('✅ Videos rendered successfully');
 }
-    
-// PAYPAL INTEGRATION SYSTEM
+
+function generateRandomDuration() {
+    const minutes = Math.floor(Math.random() * 15) + 1;
+    const seconds = Math.floor(Math.random() * 60);
+    const formattedSeconds = String(seconds).padStart(2, '0');
+    return minutes + ':' + formattedSeconds;
+}
+
+// ============================
+// VIDEO HOVER PREVIEW SYSTEM
 // ============================
 
+function setupVideoHoverPreview() {
+    const videos = document.querySelectorAll('.content-item[data-type="video"]');
+    
+    videos.forEach(item => {
+        const video = item.querySelector('video');
+        if (!video) return;
+        
+        let hoverTimeout;
+        
+        item.addEventListener('mouseenter', () => {
+            if (state.isVIP || state.unlockedContent.has(item.dataset.id)) {
+                hoverTimeout = setTimeout(() => {
+                    video.play().catch(() => {
+                        console.log('Video autoplay prevented');
+                    });
+                }, 500); // Delay to prevent accidental triggers
+            }
+        });
+        
+        item.addEventListener('mouseleave', () => {
+            clearTimeout(hoverTimeout);
+            if (!video.paused) {
+                video.pause();
+                video.currentTime = 0;
+            }
+        });
+    });
+}
+
+// ============================
+// EVENT HANDLERS
+// ============================
+
+function handlePhotoClick(id, filename, index) {
+    trackEvent('photo_click', { 
+        photo_id: id, 
+        photo_index: index, 
+        filename: filename,
+        is_unlocked: state.isVIP || state.unlockedContent.has(id)
+    });
+    
+    if (state.isVIP || state.unlockedContent.has(id)) {
+        // Open full resolution image
+        window.open(`public/assets/uncensored/${filename}`, '_blank');
+        trackEvent('photo_view', { photo_id: id, photo_index: index });
+    } else if (state.packCredits > 0) {
+        // Use pack credit to unlock
+        usePackCredit(id, 'photo');
+    } else {
+        // Show pay-per-view modal
+        const trans = TRANSLATIONS[state.currentLanguage];
+        showPayPerViewModal(
+            id, 
+            'photo', 
+            `Paradise Photo #${index + 1}`, 
+            CONFIG.PAYPAL.PRICES.SINGLE_PHOTO
+        );
+    }
+}
+
+function handleVideoClick(id, filename, index) {
+    trackEvent('video_click', { 
+        video_id: id, 
+        video_index: index, 
+        filename: filename,
+        is_unlocked: state.isVIP || state.unlockedContent.has(id)
+    });
+    
+    if (state.isVIP || state.unlockedContent.has(id)) {
+        // Open full resolution video
+        window.open(`public/assets/uncensored-videos/${filename}`, '_blank');
+        trackEvent('video_view', { video_id: id, video_index: index });
+    } else if (state.packCredits > 0) {
+        // Use pack credit to unlock
+        usePackCredit(id, 'video');
+    } else {
+        // Show pay-per-view modal
+        const trans = TRANSLATIONS[state.currentLanguage];
+        showPayPerViewModal(
+            id, 
+            'video', 
+            `Paradise Video #${index + 1}`, 
+            CONFIG.PAYPAL.PRICES.SINGLE_VIDEO
+        );
+    }
+}
+
+function toggleIsabella() {
+    const window = document.getElementById('isabellaWindow');
+    if (window) {
+        window.classList.toggle('active');
+        
+        if (window.classList.contains('active')) {
+            const notification = document.querySelector('.isabella-notification');
+            if (notification) {
+                notification.style.display = 'none';
+            }
+            trackEvent('isabella_opened');
+        } else {
+            trackEvent('isabella_closed');
+        }
+    }
+}
+
+function isabellaAction(action) {
+    const messages = TRANSLATIONS[state.currentLanguage].isabella_messages;
+    
+    switch(action) {
+        case 'vip':
+            isabellaBot.addMessage(messages[2]); // VIP message
+            setTimeout(() => showVIPModal(), 1000);
+            break;
+        case 'daily':
+            isabellaBot.addMessage(messages[3]); // Daily content message
+            break;
+        case 'help':
+            isabellaBot.addMessage(messages[4]); // Help message
+            break;
+        default:
+            isabellaBot.addMessage(messages[0]); // Default greeting
+    }
+    
+    trackEvent('isabella_action', { action: action });
+}
+
+// ============================
+// MODAL FUNCTIONS
+// ============================
+
+function showVIPModal() {
+    const modal = document.getElementById('vipModal');
+    if (modal) {
+        modal.classList.add('active');
+        renderPayPalVIPButtons();
+        trackEvent('modal_open', { modal_type: 'vip_subscription' });
+    }
+}
+
+function showPackModal() {
+    const modal = document.getElementById('packModal');
+    if (modal) {
+        modal.classList.add('active');
+        renderPayPalPackButton(state.selectedPack);
+        trackEvent('modal_open', { modal_type: 'pack_selection' });
+    }
+}
+
+function showPayPerViewModal(contentId, contentType, contentTitle, price) {
+    const trans = TRANSLATIONS[state.currentLanguage];
+    const ppvTitle = document.getElementById('ppvTitle');
+    const ppvPrice = document.getElementById('ppvPrice');
+    const ppvModal = document.getElementById('ppvModal');
+    
+    if (ppvTitle) ppvTitle.textContent = `${trans.unlock_content} - ${contentTitle}`;
+    if (ppvPrice) ppvPrice.textContent = `€${price.toFixed(2)}`;
+    if (ppvModal) ppvModal.classList.add('active');
+    
+    state.currentPayPalContentId = contentId;
+    state.currentPayPalContentType = contentType;
+    
+    renderPayPalSingleButton(contentId, contentType, contentTitle, price);
+    trackEvent('modal_open', { 
+        modal_type: 'pay_per_view', 
+        content_type: contentType,
+        content_id: contentId,
+        price: price
+    });
+}
+
+function closeModal() {
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.classList.remove('active');
+    });
+    trackEvent('modal_close');
+}
+
+function selectPlan(type) {
+    state.selectedSubscriptionType = type;
+    
+    // Update UI
+    document.querySelectorAll('.plan-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    if (event && event.currentTarget) {
+        event.currentTarget.classList.add('selected');
+    }
+    
+    renderPayPalVIPButtons();
+    
+    trackEvent('plan_selected', { plan_type: type });
+}
+
+function selectPack(packType) {
+    state.selectedPack = packType;
+    
+    // Update UI
+    document.querySelectorAll('.pack-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    if (event && event.currentTarget) {
+        event.currentTarget.classList.add('selected');
+    }
+    
+    renderPayPalPackButton(packType);
+    
+    trackEvent('pack_selected', { pack_type: packType });
+}
+
+// ============================
+// PAYPAL INTEGRATION SYSTEM
+// ============================
 function renderPayPalVIPButtons() {
     const container = document.getElementById('paypal-button-container-vip');
     if (!container || !window.paypal) return;
