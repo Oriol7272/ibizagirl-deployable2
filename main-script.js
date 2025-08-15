@@ -1728,7 +1728,7 @@ function renderPayPalPackButton(packType) {
                         value: pack.price.toFixed(2),
                         currency_code: CONFIG.PAYPAL.CURRENCY
                     },
-                    description: 'IbizaGirl ' + packType + ' Pack - ' + pack.items + ' items'
+                    description: "IbizaGirl " + packType + " Pack - " + pack.items + " items"
                 }]
             });
         },
