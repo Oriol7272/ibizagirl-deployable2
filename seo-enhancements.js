@@ -1,10 +1,10 @@
 // ============================
-// SEO ENHANCEMENTS v2.0.0 - CORRECTED
+// SEO ENHANCEMENTS v2.1.0 - FIXED
 // Lazy Loading + Open Graph + JSON-LD + Performance
 // ============================
 
 // ============================
-// LAZY LOADING MEJORADO v2.0
+// LAZY LOADING MEJORADO v2.1
 // ============================
 
 function setupAdvancedLazyLoading() {
@@ -27,6 +27,12 @@ function setupAdvancedLazyLoading() {
             if (entry.isIntersecting) {
                 const img = entry.target;
                 
+                // Solo procesar si tiene data-src
+                if (!img.dataset.src) {
+                    observer.unobserve(img);
+                    return;
+                }
+                
                 // Soporte para WEBP con fallback
                 if (supportsWebP()) {
                     const webpSrc = img.dataset.src?.replace(/\.(jpg|jpeg|png)$/i, '.webp');
@@ -37,6 +43,7 @@ function setupAdvancedLazyLoading() {
                             img.src = webpSrc;
                             img.classList.remove('skeleton', 'lazy');
                             img.classList.add('loaded');
+                            delete img.dataset.src;
                         };
                         webpImg.onerror = () => {
                             // Fallback a formato original
@@ -58,7 +65,6 @@ function setupAdvancedLazyLoading() {
     // Función auxiliar para cargar imagen original
     function loadOriginalImage(img) {
         if (!img || !img.dataset || !img.dataset.src) {
-            console.warn('Image element missing data-src attribute');
             return;
         }
         
@@ -81,12 +87,14 @@ function setupAdvancedLazyLoading() {
         };
         
         tempImg.onerror = () => {
-            console.error('Failed to load image:', img.dataset.src);
+            console.warn('Failed to load image:', img.dataset.src);
             img.classList.remove('skeleton', 'lazy');
             img.classList.add('error');
             
             // Try fallback image
-            img.src = 'public/assets/full/bikini.jpg';
+            if (!img.src || img.src.includes('data:')) {
+                img.src = 'public/assets/full/bikini.jpg';
+            }
         };
         
         tempImg.src = img.dataset.src;
@@ -108,9 +116,6 @@ function setupAdvancedLazyLoading() {
                         video.classList.remove('skeleton', 'lazy');
                         video.classList.add('loaded');
                         
-                        // Preload metadata para mejor UX
-                        video.preload = 'metadata';
-                        
                         // Performance tracking
                         if (window.trackEvent) {
                             window.trackEvent('video_loaded', {
@@ -122,7 +127,7 @@ function setupAdvancedLazyLoading() {
                     }, { once: true });
                     
                     video.addEventListener('error', () => {
-                        console.error('Failed to load video:', source.src);
+                        console.warn('Failed to load video:', source.src);
                         video.classList.remove('skeleton', 'lazy');
                         video.classList.add('error');
                     }, { once: true });
@@ -133,16 +138,27 @@ function setupAdvancedLazyLoading() {
         });
     }, lazyVideoOptions);
 
-    // Aplicar observers
-    document.querySelectorAll('img[data-src]').forEach(img => {
-        img.classList.add('lazy');
-        imageObserver.observe(img);
-    });
+    // Aplicar observers solo a elementos con data-src
+    const lazyImages = document.querySelectorAll('img[data-src]');
+    if (lazyImages.length > 0) {
+        lazyImages.forEach(img => {
+            img.classList.add('lazy');
+            imageObserver.observe(img);
+        });
+        console.log(`🖼️ Lazy loading setup for ${lazyImages.length} images`);
+    }
 
-    document.querySelectorAll('video[data-video-id]').forEach(video => {
-        video.classList.add('lazy');
-        videoObserver.observe(video);
-    });
+    const lazyVideos = document.querySelectorAll('video source[data-src]');
+    if (lazyVideos.length > 0) {
+        lazyVideos.forEach(source => {
+            const video = source.parentElement;
+            if (video) {
+                video.classList.add('lazy');
+                videoObserver.observe(video);
+            }
+        });
+        console.log(`🎬 Lazy loading setup for ${lazyVideos.length} videos`);
+    }
 
     // Progressive loading para crítico above-the-fold
     loadCriticalImages();
@@ -153,10 +169,14 @@ function setupAdvancedLazyLoading() {
 // Detectar soporte WEBP
 function supportsWebP() {
     if (typeof supportsWebP.result === 'undefined') {
-        const canvas = document.createElement('canvas');
-        canvas.width = 1;
-        canvas.height = 1;
-        supportsWebP.result = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+        try {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1;
+            canvas.height = 1;
+            supportsWebP.result = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+        } catch(e) {
+            supportsWebP.result = false;
+        }
     }
     return supportsWebP.result;
 }
@@ -165,10 +185,17 @@ function supportsWebP() {
 function loadCriticalImages() {
     const criticalImages = document.querySelectorAll('.banner-slide img, .teaser-item img');
     criticalImages.forEach(img => {
-        if (img.dataset.src) {
+        // Solo procesar si tiene data-src
+        if (img.dataset && img.dataset.src) {
             const tempImg = new Image();
             tempImg.onload = () => {
                 img.src = img.dataset.src;
+                img.classList.remove('skeleton');
+                delete img.dataset.src;
+            };
+            tempImg.onerror = () => {
+                // Use fallback on error
+                img.src = 'public/assets/full/bikini.jpg';
                 img.classList.remove('skeleton');
                 delete img.dataset.src;
             };
@@ -484,7 +511,7 @@ function injectAdvancedJSONLD() {
 // ============================
 
 function registerServiceWorker() {
-    if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js')
                 .then(registration => {
@@ -493,12 +520,14 @@ function registerServiceWorker() {
                     // Manejar actualizaciones
                     registration.addEventListener('updatefound', () => {
                         const newWorker = registration.installing;
-                        newWorker.addEventListener('statechange', () => {
-                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                // Nueva versión disponible
-                                showUpdateNotification();
-                            }
-                        });
+                        if (newWorker) {
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // Nueva versión disponible
+                                    showUpdateNotification();
+                                }
+                            });
+                        }
                     });
                     
                     // Sincronización en background
@@ -509,9 +538,11 @@ function registerServiceWorker() {
                     }
                 })
                 .catch(error => {
-                    console.error('❌ Service Worker registration failed:', error);
+                    console.warn('Service Worker registration failed:', error);
                 });
         });
+    } else {
+        console.log('Service Worker not supported or not on HTTPS');
     }
 }
 
@@ -524,6 +555,19 @@ function showUpdateNotification() {
             <button onclick="updateApp()" class="update-btn">Actualizar</button>
             <button onclick="this.parentElement.parentElement.remove()" class="close-btn">×</button>
         </div>
+    `;
+    notification.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #00ff88, #4ade80);
+        color: #001f3f;
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        font-weight: 700;
+        z-index: 10001;
+        box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
     `;
     document.body.appendChild(notification);
 }
@@ -575,7 +619,7 @@ function updateBreadcrumbs(currentPage = '') {
 }
 
 // ============================
-// PERFORMANCE MONITORING
+// PERFORMANCE MONITORING (FIXED)
 // ============================
 
 function initPerformanceMonitoring() {
@@ -584,12 +628,14 @@ function initPerformanceMonitoring() {
         try {
             const lcpObserver = new PerformanceObserver((list) => {
                 const entries = list.getEntries();
-                const lastEntry = entries[entries.length - 1];
-                if (window.trackEvent) {
-                    window.trackEvent('lcp_measured', { 
-                        value: lastEntry.startTime,
-                        element: lastEntry.element?.tagName 
-                    });
+                if (entries.length > 0) {
+                    const lastEntry = entries[entries.length - 1];
+                    if (window.trackEvent) {
+                        window.trackEvent('lcp_measured', { 
+                            value: lastEntry.startTime,
+                            element: lastEntry.element?.tagName 
+                        });
+                    }
                 }
             });
             lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
@@ -615,26 +661,29 @@ function initPerformanceMonitoring() {
             console.log('FID observer not supported');
         }
 
-        // CLS (Cumulative Layout Shift)
-        try {
-            let clsValue = 0;
-            const clsObserver = new PerformanceObserver((list) => {
-                for (const entry of list.getEntries()) {
-                    if (!entry.hadRecentInput) {
-                        clsValue += entry.value;
+        // CLS (Cumulative Layout Shift) - Solo si está soportado
+        if (PerformanceObserver.supportedEntryTypes && 
+            PerformanceObserver.supportedEntryTypes.includes('layout-shift')) {
+            try {
+                let clsValue = 0;
+                const clsObserver = new PerformanceObserver((list) => {
+                    for (const entry of list.getEntries()) {
+                        if (!entry.hadRecentInput) {
+                            clsValue += entry.value;
+                        }
                     }
-                }
-            });
-            clsObserver.observe({ entryTypes: ['layout-shift'] });
-            
-            // Report CLS when page is hidden
-            document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'hidden' && window.trackEvent) {
-                    window.trackEvent('cls_measured', { value: clsValue });
-                }
-            });
-        } catch (e) {
-            console.log('CLS observer not supported');
+                });
+                clsObserver.observe({ entryTypes: ['layout-shift'] });
+                
+                // Report CLS when page is hidden
+                document.addEventListener('visibilitychange', () => {
+                    if (document.visibilityState === 'hidden' && window.trackEvent) {
+                        window.trackEvent('cls_measured', { value: clsValue });
+                    }
+                });
+            } catch (e) {
+                console.log('CLS observer setup failed:', e.message);
+            }
         }
     }
 }
@@ -644,33 +693,38 @@ function initPerformanceMonitoring() {
 // ============================
 
 function initializeSEOEnhancements() {
-    console.log('🚀 Initializing SEO Enhancements v2.0.0...');
+    console.log('🚀 Initializing SEO Enhancements v2.1.0 FIXED...');
     
-    // Lazy loading avanzado
-    setupAdvancedLazyLoading();
-    
-    // Open Graph dinámico
-    updateOpenGraph();
-    
-    // JSON-LD avanzado
-    injectAdvancedJSONLD();
-    
-    // Service Worker PWA
-    registerServiceWorker();
-    
-    // Breadcrumbs
-    updateBreadcrumbs('gallery');
-    
-    // Performance monitoring
-    initPerformanceMonitoring();
-    
-    console.log('✅ SEO Enhancements initialized');
+    try {
+        // Lazy loading avanzado
+        setupAdvancedLazyLoading();
+        
+        // Open Graph dinámico
+        updateOpenGraph();
+        
+        // JSON-LD avanzado
+        injectAdvancedJSONLD();
+        
+        // Service Worker PWA
+        registerServiceWorker();
+        
+        // Breadcrumbs
+        updateBreadcrumbs('gallery');
+        
+        // Performance monitoring
+        initPerformanceMonitoring();
+        
+        console.log('✅ SEO Enhancements initialized successfully');
+    } catch (error) {
+        console.error('❌ Error initializing SEO Enhancements:', error);
+    }
 }
 
 // Auto-inicializar cuando el DOM esté listo
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeSEOEnhancements);
 } else {
+    // DOM ya está listo
     initializeSEOEnhancements();
 }
 
@@ -679,3 +733,5 @@ window.updateOpenGraph = updateOpenGraph;
 window.updateBreadcrumbs = updateBreadcrumbs;
 window.updateApp = updateApp;
 window.initializeSEOEnhancements = initializeSEOEnhancements;
+
+console.log('✅ SEO Enhancements script loaded');
