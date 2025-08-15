@@ -1,6 +1,6 @@
 // ============================
 // AD NETWORK VERIFICATION SYSTEM v2.0
-// Corrige errores y mejora detección
+// Archivo completo para sustituir
 // ============================
 
 class AdNetworkVerifier {
