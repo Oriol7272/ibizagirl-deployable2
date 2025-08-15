@@ -5,83 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IbizaGirl.pics - Galería Premium</title>
     
+    <!-- Favicon y App Icons -->
+    <link rel="icon" href="/public/assets/full/bikini.jpg" type="image/jpeg">
+    <link rel="shortcut icon" href="/public/assets/full/bikini.jpg" type="image/jpeg">
+    <link rel="apple-touch-icon" href="/public/assets/full/bikini.jpg">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/assets/full/bikini.jpg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/assets/full/bikini.jpg">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/assets/full/bikini.jpg">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="IbizaGirl.pics">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="IbizaGirl">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-TileColor" content="#0077be">
+    <meta name="msapplication-tap-highlight" content="no">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo español.">
+    <meta name="keywords" content="ibiza, paradise, beach, ocean, mediterranean, exclusive content, premium gallery, daily updates">
+    <meta name="theme-color" content="#0077be">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1">
+    <meta name="google" content="notranslate">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="referrer" content="origin-when-cross-origin">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="IbizaGirl.pics - Galería Premium Ibiza">
+    <meta property="og:description" content="400+ fotos exclusivas y 80+ videos actualizados DIARIAMENTE del paraíso mediterráneo">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="IbizaGirl.pics">
+    <meta property="og:image" content="https://ibizagirl.pics/public/assets/full/bikini.jpg">
+    <meta property="og:url" content="https://ibizagirl.pics/main.html">
+    <meta property="og:locale" content="es_ES">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ibizagirlpics">
+    <meta name="twitter:title" content="IbizaGirl.pics - Galería Premium Ibiza">
+    <meta name="twitter:description" content="400+ fotos exclusivas y 80+ videos HD del paraíso mediterráneo">
+    <meta name="twitter:image" content="https://ibizagirl.pics/public/assets/full/bikini.jpg">
+    
     <!-- Preconnect para optimizar carga -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://www.paypal.com">
-    <link rel="preconnect" href="https://js.juicyads.com">
-    <link rel="preconnect" href="https://a.exoclick.com">
-    <link rel="preconnect" href="https://assets.ero-advertising.com">
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     
     <!-- Preload de recursos críticos -->
     <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="content-data.js" as="script">
     <link rel="preload" href="main-script.js" as="script">
+    <link rel="preload" href="/public/assets/full/bikini.jpg" as="image">
+    <link rel="preload" href="/public/assets/full/bikbanner.jpg" as="image">
+    
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="//www.paypal.com">
+    <link rel="dns-prefetch" href="//www.googletagmanager.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="canonical" href="https://ibizagirl.pics/main.html">
+    
+    <!-- Language Alternates -->
+    <link rel="alternate" href="https://ibizagirl.pics/main.html" hreflang="es">
+    <link rel="alternate" href="https://ibizagirl.pics/main.html?lang=en" hreflang="en">
+    <link rel="alternate" href="https://ibizagirl.pics/main.html?lang=fr" hreflang="fr">
+    <link rel="alternate" href="https://ibizagirl.pics/main.html?lang=de" hreflang="de">
+    <link rel="alternate" href="https://ibizagirl.pics/main.html?lang=it" hreflang="it">
+    <link rel="alternate" href="https://ibizagirl.pics/main.html?lang=pt" hreflang="pt">
+    <link rel="alternate" href="https://ibizagirl.pics/main.html" hreflang="x-default">
     
     <!-- Estilos -->
     <link rel="stylesheet" href="styles.css">
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
-    <!-- ============================== -->
-    <!-- AD NETWORKS - SOLO 3 REDES -->
-    <!-- ============================== -->
-    
-    <!-- JuicyAds -->
-    <script type="text/javascript" data-cfasync="false" async>
-        window.juicyads_loaded = false;
-        (function() {
-            var jads = document.createElement('script');
-            jads.async = true;
-            jads.type = 'text/javascript';
-            jads.src = 'https://js.juicyads.com/jads.js';
-            jads.onload = function() {
-                window.juicyads_loaded = true;
-                console.log('✅ JuicyAds loaded');
-            };
-            jads.onerror = function() {
-                console.warn('⚠️ JuicyAds failed to load');
-            };
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jads, s);
-        })();
-    </script>
-    
-    <!-- ExoClick con manejo de errores -->
-    <script type="text/javascript">
-        window.exoclick_loaded = false;
-        var ExoLoader = ExoLoader || {
-            addZone: function(obj) {
-                console.log('ExoLoader placeholder - zone:', obj);
-            }
-        };
-    </script>
-    <script type="text/javascript" src="https://a.exoclick.com/ads.js" 
-            onload="window.exoclick_loaded = true; console.log('✅ ExoClick loaded');"
-            onerror="console.warn('⚠️ ExoClick failed to load');" async></script>
-    
-    <!-- EroAdvertising -->
-    <script type="text/javascript" data-cfasync="false" async>
-        window.eroadvertising_loaded = false;
-        (function() {
-            var ero = document.createElement('script');
-            ero.async = true;
-            ero.type = 'text/javascript';
-            ero.src = 'https://assets.ero-advertising.com/ero.js';
-            ero.onload = function() {
-                window.eroadvertising_loaded = true;
-                console.log('✅ EroAdvertising loaded');
-            };
-            ero.onerror = function() {
-                console.warn('⚠️ EroAdvertising failed to load');
-            };
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(ero, s);
-        })();
-    </script>
     
     <!-- PayPal SDK -->
     <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR"></script>
@@ -92,156 +94,37 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-DBXYNPBSPY');
+        gtag('config', 'G-DBXYNPBSPY', {
+            page_title: 'Premium Gallery',
+            page_location: window.location.href
+        });
     </script>
     
-    <style>
-        /* Ad Blocker Detection Message Styles */
-        .adblocker-message {
-            display: none;
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, rgba(255, 107, 53, 0.95), rgba(255, 105, 180, 0.95));
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 1.5rem 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(255, 107, 53, 0.4);
-            z-index: 9999;
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-            animation: slideDown 0.5s ease;
-        }
-        
-        .adblocker-message.active {
-            display: block;
-        }
-        
-        @keyframes slideDown {
-            from {
-                transform: translateX(-50%) translateY(-100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(-50%) translateY(0);
-                opacity: 1;
-            }
-        }
-        
-        .adblocker-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-        
-        .adblocker-text {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 1rem;
-            opacity: 0.95;
-        }
-        
-        .adblocker-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .adblocker-btn {
-            padding: 0.6rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-        
-        .adblocker-btn.primary {
-            background: white;
-            color: #ff6b35;
-        }
-        
-        .adblocker-btn.primary:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
-        }
-        
-        .adblocker-btn.secondary {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-        
-        .adblocker-btn.secondary:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .adblocker-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .adblocker-close:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(90deg);
-        }
-        
-        @media (max-width: 768px) {
-            .adblocker-message {
-                top: 60px;
-                padding: 1rem;
-            }
-            
-            .adblocker-title {
-                font-size: 1.1rem;
-            }
-            
-            .adblocker-text {
-                font-size: 0.9rem;
-            }
-        }
-    </style>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "IbizaGirl.pics",
+      "description": "Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente",
+      "url": "https://ibizagirl.pics/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://ibizagirl.pics/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
 </head>
 <body>
-    <!-- Ad Blocker Detection Message -->
-    <div class="adblocker-message" id="adblockerMessage">
-        <button class="adblocker-close" onclick="closeAdBlockerMessage()">×</button>
-        <div class="adblocker-title">
-            <span>🛡️</span>
-            <span>Ad Blocker Detectado</span>
-        </div>
-        <div class="adblocker-text">
-            Hemos detectado que estás usando un bloqueador de anuncios. 
-            Los anuncios nos ayudan a mantener el sitio gratuito y con contenido actualizado diariamente.
-        </div>
-        <div class="adblocker-buttons">
-            <button class="adblocker-btn primary" onclick="showDisableInstructions()">
-                🔧 Cómo Desactivar
-            </button>
-            <button class="adblocker-btn secondary" onclick="continueWithAdBlocker()">
-                Continuar Así
-            </button>
-        </div>
-    </div>
-
     <!-- Language Selector -->
     <div class="language-selector">
         <select id="languageSelect" onchange="changeLanguage(this.value)">
@@ -307,12 +190,6 @@
             </div>
         </section>
 
-        <!-- Ad Container 1 - JuicyAds -->
-        <div class="ad-container ad-horizontal" id="juicyads-banner-1">
-            <ins class="juicyads" data-zone="903748"></ins>
-            <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':903748});</script>
-        </div>
-
         <!-- Teaser Carousel -->
         <section class="teaser-carousel-container">
             <h2 class="teaser-title" data-translate="preview_gallery">🔥 Vista Previa Exclusiva</h2>
@@ -357,15 +234,6 @@
             </div>
         </section>
 
-        <!-- Ad Container 2 - ExoClick -->
-        <div class="ad-container ad-horizontal" id="exoclick-banner-1">
-            <script type="text/javascript">
-                if (typeof ExoLoader !== 'undefined') {
-                    ExoLoader.addZone({"type":"banner","width":"728","height":"90","idzone":"5748443"});
-                }
-            </script>
-        </div>
-
         <!-- Photos Section -->
         <section class="content-section" id="photosSection">
             <div class="section-header">
@@ -376,11 +244,6 @@
             </div>
             <div class="content-grid" id="photosGrid"></div>
         </section>
-
-        <!-- Ad Container 3 - EroAdvertising -->
-        <div class="ad-container ad-horizontal" id="ero-banner-1">
-            <div data-ero-spot="123456"></div>
-        </div>
 
         <!-- Videos Section -->
         <section class="content-section" id="videosSection">
@@ -515,15 +378,8 @@
         </div>
     </div>
 
-    <!-- Footer with Ad -->
+    <!-- Footer -->
     <footer class="main-footer">
-        <!-- Ad Container 4 - Footer Mixed -->
-        <div class="ad-container ad-footer" id="mixed-footer-ad">
-            <!-- JuicyAds Footer -->
-            <ins class="juicyads" data-zone="903750"></ins>
-            <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':903750});</script>
-        </div>
-        
         <div class="footer-content">
             <div class="footer-section">
                 <h3>IbizaGirl.pics</h3>
@@ -556,100 +412,9 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="content-data.js"></script>
+    <script src="content-data.js" defer></script>
+    <script src="ad-verification.js" defer></script>
     <script src="main-script.js" defer></script>
-    
-    <!-- Ad Network Verification Script -->
-    <script src="ad-verification.js"></script>
-    
-    <!-- Ad Blocker Message Functions -->
-    <script>
-        // Escuchar el evento de verificación de ad networks
-        window.addEventListener('adNetworksVerified', function(event) {
-            const status = event.detail;
-            
-            // Mostrar mensaje si se detectó ad blocker o tracking protection
-            if (status.adBlockerDetected || status.trackingProtection) {
-                showAdBlockerMessage();
-            }
-            
-            // Log del estado
-            console.log('📊 Ad Networks Status:', status);
-        });
-        
-        // Mostrar mensaje de ad blocker
-        function showAdBlockerMessage() {
-            const message = document.getElementById('adblockerMessage');
-            if (message) {
-                message.classList.add('active');
-                
-                // Guardar en localStorage que ya se mostró
-                localStorage.setItem('adblocker_message_shown', Date.now());
-            }
-        }
-        
-        // Cerrar mensaje de ad blocker
-        function closeAdBlockerMessage() {
-            const message = document.getElementById('adblockerMessage');
-            if (message) {
-                message.classList.remove('active');
-            }
-        }
-        
-        // Mostrar instrucciones para desactivar ad blocker
-        function showDisableInstructions() {
-            alert(`Para desactivar tu Ad Blocker:
-            
-1. Haz clic en el icono del Ad Blocker en tu navegador
-2. Selecciona "Pausar en este sitio" o "Desactivar en ibizagirl.pics"
-3. Recarga la página
-            
-Navegadores populares:
-• Chrome: uBlock/AdBlock icono → Desactivar
-• Firefox: Escudo → Desactivar protección
-• Safari: Preferencias → Sitios web → Contenido`);
-        }
-        
-        // Continuar con ad blocker activo
-        function continueWithAdBlocker() {
-            closeAdBlockerMessage();
-            
-            // Marcar que el usuario decidió continuar
-            localStorage.setItem('adblocker_continue', 'true');
-            
-            // Opcional: trackear evento
-            if (window.gtag) {
-                gtag('event', 'adblocker_continue', {
-                    'event_category': 'ads',
-                    'event_label': 'user_continued_with_adblocker'
-                });
-            }
-        }
-        
-        // Check si ya se mostró el mensaje recientemente (24 horas)
-        function shouldShowAdBlockerMessage() {
-            const lastShown = localStorage.getItem('adblocker_message_shown');
-            const userContinued = localStorage.getItem('adblocker_continue');
-            
-            if (userContinued === 'true') {
-                return false; // Usuario ya decidió continuar
-            }
-            
-            if (!lastShown) {
-                return true; // Nunca se mostró
-            }
-            
-            const dayInMs = 24 * 60 * 60 * 1000;
-            const timeSinceShown = Date.now() - parseInt(lastShown);
-            
-            return timeSinceShown > dayInMs; // Mostrar solo si pasó más de 24 horas
-        }
-        
-        // Verificar si se debe mostrar el mensaje
-        if (shouldShowAdBlockerMessage()) {
-            // El evento adNetworksVerified manejará la lógica
-            console.log('Ad blocker message ready to show if needed');
-        }
-    </script>
+    <script src="seo-enhancements.js" defer></script>
 </body>
 </html>
