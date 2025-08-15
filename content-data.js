@@ -13,7 +13,7 @@ const BASE_PATHS = {
 // ============================
 // FOTOS CARPETA FULL
 // ============================
-const ALL_PHOTOS_POOL = [
+window.ALL_PHOTOS_POOL = [
     'full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
     'full/85158b64-4168-45fa-9cb4-0b40634f7fa1.webp',
     'full/0Tc8Vtd0mEIvNHZwYGBq.webp',
@@ -144,7 +144,7 @@ const ALL_PHOTOS_POOL = [
 ];// ============================
 // FOTOS CARPETA UNCENSORED
 // ============================
-const ALL_UNCENSORED_PHOTOS_POOL = [
+window.ALL_UNCENSORED_PHOTOS_POOL = [
     'uncensored/00wd2wVE89BJnQVenuNP.webp',
     'uncensored/46yy65BCWILWvvLCbqn2.webp',
     'uncensored/cpoIVHMZzemmt5HJTjHk.webp',
@@ -789,7 +789,7 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
 ]; // Cierre del array SIN coma// ============================
 // VIDEOS CARPETA UNCENSORED-VIDEOS
 // ============================
-const ALL_VIDEOS_POOL = [
+window.ALL_VIDEOS_POOL = [
     'uncensored-videos/0nF138CMxl1eGWUxaG2d.mp4',
     'uncensored-videos/0xXK6PxXSv6cpYxvI7HX.mp4',
     'uncensored-videos/1NYBqpy4q2GVCDCXmXDK.mp4',
