@@ -26,7 +26,7 @@ if (typeof ALL_PHOTOS_UNCENSORED !== 'undefined') {
 if (typeof ALL_VIDEOS_POOL !== 'undefined') {
     console.log(`✅ Loaded ${ALL_VIDEOS_POOL.length} videos from content-data.js`);
 } else {
-    console.error('❌ ALL_VIDEOS_POOL not found in content-data.js');
+    console.error('❌ ALL_VIDEOS_POOL; //
 }
 
 // Seleccionar imágenes para banners y teasers del pool principal
