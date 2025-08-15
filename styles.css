@@ -425,6 +425,7 @@ body {
     background: rgba(0, 119, 190, 0.3);
     transform: scale(1.1);
 }
+
 /* Stats Section */
 .stats-section {
     display: grid;
@@ -846,6 +847,7 @@ body {
     font-size: 0.8rem;
     font-weight: 700;
 }
+
 /* Pack Selection */
 .packs-container {
     display: grid;
@@ -1272,39 +1274,4 @@ body {
 .error {
     background: rgba(255, 0, 0, 0.1);
     border: 1px solid rgba(255, 0, 0, 0.3);
-}
-
-/* Firefox Compatibility Fixes */
-@-moz-document url-prefix() {
-    .content-item {
-        -moz-transform: translateZ(0);
-        transform: translateZ(0);
-    }
-    
-    .item-media {
-        image-rendering: -moz-crisp-edges;
-        image-rendering: crisp-edges;
-    }
-    
-    .glass-bg {
-        background: rgba(0, 119, 190, 0.15);
-    }
-}
-
-/* Safari/Webkit Fixes */
-@supports (-webkit-backdrop-filter: blur(20px)) {
-    .modal-content,
-    .main-header,
-    .isabella-window,
-    .credits-display {
-        -webkit-backdrop-filter: blur(20px);
-    }
-}
-
-/* Edge Legacy Fixes */
-@supports (-ms-ime-align: auto) {
-    .content-grid {
-        display: -ms-grid;
-        -ms-grid-columns: (1fr)[auto-fill];
-    }
 }

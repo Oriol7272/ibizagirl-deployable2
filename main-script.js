@@ -22,6 +22,505 @@ const ENVIRONMENT = {
 console.log('🌍 Environment:', ENVIRONMENT.isDevelopment ? 'Development' : 'Production');
 
 // ============================
+// MULTI-LANGUAGE TRANSLATIONS (COMPLETO)
+// ============================
+
+const TRANSLATIONS = {
+    es: {
+        loading: "Cargando el paraíso...",
+        subtitle: "Contenido Exclusivo del Paraíso",
+        megapack: "📦 MEGA PACKS -70%",
+        monthly: "💳 €15/Mes",
+        lifetime: "👑 Lifetime €100",
+        welcome: "Bienvenida al Paraíso 🌴",
+        daily_content: "200+ fotos y 40+ videos actualizados DIARIAMENTE",
+        unlock_all: "🔓 Desbloquear Todo",
+        view_gallery: "📸 Ver Galería",
+        photos_today: "Fotos de Hoy",
+        updated_at: "Actualizado a las",
+        videos_hd: "Videos HD",
+        new_content: "¡NUEVO CONTENIDO!",
+        total_views: "Vistas Totales",
+        today: "hoy",
+        updates: "Actualizaciones",
+        always_fresh: "SIEMPRE FRESCO",
+        paradise_photos: "📸 Fotos del Paraíso",
+        new_today: "¡NUEVO HOY!",
+        exclusive_videos: "🎬 Videos Exclusivos",
+        fresh_content: "¡CONTENIDO FRESCO!",
+        isabella_title: "Isabella - Tu Guía VIP",
+        vip_info: "💎 VIP Info",
+        news: "📅 Novedades",
+        help: "❓ Ayuda",
+        footer_desc: "Tu destino diario para contenido exclusivo del paraíso mediterráneo. Actualizado 24/7 con las mejores fotos y videos.",
+        quick_links: "Enlaces Rápidos",
+        photos: "Fotos",
+        videos: "Videos",
+        vip_subscription: "Suscripción VIP",
+        mega_packs: "Mega Packs",
+        support: "Soporte",
+        terms: "Términos de Servicio",
+        privacy: "Política de Privacidad",
+        contact: "Contacto",
+        copyright: "© 2025 IbizaGirl.pics - Todos los derechos reservados | 18+ Solo Adultos",
+        vip_unlimited: "👑 Acceso VIP Ilimitado",
+        pack_selection: "📦 MEGA PACKS - Ahorra 70%",
+        unlock_content: "🔓 Desbloquear Contenido",
+        plan_monthly: "📅 Mensual",
+        plan_lifetime: "♾️ Lifetime",
+        best_value: "MEJOR VALOR",
+        save_yearly: "¡Ahorra €80 al año!",
+        pack_starter: "Starter Pack",
+        pack_bronze: "Bronze Pack",
+        pack_silver: "Silver Pack",
+        pack_gold: "Gold Pack",
+        items: "contenidos",
+        save: "Ahorra",
+        unlimited_access: "Acceso ilimitado",
+        hd_videos: "200+ fotos HD",
+        daily_updates: "40+ videos HD",
+        no_ads: "Sin publicidad",
+        all_content: "Todo el contenido actual y futuro",
+        priority_support: "Soporte prioritario",
+        exclusive_content: "Contenido exclusivo VIP",
+        notification_welcome: "🎉 ¡Bienvenido VIP! Todo el contenido ha sido desbloqueado.",
+        notification_pack: "🎉 {credits} créditos añadidos! Haz clic en cualquier contenido para desbloquearlo.",
+        notification_unlocked: "{icon} Desbloqueado! {credits} créditos restantes.",
+        payment_error: "❌ Error en el pago. Por favor, intenta de nuevo.",
+        preview_gallery: "🔥 Vista Previa Exclusiva - Mejores Fotos Ibiza",
+        photos_seo_title: "📸 Fotos del Paraíso de Ibiza",
+        gallery_description: "Explora nuestra colección de fotos premium de Ibiza actualizadas cada día. Contenido exclusivo del mediterráneo español con calidad profesional.",
+        meta_description: "Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo español.",
+        seo_keywords: {
+            primary: "ibiza fotos, playas ibiza, españa turismo, mediterráneo, galería ibiza",
+            secondary: "fotos diarias, contenido premium ibiza, vacaciones españa, islas baleares"
+        },
+        isabella_messages: [
+            "¡Hola preciosa! 😘 ¿Buscas el paraíso?",
+            "Pssst... ¡Los miembros VIP ven todo sin desenfoque! 👀",
+            "¿Lista para desbloquear el paraíso? ¡VIP te da acceso instantáneo a todo! 🌊",
+            "¡Hoy tenemos 200 fotos nuevas y 40 videos nuevos! 🎉",
+            "Solo haz clic en cualquier contenido borroso para desbloquearlo! 💕",
+            "¿Sabías que con Lifetime nunca más pagas? ¡Es la mejor oferta! 💎",
+            "Los packs te permiten desbloquear contenido individual, ¡perfectos para probar! 📦",
+            "¡No te pierdas las actualizaciones diarias a las 3:00 AM! ⏰",
+            "El contenido de hoy está 🔥🔥🔥 ¡No te lo pierdas!",
+            "¿Necesitas ayuda? ¡Estoy aquí para ti, cariño! 💕"
+        ]
+    },
+    en: {
+        loading: "Loading paradise...",
+        subtitle: "Exclusive Paradise Content",
+        megapack: "📦 MEGA PACKS -70%",
+        monthly: "💳 €15/Month",
+        lifetime: "👑 Lifetime €100",
+        welcome: "Welcome to Paradise 🌴",
+        daily_content: "200+ photos and 40+ videos updated DAILY",
+        unlock_all: "🔓 Unlock Everything",
+        view_gallery: "📸 View Gallery",
+        photos_today: "Today's Photos",
+        updated_at: "Updated at",
+        videos_hd: "HD Videos",
+        new_content: "NEW CONTENT!",
+        total_views: "Total Views",
+        today: "today",
+        updates: "Updates",
+        always_fresh: "ALWAYS FRESH",
+        paradise_photos: "📸 Paradise Photos",
+        new_today: "NEW TODAY!",
+        exclusive_videos: "🎬 Exclusive Videos",
+        fresh_content: "FRESH CONTENT!",
+        isabella_title: "Isabella - Your VIP Guide",
+        vip_info: "💎 VIP Info",
+        news: "📅 What's New",
+        help: "❓ Help",
+        footer_desc: "Your daily destination for exclusive Mediterranean paradise content. Updated 24/7 with the best photos and videos.",
+        quick_links: "Quick Links",
+        photos: "Photos",
+        videos: "Videos",
+        vip_subscription: "VIP Subscription",
+        mega_packs: "Mega Packs",
+        support: "Support",
+        terms: "Terms of Service",
+        privacy: "Privacy Policy",
+        contact: "Contact",
+        copyright: "© 2025 IbizaGirl.pics - All rights reserved | 18+ Adults Only",
+        vip_unlimited: "👑 Unlimited VIP Access",
+        pack_selection: "📦 MEGA PACKS - Save 70%",
+        unlock_content: "🔓 Unlock Content",
+        plan_monthly: "📅 Monthly",
+        plan_lifetime: "♾️ Lifetime",
+        best_value: "BEST VALUE",
+        save_yearly: "Save €80 per year!",
+        pack_starter: "Starter Pack",
+        pack_bronze: "Bronze Pack",
+        pack_silver: "Silver Pack",
+        pack_gold: "Gold Pack",
+        items: "items",
+        save: "Save",
+        unlimited_access: "Unlimited access",
+        hd_videos: "200+ HD photos",
+        daily_updates: "40+ HD videos",
+        no_ads: "No ads",
+        all_content: "All current and future content",
+        priority_support: "Priority support",
+        exclusive_content: "Exclusive VIP content",
+        notification_welcome: "🎉 Welcome VIP! All content has been unlocked.",
+        notification_pack: "🎉 {credits} credits added! Click any content to unlock.",
+        notification_unlocked: "{icon} Unlocked! {credits} credits remaining.",
+        payment_error: "❌ Payment error. Please try again.",
+        preview_gallery: "🔥 Exclusive Preview - Best Ibiza Photos",
+        photos_seo_title: "📸 Paradise Photos of Ibiza",
+        gallery_description: "Explore our collection of premium Ibiza photos updated daily. Exclusive Mediterranean Spanish content with professional quality.",
+        meta_description: "Premium Ibiza gallery with 400+ photos and 80+ HD videos updated daily. Exclusive Mediterranean Spanish paradise content.",
+        seo_keywords: {
+            primary: "ibiza photos, ibiza beaches, spain tourism, mediterranean, ibiza gallery",
+            secondary: "daily photos, premium ibiza content, spain vacation, balearic islands"
+        },
+        isabella_messages: [
+            "Hello beautiful! 😘 Looking for paradise?",
+            "Pssst... VIP members see everything without blur! 👀",
+            "Ready to unlock paradise? VIP gives you instant access to everything! 🌊",
+            "Today we have 200 new photos and 40 new videos! 🎉",
+            "Just click on any blurred content to unlock it! 💕",
+            "Did you know that with Lifetime you never pay again? It's the best deal! 💎",
+            "Packs let you unlock individual content, perfect for trying out! 📦",
+            "Don't miss the daily updates at 3:00 AM! ⏰",
+            "Today's content is 🔥🔥🔥 Don't miss it!",
+            "Need help? I'm here for you, darling! 💕"
+        ]
+    },
+    de: {
+        loading: "Paradies wird geladen...",
+        subtitle: "Exklusiver Paradies-Inhalt",
+        megapack: "📦 MEGA PACKS -70%",
+        monthly: "💳 €15/Monat",
+        lifetime: "👑 Lebenslang €100",
+        welcome: "Willkommen im Paradies 🌴",
+        daily_content: "200+ Fotos und 40+ Videos TÄGLICH aktualisiert",
+        unlock_all: "🔓 Alles freischalten",
+        view_gallery: "📸 Galerie anzeigen",
+        photos_today: "Heutige Fotos",
+        updated_at: "Aktualisiert um",
+        videos_hd: "HD Videos",
+        new_content: "NEUER INHALT!",
+        total_views: "Gesamtaufrufe",
+        today: "heute",
+        updates: "Updates",
+        always_fresh: "IMMER FRISCH",
+        paradise_photos: "📸 Paradies Fotos",
+        new_today: "NEU HEUTE!",
+        exclusive_videos: "🎬 Exklusive Videos",
+        fresh_content: "FRISCHER INHALT!",
+        isabella_title: "Isabella - Dein VIP Guide",
+        vip_info: "💎 VIP Info",
+        news: "📅 Neuigkeiten",
+        help: "❓ Hilfe",
+        footer_desc: "Dein tägliches Ziel für exklusive mediterrane Paradiesinhalte. 24/7 aktualisiert mit den besten Fotos und Videos.",
+        quick_links: "Schnelllinks",
+        photos: "Fotos",
+        videos: "Videos",
+        vip_subscription: "VIP-Abonnement",
+        mega_packs: "Mega Packs",
+        support: "Support",
+        terms: "Nutzungsbedingungen",
+        privacy: "Datenschutz",
+        contact: "Kontakt",
+        copyright: "© 2025 IbizaGirl.pics - Alle Rechte vorbehalten | 18+ Nur für Erwachsene",
+        vip_unlimited: "👑 Unbegrenzter VIP-Zugang",
+        pack_selection: "📦 MEGA PACKS - Spare 70%",
+        unlock_content: "🔓 Inhalt freischalten",
+        plan_monthly: "📅 Monatlich",
+        plan_lifetime: "♾️ Lebenslang",
+        best_value: "BESTER WERT",
+        save_yearly: "Spare €80 pro Jahr!",
+        pack_starter: "Starter Paket",
+        pack_bronze: "Bronze Paket",
+        pack_silver: "Silber Paket",
+        pack_gold: "Gold Paket",
+        items: "Inhalte",
+        save: "Spare",
+        unlimited_access: "Unbegrenzter Zugang",
+        hd_videos: "200+ HD Fotos",
+        daily_updates: "40+ HD Videos",
+        no_ads: "Keine Werbung",
+        all_content: "Alle aktuellen und zukünftigen Inhalte",
+        priority_support: "Prioritäts-Support",
+        exclusive_content: "Exklusiver VIP Inhalt",
+        notification_welcome: "🎉 Willkommen VIP! Alle Inhalte wurden freigeschaltet.",
+        notification_pack: "🎉 {credits} Credits hinzugefügt! Klicke auf Inhalte zum Freischalten.",
+        notification_unlocked: "{icon} Freigeschaltet! {credits} Credits übrig.",
+        payment_error: "❌ Zahlungsfehler. Bitte versuche es erneut.",
+        preview_gallery: "🔥 Exklusive Vorschau - Beste Ibiza Fotos",
+        photos_seo_title: "📸 Paradies Fotos von Ibiza",
+        gallery_description: "Entdecke unsere Sammlung von Premium Ibiza Fotos, die täglich aktualisiert werden. Exklusive mediterrane spanische Inhalte in professioneller Qualität.",
+        meta_description: "Premium Ibiza Galerie mit 200+ Fotos und 40+ HD Videos täglich aktualisiert. Exklusive mediterrane spanische Paradiesinhalte.",
+        seo_keywords: {
+            primary: "ibiza fotos, ibiza strände, spanien tourismus, mittelmeer, ibiza galerie",
+            secondary: "tägliche fotos, premium ibiza inhalt, spanien urlaub, balearen"
+        },
+        isabella_messages: [
+            "Hallo Schöne! 😘 Suchst du das Paradies?",
+            "Pssst... VIP-Mitglieder sehen alles ohne Unschärfe! 👀",
+            "Bereit, das Paradies freizuschalten? VIP gibt dir sofortigen Zugang zu allem! 🌊",
+            "Heute haben wir 200 neue Fotos und 40 neue Videos! 🎉",
+            "Klicke einfach auf verschwommene Inhalte, um sie freizuschalten! 💕",
+            "Wusstest du, dass du mit Lifetime nie wieder zahlst? Das ist das beste Angebot! 💎",
+            "Pakete lassen dich einzelne Inhalte freischalten, perfekt zum Ausprobieren! 📦",
+            "Verpasse nicht die täglichen Updates um 3:00 Uhr! ⏰",
+            "Der heutige Inhalt ist 🔥🔥🔥 Verpasse es nicht!",
+            "Brauchst du Hilfe? Ich bin für dich da, Liebling! 💕"
+        ]
+    },
+    it: {
+        loading: "Caricamento del paradiso...",
+        subtitle: "Contenuto Esclusivo del Paradiso",
+        megapack: "📦 MEGA PACKS -70%",
+        monthly: "💳 €15/Mese",
+        lifetime: "👑 A vita €100",
+        welcome: "Benvenuta in Paradiso 🌴",
+        daily_content: "200+ foto e 40+ video aggiornati QUOTIDIANAMENTE",
+        unlock_all: "🔓 Sblocca Tutto",
+        view_gallery: "📸 Vedi Galleria",
+        photos_today: "Foto di Oggi",
+        updated_at: "Aggiornato alle",
+        videos_hd: "Video HD",
+        new_content: "NUOVO CONTENUTO!",
+        total_views: "Visualizzazioni Totali",
+        today: "oggi",
+        updates: "Aggiornamenti",
+        always_fresh: "SEMPRE FRESCO",
+        paradise_photos: "📸 Foto del Paradiso",
+        new_today: "NUOVO OGGI!",
+        exclusive_videos: "🎬 Video Esclusivi",
+        fresh_content: "CONTENUTO FRESCO!",
+        isabella_title: "Isabella - La tua Guida VIP",
+        vip_info: "💎 Info VIP",
+        news: "📅 Novità",
+        help: "❓ Aiuto",
+        footer_desc: "La tua destinazione quotidiana per contenuti esclusivi del paradiso mediterraneo. Aggiornato 24/7 con le migliori foto e video.",
+        quick_links: "Link Rapidi",
+        photos: "Foto",
+        videos: "Video",
+        vip_subscription: "Abbonamento VIP",
+        mega_packs: "Mega Pack",
+        support: "Supporto",
+        terms: "Termini di Servizio",
+        privacy: "Privacy",
+        contact: "Contatto",
+        copyright: "© 2025 IbizaGirl.pics - Tutti i diritti riservati | 18+ Solo Adulti",
+        vip_unlimited: "👑 Accesso VIP Illimitato",
+        pack_selection: "📦 MEGA PACK - Risparmia il 70%",
+        unlock_content: "🔓 Sblocca Contenuto",
+        plan_monthly: "📅 Mensile",
+        plan_lifetime: "♾️ A vita",
+        best_value: "MIGLIOR VALORE",
+        save_yearly: "Risparmia €80 all'anno!",
+        pack_starter: "Pacchetto Starter",
+        pack_bronze: "Pacchetto Bronze",
+        pack_silver: "Pacchetto Silver",
+        pack_gold: "Pacchetto Gold",
+        items: "contenuti",
+        save: "Risparmia",
+        unlimited_access: "Accesso illimitato",
+        hd_videos: "200+ foto HD",
+        daily_updates: "40+ video HD",
+        no_ads: "Senza pubblicità",
+        all_content: "Tutti i contenuti attuali e futuri",
+        priority_support: "Supporto prioritario",
+        exclusive_content: "Contenuto esclusivo VIP",
+        notification_welcome: "🎉 Benvenuto VIP! Tutti i contenuti sono stati sbloccati.",
+        notification_pack: "🎉 {credits} crediti aggiunti! Clicca su qualsiasi contenuto per sbloccarlo.",
+        notification_unlocked: "{icon} Sbloccato! {credits} crediti rimanenti.",
+        payment_error: "❌ Errore di pagamento. Per favore riprova.",
+        preview_gallery: "🔥 Anteprima Esclusiva - Migliori Foto Ibiza",
+        photos_seo_title: "📸 Foto del Paradiso di Ibiza",
+        gallery_description: "Esplora la nostra collezione di foto premium di Ibiza aggiornate quotidianamente. Contenuto esclusivo mediterraneo spagnolo di qualità professionale.",
+        meta_description: "Galleria premium di Ibiza con 200+ foto e 40+ video HD aggiornati quotidianamente. Contenuto esclusivo del paradiso mediterraneo spagnolo.",
+        seo_keywords: {
+            primary: "foto ibiza, spiagge ibiza, turismo spagna, mediterraneo, galleria ibiza",
+            secondary: "foto quotidiane, contenuto premium ibiza, vacanze spagna, isole baleari"
+        },
+        isabella_messages: [
+            "Ciao bella! 😘 Cerchi il paradiso?",
+            "Pssst... I membri VIP vedono tutto senza sfocatura! 👀",
+            "Pronta a sbloccare il paradiso? VIP ti dà accesso immediato a tutto! 🌊",
+            "Oggi abbiamo 200 nuove foto e 40 nuovi video! 🎉",
+            "Clicca su qualsiasi contenuto sfocato per sbloccarlo! 💕",
+            "Sapevi che con Lifetime non paghi mai più? È la migliore offerta! 💎",
+            "I pacchetti ti permettono di sbloccare singoli contenuti, perfetti per provare! 📦",
+            "Non perdere gli aggiornamenti quotidiani alle 3:00! ⏰",
+            "Il contenuto di oggi è 🔥🔥🔥 Non perderlo!",
+            "Hai bisogno di aiuto? Sono qui per te, cara! 💕"
+        ]
+    },
+    fr: {
+        loading: "Chargement du paradis...",
+        subtitle: "Contenu Exclusif du Paradis",
+        megapack: "📦 MEGA PACKS -70%",
+        monthly: "💳 €15/Mois",
+        lifetime: "👑 À vie €100",
+        welcome: "Bienvenue au Paradis 🌴",
+        daily_content: "200+ photos et 40+ vidéos mises à jour QUOTIDIENNEMENT",
+        unlock_all: "🔓 Tout Débloquer",
+        view_gallery: "📸 Voir la Galerie",
+        photos_today: "Photos du Jour",
+        updated_at: "Mis à jour à",
+        videos_hd: "Vidéos HD",
+        new_content: "NOUVEAU CONTENU!",
+        total_views: "Vues Totales",
+        today: "aujourd'hui",
+        updates: "Mises à jour",
+        always_fresh: "TOUJOURS FRAIS",
+        paradise_photos: "📸 Photos du Paradis",
+        new_today: "NOUVEAU AUJOURD'HUI!",
+        exclusive_videos: "🎬 Vidéos Exclusives",
+        fresh_content: "CONTENU FRAIS!",
+        isabella_title: "Isabella - Votre Guide VIP",
+        vip_info: "💎 Info VIP",
+        news: "📅 Nouveautés",
+        help: "❓ Aide",
+        footer_desc: "Votre destination quotidienne pour du contenu exclusif du paradis méditerranéen. Mis à jour 24/7 avec les meilleures photos et vidéos.",
+        quick_links: "Liens Rapides",
+        photos: "Photos",
+        videos: "Vidéos",
+        vip_subscription: "Abonnement VIP",
+        mega_packs: "Mega Packs",
+        support: "Support",
+        terms: "Conditions d'utilisation",
+        privacy: "Confidentialité",
+        contact: "Contact",
+        copyright: "© 2025 IbizaGirl.pics - Tous droits réservés | 18+ Adultes uniquement",
+        vip_unlimited: "👑 Accès VIP Illimité",
+        pack_selection: "📦 MEGA PACKS - Économisez 70%",
+        unlock_content: "🔓 Débloquer le Contenu",
+        plan_monthly: "📅 Mensuel",
+        plan_lifetime: "♾️ À vie",
+        best_value: "MEILLEURE VALEUR",
+        save_yearly: "Économisez €80 par an!",
+        pack_starter: "Pack Débutant",
+        pack_bronze: "Pack Bronze",
+        pack_silver: "Pack Argent",
+        pack_gold: "Pack Or",
+        items: "contenus",
+        save: "Économisez",
+        unlimited_access: "Accès illimité",
+        hd_videos: "200+ photos HD",
+        daily_updates: "40+ vidéos HD",
+        no_ads: "Sans publicité",
+        all_content: "Tout le contenu actuel et futur",
+        priority_support: "Support prioritaire",
+        exclusive_content: "Contenu exclusif VIP",
+        notification_welcome: "🎉 Bienvenue VIP! Tout le contenu a été débloqué.",
+        notification_pack: "🎉 {credits} crédits ajoutés! Cliquez sur n'importe quel contenu pour le débloquer.",
+        notification_unlocked: "{icon} Débloqué! {credits} crédits restants.",
+        payment_error: "❌ Erreur de paiement. Veuillez réessayer.",
+        preview_gallery: "🔥 Aperçu Exclusif - Meilleures Photos Ibiza",
+        photos_seo_title: "📸 Photos du Paradis d'Ibiza",
+        gallery_description: "Explorez notre collection de photos premium d'Ibiza mises à jour quotidiennement. Contenu exclusif méditerranéen espagnol de qualité professionnelle.",
+        meta_description: "Galerie premium d'Ibiza avec 200+ photos et 40+ vidéos HD mises à jour quotidiennement. Contenu exclusif du paradis méditerranéen espagnol.",
+        seo_keywords: {
+            primary: "photos ibiza, plages ibiza, tourisme espagne, méditerranée, galerie ibiza",
+            secondary: "photos quotidiennes, contenu premium ibiza, vacances espagne, îles baléares"
+        },
+        isabella_messages: [
+            "Salut belle! 😘 Tu cherches le paradis?",
+            "Pssst... Les membres VIP voient tout sans flou! 👀",
+            "Prête à débloquer le paradis? VIP te donne un accès instantané à tout! 🌊",
+            "Aujourd'hui nous avons 200 nouvelles photos et 40 nouvelles vidéos! 🎉",
+            "Clique simplement sur n'importe quel contenu flou pour le débloquer! 💕",
+            "Savais-tu qu'avec Lifetime tu ne paies plus jamais? C'est la meilleure offre! 💎",
+            "Les packs te permettent de débloquer du contenu individuel, parfait pour essayer! 📦",
+            "Ne manque pas les mises à jour quotidiennes à 3h00! ⏰",
+            "Le contenu d'aujourd'hui est 🔥🔥🔥 Ne le manque pas!",
+            "Besoin d'aide? Je suis là pour toi, chérie! 💕"
+        ]
+    },
+    pt: {
+        loading: "Carregando o paraíso...",
+        subtitle: "Conteúdo Exclusivo do Paraíso",
+        megapack: "📦 MEGA PACKS -70%",
+        monthly: "💳 €15/Mês",
+        lifetime: "👑 Vitalício €100",
+        welcome: "Bem-vinda ao Paraíso 🌴",
+        daily_content: "200+ fotos e 40+ vídeos atualizados DIARIAMENTE",
+        unlock_all: "🔓 Desbloquear Tudo",
+        view_gallery: "📸 Ver Galeria",
+        photos_today: "Fotos de Hoje",
+        updated_at: "Atualizado às",
+        videos_hd: "Vídeos HD",
+        new_content: "NOVO CONTEÚDO!",
+        total_views: "Visualizações Totais",
+        today: "hoje",
+        updates: "Atualizações",
+        always_fresh: "SEMPRE FRESCO",
+        paradise_photos: "📸 Fotos do Paraíso",
+        new_today: "NOVO HOJE!",
+        exclusive_videos: "🎬 Vídeos Exclusivos",
+        fresh_content: "CONTEÚDO FRESCO!",
+        isabella_title: "Isabella - Sua Guia VIP",
+        vip_info: "💎 Info VIP",
+        news: "📅 Novidades",
+        help: "❓ Ajuda",
+        footer_desc: "Seu destino diário para conteúdo exclusivo do paraíso mediterrâneo. Atualizado 24/7 com as melhores fotos e vídeos.",
+        quick_links: "Links Rápidos",
+        photos: "Fotos",
+        videos: "Vídeos",
+        vip_subscription: "Assinatura VIP",
+        mega_packs: "Mega Packs",
+        support: "Suporte",
+        terms: "Termos de Serviço",
+        privacy: "Política de Privacidade",
+        contact: "Contato",
+        copyright: "© 2025 IbizaGirl.pics - Todos os direitos reservados | 18+ Apenas Adultos",
+        vip_unlimited: "👑 Acesso VIP Ilimitado",
+        pack_selection: "📦 MEGA PACKS - Economize 70%",
+        unlock_content: "🔓 Desbloquear Conteúdo",
+        plan_monthly: "📅 Mensal",
+        plan_lifetime: "♾️ Vitalício",
+        best_value: "MELHOR VALOR",
+        save_yearly: "Economize €80 por ano!",
+        pack_starter: "Pacote Starter",
+        pack_bronze: "Pacote Bronze",
+        pack_silver: "Pacote Silver",
+        pack_gold: "Pacote Gold",
+        items: "itens",
+        save: "Economize",
+        unlimited_access: "Acesso ilimitado",
+        hd_videos: "200+ fotos HD",
+        daily_updates: "40+ vídeos HD",
+        no_ads: "Sem anúncios",
+        all_content: "Todo o conteúdo atual e futuro",
+        priority_support: "Suporte prioritário",
+        exclusive_content: "Conteúdo exclusivo VIP",
+        notification_welcome: "🎉 Bem-vindo VIP! Todo o conteúdo foi desbloqueado.",
+        notification_pack: "🎉 {credits} créditos adicionados! Clique em qualquer conteúdo para desbloquear.",
+        notification_unlocked: "{icon} Desbloqueado! {credits} créditos restantes.",
+        payment_error: "❌ Erro no pagamento. Por favor, tente novamente.",
+        preview_gallery: "🔥 Prévia Exclusiva - Melhores Fotos Ibiza",
+        photos_seo_title: "📸 Fotos do Paraíso de Ibiza",
+        gallery_description: "Explore nossa coleção de fotos premium de Ibiza atualizadas diariamente. Conteúdo exclusivo mediterrâneo espanhol com qualidade profissional.",
+        meta_description: "Galeria premium de Ibiza com 200+ fotos e 40+ vídeos HD atualizados diariamente. Conteúdo exclusivo do paraíso mediterrâneo espanhol.",
+        seo_keywords: {
+            primary: "fotos ibiza, praias ibiza, turismo espanha, mediterrâneo, galeria ibiza",
+            secondary: "fotos diárias, conteúdo premium ibiza, férias espanha, ilhas baleares"
+        },
+        isabella_messages: [
+            "Olá linda! 😘 Procurando o paraíso?",
+            "Pssst... Membros VIP veem tudo sem borrão! 👀",
+            "Pronta para desbloquear o paraíso? VIP te dá acesso instantâneo a tudo! 🌊",
+            "Hoje temos 200 novas fotos e 40 novos vídeos! 🎉",
+            "Apenas clique em qualquer conteúdo borrado para desbloquear! 💕",
+            "Sabia que com Lifetime você nunca mais paga? É a melhor oferta! 💎",
+            "Os pacotes permitem desbloquear conteúdo individual, perfeito para experimentar! 📦",
+            "Não perca as atualizações diárias às 3:00! ⏰",
+            "O conteúdo de hoje está 🔥🔥🔥 Não perca!",
+            "Precisa de ajuda? Estou aqui para você, querida! 💕"
+        ]
+    }
+};
+
+// ============================
 // CONFIGURATION
 // ============================
 
@@ -73,13 +572,13 @@ const CONFIG = {
         }
     }
 };
-
 // ============================
-// COMPLETE CONTENT POOLS (TODAS LAS FOTOS Y VIDEOS)
+// COMPLETE CONTENT POOLS (ACTUALIZADOS CON TODOS LOS ARCHIVOS)
 // ============================
 
 // TODAS LAS FOTOS DE /uncensored/ - Lista completa de 400+ fotos
 const ALL_PHOTOS_POOL = [
+    // Archivos de arxiu.docx
     '00wd2wVE89BJnQVenuNP.jpg', '01CTDHff9PmCsZqjjCoO.jpg', '02gNvnd7bLJgBX7wvQ2r.jpg',
     '081YXXFwiGwFJpJCqkV9.jpg', '08cuJR4dA17oVjLQcQd7.jpg', '09HFl7nAkIjFBFbg3SeA.jpg',
     '0K7AtRh7U93R2VH9axxQ.jpg', '0Scwe5oo0JuUEanBguCT.jpg', '0VBC7iOXjVN2c89AngyH.jpg',
@@ -293,504 +792,6 @@ const TEASER_IMAGES = [
     '4YhoIAWSbVaOqBhAOGqR.jpg', '82KxJ9daxf9MpK019L5I.jpg', '8faf42TRuGOU4ZW9KS9W.jpg',
     '92Ck0v3g8gZLEQ5vOmpd.jpg', '993acHdsWLzG80gAFZQs.jpg', '9v20KsJFZoAv2WQ8m3o2.jpg'
 ];
-// ============================
-// MULTI-LANGUAGE TRANSLATIONS (COMPLETO)
-// ============================
-
-const TRANSLATIONS = {
-    es: {
-        loading: "Cargando el paraíso...",
-        subtitle: "Contenido Exclusivo del Paraíso",
-        megapack: "📦 MEGA PACKS -70%",
-        monthly: "💳 €15/Mes",
-        lifetime: "👑 Lifetime €100",
-        welcome: "Bienvenida al Paraíso 🌴",
-        daily_content: "200+ fotos y 40+ videos actualizados DIARIAMENTE",
-        unlock_all: "🔓 Desbloquear Todo",
-        view_gallery: "📸 Ver Galería",
-        photos_today: "Fotos de Hoy",
-        updated_at: "Actualizado a las",
-        videos_hd: "Videos HD",
-        new_content: "¡NUEVO CONTENIDO!",
-        total_views: "Vistas Totales",
-        today: "hoy",
-        updates: "Actualizaciones",
-        always_fresh: "SIEMPRE FRESCO",
-        paradise_photos: "📸 Fotos del Paraíso",
-        new_today: "¡NUEVO HOY!",
-        exclusive_videos: "🎬 Videos Exclusivos",
-        fresh_content: "¡CONTENIDO FRESCO!",
-        isabella_title: "Isabella - Tu Guía VIP",
-        vip_info: "💎 VIP Info",
-        news: "📅 Novedades",
-        help: "❓ Ayuda",
-        footer_desc: "Tu destino diario para contenido exclusivo del paraíso mediterráneo. Actualizado 24/7 con las mejores fotos y videos.",
-        quick_links: "Enlaces Rápidos",
-        photos: "Fotos",
-        videos: "Videos",
-        vip_subscription: "Suscripción VIP",
-        mega_packs: "Mega Packs",
-        support: "Soporte",
-        terms: "Términos de Servicio",
-        privacy: "Política de Privacidad",
-        contact: "Contacto",
-        copyright: "© 2025 IbizaGirl.pics - Todos los derechos reservados | 18+ Solo Adultos",
-        vip_unlimited: "👑 Acceso VIP Ilimitado",
-        pack_selection: "📦 MEGA PACKS - Ahorra 70%",
-        unlock_content: "🔓 Desbloquear Contenido",
-        plan_monthly: "📅 Mensual",
-        plan_lifetime: "♾️ Lifetime",
-        best_value: "MEJOR VALOR",
-        save_yearly: "¡Ahorra €80 al año!",
-        pack_starter: "Starter Pack",
-        pack_bronze: "Bronze Pack",
-        pack_silver: "Silver Pack",
-        pack_gold: "Gold Pack",
-        items: "contenidos",
-        save: "Ahorra",
-        unlimited_access: "Acceso ilimitado",
-        hd_videos: "200+ fotos HD",
-        daily_updates: "40+ videos HD",
-        no_ads: "Sin publicidad",
-        all_content: "Todo el contenido actual y futuro",
-        priority_support: "Soporte prioritario",
-        exclusive_content: "Contenido exclusivo VIP",
-        notification_welcome: "🎉 ¡Bienvenido VIP! Todo el contenido ha sido desbloqueado.",
-        notification_pack: "🎉 {credits} créditos añadidos! Haz clic en cualquier contenido para desbloquearlo.",
-        notification_unlocked: "{icon} Desbloqueado! {credits} créditos restantes.",
-        payment_error: "⚠ Error en el pago. Por favor, intenta de nuevo.",
-        preview_gallery: "🔥 Vista Previa Exclusiva - Mejores Fotos Ibiza",
-        photos_seo_title: "📸 Fotos del Paraíso de Ibiza",
-        gallery_description: "Explora nuestra colección de fotos premium de Ibiza actualizadas cada día. Contenido exclusivo del mediterráneo español con calidad profesional.",
-        meta_description: "Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo español.",
-        seo_keywords: {
-            primary: "ibiza fotos, playas ibiza, españa turismo, mediterráneo, galería ibiza",
-            secondary: "fotos diarias, contenido premium ibiza, vacaciones españa, islas baleares"
-        },
-        isabella_messages: [
-            "¡Hola preciosa! 😘 ¿Buscas el paraíso?",
-            "Pssst... ¡Los miembros VIP ven todo sin desenfoque! 👀",
-            "¿Lista para desbloquear el paraíso? ¡VIP te da acceso instantáneo a todo! 🌊",
-            "¡Hoy tenemos 200 fotos nuevas y 40 videos nuevos! 🎉",
-            "Solo haz clic en cualquier contenido borroso para desbloquearlo! 💕",
-            "¿Sabías que con Lifetime nunca más pagas? ¡Es la mejor oferta! 💎",
-            "Los packs te permiten desbloquear contenido individual, ¡perfectos para probar! 📦",
-            "¡No te pierdas las actualizaciones diarias a las 3:00 AM! ⏰",
-            "El contenido de hoy está 🔥🔥🔥 ¡No te lo pierdas!",
-            "¿Necesitas ayuda? ¡Estoy aquí para ti, cariño! 💕"
-        ]
-    },
-    en: {
-        loading: "Loading paradise...",
-        subtitle: "Exclusive Paradise Content",
-        megapack: "📦 MEGA PACKS -70%",
-        monthly: "💳 €15/Month",
-        lifetime: "👑 Lifetime €100",
-        welcome: "Welcome to Paradise 🌴",
-        daily_content: "200+ photos and 40+ videos updated DAILY",
-        unlock_all: "🔓 Unlock Everything",
-        view_gallery: "📸 View Gallery",
-        photos_today: "Today's Photos",
-        updated_at: "Updated at",
-        videos_hd: "HD Videos",
-        new_content: "NEW CONTENT!",
-        total_views: "Total Views",
-        today: "today",
-        updates: "Updates",
-        always_fresh: "ALWAYS FRESH",
-        paradise_photos: "📸 Paradise Photos",
-        new_today: "NEW TODAY!",
-        exclusive_videos: "🎬 Exclusive Videos",
-        fresh_content: "FRESH CONTENT!",
-        isabella_title: "Isabella - Your VIP Guide",
-        vip_info: "💎 VIP Info",
-        news: "📅 What's New",
-        help: "❓ Help",
-        footer_desc: "Your daily destination for exclusive Mediterranean paradise content. Updated 24/7 with the best photos and videos.",
-        quick_links: "Quick Links",
-        photos: "Photos",
-        videos: "Videos",
-        vip_subscription: "VIP Subscription",
-        mega_packs: "Mega Packs",
-        support: "Support",
-        terms: "Terms of Service",
-        privacy: "Privacy Policy",
-        contact: "Contact",
-        copyright: "© 2025 IbizaGirl.pics - All rights reserved | 18+ Adults Only",
-        vip_unlimited: "👑 Unlimited VIP Access",
-        pack_selection: "📦 MEGA PACKS - Save 70%",
-        unlock_content: "🔓 Unlock Content",
-        plan_monthly: "📅 Monthly",
-        plan_lifetime: "♾️ Lifetime",
-        best_value: "BEST VALUE",
-        save_yearly: "Save €80 per year!",
-        pack_starter: "Starter Pack",
-        pack_bronze: "Bronze Pack",
-        pack_silver: "Silver Pack",
-        pack_gold: "Gold Pack",
-        items: "items",
-        save: "Save",
-        unlimited_access: "Unlimited access",
-        hd_videos: "200+ HD photos",
-        daily_updates: "40+ HD videos",
-        no_ads: "No ads",
-        all_content: "All current and future content",
-        priority_support: "Priority support",
-        exclusive_content: "Exclusive VIP content",
-        notification_welcome: "🎉 Welcome VIP! All content has been unlocked.",
-        notification_pack: "🎉 {credits} credits added! Click any content to unlock.",
-        notification_unlocked: "{icon} Unlocked! {credits} credits remaining.",
-        payment_error: "⚠ Payment error. Please try again.",
-        preview_gallery: "🔥 Exclusive Preview - Best Ibiza Photos",
-        photos_seo_title: "📸 Paradise Photos of Ibiza",
-        gallery_description: "Explore our collection of premium Ibiza photos updated daily. Exclusive Mediterranean Spanish content with professional quality.",
-        meta_description: "Premium Ibiza gallery with 400+ photos and 80+ HD videos updated daily. Exclusive Mediterranean Spanish paradise content.",
-        seo_keywords: {
-            primary: "ibiza photos, ibiza beaches, spain tourism, mediterranean, ibiza gallery",
-            secondary: "daily photos, premium ibiza content, spain vacation, balearic islands"
-        },
-        isabella_messages: [
-            "Hello beautiful! 😘 Looking for paradise?",
-            "Pssst... VIP members see everything without blur! 👀",
-            "Ready to unlock paradise? VIP gives you instant access to everything! 🌊",
-            "Today we have 200 new photos and 40 new videos! 🎉",
-            "Just click on any blurred content to unlock it! 💕",
-            "Did you know that with Lifetime you never pay again? It's the best deal! 💎",
-            "Packs let you unlock individual content, perfect for trying out! 📦",
-            "Don't miss the daily updates at 3:00 AM! ⏰",
-            "Today's content is 🔥🔥🔥 Don't miss it!",
-            "Need help? I'm here for you, darling! 💕"
-        ]
-    },
-    de: {
-        loading: "Paradies wird geladen...",
-        subtitle: "Exklusiver Paradies-Inhalt",
-        megapack: "📦 MEGA PACKS -70%",
-        monthly: "💳 €15/Monat",
-        lifetime: "👑 Lebenslang €100",
-        welcome: "Willkommen im Paradies 🌴",
-        daily_content: "200+ Fotos und 40+ Videos TÄGLICH aktualisiert",
-        unlock_all: "🔓 Alles freischalten",
-        view_gallery: "📸 Galerie anzeigen",
-        photos_today: "Heutige Fotos",
-        updated_at: "Aktualisiert um",
-        videos_hd: "HD Videos",
-        new_content: "NEUER INHALT!",
-        total_views: "Gesamtaufrufe",
-        today: "heute",
-        updates: "Updates",
-        always_fresh: "IMMER FRISCH",
-        paradise_photos: "📸 Paradies Fotos",
-        new_today: "NEU HEUTE!",
-        exclusive_videos: "🎬 Exklusive Videos",
-        fresh_content: "FRISCHER INHALT!",
-        isabella_title: "Isabella - Dein VIP Guide",
-        vip_info: "💎 VIP Info",
-        news: "📅 Neuigkeiten",
-        help: "❓ Hilfe",
-        footer_desc: "Dein tägliches Ziel für exklusive mediterrane Paradiesinhalte. 24/7 aktualisiert mit den besten Fotos und Videos.",
-        quick_links: "Schnelllinks",
-        photos: "Fotos",
-        videos: "Videos",
-        vip_subscription: "VIP-Abonnement",
-        mega_packs: "Mega Packs",
-        support: "Support",
-        terms: "Nutzungsbedingungen",
-        privacy: "Datenschutz",
-        contact: "Kontakt",
-        copyright: "© 2025 IbizaGirl.pics - Alle Rechte vorbehalten | 18+ Nur für Erwachsene",
-        vip_unlimited: "👑 Unbegrenzter VIP-Zugang",
-        pack_selection: "📦 MEGA PACKS - Spare 70%",
-        unlock_content: "🔓 Inhalt freischalten",
-        plan_monthly: "📅 Monatlich",
-        plan_lifetime: "♾️ Lebenslang",
-        best_value: "BESTER WERT",
-        save_yearly: "Spare €80 pro Jahr!",
-        pack_starter: "Starter Paket",
-        pack_bronze: "Bronze Paket",
-        pack_silver: "Silber Paket",
-        pack_gold: "Gold Paket",
-        items: "Inhalte",
-        save: "Spare",
-        unlimited_access: "Unbegrenzter Zugang",
-        hd_videos: "200+ HD Fotos",
-        daily_updates: "40+ HD Videos",
-        no_ads: "Keine Werbung",
-        all_content: "Alle aktuellen und zukünftigen Inhalte",
-        priority_support: "Prioritäts-Support",
-        exclusive_content: "Exklusiver VIP Inhalt",
-        notification_welcome: "🎉 Willkommen VIP! Alle Inhalte wurden freigeschaltet.",
-        notification_pack: "🎉 {credits} Credits hinzugefügt! Klicke auf Inhalte zum Freischalten.",
-        notification_unlocked: "{icon} Freigeschaltet! {credits} Credits übrig.",
-        payment_error: "⚠ Zahlungsfehler. Bitte versuche es erneut.",
-        preview_gallery: "🔥 Exklusive Vorschau - Beste Ibiza Fotos",
-        photos_seo_title: "📸 Paradies Fotos von Ibiza",
-        gallery_description: "Entdecke unsere Sammlung von Premium Ibiza Fotos, die täglich aktualisiert werden. Exklusive mediterrane spanische Inhalte in professioneller Qualität.",
-        meta_description: "Premium Ibiza Galerie mit 200+ Fotos und 40+ HD Videos täglich aktualisiert. Exklusive mediterrane spanische Paradiesinhalte.",
-        seo_keywords: {
-            primary: "ibiza fotos, ibiza strände, spanien tourismus, mittelmeer, ibiza galerie",
-            secondary: "tägliche fotos, premium ibiza inhalt, spanien urlaub, balearen"
-        },
-        isabella_messages: [
-            "Hallo Schöne! 😘 Suchst du das Paradies?",
-            "Pssst... VIP-Mitglieder sehen alles ohne Unschärfe! 👀",
-            "Bereit, das Paradies freizuschalten? VIP gibt dir sofortigen Zugang zu allem! 🌊",
-            "Heute haben wir 200 neue Fotos und 40 neue Videos! 🎉",
-            "Klicke einfach auf verschwommene Inhalte, um sie freizuschalten! 💕",
-            "Wusstest du, dass du mit Lifetime nie wieder zahlst? Das ist das beste Angebot! 💎",
-            "Pakete lassen dich einzelne Inhalte freischalten, perfekt zum Ausprobieren! 📦",
-            "Verpasse nicht die täglichen Updates um 3:00 Uhr! ⏰",
-            "Der heutige Inhalt ist 🔥🔥🔥 Verpasse es nicht!",
-            "Brauchst du Hilfe? Ich bin für dich da, Liebling! 💕"
-        ]
-    },
-    it: {
-        loading: "Caricamento del paradiso...",
-        subtitle: "Contenuto Esclusivo del Paradiso",
-        megapack: "📦 MEGA PACKS -70%",
-        monthly: "💳 €15/Mese",
-        lifetime: "👑 A vita €100",
-        welcome: "Benvenuta in Paradiso 🌴",
-        daily_content: "200+ foto e 40+ video aggiornati QUOTIDIANAMENTE",
-        unlock_all: "🔓 Sblocca Tutto",
-        view_gallery: "📸 Vedi Galleria",
-        photos_today: "Foto di Oggi",
-        updated_at: "Aggiornato alle",
-        videos_hd: "Video HD",
-        new_content: "NUOVO CONTENUTO!",
-        total_views: "Visualizzazioni Totali",
-        today: "oggi",
-        updates: "Aggiornamenti",
-        always_fresh: "SEMPRE FRESCO",
-        paradise_photos: "📸 Foto del Paradiso",
-        new_today: "NUOVO OGGI!",
-        exclusive_videos: "🎬 Video Esclusivi",
-        fresh_content: "CONTENUTO FRESCO!",
-        isabella_title: "Isabella - La tua Guida VIP",
-        vip_info: "💎 Info VIP",
-        news: "📅 Novità",
-        help: "❓ Aiuto",
-        footer_desc: "La tua destinazione quotidiana per contenuti esclusivi del paradiso mediterraneo. Aggiornato 24/7 con le migliori foto e video.",
-        quick_links: "Link Rapidi",
-        photos: "Foto",
-        videos: "Video",
-        vip_subscription: "Abbonamento VIP",
-        mega_packs: "Mega Pack",
-        support: "Supporto",
-        terms: "Termini di Servizio",
-        privacy: "Privacy",
-        contact: "Contatto",
-        copyright: "© 2025 IbizaGirl.pics - Tutti i diritti riservati | 18+ Solo Adulti",
-        vip_unlimited: "👑 Accesso VIP Illimitato",
-        pack_selection: "📦 MEGA PACK - Risparmia il 70%",
-        unlock_content: "🔓 Sblocca Contenuto",
-        plan_monthly: "📅 Mensile",
-        plan_lifetime: "♾️ A vita",
-        best_value: "MIGLIOR VALORE",
-        save_yearly: "Risparmia €80 all'anno!",
-        pack_starter: "Pacchetto Starter",
-        pack_bronze: "Pacchetto Bronze",
-        pack_silver: "Pacchetto Silver",
-        pack_gold: "Pacchetto Gold",
-        items: "contenuti",
-        save: "Risparmia",
-        unlimited_access: "Accesso illimitato",
-        hd_videos: "200+ foto HD",
-        daily_updates: "40+ video HD",
-        no_ads: "Senza pubblicità",
-        all_content: "Tutti i contenuti attuali e futuri",
-        priority_support: "Supporto prioritario",
-        exclusive_content: "Contenuto esclusivo VIP",
-        notification_welcome: "🎉 Benvenuto VIP! Tutti i contenuti sono stati sbloccati.",
-        notification_pack: "🎉 {credits} crediti aggiunti! Clicca su qualsiasi contenuto per sbloccarlo.",
-        notification_unlocked: "{icon} Sbloccato! {credits} crediti rimanenti.",
-        payment_error: "⚠ Errore di pagamento. Per favore riprova.",
-        preview_gallery: "🔥 Anteprima Esclusiva - Migliori Foto Ibiza",
-        photos_seo_title: "📸 Foto del Paradiso di Ibiza",
-        gallery_description: "Esplora la nostra collezione di foto premium di Ibiza aggiornate quotidianamente. Contenuto esclusivo mediterraneo spagnolo di qualità professionale.",
-        meta_description: "Galleria premium di Ibiza con 200+ foto e 40+ video HD aggiornati quotidianamente. Contenuto esclusivo del paradiso mediterraneo spagnolo.",
-        seo_keywords: {
-            primary: "foto ibiza, spiagge ibiza, turismo spagna, mediterraneo, galleria ibiza",
-            secondary: "foto quotidiane, contenuto premium ibiza, vacanze spagna, isole baleari"
-        },
-        isabella_messages: [
-            "Ciao bella! 😘 Cerchi il paradiso?",
-            "Pssst... I membri VIP vedono tutto senza sfocatura! 👀",
-            "Pronta a sbloccare il paradiso? VIP ti dà accesso immediato a tutto! 🌊",
-            "Oggi abbiamo 200 nuove foto e 40 nuovi video! 🎉",
-            "Clicca su qualsiasi contenuto sfocato per sbloccarlo! 💕",
-            "Sapevi che con Lifetime non paghi mai più? È la migliore offerta! 💎",
-            "I pacchetti ti permettono di sbloccare singoli contenuti, perfetti per provare! 📦",
-            "Non perdere gli aggiornamenti quotidiani alle 3:00! ⏰",
-            "Il contenuto di oggi è 🔥🔥🔥 Non perderlo!",
-            "Hai bisogno di aiuto? Sono qui per te, cara! 💕"
-        ]
-    },
-    fr: {
-        loading: "Chargement du paradis...",
-        subtitle: "Contenu Exclusif du Paradis",
-        megapack: "📦 MEGA PACKS -70%",
-        monthly: "💳 €15/Mois",
-        lifetime: "👑 À vie €100",
-        welcome: "Bienvenue au Paradis 🌴",
-        daily_content: "200+ photos et 40+ vidéos mises à jour QUOTIDIENNEMENT",
-        unlock_all: "🔓 Tout Débloquer",
-        view_gallery: "📸 Voir la Galerie",
-        photos_today: "Photos du Jour",
-        updated_at: "Mis à jour à",
-        videos_hd: "Vidéos HD",
-        new_content: "NOUVEAU CONTENU!",
-        total_views: "Vues Totales",
-        today: "aujourd'hui",
-        updates: "Mises à jour",
-        always_fresh: "TOUJOURS FRAIS",
-        paradise_photos: "📸 Photos du Paradis",
-        new_today: "NOUVEAU AUJOURD'HUI!",
-        exclusive_videos: "🎬 Vidéos Exclusives",
-        fresh_content: "CONTENU FRAIS!",
-        isabella_title: "Isabella - Votre Guide VIP",
-        vip_info: "💎 Info VIP",
-        news: "📅 Nouveautés",
-        help: "❓ Aide",
-        footer_desc: "Votre destination quotidienne pour du contenu exclusif du paradis méditerranéen. Mis à jour 24/7 avec les meilleures photos et vidéos.",
-        quick_links: "Liens Rapides",
-        photos: "Photos",
-        videos: "Vidéos",
-        vip_subscription: "Abonnement VIP",
-        mega_packs: "Mega Packs",
-        support: "Support",
-        terms: "Conditions d'utilisation",
-        privacy: "Confidentialité",
-        contact: "Contact",
-        copyright: "© 2025 IbizaGirl.pics - Tous droits réservés | 18+ Adultes uniquement",
-        vip_unlimited: "👑 Accès VIP Illimité",
-        pack_selection: "📦 MEGA PACKS - Économisez 70%",
-        unlock_content: "🔓 Débloquer le Contenu",
-        plan_monthly: "📅 Mensuel",
-        plan_lifetime: "♾️ À vie",
-        best_value: "MEILLEURE VALEUR",
-        save_yearly: "Économisez €80 par an!",
-        pack_starter: "Pack Débutant",
-        pack_bronze: "Pack Bronze",
-        pack_silver: "Pack Argent",
-        pack_gold: "Pack Or",
-        items: "contenus",
-        save: "Économisez",
-        unlimited_access: "Accès illimité",
-        hd_videos: "200+ photos HD",
-        daily_updates: "40+ vidéos HD",
-        no_ads: "Sans publicité",
-        all_content: "Tout le contenu actuel et futur",
-        priority_support: "Support prioritaire",
-        exclusive_content: "Contenu exclusif VIP",
-        notification_welcome: "🎉 Bienvenue VIP! Tout le contenu a été débloqué.",
-        notification_pack: "🎉 {credits} crédits ajoutés! Cliquez sur n'importe quel contenu pour le débloquer.",
-        notification_unlocked: "{icon} Débloqué! {credits} crédits restants.",
-        payment_error: "⚠ Erreur de paiement. Veuillez réessayer.",
-        preview_gallery: "🔥 Aperçu Exclusif - Meilleures Photos Ibiza",
-        photos_seo_title: "📸 Photos du Paradis d'Ibiza",
-        gallery_description: "Explorez notre collection de photos premium d'Ibiza mises à jour quotidiennement. Contenu exclusif méditerranéen espagnol de qualité professionnelle.",
-        meta_description: "Galerie premium d'Ibiza avec 200+ photos et 40+ vidéos HD mises à jour quotidiennement. Contenu exclusif du paradis méditerranéen espagnol.",
-        seo_keywords: {
-            primary: "photos ibiza, plages ibiza, tourisme espagne, méditerranée, galerie ibiza",
-            secondary: "photos quotidiennes, contenu premium ibiza, vacances espagne, îles baléares"
-        },
-        isabella_messages: [
-            "Salut belle! 😘 Tu cherches le paradis?",
-            "Pssst... Les membres VIP voient tout sans flou! 👀",
-            "Prête à débloquer le paradis? VIP te donne un accès instantané à tout! 🌊",
-            "Aujourd'hui nous avons 200 nouvelles photos et 40 nouvelles vidéos! 🎉",
-            "Clique simplement sur n'importe quel contenu flou pour le débloquer! 💕",
-            "Savais-tu qu'avec Lifetime tu ne paies plus jamais? C'est la meilleure offre! 💎",
-            "Les packs te permettent de débloquer du contenu individuel, parfait pour essayer! 📦",
-            "Ne manque pas les mises à jour quotidiennes à 3h00! ⏰",
-            "Le contenu d'aujourd'hui est 🔥🔥🔥 Ne le manque pas!",
-            "Besoin d'aide? Je suis là pour toi, chérie! 💕"
-        ]
-    },
-    pt: {
-        loading: "Carregando o paraíso...",
-        subtitle: "Conteúdo Exclusivo do Paraíso",
-        megapack: "📦 MEGA PACKS -70%",
-        monthly: "💳 €15/Mês",
-        lifetime: "👑 Vitalício €100",
-        welcome: "Bem-vinda ao Paraíso 🌴",
-        daily_content: "200+ fotos e 40+ vídeos atualizados DIARIAMENTE",
-        unlock_all: "🔓 Desbloquear Tudo",
-        view_gallery: "📸 Ver Galeria",
-        photos_today: "Fotos de Hoje",
-        updated_at: "Atualizado às",
-        videos_hd: "Vídeos HD",
-        new_content: "NOVO CONTEÚDO!",
-        total_views: "Visualizações Totais",
-        today: "hoje",
-        updates: "Atualizações",
-        always_fresh: "SEMPRE FRESCO",
-        paradise_photos: "📸 Fotos do Paraíso",
-        new_today: "NOVO HOJE!",
-        exclusive_videos: "🎬 Vídeos Exclusivos",
-        fresh_content: "CONTEÚDO FRESCO!",
-        isabella_title: "Isabella - Sua Guia VIP",
-        vip_info: "💎 Info VIP",
-        news: "📅 Novidades",
-        help: "❓ Ajuda",
-        footer_desc: "Seu destino diário para conteúdo exclusivo do paraíso mediterrâneo. Atualizado 24/7 com as melhores fotos e vídeos.",
-        quick_links: "Links Rápidos",
-        photos: "Fotos",
-        videos: "Vídeos",
-        vip_subscription: "Assinatura VIP",
-        mega_packs: "Mega Packs",
-        support: "Suporte",
-        terms: "Termos de Serviço",
-        privacy: "Política de Privacidade",
-        contact: "Contato",
-        copyright: "© 2025 IbizaGirl.pics - Todos os direitos reservados | 18+ Apenas Adultos",
-        vip_unlimited: "👑 Acesso VIP Ilimitado",
-        pack_selection: "📦 MEGA PACKS - Economize 70%",
-        unlock_content: "🔓 Desbloquear Conteúdo",
-        plan_monthly: "📅 Mensal",
-        plan_lifetime: "♾️ Vitalício",
-        best_value: "MELHOR VALOR",
-        save_yearly: "Economize €80 por ano!",
-        pack_starter: "Pacote Starter",
-        pack_bronze: "Pacote Bronze",
-        pack_silver: "Pacote Silver",
-        pack_gold: "Pacote Gold",
-        items: "itens",
-        save: "Economize",
-        unlimited_access: "Acesso ilimitado",
-        hd_videos: "200+ fotos HD",
-        daily_updates: "40+ vídeos HD",
-        no_ads: "Sem anúncios",
-        all_content: "Todo o conteúdo atual e futuro",
-        priority_support: "Suporte prioritário",
-        exclusive_content: "Conteúdo exclusivo VIP",
-        notification_welcome: "🎉 Bem-vindo VIP! Todo o conteúdo foi desbloqueado.",
-        notification_pack: "🎉 {credits} créditos adicionados! Clique em qualquer conteúdo para desbloquear.",
-        notification_unlocked: "{icon} Desbloqueado! {credits} créditos restantes.",
-        payment_error: "⚠ Erro no pagamento. Por favor, tente novamente.",
-        preview_gallery: "🔥 Prévia Exclusiva - Melhores Fotos Ibiza",
-        photos_seo_title: "📸 Fotos do Paraíso de Ibiza",
-        gallery_description: "Explore nossa coleção de fotos premium de Ibiza atualizadas diariamente. Conteúdo exclusivo mediterrâneo espanhol com qualidade profissional.",
-        meta_description: "Galeria premium de Ibiza com 200+ fotos e 40+ vídeos HD atualizados diariamente. Conteúdo exclusivo do paraíso mediterrâneo espanhol.",
-        seo_keywords: {
-            primary: "fotos ibiza, praias ibiza, turismo espanha, mediterrâneo, galeria ibiza",
-            secondary: "fotos diárias, conteúdo premium ibiza, férias espanha, ilhas baleares"
-        },
-        isabella_messages: [
-            "Olá linda! 😘 Procurando o paraíso?",
-            "Pssst... Membros VIP veem tudo sem borrão! 👀",
-            "Pronta para desbloquear o paraíso? VIP te dá acesso instantâneo a tudo! 🌊",
-            "Hoje temos 200 novas fotos e 40 novos vídeos! 🎉",
-            "Apenas clique em qualquer conteúdo borrado para desbloquear! 💕",
-            "Sabia que com Lifetime você nunca mais paga? É a melhor oferta! 💎",
-            "Os pacotes permitem desbloquear conteúdo individual, perfeito para experimentar! 📦",
-            "Não perca as atualizações diárias às 3:00! ⏰",
-            "O conteúdo de hoje está 🔥🔥🔥 Não perca!",
-            "Precisa de ajuda? Estou aqui para você, querida! 💕"
-        ]
-    }
-};
 
 // ============================
 // STATE MANAGEMENT
@@ -1164,9 +1165,89 @@ function startBannerSlideshow() {
 }
 
 // ============================
-// RENDER FUNCTIONS - PHOTOS
+// UTILITY FUNCTIONS
 // ============================
 
+function updateLastUpdateTime() {
+    const updateHour = document.getElementById('updateHour');
+    if (updateHour) {
+        const now = new Date();
+        const updateTime = new Date(now);
+        updateTime.setHours(3, 0, 0, 0);
+        
+        if (now.getHours() < 3) {
+            updateTime.setDate(updateTime.getDate() - 1);
+        }
+        
+        const hours = updateTime.getHours();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const displayHours = hours % 12 || 12;
+        
+        updateHour.textContent = `${displayHours}:00 ${ampm}`;
+        updateHour.setAttribute('datetime', updateTime.toISOString());
+    }
+}
+
+function initializeViewCounter() {
+    // Animated counter for total views
+    setInterval(() => {
+        const views = document.getElementById('totalViews');
+        if (views) {
+            const current = parseFloat(views.textContent.replace('M', ''));
+            const increment = Math.random() * 0.002 + 0.001; // Random increment
+            const newViews = (current + increment).toFixed(1);
+            views.textContent = `${newViews}M`;
+        }
+    }, 30000); // Update every 30 seconds
+    
+    // Update photo and video counts
+    if (state.dailyContent) {
+        const photoCount = document.getElementById('photoCount');
+        const videoCount = document.getElementById('videoCount');
+        
+        if (photoCount) photoCount.textContent = state.dailyContent.stats.dailyPhotos;
+        if (videoCount) videoCount.textContent = state.dailyContent.stats.dailyVideos;
+    }
+}
+
+function trackEvent(eventName, parameters = {}) {
+    // Google Analytics tracking
+    if (window.gtag) {
+        window.gtag('event', eventName, {
+            'event_category': 'engagement',
+            'event_label': state.currentLanguage,
+            ...parameters
+        });
+    }
+    
+    // Console logging for development
+    if (ENVIRONMENT.isDevelopment) {
+        console.log(`📊 Event: ${eventName}`, parameters);
+    }
+    
+    // Custom tracking (could be extended for other analytics)
+    if (window.customAnalytics) {
+        window.customAnalytics.track(eventName, parameters);
+    }
+}
+
+function setupScrollEffects() {
+    const header = document.getElementById('mainHeader');
+    
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 100) {
+            header?.classList.add('scrolled');
+        } else {
+            header?.classList.remove('scrolled');
+        }
+    });
+}
+
+// ============================
+// GLOBAL FUNCTIONS FOR ONCLICK
+// ============================
+window.changeLanguage = changeLanguage;
+window.scrollCarousel = scrollCarousel;
 function renderPhotosProgressive() {
     const photosGrid = document.getElementById('photosGrid');
     if (!photosGrid || !state.dailyContent) return;
@@ -1234,10 +1315,6 @@ function renderPhotosProgressive() {
     
     console.log('✅ Photos rendered successfully');
 }
-
-// ============================
-// RENDER FUNCTIONS - VIDEOS
-// ============================
 
 function renderVideosProgressive() {
     const videosGrid = document.getElementById('videosGrid');
@@ -1366,6 +1443,7 @@ function setupVideoHoverPreview() {
         });
     });
 }
+
 // ============================
 // EVENT HANDLERS
 // ============================
@@ -1548,6 +1626,19 @@ function selectPack(packType) {
 }
 
 // ============================
+// GLOBAL FUNCTIONS FOR ONCLICK
+// ============================
+
+window.handlePhotoClick = handlePhotoClick;
+window.handleVideoClick = handleVideoClick;
+window.toggleIsabella = toggleIsabella;
+window.isabellaAction = isabellaAction;
+window.showVIPModal = showVIPModal;
+window.showPackModal = showPackModal;
+window.closeModal = closeModal;
+window.selectPlan = selectPlan;
+window.selectPack = selectPack;
+// ============================
 // PAYPAL INTEGRATION SYSTEM
 // ============================
 function renderPayPalVIPButtons() {
@@ -1592,75 +1683,74 @@ function renderPayPalVIPButtons() {
         }
     }).render('#paypal-button-container-vip');
 }
-
-function renderPayPalSingleButton(contentId, contentType, contentTitle, price) {
-    const container = document.getElementById('paypal-button-container-ppv');
-    if (!container || !window.paypal) return;
+function renderPayPalPackButton(packType) {
+    const container = document.getElementById('paypal-button-container-pack');
+    if (!container || !window.paypal || !packType) return;
     
+    // Clear existing buttons
     container.innerHTML = '';
     
-    const description = `${contentTitle} - ${contentType === 'video' ? 'Video' : 'Photo'}`;
+    const pack = CONFIG.PAYPAL.PACKS[packType];
+    if (!pack) {
+        console.log('Pack not found:', packType);
+        return;
+    }
+    
+    const packDescription = 'IbizaGirl ' + packType + ' Pack - ' + pack.items + ' items';
+    const packPrice = Number(pack.price).toFixed(2);
     
     paypal.Buttons({
         createOrder: function(data, actions) {
             trackEvent('paypal_checkout_started', { 
-                type: 'single_item',
-                content_id: contentId,
-                content_type: contentType,
-                price: price
+                type: 'pack', 
+                pack: packType,
+                price: pack.price 
             });
             
             return actions.order.create({
                 purchase_units: [{
                     amount: {
-                        value: String(price.toFixed(2)),
+                        value: packPrice,
                         currency_code: CONFIG.PAYPAL.CURRENCY
                     },
-                    description: description
+                    description: packDescription
                 }]
             });
         },
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
-                console.log('Single item transaction completed');
+                console.log('Pack Transaction completed');
                 
-                // Unlock the specific content
-                unlockSingleContent(contentId);
+                // Add pack credits
+                addPackCredits(pack.items);
                 
                 // Track successful purchase
                 trackEvent('purchase_complete', {
-                    type: 'single_item',
-                    content_id: contentId,
-                    content_type: contentType,
-                    price: price,
+                    type: 'pack',
+                    pack: packType,
+                    price: pack.price,
+                    items: pack.items,
                     order_id: data.orderID
                 });
                 
                 // Show success message
                 const trans = TRANSLATIONS[state.currentLanguage];
-                const icon = contentType === 'video' ? '🎬' : '📸';
-                showNotification(`${icon} ${contentTitle} unlocked!`);
+                const message = trans.notification_pack.replace('{credits}', pack.items);
+                showNotification(message);
                 celebrateUnlock();
                 closeModal();
             });
         },
         onError: function(err) {
-            console.error('PayPal Single Item Error:', err);
+            console.error('PayPal Pack Error:', err);
             const trans = TRANSLATIONS[state.currentLanguage];
             showNotification(trans.payment_error);
-            trackEvent('payment_error', { 
-                type: 'single_item', 
-                content_id: contentId,
-                error: String(err) 
-            });
+            trackEvent('payment_error', { type: 'pack', error: String(err) });
         },
         onCancel: function(data) {
-            trackEvent('payment_cancelled', { 
-                type: 'single_item',
-                content_id: contentId 
-            });
+            trackEvent('payment_cancelled', { type: 'pack' });
         }
-    }).render('#paypal-button-container-ppv');
+    }).render('#paypal-button-container-pack');
 }
 
 // ============================
@@ -1833,10 +1923,8 @@ const isabellaBot = {
         const randomMessage = this.messages[Math.floor(Math.random() * this.messages.length)];
         this.showNotification();
         
-        // Store current addMessage function
-        const originalAddMessage = this.addMessage;
-        
-        // Temporarily override addMessage to show the random tip
+        // Add message when user opens Isabella
+        const currentMessages = this.messages;
         this.addMessage = (text) => {
             const messagesDiv = document.getElementById('isabellaMessages');
             if (messagesDiv) {
@@ -1846,11 +1934,12 @@ const isabellaBot = {
                 messagesDiv.appendChild(messageDiv);
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
             }
-            // Restore original function
-            this.addMessage = originalAddMessage;
         };
     }
 };
+
+// Make Isabella globally available
+window.isabellaBot = isabellaBot;
 // ============================
 // AD NETWORK SYSTEM (MEJORADO)
 // ============================
@@ -1950,7 +2039,7 @@ function initializeFallbackAds() {
                 console.log('✅ JuicyAds fallback loaded');
             };
             script.onerror = () => {
-                console.warn('⚠ JuicyAds fallback failed');
+                console.warn('❌ JuicyAds fallback failed');
             };
             document.head.appendChild(script);
         }
@@ -1965,7 +2054,7 @@ function initializeFallbackAds() {
                 console.log('✅ ExoClick fallback loaded');
             };
             script.onerror = () => {
-                console.warn('⚠ ExoClick fallback failed');
+                console.warn('❌ ExoClick fallback failed');
             };
             document.head.appendChild(script);
         }
@@ -1979,81 +2068,6 @@ function initializeFallbackAds() {
 // ============================
 // UTILITY FUNCTIONS
 // ============================
-
-function updateLastUpdateTime() {
-    const updateHour = document.getElementById('updateHour');
-    if (updateHour) {
-        const now = new Date();
-        const updateTime = new Date(now);
-        updateTime.setHours(3, 0, 0, 0);
-        
-        if (now.getHours() < 3) {
-            updateTime.setDate(updateTime.getDate() - 1);
-        }
-        
-        const hours = updateTime.getHours();
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-        const displayHours = hours % 12 || 12;
-        
-        updateHour.textContent = `${displayHours}:00 ${ampm}`;
-        updateHour.setAttribute('datetime', updateTime.toISOString());
-    }
-}
-
-function initializeViewCounter() {
-    // Animated counter for total views
-    setInterval(() => {
-        const views = document.getElementById('totalViews');
-        if (views) {
-            const current = parseFloat(views.textContent.replace('M', ''));
-            const increment = Math.random() * 0.002 + 0.001; // Random increment
-            const newViews = (current + increment).toFixed(1);
-            views.textContent = `${newViews}M`;
-        }
-    }, 30000); // Update every 30 seconds
-    
-    // Update photo and video counts
-    if (state.dailyContent) {
-        const photoCount = document.getElementById('photoCount');
-        const videoCount = document.getElementById('videoCount');
-        
-        if (photoCount) photoCount.textContent = state.dailyContent.stats.dailyPhotos;
-        if (videoCount) videoCount.textContent = state.dailyContent.stats.dailyVideos;
-    }
-}
-
-function trackEvent(eventName, parameters = {}) {
-    // Google Analytics tracking
-    if (window.gtag) {
-        window.gtag('event', eventName, {
-            'event_category': 'engagement',
-            'event_label': state.currentLanguage,
-            ...parameters
-        });
-    }
-    
-    // Console logging for development
-    if (ENVIRONMENT.isDevelopment) {
-        console.log(`📊 Event: ${eventName}`, parameters);
-    }
-    
-    // Custom tracking (could be extended for other analytics)
-    if (window.customAnalytics) {
-        window.customAnalytics.track(eventName, parameters);
-    }
-}
-
-function setupScrollEffects() {
-    const header = document.getElementById('mainHeader');
-    
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 100) {
-            header?.classList.add('scrolled');
-        } else {
-            header?.classList.remove('scrolled');
-        }
-    });
-}
 
 function loadSavedState() {
     try {
@@ -2153,27 +2167,11 @@ function showNotification(message) {
 }
 
 // ============================
-// GLOBAL FUNCTIONS FOR ONCLICK
+// EXPORT FOR GLOBAL ACCESS
 // ============================
-window.changeLanguage = changeLanguage;
-window.scrollCarousel = scrollCarousel;
-window.handlePhotoClick = handlePhotoClick;
-window.handleVideoClick = handleVideoClick;
-window.toggleIsabella = toggleIsabella;
-window.isabellaAction = isabellaAction;
-window.showVIPModal = showVIPModal;
-window.showPackModal = showPackModal;
-window.closeModal = closeModal;
-window.selectPlan = selectPlan;
-window.selectPack = selectPack;
-
-// Export PayPal functions
 window.renderPayPalVIPButtons = renderPayPalVIPButtons;
 window.renderPayPalPackButton = renderPayPalPackButton;
 window.renderPayPalSingleButton = renderPayPalSingleButton;
-
-// Make Isabella globally available
-window.isabellaBot = isabellaBot;
 
 // ============================
 // INITIALIZATION SYSTEM
@@ -2260,7 +2258,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ============================
 
 window.addEventListener('error', (e) => {
-    console.error('⚠ Runtime Error:', e.error);
+    console.error('❌ Runtime Error:', e.error);
     trackEvent('runtime_error', {
         message: e.message,
         filename: e.filename,
@@ -2270,7 +2268,7 @@ window.addEventListener('error', (e) => {
 });
 
 window.addEventListener('unhandledrejection', (e) => {
-    console.error('⚠ Unhandled Promise Rejection:', e.reason);
+    console.error('❌ Unhandled Promise Rejection:', e.reason);
     trackEvent('unhandled_rejection', {
         reason: e.reason?.toString() || 'Unknown rejection'
     });
@@ -2288,7 +2286,7 @@ if ('serviceWorker' in navigator && ENVIRONMENT.isProduction) {
                 trackEvent('sw_registered', { scope: registration.scope });
             })
             .catch(error => {
-                console.error('⚠ Service Worker registration failed:', error);
+                console.error('❌ Service Worker registration failed:', error);
                 trackEvent('sw_registration_failed', { error: error.toString() });
             });
     });
@@ -2377,7 +2375,7 @@ window.galleryDebug = {
             changeLanguage(lang);
             console.log(`🌍 Language changed to: ${lang}`);
         } else {
-            console.error(`⚠ Language not supported: ${lang}`);
+            console.error(`❌ Language not supported: ${lang}`);
             console.log('Available languages:', Object.keys(TRANSLATIONS));
         }
     },
@@ -2471,7 +2469,7 @@ window.galleryDebug = {
         if (window.paypal) {
             console.log('✅ PayPal SDK is available');
         } else {
-            console.log('⚠ PayPal SDK not loaded');
+            console.log('❌ PayPal SDK not loaded');
         }
     },
     
@@ -2487,7 +2485,7 @@ window.galleryDebug = {
             // Test message
             window.isabellaBot.addMessage('🧪 Test message from debug console!');
         } else {
-            console.log('⚠ Isabella not initialized');
+            console.log('❌ Isabella not initialized');
         }
     },
     
@@ -2521,37 +2519,6 @@ window.galleryDebug = {
 };
 
 // ============================
-// EXPORT FOR GLOBAL ACCESS
-// ============================
-
-// Export main functions
-window.state = state;
-window.TRANSLATIONS = TRANSLATIONS;
-window.CONFIG = CONFIG;
-window.ENVIRONMENT = ENVIRONMENT;
-
-// Export utility functions  
-window.trackEvent = trackEvent;
-window.showNotification = showNotification;
-window.celebrateUnlock = celebrateUnlock;
-window.loadSavedState = loadSavedState;
-window.saveUnlockedContent = saveUnlockedContent;
-
-// Export content functions
-window.getDailyRotation = getDailyRotation;
-window.renderPhotosProgressive = renderPhotosProgressive;
-window.renderVideosProgressive = renderVideosProgressive;
-window.renderTeaserCarousel = renderTeaserCarousel;
-
-// Export unlock functions
-window.activateVIP = activateVIP;
-window.unlockAllContent = unlockAllContent;
-window.unlockSingleContent = unlockSingleContent;
-window.addPackCredits = addPackCredits;
-window.usePackCredit = usePackCredit;
-window.updateCreditsDisplay = updateCreditsDisplay;
-
-// ============================
 // CONSOLE WELCOME MESSAGE
 // ============================
 
@@ -2583,6 +2550,37 @@ console.log(`
         
 🌊 ===============================================
 `);
+
+// ============================
+// MAKE EVERYTHING GLOBALLY AVAILABLE
+// ============================
+
+// Export main functions
+window.state = state;
+window.TRANSLATIONS = TRANSLATIONS;
+window.CONFIG = CONFIG;
+window.ENVIRONMENT = ENVIRONMENT;
+
+// Export utility functions  
+window.trackEvent = trackEvent;
+window.showNotification = showNotification;
+window.celebrateUnlock = celebrateUnlock;
+window.loadSavedState = loadSavedState;
+window.saveUnlockedContent = saveUnlockedContent;
+
+// Export content functions
+window.getDailyRotation = getDailyRotation;
+window.renderPhotosProgressive = renderPhotosProgressive;
+window.renderVideosProgressive = renderVideosProgressive;
+window.renderTeaserCarousel = renderTeaserCarousel;
+
+// Export unlock functions
+window.activateVIP = activateVIP;
+window.unlockAllContent = unlockAllContent;
+window.unlockSingleContent = unlockSingleContent;
+window.addPackCredits = addPackCredits;
+window.usePackCredit = usePackCredit;
+window.updateCreditsDisplay = updateCreditsDisplay;
 
 console.log('✅ All systems initialized and ready!');
 
