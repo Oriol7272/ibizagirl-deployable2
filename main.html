@@ -94,8 +94,154 @@
         gtag('js', new Date());
         gtag('config', 'G-DBXYNPBSPY');
     </script>
+    
+    <style>
+        /* Ad Blocker Detection Message Styles */
+        .adblocker-message {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.95), rgba(255, 105, 180, 0.95));
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(255, 107, 53, 0.4);
+            z-index: 9999;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: slideDown 0.5s ease;
+        }
+        
+        .adblocker-message.active {
+            display: block;
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateX(-50%) translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .adblocker-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .adblocker-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            opacity: 0.95;
+        }
+        
+        .adblocker-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .adblocker-btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .adblocker-btn.primary {
+            background: white;
+            color: #ff6b35;
+        }
+        
+        .adblocker-btn.primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
+        }
+        
+        .adblocker-btn.secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .adblocker-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .adblocker-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .adblocker-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        @media (max-width: 768px) {
+            .adblocker-message {
+                top: 60px;
+                padding: 1rem;
+            }
+            
+            .adblocker-title {
+                font-size: 1.1rem;
+            }
+            
+            .adblocker-text {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Ad Blocker Detection Message -->
+    <div class="adblocker-message" id="adblockerMessage">
+        <button class="adblocker-close" onclick="closeAdBlockerMessage()">×</button>
+        <div class="adblocker-title">
+            <span>🛡️</span>
+            <span>Ad Blocker Detectado</span>
+        </div>
+        <div class="adblocker-text">
+            Hemos detectado que estás usando un bloqueador de anuncios. 
+            Los anuncios nos ayudan a mantener el sitio gratuito y con contenido actualizado diariamente.
+        </div>
+        <div class="adblocker-buttons">
+            <button class="adblocker-btn primary" onclick="showDisableInstructions()">
+                🔧 Cómo Desactivar
+            </button>
+            <button class="adblocker-btn secondary" onclick="continueWithAdBlocker()">
+                Continuar Así
+            </button>
+        </div>
+    </div>
+
     <!-- Language Selector -->
     <div class="language-selector">
         <select id="languageSelect" onchange="changeLanguage(this.value)">
@@ -414,41 +560,96 @@
     <script src="main-script.js" defer></script>
     
     <!-- Ad Network Verification Script -->
+    <script src="ad-verification.js"></script>
+    
+    <!-- Ad Blocker Message Functions -->
     <script>
-        // Verificar carga de ad networks después de 3 segundos
-        setTimeout(function() {
-            console.log('🔍 Verificando Ad Networks...');
+        // Escuchar el evento de verificación de ad networks
+        window.addEventListener('adNetworksVerified', function(event) {
+            const status = event.detail;
             
-            if (window.juicyads_loaded) {
-                console.log('✅ JuicyAds: Cargado correctamente');
-            } else {
-                console.warn('⚠️ JuicyAds: No cargado - posible ad blocker');
-                document.querySelectorAll('.juicyads').forEach(function(el) {
-                    if (!el.innerHTML) {
-                        el.innerHTML = '<div class="ad-placeholder">Advertisement</div>';
-                    }
+            // Mostrar mensaje si se detectó ad blocker o tracking protection
+            if (status.adBlockerDetected || status.trackingProtection) {
+                showAdBlockerMessage();
+            }
+            
+            // Log del estado
+            console.log('📊 Ad Networks Status:', status);
+        });
+        
+        // Mostrar mensaje de ad blocker
+        function showAdBlockerMessage() {
+            const message = document.getElementById('adblockerMessage');
+            if (message) {
+                message.classList.add('active');
+                
+                // Guardar en localStorage que ya se mostró
+                localStorage.setItem('adblocker_message_shown', Date.now());
+            }
+        }
+        
+        // Cerrar mensaje de ad blocker
+        function closeAdBlockerMessage() {
+            const message = document.getElementById('adblockerMessage');
+            if (message) {
+                message.classList.remove('active');
+            }
+        }
+        
+        // Mostrar instrucciones para desactivar ad blocker
+        function showDisableInstructions() {
+            alert(`Para desactivar tu Ad Blocker:
+            
+1. Haz clic en el icono del Ad Blocker en tu navegador
+2. Selecciona "Pausar en este sitio" o "Desactivar en ibizagirl.pics"
+3. Recarga la página
+            
+Navegadores populares:
+• Chrome: uBlock/AdBlock icono → Desactivar
+• Firefox: Escudo → Desactivar protección
+• Safari: Preferencias → Sitios web → Contenido`);
+        }
+        
+        // Continuar con ad blocker activo
+        function continueWithAdBlocker() {
+            closeAdBlockerMessage();
+            
+            // Marcar que el usuario decidió continuar
+            localStorage.setItem('adblocker_continue', 'true');
+            
+            // Opcional: trackear evento
+            if (window.gtag) {
+                gtag('event', 'adblocker_continue', {
+                    'event_category': 'ads',
+                    'event_label': 'user_continued_with_adblocker'
                 });
             }
+        }
+        
+        // Check si ya se mostró el mensaje recientemente (24 horas)
+        function shouldShowAdBlockerMessage() {
+            const lastShown = localStorage.getItem('adblocker_message_shown');
+            const userContinued = localStorage.getItem('adblocker_continue');
             
-            if (window.exoclick_loaded || typeof ExoLoader !== 'undefined') {
-                console.log('✅ ExoClick: Cargado correctamente');
-            } else {
-                console.warn('⚠️ ExoClick: No cargado - posible ad blocker');
+            if (userContinued === 'true') {
+                return false; // Usuario ya decidió continuar
             }
             
-            if (window.eroadvertising_loaded) {
-                console.log('✅ EroAdvertising: Cargado correctamente');
-            } else {
-                console.warn('⚠️ EroAdvertising: No cargado - posible ad blocker');
+            if (!lastShown) {
+                return true; // Nunca se mostró
             }
             
-            // Mostrar placeholders si no hay ads
-            document.querySelectorAll('.ad-container').forEach(function(container) {
-                if (container.children.length === 0 || container.innerHTML.trim() === '') {
-                    container.innerHTML = '<div class="ad-placeholder">Advertisement Space</div>';
-                }
-            });
-        }, 3000);
+            const dayInMs = 24 * 60 * 60 * 1000;
+            const timeSinceShown = Date.now() - parseInt(lastShown);
+            
+            return timeSinceShown > dayInMs; // Mostrar solo si pasó más de 24 horas
+        }
+        
+        // Verificar si se debe mostrar el mensaje
+        if (shouldShowAdBlockerMessage()) {
+            // El evento adNetworksVerified manejará la lógica
+            console.log('Ad blocker message ready to show if needed');
+        }
     </script>
 </body>
 </html>
