@@ -2,8 +2,7 @@
   "name": "IbizaGirl.pics - Galería Premium Ibiza",
   "short_name": "IbizaGirl",
   "description": "Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo español.",
-  "version": "1.2.0",
-  "manifest_version": 2,
+  "version": "1.4.0",
   "start_url": "/?utm_source=pwa",
   "scope": "/",
   "display": "standalone",
@@ -12,8 +11,15 @@
   "background_color": "#001f3f",
   "lang": "es-ES",
   "dir": "ltr",
+  "id": "ibizagirl-pics-pwa",
   
   "icons": [
+    {
+      "src": "/public/assets/full/bikini.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
     {
       "src": "/public/assets/full/bikini.jpg",
       "sizes": "192x192",
@@ -24,7 +30,7 @@
       "src": "/public/assets/full/bikbanner.jpg",
       "sizes": "512x512",
       "type": "image/jpeg",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/public/assets/full/bikini3.jpg",
@@ -41,6 +47,12 @@
     {
       "src": "/public/assets/full/backbikini.jpg",
       "sizes": "72x72",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/public/assets/full/bikini.jpg",
+      "sizes": "48x48",
       "type": "image/jpeg",
       "purpose": "any"
     }
@@ -66,7 +78,6 @@
   "categories": [
     "photo",
     "entertainment",
-    "travel",
     "lifestyle"
   ],
   
@@ -115,38 +126,27 @@
   "related_applications": [],
   "prefer_related_applications": false,
   
-  "protocol_handlers": [
-    {
-      "protocol": "web+ibizagirl",
-      "url": "/?url=%s"
-    }
-  ],
-  
-  "share_target": {
-    "action": "/share",
-    "method": "POST",
-    "enctype": "multipart/form-data",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url"
-    }
-  },
-  
-  "file_handlers": [
-    {
-      "action": "/handle-image",
-      "accept": {
-        "image/*": [".jpg", ".jpeg", ".png", ".webp", ".gif"]
-      }
-    }
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
   ],
   
   "edge_side_panel": {
-    "preferred_width": 350
+    "preferred_width": 400
   },
   
   "launch_handler": {
     "client_mode": ["focus-existing", "auto"]
+  },
+  
+  "handle_links": "preferred",
+  
+  "experimental": {
+    "scope_extensions": [
+      {
+        "origin": "*.ibizagirl.pics"
+      }
+    ]
   }
 }
