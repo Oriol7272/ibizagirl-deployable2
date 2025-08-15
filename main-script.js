@@ -1,9 +1,9 @@
 // ============================
-// IBIZAGIRL.PICS MAIN SCRIPT v14.3.0 FINAL FIXED
-// Corrección definitiva de rutas - SIN public/assets
+// IBIZAGIRL.PICS MAIN SCRIPT v14.3.1 CRITICAL FIX
+// Corrección de extensiones de archivo .jpg a .webp
 // ============================
 
-console.log('🌊 IbizaGirl.pics v14.3.0 FINAL FIXED - Loading Paradise Gallery...');
+console.log('🌊 IbizaGirl.pics v14.3.1 CRITICAL FIX - Loading Paradise Gallery...');
 
 // ============================
 // ENVIRONMENT DETECTION
@@ -19,6 +19,12 @@ const ENVIRONMENT = {
 };
 
 console.log('🌍 Environment:', ENVIRONMENT.isDevelopment ? 'Development' : 'Production');
+
+// ============================
+// ARCHIVOS BANNER Y TEASER CORREGIDOS - EXTENSIÓN .webp
+// ============================
+const BANNER_IMAGES = ['bikbanner.webp', 'bikbanner2.webp', 'backbikini.webp', 'bikini.webp', 'bikini3.webp', 'bikini5.webp'];
+const TEASER_IMAGES = ['bikini.webp', 'bikini3.webp', 'bikini5.webp', 'backbikini.webp', 'bikbanner.webp', 'bikbanner2.webp'];
 
 // ============================
 // MULTI-LANGUAGE TRANSLATIONS (COMPLETO)
@@ -245,14 +251,12 @@ const CONFIG = {
 };
 
 // ============================
-// COMPLETE CONTENT POOLS - USANDO ARRAYS DE CONTENT-DATA.JS CORREGIDOS
+// COMPLETE CONTENT POOLS
 // ============================
 
 // Arrays temporales hasta que content-data.js esté corregido
 const ALL_PHOTOS_POOL = [];
 const ALL_VIDEOS_POOL = [];
-const BANNER_IMAGES = ['bikbanner.jpg', 'bikbanner2.jpg', 'backbikini.jpg', 'bikini.jpg', 'bikini3.jpg', 'bikini5.jpg'];
-const TEASER_IMAGES = ['bikini.jpg', 'bikini3.jpg', 'bikini5.jpg', 'backbikini.jpg', 'bikbanner.jpg', 'bikbanner2.jpg'];
 
 // Intentar cargar desde window si están disponibles
 if (typeof window.ALL_PHOTOS_POOL !== 'undefined' && Array.isArray(window.ALL_PHOTOS_POOL)) {
@@ -261,7 +265,7 @@ if (typeof window.ALL_PHOTOS_POOL !== 'undefined' && Array.isArray(window.ALL_PH
 } else {
     // Fallback: generar lista de ejemplo
     for (let i = 0; i < 200; i++) {
-        ALL_PHOTOS_POOL.push(`photo_${i}.jpg`);
+        ALL_PHOTOS_POOL.push(`photo_${i}.webp`); // Cambiado a .webp
     }
     console.warn('⚠️ Using fallback photo pool');
 }
@@ -442,7 +446,7 @@ function renderPhotosProgressive() {
                      alt="Paradise Photo ${index + 1}"
                      style="filter: ${isUnlocked ? 'none' : `blur(${CONFIG.CONTENT.BLUR_PHOTO}px)`};"
                      loading="lazy"
-                     onerror="this.src='full/bikini.jpg'">
+                     onerror="this.src='full/bikini.webp'">
                 
                 ${!isUnlocked ? `
                     <div class="lock-overlay">
@@ -494,7 +498,7 @@ function renderVideosProgressive() {
             videoPath = `uncensored-videos/${video}`;
         }
         
-        // Use banner image as poster - SIN public/assets
+        // Use banner image as poster - Corregido a .webp
         const posterImage = BANNER_IMAGES[index % BANNER_IMAGES.length];
         
         videosHTML += `
@@ -570,7 +574,7 @@ function renderTeaserCarousel() {
                      src="full/${teaser}" 
                      alt="Preview ${index + 1}"
                      loading="lazy"
-                     onerror="this.src='full/bikini.jpg'">
+                     onerror="this.src='full/bikini.webp'">
                 
                 <div class="teaser-overlay">
                     <div class="teaser-info">
@@ -1324,7 +1328,7 @@ window.scrollCarousel = scrollCarousel;
 // ============================
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🎨 Initializing Paradise Gallery v14.3.0 FINAL FIXED...');
+    console.log('🎨 Initializing Paradise Gallery v14.3.1 CRITICAL FIX...');
     
     // Load saved state first
     loadSavedState();
@@ -1379,8 +1383,8 @@ document.addEventListener('DOMContentLoaded', () => {
     changeLanguage(state.currentLanguage);
     
     console.log('✅ Paradise Gallery loaded successfully!');
-    console.log(`🌊 Version: 14.3.0 FINAL FIXED - ${CONFIG.CONTENT.DAILY_PHOTOS} fotos + ${CONFIG.CONTENT.DAILY_VIDEOS} videos diarios`);
-    console.log('🔧 Paths corrected: NO public/assets prefix');
+    console.log(`🌊 Version: 14.3.1 CRITICAL FIX - ${CONFIG.CONTENT.DAILY_PHOTOS} fotos + ${CONFIG.CONTENT.DAILY_VIDEOS} videos diarios`);
+    console.log('🔧 Critical fix: Changed .jpg to .webp for all fallback images');
 });
 
 // ============================
@@ -1404,4 +1408,4 @@ window.addEventListener('unhandledrejection', (e) => {
     });
 });
 
-console.log('✅ Script loaded and ready with correct paths (NO public/assets)!');
+console.log('✅ Script loaded and ready with CRITICAL FIX (.webp extension)!');
