@@ -271,7 +271,7 @@ const TRANSLATIONS = {
             "Der heutige Inhalt ist 🔥🔥🔥 Verpasse es nicht!",
             "Brauchst du Hilfe? Ich bin für dich da, Liebling! 💕"
         ]
-    }
+    },
     it: {
         loading: "Caricamento del paradiso...",
         subtitle: "Contenuto Esclusivo del Paradiso",
