@@ -1,9 +1,9 @@
 // ============================
-// IBIZAGIRL.PICS MAIN SCRIPT v14.2.0 FINAL FIX
-// Corrección definitiva de rutas - NO PUBLIC/ASSETS
+// IBIZAGIRL.PICS MAIN SCRIPT v14.3.0 FINAL FIXED
+// Corrección definitiva de rutas - SIN public/assets
 // ============================
 
-console.log('🌊 IbizaGirl.pics v14.2.0 FINAL - Loading Paradise Gallery...');
+console.log('🌊 IbizaGirl.pics v14.3.0 FINAL FIXED - Loading Paradise Gallery...');
 
 // ============================
 // ENVIRONMENT DETECTION
@@ -245,7 +245,7 @@ const CONFIG = {
 };
 
 // ============================
-// COMPLETE CONTENT POOLS - USANDO ARRAYS DE CONTENT-DATA.JS
+// COMPLETE CONTENT POOLS - USANDO ARRAYS DE CONTENT-DATA.JS CORREGIDOS
 // ============================
 
 // Arrays temporales hasta que content-data.js esté corregido
@@ -397,7 +397,7 @@ function getDailyRotation() {
 }
 
 // ============================
-// RENDER FUNCTIONS - RUTAS CORREGIDAS
+// RENDER FUNCTIONS - RUTAS CORREGIDAS SIN public/assets
 // ============================
 
 function renderPhotosProgressive() {
@@ -420,13 +420,11 @@ function renderPhotosProgressive() {
         
         // Determinar la ruta correcta - SIN public/assets
         let imagePath = photo;
-        if (photo.startsWith('uncensored/')) {
-            imagePath = photo;
-        } else if (photo.startsWith('full/')) {
-            imagePath = photo;
-        } else {
-            // Si no tiene prefijo, asumir que es de uncensored
-            imagePath = `uncensored/${photo}`;
+        
+        // Si la foto ya viene con ruta completa (full/ o uncensored/), usarla tal como está
+        if (!photo.startsWith('full/') && !photo.startsWith('uncensored/')) {
+            // Si no tiene prefijo, asumir que es de la carpeta full para preview
+            imagePath = `full/${photo}`;
         }
         
         photosHTML += `
@@ -492,9 +490,7 @@ function renderVideosProgressive() {
         
         // Determinar la ruta correcta del video - SIN public/assets
         let videoPath = video;
-        if (video.startsWith('uncensored-videos/')) {
-            videoPath = video;
-        } else {
+        if (!video.startsWith('uncensored-videos/')) {
             videoPath = `uncensored-videos/${video}`;
         }
         
@@ -625,7 +621,7 @@ function setupVideoHoverPreview() {
 }
 
 // ============================
-// EVENT HANDLERS - RUTAS CORREGIDAS
+// EVENT HANDLERS - RUTAS CORREGIDAS SIN public/assets
 // ============================
 
 function handlePhotoClick(id, filename, index) {
@@ -638,7 +634,7 @@ function handlePhotoClick(id, filename, index) {
     if (state.isVIP || state.unlockedContent.has(id)) {
         // Abrir imagen completa - SIN public/assets
         let imagePath = filename;
-        if (!filename.startsWith('uncensored/')) {
+        if (!filename.startsWith('uncensored/') && !filename.startsWith('full/')) {
             imagePath = `uncensored/${filename}`;
         }
         window.open(imagePath, '_blank');
@@ -1328,7 +1324,7 @@ window.scrollCarousel = scrollCarousel;
 // ============================
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🎨 Initializing Paradise Gallery v14.2.0 FINAL...');
+    console.log('🎨 Initializing Paradise Gallery v14.3.0 FINAL FIXED...');
     
     // Load saved state first
     loadSavedState();
@@ -1383,8 +1379,8 @@ document.addEventListener('DOMContentLoaded', () => {
     changeLanguage(state.currentLanguage);
     
     console.log('✅ Paradise Gallery loaded successfully!');
-    console.log(`🌊 Version: 14.2.0 FINAL - ${CONFIG.CONTENT.DAILY_PHOTOS} fotos + ${CONFIG.CONTENT.DAILY_VIDEOS} videos diarios`);
-    console.log('📁 Paths corrected: NO public/assets prefix');
+    console.log(`🌊 Version: 14.3.0 FINAL FIXED - ${CONFIG.CONTENT.DAILY_PHOTOS} fotos + ${CONFIG.CONTENT.DAILY_VIDEOS} videos diarios`);
+    console.log('🔧 Paths corrected: NO public/assets prefix');
 });
 
 // ============================
@@ -1408,4 +1404,4 @@ window.addEventListener('unhandledrejection', (e) => {
     });
 });
 
-console.log('✅ Script loaded and ready with correct paths!');
+console.log('✅ Script loaded and ready with correct paths (NO public/assets)!');
