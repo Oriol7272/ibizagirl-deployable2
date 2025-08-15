@@ -1,9 +1,9 @@
 // ============================
-// IBIZAGIRL.PICS MAIN SCRIPT v14.1.0 FIXED
-// Corrección de errores de carga de contenido
+// IBIZAGIRL.PICS MAIN SCRIPT v14.2.0 FINAL FIX
+// Corrección definitiva de rutas - NO PUBLIC/ASSETS
 // ============================
 
-console.log('🌊 IbizaGirl.pics v14.1.0 FIXED - Loading Paradise Gallery...');
+console.log('🌊 IbizaGirl.pics v14.2.0 FINAL - Loading Paradise Gallery...');
 
 // ============================
 // ENVIRONMENT DETECTION
@@ -397,7 +397,7 @@ function getDailyRotation() {
 }
 
 // ============================
-// RENDER FUNCTIONS
+// RENDER FUNCTIONS - RUTAS CORREGIDAS
 // ============================
 
 function renderPhotosProgressive() {
@@ -418,13 +418,15 @@ function renderPhotosProgressive() {
         const views = Math.floor(Math.random() * 15000) + 5000;
         const likes = Math.floor(Math.random() * 2000) + 500;
         
-        // Determinar la ruta correcta de la imagen
+        // Determinar la ruta correcta - SIN public/assets
         let imagePath = photo;
-        if (!photo.startsWith('http') && !photo.startsWith('/')) {
-            // Si es de uncensored
-            if (photo.includes('.webp') || photo.includes('.jpg')) {
-                imagePath = photo.includes('uncensored/') ? photo : `uncensored/${photo}`;
-            }
+        if (photo.startsWith('uncensored/')) {
+            imagePath = photo;
+        } else if (photo.startsWith('full/')) {
+            imagePath = photo;
+        } else {
+            // Si no tiene prefijo, asumir que es de uncensored
+            imagePath = `uncensored/${photo}`;
         }
         
         photosHTML += `
@@ -438,11 +440,11 @@ function renderPhotosProgressive() {
                 ${isNew ? `<span class="new-badge">${trans.new_today || 'NEW TODAY!'}</span>` : ''}
                 
                 <img class="item-media" 
-                     src="public/assets/${imagePath}" 
+                     src="${imagePath}" 
                      alt="Paradise Photo ${index + 1}"
                      style="filter: ${isUnlocked ? 'none' : `blur(${CONFIG.CONTENT.BLUR_PHOTO}px)`};"
                      loading="lazy"
-                     onerror="this.src='public/assets/full/bikini.jpg'">
+                     onerror="this.src='full/bikini.jpg'">
                 
                 ${!isUnlocked ? `
                     <div class="lock-overlay">
@@ -488,15 +490,15 @@ function renderVideosProgressive() {
         const views = Math.floor(Math.random() * 25000) + 8000;
         const likes = Math.floor(Math.random() * 3000) + 800;
         
-        // Determinar la ruta correcta del video
+        // Determinar la ruta correcta del video - SIN public/assets
         let videoPath = video;
-        if (!video.startsWith('http') && !video.startsWith('/')) {
-            if (video.includes('.mp4')) {
-                videoPath = video.includes('uncensored-videos/') ? video : `uncensored-videos/${video}`;
-            }
+        if (video.startsWith('uncensored-videos/')) {
+            videoPath = video;
+        } else {
+            videoPath = `uncensored-videos/${video}`;
         }
         
-        // Use banner image as poster
+        // Use banner image as poster - SIN public/assets
         const posterImage = BANNER_IMAGES[index % BANNER_IMAGES.length];
         
         videosHTML += `
@@ -514,9 +516,9 @@ function renderVideosProgressive() {
                        loop 
                        playsinline
                        preload="metadata"
-                       poster="public/assets/full/${posterImage}"
+                       poster="full/${posterImage}"
                        style="filter: ${isUnlocked ? 'none' : `blur(${CONFIG.CONTENT.BLUR_VIDEO}px)`};">
-                    <source src="public/assets/${videoPath}" type="video/mp4">
+                    <source src="${videoPath}" type="video/mp4">
                     Tu navegador no soporta el elemento video.
                 </video>
                 
@@ -565,13 +567,14 @@ function renderTeaserCarousel() {
         const views = Math.floor(Math.random() * 25000) + 10000;
         const likes = Math.floor(Math.random() * 5000) + 1000;
         
+        // SIN public/assets
         teaserHTML += `
             <div class="teaser-item" data-index="${index}">
                 <img class="item-media" 
-                     src="public/assets/full/${teaser}" 
+                     src="full/${teaser}" 
                      alt="Preview ${index + 1}"
                      loading="lazy"
-                     onerror="this.src='public/assets/full/bikini.jpg'">
+                     onerror="this.src='full/bikini.jpg'">
                 
                 <div class="teaser-overlay">
                     <div class="teaser-info">
@@ -622,7 +625,7 @@ function setupVideoHoverPreview() {
 }
 
 // ============================
-// EVENT HANDLERS
+// EVENT HANDLERS - RUTAS CORREGIDAS
 // ============================
 
 function handlePhotoClick(id, filename, index) {
@@ -633,9 +636,12 @@ function handlePhotoClick(id, filename, index) {
     });
     
     if (state.isVIP || state.unlockedContent.has(id)) {
-        // Abrir imagen completa
-        const imagePath = filename.includes('uncensored/') ? filename : `uncensored/${filename}`;
-        window.open(`public/assets/${imagePath}`, '_blank');
+        // Abrir imagen completa - SIN public/assets
+        let imagePath = filename;
+        if (!filename.startsWith('uncensored/')) {
+            imagePath = `uncensored/${filename}`;
+        }
+        window.open(imagePath, '_blank');
         trackEvent('photo_view', { photo_id: id, photo_index: index });
     } else if (state.packCredits > 0) {
         usePackCredit(id, 'photo');
@@ -652,9 +658,12 @@ function handleVideoClick(id, filename, index) {
     });
     
     if (state.isVIP || state.unlockedContent.has(id)) {
-        // Abrir video completo
-        const videoPath = filename.includes('uncensored-videos/') ? filename : `uncensored-videos/${filename}`;
-        window.open(`public/assets/${videoPath}`, '_blank');
+        // Abrir video completo - SIN public/assets
+        let videoPath = filename;
+        if (!filename.startsWith('uncensored-videos/')) {
+            videoPath = `uncensored-videos/${filename}`;
+        }
+        window.open(videoPath, '_blank');
         trackEvent('video_view', { video_id: id, video_index: index });
     } else if (state.packCredits > 0) {
         usePackCredit(id, 'video');
@@ -662,6 +671,36 @@ function handleVideoClick(id, filename, index) {
         showPayPerViewModal(id, 'video', `Paradise Video #${index + 1}`, CONFIG.PAYPAL.PRICES.SINGLE_VIDEO);
     }
 }
+
+function startBannerSlideshow() {
+    const slides = document.querySelectorAll('.banner-slide');
+    
+    if (slides.length === 0) return;
+    
+    // Actualizar slides con banners del día - SIN public/assets
+    slides.forEach((slide, index) => {
+        const img = slide.querySelector('img');
+        if (img && state.dailyContent && state.dailyContent.banners[index]) {
+            img.src = `full/${state.dailyContent.banners[index]}`;
+        }
+    });
+    
+    setInterval(() => {
+        if (slides[state.currentSlide]) {
+            slides[state.currentSlide].classList.remove('active');
+        }
+        state.currentSlide = (state.currentSlide + 1) % slides.length;
+        if (slides[state.currentSlide]) {
+            slides[state.currentSlide].classList.add('active');
+        }
+    }, 5000);
+    
+    console.log('🎬 Banner slideshow started with', slides.length, 'slides');
+}
+
+// ============================
+// RESTO DE FUNCIONES (sin cambios en rutas)
+// ============================
 
 function toggleIsabella() {
     const window = document.getElementById('isabellaWindow');
@@ -1216,31 +1255,6 @@ function scrollCarousel(direction) {
     trackEvent('carousel_scroll', { direction: direction });
 }
 
-function startBannerSlideshow() {
-    const slides = document.querySelectorAll('.banner-slide');
-    
-    if (slides.length === 0) return;
-    
-    slides.forEach((slide, index) => {
-        const img = slide.querySelector('img');
-        if (img && state.dailyContent && state.dailyContent.banners[index]) {
-            img.src = `public/assets/full/${state.dailyContent.banners[index]}`;
-        }
-    });
-    
-    setInterval(() => {
-        if (slides[state.currentSlide]) {
-            slides[state.currentSlide].classList.remove('active');
-        }
-        state.currentSlide = (state.currentSlide + 1) % slides.length;
-        if (slides[state.currentSlide]) {
-            slides[state.currentSlide].classList.add('active');
-        }
-    }, 5000);
-    
-    console.log('🎬 Banner slideshow started with', slides.length, 'slides');
-}
-
 function updateLastUpdateTime() {
     const updateHour = document.getElementById('updateHour');
     if (updateHour) {
@@ -1314,7 +1328,7 @@ window.scrollCarousel = scrollCarousel;
 // ============================
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🎨 Initializing Paradise Gallery v14.1.0 FIXED...');
+    console.log('🎨 Initializing Paradise Gallery v14.2.0 FINAL...');
     
     // Load saved state first
     loadSavedState();
@@ -1369,7 +1383,8 @@ document.addEventListener('DOMContentLoaded', () => {
     changeLanguage(state.currentLanguage);
     
     console.log('✅ Paradise Gallery loaded successfully!');
-    console.log(`🌊 Version: 14.1.0 FIXED - ${CONFIG.CONTENT.DAILY_PHOTOS} fotos + ${CONFIG.CONTENT.DAILY_VIDEOS} videos diarios`);
+    console.log(`🌊 Version: 14.2.0 FINAL - ${CONFIG.CONTENT.DAILY_PHOTOS} fotos + ${CONFIG.CONTENT.DAILY_VIDEOS} videos diarios`);
+    console.log('📁 Paths corrected: NO public/assets prefix');
 });
 
 // ============================
@@ -1393,4 +1408,4 @@ window.addEventListener('unhandledrejection', (e) => {
     });
 });
 
-console.log('✅ Script loaded and ready!');
+console.log('✅ Script loaded and ready with correct paths!');
