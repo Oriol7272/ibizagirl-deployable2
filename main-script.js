@@ -1628,6 +1628,7 @@ function selectPack(packType) {
 // ============================
 // GLOBAL FUNCTIONS FOR ONCLICK
 // ============================
+
 window.handlePhotoClick = handlePhotoClick;
 window.handleVideoClick = handleVideoClick;
 window.toggleIsabella = toggleIsabella;
@@ -1681,67 +1682,6 @@ function renderPayPalVIPButtons() {
             console.log('Payment cancelled');
         }
     }).render('#paypal-button-container-vip');
-}
-function renderPayPalSingleButton(contentId, contentType, contentTitle, price) {
-    const container = document.getElementById('paypal-button-container-ppv');
-    if (!container || !window.paypal) return;
-    
-    // Clear existing buttons
-    container.innerHTML = '';
-    
-    paypal.Buttons({
-        createOrder: function(data, actions) {
-            trackEvent('paypal_checkout_started', { 
-                type: 'ppv', 
-                content_type: contentType,
-                content_id: contentId,
-                price: price 
-            });
-            
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: price.toFixed(2),
-                        currency_code: CONFIG.PAYPAL.CURRENCY
-                    },
-                    description: `Unlock ${contentTitle}`
-                }]
-            });
-        },
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-                console.log('✅ PPV Transaction completed by ' + details.payer.name.given_name);
-                
-                // Unlock single content
-                unlockSingleContent(contentId);
-                
-                // Track successful purchase
-                trackEvent('purchase_complete', {
-                    type: 'ppv',
-                    content_type: contentType,
-                    content_id: contentId,
-                    price: price,
-                    order_id: data.orderID,
-                    payer_name: details.payer.name.given_name
-                });
-                
-                // Show success message
-                const icon = contentType === 'video' ? '🎬' : '📸';
-                showNotification(`${icon} ${contentTitle} unlocked!`);
-                celebrateUnlock();
-                closeModal();
-            });
-        },
-        onError: function(err) {
-            console.error('PayPal PPV Error:', err);
-            const trans = TRANSLATIONS[state.currentLanguage];
-            showNotification(trans.payment_error);
-            trackEvent('payment_error', { type: 'ppv', error: err.toString() });
-        },
-        onCancel: function(data) {
-            trackEvent('payment_cancelled', { type: 'ppv' });
-        }
-    }).render('#paypal-button-container-ppv');
 }
 function renderPayPalPackButton(packType) {
     const container = document.getElementById('paypal-button-container-pack');
