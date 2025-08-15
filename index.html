@@ -12,6 +12,7 @@
     <meta name="description" content="IbizaGirl.pics - Daily updated Mediterranean paradise gallery with 400+ photos and 80+ videos. Premium ocean-themed content from Ibiza beaches.">
     <meta name="keywords" content="ibiza, paradise, beach, ocean, mediterranean, exclusive content, premium gallery, daily updates">
     <meta name="theme-color" content="#0077be">
+    <meta name="robots" content="index, follow">
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="IbizaGirl.pics - Ocean Paradise Gallery | Daily Updates">
@@ -19,14 +20,28 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="IbizaGirl.pics">
     <meta property="og:image" content="https://ibizagirl.pics/public/assets/full/bikini.jpg">
+    <meta property="og:url" content="https://ibizagirl.pics/">
+    <meta property="og:locale" content="es_ES">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ibizagirlpics">
+    <meta name="twitter:title" content="IbizaGirl.pics - Ocean Paradise Gallery">
+    <meta name="twitter:description" content="400+ exclusive photos and 80+ videos updated DAILY">
+    <meta name="twitter:image" content="https://ibizagirl.pics/public/assets/full/bikini.jpg">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
     <link rel="canonical" href="https://ibizagirl.pics/">
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="/public/assets/full/bikini.jpg">
+    <link rel="apple-touch-icon" href="/public/assets/full/bikini.jpg">
+    
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://www.googletagmanager.com">
     <link rel="preconnect" href="https://www.paypal.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DBXYNPBSPY"></script>
@@ -434,6 +449,25 @@
             }
         }
     </style>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "IbizaGirl.pics",
+        "url": "https://ibizagirl.pics/",
+        "description": "Premium Mediterranean paradise gallery with daily updates",
+        "publisher": {
+            "@type": "Organization",
+            "name": "IbizaGirl.pics",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://ibizagirl.pics/public/assets/full/bikini.jpg"
+            }
+        }
+    }
+    </script>
 </head>
 <body>
     <!-- Ocean Waves Background -->
@@ -496,8 +530,8 @@
 
         <p class="legal-text">
             Al entrar a este sitio, confirmas que eres mayor de edad en tu jurisdicción 
-            y aceptas nuestros <a href="#">Términos de Servicio</a> y 
-            <a href="#">Política de Privacidad</a>.<br>
+            y aceptas nuestros <a href="/terms" rel="nofollow">Términos de Servicio</a> y 
+            <a href="/privacy" rel="nofollow">Política de Privacidad</a>.<br>
             Todo el contenido es © 2025 IbizaGirl.pics - Todos los derechos reservados.
         </p>
     </div>
@@ -516,9 +550,21 @@
             // Show loading
             document.getElementById('loadingIndicator').classList.add('active');
             
-            // Store verification
-            localStorage.setItem('ibiza_age_verified', 'true');
-            localStorage.setItem('ibiza_verification_time', Date.now().toString());
+            // Store verification with timestamp
+            const verificationData = {
+                verified: true,
+                timestamp: Date.now(),
+                userAgent: navigator.userAgent,
+                language: navigator.language || 'es'
+            };
+            
+            try {
+                localStorage.setItem('ibiza_age_verified', 'true');
+                localStorage.setItem('ibiza_verification_time', Date.now().toString());
+                localStorage.setItem('ibiza_verification_data', JSON.stringify(verificationData));
+            } catch (e) {
+                console.log('LocalStorage not available');
+            }
             
             // Track event in Google Analytics
             if (typeof gtag !== 'undefined') {
@@ -531,7 +577,7 @@
             
             // Redirect to main gallery
             setTimeout(() => {
-                window.location.href = 'main.html';
+                window.location.href = '/main.html';
             }, 800);
         }
         
@@ -552,22 +598,42 @@
         
         // Check if already verified
         document.addEventListener('DOMContentLoaded', () => {
-            const ageVerified = localStorage.getItem('ibiza_age_verified');
-            const verificationTime = localStorage.getItem('ibiza_verification_time');
-            
-            if (ageVerified === 'true' && verificationTime) {
-                const daysSince = (Date.now() - parseInt(verificationTime)) / (1000 * 60 * 60 * 24);
+            try {
+                const ageVerified = localStorage.getItem('ibiza_age_verified');
+                const verificationTime = localStorage.getItem('ibiza_verification_time');
                 
-                // Auto-redirect if verified within last 30 days
-                if (daysSince < 30) {
-                    console.log('✅ Age already verified, redirecting...');
-                    window.location.href = 'main.html';
+                if (ageVerified === 'true' && verificationTime) {
+                    const hoursSince = (Date.now() - parseInt(verificationTime)) / (1000 * 60 * 60);
+                    
+                    // Auto-redirect if verified within last 24 hours
+                    if (hoursSince < 24) {
+                        console.log('✅ Age already verified, redirecting...');
+                        // Add small delay to prevent flash
+                        setTimeout(() => {
+                            window.location.href = '/main.html';
+                        }, 100);
+                    } else {
+                        // Clear old verification
+                        localStorage.removeItem('ibiza_age_verified');
+                        localStorage.removeItem('ibiza_verification_time');
+                        localStorage.removeItem('ibiza_verification_data');
+                    }
                 }
+            } catch (e) {
+                console.log('LocalStorage check failed:', e);
             }
             
             // Log page ready
             console.log('📊 Analytics ID: G-DBXYNPBSPY');
             console.log('✨ Page ready for user interaction');
+            
+            // Preload main page resources in background
+            setTimeout(() => {
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = '/main.html';
+                document.head.appendChild(link);
+            }, 2000);
         });
         
         // Add some interactive effects
@@ -581,6 +647,15 @@
             btn.addEventListener('mouseleave', function() {
                 this.style.transform = '';
             });
+        });
+        
+        // Add keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                verifyAge();
+            } else if (e.key === 'Escape') {
+                exitSite();
+            }
         });
     </script>
 </body>
