@@ -1644,70 +1644,6 @@ function renderPayPalVIPButtons() {
     const container = document.getElementById('paypal-button-container-vip');
     if (!container || !window.paypal) return;
     
-    // Clear existing buttons
-    container.innerHTML = '';
-    
-    const price = state.selectedSubscriptionType === 'monthly' 
-        ? CONFIG.PAYPAL.PRICES.MONTHLY_SUBSCRIPTION 
-        : CONFIG.PAYPAL.PRICES.LIFETIME_SUBSCRIPTION;
-    
-    paypal.Buttons({
-        createOrder: function(data, actions) {
-            trackEvent('paypal_checkout_started', { 
-                type: 'vip', 
-                plan: state.selectedSubscriptionType,
-                price: price 
-            });
-            
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: price.toFixed(2),
-                        currency_code: CONFIG.PAYPAL.CURRENCY
-                    },
-                    description: `IbizaGirl VIP ${state.selectedSubscriptionType === 'monthly' ? 'Monthly' : 'Lifetime'} Access`
-                }]
-            });
-        },
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-                console.log('✅ VIP Transaction completed by ' + details.payer.name.given_name);
-                
-                // Activate VIP
-                activateVIP(state.selectedSubscriptionType);
-                
-                // Track successful purchase
-                trackEvent('purchase_complete', {
-                    type: 'vip',
-                    plan: state.selectedSubscriptionType,
-                    price: price,
-                    order_id: data.orderID,
-                    payer_name: details.payer.name.given_name
-                });
-                
-                // Show success message
-                const trans = TRANSLATIONS[state.currentLanguage];
-                showNotification(trans.notification_welcome);
-                celebrateUnlock();
-                closeModal();
-            });
-        },
-        onError: function(err) {
-            console.error('PayPal VIP Error:', err);
-            const trans = TRANSLATIONS[state.currentLanguage];
-            showNotification(trans.payment_error);
-            trackEvent('payment_error', { type: 'vip', error: err.toString() });
-        },
-        onCancel: function(data) {
-            trackEvent('payment_cancelled', { type: 'vip' });
-        }
-    }).render('#paypal-button-container-vip');
-}
-
-function renderPayPalVIPButtons() {
-    const container = document.getElementById('paypal-button-container-vip');
-    if (!container || !window.paypal) return;
-    
     container.innerHTML = '';
     
     const isMonthly = state.selectedSubscriptionType === 'monthly';
@@ -1746,7 +1682,6 @@ function renderPayPalVIPButtons() {
         }
     }).render('#paypal-button-container-vip');
 }
-
 function renderPayPalSingleButton(contentId, contentType, contentTitle, price) {
     const container = document.getElementById('paypal-button-container-ppv');
     if (!container || !window.paypal) return;
