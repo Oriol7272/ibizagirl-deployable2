@@ -91,9 +91,9 @@ function setupAdvancedLazyLoading() {
             img.classList.remove('skeleton', 'lazy');
             img.classList.add('error');
             
-            // Try fallback image
+            // Try fallback image - RUTA CORREGIDA
             if (!img.src || img.src.includes('data:')) {
-                img.src = 'public/assets/full/bikini.jpg';
+                img.src = 'full/bikini.jpg';
             }
         };
         
@@ -181,7 +181,7 @@ function supportsWebP() {
     return supportsWebP.result;
 }
 
-// Cargar imágenes críticas inmediatamente
+// Cargar imágenes críticas inmediatamente - RUTAS CORREGIDAS
 function loadCriticalImages() {
     const criticalImages = document.querySelectorAll('.banner-slide img, .teaser-item img');
     criticalImages.forEach(img => {
@@ -194,8 +194,8 @@ function loadCriticalImages() {
                 delete img.dataset.src;
             };
             tempImg.onerror = () => {
-                // Use fallback on error
-                img.src = 'public/assets/full/bikini.jpg';
+                // Use fallback on error - RUTA CORREGIDA
+                img.src = 'full/bikini.jpg';
                 img.classList.remove('skeleton');
                 delete img.dataset.src;
             };
@@ -215,7 +215,7 @@ function updateOpenGraph(contentData = {}) {
     const defaultData = {
         title: trans.photos_seo_title || 'IbizaGirl.pics - Galería Premium Ibiza | 400+ Fotos Diarias',
         description: trans.meta_description || 'Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente.',
-        image: 'https://ibizagirl.pics/public/assets/full/bikini.jpg',
+        image: 'https://ibizagirl.pics/full/bikini.jpg', // RUTA CORREGIDA
         url: window.location.href,
         type: 'website'
     };
@@ -289,7 +289,7 @@ function injectAdvancedJSONLD() {
     const lang = window.state?.currentLanguage || 'es';
     const trans = window.TRANSLATIONS?.[lang] || {};
     
-    // Schema principal del sitio web
+    // Schema principal del sitio web - RUTAS CORREGIDAS
     const websiteSchema = {
         "@context": "https://schema.org",
         "@type": "WebSite",
@@ -328,7 +328,7 @@ function injectAdvancedJSONLD() {
         ]
     };
 
-    // Schema de la organización
+    // Schema de la organización - RUTAS CORREGIDAS
     const organizationSchema = {
         "@context": "https://schema.org",
         "@type": "Organization",
@@ -338,7 +338,7 @@ function injectAdvancedJSONLD() {
         "url": "https://ibizagirl.pics/",
         "logo": {
             "@type": "ImageObject",
-            "url": "https://ibizagirl.pics/public/assets/full/bikini.jpg",
+            "url": "https://ibizagirl.pics/full/bikini.jpg",
             "width": 1200,
             "height": 630
         },
@@ -354,7 +354,7 @@ function injectAdvancedJSONLD() {
         }
     };
 
-    // Schema de galería de imágenes
+    // Schema de galería de imágenes - RUTAS CORREGIDAS
     const imageGallerySchema = {
         "@context": "https://schema.org",
         "@type": "ImageGallery",
@@ -369,7 +369,7 @@ function injectAdvancedJSONLD() {
             "description": trans.gallery_description || "Galería premium",
             "primaryImageOfPage": {
                 "@type": "ImageObject",
-                "url": "https://ibizagirl.pics/public/assets/full/bikini.jpg",
+                "url": "https://ibizagirl.pics/full/bikini.jpg",
                 "caption": trans.seo_keywords?.primary || "Ibiza paradise gallery",
                 "width": 1200,
                 "height": 800
@@ -409,14 +409,14 @@ function injectAdvancedJSONLD() {
         }
     };
 
-    // Schema de destino turístico
+    // Schema de destino turístico - RUTAS CORREGIDAS
     const touristDestinationSchema = {
         "@context": "https://schema.org",
         "@type": "TouristDestination",
         "name": "Ibiza Paradise Beaches",
         "description": "Las mejores playas y calas de Ibiza capturadas en nuestra galería premium",
         "url": "https://ibizagirl.pics/",
-        "image": "https://ibizagirl.pics/public/assets/full/bikbanner.jpg",
+        "image": "https://ibizagirl.pics/full/bikbanner.jpg",
         "geo": {
             "@type": "GeoCoordinates",
             "latitude": "38.9067",
