@@ -1743,6 +1743,75 @@ function renderPayPalSingleButton(contentId, contentType, contentTitle, price) {
         }
     }).render('#paypal-button-container-ppv');
 }
+function renderPayPalPackButton(packType) {
+    const container = document.getElementById('paypal-button-container-pack');
+    if (!container || !window.paypal || !packType) return;
+    
+    // Clear existing buttons
+    container.innerHTML = '';
+    
+    const pack = CONFIG.PAYPAL.PACKS[packType];
+    if (!pack) {
+        console.log('Pack not found:', packType);
+        return;
+    }
+    
+    const packDescription = 'IbizaGirl ' + packType + ' Pack - ' + pack.items + ' items';
+    const packPrice = Number(pack.price).toFixed(2);
+    
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            trackEvent('paypal_checkout_started', { 
+                type: 'pack', 
+                pack: packType,
+                price: pack.price 
+            });
+            
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: packPrice,
+                        currency_code: CONFIG.PAYPAL.CURRENCY
+                    },
+                    description: packDescription
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                console.log('Pack Transaction completed');
+                
+                // Add pack credits
+                addPackCredits(pack.items);
+                
+                // Track successful purchase
+                trackEvent('purchase_complete', {
+                    type: 'pack',
+                    pack: packType,
+                    price: pack.price,
+                    items: pack.items,
+                    order_id: data.orderID
+                });
+                
+                // Show success message
+                const trans = TRANSLATIONS[state.currentLanguage];
+                const message = trans.notification_pack.replace('{credits}', pack.items);
+                showNotification(message);
+                celebrateUnlock();
+                closeModal();
+            });
+        },
+        onError: function(err) {
+            console.error('PayPal Pack Error:', err);
+            const trans = TRANSLATIONS[state.currentLanguage];
+            showNotification(trans.payment_error);
+            trackEvent('payment_error', { type: 'pack', error: String(err) });
+        },
+        onCancel: function(data) {
+            trackEvent('payment_cancelled', { type: 'pack' });
+        }
+    }).render('#paypal-button-container-pack');
+}
 
 // ============================
 // UNLOCK FUNCTIONS
@@ -2563,6 +2632,7 @@ window.getDailyRotation = getDailyRotation;
 window.renderPhotosProgressive = renderPhotosProgressive;
 window.renderVideosProgressive = renderVideosProgressive;
 window.renderTeaserCarousel = renderTeaserCarousel;
+window.renderPayPalPackButton = renderPayPalPackButton;
 
 // Export unlock functions
 window.activateVIP = activateVIP;
