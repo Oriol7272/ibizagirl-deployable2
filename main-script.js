@@ -1550,7 +1550,6 @@ function selectPack(packType) {
 // ============================
 // PAYPAL INTEGRATION SYSTEM
 // ============================
-
 function renderPayPalVIPButtons() {
     const container = document.getElementById('paypal-button-container-vip');
     if (!container || !window.paypal) return;
@@ -1598,46 +1597,47 @@ function renderPayPalSingleButton(contentId, contentType, contentTitle, price) {
     const container = document.getElementById('paypal-button-container-ppv');
     if (!container || !window.paypal) return;
     
-    // Clear existing buttons
     container.innerHTML = '';
+    
+    const description = `${contentTitle} - ${contentType === 'video' ? 'Video' : 'Photo'}`;
     
     paypal.Buttons({
         createOrder: function(data, actions) {
             trackEvent('paypal_checkout_started', { 
-                type: 'ppv', 
-                content_type: contentType,
+                type: 'single_item',
                 content_id: contentId,
-                price: price 
+                content_type: contentType,
+                price: price
             });
             
             return actions.order.create({
                 purchase_units: [{
                     amount: {
-                        value: price.toFixed(2),
+                        value: String(price.toFixed(2)),
                         currency_code: CONFIG.PAYPAL.CURRENCY
                     },
-                    description: `Unlock ${contentTitle}`
+                    description: description
                 }]
             });
         },
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
-                console.log('✅ PPV Transaction completed by ' + details.payer.name.given_name);
+                console.log('Single item transaction completed');
                 
-                // Unlock single content
+                // Unlock the specific content
                 unlockSingleContent(contentId);
                 
                 // Track successful purchase
                 trackEvent('purchase_complete', {
-                    type: 'ppv',
-                    content_type: contentType,
+                    type: 'single_item',
                     content_id: contentId,
+                    content_type: contentType,
                     price: price,
-                    order_id: data.orderID,
-                    payer_name: details.payer.name.given_name
+                    order_id: data.orderID
                 });
                 
                 // Show success message
+                const trans = TRANSLATIONS[state.currentLanguage];
                 const icon = contentType === 'video' ? '🎬' : '📸';
                 showNotification(`${icon} ${contentTitle} unlocked!`);
                 celebrateUnlock();
@@ -1645,85 +1645,22 @@ function renderPayPalSingleButton(contentId, contentType, contentTitle, price) {
             });
         },
         onError: function(err) {
-            console.error('PayPal PPV Error:', err);
+            console.error('PayPal Single Item Error:', err);
             const trans = TRANSLATIONS[state.currentLanguage];
             showNotification(trans.payment_error);
-            trackEvent('payment_error', { type: 'ppv', error: err.toString() });
+            trackEvent('payment_error', { 
+                type: 'single_item', 
+                content_id: contentId,
+                error: String(err) 
+            });
         },
         onCancel: function(data) {
-            trackEvent('payment_cancelled', { type: 'ppv' });
+            trackEvent('payment_cancelled', { 
+                type: 'single_item',
+                content_id: contentId 
+            });
         }
     }).render('#paypal-button-container-ppv');
-}
-
-function renderPayPalPackButton(packType) {
-    const container = document.getElementById('paypal-button-container-pack');
-    if (!container || !window.paypal || !packType) return;
-    
-    // Clear existing buttons
-    container.innerHTML = '';
-    
-    const pack = CONFIG.PAYPAL.PACKS[packType];
-    if (!pack) {
-        console.log('Pack not found:', packType);
-        return;
-    }
-    
-    const packDescription = 'IbizaGirl ' + packType + ' Pack - ' + pack.items + ' items';
-    const packPrice = Number(pack.price).toFixed(2);
-    
-    paypal.Buttons({
-        createOrder: function(data, actions) {
-            trackEvent('paypal_checkout_started', { 
-                type: 'pack', 
-                pack: packType,
-                price: pack.price 
-            });
-            
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: packPrice,
-                        currency_code: CONFIG.PAYPAL.CURRENCY
-                    },
-                    description: packDescription
-                }]
-            });
-        },
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-                console.log('Pack Transaction completed');
-                
-                // Add pack credits
-                addPackCredits(pack.items);
-                
-                // Track successful purchase
-                trackEvent('purchase_complete', {
-                    type: 'pack',
-                    pack: packType,
-                    price: pack.price,
-                    items: pack.items,
-                    order_id: data.orderID
-                });
-                
-                // Show success message
-                const trans = TRANSLATIONS[state.currentLanguage];
-                const message = trans.notification_pack.replace('{credits}', pack.items);
-                showNotification(message);
-                celebrateUnlock();
-                closeModal();
-            });
-        },
-        onError: function(err) {
-            console.error('PayPal Pack Error:', err);
-            const trans = TRANSLATIONS[state.currentLanguage];
-            showNotification(trans.payment_error);
-            trackEvent('payment_error', { type: 'pack', error: String(err) });
-        },
-        onCancel: function(data) {
-            trackEvent('payment_cancelled', { type: 'pack' });
-        }
-    }).render('#paypal-button-container-pack');
 }
 
 // ============================
