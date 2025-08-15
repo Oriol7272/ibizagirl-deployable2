@@ -1,9 +1,9 @@
 // ============================
-// IBIZAGIRL.PICS MAIN SCRIPT v14.3.1 CRITICAL FIX
-// Corrección de extensiones de archivo .jpg a .webp
+// IBIZAGIRL.PICS MAIN SCRIPT v14.3.2 CRITICAL FIX
+// Corrección completa de errores y optimizaciones
 // ============================
 
-console.log('🌊 IbizaGirl.pics v14.3.1 CRITICAL FIX - Loading Paradise Gallery...');
+console.log('🌊 IbizaGirl.pics v14.3.2 CRITICAL FIX - Loading Paradise Gallery...');
 
 // ============================
 // ENVIRONMENT DETECTION
@@ -264,8 +264,8 @@ if (typeof window.ALL_PHOTOS_POOL !== 'undefined' && Array.isArray(window.ALL_PH
     console.log(`📸 Loaded ${ALL_PHOTOS_POOL.length} photos from pool`);
 } else {
     // Fallback: generar lista de ejemplo
-    for (let i = 0; i < 200; i++) {
-        ALL_PHOTOS_POOL.push(`photo_${i}.webp`); // Cambiado a .webp
+    for (let i = 0; i < 127; i++) {
+        ALL_PHOTOS_POOL.push(`photo_${String(i).padStart(3, '0')}.webp`);
     }
     console.warn('⚠️ Using fallback photo pool');
 }
@@ -275,8 +275,8 @@ if (typeof window.ALL_VIDEOS_POOL !== 'undefined' && Array.isArray(window.ALL_VI
     console.log(`🎬 Loaded ${ALL_VIDEOS_POOL.length} videos from pool`);
 } else {
     // Fallback: generar lista de ejemplo
-    for (let i = 0; i < 40; i++) {
-        ALL_VIDEOS_POOL.push(`video_${i}.mp4`);
+    for (let i = 0; i < 70; i++) {
+        ALL_VIDEOS_POOL.push(`video_${String(i).padStart(3, '0')}.mp4`);
     }
     console.warn('⚠️ Using fallback video pool');
 }
@@ -297,7 +297,8 @@ let state = {
     lazyLoadObserver: null,
     currentPayPalContentId: null,
     currentPayPalContentType: null,
-    creditsDisplayVisible: false
+    creditsDisplayVisible: false,
+    errorCount: 0
 };
 
 // Make TRANSLATIONS available globally
@@ -305,40 +306,94 @@ window.TRANSLATIONS = TRANSLATIONS;
 window.state = state;
 
 // ============================
+// ERROR HANDLING SYSTEM
+// ============================
+
+class ErrorHandler {
+    static logError(error, context = '') {
+        state.errorCount++;
+        console.error(`❌ Error ${state.errorCount} [${context}]:`, error);
+        
+        // Track error if analytics available
+        if (window.gtag) {
+            window.gtag('event', 'exception', {
+                description: `${context}: ${error.message}`,
+                fatal: false
+            });
+        }
+        
+        // Show user-friendly message for critical errors
+        if (state.errorCount > 5) {
+            this.showErrorRecovery();
+        }
+    }
+    
+    static showErrorRecovery() {
+        const notification = document.createElement('div');
+        notification.className = 'error-recovery-notification';
+        notification.innerHTML = `
+            <div style="
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #ff6b35, #ff69b4);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                z-index: 10002;
+                font-weight: 600;
+                box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+            ">
+                ⚠️ Detectamos algunos errores. Recargando...
+            </div>
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            window.location.reload();
+        }, 3000);
+    }
+}
+
+// ============================
 // LANGUAGE SYSTEM
 // ============================
 
 function changeLanguage(lang) {
-    if (!TRANSLATIONS[lang]) return;
-    
-    state.currentLanguage = lang;
-    localStorage.setItem('ibiza_language', lang);
-    
-    // Update all translatable elements
-    document.querySelectorAll('[data-translate]').forEach(element => {
-        const key = element.getAttribute('data-translate');
-        if (TRANSLATIONS[lang][key]) {
-            element.textContent = TRANSLATIONS[lang][key];
+    try {
+        if (!TRANSLATIONS[lang]) return;
+        
+        state.currentLanguage = lang;
+        localStorage.setItem('ibiza_language', lang);
+        
+        // Update all translatable elements
+        document.querySelectorAll('[data-translate]').forEach(element => {
+            const key = element.getAttribute('data-translate');
+            if (TRANSLATIONS[lang][key]) {
+                element.textContent = TRANSLATIONS[lang][key];
+            }
+        });
+        
+        // Update Isabella messages
+        if (window.isabellaBot) {
+            isabellaBot.messages = TRANSLATIONS[lang].isabella_messages;
         }
-    });
-    
-    // Update Isabella messages
-    if (window.isabellaBot) {
-        isabellaBot.messages = TRANSLATIONS[lang].isabella_messages;
+        
+        // Update document language attribute
+        document.documentElement.lang = lang;
+        
+        // Re-render dynamic content with new language
+        if (state.dailyContent) {
+            renderPhotosProgressive();
+            renderVideosProgressive();
+            renderTeaserCarousel();
+        }
+        
+        trackEvent('language_changed', { language: lang });
+        console.log(`🌍 Language changed to: ${lang}`);
+    } catch (error) {
+        ErrorHandler.logError(error, 'changeLanguage');
     }
-    
-    // Update document language attribute
-    document.documentElement.lang = lang;
-    
-    // Re-render dynamic content with new language
-    if (state.dailyContent) {
-        renderPhotosProgressive();
-        renderVideosProgressive();
-        renderTeaserCarousel();
-    }
-    
-    trackEvent('language_changed', { language: lang });
-    console.log(`🌍 Language changed to: ${lang}`);
 }
 
 // ============================
@@ -346,248 +401,405 @@ function changeLanguage(lang) {
 // ============================
 
 function getDailyRotation() {
-    const today = new Date();
-    const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-    
-    console.log(`📅 Generating daily rotation for ${today.toDateString()} (seed: ${dateSeed})`);
-    
-    function seededRandom(seed) {
-        const x = Math.sin(seed++) * 10000;
-        return x - Math.floor(x);
-    }
-    
-    function shuffleWithSeed(array, seed) {
-        const shuffled = [...array];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(seededRandom(seed + i) * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    try {
+        const today = new Date();
+        const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+        
+        console.log(`📅 Generating daily rotation for ${today.toDateString()} (seed: ${dateSeed})`);
+        
+        function seededRandom(seed) {
+            const x = Math.sin(seed++) * 10000;
+            return x - Math.floor(x);
         }
-        return shuffled;
+        
+        function shuffleWithSeed(array, seed) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(seededRandom(seed + i) * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        // Shuffle and select content for today
+        const shuffledPhotos = shuffleWithSeed(ALL_PHOTOS_POOL, dateSeed);
+        const shuffledVideos = shuffleWithSeed(ALL_VIDEOS_POOL, dateSeed * 2);
+        const shuffledBanners = shuffleWithSeed(BANNER_IMAGES, dateSeed * 3);
+        const shuffledTeasers = shuffleWithSeed(TEASER_IMAGES, dateSeed * 4);
+        
+        const todayPhotos = shuffledPhotos.slice(0, Math.min(CONFIG.CONTENT.DAILY_PHOTOS, ALL_PHOTOS_POOL.length));
+        const todayVideos = shuffledVideos.slice(0, Math.min(CONFIG.CONTENT.DAILY_VIDEOS, ALL_VIDEOS_POOL.length));
+        
+        // Mark percentage as "new today"
+        const newPhotoCount = Math.floor(todayPhotos.length * CONFIG.CONTENT.NEW_CONTENT_PERCENTAGE);
+        const newVideoCount = Math.floor(todayVideos.length * CONFIG.CONTENT.NEW_CONTENT_PERCENTAGE);
+        
+        const rotation = {
+            photos: todayPhotos,
+            videos: todayVideos,
+            banners: shuffledBanners,
+            teasers: shuffledTeasers,
+            newPhotoIndices: new Set(Array.from({length: newPhotoCount}, (_, i) => i)),
+            newVideoIndices: new Set(Array.from({length: newVideoCount}, (_, i) => i)),
+            lastUpdate: new Date(),
+            stats: {
+                totalPhotosPool: ALL_PHOTOS_POOL.length,
+                totalVideosPool: ALL_VIDEOS_POOL.length,
+                dailyPhotos: todayPhotos.length,
+                dailyVideos: todayVideos.length,
+                newPhotos: newPhotoCount,
+                newVideos: newVideoCount
+            }
+        };
+        
+        console.log('📊 Daily rotation stats:', rotation.stats);
+        return rotation;
+    } catch (error) {
+        ErrorHandler.logError(error, 'getDailyRotation');
+        return null;
     }
+}
+
+// ============================
+// IMAGE ERROR HANDLING
+// ============================
+
+function createImageWithFallback(src, alt, className = '') {
+    const img = document.createElement('img');
+    img.className = className;
+    img.alt = alt;
+    img.loading = 'lazy';
     
-    // Shuffle and select content for today
-    const shuffledPhotos = shuffleWithSeed(ALL_PHOTOS_POOL, dateSeed);
-    const shuffledVideos = shuffleWithSeed(ALL_VIDEOS_POOL, dateSeed * 2);
-    const shuffledBanners = shuffleWithSeed(BANNER_IMAGES, dateSeed * 3);
-    const shuffledTeasers = shuffleWithSeed(TEASER_IMAGES, dateSeed * 4);
-    
-    const todayPhotos = shuffledPhotos.slice(0, CONFIG.CONTENT.DAILY_PHOTOS);
-    const todayVideos = shuffledVideos.slice(0, CONFIG.CONTENT.DAILY_VIDEOS);
-    
-    // Mark percentage as "new today"
-    const newPhotoCount = Math.floor(CONFIG.CONTENT.DAILY_PHOTOS * CONFIG.CONTENT.NEW_CONTENT_PERCENTAGE);
-    const newVideoCount = Math.floor(CONFIG.CONTENT.DAILY_VIDEOS * CONFIG.CONTENT.NEW_CONTENT_PERCENTAGE);
-    
-    const rotation = {
-        photos: todayPhotos,
-        videos: todayVideos,
-        banners: shuffledBanners,
-        teasers: shuffledTeasers,
-        newPhotoIndices: new Set(Array.from({length: newPhotoCount}, (_, i) => i)),
-        newVideoIndices: new Set(Array.from({length: newVideoCount}, (_, i) => i)),
-        lastUpdate: new Date(),
-        stats: {
-            totalPhotosPool: ALL_PHOTOS_POOL.length,
-            totalVideosPool: ALL_VIDEOS_POOL.length,
-            dailyPhotos: todayPhotos.length,
-            dailyVideos: todayVideos.length,
-            newPhotos: newPhotoCount,
-            newVideos: newVideoCount
+    img.onerror = function() {
+        // Try .webp fallback first
+        if (!this.src.includes('.webp') && this.src.includes('.jpg')) {
+            this.src = this.src.replace('.jpg', '.webp');
+            return;
+        }
+        
+        // Ultimate fallback
+        if (!this.src.includes('bikini.webp')) {
+            this.src = 'full/bikini.webp';
+        } else {
+            // Create placeholder if even fallback fails
+            this.style.background = 'linear-gradient(45deg, #0077be, #00d4ff)';
+            this.style.display = 'block';
+            this.style.minHeight = '200px';
         }
     };
     
-    console.log('📊 Daily rotation stats:', rotation.stats);
-    return rotation;
+    img.src = src;
+    return img;
 }
 
 // ============================
-// RENDER FUNCTIONS - RUTAS CORREGIDAS SIN public/assets
+// VIDEO ERROR HANDLING
+// ============================
+
+function setupVideoErrorHandling() {
+    const videos = document.querySelectorAll('video');
+    
+    videos.forEach(video => {
+        // Handle video loading errors
+        video.addEventListener('error', function(e) {
+            console.warn('Video loading error:', this.src, e);
+            ErrorHandler.logError(new Error(`Video load failed: ${this.src}`), 'video_load');
+            
+            // Try alternative format or fallback
+            const source = this.querySelector('source');
+            if (source && !source.dataset.retried) {
+                source.dataset.retried = 'true';
+                
+                // Try .webm format as fallback
+                if (source.src.includes('.mp4')) {
+                    const webmSrc = source.src.replace('.mp4', '.webm');
+                    source.src = webmSrc;
+                    this.load();
+                    return;
+                }
+            }
+            
+            // Show fallback image
+            this.style.display = 'none';
+            const fallbackImg = createImageWithFallback('full/bikini.webp', 'Video fallback', this.className);
+            fallbackImg.style.objectFit = 'cover';
+            fallbackImg.style.width = '100%';
+            fallbackImg.style.height = '100%';
+            this.parentNode.insertBefore(fallbackImg, this);
+        });
+        
+        // Handle loading timeout
+        const loadTimeout = setTimeout(() => {
+            if (video.readyState < 2) { // HAVE_CURRENT_DATA
+                console.warn('Video loading timeout:', video.src);
+                video.dispatchEvent(new Event('error'));
+            }
+        }, 15000); // 15 second timeout
+        
+        video.addEventListener('loadeddata', () => {
+            clearTimeout(loadTimeout);
+        });
+        
+        // Handle network errors during playback
+        video.addEventListener('stalled', function() {
+            console.warn('Video stalled:', this.src);
+        });
+        
+        video.addEventListener('suspend', function() {
+            console.warn('Video suspended:', this.src);
+        });
+    });
+}
+
+// ============================
+// RENDER FUNCTIONS - RUTAS CORREGIDAS
 // ============================
 
 function renderPhotosProgressive() {
-    const photosGrid = document.getElementById('photosGrid');
-    if (!photosGrid || !state.dailyContent) return;
-    
-    const photosToShow = state.dailyContent.photos;
-    const trans = TRANSLATIONS[state.currentLanguage];
-    let photosHTML = '';
-    
-    console.log(`📸 Rendering ${photosToShow.length} photos`);
-    
-    photosToShow.forEach((photo, index) => {
-        const id = `p${index}`;
-        const isUnlocked = state.isVIP || state.unlockedContent.has(id);
-        const unlockClass = isUnlocked ? 'unlocked' : '';
-        const isNew = state.dailyContent.newPhotoIndices.has(index);
-        const views = Math.floor(Math.random() * 15000) + 5000;
-        const likes = Math.floor(Math.random() * 2000) + 500;
+    try {
+        const photosGrid = document.getElementById('photosGrid');
+        if (!photosGrid || !state.dailyContent) return;
         
-        // Determinar la ruta correcta - SIN public/assets
-        let imagePath = photo;
+        const photosToShow = state.dailyContent.photos;
+        const trans = TRANSLATIONS[state.currentLanguage];
+        let photosHTML = '';
         
-        // Si la foto ya viene con ruta completa (full/ o uncensored/), usarla tal como está
-        if (!photo.startsWith('full/') && !photo.startsWith('uncensored/')) {
-            // Si no tiene prefijo, asumir que es de la carpeta full para preview
-            imagePath = `full/${photo}`;
-        }
+        console.log(`📸 Rendering ${photosToShow.length} photos`);
         
-        photosHTML += `
-            <div class="content-item skeleton ${unlockClass}" 
-                 data-id="${id}" 
-                 data-type="photo" 
-                 data-index="${index}"
-                 onclick="handlePhotoClick('${id}', '${photo}', ${index})"
-                 role="button"
-                 tabindex="0">
-                ${isNew ? `<span class="new-badge">${trans.new_today || 'NEW TODAY!'}</span>` : ''}
-                
-                <img class="item-media" 
-                     src="${imagePath}" 
-                     alt="Paradise Photo ${index + 1}"
-                     style="filter: ${isUnlocked ? 'none' : `blur(${CONFIG.CONTENT.BLUR_PHOTO}px)`};"
-                     loading="lazy"
-                     onerror="this.src='full/bikini.webp'">
-                
-                ${!isUnlocked ? `
-                    <div class="lock-overlay">
-                        <svg class="lock-icon" width="30" height="30" viewBox="0 0 24 24" fill="white">
-                            <path d="M12 2C9.243 2 7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"></path>
-                        </svg>
-                    </div>
-                    <div class="item-price">
-                        €${CONFIG.PAYPAL.PRICES.SINGLE_PHOTO.toFixed(2)}
-                    </div>
-                ` : ''}
-                
-                <div class="item-overlay">
-                    <div class="item-title">Paradise #${index + 1}</div>
-                    <div class="item-info">
-                        ${views.toLocaleString()} views • ${likes.toLocaleString()} likes
+        photosToShow.forEach((photo, index) => {
+            const id = `p${index}`;
+            const isUnlocked = state.isVIP || state.unlockedContent.has(id);
+            const unlockClass = isUnlocked ? 'unlocked' : '';
+            const isNew = state.dailyContent.newPhotoIndices.has(index);
+            const views = Math.floor(Math.random() * 15000) + 5000;
+            const likes = Math.floor(Math.random() * 2000) + 500;
+            
+            // Determinar la ruta correcta
+            let imagePath = photo;
+            if (!photo.startsWith('full/') && !photo.startsWith('uncensored/')) {
+                imagePath = `full/${photo}`;
+            }
+            
+            photosHTML += `
+                <div class="content-item skeleton ${unlockClass}" 
+                     data-id="${id}" 
+                     data-type="photo" 
+                     data-index="${index}"
+                     onclick="handlePhotoClick('${id}', '${photo}', ${index})"
+                     role="button"
+                     tabindex="0">
+                    ${isNew ? `<span class="new-badge">${trans.new_today || 'NEW TODAY!'}</span>` : ''}
+                    
+                    <img class="item-media" 
+                         src="${imagePath}" 
+                         alt="Paradise Photo ${index + 1}"
+                         style="filter: ${isUnlocked ? 'none' : `blur(${CONFIG.CONTENT.BLUR_PHOTO}px)`};"
+                         loading="lazy"
+                         onerror="handleImageError(this)">
+                    
+                    ${!isUnlocked ? `
+                        <div class="lock-overlay">
+                            <svg class="lock-icon" width="30" height="30" viewBox="0 0 24 24" fill="white">
+                                <path d="M12 2C9.243 2 7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"></path>
+                            </svg>
+                        </div>
+                        <div class="item-price">
+                            €${CONFIG.PAYPAL.PRICES.SINGLE_PHOTO.toFixed(2)}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="item-overlay">
+                        <div class="item-title">Paradise #${index + 1}</div>
+                        <div class="item-info">
+                            ${views.toLocaleString()} views • ${likes.toLocaleString()} likes
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
-    });
-    
-    photosGrid.innerHTML = photosHTML;
-    console.log('✅ Photos rendered successfully');
+            `;
+        });
+        
+        photosGrid.innerHTML = photosHTML;
+        console.log('✅ Photos rendered successfully');
+    } catch (error) {
+        ErrorHandler.logError(error, 'renderPhotosProgressive');
+    }
 }
 
 function renderVideosProgressive() {
-    const videosGrid = document.getElementById('videosGrid');
-    if (!videosGrid || !state.dailyContent) return;
-    
-    const videosToShow = state.dailyContent.videos;
-    const trans = TRANSLATIONS[state.currentLanguage];
-    let videosHTML = '';
-    
-    console.log(`🎬 Rendering ${videosToShow.length} videos`);
-    
-    videosToShow.forEach((video, index) => {
-        const id = `v${index}`;
-        const isUnlocked = state.isVIP || state.unlockedContent.has(id);
-        const unlockClass = isUnlocked ? 'unlocked' : '';
-        const duration = generateRandomDuration();
-        const isNew = state.dailyContent.newVideoIndices.has(index);
-        const views = Math.floor(Math.random() * 25000) + 8000;
-        const likes = Math.floor(Math.random() * 3000) + 800;
+    try {
+        const videosGrid = document.getElementById('videosGrid');
+        if (!videosGrid || !state.dailyContent) return;
         
-        // Determinar la ruta correcta del video - SIN public/assets
-        let videoPath = video;
-        if (!video.startsWith('uncensored-videos/')) {
-            videoPath = `uncensored-videos/${video}`;
-        }
+        const videosToShow = state.dailyContent.videos;
+        const trans = TRANSLATIONS[state.currentLanguage];
+        let videosHTML = '';
         
-        // Use banner image as poster - Corregido a .webp
-        const posterImage = BANNER_IMAGES[index % BANNER_IMAGES.length];
+        console.log(`🎬 Rendering ${videosToShow.length} videos`);
         
-        videosHTML += `
-            <div class="content-item skeleton ${unlockClass}" 
-                 data-id="${id}" 
-                 data-type="video" 
-                 data-index="${index}"
-                 onclick="handleVideoClick('${id}', '${video}', ${index})"
-                 role="button"
-                 tabindex="0">
-                ${isNew ? `<span class="new-badge">${trans.fresh_content || 'FRESH CONTENT!'}</span>` : ''}
-                
-                <video class="item-media" 
-                       muted 
-                       loop 
-                       playsinline
-                       preload="metadata"
-                       poster="full/${posterImage}"
-                       style="filter: ${isUnlocked ? 'none' : `blur(${CONFIG.CONTENT.BLUR_VIDEO}px)`};">
-                    <source src="${videoPath}" type="video/mp4">
-                    Tu navegador no soporta el elemento video.
-                </video>
-                
-                <div class="video-duration">${duration}</div>
-                
-                <div class="video-play-overlay">
-                    <div class="play-button">
-                        <div class="play-icon"></div>
+        videosToShow.forEach((video, index) => {
+            const id = `v${index}`;
+            const isUnlocked = state.isVIP || state.unlockedContent.has(id);
+            const unlockClass = isUnlocked ? 'unlocked' : '';
+            const duration = generateRandomDuration();
+            const isNew = state.dailyContent.newVideoIndices.has(index);
+            const views = Math.floor(Math.random() * 25000) + 8000;
+            const likes = Math.floor(Math.random() * 3000) + 800;
+            
+            // Determinar la ruta correcta del video
+            let videoPath = video;
+            if (!video.startsWith('uncensored-videos/')) {
+                videoPath = `uncensored-videos/${video}`;
+            }
+            
+            // Use banner image as poster
+            const posterImage = BANNER_IMAGES[index % BANNER_IMAGES.length];
+            
+            videosHTML += `
+                <div class="content-item skeleton ${unlockClass}" 
+                     data-id="${id}" 
+                     data-type="video" 
+                     data-index="${index}"
+                     onclick="handleVideoClick('${id}', '${video}', ${index})"
+                     role="button"
+                     tabindex="0">
+                    ${isNew ? `<span class="new-badge">${trans.fresh_content || 'FRESH CONTENT!'}</span>` : ''}
+                    
+                    <video class="item-media" 
+                           muted 
+                           loop 
+                           playsinline
+                           preload="metadata"
+                           poster="full/${posterImage}"
+                           style="filter: ${isUnlocked ? 'none' : `blur(${CONFIG.CONTENT.BLUR_VIDEO}px)`};"
+                           onerror="handleVideoError(this)">
+                        <source src="${videoPath}" type="video/mp4">
+                        Tu navegador no soporta el elemento video.
+                    </video>
+                    
+                    <div class="video-duration">${duration}</div>
+                    
+                    <div class="video-play-overlay">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
+                    
+                    ${!isUnlocked ? `
+                        <div class="lock-overlay">
+                            <svg class="lock-icon" width="30" height="30" viewBox="0 0 24 24" fill="white">
+                                <path d="M12 2C9.243 2 7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"></path>
+                            </svg>
+                        </div>
+                        <div class="item-price">
+                            €${CONFIG.PAYPAL.PRICES.SINGLE_VIDEO.toFixed(2)}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="item-overlay">
+                        <div class="item-title">Video #${index + 1}</div>
+                        <div class="item-info">
+                            ${views.toLocaleString()} views • ${likes.toLocaleString()} likes
+                        </div>
                     </div>
                 </div>
-                
-                ${!isUnlocked ? `
-                    <div class="lock-overlay">
-                        <svg class="lock-icon" width="30" height="30" viewBox="0 0 24 24" fill="white">
-                            <path d="M12 2C9.243 2 7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"></path>
-                        </svg>
-                    </div>
-                    <div class="item-price">
-                        €${CONFIG.PAYPAL.PRICES.SINGLE_VIDEO.toFixed(2)}
-                    </div>
-                ` : ''}
-                
-                <div class="item-overlay">
-                    <div class="item-title">Video #${index + 1}</div>
-                    <div class="item-info">
-                        ${views.toLocaleString()} views • ${likes.toLocaleString()} likes
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-    
-    videosGrid.innerHTML = videosHTML;
-    setupVideoHoverPreview();
-    console.log('✅ Videos rendered successfully');
+            `;
+        });
+        
+        videosGrid.innerHTML = videosHTML;
+        setupVideoHoverPreview();
+        setupVideoErrorHandling();
+        console.log('✅ Videos rendered successfully');
+    } catch (error) {
+        ErrorHandler.logError(error, 'renderVideosProgressive');
+    }
 }
 
 function renderTeaserCarousel() {
-    const teaserCarousel = document.getElementById('teaserCarousel');
-    if (!teaserCarousel) return;
-    
-    const teasersToShow = state.dailyContent.teasers.slice(0, 12);
-    let teaserHTML = '';
-    
-    teasersToShow.forEach((teaser, index) => {
-        const views = Math.floor(Math.random() * 25000) + 10000;
-        const likes = Math.floor(Math.random() * 5000) + 1000;
+    try {
+        const teaserCarousel = document.getElementById('teaserCarousel');
+        if (!teaserCarousel) return;
         
-        // SIN public/assets
-        teaserHTML += `
-            <div class="teaser-item" data-index="${index}">
-                <img class="item-media" 
-                     src="full/${teaser}" 
-                     alt="Preview ${index + 1}"
-                     loading="lazy"
-                     onerror="this.src='full/bikini.webp'">
-                
-                <div class="teaser-overlay">
-                    <div class="teaser-info">
-                        <h3>Paradise #${index + 1}</h3>
-                        <p>${views.toLocaleString()} views • ${likes.toLocaleString()} likes</p>
+        const teasersToShow = state.dailyContent.teasers.slice(0, 12);
+        let teaserHTML = '';
+        
+        teasersToShow.forEach((teaser, index) => {
+            const views = Math.floor(Math.random() * 25000) + 10000;
+            const likes = Math.floor(Math.random() * 5000) + 1000;
+            
+            teaserHTML += `
+                <div class="teaser-item" data-index="${index}">
+                    <img class="item-media" 
+                         src="full/${teaser}" 
+                         alt="Preview ${index + 1}"
+                         loading="lazy"
+                         onerror="handleImageError(this)">
+                    
+                    <div class="teaser-overlay">
+                        <div class="teaser-info">
+                            <h3>Paradise #${index + 1}</h3>
+                            <p>${views.toLocaleString()} views • ${likes.toLocaleString()} likes</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
-    });
-    
-    teaserCarousel.innerHTML = teaserHTML;
+            `;
+        });
+        
+        teaserCarousel.innerHTML = teaserHTML;
+    } catch (error) {
+        ErrorHandler.logError(error, 'renderTeaserCarousel');
+    }
 }
+
+// ============================
+// ERROR HANDLERS FOR MEDIA
+// ============================
+
+function handleImageError(img) {
+    // Try .webp fallback first
+    if (!img.src.includes('.webp') && img.src.includes('.jpg')) {
+        img.src = img.src.replace('.jpg', '.webp');
+        return;
+    }
+    
+    // Ultimate fallback
+    if (!img.src.includes('bikini.webp')) {
+        img.src = 'full/bikini.webp';
+    } else {
+        // Create gradient placeholder if even fallback fails
+        img.style.background = 'linear-gradient(45deg, #0077be, #00d4ff)';
+        img.style.display = 'block';
+        img.style.minHeight = '200px';
+        img.alt = 'Content unavailable';
+    }
+}
+
+function handleVideoError(video) {
+    console.warn('Video error:', video.src);
+    ErrorHandler.logError(new Error(`Video failed: ${video.src}`), 'video_error');
+    
+    // Try alternative format
+    const source = video.querySelector('source');
+    if (source && !source.dataset.retried) {
+        source.dataset.retried = 'true';
+        if (source.src.includes('.mp4')) {
+            source.src = source.src.replace('.mp4', '.webm');
+            video.load();
+            return;
+        }
+    }
+    
+    // Replace with fallback image
+    video.style.display = 'none';
+    const fallback = createImageWithFallback('full/bikini.webp', 'Video unavailable', video.className);
+    fallback.style.objectFit = 'cover';
+    fallback.style.width = '100%';
+    fallback.style.height = '100%';
+    video.parentNode.insertBefore(fallback, video);
+}
+
+// ============================
+// UTILITY FUNCTIONS
+// ============================
 
 function generateRandomDuration() {
     const minutes = Math.floor(Math.random() * 15) + 1;
@@ -625,119 +837,140 @@ function setupVideoHoverPreview() {
 }
 
 // ============================
-// EVENT HANDLERS - RUTAS CORREGIDAS SIN public/assets
+// EVENT HANDLERS
 // ============================
 
 function handlePhotoClick(id, filename, index) {
-    trackEvent('photo_click', { 
-        photo_id: id, 
-        photo_index: index,
-        is_unlocked: state.isVIP || state.unlockedContent.has(id)
-    });
-    
-    if (state.isVIP || state.unlockedContent.has(id)) {
-        // Abrir imagen completa - SIN public/assets
-        let imagePath = filename;
-        if (!filename.startsWith('uncensored/') && !filename.startsWith('full/')) {
-            imagePath = `uncensored/${filename}`;
+    try {
+        trackEvent('photo_click', { 
+            photo_id: id, 
+            photo_index: index,
+            is_unlocked: state.isVIP || state.unlockedContent.has(id)
+        });
+        
+        if (state.isVIP || state.unlockedContent.has(id)) {
+            // Abrir imagen completa
+            let imagePath = filename;
+            if (!filename.startsWith('uncensored/') && !filename.startsWith('full/')) {
+                imagePath = `uncensored/${filename}`;
+            }
+            window.open(imagePath, '_blank');
+            trackEvent('photo_view', { photo_id: id, photo_index: index });
+        } else if (state.packCredits > 0) {
+            usePackCredit(id, 'photo');
+        } else {
+            showPayPerViewModal(id, 'photo', `Paradise Photo #${index + 1}`, CONFIG.PAYPAL.PRICES.SINGLE_PHOTO);
         }
-        window.open(imagePath, '_blank');
-        trackEvent('photo_view', { photo_id: id, photo_index: index });
-    } else if (state.packCredits > 0) {
-        usePackCredit(id, 'photo');
-    } else {
-        showPayPerViewModal(id, 'photo', `Paradise Photo #${index + 1}`, CONFIG.PAYPAL.PRICES.SINGLE_PHOTO);
+    } catch (error) {
+        ErrorHandler.logError(error, 'handlePhotoClick');
     }
 }
 
 function handleVideoClick(id, filename, index) {
-    trackEvent('video_click', { 
-        video_id: id, 
-        video_index: index,
-        is_unlocked: state.isVIP || state.unlockedContent.has(id)
-    });
-    
-    if (state.isVIP || state.unlockedContent.has(id)) {
-        // Abrir video completo - SIN public/assets
-        let videoPath = filename;
-        if (!filename.startsWith('uncensored-videos/')) {
-            videoPath = `uncensored-videos/${filename}`;
+    try {
+        trackEvent('video_click', { 
+            video_id: id, 
+            video_index: index,
+            is_unlocked: state.isVIP || state.unlockedContent.has(id)
+        });
+        
+        if (state.isVIP || state.unlockedContent.has(id)) {
+            // Abrir video completo
+            let videoPath = filename;
+            if (!filename.startsWith('uncensored-videos/')) {
+                videoPath = `uncensored-videos/${filename}`;
+            }
+            window.open(videoPath, '_blank');
+            trackEvent('video_view', { video_id: id, video_index: index });
+        } else if (state.packCredits > 0) {
+            usePackCredit(id, 'video');
+        } else {
+            showPayPerViewModal(id, 'video', `Paradise Video #${index + 1}`, CONFIG.PAYPAL.PRICES.SINGLE_VIDEO);
         }
-        window.open(videoPath, '_blank');
-        trackEvent('video_view', { video_id: id, video_index: index });
-    } else if (state.packCredits > 0) {
-        usePackCredit(id, 'video');
-    } else {
-        showPayPerViewModal(id, 'video', `Paradise Video #${index + 1}`, CONFIG.PAYPAL.PRICES.SINGLE_VIDEO);
+    } catch (error) {
+        ErrorHandler.logError(error, 'handleVideoClick');
     }
 }
 
 function startBannerSlideshow() {
-    const slides = document.querySelectorAll('.banner-slide');
-    
-    if (slides.length === 0) return;
-    
-    // Actualizar slides con banners del día - SIN public/assets
-    slides.forEach((slide, index) => {
-        const img = slide.querySelector('img');
-        if (img && state.dailyContent && state.dailyContent.banners[index]) {
-            img.src = `full/${state.dailyContent.banners[index]}`;
-        }
-    });
-    
-    setInterval(() => {
-        if (slides[state.currentSlide]) {
-            slides[state.currentSlide].classList.remove('active');
-        }
-        state.currentSlide = (state.currentSlide + 1) % slides.length;
-        if (slides[state.currentSlide]) {
-            slides[state.currentSlide].classList.add('active');
-        }
-    }, 5000);
-    
-    console.log('🎬 Banner slideshow started with', slides.length, 'slides');
+    try {
+        const slides = document.querySelectorAll('.banner-slide');
+        
+        if (slides.length === 0) return;
+        
+        // Actualizar slides con banners del día
+        slides.forEach((slide, index) => {
+            const img = slide.querySelector('img');
+            if (img && state.dailyContent && state.dailyContent.banners[index]) {
+                img.src = `full/${state.dailyContent.banners[index]}`;
+                img.onerror = () => handleImageError(img);
+            }
+        });
+        
+        setInterval(() => {
+            if (slides[state.currentSlide]) {
+                slides[state.currentSlide].classList.remove('active');
+            }
+            state.currentSlide = (state.currentSlide + 1) % slides.length;
+            if (slides[state.currentSlide]) {
+                slides[state.currentSlide].classList.add('active');
+            }
+        }, 5000);
+        
+        console.log('🎬 Banner slideshow started with', slides.length, 'slides');
+    } catch (error) {
+        ErrorHandler.logError(error, 'startBannerSlideshow');
+    }
 }
 
 // ============================
-// RESTO DE FUNCIONES (sin cambios en rutas)
+// ISABELLA CHAT BOT
 // ============================
 
 function toggleIsabella() {
-    const window = document.getElementById('isabellaWindow');
-    if (window) {
-        window.classList.toggle('active');
-        
-        if (window.classList.contains('active')) {
-            const notification = document.querySelector('.isabella-notification');
-            if (notification) {
-                notification.style.display = 'none';
+    try {
+        const window = document.getElementById('isabellaWindow');
+        if (window) {
+            window.classList.toggle('active');
+            
+            if (window.classList.contains('active')) {
+                const notification = document.querySelector('.isabella-notification');
+                if (notification) {
+                    notification.style.display = 'none';
+                }
+                trackEvent('isabella_opened');
+            } else {
+                trackEvent('isabella_closed');
             }
-            trackEvent('isabella_opened');
-        } else {
-            trackEvent('isabella_closed');
         }
+    } catch (error) {
+        ErrorHandler.logError(error, 'toggleIsabella');
     }
 }
 
 function isabellaAction(action) {
-    const messages = TRANSLATIONS[state.currentLanguage].isabella_messages;
-    
-    switch(action) {
-        case 'vip':
-            isabellaBot.addMessage(messages[2]);
-            setTimeout(() => showVIPModal(), 1000);
-            break;
-        case 'daily':
-            isabellaBot.addMessage(messages[3]);
-            break;
-        case 'help':
-            isabellaBot.addMessage(messages[4]);
-            break;
-        default:
-            isabellaBot.addMessage(messages[0]);
+    try {
+        const messages = TRANSLATIONS[state.currentLanguage].isabella_messages;
+        
+        switch(action) {
+            case 'vip':
+                isabellaBot.addMessage(messages[2]);
+                setTimeout(() => showVIPModal(), 1000);
+                break;
+            case 'daily':
+                isabellaBot.addMessage(messages[3]);
+                break;
+            case 'help':
+                isabellaBot.addMessage(messages[4]);
+                break;
+            default:
+                isabellaBot.addMessage(messages[0]);
+        }
+        
+        trackEvent('isabella_action', { action: action });
+    } catch (error) {
+        ErrorHandler.logError(error, 'isabellaAction');
     }
-    
-    trackEvent('isabella_action', { action: action });
 }
 
 // ============================
@@ -745,80 +978,104 @@ function isabellaAction(action) {
 // ============================
 
 function showVIPModal() {
-    const modal = document.getElementById('vipModal');
-    if (modal) {
-        modal.classList.add('active');
-        renderPayPalVIPButtons();
-        trackEvent('modal_open', { modal_type: 'vip_subscription' });
+    try {
+        const modal = document.getElementById('vipModal');
+        if (modal) {
+            modal.classList.add('active');
+            renderPayPalVIPButtons();
+            trackEvent('modal_open', { modal_type: 'vip_subscription' });
+        }
+    } catch (error) {
+        ErrorHandler.logError(error, 'showVIPModal');
     }
 }
 
 function showPackModal() {
-    const modal = document.getElementById('packModal');
-    if (modal) {
-        modal.classList.add('active');
-        renderPayPalPackButton(state.selectedPack);
-        trackEvent('modal_open', { modal_type: 'pack_selection' });
+    try {
+        const modal = document.getElementById('packModal');
+        if (modal) {
+            modal.classList.add('active');
+            renderPayPalPackButton(state.selectedPack);
+            trackEvent('modal_open', { modal_type: 'pack_selection' });
+        }
+    } catch (error) {
+        ErrorHandler.logError(error, 'showPackModal');
     }
 }
 
 function showPayPerViewModal(contentId, contentType, contentTitle, price) {
-    const trans = TRANSLATIONS[state.currentLanguage];
-    const ppvTitle = document.getElementById('ppvTitle');
-    const ppvPrice = document.getElementById('ppvPrice');
-    const ppvModal = document.getElementById('ppvModal');
-    
-    if (ppvTitle) ppvTitle.textContent = `${trans.unlock_content} - ${contentTitle}`;
-    if (ppvPrice) ppvPrice.textContent = `€${price.toFixed(2)}`;
-    if (ppvModal) ppvModal.classList.add('active');
-    
-    state.currentPayPalContentId = contentId;
-    state.currentPayPalContentType = contentType;
-    
-    renderPayPalSingleButton(contentId, contentType, contentTitle, price);
-    trackEvent('modal_open', { 
-        modal_type: 'pay_per_view', 
-        content_type: contentType,
-        content_id: contentId,
-        price: price
-    });
+    try {
+        const trans = TRANSLATIONS[state.currentLanguage];
+        const ppvTitle = document.getElementById('ppvTitle');
+        const ppvPrice = document.getElementById('ppvPrice');
+        const ppvModal = document.getElementById('ppvModal');
+        
+        if (ppvTitle) ppvTitle.textContent = `${trans.unlock_content} - ${contentTitle}`;
+        if (ppvPrice) ppvPrice.textContent = `€${price.toFixed(2)}`;
+        if (ppvModal) ppvModal.classList.add('active');
+        
+        state.currentPayPalContentId = contentId;
+        state.currentPayPalContentType = contentType;
+        
+        renderPayPalSingleButton(contentId, contentType, contentTitle, price);
+        trackEvent('modal_open', { 
+            modal_type: 'pay_per_view', 
+            content_type: contentType,
+            content_id: contentId,
+            price: price
+        });
+    } catch (error) {
+        ErrorHandler.logError(error, 'showPayPerViewModal');
+    }
 }
 
 function closeModal() {
-    document.querySelectorAll('.modal').forEach(modal => {
-        modal.classList.remove('active');
-    });
-    trackEvent('modal_close');
+    try {
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.classList.remove('active');
+        });
+        trackEvent('modal_close');
+    } catch (error) {
+        ErrorHandler.logError(error, 'closeModal');
+    }
 }
 
 function selectPlan(type) {
-    state.selectedSubscriptionType = type;
-    
-    document.querySelectorAll('.plan-card').forEach(card => {
-        card.classList.remove('selected');
-    });
-    
-    if (event && event.currentTarget) {
-        event.currentTarget.classList.add('selected');
+    try {
+        state.selectedSubscriptionType = type;
+        
+        document.querySelectorAll('.plan-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        
+        if (event && event.currentTarget) {
+            event.currentTarget.classList.add('selected');
+        }
+        
+        renderPayPalVIPButtons();
+        trackEvent('plan_selected', { plan_type: type });
+    } catch (error) {
+        ErrorHandler.logError(error, 'selectPlan');
     }
-    
-    renderPayPalVIPButtons();
-    trackEvent('plan_selected', { plan_type: type });
 }
 
 function selectPack(packType) {
-    state.selectedPack = packType;
-    
-    document.querySelectorAll('.pack-card').forEach(card => {
-        card.classList.remove('selected');
-    });
-    
-    if (event && event.currentTarget) {
-        event.currentTarget.classList.add('selected');
+    try {
+        state.selectedPack = packType;
+        
+        document.querySelectorAll('.pack-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        
+        if (event && event.currentTarget) {
+            event.currentTarget.classList.add('selected');
+        }
+        
+        renderPayPalPackButton(packType);
+        trackEvent('pack_selected', { pack_type: packType });
+    } catch (error) {
+        ErrorHandler.logError(error, 'selectPack');
     }
-    
-    renderPayPalPackButton(packType);
-    trackEvent('pack_selected', { pack_type: packType });
 }
 
 // ============================
@@ -826,146 +1083,161 @@ function selectPack(packType) {
 // ============================
 
 function renderPayPalVIPButtons() {
-    const container = document.getElementById('paypal-button-container-vip');
-    if (!container || !window.paypal) return;
-    
-    container.innerHTML = '';
-    
-    const isMonthly = state.selectedSubscriptionType === 'monthly';
-    const price = isMonthly ? 15.00 : 100.00;
-    const description = isMonthly ? 'IbizaGirl VIP Monthly Access' : 'IbizaGirl VIP Lifetime Access';
-    
-    paypal.Buttons({
-        createOrder: function(data, actions) {
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: String(price.toFixed(2)),
-                        currency_code: 'EUR'
-                    },
-                    description: description
-                }]
-            });
-        },
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-                console.log('VIP Transaction completed');
-                activateVIP(state.selectedSubscriptionType);
+    try {
+        const container = document.getElementById('paypal-button-container-vip');
+        if (!container || !window.paypal) return;
+        
+        container.innerHTML = '';
+        
+        const isMonthly = state.selectedSubscriptionType === 'monthly';
+        const price = isMonthly ? 15.00 : 100.00;
+        const description = isMonthly ? 'IbizaGirl VIP Monthly Access' : 'IbizaGirl VIP Lifetime Access';
+        
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: String(price.toFixed(2)),
+                            currency_code: 'EUR'
+                        },
+                        description: description
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    console.log('VIP Transaction completed');
+                    activateVIP(state.selectedSubscriptionType);
+                    const trans = TRANSLATIONS[state.currentLanguage];
+                    showNotification(trans.notification_welcome);
+                    celebrateUnlock();
+                    closeModal();
+                });
+            },
+            onError: function(err) {
+                console.error('PayPal VIP Error:', err);
+                ErrorHandler.logError(err, 'PayPal VIP');
                 const trans = TRANSLATIONS[state.currentLanguage];
-                showNotification(trans.notification_welcome);
-                celebrateUnlock();
-                closeModal();
-            });
-        },
-        onError: function(err) {
-            console.error('PayPal VIP Error:', err);
-            const trans = TRANSLATIONS[state.currentLanguage];
-            showNotification(trans.payment_error);
-        },
-        onCancel: function(data) {
-            console.log('Payment cancelled');
-        }
-    }).render('#paypal-button-container-vip');
+                showNotification(trans.payment_error);
+            },
+            onCancel: function(data) {
+                console.log('Payment cancelled');
+            }
+        }).render('#paypal-button-container-vip');
+    } catch (error) {
+        ErrorHandler.logError(error, 'renderPayPalVIPButtons');
+    }
 }
 
 function renderPayPalPackButton(packType) {
-    const container = document.getElementById('paypal-button-container-pack');
-    if (!container || !window.paypal || !packType) return;
-    
-    container.innerHTML = '';
-    
-    const pack = CONFIG.PAYPAL.PACKS[packType];
-    if (!pack) {
-        console.log('Pack not found:', packType);
-        return;
-    }
-    
-    const packDescription = 'IbizaGirl ' + packType + ' Pack - ' + pack.items + ' items';
-    const packPrice = Number(pack.price).toFixed(2);
-    
-    paypal.Buttons({
-        createOrder: function(data, actions) {
-            trackEvent('paypal_checkout_started', { 
-                type: 'pack', 
-                pack: packType,
-                price: pack.price 
-            });
-            
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: packPrice,
-                        currency_code: CONFIG.PAYPAL.CURRENCY
-                    },
-                    description: packDescription
-                }]
-            });
-        },
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-                console.log('Pack Transaction completed');
-                addPackCredits(pack.items);
-                trackEvent('purchase_complete', {
-                    type: 'pack',
-                    pack: packType,
-                    price: pack.price,
-                    items: pack.items,
-                    order_id: data.orderID
-                });
-                const trans = TRANSLATIONS[state.currentLanguage];
-                const message = trans.notification_pack.replace('{credits}', pack.items);
-                showNotification(message);
-                celebrateUnlock();
-                closeModal();
-            });
-        },
-        onError: function(err) {
-            console.error('PayPal Pack Error:', err);
-            const trans = TRANSLATIONS[state.currentLanguage];
-            showNotification(trans.payment_error);
-            trackEvent('payment_error', { type: 'pack', error: String(err) });
-        },
-        onCancel: function(data) {
-            trackEvent('payment_cancelled', { type: 'pack' });
+    try {
+        const container = document.getElementById('paypal-button-container-pack');
+        if (!container || !window.paypal || !packType) return;
+        
+        container.innerHTML = '';
+        
+        const pack = CONFIG.PAYPAL.PACKS[packType];
+        if (!pack) {
+            console.log('Pack not found:', packType);
+            return;
         }
-    }).render('#paypal-button-container-pack');
+        
+        const packDescription = 'IbizaGirl ' + packType + ' Pack - ' + pack.items + ' items';
+        const packPrice = Number(pack.price).toFixed(2);
+        
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                trackEvent('paypal_checkout_started', { 
+                    type: 'pack', 
+                    pack: packType,
+                    price: pack.price 
+                });
+                
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: packPrice,
+                            currency_code: CONFIG.PAYPAL.CURRENCY
+                        },
+                        description: packDescription
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    console.log('Pack Transaction completed');
+                    addPackCredits(pack.items);
+                    trackEvent('purchase_complete', {
+                        type: 'pack',
+                        pack: packType,
+                        price: pack.price,
+                        items: pack.items,
+                        order_id: data.orderID
+                    });
+                    const trans = TRANSLATIONS[state.currentLanguage];
+                    const message = trans.notification_pack.replace('{credits}', pack.items);
+                    showNotification(message);
+                    celebrateUnlock();
+                    closeModal();
+                });
+            },
+            onError: function(err) {
+                console.error('PayPal Pack Error:', err);
+                ErrorHandler.logError(err, 'PayPal Pack');
+                const trans = TRANSLATIONS[state.currentLanguage];
+                showNotification(trans.payment_error);
+                trackEvent('payment_error', { type: 'pack', error: String(err) });
+            },
+            onCancel: function(data) {
+                trackEvent('payment_cancelled', { type: 'pack' });
+            }
+        }).render('#paypal-button-container-pack');
+    } catch (error) {
+        ErrorHandler.logError(error, 'renderPayPalPackButton');
+    }
 }
 
 function renderPayPalSingleButton(contentId, contentType, contentTitle, price) {
-    const container = document.getElementById('paypal-button-container-ppv');
-    if (!container || !window.paypal) return;
-    
-    container.innerHTML = '';
-    
-    paypal.Buttons({
-        createOrder: function(data, actions) {
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: String(price.toFixed(2)),
-                        currency_code: 'EUR'
-                    },
-                    description: `Unlock ${contentTitle}`
-                }]
-            });
-        },
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-                console.log('Single content purchase completed');
-                unlockSingleContent(contentId);
+    try {
+        const container = document.getElementById('paypal-button-container-ppv');
+        if (!container || !window.paypal) return;
+        
+        container.innerHTML = '';
+        
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: String(price.toFixed(2)),
+                            currency_code: 'EUR'
+                        },
+                        description: `Unlock ${contentTitle}`
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    console.log('Single content purchase completed');
+                    unlockSingleContent(contentId);
+                    const trans = TRANSLATIONS[state.currentLanguage];
+                    const icon = contentType === 'video' ? '🎬' : '📸';
+                    showNotification(`${icon} ${contentTitle} unlocked!`);
+                    celebrateUnlock();
+                    closeModal();
+                });
+            },
+            onError: function(err) {
+                console.error('PayPal Single Error:', err);
+                ErrorHandler.logError(err, 'PayPal Single');
                 const trans = TRANSLATIONS[state.currentLanguage];
-                const icon = contentType === 'video' ? '🎬' : '📸';
-                showNotification(`${icon} ${contentTitle} unlocked!`);
-                celebrateUnlock();
-                closeModal();
-            });
-        },
-        onError: function(err) {
-            console.error('PayPal Single Error:', err);
-            const trans = TRANSLATIONS[state.currentLanguage];
-            showNotification(trans.payment_error);
-        }
-    }).render('#paypal-button-container-ppv');
+                showNotification(trans.payment_error);
+            }
+        }).render('#paypal-button-container-ppv');
+    } catch (error) {
+        ErrorHandler.logError(error, 'renderPayPalSingleButton');
+    }
 }
 
 // ============================
@@ -973,100 +1245,124 @@ function renderPayPalSingleButton(contentId, contentType, contentTitle, price) {
 // ============================
 
 function activateVIP(type) {
-    state.isVIP = true;
-    
-    localStorage.setItem('ibiza_vip', JSON.stringify({
-        active: true,
-        type: type,
-        activatedAt: Date.now()
-    }));
-    
-    unlockAllContent();
-    
-    const trans = TRANSLATIONS[state.currentLanguage];
-    if (window.isabellaBot) {
-        isabellaBot.addMessage(trans.notification_welcome);
+    try {
+        state.isVIP = true;
+        
+        localStorage.setItem('ibiza_vip', JSON.stringify({
+            active: true,
+            type: type,
+            activatedAt: Date.now()
+        }));
+        
+        unlockAllContent();
+        
+        const trans = TRANSLATIONS[state.currentLanguage];
+        if (window.isabellaBot) {
+            isabellaBot.addMessage(trans.notification_welcome);
+        }
+        
+        console.log('👑 VIP activated:', type);
+    } catch (error) {
+        ErrorHandler.logError(error, 'activateVIP');
     }
-    
-    console.log('👑 VIP activated:', type);
 }
 
 function unlockAllContent() {
-    document.querySelectorAll('.content-item').forEach(item => {
-        item.classList.add('unlocked');
-        const media = item.querySelector('.item-media');
-        if (media) {
-            media.style.filter = 'none';
-        }
-    });
-    
-    console.log('🔓 All content unlocked');
+    try {
+        document.querySelectorAll('.content-item').forEach(item => {
+            item.classList.add('unlocked');
+            const media = item.querySelector('.item-media');
+            if (media) {
+                media.style.filter = 'none';
+            }
+        });
+        
+        console.log('🔓 All content unlocked');
+    } catch (error) {
+        ErrorHandler.logError(error, 'unlockAllContent');
+    }
 }
 
 function unlockSingleContent(contentId) {
-    state.unlockedContent.add(contentId);
-    
-    const item = document.querySelector(`[data-id="${contentId}"]`);
-    if (item) {
-        item.classList.add('unlocked');
-        const media = item.querySelector('.item-media');
-        if (media) {
-            media.style.filter = 'none';
+    try {
+        state.unlockedContent.add(contentId);
+        
+        const item = document.querySelector(`[data-id="${contentId}"]`);
+        if (item) {
+            item.classList.add('unlocked');
+            const media = item.querySelector('.item-media');
+            if (media) {
+                media.style.filter = 'none';
+            }
         }
+        
+        saveUnlockedContent();
+        console.log('🔓 Content unlocked:', contentId);
+    } catch (error) {
+        ErrorHandler.logError(error, 'unlockSingleContent');
     }
-    
-    saveUnlockedContent();
-    console.log('🔓 Content unlocked:', contentId);
 }
 
 function addPackCredits(credits) {
-    state.packCredits += credits;
-    localStorage.setItem('ibiza_pack_credits', state.packCredits);
-    updateCreditsDisplay();
-    
-    console.log(`💰 Pack credits added: ${credits}. Total: ${state.packCredits}`);
-}
-
-function usePackCredit(contentId, contentType) {
-    if (state.packCredits > 0) {
-        state.packCredits--;
-        unlockSingleContent(contentId);
-        
+    try {
+        state.packCredits += credits;
         localStorage.setItem('ibiza_pack_credits', state.packCredits);
         updateCreditsDisplay();
         
-        const trans = TRANSLATIONS[state.currentLanguage];
-        const icon = contentType === 'video' ? '🎬' : '📸';
-        const message = trans.notification_unlocked
-            .replace('{icon}', icon)
-            .replace('{credits}', state.packCredits);
-        
-        showNotification(message);
-        celebrateUnlock();
-        
-        trackEvent('pack_credit_used', { 
-            content_id: contentId, 
-            content_type: contentType, 
-            credits_remaining: state.packCredits 
-        });
+        console.log(`💰 Pack credits added: ${credits}. Total: ${state.packCredits}`);
+    } catch (error) {
+        ErrorHandler.logError(error, 'addPackCredits');
+    }
+}
+
+function usePackCredit(contentId, contentType) {
+    try {
+        if (state.packCredits > 0) {
+            state.packCredits--;
+            unlockSingleContent(contentId);
+            
+            localStorage.setItem('ibiza_pack_credits', state.packCredits);
+            updateCreditsDisplay();
+            
+            const trans = TRANSLATIONS[state.currentLanguage];
+            const icon = contentType === 'video' ? '🎬' : '📸';
+            const message = trans.notification_unlocked
+                .replace('{icon}', icon)
+                .replace('{credits}', state.packCredits);
+            
+            showNotification(message);
+            celebrateUnlock();
+            
+            trackEvent('pack_credit_used', { 
+                content_id: contentId, 
+                content_type: contentType, 
+                credits_remaining: state.packCredits 
+            });
+        }
+    } catch (error) {
+        ErrorHandler.logError(error, 'usePackCredit');
     }
 }
 
 function updateCreditsDisplay() {
-    const creditsDisplay = document.getElementById('creditsDisplay');
-    const creditsNumber = document.getElementById('creditsNumber');
-    
-    if (state.packCredits > 0) {
-        if (creditsNumber) creditsNumber.textContent = state.packCredits;
-        if (creditsDisplay) {
-            creditsDisplay.classList.add('active');
-            state.creditsDisplayVisible = true;
+    try {
+        const creditsDisplay = document.getElementById('creditsDisplay');
+        const creditsNumber = document.getElementById('creditsNumber');
+        
+        if (state.packCredits > 0) {
+            if (creditsNumber) creditsNumber.textContent = state.packCredits;
+            if (creditsDisplay) {
+                creditsDisplay.classList.add('active');
+                state.creditsDisplayVisible = true;
+            }
+        } else {
+            if (creditsDisplay) {
+                creditsDisplay.classList.remove('active');
+                state.creditsDisplayVisible = false;
+            }
         }
-    } else {
-        if (creditsDisplay) {
-            creditsDisplay.classList.remove('active');
-            state.creditsDisplayVisible = false;
-        }
+    } catch (error) {
+        ErrorHandler.logError(error, 'updateCreditsDisplay');
     }
 }
 
@@ -1079,53 +1375,69 @@ const isabellaBot = {
     messageIndex: 0,
     
     init() {
-        this.messages = TRANSLATIONS[state.currentLanguage].isabella_messages;
-        
-        setTimeout(() => {
-            this.showNotification();
-            this.addMessage(this.messages[0]);
+        try {
+            this.messages = TRANSLATIONS[state.currentLanguage].isabella_messages;
             
             setTimeout(() => {
-                const randomTip = this.messages[Math.floor(Math.random() * (this.messages.length - 1)) + 1];
-                this.addMessage(randomTip);
-            }, 3000);
-        }, 5000);
-        
-        setInterval(() => {
-            const window = document.getElementById('isabellaWindow');
-            if (window && !window.classList.contains('active')) {
-                this.showRandomTip();
-            }
-        }, 120000);
+                this.showNotification();
+                this.addMessage(this.messages[0]);
+                
+                setTimeout(() => {
+                    const randomTip = this.messages[Math.floor(Math.random() * (this.messages.length - 1)) + 1];
+                    this.addMessage(randomTip);
+                }, 3000);
+            }, 5000);
+            
+            setInterval(() => {
+                const window = document.getElementById('isabellaWindow');
+                if (window && !window.classList.contains('active')) {
+                    this.showRandomTip();
+                }
+            }, 120000);
+        } catch (error) {
+            ErrorHandler.logError(error, 'isabellaBot.init');
+        }
     },
     
     addMessage(text) {
-        const messagesDiv = document.getElementById('isabellaMessages');
-        if (!messagesDiv) return;
-        
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'isabella-message';
-        messageDiv.innerHTML = text;
-        messagesDiv.appendChild(messageDiv);
-        
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        try {
+            const messagesDiv = document.getElementById('isabellaMessages');
+            if (!messagesDiv) return;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'isabella-message';
+            messageDiv.innerHTML = text;
+            messagesDiv.appendChild(messageDiv);
+            
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        } catch (error) {
+            ErrorHandler.logError(error, 'isabellaBot.addMessage');
+        }
     },
     
     showNotification() {
-        const notification = document.querySelector('.isabella-notification');
-        if (notification) {
-            notification.style.display = 'flex';
-            notification.textContent = '1';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 10000);
+        try {
+            const notification = document.querySelector('.isabella-notification');
+            if (notification) {
+                notification.style.display = 'flex';
+                notification.textContent = '1';
+                
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 10000);
+            }
+        } catch (error) {
+            ErrorHandler.logError(error, 'isabellaBot.showNotification');
         }
     },
     
     showRandomTip() {
-        const randomMessage = this.messages[Math.floor(Math.random() * this.messages.length)];
-        this.showNotification();
+        try {
+            const randomMessage = this.messages[Math.floor(Math.random() * this.messages.length)];
+            this.showNotification();
+        } catch (error) {
+            ErrorHandler.logError(error, 'isabellaBot.showRandomTip');
+        }
     }
 };
 
@@ -1136,16 +1448,20 @@ window.isabellaBot = isabellaBot;
 // ============================
 
 function trackEvent(eventName, parameters = {}) {
-    if (window.gtag) {
-        window.gtag('event', eventName, {
-            'event_category': 'engagement',
-            'event_label': state.currentLanguage,
-            ...parameters
-        });
-    }
-    
-    if (ENVIRONMENT.isDevelopment) {
-        console.log(`📊 Event: ${eventName}`, parameters);
+    try {
+        if (window.gtag) {
+            window.gtag('event', eventName, {
+                'event_category': 'engagement',
+                'event_label': state.currentLanguage,
+                ...parameters
+            });
+        }
+        
+        if (ENVIRONMENT.isDevelopment) {
+            console.log(`📊 Event: ${eventName}`, parameters);
+        }
+    } catch (error) {
+        // Silent fail for analytics
     }
 }
 
@@ -1199,112 +1515,307 @@ function saveUnlockedContent() {
 }
 
 function celebrateUnlock() {
-    if (typeof confetti !== 'undefined') {
-        confetti({
-            particleCount: 150,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#00d4ff', '#ff69b4', '#ffd700', '#00ff88', '#7fdbff'],
-            shapes: ['circle', 'square'],
-            scalar: 1.2
-        });
-        
-        setTimeout(() => {
+    try {
+        if (typeof confetti !== 'undefined') {
             confetti({
-                particleCount: 100,
-                spread: 50,
-                origin: { y: 0.8 },
-                colors: ['#ff69b4', '#ffd700'],
-                shapes: ['circle']
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#00d4ff', '#ff69b4', '#ffd700', '#00ff88', '#7fdbff'],
+                shapes: ['circle', 'square'],
+                scalar: 1.2
             });
-        }, 300);
+            
+            setTimeout(() => {
+                confetti({
+                    particleCount: 100,
+                    spread: 50,
+                    origin: { y: 0.8 },
+                    colors: ['#ff69b4', '#ffd700'],
+                    shapes: ['circle']
+                });
+            }, 300);
+        }
+    } catch (error) {
+        // Silent fail for confetti
     }
 }
 
 function showNotification(message) {
-    document.querySelectorAll('.notification-toast').forEach(n => n.remove());
-    
-    const notification = document.createElement('div');
-    notification.className = 'notification-toast';
-    notification.textContent = message;
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.style.opacity = '0';
+    try {
+        document.querySelectorAll('.notification-toast').forEach(n => n.remove());
+        
+        const notification = document.createElement('div');
+        notification.className = 'notification-toast';
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
         setTimeout(() => {
-            if (notification.parentNode) {
-                notification.remove();
-            }
-        }, 500);
-    }, 5000);
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 500);
+        }, 5000);
+    } catch (error) {
+        ErrorHandler.logError(error, 'showNotification');
+    }
 }
 
 function scrollCarousel(direction) {
-    const carousel = document.getElementById('teaserCarousel');
-    if (!carousel) return;
-    
-    const scrollAmount = 270;
-    const currentScroll = carousel.scrollLeft;
-    const newScroll = currentScroll + (direction * scrollAmount);
-    
-    carousel.scrollTo({
-        left: newScroll,
-        behavior: 'smooth'
-    });
-    
-    trackEvent('carousel_scroll', { direction: direction });
+    try {
+        const carousel = document.getElementById('teaserCarousel');
+        if (!carousel) return;
+        
+        const scrollAmount = 270;
+        const currentScroll = carousel.scrollLeft;
+        const newScroll = currentScroll + (direction * scrollAmount);
+        
+        carousel.scrollTo({
+            left: newScroll,
+            behavior: 'smooth'
+        });
+        
+        trackEvent('carousel_scroll', { direction: direction });
+    } catch (error) {
+        ErrorHandler.logError(error, 'scrollCarousel');
+    }
 }
 
 function updateLastUpdateTime() {
-    const updateHour = document.getElementById('updateHour');
-    if (updateHour) {
-        const now = new Date();
-        const updateTime = new Date(now);
-        updateTime.setHours(3, 0, 0, 0);
-        
-        if (now.getHours() < 3) {
-            updateTime.setDate(updateTime.getDate() - 1);
+    try {
+        const updateHour = document.getElementById('updateHour');
+        if (updateHour) {
+            const now = new Date();
+            const updateTime = new Date(now);
+            updateTime.setHours(3, 0, 0, 0);
+            
+            if (now.getHours() < 3) {
+                updateTime.setDate(updateTime.getDate() - 1);
+            }
+            
+            const hours = updateTime.getHours();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const displayHours = hours % 12 || 12;
+            
+            updateHour.textContent = `${displayHours}:00 ${ampm}`;
+            updateHour.setAttribute('datetime', updateTime.toISOString());
         }
-        
-        const hours = updateTime.getHours();
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-        const displayHours = hours % 12 || 12;
-        
-        updateHour.textContent = `${displayHours}:00 ${ampm}`;
-        updateHour.setAttribute('datetime', updateTime.toISOString());
+    } catch (error) {
+        ErrorHandler.logError(error, 'updateLastUpdateTime');
     }
 }
 
 function initializeViewCounter() {
-    setInterval(() => {
-        const views = document.getElementById('totalViews');
-        if (views) {
-            const current = parseFloat(views.textContent.replace('M', ''));
-            const increment = Math.random() * 0.002 + 0.001;
-            const newViews = (current + increment).toFixed(1);
-            views.textContent = `${newViews}M`;
-        }
-    }, 30000);
-    
-    if (state.dailyContent) {
-        const photoCount = document.getElementById('photoCount');
-        const videoCount = document.getElementById('videoCount');
+    try {
+        setInterval(() => {
+            const views = document.getElementById('totalViews');
+            if (views) {
+                const current = parseFloat(views.textContent.replace('M', ''));
+                const increment = Math.random() * 0.002 + 0.001;
+                const newViews = (current + increment).toFixed(1);
+                views.textContent = `${newViews}M`;
+            }
+        }, 30000);
         
-        if (photoCount) photoCount.textContent = state.dailyContent.stats.dailyPhotos;
-        if (videoCount) videoCount.textContent = state.dailyContent.stats.dailyVideos;
+        if (state.dailyContent) {
+            const photoCount = document.getElementById('photoCount');
+            const videoCount = document.getElementById('videoCount');
+            
+            if (photoCount) photoCount.textContent = state.dailyContent.stats.dailyPhotos;
+            if (videoCount) videoCount.textContent = state.dailyContent.stats.dailyVideos;
+        }
+    } catch (error) {
+        ErrorHandler.logError(error, 'initializeViewCounter');
     }
 }
 
 function setupScrollEffects() {
-    const header = document.getElementById('mainHeader');
-    
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 100) {
-            header?.classList.add('scrolled');
-        } else {
-            header?.classList.remove('scrolled');
+    try {
+        const header = document.getElementById('mainHeader');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                header?.classList.add('scrolled');
+            } else {
+                header?.classList.remove('scrolled');
+            }
+        });
+    } catch (error) {
+        ErrorHandler.logError(error, 'setupScrollEffects');
+    }
+}
+
+// ============================
+// KEYBOARD ACCESSIBILITY
+// ============================
+
+function setupKeyboardNavigation() {
+    try {
+        document.addEventListener('keydown', (e) => {
+            // ESC to close modals
+            if (e.key === 'Escape') {
+                closeModal();
+                
+                // Close Isabella if open
+                const isabellaWindow = document.getElementById('isabellaWindow');
+                if (isabellaWindow && isabellaWindow.classList.contains('active')) {
+                    toggleIsabella();
+                }
+            }
+            
+            // Enter/Space for clickable elements
+            if ((e.key === 'Enter' || e.key === ' ') && e.target.hasAttribute('tabindex')) {
+                e.preventDefault();
+                e.target.click();
+            }
+            
+            // Arrow keys for carousel navigation
+            if (e.key === 'ArrowLeft') {
+                scrollCarousel(-1);
+            } else if (e.key === 'ArrowRight') {
+                scrollCarousel(1);
+            }
+        });
+    } catch (error) {
+        ErrorHandler.logError(error, 'setupKeyboardNavigation');
+    }
+}
+
+// ============================
+// PERFORMANCE MONITORING
+// ============================
+
+function initPerformanceMonitoring() {
+    try {
+        // Monitor page load performance
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const navigation = performance.getEntriesByType('navigation')[0];
+                if (navigation) {
+                    trackEvent('page_performance', {
+                        load_time: navigation.loadEventEnd - navigation.loadEventStart,
+                        dom_content_loaded: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
+                        first_paint: performance.getEntriesByName('first-paint')[0]?.startTime || 0
+                    });
+                }
+            }, 1000);
+        });
+
+        // Monitor errors
+        let errorCount = 0;
+        window.addEventListener('error', (e) => {
+            errorCount++;
+            if (errorCount <= 5) { // Only track first 5 errors to avoid spam
+                trackEvent('javascript_error', {
+                    message: e.message,
+                    filename: e.filename,
+                    line: e.lineno,
+                    column: e.colno,
+                    count: errorCount
+                });
+            }
+        });
+
+        // Monitor unhandled promise rejections
+        window.addEventListener('unhandledrejection', (e) => {
+            trackEvent('unhandled_rejection', {
+                reason: e.reason?.toString() || 'Unknown rejection'
+            });
+        });
+    } catch (error) {
+        ErrorHandler.logError(error, 'initPerformanceMonitoring');
+    }
+}
+
+// ============================
+// CONTENT REFRESH SYSTEM
+// ============================
+
+function setupContentRefresh() {
+    try {
+        // Auto-refresh content every hour
+        setInterval(() => {
+            const newRotation = getDailyRotation();
+            if (newRotation && JSON.stringify(newRotation.stats) !== JSON.stringify(state.dailyContent?.stats)) {
+                console.log('🔄 Content refreshed automatically');
+                state.dailyContent = newRotation;
+                renderPhotosProgressive();
+                renderVideosProgressive();
+                renderTeaserCarousel();
+                
+                trackEvent('content_auto_refresh', {
+                    photos: newRotation.stats.dailyPhotos,
+                    videos: newRotation.stats.dailyVideos
+                });
+            }
+        }, 3600000); // 1 hour
+        
+    } catch (error) {
+        ErrorHandler.logError(error, 'setupContentRefresh');
+    }
+}
+
+// ============================
+// OFFLINE SUPPORT
+// ============================
+
+function setupOfflineSupport() {
+    try {
+        window.addEventListener('online', () => {
+            console.log('🌐 Back online');
+            showNotification('✅ Conexión restaurada');
+            
+            // Retry failed operations
+            if (state.dailyContent) {
+                renderPhotosProgressive();
+                renderVideosProgressive();
+            }
+        });
+
+        window.addEventListener('offline', () => {
+            console.log('📴 Gone offline');
+            showNotification('⚠️ Sin conexión a internet');
+        });
+    } catch (error) {
+        ErrorHandler.logError(error, 'setupOfflineSupport');
+    }
+}
+
+// ============================
+// LAZY LOADING IMPROVEMENTS
+// ============================
+
+function setupIntersectionObserver() {
+    try {
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                            img.classList.remove('skeleton');
+                            img.classList.add('loaded');
+                            delete img.dataset.src;
+                            imageObserver.unobserve(img);
+                        }
+                    }
+                });
+            }, { rootMargin: '50px' });
+
+            // Observe existing images
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+
+            // Store observer for later use
+            state.lazyLoadObserver = imageObserver;
         }
-    });
+    } catch (error) {
+        ErrorHandler.logError(error, 'setupIntersectionObserver');
+    }
 }
 
 // ============================
@@ -1322,90 +1833,135 @@ window.selectPlan = selectPlan;
 window.selectPack = selectPack;
 window.changeLanguage = changeLanguage;
 window.scrollCarousel = scrollCarousel;
+window.handleImageError = handleImageError;
+window.handleVideoError = handleVideoError;
 
 // ============================
-// INITIALIZATION
+// INITIALIZATION SEQUENCE
 // ============================
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🎨 Initializing Paradise Gallery v14.3.1 CRITICAL FIX...');
+    console.log('🎨 Initializing Paradise Gallery v14.3.2 CRITICAL FIX...');
     
-    // Load saved state first
-    loadSavedState();
-    
-    // Set language selector
-    const langSelect = document.getElementById('languageSelect');
-    if (langSelect) {
-        langSelect.value = state.currentLanguage;
-    }
-    
-    // Get today's content rotation
-    state.dailyContent = getDailyRotation();
-    console.log(`📅 Daily rotation initialized: ${state.dailyContent.photos.length} photos, ${state.dailyContent.videos.length} videos`);
-    
-    // Initialize Isabella bot
-    isabellaBot.init();
-    console.log('🤖 Isabella bot initialized');
-    
-    // Render all content
-    renderPhotosProgressive();
-    renderVideosProgressive();
-    renderTeaserCarousel();
-    console.log('🎨 Content rendering completed');
-    
-    // Start animations and effects
-    startBannerSlideshow();
-    setupScrollEffects();
-    
-    // Initialize counters and timers
-    initializeViewCounter();
-    updateLastUpdateTime();
-    
-    // Hide loading screen
-    setTimeout(() => {
-        const loadingScreen = document.getElementById('loadingScreen');
-        if (loadingScreen) {
-            loadingScreen.classList.add('hidden');
-            console.log('🚀 Loading screen hidden');
+    try {
+        // Initialize error handling
+        window.ErrorHandler = ErrorHandler;
+        
+        // Load saved state first
+        loadSavedState();
+        
+        // Set language selector
+        const langSelect = document.getElementById('languageSelect');
+        if (langSelect) {
+            langSelect.value = state.currentLanguage;
         }
-    }, 1500);
-    
-    // Track page view
-    trackEvent('page_view', { 
-        page: 'main_gallery', 
-        language: state.currentLanguage,
-        environment: ENVIRONMENT.isDevelopment ? 'dev' : 'prod',
-        daily_photos: state.dailyContent.photos.length,
-        daily_videos: state.dailyContent.videos.length
-    });
-    
-    // Apply initial language
-    changeLanguage(state.currentLanguage);
-    
-    console.log('✅ Paradise Gallery loaded successfully!');
-    console.log(`🌊 Version: 14.3.1 CRITICAL FIX - ${CONFIG.CONTENT.DAILY_PHOTOS} fotos + ${CONFIG.CONTENT.DAILY_VIDEOS} videos diarios`);
-    console.log('🔧 Critical fix: Changed .jpg to .webp for all fallback images');
+        
+        // Get today's content rotation
+        state.dailyContent = getDailyRotation();
+        if (state.dailyContent) {
+            console.log(`📅 Daily rotation initialized: ${state.dailyContent.photos.length} photos, ${state.dailyContent.videos.length} videos`);
+        } else {
+            console.error('Failed to initialize daily content rotation');
+            return;
+        }
+        
+        // Initialize Isabella bot
+        isabellaBot.init();
+        console.log('🤖 Isabella bot initialized');
+        
+        // Render all content
+        renderPhotosProgressive();
+        renderVideosProgressive();
+        renderTeaserCarousel();
+        console.log('🎨 Content rendering completed');
+        
+        // Start animations and effects
+        startBannerSlideshow();
+        setupScrollEffects();
+        setupKeyboardNavigation();
+        setupIntersectionObserver();
+        
+        // Initialize monitoring and refresh systems
+        initializeViewCounter();
+        updateLastUpdateTime();
+        initPerformanceMonitoring();
+        setupContentRefresh();
+        setupOfflineSupport();
+        
+        // Hide loading screen
+        setTimeout(() => {
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen) {
+                loadingScreen.classList.add('hidden');
+                console.log('🚀 Loading screen hidden');
+            }
+        }, 1500);
+        
+        // Track page view
+        trackEvent('page_view', { 
+            page: 'main_gallery', 
+            language: state.currentLanguage,
+            environment: ENVIRONMENT.isDevelopment ? 'dev' : 'prod',
+            daily_photos: state.dailyContent.photos.length,
+            daily_videos: state.dailyContent.videos.length,
+            version: '14.3.2'
+        });
+        
+        // Apply initial language
+        changeLanguage(state.currentLanguage);
+        
+        console.log('✅ Paradise Gallery loaded successfully!');
+        console.log(`🌊 Version: 14.3.2 CRITICAL FIX - ${state.dailyContent.stats.dailyPhotos} fotos + ${state.dailyContent.stats.dailyVideos} videos diarios`);
+        console.log('🔧 Critical fixes: Error handling, image fallbacks, video error recovery');
+        
+    } catch (error) {
+        ErrorHandler.logError(error, 'DOMContentLoaded');
+        console.error('❌ Critical initialization error:', error);
+        
+        // Show fallback content
+        document.body.innerHTML = `
+            <div style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                background: linear-gradient(180deg, #001f3f 0%, #003366 100%);
+                color: white;
+                font-family: Arial, sans-serif;
+                text-align: center;
+                padding: 2rem;
+            ">
+                <div>
+                    <h1>🌊 IbizaGirl.pics</h1>
+                    <p>Estamos experimentando dificultades técnicas.</p>
+                    <p>Por favor, recarga la página en unos momentos.</p>
+                    <button onclick="window.location.reload()" style="
+                        background: linear-gradient(135deg, #00a8cc, #00d4ff);
+                        color: #001f3f;
+                        border: none;
+                        padding: 1rem 2rem;
+                        border-radius: 25px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        margin-top: 1rem;
+                    ">🔄 Recargar</button>
+                </div>
+            </div>
+        `;
+    }
 });
 
 // ============================
-// ERROR HANDLING
+// FINAL ERROR HANDLING
 // ============================
 
 window.addEventListener('error', (e) => {
-    console.error('❌ Runtime Error:', e.error);
-    trackEvent('runtime_error', {
-        message: e.message,
-        filename: e.filename,
-        line: e.lineno,
-        column: e.colno
-    });
+    ErrorHandler.logError(e.error || new Error(e.message), 'Global Error Handler');
 });
 
 window.addEventListener('unhandledrejection', (e) => {
-    console.error('❌ Unhandled Promise Rejection:', e.reason);
-    trackEvent('unhandled_rejection', {
-        reason: e.reason?.toString() || 'Unknown rejection'
-    });
+    ErrorHandler.logError(e.reason, 'Unhandled Promise Rejection');
+    e.preventDefault(); // Prevent console spam
 });
 
-console.log('✅ Script loaded and ready with CRITICAL FIX (.webp extension)!');
+console.log('✅ Script loaded and ready with CRITICAL FIX v14.3.2!');
