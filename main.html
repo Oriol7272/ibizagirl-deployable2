@@ -3,373 +3,452 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IbizaGirl.pics - Paradise Gallery 🌴</title>
+    <title>IbizaGirl.pics - Galería Premium</title>
     
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Exclusive Ibiza lifestyle photography collection. Premium beach and fashion content from the paradise island.">
-    <meta name="keywords" content="Ibiza, photography, beach, lifestyle, fashion, exclusive content, paradise">
-    <meta property="og:title" content="IbizaGirl.pics - Paradise Gallery">
-    <meta property="og:description" content="Exclusive Ibiza lifestyle photography collection">
-    <meta property="og:image" content="/public/assets/full/bikbanner.jpg">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@IbizaGirlPics">
+    <!-- Preconnect para optimizar carga -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://www.paypal.com">
+    <link rel="preconnect" href="https://js.juicyads.com">
+    <link rel="preconnect" href="https://a.exoclick.com">
+    <link rel="preconnect" href="https://assets.ero-advertising.com">
     
-    <!-- SITE VERIFICATIONS FOR AD NETWORKS -->
-    <!-- Ero-Advertising Verification -->
-    <meta name="eroads_" content="5f8afe77e5b70fec960d89b314e045a4" />
+    <!-- Preload de recursos críticos -->
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="content-data.js" as="script">
+    <link rel="preload" href="main-script.js" as="script">
     
-    <!-- ExoClick Verification (Alternative method) -->
-    <meta name="exoclick-site-verification" content="97ce8adfbeb6e153ef4ebf2566dfeb7d">
+    <!-- Estilos -->
+    <link rel="stylesheet" href="styles.css">
     
-    <!-- JuicyAds Verification (Alternative method) -->
-    <meta name="juicyads-site-verification" content="f67a56f266e834d596c42122f88bb88d">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- ============================== -->
+    <!-- AD NETWORKS - SOLO 3 REDES -->
+    <!-- ============================== -->
+    
+    <!-- JuicyAds -->
+    <script type="text/javascript" data-cfasync="false" async>
+        window.juicyads_loaded = false;
+        (function() {
+            var jads = document.createElement('script');
+            jads.async = true;
+            jads.type = 'text/javascript';
+            jads.src = 'https://js.juicyads.com/jads.js';
+            jads.onload = function() {
+                window.juicyads_loaded = true;
+                console.log('✅ JuicyAds loaded');
+            };
+            jads.onerror = function() {
+                console.warn('⚠️ JuicyAds failed to load');
+            };
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jads, s);
+        })();
+    </script>
+    
+    <!-- ExoClick con manejo de errores -->
+    <script type="text/javascript">
+        window.exoclick_loaded = false;
+        var ExoLoader = ExoLoader || {
+            addZone: function(obj) {
+                console.log('ExoLoader placeholder - zone:', obj);
+            }
+        };
+    </script>
+    <script type="text/javascript" src="https://a.exoclick.com/ads.js" 
+            onload="window.exoclick_loaded = true; console.log('✅ ExoClick loaded');"
+            onerror="console.warn('⚠️ ExoClick failed to load');" async></script>
+    
+    <!-- EroAdvertising -->
+    <script type="text/javascript" data-cfasync="false" async>
+        window.eroadvertising_loaded = false;
+        (function() {
+            var ero = document.createElement('script');
+            ero.async = true;
+            ero.type = 'text/javascript';
+            ero.src = 'https://assets.ero-advertising.com/ero.js';
+            ero.onload = function() {
+                window.eroadvertising_loaded = true;
+                console.log('✅ EroAdvertising loaded');
+            };
+            ero.onerror = function() {
+                console.warn('⚠️ EroAdvertising failed to load');
+            };
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ero, s);
+        })();
+    </script>
+    
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR"></script>
     
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DBXYNPBSPY"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-DBXYNPBSPY');
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-DBXYNPBSPY');
     </script>
-
-    <!-- ========== AD NETWORKS SCRIPTS ========== -->
-    
-    <!-- PopAds -->
-    <script type="text/javascript">
-      var _pop = _pop || [];
-      _pop.push(['siteId', 4898543]);
-      _pop.push(['minBid', 0]);
-      _pop.push(['popundersPerIP', 0]);
-      _pop.push(['delayBetween', 0]);
-      _pop.push(['default', false]);
-      _pop.push(['defaultPerDay', 0]);
-      _pop.push(['topmostLayer', false]);
-      (function() {
-        var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
-        var s = document.getElementsByTagName('script')[0]; 
-        pa.src = '//c1.popads.net/pop.js';
-        pa.onerror = function() {
-          var sa = document.createElement('script'); sa.type = 'text/javascript'; sa.async = true;
-          sa.src = '//c2.popads.net/pop.js';
-          s.parentNode.insertBefore(sa, s);
-        };
-        s.parentNode.insertBefore(pa, s);
-      })();
-    </script>
-
-    <!-- JuicyAds -->
-    <script type="text/javascript" data-cfasync="false">
-      var juicyads_site_id = '87923';
-      var juicyads_ad_width = '728';
-      var juicyads_ad_height = '90';
-    </script>
-    <script type="text/javascript" data-cfasync="false" src="https://js.juicyads.com/jads.js"></script>
-
-    <!-- ExoClick Native -->
-    <script type="application/javascript">
-      var ad_idzone = "4742808",
-          ad_width = "900",
-          ad_height = "250",
-          ad_sub = "0";
-    </script>
-    <script type="application/javascript" src="https://a.exoclick.com/ads.js"></script>
-
-    <!-- ExoClick Popunder -->
-    <script type="application/javascript" src="https://a.exoclick.com/popunder1000.js"></script>
-    <script type="application/javascript">
-      ExoLoader.addZone({"type":"popunder","idzone":"4742809","capping":2,"cb":"0"});
-    </script>
-
-    <!-- Ero-Advertising -->
-    <script type="text/javascript">
-      var ero_site_id = 'ibizagirl';
-      var ero_ad_type = 'popunder';
-      var ero_frequency_capping = 2;
-    </script>
-    <script type="text/javascript" src="https://assets.ero-advertising.com/ero.js"></script>
-
-    <!-- PropellerAds -->
-    <script>(function(s,u,z,p){s.src=u,s.setAttribute('data-zone',z),p.appendChild(s);})(document.createElement('script'),'https://inklinkor.com/tag.min.js',5748443,document.body||document.documentElement)</script>
-
-    <!-- AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8192796967614829" 
-         crossorigin="anonymous"></script>
-
-    <!-- Styles -->
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- Confetti Animation -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
-    <!-- PayPal SDK with verified Client ID -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR"></script>
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Language Selector -->
     <div class="language-selector">
-        <select id="languageSelect">
-            <option value="en">🇬🇧 English</option>
+        <select id="languageSelect" onchange="changeLanguage(this.value)">
             <option value="es">🇪🇸 Español</option>
+            <option value="en">🇬🇧 English</option>
             <option value="de">🇩🇪 Deutsch</option>
-            <option value="fr">🇫🇷 Français</option>
             <option value="it">🇮🇹 Italiano</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="pt">🇵🇹 Português</option>
         </select>
     </div>
 
-    <!-- Header -->
-    <header class="main-header">
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">🌊 IbizaGirl.pics</div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <p data-translate="loading">Cargando el paraíso...</p>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header" id="mainHeader">
         <div class="header-content">
-            <h1 class="site-title">
-                <span class="title-icon">🌴</span>
-                IbizaGirl.pics
-                <span class="title-icon">🌴</span>
-            </h1>
-            <p class="site-subtitle" data-i18n="subtitle">Paradise Gallery - Exclusive Content</p>
+            <div class="logo-section">
+                <div class="logo">🌊 IbizaGirl.pics</div>
+                <div class="logo-subtitle" data-translate="subtitle">Contenido Exclusivo del Paraíso</div>
+            </div>
+            
+            <div class="header-buttons">
+                <button class="header-btn" onclick="showPackModal()" data-translate="megapack">📦 MEGA PACKS -70%</button>
+                <button class="header-btn" onclick="showVIPModal()" data-translate="monthly">💳 €15/Mes</button>
+                <button class="header-btn vip" onclick="showVIPModal()" data-translate="lifetime">👑 Lifetime €100</button>
+            </div>
         </div>
     </header>
 
-    <!-- Main Navigation -->
-    <nav class="main-nav">
-        <button class="nav-btn active" data-section="gallery">
-            <i class="fas fa-images"></i>
-            <span data-i18n="nav_gallery">Gallery</span>
-        </button>
-        <button class="nav-btn" data-section="videos">
-            <i class="fas fa-video"></i>
-            <span data-i18n="nav_videos">Videos</span>
-        </button>
-        <button class="nav-btn" data-section="premium">
-            <i class="fas fa-crown"></i>
-            <span data-i18n="nav_premium">Premium</span>
-        </button>
-    </nav>
-
     <!-- Credits Display -->
-    <div class="credits-display">
-        <div class="credits-content">
-            <i class="fas fa-coins"></i>
-            <span data-i18n="credits">Credits</span>: 
-            <span id="creditCount">0</span>
-        </div>
-        <button class="buy-credits-btn" onclick="showPaymentModal()">
-            <i class="fas fa-plus-circle"></i>
-            <span data-i18n="buy_credits">Buy Credits</span>
-        </button>
+    <div class="credits-display" id="creditsDisplay">
+        <div class="credits-number" id="creditsNumber">0</div>
+        <div class="credits-label">Créditos disponibles</div>
     </div>
 
-    <!-- Top Ad Banner - JuicyAds -->
-    <div class="ad-container ad-top">
-        <div id="ad-banner-top" class="ad-slot">
-            <iframe src="https://ads.juicyads.com/adshow.php?adzone=738291" width="728" height="90" frameborder="0" scrolling="no"></iframe>
-        </div>
-    </div>
-
-    <!-- Main Content Container -->
-    <main class="main-content">
-        <!-- Gallery Section -->
-        <section id="gallery-section" class="content-section active">
-            <div class="gallery-container" id="galleryContainer">
-                <!-- Photos will be loaded here dynamically -->
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Banner Slideshow -->
+        <section class="banner-slideshow">
+            <div class="banner-slide active">
+                <img src="public/assets/full/bikbanner.jpg" alt="Paradise Banner">
             </div>
-        </section>
-
-        <!-- Videos Section -->
-        <section id="videos-section" class="content-section">
-            <div class="videos-container" id="videosContainer">
-                <!-- Videos will be loaded here dynamically -->
+            <div class="banner-slide">
+                <img src="public/assets/full/bikbanner2.jpg" alt="Paradise Banner 2">
             </div>
-        </section>
-
-        <!-- Premium Section -->
-        <section id="premium-section" class="content-section">
-            <div class="premium-container">
-                <div class="premium-header">
-                    <h2 data-i18n="premium_title">🔥 Premium Content 🔥</h2>
-                    <p data-i18n="premium_subtitle">Unlock exclusive photos and videos</p>
-                </div>
-                <div class="premium-plans">
-                    <div class="plan-card">
-                        <h3>Starter Pack</h3>
-                        <p class="price">10 Credits</p>
-                        <p class="price-eur">€4.99</p>
-                        <button onclick="purchaseCredits(10, 4.99)">Buy Now</button>
-                    </div>
-                    <div class="plan-card popular">
-                        <span class="popular-badge">POPULAR</span>
-                        <h3>Premium Pack</h3>
-                        <p class="price">25 Credits</p>
-                        <p class="price-eur">€9.99</p>
-                        <button onclick="purchaseCredits(25, 9.99)">Buy Now</button>
-                    </div>
-                    <div class="plan-card">
-                        <h3>VIP Pack</h3>
-                        <p class="price">60 Credits</p>
-                        <p class="price-eur">€19.99</p>
-                        <button onclick="purchaseCredits(60, 19.99)">Buy Now</button>
-                    </div>
+            <div class="banner-overlay">
+                <h2 class="banner-title" data-translate="welcome">Bienvenida al Paraíso 🌴</h2>
+                <p class="banner-subtitle" data-translate="daily_content">200+ fotos y 40+ videos actualizados DIARIAMENTE</p>
+                <div class="banner-cta">
+                    <button class="header-btn cta-primary" onclick="showVIPModal()" data-translate="unlock_all">🔓 Desbloquear Todo</button>
+                    <button class="header-btn cta-secondary" onclick="document.getElementById('photosSection').scrollIntoView({behavior: 'smooth'})" data-translate="view_gallery">📸 Ver Galería</button>
                 </div>
             </div>
         </section>
-    </main>
 
-    <!-- Middle Ad - ExoClick Native -->
-    <div class="ad-container ad-middle">
-        <div id="ad-banner-middle" class="ad-slot">
-            <ins class="adsbyexoclick" data-zoneid="4742808"></ins>
-            <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
+        <!-- Ad Container 1 - JuicyAds -->
+        <div class="ad-container ad-horizontal" id="juicyads-banner-1">
+            <ins class="juicyads" data-zone="903748"></ins>
+            <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':903748});</script>
         </div>
-    </div>
 
-    <!-- Load More Button -->
-    <div class="load-more-container">
-        <button id="loadMoreBtn" class="load-more-btn">
-            <i class="fas fa-sync-alt"></i>
-            <span data-i18n="load_more">Load More Content</span>
-        </button>
-    </div>
+        <!-- Teaser Carousel -->
+        <section class="teaser-carousel-container">
+            <h2 class="teaser-title" data-translate="preview_gallery">🔥 Vista Previa Exclusiva</h2>
+            <div class="teaser-carousel" id="teaserCarousel"></div>
+            <div class="carousel-nav">
+                <button class="carousel-btn" onclick="scrollCarousel(-1)">‹</button>
+                <button class="carousel-btn" onclick="scrollCarousel(1)">›</button>
+            </div>
+        </section>
 
-    <!-- Bottom Ad - Ero-Advertising Banner -->
-    <div class="ad-container ad-bottom">
-        <div id="ad-banner-bottom" class="ad-slot">
-            <div id="ero-banner-bottom"></div>
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="stat-card">
+                <div class="stat-icon">📸</div>
+                <div class="stat-number" id="photoCount">200</div>
+                <div class="stat-label" data-translate="photos_today">Fotos de Hoy</div>
+                <div class="stat-update">
+                    <span data-translate="updated_at">Actualizado a las</span>
+                    <time id="updateHour">3:00 AM</time>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">🎬</div>
+                <div class="stat-number" id="videoCount">40</div>
+                <div class="stat-label" data-translate="videos_hd">Videos HD</div>
+                <div class="stat-update" data-translate="new_content">¡NUEVO CONTENIDO!</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">👁️</div>
+                <div class="stat-number" id="totalViews">25.8M</div>
+                <div class="stat-label" data-translate="total_views">Vistas Totales</div>
+                <div class="stat-update">+120K <span data-translate="today">hoy</span></div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-number">24/7</div>
+                <div class="stat-label" data-translate="updates">Actualizaciones</div>
+                <div class="stat-update" data-translate="always_fresh">SIEMPRE FRESCO</div>
+            </div>
+        </section>
+
+        <!-- Ad Container 2 - ExoClick -->
+        <div class="ad-container ad-horizontal" id="exoclick-banner-1">
             <script type="text/javascript">
-                // Ero-Advertising banner placement
-                if (typeof ero_show_banner === 'function') {
-                    ero_show_banner('ero-banner-bottom', '728x90');
+                if (typeof ExoLoader !== 'undefined') {
+                    ExoLoader.addZone({"type":"banner","width":"728","height":"90","idzone":"5748443"});
                 }
             </script>
         </div>
-    </div>
 
-    <!-- Side floating ads for mobile - JuicyAds Mobile -->
-    <div class="mobile-ad-container" style="display: none;">
-        <script type="text/javascript" data-cfasync="false">
-            if (window.innerWidth <= 768) {
-                document.write('<iframe src="https://ads.juicyads.com/adshow.php?adzone=738292" width="320" height="50" frameborder="0" scrolling="no"></iframe>');
-                document.querySelector('.mobile-ad-container').style.display = 'block';
-            }
-        </script>
-    </div>
-
-    <!-- Footer -->
-    <footer class="main-footer">
-        <div class="footer-content">
-            <p>&copy; 2024 IbizaGirl.pics - All Rights Reserved</p>
-            <div class="footer-links">
-                <a href="#" data-i18n="privacy">Privacy Policy</a>
-                <a href="#" data-i18n="terms">Terms of Service</a>
-                <a href="#" data-i18n="contact">Contact</a>
+        <!-- Photos Section -->
+        <section class="content-section" id="photosSection">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span data-translate="paradise_photos">📸 Fotos del Paraíso</span>
+                    <span class="section-badge" data-translate="new_today">¡NUEVO HOY!</span>
+                </h2>
             </div>
+            <div class="content-grid" id="photosGrid"></div>
+        </section>
+
+        <!-- Ad Container 3 - EroAdvertising -->
+        <div class="ad-container ad-horizontal" id="ero-banner-1">
+            <div data-ero-spot="123456"></div>
+        </div>
+
+        <!-- Videos Section -->
+        <section class="content-section" id="videosSection">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span data-translate="exclusive_videos">🎬 Videos Exclusivos</span>
+                    <span class="section-badge" data-translate="fresh_content">¡CONTENIDO FRESCO!</span>
+                </h2>
+            </div>
+            <div class="content-grid" id="videosGrid"></div>
+        </section>
+    </div>
+
+    <!-- Isabella Chat Bot -->
+    <div class="isabella-chat">
+        <div class="isabella-bubble" onclick="toggleIsabella()">
+            <span class="isabella-avatar">💕</span>
+            <div class="isabella-notification">1</div>
+        </div>
+        
+        <div class="isabella-window" id="isabellaWindow">
+            <div class="isabella-header">
+                <div class="isabella-title">
+                    <span>💕</span>
+                    <span data-translate="isabella_title">Isabella - Tu Guía VIP</span>
+                </div>
+                <button class="isabella-close" onclick="toggleIsabella()">×</button>
+            </div>
+            <div class="isabella-messages" id="isabellaMessages"></div>
+            <div class="isabella-actions">
+                <button class="isabella-btn" onclick="isabellaAction('vip')" data-translate="vip_info">💎 VIP Info</button>
+                <button class="isabella-btn" onclick="isabellaAction('daily')" data-translate="news">📅 Novedades</button>
+                <button class="isabella-btn" onclick="isabellaAction('help')" data-translate="help">❓ Ayuda</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIP Modal -->
+    <div class="modal" id="vipModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" data-translate="vip_unlimited">👑 Acceso VIP Ilimitado</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            
+            <div class="plans-container">
+                <div class="plan-card" onclick="selectPlan('monthly')">
+                    <div class="plan-type" data-translate="plan_monthly">📅 Mensual</div>
+                    <div class="plan-price">€15</div>
+                    <div class="plan-period">/mes</div>
+                    <ul class="plan-features">
+                        <li data-translate="unlimited_access">Acceso ilimitado</li>
+                        <li data-translate="hd_videos">200+ fotos HD</li>
+                        <li data-translate="daily_updates">40+ videos HD</li>
+                        <li data-translate="no_ads">Sin publicidad</li>
+                    </ul>
+                </div>
+                
+                <div class="plan-card selected" onclick="selectPlan('lifetime')">
+                    <div class="best-value" data-translate="best_value">MEJOR VALOR</div>
+                    <div class="plan-type" data-translate="plan_lifetime">♾️ Lifetime</div>
+                    <div class="plan-price">€100</div>
+                    <div class="plan-period" data-translate="save_yearly">¡Ahorra €80 al año!</div>
+                    <ul class="plan-features">
+                        <li data-translate="unlimited_access">Acceso ilimitado de por vida</li>
+                        <li data-translate="all_content">Todo el contenido actual y futuro</li>
+                        <li data-translate="priority_support">Soporte prioritario</li>
+                        <li data-translate="exclusive_content">Contenido exclusivo VIP</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="paypal-button-container-vip" class="paypal-button-container"></div>
+        </div>
+    </div>
+
+    <!-- Pack Modal -->
+    <div class="modal" id="packModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" data-translate="pack_selection">📦 MEGA PACKS - Ahorra 70%</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            
+            <div class="packs-container">
+                <div class="pack-card" onclick="selectPack('starter')">
+                    <div class="pack-title" data-translate="pack_starter">Starter Pack</div>
+                    <div class="pack-items">10</div>
+                    <div class="pack-label" data-translate="items">contenidos</div>
+                    <div class="pack-price">€10</div>
+                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 33%</div>
+                </div>
+                
+                <div class="pack-card" onclick="selectPack('bronze')">
+                    <div class="pack-title" data-translate="pack_bronze">Bronze Pack</div>
+                    <div class="pack-items">20</div>
+                    <div class="pack-label" data-translate="items">contenidos</div>
+                    <div class="pack-price">€15</div>
+                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 50%</div>
+                </div>
+                
+                <div class="pack-card selected" onclick="selectPack('silver')">
+                    <div class="pack-title" data-translate="pack_silver">Silver Pack</div>
+                    <div class="pack-items">50</div>
+                    <div class="pack-label" data-translate="items">contenidos</div>
+                    <div class="pack-price">€30</div>
+                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 60%</div>
+                </div>
+                
+                <div class="pack-card" onclick="selectPack('gold')">
+                    <div class="pack-title" data-translate="pack_gold">Gold Pack</div>
+                    <div class="pack-items">100</div>
+                    <div class="pack-label" data-translate="items">contenidos</div>
+                    <div class="pack-price">€50</div>
+                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 70%</div>
+                </div>
+            </div>
+            
+            <div id="paypal-button-container-pack" class="paypal-button-container"></div>
+        </div>
+    </div>
+
+    <!-- PPV Modal -->
+    <div class="modal" id="ppvModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="ppvTitle" data-translate="unlock_content">🔓 Desbloquear Contenido</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="ppv-price" id="ppvPrice">€0.10</div>
+            <div id="paypal-button-container-ppv" class="paypal-button-container"></div>
+        </div>
+    </div>
+
+    <!-- Footer with Ad -->
+    <footer class="main-footer">
+        <!-- Ad Container 4 - Footer Mixed -->
+        <div class="ad-container ad-footer" id="mixed-footer-ad">
+            <!-- JuicyAds Footer -->
+            <ins class="juicyads" data-zone="903750"></ins>
+            <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':903750});</script>
+        </div>
+        
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>IbizaGirl.pics</h3>
+                <p data-translate="footer_desc">Tu destino diario para contenido exclusivo del paraíso mediterráneo.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 data-translate="quick_links">Enlaces Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="#photosSection" data-translate="photos">Fotos</a></li>
+                    <li><a href="#videosSection" data-translate="videos">Videos</a></li>
+                    <li><a href="#" onclick="showVIPModal()" data-translate="vip_subscription">Suscripción VIP</a></li>
+                    <li><a href="#" onclick="showPackModal()" data-translate="mega_packs">Mega Packs</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3 data-translate="support">Soporte</h3>
+                <ul class="footer-links">
+                    <li><a href="#" data-translate="terms">Términos de Servicio</a></li>
+                    <li><a href="#" data-translate="privacy">Política de Privacidad</a></li>
+                    <li><a href="#" data-translate="contact">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p data-translate="copyright">© 2025 IbizaGirl.pics - Todos los derechos reservados | 18+ Solo Adultos</p>
         </div>
     </footer>
 
-    <!-- Payment Modal -->
-    <div id="paymentModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closePaymentModal()">&times;</span>
-            <h2 data-i18n="payment_title">Complete Your Purchase</h2>
-            <div id="paypal-button-container"></div>
-        </div>
-    </div>
-
-    <!-- Image Viewer Modal -->
-    <div id="imageModal" class="modal image-modal">
-        <span class="close-modal" onclick="closeImageModal()">&times;</span>
-        <img class="modal-image" id="modalImage" src="" alt="">
-        <div class="modal-navigation">
-            <button class="nav-prev" onclick="navigateImage(-1)">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="nav-next" onclick="navigateImage(1)">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- Video Player Modal -->
-    <div id="videoModal" class="modal video-modal">
-        <span class="close-modal" onclick="closeVideoModal()">&times;</span>
-        <video id="modalVideo" controls>
-            <source src="" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
-
-    <!-- Twitter Bot Widget -->
-    <div id="twitter-bot" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
-        <a href="https://twitter.com/intent/follow?screen_name=IbizaGirlPics" 
-           target="_blank" 
-           class="twitter-follow-button"
-           style="background: #1DA1F2; color: white; padding: 10px 20px; border-radius: 25px; text-decoration: none; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: transform 0.2s;">
-            <i class="fab fa-twitter"></i>
-            <span>Follow @IbizaGirlPics</span>
-        </a>
-    </div>
-
-    <!-- Cookie Consent -->
-    <div id="cookieConsent" class="cookie-consent">
-        <p>This website uses cookies to enhance your experience. By continuing, you agree to our use of cookies.</p>
-        <button onclick="acceptCookies()">Accept</button>
-    </div>
-
     <!-- Scripts -->
     <script src="content-data.js"></script>
-    <script src="main-script.js"></script>
-
-    <!-- Initialize Additional Ad Networks -->
+    <script src="main-script.js" defer></script>
+    
+    <!-- Ad Network Verification Script -->
     <script>
-        // Initialize AdSense ads
-        (adsbygoogle = window.adsbygoogle || []).push({});
-        
-        // Cookie consent
-        function acceptCookies() {
-            localStorage.setItem('cookiesAccepted', 'true');
-            document.getElementById('cookieConsent').style.display = 'none';
-        }
-        
-        // Check cookie consent
-        if (localStorage.getItem('cookiesAccepted') === 'true') {
-            document.getElementById('cookieConsent').style.display = 'none';
-        }
-        
-        // Initialize ExoClick
-        var ExoLoader = ExoLoader || {
-            addZone: function(zone) {
-                console.log('ExoClick zone added:', zone);
-            }
-        };
-        
-        // Fallback for ad loading
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                // Check if ads loaded
-                var adSlots = document.querySelectorAll('.ad-slot');
-                adSlots.forEach(function(slot) {
-                    if (slot.children.length === 0 || slot.querySelector('iframe[src=""]')) {
-                        // Ad didn't load, show fallback
-                        slot.innerHTML = `
-                            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                                        color: white; 
-                                        padding: 30px; 
-                                        text-align: center; 
-                                        border-radius: 8px;
-                                        min-height: 90px;
-                                        display: flex;
-                                        flex-direction: column;
-                                        justify-content: center;">
-                                <h3 style="margin: 0 0 10px 0;">🌴 Support IbizaGirl.pics 🌴</h3>
-                                <p style="margin: 0;">Get unlimited access to all content!</p>
-                            </div>
-                        `;
+        // Verificar carga de ad networks después de 3 segundos
+        setTimeout(function() {
+            console.log('🔍 Verificando Ad Networks...');
+            
+            if (window.juicyads_loaded) {
+                console.log('✅ JuicyAds: Cargado correctamente');
+            } else {
+                console.warn('⚠️ JuicyAds: No cargado - posible ad blocker');
+                document.querySelectorAll('.juicyads').forEach(function(el) {
+                    if (!el.innerHTML) {
+                        el.innerHTML = '<div class="ad-placeholder">Advertisement</div>';
                     }
                 });
-            }, 3000);
-        });
+            }
+            
+            if (window.exoclick_loaded || typeof ExoLoader !== 'undefined') {
+                console.log('✅ ExoClick: Cargado correctamente');
+            } else {
+                console.warn('⚠️ ExoClick: No cargado - posible ad blocker');
+            }
+            
+            if (window.eroadvertising_loaded) {
+                console.log('✅ EroAdvertising: Cargado correctamente');
+            } else {
+                console.warn('⚠️ EroAdvertising: No cargado - posible ad blocker');
+            }
+            
+            // Mostrar placeholders si no hay ads
+            document.querySelectorAll('.ad-container').forEach(function(container) {
+                if (container.children.length === 0 || container.innerHTML.trim() === '') {
+                    container.innerHTML = '<div class="ad-placeholder">Advertisement Space</div>';
+                }
+            });
+        }, 3000);
     </script>
 </body>
 </html>
