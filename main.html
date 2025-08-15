@@ -15,6 +15,16 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@IbizaGirlPics">
     
+    <!-- SITE VERIFICATIONS FOR AD NETWORKS -->
+    <!-- Ero-Advertising Verification -->
+    <meta name="eroads_" content="5f8afe77e5b70fec960d89b314e045a4" />
+    
+    <!-- ExoClick Verification (Alternative method) -->
+    <meta name="exoclick-site-verification" content="97ce8adfbeb6e153ef4ebf2566dfeb7d">
+    
+    <!-- JuicyAds Verification (Alternative method) -->
+    <meta name="juicyads-site-verification" content="f67a56f266e834d596c42122f88bb88d">
+    
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DBXYNPBSPY"></script>
     <script>
@@ -24,22 +34,30 @@
       gtag('config', 'G-DBXYNPBSPY');
     </script>
 
-    <!-- Ad Networks Scripts -->
-    <!-- AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8192796967614829" 
-         crossorigin="anonymous"></script>
-
-    <!-- PropellerAds -->
-    <script>(function(s,u,z,p){s.src=u,s.setAttribute('data-zone',z),p.appendChild(s);})(document.createElement('script'),'https://inklinkor.com/tag.min.js',5748443,document.body||document.documentElement)</script>
-
-    <!-- PopCash -->
+    <!-- ========== AD NETWORKS SCRIPTS ========== -->
+    
+    <!-- PopAds -->
     <script type="text/javascript">
-      var popCashConfig = {
-        enabled: true,
-        frequency_capping: 2
-      };
+      var _pop = _pop || [];
+      _pop.push(['siteId', 4898543]);
+      _pop.push(['minBid', 0]);
+      _pop.push(['popundersPerIP', 0]);
+      _pop.push(['delayBetween', 0]);
+      _pop.push(['default', false]);
+      _pop.push(['defaultPerDay', 0]);
+      _pop.push(['topmostLayer', false]);
+      (function() {
+        var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
+        var s = document.getElementsByTagName('script')[0]; 
+        pa.src = '//c1.popads.net/pop.js';
+        pa.onerror = function() {
+          var sa = document.createElement('script'); sa.type = 'text/javascript'; sa.async = true;
+          sa.src = '//c2.popads.net/pop.js';
+          s.parentNode.insertBefore(sa, s);
+        };
+        s.parentNode.insertBefore(pa, s);
+      })();
     </script>
-    <script src="https://cdn.popcash.net/show.js"></script>
 
     <!-- JuicyAds -->
     <script type="text/javascript" data-cfasync="false">
@@ -49,19 +67,35 @@
     </script>
     <script type="text/javascript" data-cfasync="false" src="https://js.juicyads.com/jads.js"></script>
 
-    <!-- ExoClick -->
-    <script type="text/javascript">
-      var exoOpts = {
-        zoneId: '4742808',
-        sub: '',
-        sub2: '',
-        sub3: ''
-      };
+    <!-- ExoClick Native -->
+    <script type="application/javascript">
+      var ad_idzone = "4742808",
+          ad_width = "900",
+          ad_height = "250",
+          ad_sub = "0";
     </script>
-    <script src="https://syndication.exoclick.com/splash.php"></script>
+    <script type="application/javascript" src="https://a.exoclick.com/ads.js"></script>
 
-    <!-- TrafficStars -->
-    <script async src="https://a.tsyndicate.com/sdk/v2/scripts.js"></script>
+    <!-- ExoClick Popunder -->
+    <script type="application/javascript" src="https://a.exoclick.com/popunder1000.js"></script>
+    <script type="application/javascript">
+      ExoLoader.addZone({"type":"popunder","idzone":"4742809","capping":2,"cb":"0"});
+    </script>
+
+    <!-- Ero-Advertising -->
+    <script type="text/javascript">
+      var ero_site_id = 'ibizagirl';
+      var ero_ad_type = 'popunder';
+      var ero_frequency_capping = 2;
+    </script>
+    <script type="text/javascript" src="https://assets.ero-advertising.com/ero.js"></script>
+
+    <!-- PropellerAds -->
+    <script>(function(s,u,z,p){s.src=u,s.setAttribute('data-zone',z),p.appendChild(s);})(document.createElement('script'),'https://inklinkor.com/tag.min.js',5748443,document.body||document.documentElement)</script>
+
+    <!-- AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8192796967614829" 
+         crossorigin="anonymous"></script>
 
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
@@ -69,7 +103,7 @@
     <!-- Confetti Animation -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
-    <!-- PayPal SDK -->
+    <!-- PayPal SDK with verified Client ID -->
     <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR"></script>
 
     <!-- Font Awesome -->
@@ -128,16 +162,10 @@
         </button>
     </div>
 
-    <!-- Top Ad Banner -->
+    <!-- Top Ad Banner - JuicyAds -->
     <div class="ad-container ad-top">
         <div id="ad-banner-top" class="ad-slot">
-            <!-- Ad will be inserted here -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-8192796967614829"
-                 data-ad-slot="1234567890"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
+            <iframe src="https://ads.juicyads.com/adshow.php?adzone=738291" width="728" height="90" frameborder="0" scrolling="no"></iframe>
         </div>
     </div>
 
@@ -189,13 +217,11 @@
         </section>
     </main>
 
-    <!-- Middle Ad -->
+    <!-- Middle Ad - ExoClick Native -->
     <div class="ad-container ad-middle">
         <div id="ad-banner-middle" class="ad-slot">
-            <!-- JuicyAds Banner -->
-            <script type="text/javascript" data-cfasync="false">
-                document.write('<iframe src="https://ads.juicyads.com/adshow.php?id=' + Math.random() + '&site_id=87923&size=728x90" width="728" height="90" frameborder="0" scrolling="no"></iframe>');
-            </script>
+            <ins class="adsbyexoclick" data-zoneid="4742808"></ins>
+            <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
         </div>
     </div>
 
@@ -207,17 +233,27 @@
         </button>
     </div>
 
-    <!-- Bottom Ad -->
+    <!-- Bottom Ad - Ero-Advertising Banner -->
     <div class="ad-container ad-bottom">
         <div id="ad-banner-bottom" class="ad-slot">
-            <!-- ExoClick Ad -->
+            <div id="ero-banner-bottom"></div>
             <script type="text/javascript">
-                var ad_idzone = "4742808";
-                var ad_width = "728";
-                var ad_height = "90";
+                // Ero-Advertising banner placement
+                if (typeof ero_show_banner === 'function') {
+                    ero_show_banner('ero-banner-bottom', '728x90');
+                }
             </script>
-            <script type="text/javascript" src="https://ads.exoclick.com/ads.js"></script>
         </div>
+    </div>
+
+    <!-- Side floating ads for mobile - JuicyAds Mobile -->
+    <div class="mobile-ad-container" style="display: none;">
+        <script type="text/javascript" data-cfasync="false">
+            if (window.innerWidth <= 768) {
+                document.write('<iframe src="https://ads.juicyads.com/adshow.php?adzone=738292" width="320" height="50" frameborder="0" scrolling="no"></iframe>');
+                document.querySelector('.mobile-ad-container').style.display = 'block';
+            }
+        </script>
     </div>
 
     <!-- Footer -->
@@ -285,7 +321,7 @@
     <script src="content-data.js"></script>
     <script src="main-script.js"></script>
 
-    <!-- Initialize Ads -->
+    <!-- Initialize Additional Ad Networks -->
     <script>
         // Initialize AdSense ads
         (adsbygoogle = window.adsbygoogle || []).push({});
@@ -300,6 +336,40 @@
         if (localStorage.getItem('cookiesAccepted') === 'true') {
             document.getElementById('cookieConsent').style.display = 'none';
         }
+        
+        // Initialize ExoClick
+        var ExoLoader = ExoLoader || {
+            addZone: function(zone) {
+                console.log('ExoClick zone added:', zone);
+            }
+        };
+        
+        // Fallback for ad loading
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                // Check if ads loaded
+                var adSlots = document.querySelectorAll('.ad-slot');
+                adSlots.forEach(function(slot) {
+                    if (slot.children.length === 0 || slot.querySelector('iframe[src=""]')) {
+                        // Ad didn't load, show fallback
+                        slot.innerHTML = `
+                            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                        color: white; 
+                                        padding: 30px; 
+                                        text-align: center; 
+                                        border-radius: 8px;
+                                        min-height: 90px;
+                                        display: flex;
+                                        flex-direction: column;
+                                        justify-content: center;">
+                                <h3 style="margin: 0 0 10px 0;">🌴 Support IbizaGirl.pics 🌴</h3>
+                                <p style="margin: 0;">Get unlimited access to all content!</p>
+                            </div>
+                        `;
+                    }
+                });
+            }, 3000);
+        });
     </script>
 </body>
 </html>
