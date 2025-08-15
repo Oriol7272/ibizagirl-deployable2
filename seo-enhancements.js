@@ -93,7 +93,7 @@ function setupAdvancedLazyLoading() {
             
             // Try fallback image - RUTA CORREGIDA
             if (!img.src || img.src.includes('data:')) {
-                img.src = 'full/bikini.jpg';
+                img.src = 'full/bikini.webp';
             }
         };
         
@@ -195,7 +195,7 @@ function loadCriticalImages() {
             };
             tempImg.onerror = () => {
                 // Use fallback on error - RUTA CORREGIDA
-                img.src = 'full/bikini.jpg';
+                img.src = 'full/bikini.webp';
                 img.classList.remove('skeleton');
                 delete img.dataset.src;
             };
