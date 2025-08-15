@@ -1704,69 +1704,72 @@ function renderPayPalVIPButtons() {
     }).render('#paypal-button-container-vip');
 }
 
-function renderPayPalPackButton(packType) {
-    const container = document.getElementById('paypal-button-container-pack');
-    if (!container || !window.paypal || !packType) return;
+function renderPayPalVIPButtons() {
+    const container = document.getElementById('paypal-button-container-vip');
+    if (!container || !window.paypal) return;
     
     // Clear existing buttons
     container.innerHTML = '';
     
-    const pack = CONFIG.PAYPAL.PACKS[packType];
-    if (!pack) return;
+    const price = state.selectedSubscriptionType === 'monthly' 
+        ? CONFIG.PAYPAL.PRICES.MONTHLY_SUBSCRIPTION 
+        : CONFIG.PAYPAL.PRICES.LIFETIME_SUBSCRIPTION;
+    
+    // Construir la descripción fuera del objeto para evitar problemas
+    const planType = state.selectedSubscriptionType === 'monthly' ? 'Monthly' : 'Lifetime';
+    const description = 'IbizaGirl VIP ' + planType + ' Access';
     
     paypal.Buttons({
         createOrder: function(data, actions) {
             trackEvent('paypal_checkout_started', { 
-                type: 'pack', 
-                pack: packType,
-                price: pack.price 
+                type: 'vip', 
+                plan: state.selectedSubscriptionType,
+                price: price 
             });
             
             return actions.order.create({
                 purchase_units: [{
                     amount: {
-                        value: pack.price.toFixed(2),
+                        value: price.toFixed(2),
                         currency_code: CONFIG.PAYPAL.CURRENCY
                     },
-                    description: "IbizaGirl " + packType + " Pack - " + pack.items + " items"
+                    description: description  // Usar la variable pre-construida
                 }]
             });
         },
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
-                console.log('✅ Pack Transaction completed by ' + details.payer.name.given_name);
+                console.log('✅ VIP Transaction completed by ' + details.payer.name.given_name);
                 
-                // Add pack credits
-                addPackCredits(pack.items);
+                // Activate VIP
+                activateVIP(state.selectedSubscriptionType);
                 
                 // Track successful purchase
                 trackEvent('purchase_complete', {
-                    type: 'pack',
-                    pack: packType,
-                    price: pack.price,
-                    items: pack.items,
+                    type: 'vip',
+                    plan: state.selectedSubscriptionType,
+                    price: price,
                     order_id: data.orderID,
                     payer_name: details.payer.name.given_name
                 });
                 
                 // Show success message
                 const trans = TRANSLATIONS[state.currentLanguage];
-                const message = trans.notification_pack.replace('{credits}', pack.items);
-                showNotification(message);
+                showNotification(trans.notification_welcome);
                 celebrateUnlock();
                 closeModal();
             });
         },
         onError: function(err) {
-            console.error('PayPal Pack Error:', err);
+            console.error('PayPal VIP Error:', err);
             const trans = TRANSLATIONS[state.currentLanguage];
             showNotification(trans.payment_error);
-            trackEvent('payment_error', { type: 'pack', error: err.toString() });
+            trackEvent('payment_error', { type: 'vip', error: err.toString() });
         },
         onCancel: function(data) {
-            trackEvent('payment_cancelled', { type: 'pack' });
+            trackEvent('payment_cancelled', { type: 'vip' });
         }
-    }).render('#paypal-button-container-pack');
+    }).render('#paypal-button-container-vip');
 }
 
 function renderPayPalSingleButton(contentId, contentType, contentTitle, price) {
