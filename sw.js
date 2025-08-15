@@ -9,7 +9,7 @@ const STATIC_CACHE = `ibizagirl-static-v${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `ibizagirl-dynamic-v${CACHE_VERSION}`;
 const IMAGE_CACHE = `ibizagirl-images-v${CACHE_VERSION}`;
 
-// Archivos críticos para cachear
+// Archivos críticos para cachear - RUTAS CORREGIDAS
 const STATIC_ASSETS = [
     '/',
     '/index.html',
@@ -19,13 +19,13 @@ const STATIC_ASSETS = [
     '/seo-enhancements.js',
     '/manifest.json',
     
-    // Imágenes críticas para SEO y UI
-    '/public/assets/full/bikini.jpg',
-    '/public/assets/full/bikbanner.jpg',
-    '/public/assets/full/bikbanner2.jpg',
-    '/public/assets/full/backbikini.jpg',
-    '/public/assets/full/bikini3.jpg',
-    '/public/assets/full/bikini5.jpg'
+    // Imágenes críticas para SEO y UI - SIN public/assets
+    '/full/bikini.jpg',
+    '/full/bikbanner.jpg',
+    '/full/bikbanner2.jpg',
+    '/full/backbikini.jpg',
+    '/full/bikini3.jpg',
+    '/full/bikini5.jpg'
 ];
 
 // External scripts to cache
@@ -233,9 +233,11 @@ async function handleFetch(request, url) {
             return await networkFirstWithFallback(request);
         }
         
-        // Para imágenes - Stale While Revalidate
+        // Para imágenes - Stale While Revalidate - RUTAS CORREGIDAS
         if (request.headers.get('accept')?.includes('image/') || 
-            url.pathname.includes('/public/assets/') ||
+            url.pathname.includes('/full/') ||
+            url.pathname.includes('/uncensored/') ||
+            url.pathname.includes('/uncensored-videos/') ||
             url.pathname.match(/\.(jpg|jpeg|png|webp|gif|svg)$/i)) {
             return await staleWhileRevalidate(request);
         }
@@ -320,15 +322,15 @@ self.addEventListener('sync', event => {
     }
 });
 
-// Función para precargar contenido
+// Función para precargar contenido - RUTAS CORREGIDAS
 async function preloadContent() {
     try {
         console.log('🔄 Service Worker: Preloading content...');
         
         const imagesToPreload = [
-            '/public/assets/full/bikini.jpg',
-            '/public/assets/full/bikbanner.jpg',
-            '/public/assets/full/bikini3.jpg'
+            '/full/bikini.jpg',
+            '/full/bikbanner.jpg',
+            '/full/bikini3.jpg'
         ];
         
         const cache = await caches.open(IMAGE_CACHE);
@@ -364,9 +366,9 @@ self.addEventListener('push', event => {
         
         const options = {
             body: data.body || 'Nuevo contenido disponible en IbizaGirl.pics',
-            icon: '/public/assets/full/bikini.jpg',
-            badge: '/public/assets/full/bikini.jpg',
-            image: data.image || '/public/assets/full/bikbanner.jpg',
+            icon: '/full/bikini.jpg',
+            badge: '/full/bikini.jpg',
+            image: data.image || '/full/bikbanner.jpg',
             tag: 'ibiza-update',
             requireInteraction: false,
             data: {
@@ -376,7 +378,7 @@ self.addEventListener('push', event => {
                 {
                     action: 'view',
                     title: 'Ver galería',
-                    icon: '/public/assets/full/bikini.jpg'
+                    icon: '/full/bikini.jpg'
                 },
                 {
                     action: 'close',
