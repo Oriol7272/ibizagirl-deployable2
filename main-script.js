@@ -2172,6 +2172,7 @@ function showNotification(message) {
 window.renderPayPalVIPButtons = renderPayPalVIPButtons;
 window.renderPayPalPackButton = renderPayPalPackButton;
 window.renderPayPalSingleButton = renderPayPalSingleButton;
+
 // ============================
 // INITIALIZATION SYSTEM
 // ============================
@@ -2572,7 +2573,6 @@ window.getDailyRotation = getDailyRotation;
 window.renderPhotosProgressive = renderPhotosProgressive;
 window.renderVideosProgressive = renderVideosProgressive;
 window.renderTeaserCarousel = renderTeaserCarousel;
-window.renderPayPalPackButton = renderPayPalPackButton;
 
 // Export unlock functions
 window.activateVIP = activateVIP;
