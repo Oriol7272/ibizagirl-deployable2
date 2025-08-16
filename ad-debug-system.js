@@ -1,353 +1,359 @@
 // ============================
-// ADS DEBUG SYSTEM v1.2.0 - COMPREHENSIVE DIAGNOSTICS
-// Real-time ad network monitoring and debugging
+// ADS DEBUG SYSTEM v1.0
+// Sistema de diagnóstico y corrección de anuncios
 // ============================
 
 (function() {
     'use strict';
     
+    console.log('🔍 Ads Debug System v1.0 iniciado');
+    
     const AdsDebugSystem = {
-        initialized: false,
-        debugMode: true,
-        checkInterval: null,
-        networks: ['juicyads', 'exoclick', 'popads'],
         
         init() {
-            if (this.initialized) return;
+            console.log('🔍 [Debug] Iniciando diagnóstico de anuncios...');
             
-            console.log('🔍 [Ads Debug] Initializing comprehensive debug system...');
-            
-            // Wait for DOM and other systems
-            setTimeout(() => {
-                this.startRealTimeMonitoring();
-                this.checkAdContainers();
-                this.monitorNetworkGlobals();
-                this.setupPerformanceTracking();
-                this.initialized = true;
-                console.log('✅ [Ads Debug] Debug system active');
-            }, 3000);
-            
-            // Setup manual debug commands
-            this.exposeDebugCommands();
-        },
-        
-        startRealTimeMonitoring() {
-            if (this.checkInterval) return;
-            
-            this.checkInterval = setInterval(() => {
-                this.performHealthCheck();
-            }, 10000); // Check every 10 seconds
-            
-            console.log('📊 [Ads Debug] Real-time monitoring started');
-        },
-        
-        performHealthCheck() {
-            const report = this.generateReport();
-            
-            if (report.issues.length > 0) {
-                console.warn('⚠️ [Ads Debug] Issues detected:', report.issues);
-                this.suggestFixes(report.issues);
+            // Esperar a que el DOM esté listo
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => this.runDiagnostics());
+            } else {
+                setTimeout(() => this.runDiagnostics(), 1000);
             }
             
-            // Update debug display if visible
-            this.updateDebugDisplay(report);
+            // Crear panel de debug
+            this.createDebugPanel();
+            
+            // Monitorear cambios en el DOM
+            this.monitorDOMChanges();
+        },
+        
+        runDiagnostics() {
+            console.log('🔍 [Debug] ===== DIAGNÓSTICO COMPLETO =====');
+            
+            // 1. Verificar scripts de anuncios
+            this.checkAdScripts();
+            
+            // 2. Verificar contenedores
+            this.checkAdContainers();
+            
+            // 3. Verificar bloqueos
+            this.checkAdBlockers();
+            
+            // 4. Verificar configuración
+            this.checkConfiguration();
+            
+            // 5. Intentar corrección automática
+            setTimeout(() => this.attemptAutoFix(), 2000);
+        },
+        
+        checkAdScripts() {
+            console.log('🔍 [Debug] Verificando scripts de anuncios...');
+            
+            const scripts = {
+                juicyads: document.querySelector('script[src*="jads.co"]'),
+                exoclick: document.querySelector('script[src*="exoclick"]'),
+                popads: document.querySelector('script[data-cfasync="false"]')
+            };
+            
+            Object.entries(scripts).forEach(([network, script]) => {
+                if (script) {
+                    console.log(`✅ [Debug] ${network}: Script encontrado`);
+                } else {
+                    console.warn(`❌ [Debug] ${network}: Script NO encontrado`);
+                    this.injectAdScript(network);
+                }
+            });
         },
         
         checkAdContainers() {
-            console.log('🔍 [Ads Debug] Checking ad containers...');
+            console.log('🔍 [Debug] Verificando contenedores de anuncios...');
             
-            const containers = document.querySelectorAll('.ad-container, [id*="ad-"], [class*="ads"]');
-            console.log(`📦 [Ads Debug] Found ${containers.length} potential ad containers`);
-            
-            containers.forEach((container, index) => {
-                const info = {
-                    id: container.id || `container-${index}`,
-                    classes: container.className,
-                    visible: this.isElementVisible(container),
-                    hasContent: container.children.length > 0,
-                    position: this.getElementPosition(container),
-                    size: this.getElementSize(container)
-                };
-                
-                console.log(`📦 [Container ${index + 1}]:`, info);
-                
-                if (!info.visible) {
-                    console.warn(`⚠️ [Container ${index + 1}] Not visible:`, container);
-                }
-                
-                if (!info.hasContent) {
-                    console.warn(`⚠️ [Container ${index + 1}] Empty container:`, container);
-                }
-            });
-        },
-        
-        monitorNetworkGlobals() {
-            console.log('🌐 [Ads Debug] Monitoring network globals...');
-            
-            const networks = {
-                juicyads: {
-                    globals: ['adsbyjuicy'],
-                    loaded: false,
-                    zones: []
-                },
-                exoclick: {
-                    globals: ['ExoLoader', 'exoclick', 'adProvider'],
-                    loaded: false,
-                    zones: []
-                },
-                popads: {
-                    globals: ['e494ffb82839a291', 'e494ffb82839a29122608e933394c091'],
-                    loaded: false,
-                    active: false
-                }
-            };
-            
-            Object.entries(networks).forEach(([name, config]) => {
-                config.loaded = config.globals.some(global => window[global]);
-                
-                if (config.loaded) {
-                    console.log(`✅ [${name}] Network detected`);
-                    this.analyzeNetwork(name, config);
-                } else {
-                    console.warn(`❌ [${name}] Network not detected`);
-                    console.log(`🔍 [${name}] Looking for:`, config.globals);
-                }
-            });
-        },
-        
-        analyzeNetwork(name, config) {
-            switch(name) {
-                case 'juicyads':
-                    this.analyzeJuicyAds();
-                    break;
-                case 'exoclick':
-                    this.analyzeExoClick();
-                    break;
-                case 'popads':
-                    this.analyzePopAds();
-                    break;
-            }
-        },
-        
-        analyzeJuicyAds() {
-            if (!window.adsbyjuicy) return;
-            
-            console.log('🍊 [JuicyAds] Analyzing...');
-            console.log('🍊 [JuicyAds] Global object:', window.adsbyjuicy);
-            console.log('🍊 [JuicyAds] Commands queue:', window.adsbyjuicy.cmd?.length || 0);
-            
-            // Check for zones
-            const zones = document.querySelectorAll('[id*="juicyads"], .juicyads-zone');
-            console.log(`🍊 [JuicyAds] Found ${zones.length} zone elements`);
-            
-            zones.forEach((zone, index) => {
-                console.log(`🍊 [Zone ${index + 1}]:`, {
-                    id: zone.id,
-                    visible: this.isElementVisible(zone),
-                    hasContent: zone.innerHTML.length > 0,
-                    content: zone.innerHTML.substring(0, 100) + '...'
-                });
-            });
-        },
-        
-        analyzeExoClick() {
-            console.log('🔵 [ExoClick] Analyzing...');
-            
-            const exoGlobals = ['ExoLoader', 'exoclick', 'adProvider'];
-            const foundGlobals = exoGlobals.filter(global => window[global]);
-            
-            console.log('🔵 [ExoClick] Available globals:', foundGlobals);
-            
-            foundGlobals.forEach(global => {
-                console.log(`🔵 [ExoClick] ${global}:`, window[global]);
-            });
-            
-            // Check for zones
-            const zones = document.querySelectorAll('[id*="exoclick"], .adsbyexoclick, [data-exoclick-zoneid]');
-            console.log(`🔵 [ExoClick] Found ${zones.length} zone elements`);
-            
-            zones.forEach((zone, index) => {
-                console.log(`🔵 [Zone ${index + 1}]:`, {
-                    id: zone.id,
-                    classes: zone.className,
-                    visible: this.isElementVisible(zone),
-                    hasContent: zone.innerHTML.length > 0
-                });
-            });
-        },
-        
-        analyzePopAds() {
-            console.log('🚀 [PopAds] Analyzing...');
-            
-            const popGlobals = Object.keys(window).filter(key => 
-                key.includes('e494ffb') || key.includes('popads')
-            );
-            
-            console.log('🚀 [PopAds] Found globals:', popGlobals);
-            
-            popGlobals.forEach(global => {
-                console.log(`🚀 [PopAds] ${global}:`, window[global]);
-            });
-            
-            // Check for injected scripts
-            const popScripts = document.querySelectorAll('script[data-cfasync="false"], script[src*="premiumvertising"]');
-            console.log(`🚀 [PopAds] Found ${popScripts.length} related scripts`);
-        },
-        
-        generateReport() {
-            const report = {
-                timestamp: new Date().toISOString(),
-                networks: {},
-                containers: [],
-                issues: [],
-                performance: {}
-            };
-            
-            // Check networks
-            this.networks.forEach(network => {
-                report.networks[network] = this.getNetworkStatus(network);
-            });
-            
-            // Check containers
             const containers = document.querySelectorAll('.ad-container');
-            containers.forEach((container, index) => {
-                const containerInfo = {
-                    index,
-                    id: container.id,
-                    visible: this.isElementVisible(container),
-                    hasContent: container.children.length > 0,
-                    isEmpty: container.innerHTML.trim().length === 0
-                };
-                
-                report.containers.push(containerInfo);
-                
-                // Detect issues
-                if (!containerInfo.visible) {
-                    report.issues.push(`Container ${index + 1} not visible`);
-                }
-                if (containerInfo.isEmpty) {
-                    report.issues.push(`Container ${index + 1} is empty`);
-                }
-            });
+            console.log(`📦 [Debug] Contenedores encontrados: ${containers.length}`);
             
-            return report;
-        },
-        
-        getNetworkStatus(network) {
-            switch(network) {
-                case 'juicyads':
-                    return {
-                        loaded: !!window.adsbyjuicy,
-                        ready: window.adsbyjuicy && typeof window.adsbyjuicy.push === 'function',
-                        zones: document.querySelectorAll('[id*="juicyads"]').length
-                    };
-                case 'exoclick':
-                    return {
-                        loaded: !!(window.ExoLoader || window.exoclick),
-                        ready: !!(window.ExoLoader?.addZone || window.exoclick),
-                        zones: document.querySelectorAll('[id*="exoclick"]').length
-                    };
-                case 'popads':
-                    return {
-                        loaded: Object.keys(window).some(key => key.includes('e494ffb')),
-                        ready: !!document.querySelector('script[data-cfasync="false"]'),
-                        active: true
-                    };
-                default:
-                    return { loaded: false, ready: false };
-            }
-        },
-        
-        suggestFixes(issues) {
-            console.group('🔧 [Ads Debug] Suggested fixes:');
-            
-            issues.forEach(issue => {
-                if (issue.includes('not visible')) {
-                    console.log('💡 Check CSS display/visibility properties');
-                    console.log('💡 Verify container positioning');
-                    console.log('💡 Check for AdBlock interference');
-                }
-                
-                if (issue.includes('empty')) {
-                    console.log('💡 Verify ad network initialization');
-                    console.log('💡 Check network zone IDs');
-                    console.log('💡 Verify script loading order');
-                }
-            });
-            
-            console.groupEnd();
-        },
-        
-        setupPerformanceTracking() {
-            // Track ad load times
-            if ('PerformanceObserver' in window) {
-                try {
-                    const observer = new PerformanceObserver((list) => {
-                        const entries = list.getEntries();
-                        entries.forEach(entry => {
-                            if (entry.name.includes('ads') || 
-                                entry.name.includes('juicy') || 
-                                entry.name.includes('exo') ||
-                                entry.name.includes('popads')) {
-                                console.log('📊 [Performance] Ad resource:', {
-                                    name: entry.name,
-                                    duration: entry.duration,
-                                    size: entry.transferSize
-                                });
-                            }
-                        });
+            if (containers.length === 0) {
+                console.warn('❌ [Debug] No hay contenedores de anuncios');
+                this.createAdContainers();
+            } else {
+                containers.forEach((container, index) => {
+                    const hasContent = container.children.length > 0;
+                    const isVisible = container.offsetWidth > 0 && container.offsetHeight > 0;
+                    
+                    console.log(`📦 [Debug] Container ${index}:`, {
+                        id: container.id,
+                        hasContent,
+                        isVisible,
+                        width: container.offsetWidth,
+                        height: container.offsetHeight
                     });
                     
-                    observer.observe({ entryTypes: ['resource'] });
-                } catch (e) {
-                    console.log('📊 [Performance] Observer not supported');
-                }
+                    if (!hasContent) {
+                        this.fillEmptyContainer(container);
+                    }
+                });
             }
         },
         
-        exposeDebugCommands() {
-            window.debugAds = () => {
-                console.log('🔍 [Manual Debug] Generating comprehensive report...');
-                const report = this.generateReport();
-                console.table(report.containers);
-                console.log('📊 [Report]:', report);
-                return report;
+        checkAdBlockers() {
+            console.log('🔍 [Debug] Verificando bloqueadores de anuncios...');
+            
+            // Test simple de AdBlock
+            const testAd = document.createElement('div');
+            testAd.innerHTML = '&nbsp;';
+            testAd.className = 'adsbox ad advertisement';
+            testAd.style.cssText = 'position: absolute; top: -100px; left: -100px; width: 1px; height: 1px;';
+            document.body.appendChild(testAd);
+            
+            setTimeout(() => {
+                const adBlocked = testAd.offsetHeight === 0;
+                document.body.removeChild(testAd);
+                
+                if (adBlocked) {
+                    console.warn('⚠️ [Debug] Posible AdBlocker detectado');
+                    this.showAdBlockWarning();
+                } else {
+                    console.log('✅ [Debug] No se detectó AdBlocker');
+                }
+            }, 100);
+        },
+        
+        checkConfiguration() {
+            console.log('🔍 [Debug] Verificando configuración...');
+            
+            // Verificar variables globales
+            const globals = {
+                AdVerificationSystem: typeof window.AdVerificationSystem,
+                adsbyjuicy: typeof window.adsbyjuicy,
+                ExoLoader: typeof window.ExoLoader,
+                popAdsConfig: window.e494ffb82839a29122608e933394c091
             };
             
-            window.testAdContainers = () => {
-                this.checkAdContainers();
+            console.log('🔍 [Debug] Variables globales:', globals);
+            
+            // Verificar Service Worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    console.log(`🔍 [Debug] Service Workers registrados: ${registrations.length}`);
+                    
+                    // IMPORTANTE: Asegurar que el SW no bloquee anuncios
+                    registrations.forEach(reg => {
+                        if (reg.active) {
+                            reg.active.postMessage({ type: 'ENABLE_SYNC' });
+                            console.log('✅ [Debug] Service Worker configurado para permitir anuncios');
+                        }
+                    });
+                });
+            }
+        },
+        
+        attemptAutoFix() {
+            console.log('🔧 [Debug] Intentando corrección automática...');
+            
+            // 1. Recargar sistema de anuncios
+            if (window.AdVerificationSystem) {
+                console.log('🔧 [Debug] Recargando AdVerificationSystem...');
+                window.AdVerificationSystem.reloadAds();
+            } else {
+                console.warn('❌ [Debug] AdVerificationSystem no encontrado, cargándolo...');
+                this.loadAdVerificationScript();
+            }
+            
+            // 2. Crear contenedores faltantes
+            this.ensureAdContainers();
+            
+            // 3. Reintentar carga de scripts externos
+            setTimeout(() => this.retryAdScripts(), 3000);
+        },
+        
+        createAdContainers() {
+            console.log('🔧 [Debug] Creando contenedores de anuncios...');
+            
+            const positions = ['header', 'sidebar', 'footer'];
+            
+            positions.forEach(position => {
+                const container = document.createElement('div');
+                container.id = `ad-container-${position}`;
+                container.className = `ad-container ad-${position}`;
+                container.style.cssText = this.getContainerStyles(position);
+                
+                // Agregar contenido de prueba
+                container.innerHTML = `
+                    <div class="ad-placeholder" style="
+                        width: 100%;
+                        height: ${position === 'sidebar' ? '250px' : '90px'};
+                        background: linear-gradient(135deg, rgba(0,119,190,0.15), rgba(0,212,255,0.15));
+                        border: 2px dashed rgba(127,219,255,0.4);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: rgba(255,255,255,0.7);
+                        font-size: 14px;
+                        border-radius: 10px;
+                    ">
+                        <span>📢 ${position.toUpperCase()} AD SPACE</span>
+                    </div>
+                `;
+                
+                this.insertContainer(container, position);
+                console.log(`✅ [Debug] Contenedor ${position} creado`);
+            });
+        },
+        
+        getContainerStyles(position) {
+            const styles = {
+                header: 'margin: 20px auto; max-width: 728px; min-height: 90px;',
+                sidebar: 'position: fixed; right: 10px; top: 50%; transform: translateY(-50%); width: 300px; min-height: 250px; z-index: 100;',
+                footer: 'margin: 20px auto; max-width: 728px; min-height: 90px;'
             };
             
-            window.monitorAds = () => {
-                this.startRealTimeMonitoring();
-            };
+            return styles[position] + ' background: rgba(0, 119, 190, 0.1); padding: 10px; border-radius: 10px;';
+        },
+        
+        insertContainer(container, position) {
+            switch(position) {
+                case 'header':
+                    const header = document.querySelector('.main-header');
+                    if (header && header.parentNode) {
+                        header.parentNode.insertBefore(container, header.nextSibling);
+                    } else {
+                        document.body.insertBefore(container, document.body.firstChild);
+                    }
+                    break;
+                    
+                case 'sidebar':
+                    document.body.appendChild(container);
+                    break;
+                    
+                case 'footer':
+                    const footer = document.querySelector('.main-footer');
+                    if (footer && footer.parentNode) {
+                        footer.parentNode.insertBefore(container, footer);
+                    } else {
+                        document.body.appendChild(container);
+                    }
+                    break;
+            }
+        },
+        
+        fillEmptyContainer(container) {
+            if (container.children.length === 0) {
+                console.log(`🔧 [Debug] Llenando contenedor vacío: ${container.id}`);
+                
+                container.innerHTML = `
+                    <div class="ad-loading" style="
+                        padding: 20px;
+                        text-align: center;
+                        background: rgba(0, 119, 190, 0.1);
+                        border-radius: 10px;
+                        color: rgba(255, 255, 255, 0.7);
+                    ">
+                        <div style="font-size: 24px; margin-bottom: 10px;">📢</div>
+                        <div>Cargando anuncio...</div>
+                        <div style="font-size: 12px; margin-top: 5px; opacity: 0.5;">
+                            ${container.id || 'Ad Space'}
+                        </div>
+                    </div>
+                `;
+            }
+        },
+        
+        injectAdScript(network) {
+            console.log(`🔧 [Debug] Inyectando script para ${network}...`);
             
-            window.stopMonitorAds = () => {
-                if (this.checkInterval) {
-                    clearInterval(this.checkInterval);
-                    this.checkInterval = null;
-                    console.log('⏹️ [Ads Debug] Monitoring stopped');
+            const scripts = {
+                juicyads: {
+                    src: 'https://poweredby.jads.co/js/jads.js',
+                    async: true
+                },
+                exoclick: {
+                    src: 'https://syndication.exoclick.com/tag.js',
+                    async: true
+                },
+                popads: {
+                    inline: true,
+                    content: `
+                        var url = window.location.href;
+                        var p = url.indexOf("main.html");
+                        if (p > 0) {
+                            // PopAds code here
+                            console.log('PopAds script injected');
+                        }
+                    `
                 }
             };
             
-            console.log('🎮 [Debug Commands] Available:');
-            console.log('• window.debugAds() - Full diagnostic report');
-            console.log('• window.testAdContainers() - Check containers');
-            console.log('• window.monitorAds() - Start monitoring');
-            console.log('• window.stopMonitorAds() - Stop monitoring');
+            const config = scripts[network];
+            if (!config) return;
+            
+            const script = document.createElement('script');
+            
+            if (config.inline) {
+                script.innerHTML = config.content;
+            } else {
+                script.src = config.src;
+                script.async = config.async;
+            }
+            
+            script.setAttribute('data-network', network);
+            script.setAttribute('data-debug', 'true');
+            
+            script.onload = () => {
+                console.log(`✅ [Debug] Script ${network} cargado`);
+            };
+            
+            script.onerror = () => {
+                console.error(`❌ [Debug] Error cargando script ${network}`);
+            };
+            
+            document.head.appendChild(script);
         },
         
-        updateDebugDisplay(report) {
-            // Create/update floating debug panel if needed
-            let panel = document.getElementById('ads-debug-panel');
+        ensureAdContainers() {
+            // Asegurar que existan contenedores en las posiciones correctas
+            const positions = ['header', 'sidebar', 'footer'];
             
-            if (!panel && this.debugMode) {
-                panel = this.createDebugPanel();
+            positions.forEach(position => {
+                const existing = document.querySelector(`.ad-${position}`);
+                if (!existing) {
+                    const container = document.createElement('div');
+                    container.className = `ad-container ad-${position}`;
+                    container.id = `ad-${position}-debug`;
+                    container.style.cssText = this.getContainerStyles(position);
+                    
+                    this.insertContainer(container, position);
+                    this.fillEmptyContainer(container);
+                }
+            });
+        },
+        
+        retryAdScripts() {
+            console.log('🔄 [Debug] Reintentando carga de scripts de anuncios...');
+            
+            // Forzar recarga del sistema de verificación
+            if (window.reloadAds) {
+                window.reloadAds();
             }
             
-            if (panel) {
-                this.updateDebugPanel(panel, report);
-            }
+            // Verificar resultado después de un tiempo
+            setTimeout(() => {
+                const finalCheck = this.getFinalStatus();
+                console.log('📊 [Debug] Estado final:', finalCheck);
+                
+                if (finalCheck.totalAds === 0) {
+                    console.warn('⚠️ [Debug] No se pudieron cargar anuncios');
+                    this.showManualInstructions();
+                }
+            }, 5000);
+        },
+        
+        getFinalStatus() {
+            return {
+                containers: document.querySelectorAll('.ad-container').length,
+                juicyads: !!window.adsbyjuicy,
+                exoclick: !!window.ExoLoader,
+                popads: !!window.e494ffb82839a29122608e933394c091,
+                totalAds: document.querySelectorAll('.ad-container:not(:empty)').length
+            };
         },
         
         createDebugPanel() {
@@ -355,108 +361,193 @@
             panel.id = 'ads-debug-panel';
             panel.style.cssText = `
                 position: fixed;
-                top: 100px;
-                right: 10px;
-                width: 300px;
+                bottom: 20px;
+                left: 20px;
                 background: rgba(0, 0, 0, 0.9);
                 color: #00ff00;
                 padding: 15px;
                 border-radius: 10px;
                 font-family: monospace;
                 font-size: 12px;
-                z-index: 10003;
+                z-index: 10000;
+                max-width: 300px;
                 border: 1px solid #00ff00;
-                max-height: 400px;
-                overflow-y: auto;
+                display: none;
             `;
             
             panel.innerHTML = `
-                <div style="border-bottom: 1px solid #00ff00; margin-bottom: 10px; padding-bottom: 5px;">
+                <div style="margin-bottom: 10px; font-weight: bold;">
                     🔍 ADS DEBUG PANEL
-                    <button onclick="this.parentElement.parentElement.remove()" style="float: right; background: red; color: white; border: none; border-radius: 3px; padding: 2px 5px; cursor: pointer;">×</button>
                 </div>
-                <div id="debug-content">Loading...</div>
+                <div id="debug-status"></div>
+                <button onclick="window.testAds()" style="
+                    margin-top: 10px;
+                    padding: 5px 10px;
+                    background: #00ff00;
+                    color: black;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                ">Test Ads</button>
+                <button onclick="window.reloadAds()" style="
+                    margin-left: 5px;
+                    padding: 5px 10px;
+                    background: #ff9900;
+                    color: black;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                ">Reload</button>
+                <button onclick="this.parentElement.style.display='none'" style="
+                    float: right;
+                    padding: 5px 10px;
+                    background: #ff0000;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                ">X</button>
             `;
             
             document.body.appendChild(panel);
-            return panel;
+            
+            // Actualizar estado cada 2 segundos
+            setInterval(() => this.updateDebugPanel(), 2000);
+            
+            // Mostrar panel con tecla de debug (Ctrl+Shift+D)
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+                }
+            });
         },
         
-        updateDebugPanel(panel, report) {
-            const content = panel.querySelector('#debug-content');
-            if (!content) return;
+        updateDebugPanel() {
+            const statusDiv = document.getElementById('debug-status');
+            if (!statusDiv) return;
             
-            const html = `
-                <div><strong>Networks:</strong></div>
-                ${Object.entries(report.networks).map(([name, status]) => 
-                    `<div>${name}: ${status.loaded ? '✅' : '❌'} (${status.zones || 0} zones)</div>`
-                ).join('')}
-                
-                <div style="margin-top: 10px;"><strong>Containers:</strong></div>
-                ${report.containers.map((container, i) => 
-                    `<div>Container ${i + 1}: ${container.visible ? '👁️' : '🙈'} ${container.hasContent ? '📦' : '📭'}</div>`
-                ).join('')}
-                
-                ${report.issues.length > 0 ? `
-                    <div style="margin-top: 10px; color: #ff6666;"><strong>Issues:</strong></div>
-                    ${report.issues.map(issue => `<div>⚠️ ${issue}</div>`).join('')}
-                ` : ''}
-                
-                <div style="margin-top: 10px; font-size: 10px; opacity: 0.7;">
-                    Last update: ${new Date().toLocaleTimeString()}
-                </div>
+            const status = this.getFinalStatus();
+            
+            statusDiv.innerHTML = `
+                <div>Containers: ${status.containers}</div>
+                <div>JuicyAds: ${status.juicyads ? '✅' : '❌'}</div>
+                <div>ExoClick: ${status.exoclick ? '✅' : '❌'}</div>
+                <div>PopAds: ${status.popads ? '✅' : '❌'}</div>
+                <div>Active Ads: ${status.totalAds}</div>
+            `;
+        },
+        
+        monitorDOMChanges() {
+            // Observar cambios en el DOM para detectar cuando se eliminan anuncios
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'childList') {
+                        mutation.removedNodes.forEach((node) => {
+                            if (node.className && node.className.includes && node.className.includes('ad-container')) {
+                                console.warn('⚠️ [Debug] Contenedor de anuncios eliminado:', node.id);
+                                // Recrear el contenedor
+                                setTimeout(() => this.ensureAdContainers(), 1000);
+                            }
+                        });
+                    }
+                });
+            });
+            
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        },
+        
+        showAdBlockWarning() {
+            const warning = document.createElement('div');
+            warning.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, #ff6b35, #ff69b4);
+                color: white;
+                padding: 20px;
+                border-radius: 15px;
+                z-index: 10001;
+                text-align: center;
+                max-width: 400px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             `;
             
-            content.innerHTML = html;
-        },
-        
-        // Utility functions
-        isElementVisible(element) {
-            if (!element) return false;
+            warning.innerHTML = `
+                <h3>⚠️ AdBlocker Detectado</h3>
+                <p>Para apoyar nuestro contenido gratuito, por favor desactiva tu bloqueador de anuncios.</p>
+                <button onclick="this.parentElement.remove()" style="
+                    margin-top: 15px;
+                    padding: 10px 20px;
+                    background: white;
+                    color: #ff6b35;
+                    border: none;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    font-weight: bold;
+                ">Entendido</button>
+            `;
             
-            const rect = element.getBoundingClientRect();
-            const computedStyle = window.getComputedStyle(element);
+            document.body.appendChild(warning);
             
-            return (
-                rect.width > 0 &&
-                rect.height > 0 &&
-                computedStyle.display !== 'none' &&
-                computedStyle.visibility !== 'hidden' &&
-                computedStyle.opacity !== '0'
-            );
+            setTimeout(() => {
+                if (warning.parentNode) {
+                    warning.remove();
+                }
+            }, 10000);
         },
         
-        getElementPosition(element) {
-            const rect = element.getBoundingClientRect();
-            return {
-                top: Math.round(rect.top),
-                left: Math.round(rect.left),
-                right: Math.round(rect.right),
-                bottom: Math.round(rect.bottom)
-            };
+        showManualInstructions() {
+            console.log(`
+📋 [Debug] INSTRUCCIONES MANUALES:
+=====================================
+1. Verifica que no tengas AdBlocker activo
+2. Limpia la caché del navegador (Ctrl+Shift+R)
+3. Verifica que los scripts externos sean accesibles:
+   - https://poweredby.jads.co/js/jads.js
+   - https://syndication.exoclick.com/tag.js
+4. Revisa la consola del navegador (F12) para errores
+5. Contacta soporte si el problema persiste
+
+Para mostrar el panel de debug: Ctrl+Shift+D
+Para testear anuncios: window.testAds()
+Para recargar anuncios: window.reloadAds()
+=====================================
+            `);
         },
         
-        getElementSize(element) {
-            const rect = element.getBoundingClientRect();
-            return {
-                width: Math.round(rect.width),
-                height: Math.round(rect.height)
+        loadAdVerificationScript() {
+            // Intentar cargar el script de verificación si no está presente
+            const script = document.createElement('script');
+            script.src = 'ad-verification.js';
+            script.onload = () => {
+                console.log('✅ [Debug] ad-verification.js cargado');
+                setTimeout(() => {
+                    if (window.AdVerificationSystem) {
+                        window.AdVerificationSystem.init();
+                    }
+                }, 1000);
             };
+            script.onerror = () => {
+                console.error('❌ [Debug] No se pudo cargar ad-verification.js');
+            };
+            document.head.appendChild(script);
         }
     };
     
-    // Auto-initialize when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => AdsDebugSystem.init(), 2000);
-        });
-    } else {
-        setTimeout(() => AdsDebugSystem.init(), 2000);
-    }
+    // Inicializar sistema de debug
+    AdsDebugSystem.init();
     
-    // Expose globally
-    window.AdsDebugSystem = AdsDebugSystem;
+    // Exponer funciones globales para debug
+    window.adsDebug = AdsDebugSystem;
+    window.checkAds = () => AdsDebugSystem.runDiagnostics();
+    window.fixAds = () => AdsDebugSystem.attemptAutoFix();
     
-    console.log('🔍 [Ads Debug] Debug system loaded');
+    console.log('✅ Ads Debug System cargado');
+    console.log('💡 Usa Ctrl+Shift+D para mostrar el panel de debug');
+    console.log('💡 Comandos disponibles: window.checkAds(), window.fixAds()');
     
 })();
