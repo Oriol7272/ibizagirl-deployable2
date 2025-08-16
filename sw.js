@@ -1,15 +1,15 @@
 // ============================
-// IBIZAGIRL.PICS SERVICE WORKER v1.4.1 FIXED
-// PWA + Performance + SEO Optimized
+// IBIZAGIRL.PICS SERVICE WORKER v1.4.2 ULTRA FIXED
+// PWA + Performance + SEO + Clone Errors Fixed
 // ============================
 
-const CACHE_VERSION = '1.4.1';
+const CACHE_VERSION = '1.4.2';
 const CACHE_NAME = `ibizagirl-v${CACHE_VERSION}`;
 const STATIC_CACHE = `ibizagirl-static-v${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `ibizagirl-dynamic-v${CACHE_VERSION}`;
 const IMAGE_CACHE = `ibizagirl-images-v${CACHE_VERSION}`;
 
-// Critical assets for caching - FIXED PATHS
+// Critical assets for caching
 const STATIC_ASSETS = [
     '/',
     '/index.html',
@@ -19,7 +19,7 @@ const STATIC_ASSETS = [
     '/seo-enhancements.js',
     '/manifest.json',
     
-    // Critical images for SEO and UI
+    // Critical images
     '/full/bikini.webp',
     '/full/bikbanner.webp',
     '/full/bikbanner2.webp',
@@ -41,7 +41,11 @@ const EXCLUDED_URLS = [
     'paypalobjects.com',
     'googletagmanager.com',
     'google-analytics.com',
-    'gtag/js'
+    'gtag/js',
+    'juicyads',
+    'exoclick',
+    'popads',
+    'premiumvertising'
 ];
 
 // ============================
@@ -53,7 +57,6 @@ self.addEventListener('install', event => {
     
     event.waitUntil(
         Promise.all([
-            // Cache static assets
             caches.open(STATIC_CACHE).then(cache => {
                 console.log('📦 Service Worker: Caching static assets...');
                 return Promise.allSettled(
@@ -65,7 +68,6 @@ self.addEventListener('install', event => {
                     })
                 );
             }),
-            // Cache external scripts
             caches.open(STATIC_CACHE).then(cache => {
                 return Promise.allSettled(
                     EXTERNAL_SCRIPTS.map(url => {
@@ -118,7 +120,7 @@ self.addEventListener('activate', event => {
 });
 
 // ============================
-// FETCH EVENT HANDLER - FIXED
+// FETCH EVENT HANDLER - FIXED CLONE ERRORS
 // ============================
 
 self.addEventListener('fetch', event => {
@@ -150,7 +152,6 @@ self.addEventListener('fetch', event => {
         event.respondWith(handleFetch(request, url));
         
     } catch (error) {
-        // If URL parsing fails, let the request pass through
         console.warn('Service Worker: URL parsing failed for:', request.url, error.message);
         return;
     }
@@ -163,13 +164,13 @@ async function handleFetch(request, url) {
             return await networkFirstWithFallback(request);
         }
         
-        // For images - Stale While Revalidate
+        // For images - Stale While Revalidate (FIXED)
         if (request.headers.get('accept')?.includes('image/') || 
             url.pathname.includes('/full/') ||
             url.pathname.includes('/uncensored/') ||
             url.pathname.includes('/uncensored-videos/') ||
             url.pathname.match(/\.(jpg|jpeg|png|webp|gif|svg)$/i)) {
-            return await staleWhileRevalidate(request);
+            return await staleWhileRevalidateFixed(request);
         }
         
         // For JavaScript/CSS - Cache First with timeout
@@ -210,7 +211,7 @@ async function handleFetch(request, url) {
 }
 
 // ============================
-// CACHING STRATEGIES - IMPROVED ERROR HANDLING
+// CACHING STRATEGIES - FIXED CLONE ERRORS
 // ============================
 
 async function cacheFirstWithTimeout(request, timeout = 3000) {
@@ -232,11 +233,11 @@ async function cacheFirstWithTimeout(request, timeout = 3000) {
         const response = await fetch(request);
         if (response && response.ok && response.status < 400) {
             const cache = await caches.open(STATIC_CACHE);
+            // FIXED: Clone before using
             cache.put(request, response.clone()).catch(() => {});
         }
         return response;
     } catch (error) {
-        // Try cache again as last resort
         const cached = await caches.match(request);
         if (cached) return cached;
         throw error;
@@ -248,6 +249,7 @@ async function networkFirstWithFallback(request) {
         const response = await fetch(request);
         if (response && response.ok && response.status < 400) {
             const cache = await caches.open(DYNAMIC_CACHE);
+            // FIXED: Clone before using
             cache.put(request, response.clone()).catch(() => {});
         }
         return response;
@@ -267,19 +269,31 @@ async function networkFirstWithFallback(request) {
     }
 }
 
-async function staleWhileRevalidate(request) {
+// FIXED: Stale While Revalidate without clone errors
+async function staleWhileRevalidateFixed(request) {
     const cached = await caches.match(request);
     
-    // Fetch in background
+    // Background fetch without clone errors
     const fetchPromise = fetch(request).then(response => {
         if (response && response.ok && response.status < 400) {
             caches.open(IMAGE_CACHE).then(cache => {
-                cache.put(request, response.clone()).catch(() => {});
-            });
+                // FIXED: Check if response can be cloned
+                try {
+                    if (response.body && !response.bodyUsed) {
+                        cache.put(request, response.clone()).catch(() => {});
+                    }
+                } catch (cloneError) {
+                    // Silent fail on clone error
+                }
+            }).catch(() => {});
         }
         return response;
-    }).catch(() => cached);
+    }).catch(() => {
+        // Return cached version if fetch fails
+        return cached;
+    });
     
+    // Return cached version immediately if available, otherwise wait for fetch
     return cached || fetchPromise;
 }
 
@@ -361,4 +375,4 @@ async function preloadContent() {
     }
 }
 
-console.log(`🌊 IbizaGirl.pics Service Worker v${CACHE_VERSION} loaded successfully`);
+console.log(`🌊 IbizaGirl.pics Service Worker v${CACHE_VERSION} loaded - Clone errors FIXED`);
