@@ -1,9 +1,9 @@
 // ============================
-// IBIZAGIRL.PICS MAIN SCRIPT v14.3.5 - CRITICAL ERROR FIXES
-// All errors resolved + Enhanced error handling
+// IBIZAGIRL.PICS MAIN SCRIPT v14.3.6 - CRITICAL ERROR FIXES + ADS ENABLED
+// All errors resolved + Enhanced error handling + Ads system activated
 // ============================
 
-console.log('🌊 IbizaGirl.pics v14.3.5 CRITICAL ERROR FIXES - Loading Paradise Gallery...');
+console.log('🌊 IbizaGirl.pics v14.3.6 CRITICAL ERROR FIXES + ADS - Loading Paradise Gallery...');
 
 // ============================
 // ENVIRONMENT DETECTION
@@ -28,7 +28,7 @@ const getPhotoPool = () => {
     if (window.ALL_PHOTOS_POOL && window.ALL_PHOTOS_POOL.length > 0) {
         return window.ALL_PHOTOS_POOL;
     }
-    // Fallback básico con imágenes que existen
+    // Fallback básico con imágenes que existen - RUTAS CORREGIDAS
     return [
         'full/bikini.webp', 'full/bikini3.webp', 'full/bikini5.webp', 
         'full/backbikini.webp', 'full/bikbanner.webp', 'full/bikbanner2.webp'
@@ -557,7 +557,7 @@ function handleImageError(img) {
     try {
         console.warn('Image error:', img.src);
         
-        // FIXED: Better fallback strategy
+        // FIXED: Better fallback strategy - RUTA CORREGIDA
         if (!img.src.includes('bikini.webp')) {
             img.src = 'full/bikini.webp';
         } else {
@@ -584,7 +584,7 @@ function handleVideoError(video) {
         console.warn('Video error:', video.src);
         ErrorHandler.logError(new Error(`Video failed: ${video.src}`), 'video_error');
         
-        // Reemplazar con imagen estática
+        // Reemplazar con imagen estática - RUTA CORREGIDA
         const img = document.createElement('img');
         img.src = 'full/bikini.webp';
         img.className = video.className;
@@ -663,7 +663,7 @@ function trackEvent(eventName, parameters = {}) {
 // ============================
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🎨 Initializing Paradise Gallery v14.3.5 CRITICAL ERROR FIXES...');
+    console.log('🎨 Initializing Paradise Gallery v14.3.6 CRITICAL ERROR FIXES + ADS...');
     
     try {
         // Inicializar contenido primero
@@ -692,10 +692,15 @@ document.addEventListener('DOMContentLoaded', () => {
         startBannerSlideshow();
         updateViewCounters();
         
-        // FIXED: Disable excessive background sync
+        // FIXED: KEEP ADS SYSTEM ENABLED - Mantener ads activos
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.ready.then(registration => {
-                registration.active?.postMessage({ type: 'DISABLE_SYNC' });
+                // ELIMINADO: registration.active?.postMessage({ type: 'DISABLE_SYNC' });
+                // NUEVO: Mantener sync habilitado para que funcionen los ads
+                console.log('🌊 Service Worker sync mantenido activo para ads');
+                
+                // Opcional: Habilitar sync para ads
+                registration.active?.postMessage({ type: 'ENABLE_SYNC' });
             });
         }
         
@@ -714,11 +719,12 @@ document.addEventListener('DOMContentLoaded', () => {
             language: state.currentLanguage,
             daily_photos: state.dailyContent.photos.length,
             daily_videos: state.dailyContent.videos.length,
-            version: '14.3.5'
+            version: '14.3.6',
+            ads_enabled: true
         });
         
         console.log('✅ Paradise Gallery loaded successfully!');
-        console.log(`🌊 Version: 14.3.5 CRITICAL ERROR FIXES - ${state.dailyContent.stats.dailyPhotos} fotos + ${state.dailyContent.stats.dailyVideos} videos diarios`);
+        console.log(`🌊 Version: 14.3.6 CRITICAL ERROR FIXES + ADS - ${state.dailyContent.stats.dailyPhotos} fotos + ${state.dailyContent.stats.dailyVideos} videos diarios`);
         
     } catch (error) {
         ErrorHandler.logError(error, 'DOMContentLoaded');
@@ -866,4 +872,4 @@ window.addEventListener('unhandledrejection', (e) => {
     e.preventDefault();
 });
 
-console.log('✅ Script loaded and ready with CRITICAL ERROR FIXES v14.3.5!');
+console.log('✅ Script loaded and ready with CRITICAL ERROR FIXES + ADS ENABLED v14.3.6!');
