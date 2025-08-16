@@ -1,6 +1,6 @@
 // ============================
-// AD CONTAINERS MANAGER v1.0.0
-// Ensures proper ad container placement and visibility
+// AD CONTAINERS MANAGER v2.0.0 - MEJORADO
+// Sistema mejorado de gestión de contenedores de anuncios
 // ============================
 
 (function() {
@@ -9,13 +9,18 @@
     const AdContainersManager = {
         initialized: false,
         containers: new Map(),
+        networkStatus: {
+            juicyads: { loaded: false, zones: [] },
+            exoclick: { loaded: false, zones: [] },
+            popads: { loaded: false, active: false }
+        },
         
         init() {
             if (this.initialized) return;
             
-            console.log('📦 [Ad Containers] Initializing container manager...');
+            console.log('📦 [Ad Containers] Inicializando gestor de contenedores v2.0.0...');
             
-            // Wait for DOM to be ready
+            // Esperar a que el DOM esté listo
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', () => {
                     this.setupContainers();
@@ -24,334 +29,448 @@
                 this.setupContainers();
             }
             
+            // Monitor de visibilidad cada 5 segundos
+            setInterval(() => {
+                this.monitorContainerVisibility();
+            }, 5000);
+            
             this.initialized = true;
         },
         
         setupContainers() {
-            console.log('📦 [Ad Containers] Setting up ad containers...');
+            console.log('📦 [Ad Containers] Configurando contenedores de anuncios...');
             
-            // Ensure containers exist in proper locations
-            this.ensureHeaderContainer();
-            this.ensureSidebarContainer();
-            this.ensureFooterContainer();
+            // Crear contenedores principales
+            this.createAllContainers();
             
-            // Force visibility check
+            // Forzar visibilidad inicial
             setTimeout(() => {
                 this.forceContainerVisibility();
                 this.logContainerStatus();
             }, 2000);
+            
+            // Aplicar estilos CSS mejorados
+            this.injectEnhancedStyles();
         },
         
-        ensureHeaderContainer() {
-            const existingContainer = document.getElementById('ad-header-container');
-            if (existingContainer) {
-                console.log('📦 [Header] Container already exists');
-                return existingContainer;
-            }
+        createAllContainers() {
+            // Configuración de contenedores
+            const containerConfig = [
+                { id: 'ad-header-container', position: 'header', network: 'multi' },
+                { id: 'ad-sidebar-container', position: 'sidebar', network: 'multi' },
+                { id: 'ad-footer-container', position: 'footer', network: 'multi' }
+            ];
             
-            const headerContainer = this.createContainer('ad-header-container', 'header');
-            const mainHeader = document.querySelector('.main-header');
-            
-            if (mainHeader && mainHeader.parentNode) {
-                // Insert after main header
-                mainHeader.parentNode.insertBefore(headerContainer, mainHeader.nextSibling);
-                console.log('📦 [Header] Container created and inserted');
-            } else {
-                // Fallback: insert at top of body
-                document.body.insertBefore(headerContainer, document.body.firstChild);
-                console.log('📦 [Header] Container created (fallback position)');
-            }
-            
-            this.containers.set('header', headerContainer);
-            return headerContainer;
+            containerConfig.forEach(config => {
+                this.createContainer(config);
+            });
         },
         
-        ensureSidebarContainer() {
-            const existingContainer = document.getElementById('ad-sidebar-container');
-            if (existingContainer) {
-                console.log('📦 [Sidebar] Container already exists');
-                return existingContainer;
+        createContainer(config) {
+            const { id, position, network } = config;
+            
+            // Verificar si ya existe
+            let container = document.getElementById(id);
+            if (container) {
+                console.log(`📦 [${position}] Contenedor ya existe`);
+                this.containers.set(position, container);
+                return container;
             }
             
-            const sidebarContainer = this.createContainer('ad-sidebar-container', 'sidebar');
-            sidebarContainer.style.cssText = `
-                position: fixed !important;
-                right: 10px !important;
-                top: 50% !important;
-                transform: translateY(-50%) !important;
-                z-index: 1000 !important;
-                max-width: 300px !important;
-                min-height: 250px !important;
-                margin: 0 !important;
-            `;
-            
-            document.body.appendChild(sidebarContainer);
-            console.log('📦 [Sidebar] Container created');
-            
-            this.containers.set('sidebar', sidebarContainer);
-            return sidebarContainer;
-        },
-        
-        ensureFooterContainer() {
-            const existingContainer = document.getElementById('ad-footer-container');
-            if (existingContainer) {
-                console.log('📦 [Footer] Container already exists');
-                return existingContainer;
-            }
-            
-            const footerContainer = this.createContainer('ad-footer-container', 'footer');
-            const mainFooter = document.querySelector('.main-footer');
-            
-            if (mainFooter && mainFooter.parentNode) {
-                // Insert before main footer
-                mainFooter.parentNode.insertBefore(footerContainer, mainFooter);
-                console.log('📦 [Footer] Container created and inserted');
-            } else {
-                // Fallback: append to body
-                document.body.appendChild(footerContainer);
-                console.log('📦 [Footer] Container created (fallback position)');
-            }
-            
-            this.containers.set('footer', footerContainer);
-            return footerContainer;
-        },
-        
-        createContainer(id, position) {
-            const container = document.createElement('div');
+            // Crear nuevo contenedor
+            container = document.createElement('div');
             container.id = id;
-            container.className = `ad-container ad-${position}`;
+            container.className = `ad-container ad-${position} ad-${network}`;
             container.setAttribute('data-position', position);
-            container.setAttribute('data-debug', 'true'); // For debugging
+            container.setAttribute('data-network', network);
+            container.setAttribute('data-created', new Date().toISOString());
             
-            // Add placeholder content initially
-            container.innerHTML = `
-                <div class="ad-placeholder">
-                    <div style="font-size: 18px; margin-bottom: 10px; color: #00ff88;">📢 AD SPACE</div>
-                    <div style="font-size: 14px; opacity: 0.8;">${position.toUpperCase()} Advertisement</div>
-                    <div style="font-size: 12px; margin-top: 5px; opacity: 0.6;">Loading network...</div>
-                </div>
-            `;
+            // Aplicar estilos según posición
+            this.applyPositionStyles(container, position);
             
-            // Force visibility styles
-            container.style.cssText += `
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                min-height: 100px !important;
-                background: rgba(0, 119, 190, 0.1) !important;
-                border: 2px solid rgba(0, 255, 136, 0.3) !important;
-                margin: 2rem auto !important;
-                padding: 1rem !important;
-                border-radius: 15px !important;
-                text-align: center !important;
-            `;
+            // Añadir contenido inicial
+            container.innerHTML = this.getInitialContent(position, network);
+            
+            // Insertar en el DOM
+            this.insertContainerInDOM(container, position);
+            
+            // Guardar referencia
+            this.containers.set(position, container);
+            
+            console.log(`✅ [${position}] Contenedor creado e insertado`);
             
             return container;
         },
         
+        applyPositionStyles(container, position) {
+            const styles = {
+                header: {
+                    cssText: `
+                        display: block !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        width: 100% !important;
+                        max-width: 728px !important;
+                        min-height: 90px !important;
+                        margin: 20px auto !important;
+                        background: rgba(0, 119, 190, 0.05) !important;
+                        border: 1px solid rgba(0, 255, 136, 0.2) !important;
+                        border-radius: 10px !important;
+                        padding: 10px !important;
+                        text-align: center !important;
+                        position: relative !important;
+                        z-index: 100 !important;
+                    `
+                },
+                sidebar: {
+                    cssText: `
+                        display: block !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        position: fixed !important;
+                        right: 10px !important;
+                        top: 50% !important;
+                        transform: translateY(-50%) !important;
+                        width: 300px !important;
+                        min-height: 250px !important;
+                        background: rgba(0, 119, 190, 0.05) !important;
+                        border: 1px solid rgba(0, 255, 136, 0.2) !important;
+                        border-radius: 10px !important;
+                        padding: 10px !important;
+                        text-align: center !important;
+                        z-index: 1000 !important;
+                    `
+                },
+                footer: {
+                    cssText: `
+                        display: block !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        width: 100% !important;
+                        max-width: 728px !important;
+                        min-height: 90px !important;
+                        margin: 20px auto !important;
+                        background: rgba(0, 119, 190, 0.05) !important;
+                        border: 1px solid rgba(0, 255, 136, 0.2) !important;
+                        border-radius: 10px !important;
+                        padding: 10px !important;
+                        text-align: center !important;
+                        position: relative !important;
+                        z-index: 100 !important;
+                    `
+                }
+            };
+            
+            if (styles[position]) {
+                container.style.cssText = styles[position].cssText;
+            }
+        },
+        
+        getInitialContent(position, network) {
+            return `
+                <div class="ad-placeholder-content" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    min-height: ${position === 'sidebar' ? '250px' : '90px'};
+                    color: rgba(255, 255, 255, 0.6);
+                    font-family: system-ui, -apple-system, sans-serif;
+                ">
+                    <div style="font-size: 24px; margin-bottom: 10px;">📢</div>
+                    <div style="font-size: 14px; font-weight: bold; margin-bottom: 5px;">
+                        ${position.toUpperCase()} AD SPACE
+                    </div>
+                    <div style="font-size: 12px; opacity: 0.7;">
+                        Loading advertisements...
+                    </div>
+                    <div class="ad-status" style="
+                        font-size: 10px;
+                        margin-top: 10px;
+                        padding: 4px 8px;
+                        background: rgba(0, 255, 136, 0.2);
+                        border-radius: 5px;
+                        color: #00ff88;
+                    ">
+                        Preparing zone...
+                    </div>
+                </div>
+            `;
+        },
+        
+        insertContainerInDOM(container, position) {
+            try {
+                let targetElement;
+                let inserted = false;
+                
+                switch(position) {
+                    case 'header':
+                        // Intentar insertar después del header principal
+                        targetElement = document.querySelector('.main-header');
+                        if (!targetElement) {
+                            targetElement = document.querySelector('header');
+                        }
+                        
+                        if (targetElement && targetElement.parentNode) {
+                            targetElement.parentNode.insertBefore(container, targetElement.nextSibling);
+                            inserted = true;
+                        } else {
+                            // Fallback: insertar al principio del body
+                            const mainContainer = document.querySelector('.main-container');
+                            if (mainContainer) {
+                                mainContainer.insertBefore(container, mainContainer.firstChild);
+                                inserted = true;
+                            } else {
+                                document.body.insertBefore(container, document.body.firstChild);
+                                inserted = true;
+                            }
+                        }
+                        break;
+                        
+                    case 'sidebar':
+                        // Sidebar siempre va al body
+                        document.body.appendChild(container);
+                        inserted = true;
+                        break;
+                        
+                    case 'footer':
+                        // Intentar insertar antes del footer principal
+                        targetElement = document.querySelector('.main-footer');
+                        if (!targetElement) {
+                            targetElement = document.querySelector('footer');
+                        }
+                        
+                        if (targetElement && targetElement.parentNode) {
+                            targetElement.parentNode.insertBefore(container, targetElement);
+                            inserted = true;
+                        } else {
+                            // Fallback: añadir al final del body
+                            document.body.appendChild(container);
+                            inserted = true;
+                        }
+                        break;
+                }
+                
+                if (inserted) {
+                    console.log(`📍 [${position}] Contenedor insertado en el DOM`);
+                } else {
+                    console.warn(`⚠️ [${position}] No se pudo insertar el contenedor`);
+                }
+                
+            } catch (error) {
+                console.error(`Error insertando contenedor ${position}:`, error);
+            }
+        },
+        
         forceContainerVisibility() {
-            console.log('👁️ [Ad Containers] Forcing visibility...');
+            console.log('👁️ [Ad Containers] Forzando visibilidad de contenedores...');
             
             const allContainers = document.querySelectorAll('.ad-container');
+            
             allContainers.forEach((container, index) => {
-                // Remove any potential hiding styles
+                // Remover cualquier estilo que pueda ocultar
                 container.style.display = 'block';
                 container.style.visibility = 'visible';
                 container.style.opacity = '1';
-                container.style.position = container.style.position || 'relative';
                 
-                // Add visibility marker
+                // Asegurar z-index apropiado
+                if (!container.style.zIndex) {
+                    container.style.zIndex = container.classList.contains('ad-sidebar') ? '1000' : '100';
+                }
+                
+                // Añadir marcador de visibilidad si no existe
                 if (!container.querySelector('.visibility-marker')) {
                     const marker = document.createElement('div');
                     marker.className = 'visibility-marker';
                     marker.style.cssText = `
                         position: absolute;
-                        top: 5px;
-                        right: 5px;
+                        top: 2px;
+                        right: 2px;
                         background: #00ff88;
                         color: #001f3f;
-                        padding: 2px 5px;
+                        padding: 2px 6px;
                         border-radius: 3px;
-                        font-size: 10px;
+                        font-size: 9px;
                         font-weight: bold;
-                        z-index: 1001;
+                        z-index: 10001;
+                        font-family: monospace;
                     `;
-                    marker.textContent = `VISIBLE ${index + 1}`;
+                    marker.textContent = `AD ${index + 1}`;
                     container.appendChild(marker);
                 }
                 
-                console.log(`👁️ [Container ${index + 1}] Forced visible:`, {
+                console.log(`👁️ [Container ${index + 1}] Visibilidad forzada:`, {
                     id: container.id,
-                    position: this.getElementPosition(container),
-                    size: this.getElementSize(container),
-                    computed: this.getComputedVisibility(container)
+                    visible: this.isElementVisible(container),
+                    dimensions: `${container.offsetWidth}x${container.offsetHeight}`,
+                    position: container.getAttribute('data-position')
                 });
             });
         },
         
+        monitorContainerVisibility() {
+            const allContainers = document.querySelectorAll('.ad-container');
+            let visibleCount = 0;
+            let hiddenCount = 0;
+            
+            allContainers.forEach(container => {
+                if (this.isElementVisible(container)) {
+                    visibleCount++;
+                    container.setAttribute('data-visible', 'true');
+                } else {
+                    hiddenCount++;
+                    container.setAttribute('data-visible', 'false');
+                    // Intentar hacer visible
+                    container.style.display = 'block';
+                    container.style.visibility = 'visible';
+                    container.style.opacity = '1';
+                }
+            });
+            
+            if (hiddenCount > 0) {
+                console.warn(`⚠️ [Monitor] ${hiddenCount} contenedores ocultos detectados, intentando corregir...`);
+            }
+        },
+        
         logContainerStatus() {
-            console.group('📊 [Ad Containers] Status Report');
+            console.group('📊 [Ad Containers] Reporte de Estado');
             
             const allContainers = document.querySelectorAll('.ad-container');
-            console.log(`Found ${allContainers.length} total containers`);
+            console.log(`Total de contenedores: ${allContainers.length}`);
             
             allContainers.forEach((container, index) => {
                 const status = {
                     id: container.id,
-                    classes: container.className,
+                    position: container.getAttribute('data-position'),
+                    network: container.getAttribute('data-network'),
                     visible: this.isElementVisible(container),
-                    position: this.getElementPosition(container),
-                    size: this.getElementSize(container),
+                    dimensions: {
+                        width: container.offsetWidth,
+                        height: container.offsetHeight
+                    },
                     hasContent: container.children.length > 0,
-                    computedStyles: this.getComputedVisibility(container)
+                    hasAdZone: container.querySelector('.juicyads-zone, .adsbyexoclick, [data-exoclick-zoneid]') !== null
                 };
                 
-                console.log(`📦 Container ${index + 1}:`, status);
-                
-                if (!status.visible) {
-                    console.warn(`⚠️ Container ${index + 1} has visibility issues`);
-                }
+                const emoji = status.visible ? '✅' : '❌';
+                console.log(`${emoji} Container ${index + 1}:`, status);
             });
             
-            // Check for ad network specific elements
-            this.checkNetworkElements();
+            // Verificar redes específicas
+            this.checkNetworkStatus();
             
             console.groupEnd();
         },
         
-        checkNetworkElements() {
-            console.log('🔍 [Networks] Checking network-specific elements...');
+        checkNetworkStatus() {
+            console.log('🔍 [Networks] Verificando estado de las redes...');
             
             // JuicyAds
             const juicyElements = document.querySelectorAll('[id*="juicyads"], .juicyads-zone');
-            console.log(`🍊 JuicyAds elements: ${juicyElements.length}`);
+            this.networkStatus.juicyads.loaded = juicyElements.length > 0;
+            this.networkStatus.juicyads.zones = Array.from(juicyElements).map(el => el.id);
+            console.log(`🍊 JuicyAds: ${juicyElements.length} elementos`, this.networkStatus.juicyads.zones);
             
             // ExoClick
             const exoElements = document.querySelectorAll('[id*="exoclick"], .adsbyexoclick, [data-exoclick-zoneid]');
-            console.log(`🔵 ExoClick elements: ${exoElements.length}`);
+            this.networkStatus.exoclick.loaded = exoElements.length > 0;
+            this.networkStatus.exoclick.zones = Array.from(exoElements).map(el => el.id || el.className);
+            console.log(`🔵 ExoClick: ${exoElements.length} elementos`, this.networkStatus.exoclick.zones);
             
             // PopAds
-            const popElements = document.querySelectorAll('[data-cfasync="false"], #popads-indicator');
-            console.log(`🚀 PopAds elements: ${popElements.length}`);
-            
-            // Log specific element details
-            [...juicyElements, ...exoElements, ...popElements].forEach((element, index) => {
-                console.log(`🔍 Network element ${index + 1}:`, {
-                    tagName: element.tagName,
-                    id: element.id,
-                    classes: element.className,
-                    visible: this.isElementVisible(element),
-                    content: element.innerHTML.substring(0, 100) + '...'
-                });
-            });
+            const popAdsActive = window.e494ffb82839a29122608e933394c091 || 
+                               document.querySelector('[data-cfasync="false"]') || 
+                               document.getElementById('popads-indicator');
+            this.networkStatus.popads.active = !!popAdsActive;
+            console.log(`🚀 PopAds: ${this.networkStatus.popads.active ? 'Activo' : 'Inactivo'}`);
         },
         
-        // Enhanced container injection for specific networks
-        injectJuicyAdsContainer(position, zoneId) {
-            const containerId = `ad-juicyads-${position}`;
-            let container = document.getElementById(containerId);
+        injectEnhancedStyles() {
+            const styleId = 'ad-containers-enhanced-styles';
             
-            if (!container) {
-                container = this.createContainer(containerId, position);
-                container.classList.add('ad-juicyads');
-                this.appendToPosition(container, position);
-            }
+            // Verificar si ya existe
+            if (document.getElementById(styleId)) return;
             
-            // Create zone element
-            const zoneElement = document.createElement('div');
-            zoneElement.id = `juicyads-${position}-${zoneId}`;
-            zoneElement.className = 'juicyads-zone';
-            zoneElement.style.cssText = `
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                width: 100% !important;
-                min-height: 50px !important;
-                background: rgba(255, 165, 0, 0.1) !important;
-                border: 1px solid rgba(255, 165, 0, 0.3) !important;
-                border-radius: 5px;
-                padding: 10px;
+            const styles = document.createElement('style');
+            styles.id = styleId;
+            styles.innerHTML = `
+                /* Estilos mejorados para contenedores de anuncios */
+                .ad-container {
+                    display: block !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                    transition: all 0.3s ease;
+                    animation: adFadeIn 0.5s ease;
+                }
+                
+                @keyframes adFadeIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(10px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                
+                .ad-container:hover {
+                    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.2);
+                }
+                
+                .ad-container .visibility-marker {
+                    transition: all 0.2s ease;
+                }
+                
+                .ad-container:hover .visibility-marker {
+                    background: #00ffaa !important;
+                }
+                
+                /* Asegurar que las zonas de anuncios sean visibles */
+                .juicyads-zone,
+                .adsbyexoclick,
+                [data-exoclick-zoneid] {
+                    display: block !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                    min-height: 50px !important;
+                }
+                
+                /* Responsive para móviles */
+                @media (max-width: 768px) {
+                    .ad-container.ad-sidebar {
+                        position: relative !important;
+                        right: auto !important;
+                        top: auto !important;
+                        transform: none !important;
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        margin: 20px auto !important;
+                    }
+                    
+                    .ad-container.ad-header,
+                    .ad-container.ad-footer {
+                        max-width: 100% !important;
+                        padding: 5px !important;
+                    }
+                }
+                
+                /* Indicador de carga */
+                .ad-container .ad-status {
+                    animation: pulse 2s ease infinite;
+                }
+                
+                @keyframes pulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.5; }
+                }
             `;
             
-            container.innerHTML = ''; // Clear placeholder
-            container.appendChild(zoneElement);
-            
-            console.log(`🍊 [JuicyAds] Container injected for ${position} zone ${zoneId}`);
-            return { container, zoneElement };
+            document.head.appendChild(styles);
+            console.log('✅ [Styles] Estilos CSS mejorados inyectados');
         },
         
-        injectExoClickContainer(position, zoneId) {
-            const containerId = `ad-exoclick-${position}`;
-            let container = document.getElementById(containerId);
-            
-            if (!container) {
-                container = this.createContainer(containerId, position);
-                container.classList.add('ad-exoclick');
-                this.appendToPosition(container, position);
-            }
-            
-            // Create zone element
-            const zoneElement = document.createElement('div');
-            zoneElement.id = `exoclick-${position}-${zoneId}`;
-            zoneElement.className = 'adsbyexoclick';
-            zoneElement.setAttribute('data-exoclick-zoneid', zoneId);
-            zoneElement.style.cssText = `
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                width: 100% !important;
-                min-height: 50px !important;
-                background: rgba(0, 162, 255, 0.1) !important;
-                border: 1px solid rgba(0, 162, 255, 0.3) !important;
-                border-radius: 5px;
-                padding: 10px;
-            `;
-            
-            container.innerHTML = ''; // Clear placeholder
-            container.appendChild(zoneElement);
-            
-            console.log(`🔵 [ExoClick] Container injected for ${position} zone ${zoneId}`);
-            return { container, zoneElement };
-        },
-        
-        appendToPosition(container, position) {
-            switch(position) {
-                case 'header':
-                    const header = document.querySelector('.main-header');
-                    if (header && header.parentNode) {
-                        header.parentNode.insertBefore(container, header.nextSibling);
-                    } else {
-                        document.body.insertBefore(container, document.body.firstChild);
-                    }
-                    break;
-                    
-                case 'sidebar':
-                    container.style.cssText += `
-                        position: fixed !important;
-                        right: 10px !important;
-                        top: 50% !important;
-                        transform: translateY(-50%) !important;
-                        z-index: 1000 !important;
-                        max-width: 300px !important;
-                    `;
-                    document.body.appendChild(container);
-                    break;
-                    
-                case 'footer':
-                    const footer = document.querySelector('.main-footer');
-                    if (footer && footer.parentNode) {
-                        footer.parentNode.insertBefore(container, footer);
-                    } else {
-                        document.body.appendChild(container);
-                    }
-                    break;
-                    
-                default:
-                    document.body.appendChild(container);
-            }
-        },
-        
-        // Utility functions
+        // Funciones de utilidad
         isElementVisible(element) {
             if (!element) return false;
             
@@ -367,42 +486,51 @@
             );
         },
         
-        getElementPosition(element) {
-            const rect = element.getBoundingClientRect();
-            return {
-                top: Math.round(rect.top),
-                left: Math.round(rect.left),
-                width: Math.round(rect.width),
-                height: Math.round(rect.height)
-            };
+        updateContainerStatus(position, status) {
+            const container = this.containers.get(position);
+            if (!container) return;
+            
+            const statusElement = container.querySelector('.ad-status');
+            if (statusElement) {
+                statusElement.textContent = status;
+                statusElement.style.background = status.includes('Active') ? 
+                    'rgba(0, 255, 136, 0.3)' : 
+                    'rgba(255, 165, 0, 0.3)';
+            }
         },
         
-        getElementSize(element) {
-            const rect = element.getBoundingClientRect();
-            return {
-                width: Math.round(rect.width),
-                height: Math.round(rect.height)
-            };
+        // API pública
+        getContainer(position) {
+            return this.containers.get(position);
         },
         
-        getComputedVisibility(element) {
-            const computed = window.getComputedStyle(element);
-            return {
-                display: computed.display,
-                visibility: computed.visibility,
-                opacity: computed.opacity,
-                position: computed.position,
-                zIndex: computed.zIndex
-            };
+        getAllContainers() {
+            return Array.from(this.containers.values());
+        },
+        
+        refreshContainers() {
+            console.log('🔄 [Ad Containers] Refrescando contenedores...');
+            this.forceContainerVisibility();
+            this.logContainerStatus();
+        },
+        
+        getNetworkStatus() {
+            return this.networkStatus;
         }
     };
     
-    // Auto-initialize
+    // Auto-inicializar
     AdContainersManager.init();
     
-    // Expose globally
+    // Exponer globalmente
     window.AdContainersManager = AdContainersManager;
     
-    console.log('📦 [Ad Containers] Manager loaded');
+    // Comandos de consola útiles
+    window.refreshAds = () => AdContainersManager.refreshContainers();
+    window.adStatus = () => AdContainersManager.getNetworkStatus();
+    
+    console.log('✅ [Ad Containers] Manager v2.0.0 cargado');
+    console.log('💡 Usa window.refreshAds() para refrescar contenedores');
+    console.log('💡 Usa window.adStatus() para ver estado de las redes');
     
 })();
