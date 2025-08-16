@@ -1,9 +1,9 @@
 // ============================
-// IBIZAGIRL.PICS SERVICE WORKER v1.4.2 ULTRA FIXED
-// PWA + Performance + SEO + Clone Errors Fixed
+// IBIZAGIRL.PICS SERVICE WORKER v1.4.3 BACKGROUND SYNC FIXED
+// PWA + Performance + SEO + Background Sync Optimization
 // ============================
 
-const CACHE_VERSION = '1.4.2';
+const CACHE_VERSION = '1.4.3';
 const CACHE_NAME = `ibizagirl-v${CACHE_VERSION}`;
 const STATIC_CACHE = `ibizagirl-static-v${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `ibizagirl-dynamic-v${CACHE_VERSION}`;
@@ -45,8 +45,14 @@ const EXCLUDED_URLS = [
     'juicyads',
     'exoclick',
     'popads',
-    'premiumvertising'
+    'premiumvertising',
+    'adsco.re'
 ];
+
+// FIXED: Background sync control
+let backgroundSyncEnabled = true;
+let lastSyncTime = 0;
+const SYNC_COOLDOWN = 300000; // 5 minutes cooldown
 
 // ============================
 // SERVICE WORKER INSTALLATION
@@ -120,7 +126,7 @@ self.addEventListener('activate', event => {
 });
 
 // ============================
-// FETCH EVENT HANDLER - FIXED CLONE ERRORS
+// FETCH EVENT HANDLER - OPTIMIZED
 // ============================
 
 self.addEventListener('fetch', event => {
@@ -211,7 +217,7 @@ async function handleFetch(request, url) {
 }
 
 // ============================
-// CACHING STRATEGIES - FIXED CLONE ERRORS
+// CACHING STRATEGIES - OPTIMIZED
 // ============================
 
 async function cacheFirstWithTimeout(request, timeout = 3000) {
@@ -330,14 +336,39 @@ self.addEventListener('message', event => {
             }
         });
     }
+    
+    // FIXED: Background sync control
+    if (event.data && event.data.type === 'DISABLE_SYNC') {
+        backgroundSyncEnabled = false;
+        console.log('🔇 Background sync disabled');
+    }
+    
+    if (event.data && event.data.type === 'ENABLE_SYNC') {
+        backgroundSyncEnabled = true;
+        console.log('🔊 Background sync enabled');
+    }
 });
 
 // ============================
-// BACKGROUND SYNC
+// BACKGROUND SYNC - FIXED
 // ============================
 
 self.addEventListener('sync', event => {
+    // FIXED: Add cooldown and control mechanism
+    const currentTime = Date.now();
+    
+    if (!backgroundSyncEnabled) {
+        console.log('🔇 Background sync disabled, skipping');
+        return;
+    }
+    
+    if (currentTime - lastSyncTime < SYNC_COOLDOWN) {
+        console.log('⏳ Background sync cooldown active, skipping');
+        return;
+    }
+    
     console.log('🔄 Background sync triggered:', event.tag);
+    lastSyncTime = currentTime;
     
     if (event.tag === 'content-preload') {
         event.waitUntil(preloadContent());
@@ -348,6 +379,7 @@ async function preloadContent() {
     try {
         console.log('🔄 Service Worker: Preloading content...');
         
+        // FIXED: Only preload essential images to prevent excessive background activity
         const imagesToPreload = [
             '/full/bikini.webp',
             '/full/bikbanner.webp',
@@ -359,6 +391,12 @@ async function preloadContent() {
         await Promise.allSettled(
             imagesToPreload.map(async url => {
                 try {
+                    // Check if already cached to avoid unnecessary requests
+                    const cached = await cache.match(url);
+                    if (cached) {
+                        return;
+                    }
+                    
                     const response = await fetch(url);
                     if (response && response.ok) {
                         await cache.put(url, response);
@@ -370,9 +408,69 @@ async function preloadContent() {
         );
         
         console.log('✅ Service Worker: Content preloaded');
+        
+        // FIXED: Disable further background syncs for a while
+        setTimeout(() => {
+            backgroundSyncEnabled = true;
+        }, SYNC_COOLDOWN);
+        
     } catch (error) {
         console.error('❌ Service Worker: Preload failed', error);
     }
 }
 
-console.log(`🌊 IbizaGirl.pics Service Worker v${CACHE_VERSION} loaded - Clone errors FIXED`);
+// ============================
+// PERFORMANCE OPTIMIZATION
+// ============================
+
+// FIXED: Limit concurrent operations
+let activeOperations = 0;
+const MAX_CONCURRENT_OPERATIONS = 3;
+
+async function throttledOperation(operation) {
+    if (activeOperations >= MAX_CONCURRENT_OPERATIONS) {
+        return;
+    }
+    
+    activeOperations++;
+    try {
+        await operation();
+    } finally {
+        activeOperations--;
+    }
+}
+
+// FIXED: Cleanup old caches more aggressively
+async function cleanupOldCaches() {
+    try {
+        const cacheNames = await caches.keys();
+        const oldCaches = cacheNames.filter(name => 
+            !name.includes(CACHE_VERSION) && 
+            (name.includes('ibizagirl') || name.includes('dynamic') || name.includes('images'))
+        );
+        
+        if (oldCaches.length > 0) {
+            console.log('🧹 Cleaning up old caches:', oldCaches);
+            await Promise.all(oldCaches.map(name => caches.delete(name)));
+        }
+    } catch (error) {
+        console.warn('Cache cleanup failed:', error.message);
+    }
+}
+
+// Run cleanup periodically
+setInterval(cleanupOldCaches, 3600000); // Every hour
+
+// ============================
+// ERROR HANDLING IMPROVEMENT
+// ============================
+
+self.addEventListener('error', event => {
+    console.error('Service Worker Error:', event.error);
+});
+
+self.addEventListener('unhandledrejection', event => {
+    console.error('Service Worker Unhandled Promise Rejection:', event.reason);
+});
+
+console.log(`🌊 IbizaGirl.pics Service Worker v${CACHE_VERSION} loaded - Background sync FIXED`);
