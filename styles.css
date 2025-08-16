@@ -45,37 +45,57 @@ body {
 
 /* Base ad container styles - FORCE VISIBILITY */
 .ad-container {
-    margin: 2rem auto !important;
-    padding: 1rem !important;
-    background: var(--glass-bg) !important;
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 15px;
-    text-align: center;
-    min-height: 100px !important;
     display: block !important;
-    position: relative !important;
-    overflow: visible !important;
     visibility: visible !important;
     opacity: 1 !important;
+    margin: 20px auto !important;
+    padding: 10px !important;
+    background: rgba(0, 119, 190, 0.05) !important;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(0, 255, 136, 0.3) !important;
+    border-radius: 15px;
+    text-align: center;
+    position: relative !important;
+    overflow: visible !important;
     z-index: 100 !important;
     clear: both;
     width: auto !important;
     max-width: 100% !important;
+    min-height: 90px !important;
+    transition: all 0.3s ease;
+    animation: adFadeIn 0.5s ease;
+}
+
+@keyframes adFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ad-container:hover {
+    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.2);
+    background: rgba(0, 119, 190, 0.1) !important;
 }
 
 /* Enhanced visibility for specific ad networks */
-.ad-container.ad-juicyads,
-.ad-container.ad-exoclick,
-.ad-container.ad-popads {
-    background: rgba(0, 119, 190, 0.15) !important;
-    border: 2px solid rgba(0, 255, 136, 0.4) !important;
-    box-shadow: 0 0 15px rgba(0, 255, 136, 0.3) !important;
+.ad-container.ad-juicyads {
+    background: rgba(255, 165, 0, 0.05) !important;
+    border-color: rgba(255, 165, 0, 0.3) !important;
+}
+
+.ad-container.ad-exoclick {
+    background: rgba(0, 162, 255, 0.05) !important;
+    border-color: rgba(0, 162, 255, 0.3) !important;
 }
 
 /* Position-specific styles with enhanced visibility */
 .ad-container.ad-header {
-    margin: 1rem auto 2rem auto !important;
+    margin: 20px auto 30px auto !important;
     max-width: 728px !important;
     min-height: 90px !important;
 }
@@ -92,9 +112,9 @@ body {
 }
 
 .ad-container.ad-footer {
-    max-width: 100% !important;
-    min-height: 100px !important;
-    margin: 2rem auto !important;
+    max-width: 728px !important;
+    min-height: 90px !important;
+    margin: 30px auto 20px auto !important;
     background: rgba(0, 33, 66, 0.3) !important;
 }
 
@@ -106,26 +126,27 @@ body {
     opacity: 1 !important;
     width: 100% !important;
     min-height: 50px !important;
-    background: rgba(255, 165, 0, 0.15) !important;
-    border: 1px solid rgba(255, 165, 0, 0.4) !important;
-    border-radius: 5px;
-    padding: 10px;
+    background: rgba(255, 165, 0, 0.03);
+    border: 1px solid rgba(255, 165, 0, 0.2);
+    border-radius: 8px;
+    padding: 5px;
     position: relative !important;
 }
 
 /* ExoClick specific zones - ENHANCED */
 .adsbyexoclick,
 [id*="exoclick"],
-[data-exoclick-zoneid] {
+[data-exoclick-zoneid],
+[data-zoneid] {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
     width: 100% !important;
     min-height: 50px !important;
-    background: rgba(0, 162, 255, 0.15) !important;
-    border: 1px solid rgba(0, 162, 255, 0.4) !important;
-    border-radius: 5px;
-    padding: 10px;
+    background: rgba(0, 162, 255, 0.03);
+    border: 1px solid rgba(0, 162, 255, 0.2);
+    border-radius: 8px;
+    padding: 5px;
     position: relative !important;
 }
 
@@ -136,86 +157,87 @@ body {
     opacity: 1 !important;
     z-index: 9999 !important;
     position: fixed !important;
+    animation: slideInLeft 0.5s ease;
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 /* Enhanced placeholder styles */
 .ad-placeholder {
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 90px !important;
-    background: linear-gradient(135deg, rgba(0,119,190,0.2), rgba(0,212,255,0.2)) !important;
-    border: 2px dashed rgba(127,219,255,0.5) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    color: rgba(255,255,255,0.8) !important;
-    font-size: 14px !important;
-    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(0,119,190,0.1), rgba(0,212,255,0.1)) !important;
+    border: 2px dashed rgba(127,219,255,0.4) !important;
+}
+
+.ad-placeholder-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: inherit;
+    color: rgba(255, 255, 255, 0.6);
     font-family: system-ui, -apple-system, sans-serif;
-    text-align: center;
     padding: 20px;
-    visibility: visible !important;
-    opacity: 1 !important;
-    position: relative !important;
 }
 
-.ad-placeholder::before {
-    content: '📢 AD SPACE' !important;
-    font-size: 16px !important;
-    margin-bottom: 8px !important;
-    opacity: 1 !important;
-    color: #00ff88 !important;
-    font-weight: bold !important;
-    display: block !important;
+/* Ad loading states */
+.ad-loading {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    padding: 20px;
+    animation: pulse 2s ease infinite;
 }
 
-/* Success indicators for loaded ads */
-.ad-success-indicator {
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.ad-loading::before {
+    content: '📢';
+    font-size: 24px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Status indicators */
+.ad-status {
+    font-size: 10px;
+    margin-top: 10px;
+    padding: 4px 8px;
+    background: rgba(0, 255, 136, 0.2);
+    border-radius: 5px;
+    color: #00ff88;
+    display: inline-block;
+    animation: pulse 2s ease infinite;
+}
+
+.visibility-marker {
     position: absolute !important;
-    top: 5px !important;
-    right: 5px !important;
+    top: 2px !important;
+    right: 2px !important;
     background: #00ff88 !important;
     color: #001f3f !important;
-    padding: 3px 8px !important;
-    border-radius: 5px !important;
-    font-size: 10px !important;
-    font-weight: bold !important;
-    z-index: 1001 !important;
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-
-/* Debug styles for development */
-.ad-container[data-debug="true"] {
-    border: 3px solid #ff0000 !important;
-    background: rgba(255, 0, 0, 0.05) !important;
-}
-
-.ad-container[data-debug="true"]::after {
-    content: 'DEBUG: ' attr(id) !important;
-    position: absolute !important;
-    top: -15px !important;
-    left: 0 !important;
-    background: #ff0000 !important;
-    color: white !important;
-    padding: 2px 8px !important;
-    font-size: 11px !important;
-    font-weight: bold !important;
+    padding: 2px 6px !important;
     border-radius: 3px !important;
-    z-index: 1002 !important;
+    font-size: 9px !important;
+    font-weight: bold !important;
+    z-index: 10001 !important;
+    font-family: monospace !important;
+    transition: all 0.2s ease;
 }
 
-/* Anti-adblock protection */
-.ad-container:not(.ad-placeholder) {
-    background-color: transparent !important;
-}
-
-/* Ensure ad networks can inject content */
-.ad-container * {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
+.ad-container:hover .visibility-marker {
+    background: #00ffaa !important;
+    transform: scale(1.1);
 }
 
 /* Language Selector */
@@ -275,11 +297,6 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: pulse 1.5s ease infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.05); opacity: 0.8; }
 }
 
 .loading-bar {
@@ -1009,7 +1026,7 @@ body {
 }
 
 .plan-features li:before {
-    content: '✓';
+    content: '✔';
     color: var(--update-green);
     font-weight: bold;
     margin-right: 0.5rem;
@@ -1476,8 +1493,8 @@ body {
     
     /* Ad containers mobile optimization */
     .ad-container {
-        margin: 1rem 0.5rem !important;
-        padding: 0.5rem !important;
+        margin: 10px !important;
+        padding: 8px !important;
     }
     
     .ad-container.ad-sidebar {
@@ -1486,10 +1503,36 @@ body {
         top: auto !important;
         transform: none !important;
         max-width: 100% !important;
-        margin: 1rem 0 !important;
+        width: 100% !important;
+        margin: 20px auto !important;
+        z-index: 100 !important;
     }
     
-    .ad-container.ad-header {
-        min-height: 80px !important;
+    .ad-container.ad-header,
+    .ad-container.ad-footer {
+        min-height: 70px !important;
+    }
+    
+    #popads-indicator {
+        bottom: 10px !important;
+        left: 10px !important;
+        right: 10px !important;
+        max-width: none !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .ad-container {
+        border-radius: 10px !important;
+        min-height: 70px !important;
+    }
+    
+    .ad-container.ad-sidebar {
+        min-height: 200px !important;
+    }
+    
+    .visibility-marker {
+        font-size: 8px !important;
+        padding: 1px 4px !important;
     }
 }
