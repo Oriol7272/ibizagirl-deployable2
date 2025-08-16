@@ -54,7 +54,6 @@
                 testMode: false
             }
         },
-        // FIXED: Added adsco.re to excluded URLs to prevent 401 error logging
         excludedUrls: [
             'chrome-extension://',
             'extension://',
@@ -67,7 +66,7 @@
             'exoclick',
             'popads',
             'premiumvertising',
-            'adsco.re' // ✅ ADDED: Filters 401 errors from adsco.re tracking
+            'adsco.re'
         ]
     };
     
@@ -89,12 +88,10 @@
                 return;
             }
             
-            // Production mode - Load real ads with delay to avoid conflicts
             setTimeout(() => {
                 this.loadAdNetworks();
             }, 1000);
             
-            // Verify after adequate delay
             setTimeout(() => {
                 this.verifyAdNetworks();
             }, 6000);
@@ -105,7 +102,6 @@
             
             Object.entries(AD_CONFIG.networks).forEach(([key, network]) => {
                 if (network.enabled && !network.testMode) {
-                    // Add delay between network loads to prevent conflicts
                     setTimeout(() => {
                         this.loadAdScript(key, network);
                     }, key === 'juicyads' ? 0 : key === 'exoclick' ? 1000 : 2000);
@@ -120,25 +116,21 @@
             }
             
             try {
-                // Special handling for PopAds
                 if (networkKey === 'popads') {
                     this.initPopAds(network);
                     return;
                 }
                 
-                // Special handling for ExoClick with multiple URLs
                 if (networkKey === 'exoclick') {
                     this.loadExoClickWithFallback(network);
                     return;
                 }
                 
-                // Enhanced JuicyAds loading
                 if (networkKey === 'juicyads') {
                     this.loadJuicyAdsSafely(network);
                     return;
                 }
                 
-                // Standard script loading for other networks
                 this.loadSingleScript(networkKey, network, network.scriptUrl);
             } catch (error) {
                 console.error(`Error loading ${networkKey}:`, error.message);
@@ -149,7 +141,6 @@
         loadJuicyAdsSafely(network) {
             console.log('🍊 Loading JuicyAds with enhanced safety...');
             
-            // Pre-initialize global object to prevent undefined errors
             if (typeof window.adsbyjuicy === 'undefined') {
                 window.adsbyjuicy = {
                     cmd: [],
@@ -170,7 +161,6 @@
                 console.log('🍊 JuicyAds script loaded successfully');
                 this.loadedNetworks.add('juicyads');
                 
-                // Wait for proper initialization before creating zones
                 setTimeout(() => {
                     this.initJuicyAds(network);
                 }, 2000);
@@ -842,7 +832,6 @@
         }
     };
     
-    // Initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             AdVerificationSystem.init();
@@ -853,7 +842,6 @@
         }, 100);
     }
     
-    // Expose to global scope
     window.AdVerificationSystem = AdVerificationSystem;
     window.testAds = () => AdVerificationSystem.testAds();
     window.reloadAds = () => AdVerificationSystem.reloadAds();
