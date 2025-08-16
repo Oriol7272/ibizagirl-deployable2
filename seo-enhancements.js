@@ -1,5 +1,5 @@
 // ============================
-// SEO ENHANCEMENTS v2.1.0 - FIXED
+// SEO ENHANCEMENTS v2.1.1 - FIXED PATHS
 // Lazy Loading + Open Graph + JSON-LD + Performance
 // ============================
 
@@ -215,7 +215,7 @@ function updateOpenGraph(contentData = {}) {
     const defaultData = {
         title: trans.photos_seo_title || 'IbizaGirl.pics - Galería Premium Ibiza | 400+ Fotos Diarias',
         description: trans.meta_description || 'Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente.',
-        image: 'https://ibizagirl.pics/full/bikini.jpg', // RUTA CORREGIDA
+        image: 'https://ibizagirl.pics/full/bikini.webp', // RUTA CORREGIDA
         url: window.location.href,
         type: 'website'
     };
@@ -338,7 +338,7 @@ function injectAdvancedJSONLD() {
         "url": "https://ibizagirl.pics/",
         "logo": {
             "@type": "ImageObject",
-            "url": "https://ibizagirl.pics/full/bikini.jpg",
+            "url": "https://ibizagirl.pics/full/bikini.webp",
             "width": 1200,
             "height": 630
         },
@@ -369,7 +369,7 @@ function injectAdvancedJSONLD() {
             "description": trans.gallery_description || "Galería premium",
             "primaryImageOfPage": {
                 "@type": "ImageObject",
-                "url": "https://ibizagirl.pics/full/bikini.jpg",
+                "url": "https://ibizagirl.pics/full/bikini.webp",
                 "caption": trans.seo_keywords?.primary || "Ibiza paradise gallery",
                 "width": 1200,
                 "height": 800
@@ -416,7 +416,7 @@ function injectAdvancedJSONLD() {
         "name": "Ibiza Paradise Beaches",
         "description": "Las mejores playas y calas de Ibiza capturadas en nuestra galería premium",
         "url": "https://ibizagirl.pics/",
-        "image": "https://ibizagirl.pics/full/bikbanner.jpg",
+        "image": "https://ibizagirl.pics/full/bikbanner.webp",
         "geo": {
             "@type": "GeoCoordinates",
             "latitude": "38.9067",
@@ -693,7 +693,7 @@ function initPerformanceMonitoring() {
 // ============================
 
 function initializeSEOEnhancements() {
-    console.log('🚀 Initializing SEO Enhancements v2.1.0 FIXED...');
+    console.log('🚀 Initializing SEO Enhancements v2.1.1 FIXED...');
     
     try {
         // Lazy loading avanzado
