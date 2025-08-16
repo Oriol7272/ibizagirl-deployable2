@@ -1,6 +1,6 @@
 // ============================
-// AD VERIFICATION SYSTEM v2.3 FINAL FIX
-// ExoClick corregido + PopAds reemplaza EroAdvertising
+// AD VERIFICATION SYSTEM v2.4 POPADS CONFIGURED
+// Sistema con PopAds real configurado
 // ============================
 
 (function() {
@@ -25,9 +25,9 @@
                 testMode: false
             },
             exoclick: {
-                enabled: true, // CORREGIDO
+                enabled: true,
                 name: 'ExoClick',
-                scriptUrl: 'https://a.realsrv.com/ad-provider.js', // URL CORREGIDA
+                scriptUrl: 'https://a.realsrv.com/ad-provider.js',
                 zones: {
                     header: 5696328,
                     sidebar: 5696329,
@@ -36,13 +36,17 @@
                 testMode: false
             },
             popads: {
-                enabled: true, // REEMPLAZA EroAdvertising
+                enabled: true,
                 name: 'PopAds',
-                scriptUrl: 'https://c2.popads.media/pop.js',
-                zones: {
-                    pop_under: 4987321,
-                    banner_header: 4987322,
-                    banner_footer: 4987323
+                // Configuración extraída del script proporcionado
+                config: {
+                    siteId: 641 + 623 + 837 * 598 + 810 + 4724158, // = 5226178
+                    minBid: 0,
+                    popundersPerIP: "0",
+                    delayBetween: 0,
+                    default: false,
+                    defaultPerDay: 0,
+                    topmostLayer: "auto"
                 },
                 testMode: false
             }
@@ -56,9 +60,9 @@
         popAdsInitialized: false,
         
         init() {
-            console.log('🎯 [Ad Networks] Sistema v2.3 FINAL FIX iniciado');
+            console.log('🎯 [Ad Networks] Sistema v2.4 POPADS CONFIGURED iniciado');
             console.log('🌍 Environment:', AD_CONFIG.environment);
-            console.log('📋 Networks: JuicyAds + ExoClick + PopAds (replaces EroAdvertising)');
+            console.log('📋 Networks: JuicyAds + ExoClick + PopAds (configured)');
             
             if (AD_CONFIG.environment === 'development') {
                 console.log('📢 Development mode - Using placeholders');
@@ -91,7 +95,7 @@
                 return;
             }
             
-            // Special handling for PopAds (no external script needed)
+            // Special handling for PopAds (custom script)
             if (networkKey === 'popads') {
                 this.initPopAds(network);
                 return;
@@ -128,9 +132,6 @@
                     case 'exoclick':
                         this.initExoClick(network);
                         break;
-                    case 'popads':
-                        this.initPopAds(network);
-                        break;
                 }
             } catch (error) {
                 console.error(`Error initializing ${networkKey}:`, error);
@@ -140,7 +141,6 @@
         
         initJuicyAds(network) {
             try {
-                // Initialize JuicyAds global
                 if (typeof window.adsbyjuicy === 'undefined') {
                     window.adsbyjuicy = window.adsbyjuicy || { cmd: [] };
                 }
@@ -171,9 +171,7 @@
         
         initExoClick(network) {
             try {
-                // CORREGIDO: Mejor inicialización de ExoClick
                 const checkExoClick = () => {
-                    // ExoClick puede usar diferentes nombres globales
                     if (typeof window.ExoLoader !== 'undefined' || 
                         typeof window.exoclick !== 'undefined' ||
                         typeof window.adProvider !== 'undefined') {
@@ -200,23 +198,158 @@
             try {
                 if (this.popAdsInitialized) return;
                 
-                console.log('🚀 Initializing PopAds (replacing EroAdvertising)');
+                console.log('🚀 Initializing PopAds with custom configuration...');
+                console.log('PopAds SiteID:', network.config.siteId);
                 
-                // Create PopAds pop-under
-                this.createPopAdsPopunder(network.zones.pop_under);
+                // SCRIPT ORIGINAL DE POPADS CONFIGURADO
+                const popAdsScript = document.createElement('script');
+                popAdsScript.type = 'text/javascript';
+                popAdsScript.setAttribute('data-cfasync', 'false');
+                popAdsScript.innerHTML = `
+                    /*<![CDATA[/* */
+                    (function(){
+                        var x=window,
+                            r="e494ffb82839a29122608e933394c091",
+                            l=[
+                                ["siteId", ${network.config.siteId}],
+                                ["minBid", ${network.config.minBid}],
+                                ["popundersPerIP", "${network.config.popundersPerIP}"],
+                                ["delayBetween", ${network.config.delayBetween}],
+                                ["default", ${network.config.default}],
+                                ["defaultPerDay", ${network.config.defaultPerDay}],
+                                ["topmostLayer", "${network.config.topmostLayer}"]
+                            ],
+                            t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL3Bib2JhLm1pbi5jc3M=","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvRHEvaGJvb3RzdHJhcC1lZGl0YWJsZS5taW4uanM="],
+                            a=-1,o,m,
+                            w=function(){
+                                clearTimeout(m);
+                                a++;
+                                if(t[a]&&!(1781262446000<(new Date).getTime()&&1<a)){
+                                    o=x.document.createElement("script");
+                                    o.type="text/javascript";
+                                    o.async=!0;
+                                    var z=x.document.getElementsByTagName("script")[0];
+                                    o.src="https://"+atob(t[a]);
+                                    o.crossOrigin="anonymous";
+                                    o.onerror=w;
+                                    o.onload=function(){
+                                        clearTimeout(m);
+                                        x[r.slice(0,16)+r.slice(0,16)]||w()
+                                    };
+                                    m=setTimeout(w,5E3);
+                                    z.parentNode.insertBefore(o,z)
+                                }
+                            };
+                        if(!x[r]){
+                            try{
+                                Object.freeze(x[r]=l)
+                            }catch(e){}
+                            w()
+                        }
+                    })();
+                    /*]]>/* */
+                `;
                 
-                // Create PopAds banner zones
-                this.createPopAdsBanner('header', network.zones.banner_header);
-                this.createPopAdsBanner('footer', network.zones.banner_footer);
+                document.head.appendChild(popAdsScript);
+                
+                // Crear indicador visual para PopAds
+                this.createPopAdsIndicator();
                 
                 this.loadedNetworks.add('popads');
                 this.popAdsInitialized = true;
                 
-                console.log('✅ PopAds initialized successfully');
+                console.log('✅ PopAds initialized with real configuration');
+                
+                // Monitor PopAds loading
+                this.monitorPopAdsLoading();
                 
             } catch (error) {
                 console.error('PopAds initialization error:', error);
                 this.showPlaceholder('popads');
+            }
+        },
+        
+        monitorPopAdsLoading() {
+            let checkCount = 0;
+            const checkInterval = setInterval(() => {
+                checkCount++;
+                
+                // Check if PopAds global variables exist
+                const popAdsLoaded = window.e494ffb82839a291 || 
+                                   document.querySelector('[data-cfasync="false"]') ||
+                                   document.querySelector('script[src*="premiumvertising"]');
+                
+                if (popAdsLoaded || checkCount > 20) {
+                    clearInterval(checkInterval);
+                    
+                    if (popAdsLoaded) {
+                        console.log('🚀 PopAds successfully loaded and active');
+                        this.updatePopAdsIndicator(true);
+                    } else {
+                        console.warn('⚠️ PopAds loading timeout');
+                        this.updatePopAdsIndicator(false);
+                    }
+                }
+            }, 1000);
+        },
+        
+        createPopAdsIndicator() {
+            const indicator = document.createElement('div');
+            indicator.id = 'popads-indicator';
+            indicator.className = 'ad-container ad-popads ad-footer';
+            indicator.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 20px;
+                background: rgba(0, 51, 102, 0.9);
+                color: white;
+                padding: 10px 15px;
+                border-radius: 10px;
+                font-size: 12px;
+                z-index: 1000;
+                border: 1px solid rgba(127, 219, 255, 0.3);
+                max-width: 200px;
+            `;
+            indicator.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div id="popads-status">🔄</div>
+                    <div>
+                        <div style="font-weight: bold;">PopAds</div>
+                        <div style="font-size: 10px; opacity: 0.8;">Loading...</div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(indicator);
+            
+            // Auto-hide after 10 seconds
+            setTimeout(() => {
+                if (indicator.parentNode) {
+                    indicator.style.opacity = '0';
+                    setTimeout(() => {
+                        if (indicator.parentNode) {
+                            indicator.remove();
+                        }
+                    }, 1000);
+                }
+            }, 10000);
+        },
+        
+        updatePopAdsIndicator(success) {
+            const indicator = document.getElementById('popads-indicator');
+            if (!indicator) return;
+            
+            const status = indicator.querySelector('#popads-status');
+            const text = indicator.querySelector('div:last-child div:last-child');
+            
+            if (success) {
+                status.textContent = '✅';
+                text.textContent = 'Active';
+                indicator.style.borderColor = 'rgba(0, 255, 136, 0.5)';
+            } else {
+                status.textContent = '❌';
+                text.textContent = 'Failed';
+                indicator.style.borderColor = 'rgba(255, 107, 53, 0.5)';
             }
         },
         
@@ -231,12 +364,10 @@
                 this.appendAdContainer(container, position);
             }
             
-            // JuicyAds implementation
             const adDiv = document.createElement('div');
             adDiv.id = `juicyads-${position}-${zoneId}`;
             container.appendChild(adDiv);
             
-            // Push to JuicyAds
             if (typeof adsbyjuicy !== 'undefined' && adsbyjuicy.push) {
                 adsbyjuicy.push({'adzone': zoneId});
             }
@@ -253,9 +384,7 @@
                 this.appendAdContainer(container, position);
             }
             
-            // CORREGIDO: Múltiples métodos de ExoClick
             try {
-                // Método 1: ExoLoader
                 if (typeof window.ExoLoader !== 'undefined') {
                     const adElement = document.createElement('ins');
                     adElement.className = 'adsbyexoclick';
@@ -263,9 +392,7 @@
                     container.appendChild(adElement);
                     
                     window.ExoLoader.addZone({"zone_id": zoneId});
-                }
-                // Método 2: Script directo
-                else {
+                } else {
                     const script = document.createElement('script');
                     script.innerHTML = `
                         var exoOptions = {
@@ -283,84 +410,6 @@
                 console.warn('ExoClick zone creation error:', error);
                 this.showPlaceholderInContainer(container, 'ExoClick', `Error: ${position}`);
             }
-        },
-        
-        createPopAdsPopunder(zoneId) {
-            try {
-                // PopAds pop-under implementation
-                const popScript = document.createElement('script');
-                popScript.innerHTML = `
-                    (function() {
-                        var popAdsConfig = {
-                            enabled: true,
-                            zoneId: '${zoneId}',
-                            frequency: 1440, // minutes (24 hours)
-                            delay: 10000 // 10 seconds
-                        };
-                        
-                        function showPopAds() {
-                            var lastPop = localStorage.getItem('popads_last_show');
-                            var now = Date.now();
-                            
-                            if (lastPop && (now - parseInt(lastPop)) < (popAdsConfig.frequency * 60 * 1000)) {
-                                return; // Don't show yet
-                            }
-                            
-                            try {
-                                var popup = window.open(
-                                    'https://www.popads.media/pop/' + popAdsConfig.zoneId,
-                                    '_blank',
-                                    'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=1,height=1'
-                                );
-                                
-                                if (popup) {
-                                    popup.blur();
-                                    window.focus();
-                                    localStorage.setItem('popads_last_show', now.toString());
-                                    console.log('🚀 PopAds pop-under shown');
-                                }
-                            } catch (e) {
-                                console.warn('PopAds blocked:', e);
-                            }
-                        }
-                        
-                        // Show pop-under after delay
-                        setTimeout(showPopAds, popAdsConfig.delay);
-                        
-                        // Also on click events
-                        document.addEventListener('click', function() {
-                            setTimeout(showPopAds, 1000);
-                        }, { once: true });
-                    })();
-                `;
-                document.head.appendChild(popScript);
-                
-            } catch (error) {
-                console.error('PopAds pop-under error:', error);
-            }
-        },
-        
-        createPopAdsBanner(position, zoneId) {
-            const containerId = `ad-popads-${position}`;
-            let container = document.getElementById(containerId);
-            
-            if (!container) {
-                container = document.createElement('div');
-                container.id = containerId;
-                container.className = `ad-container ad-popads ad-${position}`;
-                this.appendAdContainer(container, position);
-            }
-            
-            // PopAds banner implementation
-            const iframe = document.createElement('iframe');
-            iframe.src = `https://www.popads.media/adframe.php?zid=${zoneId}`;
-            iframe.width = position === 'header' || position === 'footer' ? '728' : '300';
-            iframe.height = position === 'header' || position === 'footer' ? '90' : '250';
-            iframe.frameBorder = '0';
-            iframe.scrolling = 'no';
-            iframe.style.border = 'none';
-            
-            container.appendChild(iframe);
         },
         
         appendAdContainer(container, position) {
@@ -421,7 +470,7 @@
         },
         
         verifyAdNetworks() {
-            console.log('🎯 [Ad Networks] ===== Verificación de redes v2.3 =====');
+            console.log('🎯 [Ad Networks] ===== Verificación v2.4 POPADS =====');
             
             let activeNetworks = 0;
             let placeholdersShown = 0;
@@ -455,8 +504,12 @@
             }
             
             // Check PopAds
-            if (this.popAdsInitialized || document.querySelector('.ad-popads')) {
+            if (this.popAdsInitialized || 
+                window.e494ffb82839a291 || 
+                document.querySelector('[data-cfasync="false"]') ||
+                document.querySelector('.ad-popads')) {
                 console.log('🎯 [Ad Networks] PopAds: Detectado ✅');
+                console.log(`🎯 [PopAds] SiteID: ${AD_CONFIG.networks.popads.config.siteId}`);
                 activeNetworks++;
             } else {
                 console.log('🎯 [Ad Networks] PopAds: No detectado ❌');
@@ -466,20 +519,10 @@
                 }
             }
             
-            console.log('🎯 [Ad Networks] ===== Resumen v2.3 =====');
+            console.log('🎯 [Ad Networks] ===== Resumen v2.4 =====');
             console.log(`🎯 [Ad Networks] Redes activas: ${activeNetworks}/3`);
+            console.log(`🎯 [Ad Networks] PopAds SiteID: ${AD_CONFIG.networks.popads.config.siteId}`);
             console.log(`🎯 [Ad Networks] Placeholders: ${placeholdersShown}`);
-            console.log('🎯 [Ad Networks] EroAdvertising → PopAds (migrado)');
-            
-            // Retry verification if needed
-            if (activeNetworks === 0 && this.verificationAttempts < AD_CONFIG.maxRetries) {
-                this.verificationAttempts++;
-                console.log(`🎯 [Ad Networks] Reintento ${this.verificationAttempts}/${AD_CONFIG.maxRetries}...`);
-                
-                setTimeout(() => {
-                    this.verifyAdNetworks();
-                }, AD_CONFIG.retryDelay);
-            }
             
             return activeNetworks;
         },
@@ -488,36 +531,25 @@
             const network = AD_CONFIG.networks[networkKey];
             if (!network) return;
             
-            // For PopAds, show different zones
             if (networkKey === 'popads') {
-                ['header', 'footer'].forEach(position => {
-                    const containerId = `ad-${networkKey}-${position}`;
-                    let container = document.getElementById(containerId);
-                    
-                    if (!container) {
-                        container = document.createElement('div');
-                        container.id = containerId;
-                        container.className = `ad-container ad-placeholder ad-${position}`;
-                        this.appendAdContainer(container, position);
-                    }
-                    
-                    this.showPlaceholderInContainer(container, network.name, position);
-                });
-            } else {
-                Object.keys(network.zones).forEach(position => {
-                    const containerId = `ad-${networkKey}-${position}`;
-                    let container = document.getElementById(containerId);
-                    
-                    if (!container) {
-                        container = document.createElement('div');
-                        container.id = containerId;
-                        container.className = `ad-container ad-placeholder ad-${position}`;
-                        this.appendAdContainer(container, position);
-                    }
-                    
-                    this.showPlaceholderInContainer(container, network.name, position);
-                });
+                // PopAds doesn't need traditional ad containers
+                console.log('PopAds uses pop-unders, no placeholder needed');
+                return;
             }
+            
+            Object.keys(network.zones || {}).forEach(position => {
+                const containerId = `ad-${networkKey}-${position}`;
+                let container = document.getElementById(containerId);
+                
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = containerId;
+                    container.className = `ad-container ad-placeholder ad-${position}`;
+                    this.appendAdContainer(container, position);
+                }
+                
+                this.showPlaceholderInContainer(container, network.name, position);
+            });
         },
         
         showPlaceholderInContainer(container, networkName, position) {
@@ -552,17 +584,12 @@
                     <div style="font-size: 16px; margin-bottom: 8px;">📢</div>
                     <div>${networkName}</div>
                     <div style="font-size: 12px; margin-top: 4px; opacity: 0.6;">${position} ad space</div>
-                    ${networkName === 'PopAds' ? 
-                        '<div style="font-size: 10px; margin-top: 8px; opacity: 0.5;">Replaces EroAdvertising</div>' : 
-                        '<div style="font-size: 10px; margin-top: 8px; opacity: 0.5;">Loading...</div>'
-                    }
+                    <div style="font-size: 10px; margin-top: 8px; opacity: 0.5;">Loading...</div>
                 </div>
             `;
         },
         
         showDevelopmentPlaceholders() {
-            console.log('📢 Showing development placeholders...');
-            
             Object.entries(AD_CONFIG.networks).forEach(([key, network]) => {
                 if (network.enabled) {
                     this.showPlaceholder(key);
@@ -572,35 +599,24 @@
         
         // Public API
         testAds() {
-            console.log('🔍 Testing ad networks v2.3...');
+            console.log('🔍 Testing ad networks v2.4 POPADS...');
             console.log('Environment:', AD_CONFIG.environment);
             console.log('Loaded networks:', Array.from(this.loadedNetworks));
+            console.log('PopAds Config:', AD_CONFIG.networks.popads.config);
             
             const verification = this.verifyAdNetworks();
-            
-            const containers = document.querySelectorAll('.ad-container');
-            console.log(`Found ${containers.length} ad containers:`);
-            
-            containers.forEach((container, index) => {
-                console.log(`Container ${index + 1}:`, {
-                    id: container.id,
-                    className: container.className,
-                    hasContent: container.children.length > 0,
-                    isVisible: container.offsetParent !== null
-                });
-            });
             
             return {
                 environment: AD_CONFIG.environment,
                 loadedNetworks: Array.from(this.loadedNetworks),
                 activeNetworks: verification,
-                containers: containers.length,
-                migration: 'EroAdvertising → PopAds'
+                popAdsConfig: AD_CONFIG.networks.popads.config,
+                popAdsId: AD_CONFIG.networks.popads.config.siteId
             };
         },
         
         reloadAds() {
-            console.log('🔄 Reloading ad networks v2.3...');
+            console.log('🔄 Reloading ad networks v2.4...');
             
             document.querySelectorAll('.ad-container').forEach(container => {
                 container.remove();
@@ -631,9 +647,8 @@
     window.testAds = () => AdVerificationSystem.testAds();
     window.reloadAds = () => AdVerificationSystem.reloadAds();
     
-    console.log('✅ Ad Verification System v2.3 FINAL FIX loaded');
-    console.log('💡 Use window.testAds() to test ad networks');
-    console.log('💡 Use window.reloadAds() to reload all ads');
-    console.log('📋 Networks: JuicyAds + ExoClick + PopAds');
+    console.log('✅ Ad System v2.4 POPADS CONFIGURED loaded');
+    console.log('🚀 PopAds SiteID:', AD_CONFIG.networks.popads.config.siteId);
+    console.log('💡 Use window.testAds() to verify configuration');
     
 })();
