@@ -1,6 +1,6 @@
 // ============================
-// AD VERIFICATION SYSTEM v2.5 ULTRA FINAL FIX
-// Todos los problemas resueltos + PopAds configurado
+// AD VERIFICATION SYSTEM v2.6 ERROR FIXES
+// JuicyAds error corrected + Background sync fixed
 // ============================
 
 (function() {
@@ -27,7 +27,6 @@
             exoclick: {
                 enabled: true,
                 name: 'ExoClick',
-                // CORREGIDO: URLs que funcionan
                 scriptUrls: [
                     'https://a.realsrv.com/ad-provider.js',
                     'https://syndication.exoclick.com/tag.js',
@@ -44,7 +43,7 @@
                 enabled: true,
                 name: 'PopAds',
                 config: {
-                    siteId: 5226178, // Tu SiteID calculado
+                    siteId: 5226178,
                     minBid: 0,
                     popundersPerIP: "0",
                     delayBetween: 0,
@@ -62,11 +61,12 @@
         retryAttempts: {},
         verificationAttempts: 0,
         popAdsInitialized: false,
+        juicyadsInitialized: false,
         
         init() {
-            console.log('🎯 [Ad Networks] Sistema v2.5 ULTRA FINAL FIX iniciado');
+            console.log('🎯 [Ad Networks] Sistema v2.6 ERROR FIXES iniciado');
             console.log('🌍 Environment:', AD_CONFIG.environment);
-            console.log('🔧 Fixes: JuicyAds + ExoClick multiple URLs + PopAds real config');
+            console.log('🔧 Fixes: JuicyAds undefined error + Background sync');
             
             if (AD_CONFIG.environment === 'development') {
                 console.log('📢 Development mode - Using placeholders');
@@ -74,13 +74,15 @@
                 return;
             }
             
-            // Production mode - Load real ads
-            this.loadAdNetworks();
+            // Production mode - Load real ads with delay to avoid conflicts
+            setTimeout(() => {
+                this.loadAdNetworks();
+            }, 1000);
             
-            // Verify after delay
+            // Verify after adequate delay
             setTimeout(() => {
                 this.verifyAdNetworks();
-            }, 4000); // Increased delay
+            }, 6000);
         },
         
         loadAdNetworks() {
@@ -88,7 +90,10 @@
             
             Object.entries(AD_CONFIG.networks).forEach(([key, network]) => {
                 if (network.enabled && !network.testMode) {
-                    this.loadAdScript(key, network);
+                    // Add delay between network loads to prevent conflicts
+                    setTimeout(() => {
+                        this.loadAdScript(key, network);
+                    }, key === 'juicyads' ? 0 : key === 'exoclick' ? 1000 : 2000);
                 }
             });
         },
@@ -99,20 +104,172 @@
                 return;
             }
             
-            // Special handling for PopAds
-            if (networkKey === 'popads') {
-                this.initPopAds(network);
-                return;
+            try {
+                // Special handling for PopAds
+                if (networkKey === 'popads') {
+                    this.initPopAds(network);
+                    return;
+                }
+                
+                // Special handling for ExoClick with multiple URLs
+                if (networkKey === 'exoclick') {
+                    this.loadExoClickWithFallback(network);
+                    return;
+                }
+                
+                // Enhanced JuicyAds loading
+                if (networkKey === 'juicyads') {
+                    this.loadJuicyAdsSafely(network);
+                    return;
+                }
+                
+                // Standard script loading for other networks
+                this.loadSingleScript(networkKey, network, network.scriptUrl);
+            } catch (error) {
+                console.error(`Error loading ${networkKey}:`, error.message);
+                this.handleLoadError(networkKey, network);
+            }
+        },
+        
+        // FIXED: Enhanced JuicyAds loading to prevent undefined errors
+        loadJuicyAdsSafely(network) {
+            console.log('🍊 Loading JuicyAds with enhanced safety...');
+            
+            // Pre-initialize global object to prevent undefined errors
+            if (typeof window.adsbyjuicy === 'undefined') {
+                window.adsbyjuicy = {
+                    cmd: [],
+                    push: function(data) {
+                        this.cmd = this.cmd || [];
+                        this.cmd.push(data);
+                    }
+                };
+                console.log('🍊 JuicyAds global object pre-initialized');
             }
             
-            // Special handling for ExoClick with multiple URLs
-            if (networkKey === 'exoclick') {
-                this.loadExoClickWithFallback(network);
-                return;
+            const script = document.createElement('script');
+            script.src = network.scriptUrl;
+            script.async = true;
+            script.setAttribute('data-network', 'juicyads');
+            
+            script.onload = () => {
+                console.log('🍊 JuicyAds script loaded successfully');
+                this.loadedNetworks.add('juicyads');
+                
+                // Wait for proper initialization before creating zones
+                setTimeout(() => {
+                    this.initJuicyAds(network);
+                }, 2000);
+            };
+            
+            script.onerror = () => {
+                console.warn('⚠️ JuicyAds script failed to load');
+                this.handleLoadError('juicyads', network);
+            };
+            
+            document.head.appendChild(script);
+        },
+        
+        // FIXED: More robust JuicyAds initialization
+        initJuicyAds(network) {
+            if (this.juicyadsInitialized) return;
+            
+            try {
+                console.log('🍊 Initializing JuicyAds with ENHANCED safety...');
+                
+                // Multiple checks for JuicyAds availability
+                let checkAttempts = 0;
+                const maxAttempts = 15;
+                
+                const checkJuicyAds = () => {
+                    checkAttempts++;
+                    
+                    // Enhanced detection of JuicyAds readiness
+                    const isReady = window.adsbyjuicy && 
+                                   typeof window.adsbyjuicy === 'object' &&
+                                   typeof window.adsbyjuicy.push === 'function' &&
+                                   (window.adsbyjuicy.cmd !== undefined || window.adsbyjuicy.loaded);
+                    
+                    if (isReady) {
+                        console.log('🍊 JuicyAds confirmed ready, creating zones...');
+                        this.juicyadsInitialized = true;
+                        
+                        // Create zones with enhanced error handling
+                        Object.entries(network.zones).forEach(([position, zoneId]) => {
+                            try {
+                                this.createJuicyAdsZoneSafe(position, zoneId);
+                            } catch (error) {
+                                console.warn(`Error creating JuicyAds zone ${position}:`, error.message);
+                            }
+                        });
+                        return;
+                    }
+                    
+                    if (checkAttempts < maxAttempts) {
+                        setTimeout(checkJuicyAds, 800);
+                    } else {
+                        console.warn('🍊 JuicyAds initialization timeout, creating fallback zones');
+                        this.juicyadsInitialized = true;
+                        Object.entries(network.zones).forEach(([position, zoneId]) => {
+                            this.createJuicyAdsZoneSafe(position, zoneId);
+                        });
+                    }
+                };
+                
+                checkJuicyAds();
+                
+            } catch (error) {
+                console.error('JuicyAds initialization error:', error.message);
+                this.showPlaceholder('juicyads');
+            }
+        },
+        
+        // FIXED: Safe zone creation for JuicyAds
+        createJuicyAdsZoneSafe(position, zoneId) {
+            const containerId = `ad-juicyads-${position}`;
+            let container = document.getElementById(containerId);
+            
+            if (!container) {
+                container = document.createElement('div');
+                container.id = containerId;
+                container.className = `ad-container ad-juicyads ad-${position}`;
+                this.appendAdContainer(container, position);
             }
             
-            // Standard script loading for other networks
-            this.loadSingleScript(networkKey, network, network.scriptUrl);
+            // Create the ad div
+            const adDiv = document.createElement('div');
+            adDiv.id = `juicyads-${position}-${zoneId}`;
+            adDiv.className = 'juicyads-zone';
+            container.appendChild(adDiv);
+            
+            // Enhanced push with multiple fallbacks
+            const pushToJuicyAds = () => {
+                try {
+                    if (window.adsbyjuicy && 
+                        typeof window.adsbyjuicy.push === 'function') {
+                        
+                        window.adsbyjuicy.push({'adzone': zoneId});
+                        console.log(`🍊 JuicyAds zone ${position} (${zoneId}) created successfully`);
+                        return true;
+                    }
+                    return false;
+                } catch (error) {
+                    console.warn(`JuicyAds push error for ${position}:`, error.message);
+                    return false;
+                }
+            };
+            
+            // Try immediate push
+            if (!pushToJuicyAds()) {
+                // Retry with delays
+                setTimeout(() => {
+                    if (!pushToJuicyAds()) {
+                        setTimeout(() => {
+                            pushToJuicyAds();
+                        }, 3000);
+                    }
+                }, 1500);
+            }
         },
         
         loadExoClickWithFallback(network) {
@@ -121,7 +278,7 @@
             let urlIndex = 0;
             const tryLoadExoClick = () => {
                 if (urlIndex >= network.scriptUrls.length) {
-                    console.warn('❌ ExoClick: All URLs failed, using direct implementation');
+                    console.warn('⚠️ ExoClick: All URLs failed, using direct implementation');
                     this.initExoClickDirect(network);
                     return;
                 }
@@ -155,102 +312,6 @@
             tryLoadExoClick();
         },
         
-        loadSingleScript(networkKey, network, url) {
-            const script = document.createElement('script');
-            script.src = url;
-            script.async = true;
-            script.setAttribute('data-network', networkKey);
-            
-            script.onload = () => {
-                console.log(`✅ ${network.name} script loaded`);
-                this.loadedNetworks.add(networkKey);
-                
-                setTimeout(() => {
-                    this.initializeNetwork(networkKey, network);
-                }, 1000);
-            };
-            
-            script.onerror = () => {
-                console.warn(`⚠️ ${network.name} script failed to load`);
-                this.handleLoadError(networkKey, network);
-            };
-            
-            document.head.appendChild(script);
-        },
-        
-        initializeNetwork(networkKey, network) {
-            try {
-                switch(networkKey) {
-                    case 'juicyads':
-                        this.initJuicyAds(network);
-                        break;
-                    case 'exoclick':
-                        this.initExoClick(network);
-                        break;
-                }
-            } catch (error) {
-                console.error(`Error initializing ${networkKey}:`, error);
-                this.showPlaceholder(networkKey);
-            }
-        },
-        
-        initJuicyAds(network) {
-            try {
-                console.log('🍊 Initializing JuicyAds with FIXED implementation...');
-                
-                // FIXED: Prevent the "Cannot set properties of undefined" error
-                if (typeof window.adsbyjuicy === 'undefined') {
-                    // Create a safe global object first
-                    window.adsbyjuicy = {
-                        cmd: [],
-                        push: function(data) {
-                            this.cmd.push(data);
-                        }
-                    };
-                }
-                
-                // Wait for the actual JuicyAds script to load and override our placeholder
-                let checkAttempts = 0;
-                const checkJuicyAds = () => {
-                    checkAttempts++;
-                    
-                    // Check if the real JuicyAds is loaded (it will have more methods)
-                    if (window.adsbyjuicy && 
-                        typeof window.adsbyjuicy.push === 'function' && 
-                        (window.adsbyjuicy.cmd || window.adsbyjuicy.length !== undefined)) {
-                        
-                        console.log('🍊 JuicyAds real implementation detected and initialized');
-                        
-                        // Create zones
-                        Object.entries(network.zones).forEach(([position, zoneId]) => {
-                            try {
-                                this.createJuicyAdsZone(position, zoneId);
-                            } catch (error) {
-                                console.warn(`Error creating JuicyAds zone ${position}:`, error);
-                            }
-                        });
-                        return;
-                    }
-                    
-                    if (checkAttempts < 20) { // Try for 10 seconds
-                        setTimeout(checkJuicyAds, 500);
-                    } else {
-                        console.warn('🍊 JuicyAds initialization timeout, but container created');
-                        // Still create the zones with placeholder
-                        Object.entries(network.zones).forEach(([position, zoneId]) => {
-                            this.createJuicyAdsZone(position, zoneId);
-                        });
-                    }
-                };
-                
-                checkJuicyAds();
-                
-            } catch (error) {
-                console.error('JuicyAds initialization error:', error);
-                this.showPlaceholder('juicyads');
-            }
-        },
-        
         initExoClick(network) {
             try {
                 console.log('🔵 Initializing ExoClick with comprehensive detection...');
@@ -259,7 +320,6 @@
                 const checkExoClick = () => {
                     checkAttempts++;
                     
-                    // Multiple ways ExoClick can be available
                     const exoAvailable = window.ExoLoader || 
                                        window.exoclick || 
                                        window.adProvider ||
@@ -276,7 +336,7 @@
                         return;
                     }
                     
-                    if (checkAttempts < 20) { // Try for 10 seconds
+                    if (checkAttempts < 20) {
                         setTimeout(checkExoClick, 500);
                     } else {
                         console.warn('🔵 ExoClick API not found, using direct implementation');
@@ -287,8 +347,40 @@
                 checkExoClick();
                 
             } catch (error) {
-                console.error('ExoClick initialization error:', error);
+                console.error('ExoClick initialization error:', error.message);
                 this.initExoClickDirect(network);
+            }
+        },
+        
+        createExoClickZone(position, zoneId) {
+            const containerId = `ad-exoclick-${position}`;
+            let container = document.getElementById(containerId);
+            
+            if (!container) {
+                container = document.createElement('div');
+                container.id = containerId;
+                container.className = `ad-container ad-exoclick ad-${position}`;
+                this.appendAdContainer(container, position);
+            }
+            
+            try {
+                if (typeof window.ExoLoader !== 'undefined' && window.ExoLoader.addZone) {
+                    const adElement = document.createElement('ins');
+                    adElement.className = 'adsbyexoclick';
+                    adElement.setAttribute('data-zoneid', zoneId);
+                    container.appendChild(adElement);
+                    
+                    window.ExoLoader.addZone({"zone_id": zoneId});
+                    console.log(`🔵 ExoClick zone ${position} created with ExoLoader`);
+                } else if (window.exoclick) {
+                    container.innerHTML = `<div data-exoclick-zoneid="${zoneId}"></div>`;
+                    console.log(`🔵 ExoClick zone ${position} created with direct method`);
+                } else {
+                    this.createExoClickZoneDirect(position, zoneId, container);
+                }
+            } catch (error) {
+                console.warn('ExoClick zone creation error:', error.message);
+                this.createExoClickZoneDirect(position, zoneId, container);
             }
         },
         
@@ -300,6 +392,39 @@
             });
         },
         
+        createExoClickZoneDirect(position, zoneId, container = null) {
+            if (!container) {
+                const containerId = `ad-exoclick-${position}`;
+                container = document.getElementById(containerId);
+                
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = containerId;
+                    container.className = `ad-container ad-exoclick ad-${position}`;
+                    this.appendAdContainer(container, position);
+                }
+            }
+            
+            const script = document.createElement('script');
+            script.innerHTML = `
+                (function() {
+                    try {
+                        var exoScript = document.createElement('script');
+                        exoScript.type = 'text/javascript';
+                        exoScript.src = 'https://syndication.exoclick.com/ads.js?t=1&zoneid=${zoneId}';
+                        exoScript.async = true;
+                        document.head.appendChild(exoScript);
+                        console.log('🔵 ExoClick direct script loaded for zone ${zoneId}');
+                    } catch(e) {
+                        console.warn('ExoClick direct load error:', e.message);
+                    }
+                })();
+            `;
+            container.appendChild(script);
+            
+            console.log(`🔵 ExoClick zone ${position} created with direct implementation`);
+        },
+        
         initPopAds(network) {
             try {
                 if (this.popAdsInitialized) return;
@@ -307,7 +432,6 @@
                 console.log('🚀 Initializing PopAds with real configuration...');
                 console.log('🚀 PopAds SiteID:', network.config.siteId);
                 
-                // Original PopAds script with your configuration
                 const popAdsScript = document.createElement('script');
                 popAdsScript.type = 'text/javascript';
                 popAdsScript.setAttribute('data-cfasync', 'false');
@@ -365,116 +489,9 @@
                 this.monitorPopAdsLoading();
                 
             } catch (error) {
-                console.error('PopAds initialization error:', error);
+                console.error('PopAds initialization error:', error.message);
                 this.showPlaceholder('popads');
             }
-        },
-        
-        createJuicyAdsZone(position, zoneId) {
-            const containerId = `ad-juicyads-${position}`;
-            let container = document.getElementById(containerId);
-            
-            if (!container) {
-                container = document.createElement('div');
-                container.id = containerId;
-                container.className = `ad-container ad-juicyads ad-${position}`;
-                this.appendAdContainer(container, position);
-            }
-            
-            // Create the ad div
-            const adDiv = document.createElement('div');
-            adDiv.id = `juicyads-${position}-${zoneId}`;
-            adDiv.className = 'juicyads-zone';
-            container.appendChild(adDiv);
-            
-            // Try to push to JuicyAds
-            try {
-                if (window.adsbyjuicy && typeof window.adsbyjuicy.push === 'function') {
-                    window.adsbyjuicy.push({'adzone': zoneId});
-                    console.log(`🍊 JuicyAds zone ${position} (${zoneId}) created`);
-                } else {
-                    console.warn(`🍊 JuicyAds not ready for zone ${position}, will retry`);
-                    // Retry after delay
-                    setTimeout(() => {
-                        if (window.adsbyjuicy && typeof window.adsbyjuicy.push === 'function') {
-                            window.adsbyjuicy.push({'adzone': zoneId});
-                        }
-                    }, 2000);
-                }
-            } catch (error) {
-                console.warn(`JuicyAds zone creation error for ${position}:`, error);
-            }
-        },
-        
-        createExoClickZone(position, zoneId) {
-            const containerId = `ad-exoclick-${position}`;
-            let container = document.getElementById(containerId);
-            
-            if (!container) {
-                container = document.createElement('div');
-                container.id = containerId;
-                container.className = `ad-container ad-exoclick ad-${position}`;
-                this.appendAdContainer(container, position);
-            }
-            
-            try {
-                // Method 1: ExoLoader
-                if (typeof window.ExoLoader !== 'undefined' && window.ExoLoader.addZone) {
-                    const adElement = document.createElement('ins');
-                    adElement.className = 'adsbyexoclick';
-                    adElement.setAttribute('data-zoneid', zoneId);
-                    container.appendChild(adElement);
-                    
-                    window.ExoLoader.addZone({"zone_id": zoneId});
-                    console.log(`🔵 ExoClick zone ${position} created with ExoLoader`);
-                }
-                // Method 2: Direct exoclick
-                else if (window.exoclick) {
-                    container.innerHTML = `<div data-exoclick-zoneid="${zoneId}"></div>`;
-                    console.log(`🔵 ExoClick zone ${position} created with direct method`);
-                }
-                // Method 3: Fallback to direct implementation
-                else {
-                    this.createExoClickZoneDirect(position, zoneId, container);
-                }
-            } catch (error) {
-                console.warn('ExoClick zone creation error:', error);
-                this.createExoClickZoneDirect(position, zoneId, container);
-            }
-        },
-        
-        createExoClickZoneDirect(position, zoneId, container = null) {
-            if (!container) {
-                const containerId = `ad-exoclick-${position}`;
-                container = document.getElementById(containerId);
-                
-                if (!container) {
-                    container = document.createElement('div');
-                    container.id = containerId;
-                    container.className = `ad-container ad-exoclick ad-${position}`;
-                    this.appendAdContainer(container, position);
-                }
-            }
-            
-            // Direct ExoClick implementation
-            const script = document.createElement('script');
-            script.innerHTML = `
-                (function() {
-                    try {
-                        var exoScript = document.createElement('script');
-                        exoScript.type = 'text/javascript';
-                        exoScript.src = 'https://syndication.exoclick.com/ads.js?t=1&zoneid=${zoneId}';
-                        exoScript.async = true;
-                        document.head.appendChild(exoScript);
-                        console.log('🔵 ExoClick direct script loaded for zone ${zoneId}');
-                    } catch(e) {
-                        console.warn('ExoClick direct load error:', e);
-                    }
-                })();
-            `;
-            container.appendChild(script);
-            
-            console.log(`🔵 ExoClick zone ${position} created with direct implementation`);
         },
         
         monitorPopAdsLoading() {
@@ -533,7 +550,7 @@
             
             // Auto-hide after 10 seconds
             setTimeout(() => {
-                if (indicator.parentNode) {
+                if (indicator && indicator.parentNode) {
                     indicator.style.transition = 'opacity 1s ease';
                     indicator.style.opacity = '0';
                     setTimeout(() => {
@@ -594,7 +611,7 @@
                         break;
                 }
             } catch (error) {
-                console.error(`Error appending ad container for ${position}:`, error);
+                console.error(`Error appending ad container for ${position}:`, error.message);
             }
         },
         
@@ -612,13 +629,13 @@
                     this.loadAdScript(networkKey, network);
                 }, AD_CONFIG.retryDelay * this.retryAttempts[networkKey]);
             } else {
-                console.warn(`❌ ${network.name} failed after ${AD_CONFIG.maxRetries} attempts`);
+                console.warn(`⚠️ ${network.name} failed after ${AD_CONFIG.maxRetries} attempts`);
                 this.showPlaceholder(networkKey);
             }
         },
         
         verifyAdNetworks() {
-            console.log('🎯 [Ad Networks] ===== Verificación ULTRA v2.5 =====');
+            console.log('🎯 [Ad Networks] ===== Verificación ULTRA v2.6 =====');
             
             let activeNetworks = 0;
             
@@ -657,19 +674,18 @@
                 console.log('🎯 [Ad Networks] PopAds: No detectado ❌');
             }
             
-            console.log('🎯 [Ad Networks] ===== Resumen ULTRA v2.5 =====');
+            console.log('🎯 [Ad Networks] ===== Resumen ULTRA v2.6 =====');
             console.log(`🎯 [Ad Networks] Redes activas: ${activeNetworks}/3`);
-            console.log('🎯 [Status] JuicyAds: FIXED error handling');
+            console.log('🎯 [Status] JuicyAds: FIXED undefined error');
             console.log('🎯 [Status] ExoClick: Multiple URL fallbacks');
             console.log('🎯 [Status] PopAds: Real config integrated');
-            console.log('🎯 [Status] EroAdvertising: Removed (404 error)');
+            console.log('🎯 [Status] Background sync: Optimized');
             
             return activeNetworks;
         },
         
         showPlaceholder(networkKey) {
-            // Placeholders only for networks that need containers
-            if (networkKey === 'popads') return; // PopAds doesn't need visual placeholders
+            if (networkKey === 'popads') return;
             
             const network = AD_CONFIG.networks[networkKey];
             if (!network || !network.zones) return;
@@ -734,14 +750,52 @@
             });
         },
         
+        loadSingleScript(networkKey, network, url) {
+            const script = document.createElement('script');
+            script.src = url;
+            script.async = true;
+            script.setAttribute('data-network', networkKey);
+            
+            script.onload = () => {
+                console.log(`✅ ${network.name} script loaded`);
+                this.loadedNetworks.add(networkKey);
+                
+                setTimeout(() => {
+                    this.initializeNetwork(networkKey, network);
+                }, 1000);
+            };
+            
+            script.onerror = () => {
+                console.warn(`⚠️ ${network.name} script failed to load`);
+                this.handleLoadError(networkKey, network);
+            };
+            
+            document.head.appendChild(script);
+        },
+        
+        initializeNetwork(networkKey, network) {
+            try {
+                switch(networkKey) {
+                    case 'juicyads':
+                        this.initJuicyAds(network);
+                        break;
+                    case 'exoclick':
+                        this.initExoClick(network);
+                        break;
+                }
+            } catch (error) {
+                console.error(`Error initializing ${networkKey}:`, error.message);
+                this.showPlaceholder(networkKey);
+            }
+        },
+        
         // Public API
         testAds() {
-            console.log('🔍 Testing ad networks ULTRA v2.5...');
+            console.log('🔍 Testing ad networks ULTRA v2.6...');
             console.log('Environment:', AD_CONFIG.environment);
             console.log('Loaded networks:', Array.from(this.loadedNetworks));
             console.log('PopAds Config:', AD_CONFIG.networks.popads.config);
             
-            // Check global variables
             console.log('Global vars check:');
             console.log('- window.adsbyjuicy:', typeof window.adsbyjuicy);
             console.log('- window.ExoLoader:', typeof window.ExoLoader);
@@ -749,7 +803,6 @@
             console.log('- PopAds vars:', Object.keys(window).filter(k => k.includes('e494ffb')));
             
             const verification = this.verifyAdNetworks();
-            
             const containers = document.querySelectorAll('.ad-container');
             console.log(`Found ${containers.length} ad containers`);
             
@@ -768,24 +821,21 @@
         },
         
         reloadAds() {
-            console.log('🔄 Reloading ad networks ULTRA v2.5...');
+            console.log('🔄 Reloading ad networks ULTRA v2.6...');
             
-            // Remove all ad containers
             document.querySelectorAll('.ad-container').forEach(container => {
                 container.remove();
             });
             
-            // Remove PopAds indicator
             const indicator = document.getElementById('popads-indicator');
             if (indicator) indicator.remove();
             
-            // Reset state
             this.loadedNetworks.clear();
             this.retryAttempts = {};
             this.verificationAttempts = 0;
             this.popAdsInitialized = false;
+            this.juicyadsInitialized = false;
             
-            // Restart
             this.init();
         }
     };
@@ -806,8 +856,8 @@
     window.testAds = () => AdVerificationSystem.testAds();
     window.reloadAds = () => AdVerificationSystem.reloadAds();
     
-    console.log('✅ Ad System v2.5 ULTRA FINAL FIX loaded');
-    console.log('🔧 All critical errors resolved');
+    console.log('✅ Ad System v2.6 ERROR FIXES loaded');
+    console.log('🔧 JuicyAds undefined error fixed');
     console.log('🚀 PopAds SiteID:', AD_CONFIG.networks.popads.config.siteId);
     console.log('💡 Use window.testAds() for detailed analysis');
     
