@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IbizaGirl.pics - Galería Premium</title>
+    <title>IbizaGirl.pics - Galería Premium | Paradise Gallery 🏖️</title>
     
-    <!-- FIXED: CSP más permisiva específicamente para anuncios -->
+    <!-- CRITICAL FIX: Content Security Policy optimizada para anuncios -->
     <meta http-equiv="Content-Security-Policy" content="
         default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;
-        script-src * 'unsafe-inline' 'unsafe-eval' data: blob:;
+        script-src * 'unsafe-inline' 'unsafe-eval' 'unsafe-hashes';
         connect-src *;
         img-src * data: blob:;
         frame-src *;
         style-src * 'unsafe-inline';
-        media-src * data: blob:;
+        font-src *;
+        media-src *;
         object-src *;
-        child-src *;
-        worker-src *;
-        manifest-src *;
+        base-uri 'self';
+        form-action 'self';
     ">
     
-    <!-- FIXED: Permitir todos los referrers para ads -->
+    <!-- CRITICAL FIX: Permitir todos los referrers para anuncios -->
     <meta name="referrer" content="unsafe-url">
     
-    <!-- FIXED: Desactivar X-Frame-Options para permitir iframes de ads -->
+    <!-- CRITICAL FIX: Desactivar X-Frame-Options para permitir iframes de anuncios -->
     <meta http-equiv="X-Frame-Options" content="ALLOWALL">
     
     <!-- Favicon y App Icons -->
@@ -52,7 +52,7 @@
     <meta name="google" content="notranslate">
     <meta name="format-detection" content="telephone=no">
     
-    <!-- FIXED: Verificación de redes de anuncios con zonas corregidas -->
+    <!-- FIXED: Verificación de redes de anuncios con IDs correctos -->
     <meta name="juicyads-site-verification" content="57781c218b1d1435f3512464c59cf39b">
     <meta name="exoclick-site-verification" content="97ce8adfbeb6e153ef4ebf2566dfeb7d">
     
@@ -72,7 +72,7 @@
     <meta name="twitter:description" content="400+ fotos exclusivas y 80+ videos HD del paraíso mediterráneo">
     <meta name="twitter:image" content="https://ibizagirl.pics/full/bikini.webp">
     
-    <!-- FIXED: Preconnect para redes de anuncios corregidas -->
+    <!-- Preconnect para optimizar carga de anuncios -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://www.paypal.com">
     <link rel="preconnect" href="https://www.googletagmanager.com">
@@ -90,7 +90,11 @@
     <link rel="preload" href="/full/bikini.webp" as="image">
     <link rel="preload" href="/full/bikbanner.webp" as="image">
     
-    <!-- DNS Prefetch para ads -->
+    <!-- DNS Prefetch para anuncios -->
+    <link rel="dns-prefetch" href="//www.paypal.com">
+    <link rel="dns-prefetch" href="//www.googletagmanager.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="//poweredby.jads.co">
     <link rel="dns-prefetch" href="//www.juicyads.com">
     <link rel="dns-prefetch" href="//syndication.exoclick.com">
@@ -115,10 +119,10 @@
     <link rel="stylesheet" href="styles.css">
     
     <!-- Canvas Confetti -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" data-cfasync="false"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR" data-cfasync="false"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR"></script>
     
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DBXYNPBSPY"></script>
@@ -151,26 +155,22 @@
     }
     </script>
     
-    <!-- FIXED: Inicialización temprana de arrays globales para ads -->
+    <!-- CRITICAL FIX: Sistema anti-bloqueo y configuración avanzada de anuncios -->
     <script>
-        // Inicializar arrays globales para ads ANTES que cualquier script
-        window.adsbyjuicy = window.adsbyjuicy || [];
-        window.ExoLoader = window.ExoLoader || {};
-        
-        // Configuración global de anuncios con zonas corregidas
+        // FIXED: Configuración global de anuncios con zone IDs correctos
         window.AD_CONFIG_OVERRIDE = {
             juicyads: {
                 zones: {
-                    header: 2092250,    // Zona real de JuicyAds
-                    sidebar: 2092251,   // Zona real de JuicyAds  
-                    footer: 2092471     // Zona real de JuicyAds
+                    header: 1098518,    // FIXED: Zone ID real de tu dashboard
+                    sidebar: 1098519,   // FIXED: Zone ID real de tu dashboard
+                    footer: 1098520     // FIXED: Zone ID real de tu dashboard
                 }
             },
             exoclick: {
                 zones: {
-                    header: 5696328,    // Zona real de ExoClick
-                    sidebar: 5696329,   // Zona adicional
-                    footer: 5696330     // Zona adicional
+                    header: 5696328,    // CONFIRMED: De tu dashboard ExoClick
+                    sidebar: 5696329,   // AÑADIR: Crear en ExoClick
+                    footer: 5696330     // AÑADIR: Crear en ExoClick
                 }
             },
             popads: {
@@ -178,9 +178,179 @@
             }
         };
         
-        console.log('🌊 IbizaGirl.pics - Configuración de ads inicializada');
-        console.log('📊 Zonas JuicyAds:', window.AD_CONFIG_OVERRIDE.juicyads.zones);
-        console.log('📊 Zonas ExoClick:', window.AD_CONFIG_OVERRIDE.exoclick.zones);
+        // FIXED: Sistema anti-bloqueo más agresivo
+        (function() {
+            // Detectar y prevenir bloqueo de anuncios
+            function setupAntiAdBlock() {
+                const style = document.createElement('style');
+                style.textContent = `
+                    /* FIXED: Forzar visibilidad de anuncios */
+                    .ad-container,
+                    [id*="ad-"],
+                    [id*="juicyads"],
+                    [id*="exoclick"],
+                    .jaads,
+                    ins[data-aid] {
+                        display: block !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        position: relative !important;
+                        z-index: 999 !important;
+                        width: auto !important;
+                        height: auto !important;
+                        overflow: visible !important;
+                        transform: none !important;
+                        filter: none !important;
+                        clip-path: none !important;
+                    }
+                    
+                    /* Chrome específico */
+                    @supports (-webkit-appearance: none) {
+                        .ad-container {
+                            -webkit-backface-visibility: visible !important;
+                            -webkit-transform: translate3d(0,0,0) !important;
+                            will-change: auto !important;
+                        }
+                    }
+                    
+                    /* Contenedores específicos por posición */
+                    .ad-header,
+                    #ad-header-container,
+                    [id*="ad-juicyads-header"],
+                    [id*="ad-exoclick-header"] {
+                        width: 100% !important;
+                        max-width: 728px !important;
+                        min-height: 90px !important;
+                        margin: 20px auto !important;
+                        display: block !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        position: relative !important;
+                        z-index: 100 !important;
+                    }
+                    
+                    .ad-sidebar,
+                    #ad-sidebar-container,
+                    [id*="ad-juicyads-sidebar"],
+                    [id*="ad-exoclick-sidebar"] {
+                        width: 300px !important;
+                        min-height: 250px !important;
+                        position: fixed !important;
+                        right: 10px !important;
+                        top: 50% !important;
+                        transform: translateY(-50%) !important;
+                        z-index: 2000 !important;
+                        display: block !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                    }
+                    
+                    .ad-footer,
+                    #ad-footer-container,
+                    [id*="ad-juicyads-footer"],
+                    [id*="ad-exoclick-footer"] {
+                        width: 100% !important;
+                        max-width: 728px !important;
+                        min-height: 90px !important;
+                        margin: 20px auto !important;
+                        display: block !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        position: relative !important;
+                        z-index: 100 !important;
+                    }
+                    
+                    /* Iframes dentro de contenedores de anuncios */
+                    .ad-container iframe,
+                    [id*="ad-"] iframe {
+                        display: block !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        position: relative !important;
+                        z-index: 1001 !important;
+                        border: none !important;
+                        width: 100% !important;
+                        height: 100% !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            // Ejecutar inmediatamente
+            setupAntiAdBlock();
+            
+            // Detectar AdBlock y mostrar mensaje amigable
+            function detectAdBlock() {
+                const adTest = document.createElement('div');
+                adTest.innerHTML = '&nbsp;';
+                adTest.className = 'adsbox adsbygoogle';
+                adTest.style.cssText = 'position: absolute; top: -100px; left: -100px; width: 1px; height: 1px;';
+                document.body.appendChild(adTest);
+                
+                setTimeout(() => {
+                    if (adTest.offsetHeight === 0) {
+                        console.warn('⚠️ AdBlock detectado');
+                        const message = document.createElement('div');
+                        message.id = 'adblock-message';
+                        message.style.cssText = `
+                            position: fixed;
+                            top: 20px;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            background: linear-gradient(135deg, #ff6b35, #ff69b4);
+                            color: white;
+                            padding: 1rem 2rem;
+                            border-radius: 15px;
+                            z-index: 10000;
+                            text-align: center;
+                            max-width: 400px;
+                            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                        `;
+                        message.innerHTML = `
+                            <h4 style="margin: 0 0 0.5rem 0;">⚠️ AdBlock Detectado</h4>
+                            <p style="margin: 0 0 1rem 0; font-size: 0.9rem;">Para mantener este contenido gratuito, por favor considera desactivar tu bloqueador de anuncios.</p>
+                            <button onclick="this.parentElement.remove()" style="
+                                background: white;
+                                color: #ff6b35;
+                                border: none;
+                                padding: 0.5rem 1rem;
+                                border-radius: 5px;
+                                cursor: pointer;
+                                font-weight: 600;
+                                font-size: 0.9rem;
+                            ">Entendido</button>
+                        `;
+                        document.body.appendChild(message);
+                    }
+                    adTest.remove();
+                }, 100);
+            }
+            
+            // Ejecutar cuando DOM esté listo
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', detectAdBlock);
+            } else {
+                detectAdBlock();
+            }
+            
+        })();
+        
+        // Log de inicialización
+        console.log('🌊 IbizaGirl.pics - Inicializando sistema de anuncios mejorado...');
+        console.log('🔧 Zone IDs actualizados según dashboards:');
+        console.log('  - JuicyAds: 1098518, 1098519, 1098520');
+        console.log('  - ExoClick: 5696328, 5696329, 5696330');
+        console.log('  - PopAds: 5226178');
+        
+        // Verificar estado después de cargar
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (window.testAds) {
+                    console.log('📊 Estado inicial de anuncios:', window.testAds());
+                }
+            }, 5000);
+        });
     </script>
 </head>
 <body>
@@ -223,24 +393,7 @@
         </div>
     </header>
 
-    <!-- FIXED: Espacio reservado para ads header (se insertará automáticamente) -->
-    <div id="ads-header-zone" style="
-        width: 100%;
-        max-width: 728px;
-        min-height: 90px;
-        margin: 20px auto;
-        text-align: center;
-        background: rgba(0, 119, 190, 0.05);
-        border: 1px solid rgba(0, 255, 136, 0.2);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 12px;
-    ">
-        Header Ad Zone - Loading...
-    </div>
+    <!-- FIXED: Los contenedores de anuncios se crearán automáticamente aquí por el script -->
 
     <!-- Credits Display -->
     <div class="credits-display" id="creditsDisplay">
@@ -335,46 +488,7 @@
         </section>
     </div>
 
-    <!-- FIXED: Espacio reservado para ads footer -->
-    <div id="ads-footer-zone" style="
-        width: 100%;
-        max-width: 728px;
-        min-height: 90px;
-        margin: 20px auto;
-        text-align: center;
-        background: rgba(0, 119, 190, 0.05);
-        border: 1px solid rgba(0, 255, 136, 0.2);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 12px;
-    ">
-        Footer Ad Zone - Loading...
-    </div>
-
-    <!-- FIXED: Sidebar ad space -->
-    <div id="ads-sidebar-zone" style="
-        position: fixed;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 300px;
-        min-height: 250px;
-        z-index: 1000;
-        background: rgba(0, 119, 190, 0.05);
-        border: 1px solid rgba(0, 255, 136, 0.2);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 12px;
-        text-align: center;
-    ">
-        Sidebar Ad Zone<br>Loading...
-    </div>
+    <!-- FIXED: Los contenedores de anuncios de footer se crearán automáticamente aquí -->
 
     <!-- Isabella Chat Bot -->
     <div class="isabella-chat">
@@ -530,44 +644,12 @@
         </div>
     </footer>
 
-    <!-- FIXED: Scripts en orden correcto -->
+    <!-- Scripts -->
     <script src="content-data.js" defer></script>
+    <script src="ad-containers-manager.js" defer></script>
     <script src="ad-verification.js" defer></script>
-    <script src="ad-containers-manager.js" defer></script>  
     <script src="main-script.js" defer></script>
     <script src="seo-enhancements.js" defer></script>
     <script src="chrome-ads-fix.js" defer></script>
-    
-    <!-- FIXED: Script de verificación post-carga -->
-    <script>
-        window.addEventListener('load', function() {
-            console.log('🌊 IbizaGirl.pics - Página cargada completamente');
-            
-            // Verificar estado de anuncios después de 3 segundos
-            setTimeout(function() {
-                if (window.testAds) {
-                    console.log('📊 Estado de anuncios después de carga:');
-                    window.testAds();
-                }
-                
-                // Limpiar espacios reservados si se cargaron anuncios reales
-                const adZones = document.querySelectorAll('#ads-header-zone, #ads-footer-zone, #ads-sidebar-zone');
-                adZones.forEach(zone => {
-                    // Si hay contenedores de anuncios reales, ocultar placeholders
-                    const realAdContainers = document.querySelectorAll('.ad-container');
-                    if (realAdContainers.length > 0) {
-                        zone.style.display = 'none';
-                    }
-                });
-            }, 3000);
-            
-            // Verificación adicional después de 10 segundos
-            setTimeout(function() {
-                if (window.fixAds) {
-                    window.fixAds();
-                }
-            }, 10000);
-        });
-    </script>
 </body>
 </html>
