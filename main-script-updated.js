@@ -1105,7 +1105,7 @@ function initializeApplication() {
                 state.dailyContent.stats.dailyVideos = state.dailyContent.videos?.length || 0;
             }
             
-            console.log(`📅 Daily rotation initialized: ${state.dailyContent.stats.dailyPhotos} photos, ${state.dailyContent.stats.dailyVideos} videos`);
+            console.log(`📅 Daily rotation initialized: ${state.dailyContent?.stats?.dailyPhotos || 0} photos, ${state.dailyContent?.stats?.dailyVideos || 0} videos`);
             
             // Render content
             renderPhotosProgressive();
