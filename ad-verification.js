@@ -1,7 +1,7 @@
 // ============================
-// AD VERIFICATION SYSTEM v5.1.0 - COMPLETAMENTE CORREGIDO
-// Sistema completo de gestión de anuncios con zone IDs correctos
-// FIXED: Zone IDs actualizados, scripts corregidos, mejor gestión de errores
+// AD VERIFICATION SYSTEM v5.2.0 - COMPLETAMENTE CORREGIDO CON IDs REALES
+// Sistema completo de gestión de anuncios con zone IDs correctos de los dashboards
+// FIXED: Zone IDs actualizados según dashboards reales
 // ============================
 
 (function() {
@@ -22,10 +22,15 @@
                 scriptUrl: 'https://poweredby.jads.co/js/jads.js',
                 fallbackUrl: 'https://www.juicyads.com/js/jads.js',
                 zones: {
-                    // FIXED: Zone IDs correctos del dashboard de JuicyAds
-                    header: 1098518,    
-                    sidebar: 1098519,   
-                    footer: 1098520     
+                    // ZONE IDs REALES DE JUICYADS DASHBOARD
+                    header: 1098658,    // 300x50 Mobile Ads
+                    sidebar: 1098518,   // 300x250 Image
+                    footer: 1098656     // 160x600 Skyscraper
+                },
+                alternativeZones: {
+                    // Zonas alternativas para rotar
+                    small: 1098519,     // 125x125 Img + Title
+                    small2: 1098657     // 125x125 Img + Title
                 },
                 iframeUrl: 'https://www.juicyads.com/iframe_mobile.php?adzone=',
                 testMode: false
@@ -38,12 +43,22 @@
                     'https://a.realsrv.com/ad-provider.js'
                 ],
                 zones: {
-                    // FIXED: Zone IDs correctos del dashboard de ExoClick
-                    header: 5696328,   
-                    sidebar: 5696329,  
-                    footer: 5696330    
+                    // SOLO TENEMOS 1 ZONA EN EXOCLICK - USAR EN TODAS LAS POSICIONES
+                    header: 5696328,   // 300x250 Banner (única zona disponible)
+                    sidebar: 5696328,  // 300x250 Banner (misma zona)
+                    footer: 5696328    // 300x250 Banner (misma zona)
                 },
                 iframeUrl: 'https://syndication.exoclick.com/ads-iframe.php?idzone=',
+                testMode: false
+            },
+            eroadvertising: {
+                enabled: true,
+                name: 'EroAdvertising',
+                scriptUrl: 'https://www.eroadvertising.com/js/erojs.js',
+                zones: {
+                    ibizagirl: 8177575,  // Zone ID para ibizagirl
+                    beach: 8179717       // Zone ID para beach
+                },
                 testMode: false
             },
             popads: {
@@ -70,9 +85,12 @@
         containersCreated: new Set(),
         
         init() {
-            console.log('🎯 [Ad Networks] Sistema v5.1.0 - COMPLETAMENTE CORREGIDO');
+            console.log('🎯 [Ad Networks] Sistema v5.2.0 - IDs REALES DE DASHBOARDS');
             console.log('🌍 Environment:', AD_CONFIG.environment);
-            console.log('🔧 Zone IDs actualizados según dashboards');
+            console.log('🔧 Zone IDs actualizados:');
+            console.log('   JuicyAds:', Object.values(AD_CONFIG.networks.juicyads.zones));
+            console.log('   ExoClick:', AD_CONFIG.networks.exoclick.zones.header, '(única zona)');
+            console.log('   EroAdvertising:', Object.values(AD_CONFIG.networks.eroadvertising.zones));
             
             if (AD_CONFIG.environment === 'development') {
                 console.log('🔧 Development mode - Using test placeholders');
@@ -124,6 +142,11 @@
                     await this.loadExoClickFixed();
                 }
                 
+                // EroAdvertising
+                if (AD_CONFIG.networks.eroadvertising.enabled) {
+                    await this.loadEroAdvertising();
+                }
+                
                 // PopAds
                 if (AD_CONFIG.networks.popads.enabled) {
                     await this.loadPopAds();
@@ -141,10 +164,10 @@
         },
         
         // ============================
-        // JUICYADS - MÉTODO COMPLETAMENTE CORREGIDO
+        // JUICYADS - MÉTODO CORREGIDO CON IDs REALES
         // ============================
         async loadJuicyAdsFixed() {
-            console.log('🟠 Cargando JuicyAds con zone IDs correctos...');
+            console.log('🟠 Cargando JuicyAds con zone IDs reales del dashboard...');
             
             const zones = AD_CONFIG.networks.juicyads.zones;
             
@@ -154,12 +177,13 @@
                 console.log(`✅ JuicyAds contenedor ${position} creado con zone ${zoneId}`);
             });
             
+            // Intentar cargar script primero
             try {
                 await this.loadJuicyAdsScript();
                 this.loadedNetworks.add('juicyads');
                 console.log('✅ JuicyAds script cargado');
             } catch (error) {
-                console.warn('⚠️ Script JuicyAds falló:', error.message);
+                console.warn('⚠️ Script JuicyAds falló, usando iframes directos');
                 this.loadJuicyAdsFallback();
             }
         },
@@ -204,7 +228,7 @@
         },
         
         loadJuicyAdsFallback() {
-            console.log('🔧 JuicyAds fallback - iframes directos');
+            console.log('🔧 JuicyAds fallback - iframes directos con IDs reales');
             
             const zones = AD_CONFIG.networks.juicyads.zones;
             
@@ -295,15 +319,16 @@
         },
         
         // ============================
-        // EXOCLICK - MÉTODO CORREGIDO
+        // EXOCLICK - MÉTODO CORREGIDO (SOLO 1 ZONA)
         // ============================
         async loadExoClickFixed() {
-            console.log('🔵 Cargando ExoClick con zone IDs correctos...');
+            console.log('🔵 Cargando ExoClick con única zona 5696328...');
             
-            const zones = AD_CONFIG.networks.exoclick.zones;
+            const zoneId = AD_CONFIG.networks.exoclick.zones.header; // 5696328
+            const positions = ['header', 'sidebar', 'footer'];
             
-            // Crear contenedores e iframes directamente
-            Object.entries(zones).forEach(([position, zoneId]) => {
+            // Crear contenedores con la misma zona en todas las posiciones
+            positions.forEach(position => {
                 const container = this.createAdContainer('exoclick', position, zoneId);
                 this.loadExoClickIframe(container, position, zoneId);
             });
@@ -312,7 +337,7 @@
         },
         
         loadExoClickIframe(container, position, zoneId) {
-            console.log(`🔧 ExoClick iframe para zona ${zoneId}`);
+            console.log(`🔧 ExoClick iframe para zona ${zoneId} en posición ${position}`);
             
             container.innerHTML = '';
             
@@ -365,6 +390,38 @@
                     </div>
                 </div>
             `;
+        },
+        
+        // ============================
+        // EROADVERTISING - NUEVO
+        // ============================
+        async loadEroAdvertising() {
+            console.log('🟣 Cargando EroAdvertising...');
+            
+            const zones = AD_CONFIG.networks.eroadvertising.zones;
+            
+            // Crear contenedor para ibizagirl
+            const containerIbiza = this.createAdContainer('eroadvertising', 'header', zones.ibizagirl);
+            this.loadEroAdZone(containerIbiza, zones.ibizagirl, 'ibizagirl');
+            
+            // Crear contenedor para beach
+            const containerBeach = this.createAdContainer('eroadvertising', 'footer', zones.beach);
+            this.loadEroAdZone(containerBeach, zones.beach, 'beach');
+            
+            this.loadedNetworks.add('eroadvertising');
+        },
+        
+        loadEroAdZone(container, zoneId, siteName) {
+            container.innerHTML = `
+                <div id="ero_${zoneId}" style="width: 100%; height: 100%;">
+                    <script type="text/javascript">
+                        var ero_id = ${zoneId};
+                        var ero_site = '${siteName}';
+                    </script>
+                    <script type="text/javascript" src="https://www.eroadvertising.com/js/erojs.js"></script>
+                </div>
+            `;
+            console.log(`✅ EroAdvertising zona ${siteName} (${zoneId}) creada`);
         },
         
         // ============================
@@ -455,7 +512,7 @@
             container.setAttribute('data-created', new Date().toISOString());
             
             // Aplicar estilos
-            const styles = this.getContainerStyles(position);
+            const styles = this.getContainerStyles(position, network);
             container.style.cssText = styles;
             
             // Insertar en DOM
@@ -464,7 +521,7 @@
             return container;
         },
         
-        getContainerStyles(position) {
+        getContainerStyles(position, network) {
             const baseStyles = `
                 display: block !important;
                 visibility: visible !important;
@@ -480,11 +537,12 @@
                 box-sizing: border-box !important;
             `;
             
+            // Ajustar tamaños según la red y posición
             const styles = {
                 header: baseStyles + `
                     width: 100% !important;
-                    max-width: 728px !important;
-                    height: 90px !important;
+                    max-width: ${network === 'juicyads' ? '300px' : '728px'} !important;
+                    height: ${network === 'juicyads' ? '50px' : '90px'} !important;
                     margin: 20px auto !important;
                 `,
                 sidebar: baseStyles + `
@@ -498,8 +556,8 @@
                 `,
                 footer: baseStyles + `
                     width: 100% !important;
-                    max-width: 728px !important;
-                    height: 90px !important;
+                    max-width: ${network === 'juicyads' ? '160px' : '728px'} !important;
+                    height: ${network === 'juicyads' ? '600px' : '90px'} !important;
                     margin: 20px auto !important;
                 `
             };
@@ -547,11 +605,15 @@
         // FALLBACKS DE EMERGENCIA
         // ============================
         activateEmergencyFallbacks() {
-            console.log('🚨 Activando fallbacks de emergencia...');
+            console.log('🚨 Activando fallbacks de emergencia con IDs reales...');
             
             const emergencyZones = {
                 juicyads: AD_CONFIG.networks.juicyads.zones,
-                exoclick: AD_CONFIG.networks.exoclick.zones
+                exoclick: { 
+                    header: AD_CONFIG.networks.exoclick.zones.header,
+                    sidebar: AD_CONFIG.networks.exoclick.zones.header,
+                    footer: AD_CONFIG.networks.exoclick.zones.header
+                }
             };
             
             Object.entries(emergencyZones).forEach(([network, zones]) => {
@@ -599,23 +661,27 @@
                     if (position && network && zoneId) {
                         const iframeUrl = network.includes('juicy') ? 
                             AD_CONFIG.networks.juicyads.iframeUrl :
-                            AD_CONFIG.networks.exoclick.iframeUrl;
+                            network.includes('exo') ?
+                            AD_CONFIG.networks.exoclick.iframeUrl :
+                            null;
                         
-                        const iframe = document.createElement('iframe');
-                        iframe.src = `${iframeUrl}${zoneId}`;
-                        iframe.style.cssText = `
-                            width: 100% !important; 
-                            height: 100% !important; 
-                            border: 0 !important;
-                            display: block !important;
-                        `;
-                        iframe.setAttribute('scrolling', 'no');
-                        iframe.setAttribute('frameborder', '0');
-                        
-                        container.innerHTML = '';
-                        container.appendChild(iframe);
-                        
-                        console.log(`🔧 Contenedor vacío reparado: ${position} (${zoneId})`);
+                        if (iframeUrl) {
+                            const iframe = document.createElement('iframe');
+                            iframe.src = `${iframeUrl}${zoneId}`;
+                            iframe.style.cssText = `
+                                width: 100% !important; 
+                                height: 100% !important; 
+                                border: 0 !important;
+                                display: block !important;
+                            `;
+                            iframe.setAttribute('scrolling', 'no');
+                            iframe.setAttribute('frameborder', '0');
+                            
+                            container.innerHTML = '';
+                            container.appendChild(iframe);
+                            
+                            console.log(`🔧 Contenedor vacío reparado: ${position} (${zoneId})`);
+                        }
                     }
                 }
             });
@@ -632,6 +698,7 @@
                 containers: document.querySelectorAll('.ad-container').length,
                 juicyads: document.querySelectorAll('[id*="juicyads"], .jaads').length,
                 exoclick: document.querySelectorAll('[id*="exoclick"], .adsbyexoclick').length,
+                eroadvertising: document.querySelectorAll('[id*="ero_"]').length,
                 popads: !!window.e494ffb82839a29122608e933394c091,
                 loadedNetworks: Array.from(this.loadedNetworks)
             };
@@ -648,10 +715,14 @@
             console.log('🔧 Mostrando placeholders de desarrollo...');
             
             const positions = ['header', 'sidebar', 'footer'];
-            const zones = [1098518, 1098519, 1098520];
+            const zones = {
+                header: 1098658,
+                sidebar: 1098518,
+                footer: 1098656
+            };
             
-            positions.forEach((position, index) => {
-                const container = this.createAdContainer('dev', position, zones[index]);
+            positions.forEach((position) => {
+                const container = this.createAdContainer('dev', position, zones[position]);
                 container.innerHTML = `
                     <div style="
                         display: flex;
@@ -665,9 +736,9 @@
                         border-radius: 10px;
                     ">
                         <div>
-                            <div style="font-size: 20px;">🏖️ DEV MODE</div>
+                            <div style="font-size: 20px;">🖥️ DEV MODE</div>
                             <div style="font-size: 14px;">${position.toUpperCase()}</div>
-                            <div style="font-size: 12px;">Zone ${zones[index]}</div>
+                            <div style="font-size: 12px;">Zone ${zones[position]}</div>
                         </div>
                     </div>
                 `;
@@ -682,6 +753,6 @@
     window.AdVerificationSystem = AdVerificationSystem;
     window.testAds = () => AdVerificationSystem.runFinalVerification();
     
-    console.log('✅ Ad Verification System v5.1.0 COMPLETAMENTE CORREGIDO');
+    console.log('✅ Ad Verification System v5.2.0 con IDs REALES cargado');
     
 })();
