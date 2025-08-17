@@ -860,6 +860,39 @@ window.ALL_VIDEOS_POOL = [
     'uncensored-videos/zB6YDw2LZ6BZl8CbXMiV.mp4',
     'uncensored-videos/zX53TSjhlQj4Gy76iK0H.mp4'
 ]; // Cierre del array SIN coma
+
+/ ============================
+// BANNERS Y TEASERS
+// ============================
+window.BANNER_IMAGES = [
+    'bikini.webp',
+    'bikbanner.webp',
+    'bikbanner2.webp'
+];
+
+window.TEASER_IMAGES = [
+    'bikini.webp',
+    'bikini3.webp',
+    'bikini5.webp',
+    'backbikini.webp'
+];
+
+// ============================
+// METADATA
+// ============================
+window.CONTENT_METADATA = {
+    version: '3.0.0',
+    lastUpdate: new Date().toISOString(),
+    dailyRotation: true,
+    categories: ['beach', 'paradise', 'mediterranean', 'exclusive'],
+    totalAssets: {
+        photos: window.ALL_PHOTOS_POOL.length,
+        videos: window.ALL_VIDEOS_POOL.length,
+        banners: window.BANNER_IMAGES.length,
+        teasers: window.TEASER_IMAGES.length
+    }
+};
+
 // ============================
 // FUNCIONES DE UTILIDAD
 // ============================
