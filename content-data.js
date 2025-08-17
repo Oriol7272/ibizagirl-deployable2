@@ -1,6 +1,6 @@
-// ============================
-// CONTENT DATA
-// Arrays de todas las imágenes y videos
+/ ============================
+// CONTENT DATA - VERSIÓN CORREGIDA
+// Añadidas las variables faltantes BANNER_IMAGES y TEASER_IMAGES
 // ============================
 
 // Configuración de rutas base
@@ -8,6 +8,44 @@ const BASE_PATHS = {
     FULL: 'full/',
     UNCENSORED: 'uncensored/',
     VIDEOS: 'uncensored-videos/'
+};
+
+// ============================
+// BANNER IMAGES - AÑADIDO
+// ============================
+window.BANNER_IMAGES = [
+    'full/bikbanner.webp',
+    'full/bikbanner2.webp',
+    'full/bikini.webp',
+    'full/bikini3.webp',
+    'full/bikini5.webp',
+    'full/backbikini.webp'
+];
+
+// ============================
+// TEASER IMAGES - AÑADIDO
+// ============================
+window.TEASER_IMAGES = [
+    'full/bikini.webp',
+    'full/bikini3.webp',
+    'full/bikini5.webp',
+    'full/backbikini.webp',
+    'full/bikback2.webp',
+    'full/Sinportada.webp',
+    'full/Sintulo.webp',
+    'full/Siulo.webp',
+    'full/Sinoseup.webp'
+];
+
+// ============================
+// METADATA - AÑADIDO
+// ============================
+window.CONTENT_METADATA = {
+    version: '3.0.0',
+    lastUpdate: new Date().toISOString(),
+    categories: ['beach', 'paradise', 'premium', 'exclusive'],
+    dailyRotation: true,
+    updateTime: '03:00'
 };
 
 // ============================
@@ -140,6 +178,8 @@ window.ALL_PHOTOS_POOL = [
     'full/bikini.webp',
     'full/bikini3.webp',
     'full/bikini5.webp'
+];
+
 ];// ============================
 // FOTOS CARPETA UNCENSORED
 // ============================
@@ -861,38 +901,6 @@ window.ALL_VIDEOS_POOL = [
     'uncensored-videos/zX53TSjhlQj4Gy76iK0H.mp4'
 ]; // Cierre del array SIN coma
 
-/ ============================
-// BANNERS Y TEASERS
-// ============================
-window.BANNER_IMAGES = [
-    'bikini.webp',
-    'bikbanner.webp',
-    'bikbanner2.webp'
-];
-
-window.TEASER_IMAGES = [
-    'bikini.webp',
-    'bikini3.webp',
-    'bikini5.webp',
-    'backbikini.webp'
-];
-
-// ============================
-// METADATA
-// ============================
-window.CONTENT_METADATA = {
-    version: '3.0.0',
-    lastUpdate: new Date().toISOString(),
-    dailyRotation: true,
-    categories: ['beach', 'paradise', 'mediterranean', 'exclusive'],
-    totalAssets: {
-        photos: window.ALL_PHOTOS_POOL.length,
-        videos: window.ALL_VIDEOS_POOL.length,
-        banners: window.BANNER_IMAGES.length,
-        teasers: window.TEASER_IMAGES.length
-    }
-};
-
 // ============================
 // FUNCIONES DE UTILIDAD
 // ============================
@@ -945,6 +953,7 @@ window.getTodaysNewContent = function() {
 window.getContentStats = function() {
     return {
         totalPhotos: window.ALL_PHOTOS_POOL.length,
+        totalUncensoredPhotos: window.ALL_UNCENSORED_PHOTOS_POOL.length,
         totalVideos: window.ALL_VIDEOS_POOL.length,
         totalBanners: window.BANNER_IMAGES.length,
         totalTeasers: window.TEASER_IMAGES.length,
@@ -960,14 +969,7 @@ window.validateContentPaths = function() {
     const validVideos = [];
     
     // Para fotos - usar las existentes como base y generar variaciones
-    const basePhotos = [
-        'full/bikini.webp',
-        'full/bikini3.webp', 
-        'full/bikini5.webp',
-        'full/backbikini.webp',
-        'full/bikbanner.webp',
-        'full/bikbanner2.webp'
-    ];
+    const basePhotos = window.BANNER_IMAGES.concat(window.TEASER_IMAGES);
     
     // Agregar fotos base
     validPhotos.push(...basePhotos);
@@ -1002,17 +1004,10 @@ window.validateContentPaths = function() {
 // ============================
 window.getFallbackContent = function() {
     return {
-        photos: [
-            'full/bikini.webp',
-            'full/bikini3.webp', 
-            'full/bikini5.webp',
-            'full/backbikini.webp',
-            'full/bikbanner.webp',
-            'full/bikbanner2.webp'
-        ],
+        photos: window.BANNER_IMAGES.slice(0, 6),
         videos: [],
-        banners: ['bikini.webp', 'bikini3.webp'],
-        teasers: ['bikini.webp', 'bikini3.webp', 'bikini5.webp']
+        banners: window.BANNER_IMAGES.slice(0, 2),
+        teasers: window.TEASER_IMAGES.slice(0, 3)
     };
 };
 
@@ -1022,6 +1017,7 @@ window.getFallbackContent = function() {
 (function() {
     console.log('📊 Content Data inicializado:');
     console.log(`  - ${window.ALL_PHOTOS_POOL.length} fotos en pool`);
+    console.log(`  - ${window.ALL_UNCENSORED_PHOTOS_POOL?.length || 0} fotos uncensored en pool`);
     console.log(`  - ${window.ALL_VIDEOS_POOL.length} videos en pool`);
     console.log(`  - ${window.BANNER_IMAGES.length} banners disponibles`);
     console.log(`  - ${window.TEASER_IMAGES.length} teasers disponibles`);
@@ -1040,6 +1036,7 @@ window.getFallbackContent = function() {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         ALL_PHOTOS_POOL: window.ALL_PHOTOS_POOL,
+        ALL_UNCENSORED_PHOTOS_POOL: window.ALL_UNCENSORED_PHOTOS_POOL,
         ALL_VIDEOS_POOL: window.ALL_VIDEOS_POOL,
         BANNER_IMAGES: window.BANNER_IMAGES,
         TEASER_IMAGES: window.TEASER_IMAGES,
