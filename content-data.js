@@ -1,7 +1,9 @@
-/ ============================
-// CONTENT DATA - VERSIÓN CORREGIDA
-// Añadidas las variables faltantes BANNER_IMAGES y TEASER_IMAGES
 // ============================
+// CONTENT DATA v4.0.0 - SISTEMA DINÁMICO
+// Banners y teasers aleatorios desde carpeta full
+// ============================
+
+'use strict';
 
 // Configuración de rutas base
 const BASE_PATHS = {
@@ -11,45 +13,20 @@ const BASE_PATHS = {
 };
 
 // ============================
-// BANNER IMAGES - AÑADIDO
-// ============================
-window.BANNER_IMAGES = [
-    'full/bikbanner.webp',
-    'full/bikbanner2.webp',
-    'full/bikini.webp',
-    'full/bikini3.webp',
-    'full/bikini5.webp',
-    'full/backbikini.webp'
-];
-
-// ============================
-// TEASER IMAGES - AÑADIDO
-// ============================
-window.TEASER_IMAGES = [
-    'full/bikini.webp',
-    'full/bikini3.webp',
-    'full/bikini5.webp',
-    'full/backbikini.webp',
-    'full/bikback2.webp',
-    'full/Sinportada.webp',
-    'full/Sintulo.webp',
-    'full/Siulo.webp',
-    'full/Sinoseup.webp'
-];
-
-// ============================
-// METADATA - AÑADIDO
+// METADATA
 // ============================
 window.CONTENT_METADATA = {
-    version: '3.0.0',
+    version: '4.0.0',
     lastUpdate: new Date().toISOString(),
     categories: ['beach', 'paradise', 'premium', 'exclusive'],
     dailyRotation: true,
-    updateTime: '03:00'
+    updateTime: '03:00',
+    dynamicBanners: true,
+    dynamicTeasers: true
 };
 
 // ============================
-// FOTOS CARPETA FULL
+// FOTOS CARPETA FULL (127 archivos - contenido público)
 // ============================
 window.ALL_PHOTOS_POOL = [
     'full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
@@ -180,7 +157,7 @@ window.ALL_PHOTOS_POOL = [
     'full/bikini5.webp'
 ];
 
-];// ============================
+// ============================
 // FOTOS CARPETA UNCENSORED
 // ============================
 window.ALL_UNCENSORED_PHOTOS_POOL = [
@@ -902,6 +879,57 @@ window.ALL_VIDEOS_POOL = [
 ]; // Cierre del array SIN coma
 
 // ============================
+// SISTEMA DINÁMICO DE BANNERS Y TEASERS
+// ============================
+
+// Función para obtener seed basada en fecha/hora
+function getRotationSeed() {
+    const now = new Date();
+    // Cambio cada hora para más variedad
+    return now.getFullYear() * 10000 + 
+           now.getMonth() * 1000 + 
+           now.getDate() * 100 + 
+           now.getHours();
+}
+
+// Función para mezclar array con seed
+function shuffleWithSeed(array, seed) {
+    const shuffled = [...array];
+    let currentIndex = shuffled.length;
+    
+    // Generador de números pseudo-aleatorios basado en seed
+    const random = (seed) => {
+        const x = Math.sin(seed) * 10000;
+        return x - Math.floor(x);
+    };
+    
+    while (currentIndex !== 0) {
+        const randomIndex = Math.floor(random(seed++) * currentIndex);
+        currentIndex--;
+        [shuffled[currentIndex], shuffled[randomIndex]] = 
+        [shuffled[randomIndex], shuffled[currentIndex]];
+    }
+    
+    return shuffled;
+}
+
+// Generar banners dinámicamente desde carpeta full
+window.BANNER_IMAGES = (function() {
+    const seed = getRotationSeed();
+    const shuffled = shuffleWithSeed(window.ALL_PHOTOS_POOL, seed);
+    // Seleccionar 6 imágenes para banners
+    return shuffled.slice(0, 6);
+})();
+
+// Generar teasers dinámicamente desde carpeta full
+window.TEASER_IMAGES = (function() {
+    const seed = getRotationSeed() + 1000; // Seed diferente para teasers
+    const shuffled = shuffleWithSeed(window.ALL_PHOTOS_POOL, seed);
+    // Seleccionar 9 imágenes para teasers
+    return shuffled.slice(0, 9);
+})();
+
+// ============================
 // FUNCIONES DE UTILIDAD
 // ============================
 
@@ -912,6 +940,10 @@ window.getRandomPhotos = function(count = 10) {
 };
 
 window.getRandomVideos = function(count = 5) {
+    if (window.ALL_VIDEOS_POOL.length === 0) {
+        console.warn('Videos requieren suscripción premium');
+        return [];
+    }
     const shuffled = [...window.ALL_VIDEOS_POOL].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
 };
@@ -927,26 +959,38 @@ window.getContentByCategory = function(category) {
 
 // Función para simular contenido "nuevo" basado en fecha
 window.getTodaysNewContent = function() {
-    const today = new Date();
-    const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+    const seed = getRotationSeed();
     
-    // Usar seed para reproducible "randomness" diaria
-    const random = function(seed) {
-        const x = Math.sin(seed) * 10000;
-        return x - Math.floor(x);
-    };
-    
-    const newPhotoCount = Math.floor(random(seed) * 40) + 10; // 10-50 nuevas fotos
-    const newVideoCount = Math.floor(random(seed + 1) * 15) + 5; // 5-20 nuevos videos
-    
-    const shuffledPhotos = [...window.ALL_PHOTOS_POOL].sort(() => random(seed + 2) - 0.5);
-    const shuffledVideos = [...window.ALL_VIDEOS_POOL].sort(() => random(seed + 3) - 0.5);
+    const shuffledPhotos = shuffleWithSeed(window.ALL_PHOTOS_POOL, seed);
+    const shuffledVideos = window.ALL_VIDEOS_POOL.length > 0 ? 
+                          shuffleWithSeed(window.ALL_VIDEOS_POOL, seed + 500) : [];
     
     return {
-        photos: shuffledPhotos.slice(0, newPhotoCount),
-        videos: shuffledVideos.slice(0, newVideoCount),
-        date: today.toDateString()
+        photos: shuffledPhotos.slice(0, 50), // 50 fotos "nuevas" del día
+        videos: shuffledVideos.slice(0, 20), // 20 videos "nuevos" del día
+        date: new Date().toDateString()
     };
+};
+
+// Función para rotar banners y teasers
+window.rotateBannersAndTeasers = function() {
+    const seed = Date.now(); // Usar timestamp para rotación instantánea
+    
+    // Rotar banners
+    window.BANNER_IMAGES = shuffleWithSeed(window.ALL_PHOTOS_POOL, seed).slice(0, 6);
+    
+    // Rotar teasers
+    window.TEASER_IMAGES = shuffleWithSeed(window.ALL_PHOTOS_POOL, seed + 1000).slice(0, 9);
+    
+    console.log('✅ Banners y teasers rotados');
+    
+    // Disparar evento personalizado para actualizar UI
+    window.dispatchEvent(new CustomEvent('contentRotated', {
+        detail: {
+            banners: window.BANNER_IMAGES,
+            teasers: window.TEASER_IMAGES
+        }
+    }));
 };
 
 // Función para obtener estadísticas de contenido
@@ -959,52 +1003,15 @@ window.getContentStats = function() {
         totalTeasers: window.TEASER_IMAGES.length,
         categories: window.CONTENT_METADATA.categories.length,
         lastUpdate: window.CONTENT_METADATA.lastUpdate,
-        dailyRotation: window.CONTENT_METADATA.dailyRotation
+        dailyRotation: window.CONTENT_METADATA.dailyRotation,
+        dynamicContent: true
     };
 };
 
-// Función para validar que las rutas de imágenes existan
-window.validateContentPaths = function() {
-    const validPhotos = [];
-    const validVideos = [];
-    
-    // Para fotos - usar las existentes como base y generar variaciones
-    const basePhotos = window.BANNER_IMAGES.concat(window.TEASER_IMAGES);
-    
-    // Agregar fotos base
-    validPhotos.push(...basePhotos);
-    
-    // Generar variaciones simuladas para alcanzar el número deseado
-    const totalNeeded = 127;
-    for (let i = validPhotos.length; i < totalNeeded; i++) {
-        const baseIndex = i % basePhotos.length;
-        const basePath = basePhotos[baseIndex];
-        const variation = basePath.replace('.webp', `_var${i}.webp`);
-        validPhotos.push(variation);
-    }
-    
-    // Para videos, simular paths (en ambiente real estos existirían)
-    for (let i = 1; i <= 70; i++) {
-        validVideos.push(`videos/paradise_${i.toString().padStart(3, '0')}.mp4`);
-    }
-    
-    // Actualizar los pools globales
-    window.ALL_PHOTOS_POOL = validPhotos;
-    window.ALL_VIDEOS_POOL = validVideos;
-    
-    return {
-        photos: validPhotos.length,
-        videos: validVideos.length,
-        validated: true
-    };
-};
-
-// ============================
-// SISTEMA DE FALLBACK
-// ============================
+// Sistema de fallback
 window.getFallbackContent = function() {
     return {
-        photos: window.BANNER_IMAGES.slice(0, 6),
+        photos: window.ALL_PHOTOS_POOL.slice(0, 6),
         videos: [],
         banners: window.BANNER_IMAGES.slice(0, 2),
         teasers: window.TEASER_IMAGES.slice(0, 3)
@@ -1015,21 +1022,23 @@ window.getFallbackContent = function() {
 // INICIALIZACIÓN
 // ============================
 (function() {
-    console.log('📊 Content Data inicializado:');
-    console.log(`  - ${window.ALL_PHOTOS_POOL.length} fotos en pool`);
-    console.log(`  - ${window.ALL_UNCENSORED_PHOTOS_POOL?.length || 0} fotos uncensored en pool`);
-    console.log(`  - ${window.ALL_VIDEOS_POOL.length} videos en pool`);
-    console.log(`  - ${window.BANNER_IMAGES.length} banners disponibles`);
-    console.log(`  - ${window.TEASER_IMAGES.length} teasers disponibles`);
+    console.log('📊 Content Data v4.0.0 - Sistema Dinámico');
+    console.log(`  - ${window.ALL_PHOTOS_POOL.length} fotos públicas en pool`);
+    console.log(`  - ${window.ALL_UNCENSORED_PHOTOS_POOL.length} fotos premium (requiere pago)`);
+    console.log(`  - ${window.ALL_VIDEOS_POOL.length} videos premium (requiere pago)`);
+    console.log(`  - ${window.BANNER_IMAGES.length} banners dinámicos`);
+    console.log(`  - ${window.TEASER_IMAGES.length} teasers dinámicos`);
+    console.log('  - 🔄 Rotación automática cada hora');
     
-    // Validar contenido al cargar
-    const validation = window.validateContentPaths();
-    console.log('✅ Validación completada:', validation);
+    // Configurar rotación automática cada hora
+    setInterval(() => {
+        window.rotateBannersAndTeasers();
+    }, 3600000); // 1 hora
     
     // Exponer estadísticas globales
     window.CONTENT_STATS = window.getContentStats();
     
-    console.log('✅ Content Data v3.0.0 cargado completamente');
+    console.log('✅ Content Data cargado - Sistema dinámico activo');
 })();
 
 // Export para compatibilidad
@@ -1040,6 +1049,7 @@ if (typeof module !== 'undefined' && module.exports) {
         ALL_VIDEOS_POOL: window.ALL_VIDEOS_POOL,
         BANNER_IMAGES: window.BANNER_IMAGES,
         TEASER_IMAGES: window.TEASER_IMAGES,
-        CONTENT_METADATA: window.CONTENT_METADATA
+        CONTENT_METADATA: window.CONTENT_METADATA,
+        rotateBannersAndTeasers: window.rotateBannersAndTeasers
     };
 }
