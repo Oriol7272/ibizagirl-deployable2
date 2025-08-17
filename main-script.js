@@ -1,9 +1,10 @@
 // ============================
-// IBIZAGIRL.PICS MAIN SCRIPT v14.4.1 - COMPLETO Y CORREGIDO
-// Fixed: Syntax errors, Twitter bot 429, Modal functions, Isabella chat, PayPal integration
+// IBIZAGIRL.PICS MAIN SCRIPT v15.0.0 - INTEGRADO CON SISTEMA MODULAR
+// Fixed: Complete integration with modular content system
+// Enhanced: Compatibility with content-data modules 1-6
 // ============================
 
-console.log('🌊 IbizaGirl.pics v14.4.1 COMPLETE FIXED VERSION - Loading Paradise Gallery...');
+console.log('🌊 IbizaGirl.pics v15.0.0 MODULAR INTEGRATION - Loading Paradise Gallery...');
 
 // ============================
 // ENVIRONMENT DETECTION
@@ -21,53 +22,7 @@ const ENVIRONMENT = {
 console.log('🌍 Environment:', ENVIRONMENT.isDevelopment ? 'Development' : 'Production');
 
 // ============================
-// CONFIGURACIÓN CORREGIDA
-// ============================
-
-const getPhotoPool = () => {
-    if (window.ALL_PHOTOS_POOL && window.ALL_PHOTOS_POOL.length > 0) {
-        return window.ALL_PHOTOS_POOL;
-    }
-    // Fallback básico con imágenes que existen
-    return [
-        'full/bikini.webp', 'full/bikini3.webp', 'full/bikini5.webp', 
-        'full/backbikini.webp', 'full/bikbanner.webp', 'full/bikbanner2.webp'
-    ];
-};
-
-const getVideoPool = () => {
-    if (window.ALL_VIDEOS_POOL && window.ALL_VIDEOS_POOL.length > 0) {
-        return window.ALL_VIDEOS_POOL;
-    }
-    return [];
-};
-
-// Arrays dinámicos
-let ALL_PHOTOS_POOL = [];
-let ALL_VIDEOS_POOL = [];
-let BANNER_IMAGES = [];
-let TEASER_IMAGES = [];
-
-// Inicializar arrays cuando estén disponibles
-function initializeContentArrays() {
-    ALL_PHOTOS_POOL = getPhotoPool();
-    ALL_VIDEOS_POOL = getVideoPool();
-    
-    BANNER_IMAGES = ALL_PHOTOS_POOL.slice(0, 6).map(path => {
-        const parts = path.split('/');
-        return parts[parts.length - 1];
-    });
-    
-    TEASER_IMAGES = ALL_PHOTOS_POOL.slice(6, 12).map(path => {
-        const parts = path.split('/');
-        return parts[parts.length - 1];
-    });
-    
-    console.log(`📊 Content initialized: ${ALL_PHOTOS_POOL.length} photos, ${ALL_VIDEOS_POOL.length} videos`);
-}
-
-// ============================
-// CONFIGURACIÓN
+// CONFIGURACIÓN MODULAR
 // ============================
 
 const CONFIG = {
@@ -100,7 +55,7 @@ const CONFIG = {
 };
 
 // ============================
-// MULTI-LANGUAGE TRANSLATIONS - FIXED SYNTAX
+// MULTI-LANGUAGE TRANSLATIONS
 // ============================
 
 const TRANSLATIONS = {
@@ -142,23 +97,12 @@ const TRANSLATIONS = {
         save_yearly: "¡Ahorra €80 al año!",
         pack_selection: "📦 MEGA PACKS - Ahorra 70%",
         pack_starter: "Starter Pack",
-        pack_bronze: "Bronze Pack",
+        pack_bronze: "Bronze Pack", 
         pack_silver: "Silver Pack",
         pack_gold: "Gold Pack",
         items: "contenidos",
         save: "Ahorra",
         unlock_content: "🔓 Desbloquear Contenido",
-        quick_links: "Enlaces Rápidos",
-        photos: "Fotos",
-        videos: "Videos",
-        vip_subscription: "Suscripción VIP",
-        mega_packs: "Mega Packs",
-        support: "Soporte",
-        terms: "Términos de Servicio",
-        privacy: "Política de Privacidad",
-        contact: "Contacto",
-        copyright: "© 2025 IbizaGirl.pics - Todos los derechos reservados | 18+ Solo Adultos",
-        footer_desc: "Tu destino diario para contenido exclusivo del paraíso mediterráneo.",
         notification_welcome: "🎉 ¡Bienvenido VIP! Todo el contenido ha sido desbloqueado.",
         notification_pack: "🎉 {credits} créditos añadidos! Haz clic en cualquier contenido para desbloquearlo.",
         notification_unlocked: "{icon} Desbloqueado! {credits} créditos restantes.",
@@ -210,22 +154,11 @@ const TRANSLATIONS = {
         pack_selection: "📦 MEGA PACKS - Save 70%",
         pack_starter: "Starter Pack",
         pack_bronze: "Bronze Pack",
-        pack_silver: "Silver Pack",
+        pack_silver: "Silver Pack", 
         pack_gold: "Gold Pack",
         items: "items",
         save: "Save",
         unlock_content: "🔓 Unlock Content",
-        quick_links: "Quick Links",
-        photos: "Photos",
-        videos: "Videos",
-        vip_subscription: "VIP Subscription",
-        mega_packs: "Mega Packs",
-        support: "Support",
-        terms: "Terms of Service",
-        privacy: "Privacy Policy",
-        contact: "Contact",
-        copyright: "© 2025 IbizaGirl.pics - All rights reserved | 18+ Adults Only",
-        footer_desc: "Your daily destination for exclusive Mediterranean paradise content.",
         notification_welcome: "🎉 Welcome VIP! All content has been unlocked.",
         notification_pack: "🎉 {credits} credits added! Click any content to unlock.",
         notification_unlocked: "{icon} Unlocked! {credits} credits remaining.",
@@ -256,28 +189,23 @@ let state = {
     errorCount: 0,
     contentInitialized: false,
     isabellaOpen: false,
-    currentPPVItem: null
+    currentPPVItem: null,
+    modulesLoaded: false
 };
 
-// Make globals available
-window.TRANSLATIONS = TRANSLATIONS;
-window.state = state;
-
 // ============================
-// ENHANCED ERROR HANDLING - FIXED TWITTER BOT 429
+// ENHANCED ERROR HANDLING
 // ============================
 
 class ErrorHandler {
     static logError(error, context = '') {
-        // FIX: Filter out Twitter bot 429 errors and other bot-related errors
         const errorMessage = error?.message || error?.toString() || 'Unknown error';
         
-        // List of errors to ignore
         const ignoredErrors = [
             'Script error',
             'ResizeObserver',
             'Non-Error promise rejection',
-            '429', // Twitter bot rate limit
+            '429',
             'Failed to fetch',
             'NetworkError',
             'Load failed',
@@ -287,19 +215,17 @@ class ErrorHandler {
             'moz-extension'
         ];
         
-        // Check if error should be ignored
         const shouldIgnore = ignoredErrors.some(ignored => 
             errorMessage.toLowerCase().includes(ignored.toLowerCase())
         );
         
         if (shouldIgnore) {
-            return; // Silently ignore these errors
+            return;
         }
         
         state.errorCount++;
         console.error(`❌ Error ${state.errorCount} [${context}]:`, error);
         
-        // Track only significant errors
         if (window.gtag && state.errorCount <= 10) {
             try {
                 window.gtag('event', 'exception', {
@@ -311,7 +237,6 @@ class ErrorHandler {
             }
         }
         
-        // Show recovery only after many significant errors
         if (state.errorCount > 50) {
             this.showErrorRecovery();
         }
@@ -341,126 +266,148 @@ class ErrorHandler {
 }
 
 // ============================
-// DAILY ROTATION SYSTEM MEJORADO
+// CONTENT SYSTEM INTEGRATION
 // ============================
 
-function getDailyRotation() {
-    try {
-        // Asegurar que los arrays estén inicializados
-        if (!state.contentInitialized) {
-            initializeContentArrays();
-            state.contentInitialized = true;
-        }
-        
-        const today = new Date();
-        const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-        
-        console.log(`📅 Generating daily rotation for ${today.toDateString()} (seed: ${dateSeed})`);
-        
-        function seededRandom(seed) {
-            const x = Math.sin(seed++) * 10000;
-            return x - Math.floor(x);
-        }
-        
-        function shuffleWithSeed(array, seed) {
-            if (!array || array.length === 0) return [];
-            const shuffled = [...array];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(seededRandom(seed + i) * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+class ContentSystemManager {
+    constructor() {
+        this.contentReady = false;
+        this.retryAttempts = 0;
+        this.maxRetries = 10;
+    }
+
+    // Esperar a que el sistema de contenido esté listo
+    async waitForContentSystem() {
+        return new Promise((resolve) => {
+            // Si ya está listo, resolver inmediatamente
+            if (this.isContentSystemReady()) {
+                this.contentReady = true;
+                resolve(true);
+                return;
             }
-            return shuffled;
+
+            // Escuchar el evento de sistema listo
+            const handleContentReady = () => {
+                console.log('✅ Sistema de contenido listo - evento recibido');
+                this.contentReady = true;
+                window.removeEventListener('contentSystemReady', handleContentReady);
+                resolve(true);
+            };
+
+            window.addEventListener('contentSystemReady', handleContentReady);
+
+            // También verificar periódicamente
+            const checkInterval = setInterval(() => {
+                if (this.isContentSystemReady()) {
+                    this.contentReady = true;
+                    clearInterval(checkInterval);
+                    window.removeEventListener('contentSystemReady', handleContentReady);
+                    resolve(true);
+                } else {
+                    this.retryAttempts++;
+                    if (this.retryAttempts >= this.maxRetries) {
+                        console.warn('⚠️ Timeout esperando sistema de contenido, usando fallback');
+                        clearInterval(checkInterval);
+                        window.removeEventListener('contentSystemReady', handleContentReady);
+                        this.initializeFallbackContent();
+                        resolve(true);
+                    }
+                }
+            }, 500);
+        });
+    }
+
+    // Verificar si el sistema de contenido está listo
+    isContentSystemReady() {
+        return !!(
+            window.ContentAPI && 
+            window.UnifiedContentAPI && 
+            window.ALL_PHOTOS_POOL && 
+            window.ALL_PHOTOS_POOL.length > 0
+        );
+    }
+
+    // Inicializar contenido de fallback
+    initializeFallbackContent() {
+        console.log('🆘 Inicializando contenido de fallback...');
+        
+        if (!window.ALL_PHOTOS_POOL) {
+            window.ALL_PHOTOS_POOL = [
+                'full/bikini.webp',
+                'full/bikini3.webp',
+                'full/bikini5.webp',
+                'full/backbikini.webp',
+                'full/bikbanner.webp',
+                'full/bikbanner2.webp'
+            ];
         }
-        
-        // Verificar que tengamos contenido
-        if (ALL_PHOTOS_POOL.length === 0) {
-            console.warn('⚠️ No photos available, using fallback');
-            ALL_PHOTOS_POOL = getPhotoPool();
+
+        if (!window.ALL_VIDEOS_POOL) {
+            window.ALL_VIDEOS_POOL = [];
         }
-        
-        if (ALL_VIDEOS_POOL.length === 0) {
-            console.warn('⚠️ No videos available, using fallback');
-            ALL_VIDEOS_POOL = getVideoPool();
+
+        if (!window.BANNER_IMAGES) {
+            window.BANNER_IMAGES = ['bikini.webp', 'bikini3.webp'];
         }
-        
-        // Crear pools expandidos
-        const expandedPhotos = [];
-        const targetPhotoCount = Math.min(CONFIG.CONTENT.DAILY_PHOTOS, 200);
-        
-        for (let i = 0; i < targetPhotoCount; i++) {
-            const basePhoto = ALL_PHOTOS_POOL[i % ALL_PHOTOS_POOL.length];
-            expandedPhotos.push(basePhoto);
+
+        if (!window.TEASER_IMAGES) {
+            window.TEASER_IMAGES = ['bikini.webp', 'bikini3.webp', 'bikini5.webp'];
         }
-        
-        const expandedVideos = [];
-        const targetVideoCount = Math.min(CONFIG.CONTENT.DAILY_VIDEOS, 50);
-        
-        // FIXED: Only add videos if we have them
-        if (ALL_VIDEOS_POOL.length > 0) {
-            for (let i = 0; i < targetVideoCount; i++) {
-                const baseVideo = ALL_VIDEOS_POOL[i % ALL_VIDEOS_POOL.length];
-                expandedVideos.push(baseVideo);
-            }
+
+        this.contentReady = true;
+        console.log('✅ Contenido de fallback inicializado');
+    }
+
+    // Obtener contenido usando la API modular o fallback
+    getContent() {
+        if (window.generateDailyRotationForMainScript) {
+            return window.generateDailyRotationForMainScript();
         }
-        
-        // Shuffle content
-        const shuffledPhotos = shuffleWithSeed(expandedPhotos, dateSeed);
-        const shuffledVideos = shuffleWithSeed(expandedVideos, dateSeed * 2);
-        const shuffledBanners = shuffleWithSeed(BANNER_IMAGES, dateSeed * 3);
-        const shuffledTeasers = shuffleWithSeed(TEASER_IMAGES, dateSeed * 4);
-        
-        const todayPhotos = shuffledPhotos.slice(0, targetPhotoCount);
-        const todayVideos = shuffledVideos.slice(0, expandedVideos.length);
-        
-        // Mark new content
-        const newPhotoCount = Math.floor(todayPhotos.length * CONFIG.CONTENT.NEW_CONTENT_PERCENTAGE);
-        const newVideoCount = Math.floor(todayVideos.length * CONFIG.CONTENT.NEW_CONTENT_PERCENTAGE);
-        
-        const rotation = {
-            photos: todayPhotos,
-            videos: todayVideos,
-            banners: shuffledBanners.slice(0, 6),
-            teasers: shuffledTeasers.slice(0, 12),
-            newPhotoIndices: new Set(Array.from({length: newPhotoCount}, (_, i) => i)),
-            newVideoIndices: new Set(Array.from({length: newVideoCount}, (_, i) => i)),
-            lastUpdate: new Date(),
-            stats: {
-                totalPhotosPool: ALL_PHOTOS_POOL.length,
-                totalVideosPool: ALL_VIDEOS_POOL.length,
-                dailyPhotos: todayPhotos.length,
-                dailyVideos: todayVideos.length,
-                newPhotos: newPhotoCount,
-                newVideos: newVideoCount
-            }
-        };
-        
-        console.log('📊 Daily rotation stats:', rotation.stats);
-        return rotation;
-        
-    } catch (error) {
-        ErrorHandler.logError(error, 'getDailyRotation');
+
+        if (window.getRandomContentForMainScript) {
+            const content = window.getRandomContentForMainScript();
+            return {
+                photos: content.photos,
+                videos: content.videos,
+                banners: content.banners,
+                teasers: content.teasers,
+                newPhotoIndices: new Set([0, 1, 2, 3, 4]),
+                newVideoIndices: new Set([0, 1, 2]),
+                lastUpdate: new Date(),
+                stats: {
+                    totalPhotosPool: content.photos.length,
+                    totalVideosPool: content.videos.length,
+                    dailyPhotos: content.photos.length,
+                    dailyVideos: content.videos.length,
+                    newPhotos: 5,
+                    newVideos: 3
+                }
+            };
+        }
+
+        // Fallback manual
         return {
-            photos: ['full/bikini.webp', 'full/bikini3.webp'],
-            videos: [],
-            banners: ['bikini.webp', 'bikini3.webp'],
-            teasers: ['bikini.webp', 'bikini3.webp'],
-            newPhotoIndices: new Set([0]),
-            newVideoIndices: new Set(),
+            photos: window.ALL_PHOTOS_POOL || [],
+            videos: window.ALL_VIDEOS_POOL || [],
+            banners: window.BANNER_IMAGES || [],
+            teasers: window.TEASER_IMAGES || [],
+            newPhotoIndices: new Set([0, 1, 2]),
+            newVideoIndices: new Set([0]),
             lastUpdate: new Date(),
             stats: {
-                totalPhotosPool: 2,
-                totalVideosPool: 0,
-                dailyPhotos: 2,
-                dailyVideos: 0,
-                newPhotos: 1,
-                newVideos: 0
+                totalPhotosPool: (window.ALL_PHOTOS_POOL || []).length,
+                totalVideosPool: (window.ALL_VIDEOS_POOL || []).length,
+                dailyPhotos: (window.ALL_PHOTOS_POOL || []).length,
+                dailyVideos: (window.ALL_VIDEOS_POOL || []).length,
+                newPhotos: 3,
+                newVideos: 1
             }
         };
     }
 }
 
 // ============================
-// RENDER FUNCTIONS CORREGIDAS
+// RENDER FUNCTIONS
 // ============================
 
 function renderPhotosProgressive() {
@@ -482,7 +429,6 @@ function renderPhotosProgressive() {
             const views = Math.floor(Math.random() * 15000) + 5000;
             const likes = Math.floor(Math.random() * 2000) + 500;
             
-            // FIXED: Determinar ruta correcta y verificar existencia
             let imagePath = photo;
             if (!photo.includes('/')) {
                 imagePath = `full/${photo}`;
@@ -544,7 +490,6 @@ function renderVideosProgressive() {
         
         console.log(`🎬 Rendering ${videosToShow.length} videos`);
         
-        // FIXED: Si no hay videos, mostrar mensaje informativo
         if (videosToShow.length === 0) {
             videosHTML = `
                 <div style="
@@ -572,7 +517,6 @@ function renderVideosProgressive() {
             const views = Math.floor(Math.random() * 25000) + 8000;
             const likes = Math.floor(Math.random() * 3000) + 800;
             
-            // Usar imagen de poster en lugar de video
             const posterImage = state.dailyContent.banners[index % state.dailyContent.banners.length] || 'bikini.webp';
             
             videosHTML += `
@@ -628,19 +572,49 @@ function renderVideosProgressive() {
     }
 }
 
+function renderTeaserCarousel() {
+    try {
+        const carousel = document.getElementById('teaserCarousel');
+        if (!carousel || !state.dailyContent) return;
+        
+        let teaserHTML = '';
+        const teasersToShow = state.dailyContent.teasers.slice(0, 12);
+        
+        teasersToShow.forEach((teaser, index) => {
+            const imagePath = `full/${teaser}`;
+            teaserHTML += `
+                <div class="teaser-item" onclick="handleTeaserClick(${index})">
+                    <img src="${imagePath}" 
+                         alt="Teaser ${index + 1}"
+                         loading="lazy"
+                         onerror="handleImageError(this)">
+                    <div class="teaser-overlay">
+                        <div class="teaser-info">
+                            <h3>Paradise Collection #${index + 1}</h3>
+                            <p>${Math.floor(Math.random() * 50) + 10} exclusive photos</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        carousel.innerHTML = teaserHTML;
+    } catch (error) {
+        ErrorHandler.logError(error, 'renderTeaserCarousel');
+    }
+}
+
 // ============================
-// ERROR HANDLERS MEJORADOS
+// ERROR HANDLERS
 // ============================
 
 function handleImageError(img) {
     try {
         console.warn('Image error:', img.src);
         
-        // FIXED: Better fallback strategy
         if (!img.src.includes('bikini.webp')) {
             img.src = 'full/bikini.webp';
         } else {
-            // Create placeholder visual if all fails
             img.style.cssText = `
                 background: linear-gradient(45deg, #0077be, #00d4ff);
                 display: block;
@@ -657,32 +631,8 @@ function handleImageError(img) {
     }
 }
 
-function handleVideoError(video) {
-    try {
-        console.warn('Video error:', video.src);
-        ErrorHandler.logError(new Error(`Video failed: ${video.src}`), 'video_error');
-        
-        // Reemplazar con imagen estática
-        const img = document.createElement('img');
-        img.src = 'full/bikini.webp';
-        img.className = video.className;
-        img.style.cssText = `
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        `;
-        img.alt = 'Video preview unavailable';
-        
-        if (video.parentNode) {
-            video.parentNode.replaceChild(img, video);
-        }
-    } catch (error) {
-        ErrorHandler.logError(error, 'handleVideoError');
-    }
-}
-
 // ============================
-// MODAL FUNCTIONS - FIXED
+// MODAL FUNCTIONS
 // ============================
 
 function showVIPModal() {
@@ -769,7 +719,7 @@ function selectPack(packType) {
 }
 
 // ============================
-// ISABELLA CHAT - FIXED
+// ISABELLA CHAT
 // ============================
 
 function toggleIsabella() {
@@ -843,7 +793,6 @@ function showIsabellaMessage(type) {
         messageDiv.textContent = messageText;
         messages.appendChild(messageDiv);
         
-        // Auto-scroll to bottom
         messages.scrollTop = messages.scrollHeight;
     } catch (error) {
         ErrorHandler.logError(error, 'showIsabellaMessage');
@@ -851,7 +800,7 @@ function showIsabellaMessage(type) {
 }
 
 // ============================
-// PAYPAL INTEGRATION - FIXED
+// PAYPAL INTEGRATION
 // ============================
 
 function initializePayPalButtons(type, price = null) {
@@ -885,7 +834,6 @@ function initializePayPalButtons(type, price = null) {
         const container = document.getElementById(containerId);
         if (!container) return;
         
-        // Clear existing buttons
         container.innerHTML = '';
         
         paypal.Buttons({
@@ -944,7 +892,6 @@ function handlePaymentSuccess(type, amount) {
         closeModal();
         trackEvent('payment_success', { type: type, amount: amount });
         
-        // Trigger confetti
         if (window.confetti) {
             confetti({
                 particleCount: 100,
@@ -965,7 +912,7 @@ function handlePaymentError(error) {
 }
 
 // ============================
-// CLICK HANDLERS - FIXED
+// CLICK HANDLERS
 // ============================
 
 function handlePhotoClick(id, filename, index) {
@@ -1000,9 +947,13 @@ function handleVideoClick(id, filename, index) {
     }
 }
 
+function handleTeaserClick(index) {
+    console.log('Teaser clicked:', index);
+    document.getElementById('photosSection').scrollIntoView({ behavior: 'smooth' });
+}
+
 function viewFullContent(id, filename, type) {
     console.log(`Viewing ${type}:`, id, filename);
-    // Aquí iría la lógica para mostrar el contenido completo
 }
 
 function unlockWithCredits(id) {
@@ -1055,47 +1006,6 @@ function showNotification(message) {
     setTimeout(() => {
         notification.remove();
     }, 3000);
-}
-
-// ============================
-// TEASER CAROUSEL - FIXED
-// ============================
-
-function renderTeaserCarousel() {
-    try {
-        const carousel = document.getElementById('teaserCarousel');
-        if (!carousel || !state.dailyContent) return;
-        
-        let teaserHTML = '';
-        const teasersToShow = state.dailyContent.teasers.slice(0, 12);
-        
-        teasersToShow.forEach((teaser, index) => {
-            const imagePath = `full/${teaser}`;
-            teaserHTML += `
-                <div class="teaser-item" onclick="handleTeaserClick(${index})">
-                    <img src="${imagePath}" 
-                         alt="Teaser ${index + 1}"
-                         loading="lazy"
-                         onerror="handleImageError(this)">
-                    <div class="teaser-overlay">
-                        <div class="teaser-info">
-                            <h3>Paradise Collection #${index + 1}</h3>
-                            <p>${Math.floor(Math.random() * 50) + 10} exclusive photos</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-        
-        carousel.innerHTML = teaserHTML;
-    } catch (error) {
-        ErrorHandler.logError(error, 'renderTeaserCarousel');
-    }
-}
-
-function handleTeaserClick(index) {
-    console.log('Teaser clicked:', index);
-    document.getElementById('photosSection').scrollIntoView({ behavior: 'smooth' });
 }
 
 function scrollCarousel(direction) {
@@ -1244,14 +1154,13 @@ function showFallbackContent() {
 }
 
 // ============================
-// GLOBAL ERROR HANDLING - ENHANCED WITH TWITTER BOT FIX
+// GLOBAL ERROR HANDLING
 // ============================
 
 window.addEventListener('error', (e) => {
     const message = e.message || e.error?.message || '';
     const filename = e.filename || '';
     
-    // Lista ampliada de errores a ignorar (incluye Twitter bot 429)
     const ignoredPatterns = [
         'Script error',
         'ResizeObserver',
@@ -1259,7 +1168,7 @@ window.addEventListener('error', (e) => {
         'extension://',
         'chrome-extension://',
         'moz-extension://',
-        '429', // Twitter bot rate limit
+        '429',
         'Failed to fetch',
         'NetworkError',
         'AbortError',
@@ -1283,20 +1192,18 @@ window.addEventListener('error', (e) => {
         ErrorHandler.logError(e.error || new Error(message), 'Global Error');
     }
     
-    // Prevent default error handling
     e.preventDefault();
 });
 
 window.addEventListener('unhandledrejection', (e) => {
     const reason = e.reason?.message || e.reason?.toString() || '';
     
-    // Lista de rechazos de promesas a ignorar
     const ignoredRejections = [
         'Load failed',
         'NetworkError',
         'AbortError',
         'The user aborted',
-        '429', // Twitter bot rate limit
+        '429',
         'Failed to fetch',
         'TypeError: Failed to fetch',
         'net::ERR_',
@@ -1318,11 +1225,10 @@ window.addEventListener('unhandledrejection', (e) => {
 });
 
 // ============================
-// GLOBAL EXPORTS - FIXED
+// GLOBAL EXPORTS
 // ============================
 
 window.handleImageError = handleImageError;
-window.handleVideoError = handleVideoError;
 window.changeLanguage = changeLanguage;
 window.handlePhotoClick = handlePhotoClick;
 window.handleVideoClick = handleVideoClick;
@@ -1339,41 +1245,45 @@ window.scrollCarousel = scrollCarousel;
 window.trackEvent = trackEvent;
 
 // ============================
-// INITIALIZATION SEQUENCE - COMPLETE FIX
+// INITIALIZATION SEQUENCE
 // ============================
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('🎨 Initializing Paradise Gallery v14.4.1 COMPLETE FIXED...');
+async function initializeApplication() {
+    console.log('🎨 Initializing Paradise Gallery v15.0.0 MODULAR INTEGRATION...');
     
     try {
-        // Initialize content first
-        initializeContentArrays();
+        // Paso 1: Esperar al sistema de contenido modular
+        const contentSystemManager = new ContentSystemManager();
+        console.log('⏳ Esperando sistema de contenido modular...');
         
-        // Load saved state
+        await contentSystemManager.waitForContentSystem();
+        console.log('✅ Sistema de contenido modular listo');
+        
+        // Paso 2: Cargar estado guardado
         loadSavedState();
         
-        // Set language selector
+        // Paso 3: Configurar selector de idioma
         const langSelect = document.getElementById('languageSelect');
         if (langSelect) {
             langSelect.value = state.currentLanguage;
         }
         
-        // Get daily rotation
-        state.dailyContent = getDailyRotation();
+        // Paso 4: Obtener contenido diario usando el sistema modular
+        state.dailyContent = contentSystemManager.getContent();
         if (state.dailyContent) {
             console.log(`📅 Daily rotation initialized: ${state.dailyContent.photos.length} photos, ${state.dailyContent.videos.length} videos`);
         }
         
-        // Render all content
+        // Paso 5: Renderizar todo el contenido
         renderPhotosProgressive();
         renderVideosProgressive();
         renderTeaserCarousel();
         
-        // Initialize systems
+        // Paso 6: Inicializar sistemas
         startBannerSlideshow();
         updateViewCounters();
         
-        // Initialize Isabella with welcome message
+        // Paso 7: Configurar Isabella
         setTimeout(() => {
             const notification = document.querySelector('.isabella-notification');
             if (notification) {
@@ -1381,14 +1291,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 3000);
         
-        // Close modals on escape key
+        // Paso 8: Event listeners
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeModal();
             }
         });
         
-        // Close modals on background click
         document.querySelectorAll('.modal').forEach(modal => {
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
@@ -1397,7 +1306,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         
-        // Hide loading screen
+        // Paso 9: Ocultar pantalla de carga
         setTimeout(() => {
             const loadingScreen = document.getElementById('loadingScreen');
             if (loadingScreen) {
@@ -1406,24 +1315,91 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 1500);
         
-        // Track page view
+        // Paso 10: Analytics
         trackEvent('page_view', { 
             page: 'main_gallery', 
             language: state.currentLanguage,
             daily_photos: state.dailyContent.photos.length,
             daily_videos: state.dailyContent.videos.length,
-            version: '14.4.1',
-            ads_enabled: true
+            version: '15.0.0',
+            modular_system: true,
+            content_system_ready: contentSystemManager.contentReady
         });
         
-        console.log('✅ Paradise Gallery loaded successfully!');
-        console.log(`🌊 Version: 14.4.1 COMPLETE FIXED - ${state.dailyContent.stats.dailyPhotos} photos + ${state.dailyContent.stats.dailyVideos} videos daily`);
+        console.log('✅ Paradise Gallery loaded successfully with modular system!');
+        console.log(`🌊 Version: 15.0.0 MODULAR - ${state.dailyContent.stats.dailyPhotos} photos + ${state.dailyContent.stats.dailyVideos} videos daily`);
+        
+        // Marcar como inicializado
+        state.contentInitialized = true;
         
     } catch (error) {
-        ErrorHandler.logError(error, 'DOMContentLoaded');
+        ErrorHandler.logError(error, 'Application Initialization');
         console.error('❌ Critical initialization error:', error);
         showFallbackContent();
     }
-});
+}
 
-console.log('✅ Script loaded and ready - v14.4.1 COMPLETE WITH ALL FIXES!');
+// ============================
+// DOM READY HANDLER
+// ============================
+
+document.addEventListener('DOMContentLoaded', initializeApplication);
+
+// ============================
+// COMPATIBILITY AND DEBUGGING
+// ============================
+
+// Asegurar compatibilidad con el sistema anterior
+window.state = state;
+window.CONFIG = CONFIG;
+window.TRANSLATIONS = TRANSLATIONS;
+
+// Funciones de debugging para desarrollo
+if (ENVIRONMENT.isDevelopment) {
+    window.debugModularSystem = function() {
+        console.log('🔍 DEBUG: Estado del sistema modular');
+        console.table({
+            'Content System Ready': !!(window.ContentAPI && window.UnifiedContentAPI),
+            'Arrays Available': {
+                'ALL_PHOTOS_POOL': !!window.ALL_PHOTOS_POOL,
+                'ALL_VIDEOS_POOL': !!window.ALL_VIDEOS_POOL,
+                'BANNER_IMAGES': !!window.BANNER_IMAGES,
+                'TEASER_IMAGES': !!window.TEASER_IMAGES
+            },
+            'State': state,
+            'Daily Content': !!state.dailyContent
+        });
+        
+        if (window.getContentStats) {
+            console.log('📊 Content Stats:', window.getContentStats());
+        }
+    };
+    
+    window.testModularContent = function() {
+        console.log('🧪 TEST: Probando contenido modular');
+        if (window.getRandomContentForMainScript) {
+            console.log('Random Content:', window.getRandomContentForMainScript());
+        }
+        if (window.generateDailyRotationForMainScript) {
+            console.log('Daily Rotation:', window.generateDailyRotationForMainScript());
+        }
+    };
+    
+    window.forceReloadContent = function() {
+        console.log('🔄 Forzando recarga de contenido...');
+        const contentSystemManager = new ContentSystemManager();
+        state.dailyContent = contentSystemManager.getContent();
+        renderPhotosProgressive();
+        renderVideosProgressive();
+        renderTeaserCarousel();
+        updateViewCounters();
+        console.log('✅ Contenido recargado');
+    };
+    
+    console.log('🛠️ Funciones de debug disponibles:');
+    console.log('  - debugModularSystem()');
+    console.log('  - testModularContent()');
+    console.log('  - forceReloadContent()');
+}
+
+console.log('✅ Script loaded and ready - v15.0.0 MODULAR INTEGRATION COMPLETE!');

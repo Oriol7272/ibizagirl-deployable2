@@ -86,7 +86,6 @@
     
     <!-- Preload de recursos críticos -->
     <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="main-script.js" as="script">
     <link rel="preload" href="/full/bikini.webp" as="image">
     <link rel="preload" href="/full/bikbanner.webp" as="image">
     
@@ -162,23 +161,22 @@
         window.AD_CONFIG_OVERRIDE = {
             juicyads: {
                 zones: {
-                    header: 1098658,    // 300x50 Mobile Ads (real)
-                    sidebar: 1098518,   // 300x250 Image (real)
-                    footer: 1098656     // 160x600 Skyscraper (real)
+                    header: 1098658,
+                    sidebar: 1098518,
+                    footer: 1098656
                 }
             },
             exoclick: {
                 zones: {
-                    // Solo tenemos 1 zona en ExoClick, usar en todas las posiciones
-                    header: 5696328,    // 300x250 Banner (única zona disponible)
-                    sidebar: 5696328,   // Misma zona
-                    footer: 5696328     // Misma zona
+                    header: 5696328,
+                    sidebar: 5696328,
+                    footer: 5696328
                 }
             },
             eroadvertising: {
                 zones: {
-                    ibizagirl: 8177575,  // Zone para ibizagirl
-                    beach: 8179717       // Zone para beach
+                    ibizagirl: 8177575,
+                    beach: 8179717
                 }
             },
             popads: {
@@ -188,11 +186,9 @@
         
         // FIXED: Sistema anti-bloqueo mejorado
         (function() {
-            // Detectar y prevenir bloqueo de anuncios
             function setupAntiAdBlock() {
                 const style = document.createElement('style');
                 style.textContent = `
-                    /* FIXED: Forzar visibilidad de anuncios con !important */
                     .ad-container,
                     [id*="ad-"],
                     [id*="juicyads"],
@@ -216,93 +212,12 @@
                         -webkit-transform: translateZ(0) !important;
                         will-change: auto !important;
                     }
-                    
-                    /* Contenedores específicos por posición */
-                    .ad-header,
-                    #ad-header-container,
-                    [id*="ad-juicyads-header"],
-                    [id*="ad-exoclick-header"],
-                    [id*="ad-eroadvertising-header"] {
-                        width: 100% !important;
-                        max-width: 728px !important;
-                        min-height: 90px !important;
-                        margin: 20px auto !important;
-                        display: block !important;
-                        visibility: visible !important;
-                        opacity: 1 !important;
-                        position: relative !important;
-                        z-index: 100 !important;
-                    }
-                    
-                    .ad-sidebar,
-                    #ad-sidebar-container,
-                    [id*="ad-juicyads-sidebar"],
-                    [id*="ad-exoclick-sidebar"] {
-                        width: 300px !important;
-                        min-height: 250px !important;
-                        position: fixed !important;
-                        right: 10px !important;
-                        top: 50% !important;
-                        transform: translateY(-50%) !important;
-                        z-index: 2000 !important;
-                        display: block !important;
-                        visibility: visible !important;
-                        opacity: 1 !important;
-                    }
-                    
-                    .ad-footer,
-                    #ad-footer-container,
-                    [id*="ad-juicyads-footer"],
-                    [id*="ad-exoclick-footer"],
-                    [id*="ad-eroadvertising-footer"] {
-                        width: 100% !important;
-                        max-width: 728px !important;
-                        min-height: 90px !important;
-                        margin: 20px auto !important;
-                        display: block !important;
-                        visibility: visible !important;
-                        opacity: 1 !important;
-                        position: relative !important;
-                        z-index: 100 !important;
-                    }
-                    
-                    /* Iframes dentro de anuncios */
-                    .ad-container iframe,
-                    [id*="ad-"] iframe,
-                    .jaads iframe,
-                    .adsbyexoclick iframe {
-                        display: block !important;
-                        visibility: visible !important;
-                        opacity: 1 !important;
-                        position: relative !important;
-                        z-index: 1001 !important;
-                        border: none !important;
-                        width: 100% !important;
-                        height: 100% !important;
-                    }
-                    
-                    /* Mobile responsive */
-                    @media (max-width: 768px) {
-                        .ad-sidebar,
-                        #ad-sidebar-container {
-                            position: relative !important;
-                            right: auto !important;
-                            top: auto !important;
-                            transform: none !important;
-                            width: 100% !important;
-                            max-width: 300px !important;
-                            margin: 20px auto !important;
-                            z-index: 100 !important;
-                        }
-                    }
                 `;
                 document.head.appendChild(style);
             }
             
-            // Ejecutar inmediatamente
             setupAntiAdBlock();
             
-            // Detectar AdBlock y mostrar mensaje amigable
             function detectAdBlock() {
                 const adTest = document.createElement('div');
                 adTest.innerHTML = '&nbsp;';
@@ -328,21 +243,11 @@
                             text-align: center;
                             max-width: 400px;
                             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-                            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                         `;
                         message.innerHTML = `
-                            <h4 style="margin: 0 0 0.5rem 0;">⚠️ AdBlock Detectado</h4>
-                            <p style="margin: 0 0 1rem 0; font-size: 0.9rem;">Para mantener este contenido gratuito, por favor considera desactivar tu bloqueador de anuncios.</p>
-                            <button onclick="this.parentElement.remove()" style="
-                                background: white;
-                                color: #ff6b35;
-                                border: none;
-                                padding: 0.5rem 1rem;
-                                border-radius: 5px;
-                                cursor: pointer;
-                                font-weight: 600;
-                                font-size: 0.9rem;
-                            ">Entendido</button>
+                            <h4>⚠️ AdBlock Detectado</h4>
+                            <p>Para mantener este contenido gratuito, por favor considera desactivar tu bloqueador de anuncios.</p>
+                            <button onclick="this.parentElement.remove()">Entendido</button>
                         `;
                         document.body.appendChild(message);
                     }
@@ -350,7 +255,6 @@
                 }, 100);
             }
             
-            // Ejecutar cuando DOM esté listo
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', detectAdBlock);
             } else {
@@ -359,15 +263,9 @@
             
         })();
         
-        // Log de inicialización
         console.log('🌊 IbizaGirl.pics - Inicializando sistema de anuncios con IDs REALES...');
-        console.log('🔧 Zone IDs actualizados según dashboards:');
-        console.log('  - JuicyAds: 1098658, 1098518, 1098656');
-        console.log('  - ExoClick: 5696328 (única zona)');
-        console.log('  - EroAdvertising: 8177575, 8179717');
-        console.log('  - PopAds: 5226178');
+        console.log('📧 Zone IDs actualizados según dashboards');
         
-        // Verificar estado después de cargar
         window.addEventListener('load', function() {
             setTimeout(function() {
                 if (window.testAds) {
@@ -398,6 +296,9 @@
                 <div class="loading-progress"></div>
             </div>
             <p data-translate="loading">Cargando el paraíso...</p>
+            <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">
+                Sistema Modular v4.1.0
+            </div>
         </div>
     </div>
 
@@ -641,6 +542,9 @@
             <div class="footer-section">
                 <h3>IbizaGirl.pics</h3>
                 <p data-translate="footer_desc">Tu destino diario para contenido exclusivo del paraíso mediterráneo.</p>
+                <div style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
+                    🔧 Sistema Modular v4.1.0 | 📊 Content API Unificada
+                </div>
             </div>
             
             <div class="footer-section">
@@ -668,13 +572,67 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="content-data.js" defer></script>
+    <!-- ============================
+         MODULAR CONTENT SCRIPTS - LOAD ORDER CRITICAL
+         Cargar en orden específico para dependencias
+         ============================ -->
+    
+    <!-- 1. Configuración y utilidades base -->
+    <script src="content-data1.js" defer></script>
+    
+    <!-- 2. Imágenes públicas y gestores -->
+    <script src="content-data2.js" defer></script>
+    
+    <!-- 3. Imágenes premium parte 1 -->
+    <script src="content-data3.js" defer></script>
+    
+    <!-- 4. Imágenes premium parte 2 -->
+    <script src="content-data4.js" defer></script>
+    
+    <!-- 5. Videos premium -->
+    <script src="content-data5.js" defer></script>
+    
+    <!-- 6. API unificada (depende de todos los anteriores) -->
+    <script src="content-data6.js" defer></script>
+    
+    <!-- 7. Integrador de contenido (conecta todo con main-script) -->
+    <script src="content-data-integration.js" defer></script>
+    
+    <!-- 8. Script principal (actualizado para sistema modular) -->
+    <script src="main-script-updated.js" defer></script>
+    
+    <!-- ============================
+         ADDITIONAL SCRIPTS
+         ============================ -->
+    
+    <!-- Gestores de anuncios -->
     <script src="ad-containers-manager.js" defer></script>
     <script src="ad-verification.js" defer></script>
-    <script src="main-script.js" defer></script>
+    
+    <!-- Optimizaciones -->
     <script src="seo-enhancements.js" defer></script>
     <script src="chrome-ads-fix.js" defer></script>
     <script src="exoclick-urls-fix.js" defer></script>
+    
+    <!-- Debug en desarrollo -->
+    <script>
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            console.log('🛠️ MODO DESARROLLO ACTIVADO');
+            console.log('📦 Sistema Modular v4.1.0');
+            console.log('🔧 Scripts cargados en orden de dependencia');
+            console.log('⚡ Funciones debug disponibles después de carga completa');
+            
+            // Mostrar progreso de carga
+            let scriptsLoaded = 0;
+            const totalScripts = 8;
+            const loadProgress = setInterval(() => {
+                if (window.UnifiedContentAPI && window.ContentAPI) {
+                    clearInterval(loadProgress);
+                    console.log('✅ SISTEMA MODULAR COMPLETAMENTE CARGADO');
+                    console.log('🎯 Disponible: debugModularSystem(), testModularContent(), forceReloadContent()');
+                }
+            }, 500);
+        }
+    </script>
 </body>
 </html>
