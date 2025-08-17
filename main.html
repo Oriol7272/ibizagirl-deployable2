@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IbizaGirl.pics - Galería Premium</title>
     
+    <!-- CRITICAL FIX: Content Security Policy más permisiva para anuncios -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;
+        script-src * 'unsafe-inline' 'unsafe-eval';
+        connect-src *;
+        img-src * data: blob:;
+        frame-src *;
+        style-src * 'unsafe-inline';
+    ">
+    
+    <!-- CRITICAL FIX: Permitir todos los referrers -->
+    <meta name="referrer" content="unsafe-url">
+    
+    <!-- CRITICAL FIX: Desactivar X-Frame-Options para permitir iframes -->
+    <meta http-equiv="X-Frame-Options" content="ALLOWALL">
+    
     <!-- Favicon y App Icons -->
     <link rel="icon" href="/full/bikini.webp" type="image/webp">
     <link rel="shortcut icon" href="/full/bikini.webp" type="image/webp">
@@ -30,7 +46,6 @@
     <meta name="googlebot" content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1">
     <meta name="google" content="notranslate">
     <meta name="format-detection" content="telephone=no">
-    <meta name="referrer" content="origin-when-cross-origin">
     
     <!-- Verificación de redes de anuncios -->
     <meta name="juicyads-site-verification" content="57781c218b1d1435f3512464c59cf39b">
@@ -112,10 +127,6 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Security Headers -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
@@ -130,6 +141,147 @@
         "query-input": "required name=search_term_string"
       }
     }
+    </script>
+    
+    <!-- CRITICAL FIX: AdBlock Detector y Fallback para Scripts Bloqueados -->
+    <script>
+        // Detector de AdBlock
+        function detectAdBlock() {
+            const adTest = document.createElement('div');
+            adTest.innerHTML = '&nbsp;';
+            adTest.className = 'adsbox';
+            adTest.style.cssText = 'position: absolute; top: -100px; left: -100px; width: 1px; height: 1px;';
+            document.body.appendChild(adTest);
+            
+            window.setTimeout(() => {
+                if (adTest.offsetHeight === 0) {
+                    // AdBlock detectado
+                    console.warn('⚠️ AdBlock detectado');
+                    const message = document.createElement('div');
+                    message.id = 'adblock-message';
+                    message.style.cssText = `
+                        position: fixed;
+                        top: 20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background: linear-gradient(135deg, #ff6b35, #ff69b4);
+                        color: white;
+                        padding: 1rem 2rem;
+                        border-radius: 15px;
+                        z-index: 10000;
+                        text-align: center;
+                        max-width: 400px;
+                        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                    `;
+                    message.innerHTML = `
+                        <h4 style="margin: 0 0 0.5rem 0;">⚠️ AdBlock Detectado</h4>
+                        <p style="margin: 0 0 1rem 0; font-size: 0.9rem;">Por favor, desactiva tu bloqueador de anuncios para apoyar nuestro contenido gratuito.</p>
+                        <button onclick="this.parentElement.remove()" style="
+                            background: white;
+                            color: #ff6b35;
+                            border: none;
+                            padding: 0.5rem 1rem;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-weight: 600;
+                        ">Entendido</button>
+                    `;
+                    document.body.appendChild(message);
+                }
+                adTest.remove();
+            }, 100);
+        }
+        
+        // Fallback para scripts bloqueados
+        function loadAdsFallback() {
+            console.log('🔄 Iniciando fallback para anuncios...');
+            
+            // Fallback para JuicyAds
+            if (!window.adsbyjuicy) {
+                const zones = {
+                    header: 903748,
+                    sidebar: 903749,
+                    footer: 903750
+                };
+                
+                Object.entries(zones).forEach(([position, zoneId]) => {
+                    const container = document.createElement('div');
+                    container.id = `ad-juicyads-${position}`;
+                    container.className = `ad-container ad-juicyads ad-${position}`;
+                    container.innerHTML = `
+                        <iframe 
+                            src="https://www.juicyads.com/iframe_mobile.php?adzone=${zoneId}"
+                            width="100%" 
+                            height="${position === 'sidebar' ? '250' : '90'}"
+                            scrolling="no"
+                            frameborder="0"
+                            marginheight="0"
+                            marginwidth="0"
+                            allowtransparency="true"
+                            style="border:0; margin:0; padding:0;">
+                        </iframe>
+                    `;
+                    
+                    // Insertar en el DOM
+                    if (position === 'header') {
+                        const header = document.querySelector('.main-header');
+                        if (header) header.parentNode.insertBefore(container, header.nextSibling);
+                    } else if (position === 'footer') {
+                        const footer = document.querySelector('.main-footer');
+                        if (footer) footer.parentNode.insertBefore(container, footer);
+                    } else {
+                        document.body.appendChild(container);
+                    }
+                });
+            }
+            
+            // Fallback para ExoClick
+            const exoZones = {
+                header: 5696328,
+                sidebar: 5696329,
+                footer: 5696330
+            };
+            
+            Object.entries(exoZones).forEach(([position, zoneId]) => {
+                const container = document.createElement('div');
+                container.id = `ad-exoclick-${position}`;
+                container.className = `ad-container ad-exoclick ad-${position}`;
+                container.innerHTML = `
+                    <iframe 
+                        src="https://syndication.exoclick.com/ads-iframe.php?idzone=${zoneId}"
+                        width="100%" 
+                        height="${position === 'sidebar' ? '250' : '90'}"
+                        scrolling="no"
+                        frameborder="0"
+                        style="border:0;">
+                    </iframe>
+                `;
+                
+                // Insertar en el DOM
+                if (position === 'header') {
+                    const header = document.querySelector('.main-header');
+                    if (header) header.parentNode.insertBefore(container, header.nextSibling);
+                } else if (position === 'footer') {
+                    const footer = document.querySelector('.main-footer');
+                    if (footer) footer.parentNode.insertBefore(container, footer);
+                } else {
+                    document.body.appendChild(container);
+                }
+            });
+        }
+        
+        // Ejecutar después de cargar
+        window.addEventListener('load', () => {
+            detectAdBlock();
+            
+            // Verificar si los scripts de anuncios se cargaron
+            setTimeout(() => {
+                if (!window.adsbyjuicy && !window.ExoLoader) {
+                    console.warn('⚠️ Scripts de anuncios no cargados, usando fallback...');
+                    loadAdsFallback();
+                }
+            }, 5000);
+        });
     </script>
 </head>
 <body>
@@ -430,7 +582,7 @@
     <script src="main-script.js" defer></script>
     <script src="seo-enhancements.js" defer></script>
     
-    <!-- Script de inicialización de anuncios -->
+    <!-- Script de inicialización de anuncios MEJORADO -->
     <script>
         // Configuración global de anuncios
         window.AD_CONFIG_OVERRIDE = {
