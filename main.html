@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IbizaGirl.pics - Galería Premium | Paradise Gallery 🏖️</title>
     
-    <!-- CRITICAL FIX: Content Security Policy optimizada para anuncios -->
+    <!-- FIXED: Content Security Policy optimizada para anuncios -->
     <meta http-equiv="Content-Security-Policy" content="
         default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;
-        script-src * 'unsafe-inline' 'unsafe-eval' 'unsafe-hashes';
+        script-src * 'unsafe-inline' 'unsafe-eval' 'unsafe-hashes' blob:;
+        worker-src * blob:;
         connect-src *;
         img-src * data: blob:;
         frame-src *;
@@ -20,11 +21,8 @@
         form-action 'self';
     ">
     
-    <!-- CRITICAL FIX: Permitir todos los referrers para anuncios -->
-    <meta name="referrer" content="unsafe-url">
-    
-    <!-- CRITICAL FIX: Desactivar X-Frame-Options para permitir iframes de anuncios -->
-    <meta http-equiv="X-Frame-Options" content="ALLOWALL">
+    <!-- FIXED: Permitir todos los referrers para anuncios -->
+    <meta name="referrer" content="no-referrer-when-downgrade">
     
     <!-- Favicon y App Icons -->
     <link rel="icon" href="/full/bikini.webp" type="image/webp">
@@ -155,22 +153,22 @@
     }
     </script>
     
-    <!-- CRITICAL FIX: Sistema anti-bloqueo y configuración avanzada de anuncios -->
+    <!-- FIXED: Sistema anti-bloqueo y configuración avanzada de anuncios -->
     <script>
-        // FIXED: Configuración global de anuncios con zone IDs correctos
+        // FIXED: Configuración global de anuncios con zone IDs correctos según dashboards
         window.AD_CONFIG_OVERRIDE = {
             juicyads: {
                 zones: {
-                    header: 1098518,    // FIXED: Zone ID real de tu dashboard
-                    sidebar: 1098519,   // FIXED: Zone ID real de tu dashboard
-                    footer: 1098520     // FIXED: Zone ID real de tu dashboard
+                    header: 1098518,    // Zone ID real del dashboard JuicyAds
+                    sidebar: 1098519,   // Zone ID real del dashboard JuicyAds
+                    footer: 1098520     // Zone ID real del dashboard JuicyAds
                 }
             },
             exoclick: {
                 zones: {
-                    header: 5696328,    // CONFIRMED: De tu dashboard ExoClick
-                    sidebar: 5696329,   // AÑADIR: Crear en ExoClick
-                    footer: 5696330     // AÑADIR: Crear en ExoClick
+                    header: 5696328,    // Zone ID confirmado de ExoClick dashboard
+                    sidebar: 5696329,   // Zone ID a crear en ExoClick
+                    footer: 5696330     // Zone ID a crear en ExoClick
                 }
             },
             popads: {
@@ -178,19 +176,20 @@
             }
         };
         
-        // FIXED: Sistema anti-bloqueo más agresivo
+        // FIXED: Sistema anti-bloqueo mejorado
         (function() {
             // Detectar y prevenir bloqueo de anuncios
             function setupAntiAdBlock() {
                 const style = document.createElement('style');
                 style.textContent = `
-                    /* FIXED: Forzar visibilidad de anuncios */
+                    /* FIXED: Forzar visibilidad de anuncios con !important */
                     .ad-container,
                     [id*="ad-"],
                     [id*="juicyads"],
                     [id*="exoclick"],
                     .jaads,
-                    ins[data-aid] {
+                    ins[data-aid],
+                    .adsbyexoclick {
                         display: block !important;
                         visibility: visible !important;
                         opacity: 1 !important;
@@ -202,15 +201,8 @@
                         transform: none !important;
                         filter: none !important;
                         clip-path: none !important;
-                    }
-                    
-                    /* Chrome específico */
-                    @supports (-webkit-appearance: none) {
-                        .ad-container {
-                            -webkit-backface-visibility: visible !important;
-                            -webkit-transform: translate3d(0,0,0) !important;
-                            will-change: auto !important;
-                        }
+                        -webkit-transform: translateZ(0) !important;
+                        will-change: auto !important;
                     }
                     
                     /* Contenedores específicos por posición */
@@ -260,9 +252,11 @@
                         z-index: 100 !important;
                     }
                     
-                    /* Iframes dentro de contenedores de anuncios */
+                    /* Iframes dentro de anuncios */
                     .ad-container iframe,
-                    [id*="ad-"] iframe {
+                    [id*="ad-"] iframe,
+                    .jaads iframe,
+                    .adsbyexoclick iframe {
                         display: block !important;
                         visibility: visible !important;
                         opacity: 1 !important;
@@ -271,6 +265,21 @@
                         border: none !important;
                         width: 100% !important;
                         height: 100% !important;
+                    }
+                    
+                    /* Mobile responsive */
+                    @media (max-width: 768px) {
+                        .ad-sidebar,
+                        #ad-sidebar-container {
+                            position: relative !important;
+                            right: auto !important;
+                            top: auto !important;
+                            transform: none !important;
+                            width: 100% !important;
+                            max-width: 300px !important;
+                            margin: 20px auto !important;
+                            z-index: 100 !important;
+                        }
                     }
                 `;
                 document.head.appendChild(style);
@@ -337,7 +346,7 @@
         })();
         
         // Log de inicialización
-        console.log('🌊 IbizaGirl.pics - Inicializando sistema de anuncios mejorado...');
+        console.log('🌊 IbizaGirl.pics - Inicializando sistema de anuncios FIXED...');
         console.log('🔧 Zone IDs actualizados según dashboards:');
         console.log('  - JuicyAds: 1098518, 1098519, 1098520');
         console.log('  - ExoClick: 5696328, 5696329, 5696330');
