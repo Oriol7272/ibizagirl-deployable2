@@ -133,7 +133,6 @@ window.ALL_PHOTOS_POOL = [
     'full/Sinportada.webp',
     'full/Sintulo.webp',
     'full/Siulo.webp',
-    'full/SÃ¼tulo3.webp',
     'full/backbikini.webp',
     'full/bikback2.webp',
     'full/bikbanner.webp',
