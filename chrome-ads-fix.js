@@ -1,28 +1,35 @@
 // ============================
-// CHROME ADS VISIBILITY ENFORCER v2.0 - ULTIMATE FIX
-// Fuerza la visibilidad de anuncios en Chrome con zone IDs correctos
+// CHROME ADS VISIBILITY ENFORCER v2.1 - FIXED WITH REAL IDs
+// Fuerza la visibilidad de anuncios en Chrome con zone IDs correctos de dashboards
 // ============================
 
 (function() {
     'use strict';
     
-    console.log('🔧 Chrome Ads Visibility Enforcer v2.0 - ULTIMATE FIX iniciado...');
+    console.log('🔧 Chrome Ads Visibility Enforcer v2.1 - REAL IDs iniciado...');
     
-    // Configuración con zone IDs correctos
+    // Configuración con zone IDs REALES de los dashboards
     const CONFIG = {
         checkInterval: 2000,
         maxAttempts: 15,
         debugMode: false,
         zoneIds: {
             juicyads: {
-                header: 1098518,
-                sidebar: 1098519,
-                footer: 1098520
+                header: 1098658,    // 300x50 Mobile Ads (real)
+                sidebar: 1098518,   // 300x250 Image (real)
+                footer: 1098656,    // 160x600 Skyscraper (real)
+                alternate1: 1098519, // 125x125 Img + Title
+                alternate2: 1098657  // 125x125 Img + Title
             },
             exoclick: {
-                header: 5696328,
-                sidebar: 5696329,
-                footer: 5696330
+                // Solo tenemos 1 zona, usar en todas las posiciones
+                header: 5696328,    // 300x250 Banner (única zona)
+                sidebar: 5696328,   // Misma zona
+                footer: 5696328     // Misma zona
+            },
+            eroadvertising: {
+                ibizagirl: 8177575, // Zone para ibizagirl
+                beach: 8179717      // Zone para beach
             }
         }
     };
@@ -37,6 +44,8 @@
             '[id*="ad-"]',
             '[id*="juicyads"]',
             '[id*="exoclick"]',
+            '[id*="eroadvertising"]',
+            '[id*="ero_"]',
             '.jaads',
             '.adsbyexoclick',
             'ins[data-aid]',
@@ -203,7 +212,7 @@
                             computedStyle.visibility === 'hidden' || 
                             parseFloat(computedStyle.opacity) < 1) {
                             
-                            console.log('🎨 Cambio de estilo detectado en:', target.id || target.className, attemptCount);
+                            console.log('🎨 Cambio de estilo detectado en:', target.id || target.className);
                             adRelatedChange = true;
                         }
                     }
@@ -242,6 +251,8 @@
                className.includes('juicy') ||
                id.includes('exo') || 
                className.includes('exo') ||
+               id.includes('ero') ||
+               className.includes('ero') ||
                element.tagName === 'INS' ||
                element.hasAttribute('data-aid') ||
                element.hasAttribute('data-zoneid');
@@ -268,9 +279,9 @@
         });
     }
     
-    // Diagnóstico mejorado con zone IDs
+    // Diagnóstico mejorado con zone IDs reales
     function runDiagnostics() {
-        console.group('🔍 Diagnóstico de Anuncios Chrome v2.0');
+        console.group('🔍 Diagnóstico de Anuncios Chrome v2.1 - IDs REALES');
         
         const report = [];
         const allContainers = document.querySelectorAll('.ad-container, [id*="ad-"]');
@@ -284,16 +295,35 @@
             
             // Detectar zone ID
             let zoneId = 'unknown';
-            if (container.id.includes('1098518') || ins?.getAttribute('data-aid') === '1098518') zoneId = '1098518 (JuicyAds Header)';
-            else if (container.id.includes('1098519') || ins?.getAttribute('data-aid') === '1098519') zoneId = '1098519 (JuicyAds Sidebar)';
-            else if (container.id.includes('1098520') || ins?.getAttribute('data-aid') === '1098520') zoneId = '1098520 (JuicyAds Footer)';
-            else if (container.id.includes('5696328')) zoneId = '5696328 (ExoClick Header)';
-            else if (container.id.includes('5696329')) zoneId = '5696329 (ExoClick Sidebar)';
-            else if (container.id.includes('5696330')) zoneId = '5696330 (ExoClick Footer)';
+            let network = 'unknown';
+            
+            // JuicyAds zones
+            if (container.id.includes('1098658')) { zoneId = '1098658'; network = 'JuicyAds Mobile'; }
+            else if (container.id.includes('1098518')) { zoneId = '1098518'; network = 'JuicyAds 300x250'; }
+            else if (container.id.includes('1098656')) { zoneId = '1098656'; network = 'JuicyAds Skyscraper'; }
+            else if (container.id.includes('1098519')) { zoneId = '1098519'; network = 'JuicyAds 125x125'; }
+            else if (container.id.includes('1098657')) { zoneId = '1098657'; network = 'JuicyAds 125x125 #2'; }
+            // ExoClick zone (solo 1)
+            else if (container.id.includes('5696328')) { zoneId = '5696328'; network = 'ExoClick Banner'; }
+            // EroAdvertising zones
+            else if (container.id.includes('8177575')) { zoneId = '8177575'; network = 'EroAds ibizagirl'; }
+            else if (container.id.includes('8179717')) { zoneId = '8179717'; network = 'EroAds beach'; }
+            
+            // También verificar atributos
+            if (ins) {
+                const aid = ins.getAttribute('data-aid');
+                if (aid) {
+                    zoneId = aid;
+                    if (CONFIG.zoneIds.juicyads[Object.keys(CONFIG.zoneIds.juicyads).find(k => CONFIG.zoneIds.juicyads[k] == aid)]) {
+                        network = 'JuicyAds';
+                    }
+                }
+            }
             
             const diagnostics = {
                 index: index + 1,
                 id: container.id || 'sin-id',
+                network: network,
                 zoneId: zoneId,
                 visible: rect.width > 0 && rect.height > 0,
                 dimensions: `${Math.round(rect.width)}x${Math.round(rect.height)}`,
@@ -321,14 +351,16 @@
         console.table(report);
         
         // Resumen por zona
-        console.log('🎯 Zone IDs detectados:');
-        CONFIG.zoneIds.juicyads && console.log('  JuicyAds:', Object.values(CONFIG.zoneIds.juicyads));
-        CONFIG.zoneIds.exoclick && console.log('  ExoClick:', Object.values(CONFIG.zoneIds.exoclick));
+        console.log('🎯 Zone IDs REALES detectados:');
+        console.log('JuicyAds:', Object.values(CONFIG.zoneIds.juicyads));
+        console.log('ExoClick:', CONFIG.zoneIds.exoclick.header, '(única zona)');
+        console.log('EroAdvertising:', Object.values(CONFIG.zoneIds.eroadvertising));
         
         // Estado de redes
         console.log('📡 Estado de redes:');
         console.log(`  JuicyAds: ${document.querySelector('.jaads, [id^="ja_"]') ? '✅' : '❌'}`);
         console.log(`  ExoClick: ${document.querySelector('.adsbyexoclick, [data-zoneid]') ? '✅' : '❌'}`);
+        console.log(`  EroAdvertising: ${document.querySelector('[id*="ero_"]') ? '✅' : '❌'}`);
         console.log(`  PopAds: ${window.e494ffb82839a29122608e933394c091 ? '✅' : '❌'}`);
         
         console.groupEnd();
@@ -338,7 +370,7 @@
     
     // Crear contenedores de emergencia con zone IDs correctos
     function createEmergencyAdContainers() {
-        console.log('🚨 Creando contenedores de emergencia...');
+        console.log('🚨 Creando contenedores de emergencia con IDs REALES...');
         
         const emergencyConfigs = [
             { network: 'juicyads', position: 'header', zoneId: CONFIG.zoneIds.juicyads.header },
@@ -401,12 +433,13 @@
     
     // Verificar zone IDs
     function checkZoneIds() {
-        console.group('🔍 Verificación de Zone IDs');
+        console.group('🔍 Verificación de Zone IDs REALES');
         
         const containers = document.querySelectorAll('.ad-container, [id*="ad-"]');
         const foundZones = {
             juicyads: [],
-            exoclick: []
+            exoclick: [],
+            eroadvertising: []
         };
         
         containers.forEach(container => {
@@ -428,6 +461,14 @@
                 }
             }
             
+            // EroAdvertising zones
+            if (id.includes('ero_')) {
+                const match = id.match(/ero_(\d+)/);
+                if (match) {
+                    foundZones.eroadvertising.push(match[1]);
+                }
+            }
+            
             // From container ID
             const zoneMatch = id.match(/(\d{7})/);
             if (zoneMatch) {
@@ -436,6 +477,8 @@
                     foundZones.juicyads.push(zoneId);
                 } else if (Object.values(CONFIG.zoneIds.exoclick).includes(parseInt(zoneId))) {
                     foundZones.exoclick.push(zoneId);
+                } else if (Object.values(CONFIG.zoneIds.eroadvertising).includes(parseInt(zoneId))) {
+                    foundZones.eroadvertising.push(zoneId);
                 }
             }
         });
@@ -443,10 +486,12 @@
         console.log('📊 Zone IDs encontrados:');
         console.log('  JuicyAds:', [...new Set(foundZones.juicyads)]);
         console.log('  ExoClick:', [...new Set(foundZones.exoclick)]);
+        console.log('  EroAdvertising:', [...new Set(foundZones.eroadvertising)]);
         
-        console.log('🎯 Zone IDs configurados:');
+        console.log('🎯 Zone IDs configurados (REALES):');
         console.log('  JuicyAds:', Object.values(CONFIG.zoneIds.juicyads));
         console.log('  ExoClick:', Object.values(CONFIG.zoneIds.exoclick));
+        console.log('  EroAdvertising:', Object.values(CONFIG.zoneIds.eroadvertising));
         
         console.groupEnd();
         
@@ -455,8 +500,8 @@
     
     // Función principal de inicialización
     function initialize() {
-        console.log('🚀 Inicializando Chrome Ads Visibility Enforcer v2.0...');
-        console.log('🎯 Zone IDs configurados:', CONFIG.zoneIds);
+        console.log('🚀 Inicializando Chrome Ads Visibility Enforcer v2.1...');
+        console.log('🎯 Zone IDs REALES configurados:', CONFIG.zoneIds);
         
         // Primera ejecución inmediata
         forceAdVisibility();
@@ -468,7 +513,7 @@
         // Ejecutar periódicamente con zone IDs correctos
         const interval = setInterval(() => {
             attemptCount++;
-            console.log(`🔄 Intento ${attemptCount}/${CONFIG.maxAttempts} - Zone IDs correctos`);
+            console.log(`🔄 Intento ${attemptCount}/${CONFIG.maxAttempts} - Zone IDs REALES`);
             
             forceAdVisibility();
             enforceAdDimensions();
@@ -487,9 +532,10 @@
         // Verificación post-carga
         window.addEventListener('load', () => {
             setTimeout(() => {
-                console.log('🔄 Verificación post-carga con zone IDs correctos...');
+                console.log('🔄 Verificación post-carga con zone IDs REALES...');
                 forceAdVisibility();
                 enforceAdDimensions();
+                checkZoneIds();
             }, 3000);
         });
     }
@@ -498,14 +544,14 @@
     window.debugAds = function(enable = true) {
         CONFIG.debugMode = enable;
         if (enable) {
-            console.log('🐛 Modo debug activado - Bordes de debug visibles');
+            console.log('🛠 Modo debug activado - Bordes de debug visibles');
             document.querySelectorAll('.ad-container, [id*="ad-"]').forEach(el => {
                 el.style.border = '3px solid red';
                 el.style.background = 'rgba(255, 0, 0, 0.1)';
             });
             runDiagnostics();
         } else {
-            console.log('🐛 Modo debug desactivado');
+            console.log('🛠 Modo debug desactivado');
             document.querySelectorAll('.ad-container, [id*="ad-"]').forEach(el => {
                 el.style.border = '';
                 el.style.background = '';
@@ -541,10 +587,11 @@
         setTimeout(initialize, 500);
     }
     
-    console.log('✅ Chrome Ads Visibility Enforcer v2.0 cargado - ULTIMATE FIX');
-    console.log('🎯 Zone IDs correctos configurados:');
-    console.log('   JuicyAds: 1098518, 1098519, 1098520');
-    console.log('   ExoClick: 5696328, 5696329, 5696330');
+    console.log('✅ Chrome Ads Visibility Enforcer v2.1 cargado - IDs REALES');
+    console.log('🎯 Zone IDs REALES configurados:');
+    console.log('   JuicyAds: 1098658, 1098518, 1098656, 1098519, 1098657');
+    console.log('   ExoClick: 5696328 (única zona)');
+    console.log('   EroAdvertising: 8177575, 8179717');
     console.log('💡 Comandos disponibles:');
     console.log('  window.debugAds() - Activar/desactivar modo debug');
     console.log('  window.forceAds() - Forzar visibilidad manualmente');
