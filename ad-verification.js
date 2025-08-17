@@ -1,7 +1,7 @@
 // ============================
-// AD VERIFICATION SYSTEM v3.0.0 - CHROME FIX
+// AD VERIFICATION SYSTEM v3.1.0 - FIXED EXOCLICK & ENHANCED
 // Sistema completo de gestión de anuncios para IbizaGirl.pics
-// FIXED: Chrome visibility issues + Zone IDs corrected
+// FIXED: ExoClick loading, Chrome visibility, Enhanced error handling
 // ============================
 
 (function() {
@@ -29,8 +29,8 @@
                 enabled: true,
                 name: 'ExoClick',
                 scriptUrls: [
+                    'https://syndication.exoclick.com/ads.js',
                     'https://a.realsrv.com/ad-provider.js',
-                    'https://syndication.exoclick.com/tag.js',
                     'https://main.exoclick.com/tag_gen.js'
                 ],
                 zones: {
@@ -61,9 +61,10 @@
         loadedNetworks: new Set(),
         retryAttempts: {},
         verificationAttempts: 0,
+        exoClickLoaded: false,
         
         init() {
-            console.log('🎯 [Ad Networks] Sistema v3.0.0 - Chrome Fix');
+            console.log('🎯 [Ad Networks] Sistema v3.1.0 - ExoClick Fixed');
             console.log('🌍 Environment:', AD_CONFIG.environment);
             
             if (AD_CONFIG.environment === 'development') {
@@ -72,10 +73,63 @@
                 return;
             }
             
+            // Detectar bloqueadores de anuncios
+            this.detectAdBlocker();
+            
             // Inicializar redes con delay progresivo
             setTimeout(() => this.loadAdNetworks(), 1000);
             setTimeout(() => this.verifyAdNetworks(), 8000);
             setTimeout(() => this.finalVerification(), 15000);
+        },
+        
+        detectAdBlocker() {
+            // Crear un elemento de prueba
+            const testAd = document.createElement('div');
+            testAd.innerHTML = '&nbsp;';
+            testAd.className = 'adsbox pub_300x250 pub_728x90 text-ad textAd text_ad text_ads text-ads text-ad-links ad-text adSense adBlock';
+            testAd.style.cssText = 'width: 1px !important; height: 1px !important; position: absolute !important; left: -10000px !important; top: -1000px !important;';
+            
+            document.body.appendChild(testAd);
+            
+            setTimeout(() => {
+                if (testAd.offsetHeight === 0 || testAd.clientHeight === 0) {
+                    console.warn('⚠️ Posible bloqueador de anuncios detectado');
+                    this.showAdBlockerWarning();
+                }
+                testAd.remove();
+            }, 100);
+        },
+        
+        showAdBlockerWarning() {
+            const warning = document.createElement('div');
+            warning.id = 'adblocker-warning';
+            warning.style.cssText = `
+                position: fixed;
+                top: 70px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, #ff6b35, #ff69b4);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                z-index: 10000;
+                font-weight: 600;
+                box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+                max-width: 500px;
+                text-align: center;
+            `;
+            warning.innerHTML = `
+                ⚠️ Bloqueador de anuncios detectado<br>
+                <small>Por favor, desactívalo para apoyar nuestro contenido gratuito</small>
+            `;
+            
+            document.body.appendChild(warning);
+            
+            setTimeout(() => {
+                warning.style.transition = 'opacity 0.5s';
+                warning.style.opacity = '0';
+                setTimeout(() => warning.remove(), 500);
+            }, 5000);
         },
         
         loadAdNetworks() {
@@ -86,7 +140,7 @@
             }
             
             if (AD_CONFIG.networks.exoclick.enabled) {
-                setTimeout(() => this.loadExoClick(), 2000);
+                setTimeout(() => this.loadExoClickEnhanced(), 2000);
             }
             
             if (AD_CONFIG.networks.popads.enabled) {
@@ -95,7 +149,7 @@
         },
         
         // ============================
-        // JUICYADS IMPLEMENTATION - CHROME FIXED
+        // JUICYADS IMPLEMENTATION - ENHANCED
         // ============================
         loadJuicyAds() {
             console.log('🍊 Cargando JuicyAds...');
@@ -117,6 +171,7 @@
             script.src = AD_CONFIG.networks.juicyads.scriptUrl;
             script.async = true;
             script.setAttribute('data-cfasync', 'false');
+            script.setAttribute('crossorigin', 'anonymous');
             
             script.onload = () => {
                 console.log('✅ JuicyAds script cargado');
@@ -137,7 +192,6 @@
             
             const zones = AD_CONFIG.networks.juicyads.zones;
             
-            // Crear zonas para JuicyAds
             Object.entries(zones).forEach(([position, zoneId]) => {
                 this.createJuicyAdsZone(position, zoneId);
             });
@@ -146,7 +200,6 @@
         createJuicyAdsZone(position, zoneId) {
             console.log(`🍊 Creando zona JuicyAds: ${position} (${zoneId})`);
             
-            // Crear o obtener contenedor
             let container = document.getElementById(`ad-juicyads-${position}`);
             
             if (!container) {
@@ -157,20 +210,17 @@
                 this.appendAdContainer(container, position);
             }
             
-            // Limpiar contenedor
             container.innerHTML = '';
             
-            // Crear ins tag para JuicyAds
             const ins = document.createElement('ins');
             ins.id = `ja_${zoneId}`;
             ins.className = 'jaads';
             ins.setAttribute('data-aid', zoneId);
             ins.setAttribute('data-divid', `ja_${zoneId}`);
-            ins.style.cssText = 'display:block !important;';
+            ins.style.cssText = 'display:block !important; width:100% !important; height:auto !important;';
             
             container.appendChild(ins);
             
-            // Crear script de activación
             const script = document.createElement('script');
             script.type = 'text/javascript';
             script.innerHTML = `
@@ -185,46 +235,65 @@
         },
         
         // ============================
-        // EXOCLICK IMPLEMENTATION - CHROME FIXED
+        // EXOCLICK IMPLEMENTATION - COMPLETELY FIXED
         // ============================
-        loadExoClick() {
-            console.log('🔵 Cargando ExoClick...');
+        loadExoClickEnhanced() {
+            console.log('🔵 Cargando ExoClick Enhanced...');
             
-            let urlIndex = 0;
-            const tryLoadExoClick = () => {
-                if (urlIndex >= AD_CONFIG.networks.exoclick.scriptUrls.length) {
-                    console.warn('⚠️ No se pudo cargar ExoClick, usando método directo');
-                    this.initExoClickDirect();
-                    return;
-                }
-                
-                const url = AD_CONFIG.networks.exoclick.scriptUrls[urlIndex];
-                console.log(`🔵 Intentando ExoClick URL ${urlIndex + 1}: ${url}`);
-                
-                const script = document.createElement('script');
-                script.src = url;
-                script.async = true;
-                
-                script.onload = () => {
-                    console.log(`✅ ExoClick cargado desde URL ${urlIndex + 1}`);
-                    this.loadedNetworks.add('exoclick');
-                    setTimeout(() => this.initializeExoClick(), 1500);
+            // Crear el objeto ExoLoader manualmente si no existe
+            if (!window.ExoLoader) {
+                window.ExoLoader = {
+                    addZone: function(config) {
+                        console.log('🔵 ExoLoader.addZone simulado:', config);
+                        const zoneId = config.zone_id || config.idzone;
+                        if (zoneId) {
+                            const container = document.querySelector(`[data-zoneid="${zoneId}"]`);
+                            if (container && container.parentElement) {
+                                const script = document.createElement('script');
+                                script.src = `https://syndication.exoclick.com/ads.js?t=2&idzone=${zoneId}`;
+                                script.async = true;
+                                script.setAttribute('data-cfasync', 'false');
+                                container.parentElement.appendChild(script);
+                            }
+                        }
+                    },
+                    serve: function(config) {
+                        console.log('🔵 ExoLoader.serve simulado:', config);
+                        this.addZone(config);
+                    }
                 };
-                
-                script.onerror = () => {
-                    console.warn(`⚠️ ExoClick URL ${urlIndex + 1} falló`);
-                    urlIndex++;
-                    setTimeout(tryLoadExoClick, 1000);
-                };
-                
-                document.head.appendChild(script);
+            }
+            
+            // Intentar cargar el script principal
+            const mainScript = document.createElement('script');
+            mainScript.src = 'https://syndication.exoclick.com/ads.js';
+            mainScript.async = true;
+            mainScript.setAttribute('data-cfasync', 'false');
+            
+            mainScript.onload = () => {
+                console.log('✅ ExoClick script principal cargado');
+                this.exoClickLoaded = true;
+                this.loadedNetworks.add('exoclick');
+                setTimeout(() => this.initializeExoClickZones(), 1000);
             };
             
-            tryLoadExoClick();
+            mainScript.onerror = () => {
+                console.warn('⚠️ ExoClick script principal falló, usando método directo');
+                this.initializeExoClickDirect();
+            };
+            
+            document.body.appendChild(mainScript);
+            
+            // Timeout para cargar directamente si falla
+            setTimeout(() => {
+                if (!this.exoClickLoaded) {
+                    this.initializeExoClickDirect();
+                }
+            }, 3000);
         },
         
-        initializeExoClick() {
-            console.log('🔵 Inicializando zonas ExoClick...');
+        initializeExoClickZones() {
+            console.log('🔵 Inicializando zonas ExoClick con ExoLoader...');
             
             const zones = AD_CONFIG.networks.exoclick.zones;
             Object.entries(zones).forEach(([position, zoneId]) => {
@@ -245,33 +314,41 @@
                 this.appendAdContainer(container, position);
             }
             
-            // Limpiar contenedor
             container.innerHTML = '';
             
-            // Método 1: Si ExoLoader está disponible
-            if (window.ExoLoader) {
-                const ins = document.createElement('ins');
-                ins.className = 'adsbyexoclick';
-                ins.setAttribute('data-zoneid', zoneId);
-                ins.style.cssText = 'display:block !important;';
-                container.appendChild(ins);
-                
-                window.ExoLoader.addZone({"zone_id": zoneId});
-                console.log(`✅ ExoClick zona ${position} activada con ExoLoader`);
-            }
-            // Método 2: Script directo
-            else {
-                const script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.src = `https://syndication.exoclick.com/ads.js?t=2&idzone=${zoneId}`;
-                script.async = true;
-                container.appendChild(script);
-                console.log(`✅ ExoClick zona ${position} activada con script directo`);
+            // Crear elemento ins para ExoClick
+            const ins = document.createElement('ins');
+            ins.className = 'adsbyexoclick';
+            ins.setAttribute('data-zoneid', zoneId);
+            ins.style.cssText = 'display:block !important; width:100% !important; height:auto !important;';
+            container.appendChild(ins);
+            
+            // Si ExoLoader está disponible, usarlo
+            if (window.ExoLoader && typeof window.ExoLoader.addZone === 'function') {
+                try {
+                    window.ExoLoader.addZone({"zone_id": zoneId});
+                    console.log(`✅ ExoClick zona ${position} activada con ExoLoader`);
+                } catch (e) {
+                    console.warn(`⚠️ Error con ExoLoader para zona ${position}:`, e);
+                    this.loadExoClickZoneDirect(container, zoneId);
+                }
+            } else {
+                this.loadExoClickZoneDirect(container, zoneId);
             }
         },
         
-        initExoClickDirect() {
-            console.log('🔵 Usando implementación directa de ExoClick...');
+        loadExoClickZoneDirect(container, zoneId) {
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = `https://syndication.exoclick.com/ads.js?t=2&idzone=${zoneId}`;
+            script.async = true;
+            script.setAttribute('data-cfasync', 'false');
+            container.appendChild(script);
+            console.log(`✅ ExoClick zona cargada directamente: ${zoneId}`);
+        },
+        
+        initializeExoClickDirect() {
+            console.log('🔵 Inicialización directa de ExoClick...');
             
             const zones = AD_CONFIG.networks.exoclick.zones;
             Object.entries(zones).forEach(([position, zoneId]) => {
@@ -285,13 +362,39 @@
                     this.appendAdContainer(container, position);
                 }
                 
-                // Insertar script directo de ExoClick
+                container.innerHTML = '';
+                
+                // Método 1: Crear ins y script
+                const ins = document.createElement('ins');
+                ins.className = 'adsbyexoclick';
+                ins.setAttribute('data-zoneid', zoneId);
+                ins.style.cssText = 'display:block !important; width:100% !important; height:auto !important;';
+                container.appendChild(ins);
+                
+                // Método 2: Iframe como fallback
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://syndication.exoclick.com/ads-iframe.php?idzone=${zoneId}`;
+                iframe.style.cssText = 'width:100%; height:100%; border:none; min-height:250px;';
+                iframe.setAttribute('scrolling', 'no');
+                iframe.setAttribute('marginwidth', '0');
+                iframe.setAttribute('marginheight', '0');
+                
+                // Agregar script de zona
                 const script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.src = `https://syndication.exoclick.com/ads.js?t=2&idzone=${zoneId}`;
                 script.async = true;
+                script.setAttribute('data-cfasync', 'false');
+                script.src = `https://syndication.exoclick.com/ads.js?t=2&idzone=${zoneId}`;
+                
+                script.onerror = () => {
+                    console.warn(`⚠️ Script de zona ${zoneId} falló, usando iframe`);
+                    container.appendChild(iframe);
+                };
+                
                 container.appendChild(script);
             });
+            
+            this.loadedNetworks.add('exoclick');
+            console.log('✅ ExoClick inicializado directamente');
         },
         
         // ============================
@@ -302,7 +405,6 @@
             
             const config = AD_CONFIG.networks.popads.config;
             
-            // Verificar si ya existe
             if (window.e494ffb82839a29122608e933394c091) {
                 console.log('🚀 PopAds ya existe');
                 return;
@@ -379,7 +481,7 @@
                 border: 1px solid rgba(127, 219, 255, 0.3);
                 max-width: 220px;
                 font-family: system-ui, -apple-system, sans-serif;
-                display: none; /* Hidden by default for Chrome */
+                display: none;
             `;
             indicator.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 8px;">
@@ -401,6 +503,11 @@
                 position: relative !important;
                 z-index: 100 !important;
                 clear: both !important;
+                overflow: visible !important;
+                transform: translateZ(0) !important;
+                -webkit-transform: translateZ(0) !important;
+                backface-visibility: visible !important;
+                -webkit-backface-visibility: visible !important;
             `;
             
             const styles = {
@@ -484,7 +591,7 @@
                             this.loadJuicyAds();
                             break;
                         case 'exoclick':
-                            this.loadExoClick();
+                            this.loadExoClickEnhanced();
                             break;
                         case 'popads':
                             this.loadPopAds();
@@ -525,13 +632,14 @@
                     <div style="
                         width: 100%;
                         height: 100%;
-                        background: #f0f0f0;
+                        background: linear-gradient(135deg, rgba(0, 119, 190, 0.1), rgba(0, 212, 255, 0.1));
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        border: 2px dashed #ccc;
-                        color: #999;
+                        border: 2px dashed rgba(0, 212, 255, 0.3);
+                        color: rgba(255, 255, 255, 0.6);
                         font-family: Arial, sans-serif;
+                        border-radius: 10px;
                     ">
                         <div>
                             <div style="font-size: 14px;">${network.name}</div>
@@ -576,7 +684,8 @@
             // Verificar ExoClick
             const exoClickActive = window.ExoLoader || 
                                   document.querySelector('.adsbyexoclick') ||
-                                  document.querySelector('[data-zoneid]');
+                                  document.querySelector('[data-zoneid]') ||
+                                  document.querySelector('iframe[src*="exoclick"]');
             
             if (exoClickActive) {
                 console.log('✅ ExoClick: Detectado');
@@ -616,7 +725,7 @@
             
             let emptyContainers = 0;
             containers.forEach((container, index) => {
-                const hasContent = container.querySelector('ins, script[src*="exoclick"], script[src*="jads"]');
+                const hasContent = container.querySelector('ins, script[src*="exoclick"], script[src*="jads"], iframe');
                 if (!hasContent && !container.classList.contains('ad-placeholder')) {
                     emptyContainers++;
                     console.warn(`⚠️ Contenedor vacío: ${container.id}`);
@@ -627,7 +736,36 @@
             console.log(`✅ Redes activas: ${result.activeNetworks}/3`);
             console.log(`📦 Contenedores: ${containers.length} (${emptyContainers} vacíos)`);
             
+            // Si hay problemas, intentar arreglarlos
+            if (result.activeNetworks < 3 || emptyContainers > 0) {
+                this.attemptFixes();
+            }
+            
             return result;
+        },
+        
+        attemptFixes() {
+            console.log('🔧 Intentando correcciones automáticas...');
+            
+            // Forzar visibilidad de todos los contenedores
+            document.querySelectorAll('.ad-container').forEach(container => {
+                container.style.display = 'block !important';
+                container.style.visibility = 'visible !important';
+                container.style.opacity = '1 !important';
+                
+                // Si está vacío, intentar recargar
+                if (container.children.length === 0) {
+                    const position = container.id.includes('header') ? 'header' : 
+                                   container.id.includes('sidebar') ? 'sidebar' : 'footer';
+                    
+                    if (container.id.includes('exoclick')) {
+                        const zoneId = AD_CONFIG.networks.exoclick.zones[position];
+                        if (zoneId) {
+                            this.loadExoClickZoneDirect(container, zoneId);
+                        }
+                    }
+                }
+            });
         },
         
         // Función pública para testing
@@ -652,7 +790,7 @@
                     id: container.id,
                     visible: container.offsetWidth > 0 && container.offsetHeight > 0,
                     dimensions: `${container.offsetWidth}x${container.offsetHeight}`,
-                    hasAdContent: !!container.querySelector('ins, script[src]'),
+                    hasAdContent: !!container.querySelector('ins, script[src], iframe'),
                     children: container.children.length
                 });
             });
@@ -677,7 +815,11 @@
     // Exponer funciones globales para pruebas
     window.AdVerificationSystem = AdVerificationSystem;
     window.testAds = () => AdVerificationSystem.testAds();
+    window.reloadAds = () => {
+        console.log('🔄 Recargando sistema de anuncios...');
+        AdVerificationSystem.loadAdNetworks();
+    };
     
-    console.log('✅ Sistema de Anuncios v3.0.0 cargado - Chrome Fix');
+    console.log('✅ Sistema de Anuncios v3.1.0 cargado - ExoClick Fixed');
     
 })();
