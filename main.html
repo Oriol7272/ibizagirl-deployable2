@@ -53,6 +53,7 @@
     <!-- FIXED: Verificación de redes de anuncios con IDs correctos -->
     <meta name="juicyads-site-verification" content="57781c218b1d1435f3512464c59cf39b">
     <meta name="exoclick-site-verification" content="97ce8adfbeb6e153ef4ebf2566dfeb7d">
+    <meta name="eroadvertising-site-verification" content="5f8afe77e5b70fec960d89b314e045a4">
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="IbizaGirl.pics - Galería Premium Ibiza">
@@ -81,6 +82,7 @@
     <link rel="preconnect" href="https://a.realsrv.com">
     <link rel="preconnect" href="https://main.exoclick.com">
     <link rel="preconnect" href="https://www.premiumvertising.com">
+    <link rel="preconnect" href="https://www.eroadvertising.com">
     
     <!-- Preload de recursos críticos -->
     <link rel="preload" href="styles.css" as="style">
@@ -99,6 +101,7 @@
     <link rel="dns-prefetch" href="//a.realsrv.com">
     <link rel="dns-prefetch" href="//main.exoclick.com">
     <link rel="dns-prefetch" href="//www.premiumvertising.com">
+    <link rel="dns-prefetch" href="//www.eroadvertising.com">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
@@ -153,22 +156,29 @@
     }
     </script>
     
-    <!-- FIXED: Sistema anti-bloqueo y configuración avanzada de anuncios -->
+    <!-- FIXED: Sistema anti-bloqueo y configuración avanzada de anuncios con IDs REALES -->
     <script>
-        // FIXED: Configuración global de anuncios con zone IDs correctos según dashboards
+        // FIXED: Configuración global de anuncios con zone IDs REALES de los dashboards
         window.AD_CONFIG_OVERRIDE = {
             juicyads: {
                 zones: {
-                    header: 1098518,    // Zone ID real del dashboard JuicyAds
-                    sidebar: 1098519,   // Zone ID real del dashboard JuicyAds
-                    footer: 1098520     // Zone ID real del dashboard JuicyAds
+                    header: 1098658,    // 300x50 Mobile Ads (real)
+                    sidebar: 1098518,   // 300x250 Image (real)
+                    footer: 1098656     // 160x600 Skyscraper (real)
                 }
             },
             exoclick: {
                 zones: {
-                    header: 5696328,    // Zone ID confirmado de ExoClick dashboard
-                    sidebar: 5696329,   // Zone ID a crear en ExoClick
-                    footer: 5696330     // Zone ID a crear en ExoClick
+                    // Solo tenemos 1 zona en ExoClick, usar en todas las posiciones
+                    header: 5696328,    // 300x250 Banner (única zona disponible)
+                    sidebar: 5696328,   // Misma zona
+                    footer: 5696328     // Misma zona
+                }
+            },
+            eroadvertising: {
+                zones: {
+                    ibizagirl: 8177575,  // Zone para ibizagirl
+                    beach: 8179717       // Zone para beach
                 }
             },
             popads: {
@@ -187,6 +197,8 @@
                     [id*="ad-"],
                     [id*="juicyads"],
                     [id*="exoclick"],
+                    [id*="eroadvertising"],
+                    [id*="ero_"],
                     .jaads,
                     ins[data-aid],
                     .adsbyexoclick {
@@ -209,7 +221,8 @@
                     .ad-header,
                     #ad-header-container,
                     [id*="ad-juicyads-header"],
-                    [id*="ad-exoclick-header"] {
+                    [id*="ad-exoclick-header"],
+                    [id*="ad-eroadvertising-header"] {
                         width: 100% !important;
                         max-width: 728px !important;
                         min-height: 90px !important;
@@ -240,7 +253,8 @@
                     .ad-footer,
                     #ad-footer-container,
                     [id*="ad-juicyads-footer"],
-                    [id*="ad-exoclick-footer"] {
+                    [id*="ad-exoclick-footer"],
+                    [id*="ad-eroadvertising-footer"] {
                         width: 100% !important;
                         max-width: 728px !important;
                         min-height: 90px !important;
@@ -346,10 +360,11 @@
         })();
         
         // Log de inicialización
-        console.log('🌊 IbizaGirl.pics - Inicializando sistema de anuncios FIXED...');
+        console.log('🌊 IbizaGirl.pics - Inicializando sistema de anuncios con IDs REALES...');
         console.log('🔧 Zone IDs actualizados según dashboards:');
-        console.log('  - JuicyAds: 1098518, 1098519, 1098520');
-        console.log('  - ExoClick: 5696328, 5696329, 5696330');
+        console.log('  - JuicyAds: 1098658, 1098518, 1098656');
+        console.log('  - ExoClick: 5696328 (única zona)');
+        console.log('  - EroAdvertising: 8177575, 8179717');
         console.log('  - PopAds: 5226178');
         
         // Verificar estado después de cargar
