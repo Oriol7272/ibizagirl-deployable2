@@ -1,86 +1,75 @@
 # ============================
-# IBIZAGIRL.PICS .HTACCESS
-# Configuración optimizada para anuncios
+# IBIZAGIRL.PICS - HTACCESS v4.1.0
+# Configuración optimizada para Apache
 # ============================
 
-# Activar RewriteEngine
+# Activar motor de reescritura
 RewriteEngine On
 
 # ============================
-# HEADERS DE SEGURIDAD PERMISIVOS PARA ANUNCIOS
+# SEGURIDAD BÁSICA
 # ============================
 
-<IfModule mod_headers.c>
-    # Permitir CORS para todos los orígenes (necesario para anuncios)
-    Header set Access-Control-Allow-Origin "*"
-    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
-    Header set Access-Control-Allow-Headers "*"
-    Header set Access-Control-Allow-Credentials "true"
-    
-    # Permitir iframes de cualquier origen
-    Header set X-Frame-Options "ALLOWALL"
-    
-    # Política de referrer más permisiva
-    Header set Referrer-Policy "unsafe-url"
-    
-    # Desactivar protección XSS para permitir scripts de anuncios
-    Header set X-XSS-Protection "0"
-    
-    # Permitir contenido mixto
-    Header set Content-Security-Policy "upgrade-insecure-requests"
-    
-    # Cache control para recursos estáticos
-    <FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|ico|css|js|woff|woff2|ttf|eot)$">
-        Header set Cache-Control "public, max-age=31536000, immutable"
-    </FilesMatch>
-    
-    # Cache control para HTML
-    <FilesMatch "\.(html|htm)$">
-        Header set Cache-Control "no-cache, no-store, must-revalidate"
-        Header set Pragma "no-cache"
-        Header set Expires "0"
-    </FilesMatch>
-</IfModule>
+# Deshabilitar listado de directorios
+Options -Indexes
+
+# Deshabilitar firma del servidor
+ServerSignature Off
+
+# Prevenir clickjacking
+Header always set X-Frame-Options "SAMEORIGIN"
+
+# Prevenir MIME type sniffing
+Header always set X-Content-Type-Options "nosniff"
+
+# XSS Protection
+Header always set X-XSS-Protection "1; mode=block"
+
+# Referrer Policy
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
 
 # ============================
 # COMPRESIÓN GZIP
 # ============================
 
 <IfModule mod_deflate.c>
-    # Comprimir HTML, CSS, JavaScript, Text, XML y fonts
-    AddOutputFilterByType DEFLATE application/javascript
-    AddOutputFilterByType DEFLATE application/rss+xml
-    AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
-    AddOutputFilterByType DEFLATE application/x-font
-    AddOutputFilterByType DEFLATE application/x-font-opentype
-    AddOutputFilterByType DEFLATE application/x-font-otf
-    AddOutputFilterByType DEFLATE application/x-font-truetype
-    AddOutputFilterByType DEFLATE application/x-font-ttf
-    AddOutputFilterByType DEFLATE application/x-javascript
-    AddOutputFilterByType DEFLATE application/xhtml+xml
-    AddOutputFilterByType DEFLATE application/xml
-    AddOutputFilterByType DEFLATE font/opentype
-    AddOutputFilterByType DEFLATE font/otf
-    AddOutputFilterByType DEFLATE font/ttf
-    AddOutputFilterByType DEFLATE image/svg+xml
-    AddOutputFilterByType DEFLATE image/x-icon
-    AddOutputFilterByType DEFLATE text/css
     AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
     AddOutputFilterByType DEFLATE text/javascript
-    AddOutputFilterByType DEFLATE text/plain
     AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/font-woff
+    AddOutputFilterByType DEFLATE application/font-woff2
+    
+    # Excluir archivos ya comprimidos
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|webp|mp4|webm|zip|gz|tar|bz2|sit|rar)$ no-gzip dont-vary
 </IfModule>
 
 # ============================
-# EXPIRES HEADERS
+# CACHE DE NAVEGADOR
 # ============================
 
 <IfModule mod_expires.c>
     ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    
+    # HTML
+    ExpiresByType text/html "access plus 0 seconds"
+    
+    # CSS y JavaScript
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType text/javascript "access plus 1 year"
     
     # Imágenes
-    ExpiresByType image/jpg "access plus 1 year"
     ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/jpg "access plus 1 year"
     ExpiresByType image/gif "access plus 1 year"
     ExpiresByType image/png "access plus 1 year"
     ExpiresByType image/webp "access plus 1 year"
@@ -93,31 +82,47 @@ RewriteEngine On
     ExpiresByType video/webm "access plus 1 year"
     ExpiresByType video/ogg "access plus 1 year"
     
-    # CSS y JavaScript
-    ExpiresByType text/css "access plus 1 month"
-    ExpiresByType text/javascript "access plus 1 month"
-    ExpiresByType application/javascript "access plus 1 month"
-    
-    # Fonts
-    ExpiresByType font/ttf "access plus 1 year"
-    ExpiresByType font/otf "access plus 1 year"
+    # Fuentes
     ExpiresByType font/woff "access plus 1 year"
     ExpiresByType font/woff2 "access plus 1 year"
     ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+    ExpiresByType font/ttf "access plus 1 year"
+    ExpiresByType font/otf "access plus 1 year"
     
-    # HTML
-    ExpiresByType text/html "access plus 0 seconds"
+    # Otros
+    ExpiresByType application/pdf "access plus 1 month"
+    ExpiresByType application/json "access plus 0 seconds"
+    ExpiresByType application/xml "access plus 0 seconds"
+    ExpiresByType text/xml "access plus 0 seconds"
+</IfModule>
+
+# Cache-Control Headers
+<IfModule mod_headers.c>
+    # 1 año para archivos estáticos
+    <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|webp|js|css|swf|woff|woff2|ttf|otf|svg)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
     
-    # Default
-    ExpiresDefault "access plus 1 month"
+    # 1 hora para HTML
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "public, max-age=3600, must-revalidate"
+    </FilesMatch>
+    
+    # Sin cache para archivos dinámicos
+    <FilesMatch "\.(php|cgi|pl|py)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
 </IfModule>
 
 # ============================
-# REDIRECTS Y REWRITES
+# REDIRECCIONES Y URLS
 # ============================
 
 # Forzar HTTPS
-RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 
 # Redirigir www a no-www
@@ -213,13 +218,4 @@ ErrorDocument 500 /500.html
     SecFilterScanPOST Off
 </IfModule>
 
-# Desactivar mod_security para rutas de anuncios
-<LocationMatch "/(ads|advertisements|banners|sponsors)">
-    <IfModule mod_security.c>
-        SecRuleEngine Off
-    </IfModule>
-</LocationMatch>
-
-# ============================
-# FIN DE CONFIGURACIÓN
-# ============================
+#
