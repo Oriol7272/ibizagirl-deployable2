@@ -1,175 +1,142 @@
 // ============================
-// IBIZAGIRL.PICS MAIN SCRIPT v15.0.0 - INTEGRADO CON SISTEMA MODULAR
-// Fixed: Complete integration with modular content system
-// Enhanced: Compatibility with content-data modules 1-6
+// IBIZAGIRL.PICS - MAIN SCRIPT v4.1.0
+// Sistema Principal con Integración Modular
 // ============================
 
-console.log('🌊 IbizaGirl.pics v15.0.0 MODULAR INTEGRATION - Loading Paradise Gallery...');
+'use strict';
 
 // ============================
-// ENVIRONMENT DETECTION
-// ============================
-
-const ENVIRONMENT = {
-    isDevelopment: window.location.hostname === 'localhost' || 
-                   window.location.hostname === '127.0.0.1' || 
-                   window.location.hostname.includes('192.168') || 
-                   window.location.protocol === 'file:' ||
-                   window.location.port !== '',
-    get isProduction() { return !this.isDevelopment; }
-};
-
-console.log('🌍 Environment:', ENVIRONMENT.isDevelopment ? 'Development' : 'Production');
-
-// ============================
-// CONFIGURACIÓN MODULAR
+// CONFIGURATION & CONSTANTS
 // ============================
 
 const CONFIG = {
-    PAYPAL: {
-        CLIENT_ID: 'AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5',
-        CURRENCY: 'EUR',
-        PRICES: {
-            MONTHLY_SUBSCRIPTION: 15.00,
-            LIFETIME_SUBSCRIPTION: 100.00,
-            SINGLE_PHOTO: 0.10,
-            SINGLE_VIDEO: 0.30
-        },
-        PACKS: {
-            starter: { items: 10, price: 10.00, savings: 33 },
-            bronze: { items: 20, price: 15.00, savings: 50 },
-            silver: { items: 50, price: 30.00, savings: 60 },
-            gold: { items: 100, price: 50.00, savings: 70 }
-        }
+    version: '4.1.0',
+    debug: false,
+    api: {
+        baseUrl: 'https://ibizagirl.pics',
+        timeout: 10000,
+        retryAttempts: 3
     },
-    
-    CONTENT: {
-        DAILY_PHOTOS: 127,
-        DAILY_VIDEOS: 40,
-        NEW_CONTENT_PERCENTAGE: 0.3,
-        BLUR_PHOTO: 10,
-        BLUR_VIDEO: 10
+    media: {
+        lazyLoadOffset: 50,
+        imageQuality: 'high',
+        videoPreload: 'metadata'
     },
-    
-    ANALYTICS_ID: 'G-DBXYNPBSPY'
+    cache: {
+        duration: 3600000, // 1 hora
+        maxSize: 50 // MB
+    },
+    analytics: {
+        enabled: true,
+        trackingId: 'G-DBXYNPBSPY'
+    },
+    ads: {
+        enabled: true,
+        refreshInterval: 60000, // 1 minuto
+        maxRetries: 3
+    }
+};
+
+const ENVIRONMENT = {
+    isDevelopment: window.location.hostname === 'localhost',
+    isProduction: window.location.hostname === 'ibizagirl.pics',
+    isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 };
 
 // ============================
-// MULTI-LANGUAGE TRANSLATIONS
+// TRANSLATIONS
 // ============================
 
 const TRANSLATIONS = {
     es: {
-        loading: "Cargando el paraíso...",
-        subtitle: "Contenido Exclusivo del Paraíso",
-        megapack: "📦 MEGA PACKS -70%",
-        monthly: "💳 €15/Mes",
-        lifetime: "👑 Lifetime €100",
-        welcome: "Bienvenida al Paraíso 🌴",
-        daily_content: "200+ fotos y 40+ videos actualizados DIARIAMENTE",
-        unlock_all: "🔓 Desbloquear Todo",
-        view_gallery: "📸 Ver Galería",
-        preview_gallery: "🔥 Vista Previa Exclusiva",
-        photos_today: "Fotos de Hoy",
-        updated_at: "Actualizado a las",
-        videos_hd: "Videos HD",
-        new_content: "¡NUEVO CONTENIDO!",
-        total_views: "Vistas Totales",
-        today: "hoy",
-        updates: "Actualizaciones",
-        always_fresh: "SIEMPRE FRESCO",
-        paradise_photos: "📸 Fotos del Paraíso",
-        new_today: "¡NUEVO HOY!",
-        exclusive_videos: "🎬 Videos Exclusivos",
-        fresh_content: "¡CONTENIDO FRESCO!",
-        isabella_title: "Isabella - Tu Guía VIP",
-        vip_info: "💎 VIP Info",
-        news: "📅 Novedades",
-        help: "❓ Ayuda",
-        vip_unlimited: "👑 Acceso VIP Ilimitado",
-        plan_monthly: "📅 Mensual",
-        plan_lifetime: "♾️ Lifetime",
-        unlimited_access: "Acceso ilimitado",
-        all_content: "Todo el contenido actual y futuro",
-        priority_support: "Soporte prioritario",
-        exclusive_content: "Contenido exclusivo VIP",
-        best_value: "MEJOR VALOR",
-        save_yearly: "¡Ahorra €80 al año!",
-        pack_selection: "📦 MEGA PACKS - Ahorra 70%",
-        pack_starter: "Starter Pack",
-        pack_bronze: "Bronze Pack", 
-        pack_silver: "Silver Pack",
-        pack_gold: "Gold Pack",
-        items: "contenidos",
-        save: "Ahorra",
-        unlock_content: "🔓 Desbloquear Contenido",
-        notification_welcome: "🎉 ¡Bienvenido VIP! Todo el contenido ha sido desbloqueado.",
-        notification_pack: "🎉 {credits} créditos añadidos! Haz clic en cualquier contenido para desbloquearlo.",
-        notification_unlocked: "{icon} Desbloqueado! {credits} créditos restantes.",
-        payment_error: "❌ Error en el pago. Por favor, intenta de nuevo.",
-        isabella_messages: [
-            "¡Hola preciosa! 😘 ¿Buscas el paraíso?",
-            "Pssst... ¡Los miembros VIP ven todo sin desenfoque! 👀",
-            "¿Lista para desbloquear el paraíso? ¡VIP te da acceso instantáneo a todo! 🌊",
-            "¡Hoy tenemos 200 fotos nuevas y 40 videos nuevos! 🎉",
-            "Solo haz clic en cualquier contenido borroso para desbloquearlo! 💕"
-        ]
+        welcome: "Bienvenido",
+        photos: "Fotos",
+        videos: "Videos",
+        vip: "VIP",
+        packages: "Paquetes",
+        daily: "Diarias",
+        premium: "Premium",
+        exclusive: "Exclusivo",
+        subscribe: "Suscribirse",
+        buyNow: "Comprar Ahora",
+        loading: "Cargando...",
+        error: "Error al cargar",
+        retry: "Reintentar"
     },
     en: {
-        loading: "Loading paradise...",
-        subtitle: "Exclusive Paradise Content",
-        megapack: "📦 MEGA PACKS -70%",
-        monthly: "💳 €15/Month",
-        lifetime: "👑 Lifetime €100",
-        welcome: "Welcome to Paradise 🌴",
-        daily_content: "200+ photos and 40+ videos updated DAILY",
-        unlock_all: "🔓 Unlock Everything",
-        view_gallery: "📸 View Gallery",
-        preview_gallery: "🔥 Exclusive Preview",
-        photos_today: "Today's Photos",
-        updated_at: "Updated at",
-        videos_hd: "HD Videos",
-        new_content: "NEW CONTENT!",
-        total_views: "Total Views",
-        today: "today",
-        updates: "Updates",
-        always_fresh: "ALWAYS FRESH",
-        paradise_photos: "📸 Paradise Photos",
-        new_today: "NEW TODAY!",
-        exclusive_videos: "🎬 Exclusive Videos",
-        fresh_content: "FRESH CONTENT!",
-        isabella_title: "Isabella - Your VIP Guide",
-        vip_info: "💎 VIP Info",
-        news: "📅 News",
-        help: "❓ Help",
-        vip_unlimited: "👑 Unlimited VIP Access",
-        plan_monthly: "📅 Monthly",
-        plan_lifetime: "♾️ Lifetime",
-        unlimited_access: "Unlimited access",
-        all_content: "All current and future content",
-        priority_support: "Priority support",
-        exclusive_content: "Exclusive VIP content",
-        best_value: "BEST VALUE",
-        save_yearly: "Save €80 per year!",
-        pack_selection: "📦 MEGA PACKS - Save 70%",
-        pack_starter: "Starter Pack",
-        pack_bronze: "Bronze Pack",
-        pack_silver: "Silver Pack", 
-        pack_gold: "Gold Pack",
-        items: "items",
-        save: "Save",
-        unlock_content: "🔓 Unlock Content",
-        notification_welcome: "🎉 Welcome VIP! All content has been unlocked.",
-        notification_pack: "🎉 {credits} credits added! Click any content to unlock.",
-        notification_unlocked: "{icon} Unlocked! {credits} credits remaining.",
-        payment_error: "❌ Payment error. Please try again.",
-        isabella_messages: [
-            "Hello beautiful! 😘 Looking for paradise?",
-            "Pssst... VIP members see everything without blur! 👀",
-            "Ready to unlock paradise? VIP gives you instant access to everything! 🌊",
-            "Today we have 200 new photos and 40 new videos! 🎉",
-            "Just click on any blurred content to unlock it! 💕"
-        ]
+        welcome: "Welcome",
+        photos: "Photos",
+        videos: "Videos",
+        vip: "VIP",
+        packages: "Packages",
+        daily: "Daily",
+        premium: "Premium",
+        exclusive: "Exclusive",
+        subscribe: "Subscribe",
+        buyNow: "Buy Now",
+        loading: "Loading...",
+        error: "Loading error",
+        retry: "Retry"
+    },
+    fr: {
+        welcome: "Bienvenue",
+        photos: "Photos",
+        videos: "Vidéos",
+        vip: "VIP",
+        packages: "Forfaits",
+        daily: "Quotidien",
+        premium: "Premium",
+        exclusive: "Exclusif",
+        subscribe: "S'abonner",
+        buyNow: "Acheter",
+        loading: "Chargement...",
+        error: "Erreur de chargement",
+        retry: "Réessayer"
+    },
+    de: {
+        welcome: "Willkommen",
+        photos: "Fotos",
+        videos: "Videos",
+        vip: "VIP",
+        packages: "Pakete",
+        daily: "Täglich",
+        premium: "Premium",
+        exclusive: "Exklusiv",
+        subscribe: "Abonnieren",
+        buyNow: "Jetzt kaufen",
+        loading: "Laden...",
+        error: "Ladefehler",
+        retry: "Wiederholen"
+    },
+    it: {
+        welcome: "Benvenuto",
+        photos: "Foto",
+        videos: "Video",
+        vip: "VIP",
+        packages: "Pacchetti",
+        daily: "Giornaliero",
+        premium: "Premium",
+        exclusive: "Esclusivo",
+        subscribe: "Iscriviti",
+        buyNow: "Acquista ora",
+        loading: "Caricamento...",
+        error: "Errore di caricamento",
+        retry: "Riprova"
+    },
+    pt: {
+        welcome: "Bem-vindo",
+        photos: "Fotos",
+        videos: "Vídeos",
+        vip: "VIP",
+        packages: "Pacotes",
+        daily: "Diário",
+        premium: "Premium",
+        exclusive: "Exclusivo",
+        subscribe: "Inscrever-se",
+        buyNow: "Comprar agora",
+        loading: "Carregando...",
+        error: "Erro ao carregar",
+        retry: "Tentar novamente"
     }
 };
 
@@ -177,457 +144,263 @@ const TRANSLATIONS = {
 // STATE MANAGEMENT
 // ============================
 
-let state = {
+const state = {
     currentLanguage: 'es',
-    isVIP: false,
-    unlockedContent: new Set(),
-    packCredits: 0,
-    selectedPack: 'silver',
-    selectedSubscriptionType: 'lifetime',
+    isLoading: false,
     currentSlide: 0,
     dailyContent: null,
-    errorCount: 0,
-    contentInitialized: false,
-    isabellaOpen: false,
-    currentPPVItem: null,
-    modulesLoaded: false
+    userData: {
+        isVIP: false,
+        purchases: [],
+        preferences: {}
+    },
+    ui: {
+        modalOpen: false,
+        sidebarOpen: false,
+        currentView: 'gallery'
+    },
+    cache: new Map(),
+    errors: []
 };
 
 // ============================
-// ENHANCED ERROR HANDLING
+// ERROR HANDLER
 // ============================
 
-class ErrorHandler {
-    static logError(error, context = '') {
-        const errorMessage = error?.message || error?.toString() || 'Unknown error';
+const ErrorHandler = {
+    errors: [],
+    maxErrors: 50,
+    
+    logError(error, context = '') {
+        const errorInfo = {
+            message: error?.message || String(error),
+            stack: error?.stack,
+            context,
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent,
+            url: window.location.href
+        };
         
-        const ignoredErrors = [
-            'Script error',
-            'ResizeObserver',
-            'Non-Error promise rejection',
-            '429',
-            'Failed to fetch',
-            'NetworkError',
-            'Load failed',
-            'The user aborted a request',
-            'Extension context',
-            'chrome-extension',
-            'moz-extension'
+        this.errors.push(errorInfo);
+        
+        if (this.errors.length > this.maxErrors) {
+            this.errors.shift();
+        }
+        
+        if (CONFIG.debug) {
+            console.error(`[${context}]`, error);
+        }
+        
+        // Enviar errores críticos al servidor
+        if (this.isCriticalError(error)) {
+            this.reportToServer(errorInfo);
+        }
+    },
+    
+    isCriticalError(error) {
+        const criticalPatterns = [
+            'PayPal',
+            'payment',
+            'undefined is not',
+            'Cannot read property',
+            'Network request failed'
         ];
         
-        const shouldIgnore = ignoredErrors.some(ignored => 
-            errorMessage.toLowerCase().includes(ignored.toLowerCase())
+        return criticalPatterns.some(pattern => 
+            error?.message?.includes(pattern)
         );
-        
-        if (shouldIgnore) {
-            return;
+    },
+    
+    reportToServer(errorInfo) {
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'exception', {
+                description: errorInfo.message,
+                fatal: false
+            });
         }
-        
-        state.errorCount++;
-        console.error(`❌ Error ${state.errorCount} [${context}]:`, error);
-        
-        if (window.gtag && state.errorCount <= 10) {
-            try {
-                window.gtag('event', 'exception', {
-                    description: `${context}: ${errorMessage}`,
-                    fatal: false
-                });
-            } catch (e) {
-                // Silent fail
-            }
+    },
+    
+    clearErrors() {
+        this.errors = [];
+    }
+};
+
+// ============================
+// UTILITY FUNCTIONS
+// ============================
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function throttle(func, limit) {
+    let inThrottle;
+    return function(...args) {
+        if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
         }
-        
-        if (state.errorCount > 50) {
-            this.showErrorRecovery();
-        }
+    };
+}
+
+function generateSessionId() {
+    return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function setCookie(name, value, days = 30) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = `expires=${date.toUTCString()}`;
+    document.cookie = `${name}=${value};${expires};path=/;SameSite=Strict;Secure`;
+}
+
+// ============================
+// LANGUAGE FUNCTIONS
+// ============================
+
+function detectUserLanguage() {
+    const savedLang = localStorage.getItem('userLanguage');
+    if (savedLang && TRANSLATIONS[savedLang]) {
+        return savedLang;
     }
     
-    static showErrorRecovery() {
-        const notification = document.createElement('div');
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #ff6b35, #ff69b4);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            z-index: 10002;
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
-        `;
-        notification.innerHTML = '⚠️ Detectamos algunos errores. Recargando...';
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            window.location.reload();
-        }, 3000);
+    const browserLang = navigator.language.substring(0, 2).toLowerCase();
+    if (TRANSLATIONS[browserLang]) {
+        return browserLang;
     }
+    
+    return 'es';
+}
+
+function changeLanguage(lang) {
+    if (!TRANSLATIONS[lang]) {
+        console.warn(`Language ${lang} not supported`);
+        return;
+    }
+    
+    state.currentLanguage = lang;
+    localStorage.setItem('userLanguage', lang);
+    updateUILanguage();
+    
+    // Track language change
+    trackEvent('language_change', { language: lang });
+}
+
+function updateUILanguage() {
+    const elements = document.querySelectorAll('[data-translate]');
+    const currentTranslations = TRANSLATIONS[state.currentLanguage];
+    
+    elements.forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (currentTranslations[key]) {
+            element.textContent = currentTranslations[key];
+        }
+    });
 }
 
 // ============================
-// CONTENT SYSTEM INTEGRATION
-// ============================
-
-class ContentSystemManager {
-    constructor() {
-        this.contentReady = false;
-        this.retryAttempts = 0;
-        this.maxRetries = 10;
-    }
-
-    // Esperar a que el sistema de contenido esté listo
-    async waitForContentSystem() {
-        return new Promise((resolve) => {
-            // Si ya está listo, resolver inmediatamente
-            if (this.isContentSystemReady()) {
-                this.contentReady = true;
-                resolve(true);
-                return;
-            }
-
-            // Escuchar el evento de sistema listo
-            const handleContentReady = () => {
-                console.log('✅ Sistema de contenido listo - evento recibido');
-                this.contentReady = true;
-                window.removeEventListener('contentSystemReady', handleContentReady);
-                resolve(true);
-            };
-
-            window.addEventListener('contentSystemReady', handleContentReady);
-
-            // También verificar periódicamente
-            const checkInterval = setInterval(() => {
-                if (this.isContentSystemReady()) {
-                    this.contentReady = true;
-                    clearInterval(checkInterval);
-                    window.removeEventListener('contentSystemReady', handleContentReady);
-                    resolve(true);
-                } else {
-                    this.retryAttempts++;
-                    if (this.retryAttempts >= this.maxRetries) {
-                        console.warn('⚠️ Timeout esperando sistema de contenido, usando fallback');
-                        clearInterval(checkInterval);
-                        window.removeEventListener('contentSystemReady', handleContentReady);
-                        this.initializeFallbackContent();
-                        resolve(true);
-                    }
-                }
-            }, 500);
-        });
-    }
-
-    // Verificar si el sistema de contenido está listo
-    isContentSystemReady() {
-        return !!(
-            window.ContentAPI && 
-            window.UnifiedContentAPI && 
-            window.ALL_PHOTOS_POOL && 
-            window.ALL_PHOTOS_POOL.length > 0
-        );
-    }
-
-    // Inicializar contenido de fallback
-    initializeFallbackContent() {
-        console.log('🆘 Inicializando contenido de fallback...');
-        
-        if (!window.ALL_PHOTOS_POOL) {
-            window.ALL_PHOTOS_POOL = [
-                'full/bikini.webp',
-                'full/bikini3.webp',
-                'full/bikini5.webp',
-                'full/backbikini.webp',
-                'full/bikbanner.webp',
-                'full/bikbanner2.webp'
-            ];
-        }
-
-        if (!window.ALL_VIDEOS_POOL) {
-            window.ALL_VIDEOS_POOL = [];
-        }
-
-        if (!window.BANNER_IMAGES) {
-            window.BANNER_IMAGES = ['bikini.webp', 'bikini3.webp'];
-        }
-
-        if (!window.TEASER_IMAGES) {
-            window.TEASER_IMAGES = ['bikini.webp', 'bikini3.webp', 'bikini5.webp'];
-        }
-
-        this.contentReady = true;
-        console.log('✅ Contenido de fallback inicializado');
-    }
-
-    // Obtener contenido usando la API modular o fallback
-    getContent() {
-        if (window.generateDailyRotationForMainScript) {
-            return window.generateDailyRotationForMainScript();
-        }
-
-        if (window.getRandomContentForMainScript) {
-            const content = window.getRandomContentForMainScript();
-            return {
-                photos: content.photos,
-                videos: content.videos,
-                banners: content.banners,
-                teasers: content.teasers,
-                newPhotoIndices: new Set([0, 1, 2, 3, 4]),
-                newVideoIndices: new Set([0, 1, 2]),
-                lastUpdate: new Date(),
-                stats: {
-                    totalPhotosPool: content.photos.length,
-                    totalVideosPool: content.videos.length,
-                    dailyPhotos: content.photos.length,
-                    dailyVideos: content.videos.length,
-                    newPhotos: 5,
-                    newVideos: 3
-                }
-            };
-        }
-
-        // Fallback manual
-        return {
-            photos: window.ALL_PHOTOS_POOL || [],
-            videos: window.ALL_VIDEOS_POOL || [],
-            banners: window.BANNER_IMAGES || [],
-            teasers: window.TEASER_IMAGES || [],
-            newPhotoIndices: new Set([0, 1, 2]),
-            newVideoIndices: new Set([0]),
-            lastUpdate: new Date(),
-            stats: {
-                totalPhotosPool: (window.ALL_PHOTOS_POOL || []).length,
-                totalVideosPool: (window.ALL_VIDEOS_POOL || []).length,
-                dailyPhotos: (window.ALL_PHOTOS_POOL || []).length,
-                dailyVideos: (window.ALL_VIDEOS_POOL || []).length,
-                newPhotos: 3,
-                newVideos: 1
-            }
-        };
-    }
-}
-
-// ============================
-// RENDER FUNCTIONS
-// ============================
-
-function renderPhotosProgressive() {
-    try {
-        const photosGrid = document.getElementById('photosGrid');
-        if (!photosGrid || !state.dailyContent) return;
-        
-        const photosToShow = state.dailyContent.photos;
-        const trans = TRANSLATIONS[state.currentLanguage];
-        let photosHTML = '';
-        
-        console.log(`📸 Rendering ${photosToShow.length} photos`);
-        
-        photosToShow.forEach((photo, index) => {
-            const id = `p${index}`;
-            const isUnlocked = state.isVIP || state.unlockedContent.has(id);
-            const unlockClass = isUnlocked ? 'unlocked' : '';
-            const isNew = state.dailyContent.newPhotoIndices.has(index);
-            const views = Math.floor(Math.random() * 15000) + 5000;
-            const likes = Math.floor(Math.random() * 2000) + 500;
-            
-            let imagePath = photo;
-            if (!photo.includes('/')) {
-                imagePath = `full/${photo}`;
-            }
-            
-            photosHTML += `
-                <div class="content-item ${unlockClass}" 
-                     data-id="${id}" 
-                     data-type="photo" 
-                     data-index="${index}"
-                     onclick="handlePhotoClick('${id}', '${photo}', ${index})"
-                     role="button"
-                     tabindex="0">
-                    ${isNew ? `<span class="new-badge">${trans.new_today || 'NEW TODAY!'}</span>` : ''}
-                    
-                    <img class="item-media" 
-                         src="${imagePath}" 
-                         alt="Paradise Photo ${index + 1}"
-                         style="filter: ${isUnlocked ? 'none' : `blur(${CONFIG.CONTENT.BLUR_PHOTO}px)`};"
-                         loading="lazy"
-                         onerror="handleImageError(this)">
-                    
-                    ${!isUnlocked ? `
-                        <div class="lock-overlay">
-                            <svg class="lock-icon" width="30" height="30" viewBox="0 0 24 24" fill="white">
-                                <path d="M12 2C9.243 2 7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"></path>
-                            </svg>
-                        </div>
-                        <div class="item-price">
-                            €${CONFIG.PAYPAL.PRICES.SINGLE_PHOTO.toFixed(2)}
-                        </div>
-                    ` : ''}
-                    
-                    <div class="item-overlay">
-                        <div class="item-title">Paradise #${index + 1}</div>
-                        <div class="item-info">
-                            ${views.toLocaleString()} views • ${likes.toLocaleString()} likes
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-        
-        photosGrid.innerHTML = photosHTML;
-        console.log('✅ Photos rendered successfully');
-    } catch (error) {
-        ErrorHandler.logError(error, 'renderPhotosProgressive');
-    }
-}
-
-function renderVideosProgressive() {
-    try {
-        const videosGrid = document.getElementById('videosGrid');
-        if (!videosGrid || !state.dailyContent) return;
-        
-        const videosToShow = state.dailyContent.videos;
-        const trans = TRANSLATIONS[state.currentLanguage];
-        let videosHTML = '';
-        
-        console.log(`🎬 Rendering ${videosToShow.length} videos`);
-        
-        if (videosToShow.length === 0) {
-            videosHTML = `
-                <div style="
-                    grid-column: 1 / -1;
-                    text-align: center;
-                    padding: 2rem;
-                    background: rgba(0, 119, 190, 0.1);
-                    border-radius: 15px;
-                    border: 1px solid rgba(127, 219, 255, 0.3);
-                ">
-                    <h3>🎬 Videos Coming Soon!</h3>
-                    <p>Los videos exclusivos estarán disponibles pronto.</p>
-                </div>
-            `;
-            videosGrid.innerHTML = videosHTML;
-            return;
-        }
-        
-        videosToShow.forEach((video, index) => {
-            const id = `v${index}`;
-            const isUnlocked = state.isVIP || state.unlockedContent.has(id);
-            const unlockClass = isUnlocked ? 'unlocked' : '';
-            const duration = generateRandomDuration();
-            const isNew = state.dailyContent.newVideoIndices.has(index);
-            const views = Math.floor(Math.random() * 25000) + 8000;
-            const likes = Math.floor(Math.random() * 3000) + 800;
-            
-            const posterImage = state.dailyContent.banners[index % state.dailyContent.banners.length] || 'bikini.webp';
-            
-            videosHTML += `
-                <div class="content-item ${unlockClass}" 
-                     data-id="${id}" 
-                     data-type="video" 
-                     data-index="${index}"
-                     onclick="handleVideoClick('${id}', '${video}', ${index})"
-                     role="button"
-                     tabindex="0">
-                    ${isNew ? `<span class="new-badge">${trans.fresh_content || 'FRESH CONTENT!'}</span>` : ''}
-                    
-                    <img class="item-media" 
-                         src="full/${posterImage}"
-                         alt="Video Preview ${index + 1}"
-                         style="filter: ${isUnlocked ? 'none' : `blur(${CONFIG.CONTENT.BLUR_VIDEO}px)`};"
-                         loading="lazy"
-                         onerror="handleImageError(this)">
-                    
-                    <div class="video-duration">${duration}</div>
-                    
-                    <div class="video-play-overlay">
-                        <div class="play-button">
-                            <div class="play-icon"></div>
-                        </div>
-                    </div>
-                    
-                    ${!isUnlocked ? `
-                        <div class="lock-overlay">
-                            <svg class="lock-icon" width="30" height="30" viewBox="0 0 24 24" fill="white">
-                                <path d="M12 2C9.243 2 7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"></path>
-                            </svg>
-                        </div>
-                        <div class="item-price">
-                            €${CONFIG.PAYPAL.PRICES.SINGLE_VIDEO.toFixed(2)}
-                        </div>
-                    ` : ''}
-                    
-                    <div class="item-overlay">
-                        <div class="item-title">Video #${index + 1}</div>
-                        <div class="item-info">
-                            ${views.toLocaleString()} views • ${likes.toLocaleString()} likes
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-        
-        videosGrid.innerHTML = videosHTML;
-        console.log('✅ Videos rendered successfully');
-    } catch (error) {
-        ErrorHandler.logError(error, 'renderVideosProgressive');
-    }
-}
-
-function renderTeaserCarousel() {
-    try {
-        const carousel = document.getElementById('teaserCarousel');
-        if (!carousel || !state.dailyContent) return;
-        
-        let teaserHTML = '';
-        const teasersToShow = state.dailyContent.teasers.slice(0, 12);
-        
-        teasersToShow.forEach((teaser, index) => {
-            const imagePath = `full/${teaser}`;
-            teaserHTML += `
-                <div class="teaser-item" onclick="handleTeaserClick(${index})">
-                    <img src="${imagePath}" 
-                         alt="Teaser ${index + 1}"
-                         loading="lazy"
-                         onerror="handleImageError(this)">
-                    <div class="teaser-overlay">
-                        <div class="teaser-info">
-                            <h3>Paradise Collection #${index + 1}</h3>
-                            <p>${Math.floor(Math.random() * 50) + 10} exclusive photos</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-        
-        carousel.innerHTML = teaserHTML;
-    } catch (error) {
-        ErrorHandler.logError(error, 'renderTeaserCarousel');
-    }
-}
-
-// ============================
-// ERROR HANDLERS
+// MEDIA HANDLERS
 // ============================
 
 function handleImageError(img) {
-    try {
-        console.warn('Image error:', img.src);
+    console.warn('Image failed to load:', img.src);
+    
+    if (!img.dataset.retryCount) {
+        img.dataset.retryCount = '0';
+    }
+    
+    const retryCount = parseInt(img.dataset.retryCount);
+    
+    if (retryCount < CONFIG.api.retryAttempts) {
+        img.dataset.retryCount = String(retryCount + 1);
         
-        if (!img.src.includes('bikini.webp')) {
-            img.src = 'full/bikini.webp';
-        } else {
-            img.style.cssText = `
-                background: linear-gradient(45deg, #0077be, #00d4ff);
-                display: block;
-                min-height: 200px;
-                object-fit: cover;
-                width: 100%;
-                height: 100%;
-            `;
-            img.alt = 'Content unavailable';
-            img.removeAttribute('src');
+        setTimeout(() => {
+            const originalSrc = img.src;
+            img.src = '';
+            img.src = originalSrc;
+        }, 1000 * Math.pow(2, retryCount));
+    } else {
+        img.src = '/assets/placeholder.webp';
+        img.classList.add('error');
+        
+        const parent = img.closest('.media-item');
+        if (parent) {
+            parent.classList.add('load-error');
         }
-    } catch (error) {
-        ErrorHandler.logError(error, 'handleImageError');
+    }
+}
+
+function handleVideoError(video) {
+    console.warn('Video failed to load:', video.src);
+    
+    const parent = video.closest('.media-item');
+    if (parent) {
+        parent.classList.add('load-error');
+        parent.innerHTML = `
+            <div class="video-error">
+                <p>Error al cargar el video</p>
+                <button onclick="retryVideo('${video.src}', this)">Reintentar</button>
+            </div>
+        `;
+    }
+}
+
+function retryVideo(src, button) {
+    const parent = button.closest('.media-item');
+    parent.classList.remove('load-error');
+    parent.innerHTML = `
+        <video controls preload="${CONFIG.media.videoPreload}" 
+               onerror="handleVideoError(this)">
+            <source src="${src}" type="video/mp4">
+        </video>
+    `;
+}
+
+// ============================
+// LAZY LOADING
+// ============================
+
+function setupLazyLoading() {
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                        imageObserver.unobserve(img);
+                    }
+                }
+            });
+        }, {
+            rootMargin: `${CONFIG.media.lazyLoadOffset}px`
+        });
+        
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    } else {
+        // Fallback para navegadores antiguos
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+        });
     }
 }
 
@@ -636,453 +409,536 @@ function handleImageError(img) {
 // ============================
 
 function showVIPModal() {
-    try {
-        const modal = document.getElementById('vipModal');
-        if (modal) {
-            modal.classList.add('active');
-            initializePayPalButtons('vip');
-            trackEvent('modal_opened', { type: 'vip' });
-        }
-    } catch (error) {
-        ErrorHandler.logError(error, 'showVIPModal');
+    const modal = document.getElementById('vipModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        state.ui.modalOpen = true;
+        trackEvent('modal_open', { type: 'vip' });
     }
 }
 
 function showPackModal() {
-    try {
-        const modal = document.getElementById('packModal');
-        if (modal) {
-            modal.classList.add('active');
-            initializePayPalButtons('pack');
-            trackEvent('modal_opened', { type: 'pack' });
-        }
-    } catch (error) {
-        ErrorHandler.logError(error, 'showPackModal');
+    const modal = document.getElementById('packModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        state.ui.modalOpen = true;
+        trackEvent('modal_open', { type: 'pack' });
     }
 }
 
-function showPPVModal(itemId, price) {
-    try {
-        const modal = document.getElementById('ppvModal');
-        if (modal) {
-            state.currentPPVItem = itemId;
-            const priceElement = document.getElementById('ppvPrice');
-            if (priceElement) {
-                priceElement.textContent = `€${price.toFixed(2)}`;
-            }
-            modal.classList.add('active');
-            initializePayPalButtons('ppv', price);
-            trackEvent('modal_opened', { type: 'ppv', item: itemId, price: price });
-        }
-    } catch (error) {
-        ErrorHandler.logError(error, 'showPPVModal');
+function showPPVModal() {
+    const modal = document.getElementById('ppvModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        state.ui.modalOpen = true;
+        trackEvent('modal_open', { type: 'ppv' });
     }
 }
 
-function closeModal() {
-    try {
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.classList.remove('active');
-        });
-        trackEvent('modal_closed');
-    } catch (error) {
-        ErrorHandler.logError(error, 'closeModal');
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+        state.ui.modalOpen = false;
+        trackEvent('modal_close', { type: modalId });
     }
 }
+
+// ============================
+// PAYMENT FUNCTIONS
+// ============================
 
 function selectPlan(planType) {
-    try {
-        state.selectedSubscriptionType = planType;
-        document.querySelectorAll('.plan-card').forEach(card => {
-            card.classList.remove('selected');
-        });
-        event.currentTarget.classList.add('selected');
-        initializePayPalButtons('vip');
-        trackEvent('plan_selected', { plan: planType });
-    } catch (error) {
-        ErrorHandler.logError(error, 'selectPlan');
-    }
-}
-
-function selectPack(packType) {
-    try {
-        state.selectedPack = packType;
-        document.querySelectorAll('.pack-card').forEach(card => {
-            card.classList.remove('selected');
-        });
-        event.currentTarget.classList.add('selected');
-        initializePayPalButtons('pack');
-        trackEvent('pack_selected', { pack: packType });
-    } catch (error) {
-        ErrorHandler.logError(error, 'selectPack');
-    }
-}
-
-// ============================
-// ISABELLA CHAT
-// ============================
-
-function toggleIsabella() {
-    try {
-        const window = document.getElementById('isabellaWindow');
-        if (window) {
-            state.isabellaOpen = !state.isabellaOpen;
-            window.classList.toggle('active');
-            
-            if (state.isabellaOpen && !window.querySelector('.isabella-message')) {
-                showIsabellaMessage('welcome');
-            }
-            
-            trackEvent('isabella_toggled', { open: state.isabellaOpen });
-        }
-    } catch (error) {
-        ErrorHandler.logError(error, 'toggleIsabella');
-    }
-}
-
-function isabellaAction(action) {
-    try {
-        const trans = TRANSLATIONS[state.currentLanguage];
-        
-        switch(action) {
-            case 'vip':
-                showIsabellaMessage('vip');
-                setTimeout(() => showVIPModal(), 1000);
-                break;
-            case 'daily':
-                showIsabellaMessage('daily');
-                break;
-            case 'help':
-                showIsabellaMessage('help');
-                break;
-        }
-        
-        trackEvent('isabella_action', { action: action });
-    } catch (error) {
-        ErrorHandler.logError(error, 'isabellaAction');
-    }
-}
-
-function showIsabellaMessage(type) {
-    try {
-        const messages = document.getElementById('isabellaMessages');
-        if (!messages) return;
-        
-        const trans = TRANSLATIONS[state.currentLanguage];
-        let messageText = '';
-        
-        switch(type) {
-            case 'welcome':
-                messageText = trans.isabella_messages[0];
-                break;
-            case 'vip':
-                messageText = trans.isabella_messages[1];
-                break;
-            case 'daily':
-                messageText = trans.isabella_messages[3];
-                break;
-            case 'help':
-                messageText = trans.isabella_messages[4];
-                break;
-            default:
-                messageText = trans.isabella_messages[Math.floor(Math.random() * trans.isabella_messages.length)];
-        }
-        
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'isabella-message';
-        messageDiv.textContent = messageText;
-        messages.appendChild(messageDiv);
-        
-        messages.scrollTop = messages.scrollHeight;
-    } catch (error) {
-        ErrorHandler.logError(error, 'showIsabellaMessage');
-    }
-}
-
-// ============================
-// PAYPAL INTEGRATION
-// ============================
-
-function initializePayPalButtons(type, price = null) {
-    try {
-        if (!window.paypal) {
-            console.warn('PayPal SDK not loaded');
-            return;
-        }
-        
-        let containerId, amount;
-        
-        switch(type) {
-            case 'vip':
-                containerId = 'paypal-button-container-vip';
-                amount = state.selectedSubscriptionType === 'lifetime' ? 
-                    CONFIG.PAYPAL.PRICES.LIFETIME_SUBSCRIPTION : 
-                    CONFIG.PAYPAL.PRICES.MONTHLY_SUBSCRIPTION;
-                break;
-            case 'pack':
-                containerId = 'paypal-button-container-pack';
-                amount = CONFIG.PAYPAL.PACKS[state.selectedPack].price;
-                break;
-            case 'ppv':
-                containerId = 'paypal-button-container-ppv';
-                amount = price || CONFIG.PAYPAL.PRICES.SINGLE_PHOTO;
-                break;
-            default:
-                return;
-        }
-        
-        const container = document.getElementById(containerId);
-        if (!container) return;
-        
-        container.innerHTML = '';
-        
+    trackEvent('plan_selected', { plan: planType });
+    
+    const prices = {
+        monthly: 29.99,
+        quarterly: 79.99,
+        annual: 299.99
+    };
+    
+    const price = prices[planType];
+    if (!price) return;
+    
+    // Inicializar PayPal
+    if (typeof paypal !== 'undefined') {
         paypal.Buttons({
             createOrder: function(data, actions) {
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
-                            value: amount.toFixed(2),
-                            currency_code: CONFIG.PAYPAL.CURRENCY
-                        }
+                            value: price.toFixed(2),
+                            currency_code: 'EUR'
+                        },
+                        description: `VIP ${planType} - IbizaGirl.pics`
                     }]
                 });
             },
             onApprove: function(data, actions) {
                 return actions.order.capture().then(function(details) {
-                    handlePaymentSuccess(type, amount);
+                    handlePaymentSuccess('vip', planType, details);
                 });
             },
             onError: function(err) {
                 handlePaymentError(err);
             }
-        }).render('#' + containerId);
-        
-    } catch (error) {
-        ErrorHandler.logError(error, 'initializePayPalButtons');
+        }).render('#paypal-button-container');
     }
 }
 
-function handlePaymentSuccess(type, amount) {
-    try {
-        const trans = TRANSLATIONS[state.currentLanguage];
-        
-        switch(type) {
-            case 'vip':
-                state.isVIP = true;
-                unlockAllContent();
-                showNotification(trans.notification_welcome);
-                break;
-            case 'pack':
-                const pack = CONFIG.PAYPAL.PACKS[state.selectedPack];
-                state.packCredits += pack.items;
-                updateCreditsDisplay();
-                showNotification(trans.notification_pack.replace('{credits}', pack.items));
-                break;
-            case 'ppv':
-                if (state.currentPPVItem) {
-                    state.unlockedContent.add(state.currentPPVItem);
-                    updateContentItem(state.currentPPVItem);
-                    showNotification(trans.notification_unlocked
-                        .replace('{icon}', '🔓')
-                        .replace('{credits}', state.packCredits));
-                }
-                break;
-        }
-        
-        closeModal();
-        trackEvent('payment_success', { type: type, amount: amount });
-        
-        if (window.confetti) {
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
-        }
-        
-    } catch (error) {
-        ErrorHandler.logError(error, 'handlePaymentSuccess');
+function selectPack(packType) {
+    trackEvent('pack_selected', { pack: packType });
+    
+    const prices = {
+        pack10: 14.99,
+        pack25: 29.99,
+        pack50: 49.99,
+        packAll: 99.99
+    };
+    
+    const price = prices[packType];
+    if (!price) return;
+    
+    // Procesar pago
+    initializePayment('pack', packType, price);
+}
+
+function initializePayment(type, item, price) {
+    if (typeof paypal !== 'undefined') {
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: price.toFixed(2),
+                            currency_code: 'EUR'
+                        },
+                        description: `${type} - ${item} - IbizaGirl.pics`
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    handlePaymentSuccess(type, item, details);
+                });
+            },
+            onError: function(err) {
+                handlePaymentError(err);
+            }
+        }).render('#paypal-container-' + type);
+    }
+}
+
+function handlePaymentSuccess(type, item, details) {
+    console.log('Payment successful:', details);
+    
+    // Guardar compra
+    state.userData.purchases.push({
+        type,
+        item,
+        date: new Date().toISOString(),
+        transactionId: details.id
+    });
+    
+    // Actualizar UI
+    if (type === 'vip') {
+        state.userData.isVIP = true;
+        unlockVIPContent();
+    }
+    
+    // Mostrar confirmación
+    showSuccessMessage(`¡Gracias por tu compra! ${type} - ${item}`);
+    
+    // Track conversion
+    trackEvent('purchase_complete', {
+        type,
+        item,
+        value: details.purchase_units[0].amount.value
+    });
+    
+    // Celebración
+    if (typeof confetti !== 'undefined') {
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
     }
 }
 
 function handlePaymentError(error) {
-    const trans = TRANSLATIONS[state.currentLanguage];
-    showNotification(trans.payment_error);
-    ErrorHandler.logError(error, 'PayPal Payment');
+    console.error('Payment error:', error);
+    ErrorHandler.logError(error, 'Payment');
+    
+    showErrorMessage('Error al procesar el pago. Por favor, intenta de nuevo.');
+    
+    trackEvent('payment_error', {
+        error: error.message
+    });
+}
+
+function showSuccessMessage(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast success';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+function showErrorMessage(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast error';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+// ============================
+// CONTENT FUNCTIONS
+// ============================
+
+function unlockVIPContent() {
+    // Desbloquear contenido VIP
+    document.querySelectorAll('.vip-locked').forEach(element => {
+        element.classList.remove('vip-locked');
+        element.classList.add('vip-unlocked');
+    });
+    
+    // Actualizar UI
+    const vipBadge = document.getElementById('vip-badge');
+    if (vipBadge) {
+        vipBadge.style.display = 'block';
+    }
+    
+    // Recargar galería con contenido VIP
+    loadVIPContent();
+}
+
+function loadVIPContent() {
+    // Esta función será integrada con el sistema modular
+    if (window.ContentAPI && window.ContentAPI.getVideos) {
+        const videos = window.ContentAPI.getVideos(20);
+        displayVideos(videos);
+    }
+}
+
+function displayVideos(videos) {
+    const container = document.getElementById('video-gallery');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    videos.forEach(video => {
+        const videoElement = document.createElement('div');
+        videoElement.className = 'video-item';
+        videoElement.innerHTML = `
+            <video controls preload="metadata" poster="${video.poster || ''}">
+                <source src="${video.src}" type="video/mp4">
+            </video>
+            <div class="video-info">
+                <h3>${video.title || 'Premium Video'}</h3>
+                <p>${video.duration || ''}</p>
+            </div>
+        `;
+        container.appendChild(videoElement);
+    });
 }
 
 // ============================
 // CLICK HANDLERS
 // ============================
 
-function handlePhotoClick(id, filename, index) {
+function handlePhotoClick(element) {
+    if (element.classList.contains('premium-photo') && !state.userData.isVIP) {
+        showVIPModal();
+        trackEvent('premium_photo_click', { blocked: true });
+    } else {
+        openPhotoViewer(element);
+        trackEvent('photo_view', { src: element.dataset.src });
+    }
+}
+
+function handleVideoClick(element) {
+    if (!state.userData.isVIP) {
+        showVIPModal();
+        trackEvent('premium_video_click', { blocked: true });
+    } else {
+        playVideo(element);
+        trackEvent('video_play', { src: element.dataset.src });
+    }
+}
+
+function handleTeaserClick(element) {
+    showPPVModal();
+    trackEvent('teaser_click', { src: element.dataset.src });
+}
+
+function openPhotoViewer(element) {
+    // Implementar visor de fotos
+    console.log('Opening photo viewer for:', element);
+}
+
+function playVideo(element) {
+    // Implementar reproductor de video
+    console.log('Playing video:', element);
+}
+
+// ============================
+// ANALYTICS
+// ============================
+
+function trackEvent(eventName, parameters = {}) {
+    if (!CONFIG.analytics.enabled) return;
+    
     try {
-        if (state.isVIP || state.unlockedContent.has(id)) {
-            viewFullContent(id, filename, 'photo');
-        } else if (state.packCredits > 0) {
-            unlockWithCredits(id);
+        if (typeof gtag !== 'undefined') {
+            gtag('event', eventName, {
+                ...parameters,
+                timestamp: new Date().toISOString(),
+                session_id: state.sessionId
+            });
+        }
+    } catch (error) {
+        console.warn('Analytics error:', error);
+    }
+}
+
+// ============================
+// ISABELLA TOGGLE
+// ============================
+
+function toggleIsabella() {
+    const isabellaContent = document.getElementById('isabella-content');
+    const mainContent = document.getElementById('main-content');
+    
+    if (isabellaContent && mainContent) {
+        if (isabellaContent.style.display === 'none') {
+            isabellaContent.style.display = 'block';
+            mainContent.style.display = 'none';
+            trackEvent('isabella_mode_activated');
         } else {
-            showPPVModal(id, CONFIG.PAYPAL.PRICES.SINGLE_PHOTO);
+            isabellaContent.style.display = 'none';
+            mainContent.style.display = 'block';
+            trackEvent('isabella_mode_deactivated');
+        }
+    }
+}
+
+// ============================
+// INITIALIZATION
+// ============================
+
+async function initializeApplication() {
+    try {
+        console.log('🚀 Initializing IbizaGirl.pics v' + CONFIG.version);
+        
+        // Generar ID de sesión
+        state.sessionId = generateSessionId();
+        
+        // Detectar idioma
+        state.currentLanguage = detectUserLanguage();
+        updateUILanguage();
+        
+        // Verificar sistema modular
+        await checkModularSystem();
+        
+        // Cargar contenido diario
+        await loadDailyContent();
+        
+        // Configurar lazy loading
+        setupLazyLoading();
+        
+        // Inicializar componentes UI
+        initializeUIComponents();
+        
+        // Configurar event listeners
+        setupEventListeners();
+        
+        // Iniciar slideshow
+        startBannerSlideshow();
+        
+        // Actualizar contadores
+        updateViewCounters();
+        
+        // Registrar Service Worker
+        if ('serviceWorker' in navigator && ENVIRONMENT.isProduction) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.warn('Service Worker registration failed'));
         }
         
-        trackEvent('photo_clicked', { id: id, index: index });
+        console.log('✅ Application initialized successfully');
+        
     } catch (error) {
-        ErrorHandler.logError(error, 'handlePhotoClick');
+        ErrorHandler.logError(error, 'Initialization');
+        showFallbackContent();
     }
 }
 
-function handleVideoClick(id, filename, index) {
+async function checkModularSystem() {
+    return new Promise((resolve) => {
+        let attempts = 0;
+        const maxAttempts = 50;
+        
+        const checkInterval = setInterval(() => {
+            attempts++;
+            
+            if (window.ContentAPI && window.UnifiedContentAPI) {
+                clearInterval(checkInterval);
+                console.log('✅ Modular system loaded');
+                resolve(true);
+            } else if (attempts >= maxAttempts) {
+                clearInterval(checkInterval);
+                console.warn('⚠️ Modular system not fully loaded');
+                resolve(false);
+            }
+        }, 100);
+    });
+}
+
+async function loadDailyContent() {
     try {
-        if (state.isVIP || state.unlockedContent.has(id)) {
-            viewFullContent(id, filename, 'video');
-        } else if (state.packCredits > 0) {
-            unlockWithCredits(id);
-        } else {
-            showPPVModal(id, CONFIG.PAYPAL.PRICES.SINGLE_VIDEO);
+        if (window.UnifiedContentAPI && window.UnifiedContentAPI.getTodaysContent) {
+            state.dailyContent = window.UnifiedContentAPI.getTodaysContent();
+            console.log('📅 Daily content loaded:', state.dailyContent);
+            
+            // Renderizar contenido
+            if (state.dailyContent) {
+                renderDailyPhotos(state.dailyContent.photos);
+                renderDailyVideos(state.dailyContent.videos);
+            }
         }
-        
-        trackEvent('video_clicked', { id: id, index: index });
     } catch (error) {
-        ErrorHandler.logError(error, 'handleVideoClick');
+        ErrorHandler.logError(error, 'loadDailyContent');
     }
 }
 
-function handleTeaserClick(index) {
-    console.log('Teaser clicked:', index);
-    document.getElementById('photosSection').scrollIntoView({ behavior: 'smooth' });
+function renderDailyPhotos(photos) {
+    const container = document.getElementById('daily-photos');
+    if (!container || !photos) return;
+    
+    container.innerHTML = photos.map(photo => `
+        <div class="photo-item" onclick="handlePhotoClick(this)" data-src="${photo}">
+            <img src="${photo}" alt="Daily Photo" loading="lazy" onerror="handleImageError(this)">
+        </div>
+    `).join('');
 }
 
-function viewFullContent(id, filename, type) {
-    console.log(`Viewing ${type}:`, id, filename);
+function renderDailyVideos(videos) {
+    const container = document.getElementById('daily-videos');
+    if (!container || !videos) return;
+    
+    container.innerHTML = videos.map(video => `
+        <div class="video-item" onclick="handleVideoClick(this)" data-src="${video}">
+            <video preload="metadata" muted>
+                <source src="${video}" type="video/mp4">
+            </video>
+            <div class="play-overlay">▶</div>
+        </div>
+    `).join('');
 }
 
-function unlockWithCredits(id) {
-    if (state.packCredits > 0) {
-        state.packCredits--;
-        state.unlockedContent.add(id);
-        updateContentItem(id);
-        updateCreditsDisplay();
-        
-        const trans = TRANSLATIONS[state.currentLanguage];
-        showNotification(trans.notification_unlocked
-            .replace('{icon}', '🔓')
-            .replace('{credits}', state.packCredits));
-    }
+function initializeUIComponents() {
+    // Inicializar tooltips
+    document.querySelectorAll('[data-tooltip]').forEach(element => {
+        element.addEventListener('mouseenter', showTooltip);
+        element.addEventListener('mouseleave', hideTooltip);
+    });
+    
+    // Inicializar dropdowns
+    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+        toggle.addEventListener('click', toggleDropdown);
+    });
 }
 
-function unlockAllContent() {
-    document.querySelectorAll('.content-item').forEach(item => {
-        const id = item.dataset.id;
-        if (id) {
-            state.unlockedContent.add(id);
-            item.classList.add('unlocked');
+function setupEventListeners() {
+    // Cerrar modales con ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && state.ui.modalOpen) {
+            const openModal = document.querySelector('.modal[style*="flex"]');
+            if (openModal) {
+                closeModal(openModal.id);
+            }
+        }
+    });
+    
+    // Cerrar modales al hacer clic fuera
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal(modal.id);
+            }
+        });
+    });
+    
+    // Optimizar scroll
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        if (!scrollTimeout) {
+            scrollTimeout = setTimeout(() => {
+                scrollTimeout = null;
+                handleScroll();
+            }, 100);
         }
     });
 }
 
-function updateContentItem(id) {
-    const item = document.querySelector(`[data-id="${id}"]`);
-    if (item) {
-        item.classList.add('unlocked');
-    }
-}
-
-function updateCreditsDisplay() {
-    const display = document.getElementById('creditsDisplay');
-    const number = document.getElementById('creditsNumber');
+function handleScroll() {
+    const scrolled = window.pageYOffset;
+    const header = document.querySelector('header');
     
-    if (display && number) {
-        number.textContent = state.packCredits;
-        display.classList.toggle('active', state.packCredits > 0);
+    if (header) {
+        if (scrolled > 100) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
     }
-}
-
-function showNotification(message) {
-    const notification = document.createElement('div');
-    notification.className = 'notification-toast';
-    notification.textContent = message;
-    document.body.appendChild(notification);
     
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
+    // Lazy load más imágenes si es necesario
+    setupLazyLoading();
 }
 
-function scrollCarousel(direction) {
-    try {
-        const carousel = document.getElementById('teaserCarousel');
-        if (carousel) {
-            const scrollAmount = 280 * direction;
-            carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        }
-    } catch (error) {
-        ErrorHandler.logError(error, 'scrollCarousel');
-    }
+function showTooltip(e) {
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip';
+    tooltip.textContent = e.target.dataset.tooltip;
+    document.body.appendChild(tooltip);
+    
+    const rect = e.target.getBoundingClientRect();
+    tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+    tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
 }
 
-// ============================
-// UTILITY FUNCTIONS
-// ============================
-
-function generateRandomDuration() {
-    const minutes = Math.floor(Math.random() * 15) + 1;
-    const seconds = Math.floor(Math.random() * 60);
-    return `${minutes}:${String(seconds).padStart(2, '0')}`;
+function hideTooltip() {
+    document.querySelectorAll('.tooltip').forEach(t => t.remove());
 }
 
-function changeLanguage(lang) {
-    try {
-        if (!TRANSLATIONS[lang]) return;
-        
-        state.currentLanguage = lang;
-        localStorage.setItem('ibiza_language', lang);
-        
-        document.querySelectorAll('[data-translate]').forEach(element => {
-            const key = element.getAttribute('data-translate');
-            if (TRANSLATIONS[lang][key]) {
-                element.textContent = TRANSLATIONS[lang][key];
-            }
-        });
-        
-        document.documentElement.lang = lang;
-        
-        if (state.dailyContent) {
-            renderPhotosProgressive();
-            renderVideosProgressive();
-        }
-        
-        console.log(`🌍 Language changed to: ${lang}`);
-    } catch (error) {
-        ErrorHandler.logError(error, 'changeLanguage');
-    }
-}
-
-function trackEvent(eventName, parameters = {}) {
-    try {
-        if (window.gtag) {
-            window.gtag('event', eventName, {
-                'event_category': 'engagement',
-                'event_label': state.currentLanguage,
-                ...parameters
-            });
-        }
-        
-        if (ENVIRONMENT.isDevelopment) {
-            console.log(`📊 Event: ${eventName}`, parameters);
-        }
-    } catch (error) {
-        // Silent fail for analytics
-    }
-}
-
-function loadSavedState() {
-    try {
-        const savedLang = localStorage.getItem('ibiza_language') || 'es';
-        if (savedLang !== state.currentLanguage) {
-            state.currentLanguage = savedLang;
-        }
-    } catch (e) {
-        console.error('Error loading saved state:', e);
+function toggleDropdown(e) {
+    e.preventDefault();
+    const dropdown = e.target.nextElementSibling;
+    if (dropdown) {
+        dropdown.classList.toggle('show');
     }
 }
 
@@ -1189,21 +1045,18 @@ window.addEventListener('error', (e) => {
     );
     
     if (!shouldIgnore) {
-        ErrorHandler.logError(e.error || new Error(message), 'Global Error');
+        ErrorHandler.logError(e.error || e, 'Window Error');
     }
-    
-    e.preventDefault();
 });
 
 window.addEventListener('unhandledrejection', (e) => {
-    const reason = e.reason?.message || e.reason?.toString() || '';
+    const reason = String(e.reason);
     
     const ignoredRejections = [
-        'Load failed',
-        'NetworkError',
-        'AbortError',
-        'The user aborted',
+        'Non-Error promise rejection',
+        'ResizeObserver',
         '429',
+        'AbortError',
         'Failed to fetch',
         'TypeError: Failed to fetch',
         'net::ERR_',
@@ -1229,6 +1082,7 @@ window.addEventListener('unhandledrejection', (e) => {
 // ============================
 
 window.handleImageError = handleImageError;
+window.handleVideoError = handleVideoError;
 window.changeLanguage = changeLanguage;
 window.handlePhotoClick = handlePhotoClick;
 window.handleVideoClick = handleVideoClick;
@@ -1240,104 +1094,7 @@ window.closeModal = closeModal;
 window.selectPlan = selectPlan;
 window.selectPack = selectPack;
 window.toggleIsabella = toggleIsabella;
-window.isabellaAction = isabellaAction;
-window.scrollCarousel = scrollCarousel;
 window.trackEvent = trackEvent;
-
-// ============================
-// INITIALIZATION SEQUENCE
-// ============================
-
-async function initializeApplication() {
-    console.log('🎨 Initializing Paradise Gallery v15.0.0 MODULAR INTEGRATION...');
-    
-    try {
-        // Paso 1: Esperar al sistema de contenido modular
-        const contentSystemManager = new ContentSystemManager();
-        console.log('⏳ Esperando sistema de contenido modular...');
-        
-        await contentSystemManager.waitForContentSystem();
-        console.log('✅ Sistema de contenido modular listo');
-        
-        // Paso 2: Cargar estado guardado
-        loadSavedState();
-        
-        // Paso 3: Configurar selector de idioma
-        const langSelect = document.getElementById('languageSelect');
-        if (langSelect) {
-            langSelect.value = state.currentLanguage;
-        }
-        
-        // Paso 4: Obtener contenido diario usando el sistema modular
-        state.dailyContent = contentSystemManager.getContent();
-        if (state.dailyContent) {
-            console.log(`📅 Daily rotation initialized: ${state.dailyContent.photos.length} photos, ${state.dailyContent.videos.length} videos`);
-        }
-        
-        // Paso 5: Renderizar todo el contenido
-        renderPhotosProgressive();
-        renderVideosProgressive();
-        renderTeaserCarousel();
-        
-        // Paso 6: Inicializar sistemas
-        startBannerSlideshow();
-        updateViewCounters();
-        
-        // Paso 7: Configurar Isabella
-        setTimeout(() => {
-            const notification = document.querySelector('.isabella-notification');
-            if (notification) {
-                notification.style.display = 'block';
-            }
-        }, 3000);
-        
-        // Paso 8: Event listeners
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-        });
-        
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
-            });
-        });
-        
-        // Paso 9: Ocultar pantalla de carga
-        setTimeout(() => {
-            const loadingScreen = document.getElementById('loadingScreen');
-            if (loadingScreen) {
-                loadingScreen.classList.add('hidden');
-                console.log('🚀 Loading screen hidden');
-            }
-        }, 1500);
-        
-        // Paso 10: Analytics
-        trackEvent('page_view', { 
-            page: 'main_gallery', 
-            language: state.currentLanguage,
-            daily_photos: state.dailyContent.photos.length,
-            daily_videos: state.dailyContent.videos.length,
-            version: '15.0.0',
-            modular_system: true,
-            content_system_ready: contentSystemManager.contentReady
-        });
-        
-        console.log('✅ Paradise Gallery loaded successfully with modular system!');
-        console.log(`🌊 Version: 15.0.0 MODULAR - ${state.dailyContent.stats.dailyPhotos} photos + ${state.dailyContent.stats.dailyVideos} videos daily`);
-        
-        // Marcar como inicializado
-        state.contentInitialized = true;
-        
-    } catch (error) {
-        ErrorHandler.logError(error, 'Application Initialization');
-        console.error('❌ Critical initialization error:', error);
-        showFallbackContent();
-    }
-}
 
 // ============================
 // DOM READY HANDLER
@@ -1367,39 +1124,23 @@ if (ENVIRONMENT.isDevelopment) {
                 'TEASER_IMAGES': !!window.TEASER_IMAGES
             },
             'State': state,
-            'Daily Content': !!state.dailyContent
+            'Daily Content': !!state.dailyContent,
+            'Errors': ErrorHandler.errors.length
         });
-        
-        if (window.getContentStats) {
-            console.log('📊 Content Stats:', window.getContentStats());
-        }
     };
     
-    window.testModularContent = function() {
-        console.log('🧪 TEST: Probando contenido modular');
-        if (window.getRandomContentForMainScript) {
-            console.log('Random Content:', window.getRandomContentForMainScript());
-        }
-        if (window.generateDailyRotationForMainScript) {
-            console.log('Daily Rotation:', window.generateDailyRotationForMainScript());
-        }
+    window.getSystemErrors = function() {
+        return ErrorHandler.errors;
     };
     
-    window.forceReloadContent = function() {
-        console.log('🔄 Forzando recarga de contenido...');
-        const contentSystemManager = new ContentSystemManager();
-        state.dailyContent = contentSystemManager.getContent();
-        renderPhotosProgressive();
-        renderVideosProgressive();
-        renderTeaserCarousel();
-        updateViewCounters();
-        console.log('✅ Contenido recargado');
+    window.clearSystemErrors = function() {
+        ErrorHandler.clearErrors();
+        console.log('System errors cleared');
     };
-    
-    console.log('🛠️ Funciones de debug disponibles:');
-    console.log('  - debugModularSystem()');
-    console.log('  - testModularContent()');
-    console.log('  - forceReloadContent()');
 }
 
-console.log('✅ Script loaded and ready - v15.0.0 MODULAR INTEGRATION COMPLETE!');
+// ============================
+// END OF MAIN SCRIPT
+// ============================
+
+console.log('📜 Main script loaded successfully');
