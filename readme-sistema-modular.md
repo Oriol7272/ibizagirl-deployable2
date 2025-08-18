@@ -14,6 +14,7 @@
 5. **content-data5.js** - 67 Videos Premium ✓
 6. **content-data6.js** - API Unificada ✓
 7. **verification.js** - Script de Verificación ✓
+8. **content-data-integration.js** - Módulo de Integración ✓
 
 ---
 
@@ -33,193 +34,74 @@ mkdir -p uncensored-videos
 
 ### PASO 2: Copiar Archivos de Contenido
 
-1. Copia cada archivo `content-data[1-6].js` desde los artefactos proporcionados
+1. Copia cada archivo desde los artefactos proporcionados
 2. Guárdalos en la raíz de tu proyecto
-3. **IMPORTANTE**: Asegúrate de que cada archivo esté COMPLETO
+3. **IMPORTANTE**: Usa los archivos CORREGIDOS proporcionados
 
-### PASO 3: Crear content-data-integration.js
+### PASO 3: Actualizar main.html
 
-```javascript
-/**
- * content-data-integration.js - Integration Module v4.1.0 FIXED
- */
-
-'use strict';
-
-console.log('🔗 Iniciando módulo de integración v4.1.0...');
-
-// Función principal de integración
-function initializeIntegration() {
-    console.log('📦 Verificando módulos cargados...');
-    
-    // Crear arrays globales para compatibilidad
-    if (!window.ALL_PHOTOS_POOL) {
-        window.ALL_PHOTOS_POOL = [
-            ...(window.FULL_IMAGES_POOL || []),
-            ...(window.PREMIUM_IMAGES_PART1 || []),
-            ...(window.PREMIUM_IMAGES_PART2 || [])
-        ];
-    }
-    
-    if (!window.ALL_VIDEOS_POOL) {
-        window.ALL_VIDEOS_POOL = window.PREMIUM_VIDEOS_POOL || [];
-    }
-    
-    console.log('✅ Arrays globales creados');
-}
-
-// Funciones auxiliares para main-script.js
-window.getRandomContentForMainScript = function(photoCount = 200, videoCount = 50) {
-    if (window.ContentAPI) {
-        const publicPhotos = window.ContentAPI.getPublicImages(Math.floor(photoCount * 0.3));
-        const premiumPhotos = window.ContentAPI.getPremiumImages(Math.floor(photoCount * 0.7));
-        const videos = window.ContentAPI.getVideos(videoCount);
-        
-        return {
-            photos: [...publicPhotos, ...premiumPhotos].sort(() => Math.random() - 0.5),
-            videos: videos,
-            banners: window.ContentAPI.getBanners(),
-            teasers: window.ContentAPI.getTeasers()
-        };
-    }
-    
-    return {
-        photos: [],
-        videos: [],
-        banners: [],
-        teasers: []
-    };
-};
-
-window.generateDailyRotationForMainScript = function() {
-    if (window.UnifiedContentAPI && window.UnifiedContentAPI.initialized) {
-        return window.UnifiedContentAPI.getTodaysContent();
-    }
-    
-    return window.getRandomContentForMainScript();
-};
-
-window.getContentStats = function() {
-    return {
-        totalPhotos: (window.ALL_PHOTOS_POOL || []).length,
-        totalVideos: (window.ALL_VIDEOS_POOL || []).length,
-        publicPhotos: (window.FULL_IMAGES_POOL || []).length,
-        premiumPhotos: ((window.PREMIUM_IMAGES_PART1 || []).length + (window.PREMIUM_IMAGES_PART2 || []).length),
-        banners: (window.BANNER_IMAGES || []).length,
-        teasers: (window.TEASER_IMAGES || []).length
-    };
-};
-
-// Funciones de debug
-window.debugModularSystem = function() {
-    console.log('🛠️ DEBUG: Estado del sistema modular');
-    console.log('Módulos cargados:', {
-        config: !!window.ContentConfig,
-        public: !!window.FULL_IMAGES_POOL,
-        premium1: !!window.PREMIUM_IMAGES_PART1,
-        premium2: !!window.PREMIUM_IMAGES_PART2,
-        videos: !!window.PREMIUM_VIDEOS_POOL,
-        apis: !!(window.ContentAPI && window.UnifiedContentAPI)
-    });
-    console.log('Estadísticas:', window.getContentStats());
-};
-
-window.testModularContent = function() {
-    console.log('🧪 TEST: Probando contenido modular');
-    const content = window.getRandomContentForMainScript(10, 5);
-    console.log('Contenido aleatorio:', content);
-    return content;
-};
-
-window.forceReloadContent = function() {
-    console.log('🔄 Forzando recarga de contenido...');
-    initializeIntegration();
-    const content = window.generateDailyRotationForMainScript();
-    console.log('✅ Contenido recargado:', content);
-    return content;
-};
-
-// Esperar a que todos los módulos estén cargados
-setTimeout(initializeIntegration, 100);
-
-window.IntegrationSystem = {
-    initialize: initializeIntegration,
-    getContent: window.getRandomContentForMainScript,
-    getDailyRotation: window.generateDailyRotationForMainScript,
-    getStats: window.getContentStats
-};
-
-console.log('✅ Módulo de integración cargado');
-```
-
-### PASO 4: Actualizar main.html
-
-Añade al final del `<body>`:
+Añade estos scripts en el orden exacto ANTES de main-script.js:
 
 ```html
-<!-- Sistema Modular v4.1.0 -->
-<!-- IMPORTANTE: Mantener este orden exacto -->
-<script src="content-data1.js" defer></script>
-<script src="content-data2.js" defer></script>
-<script src="content-data3.js" defer></script>
-<script src="content-data4.js" defer></script>
-<script src="content-data5.js" defer></script>
-<script src="content-data6.js" defer></script>
-<script src="content-data-integration.js" defer></script>
+<!-- Sistema Modular de Contenido v4.1.0 FIXED -->
+<script src="content-data1.js"></script>
+<script src="content-data2.js"></script>
+<script src="content-data3.js"></script>
+<script src="content-data4.js"></script>
+<script src="content-data5.js"></script>
+<script src="content-data6.js"></script>
+<script src="content-data-integration.js"></script>
 
-<!-- Script principal (tu main-script.js existente) -->
-<script src="main-script.js" defer></script>
+<!-- Script de verificación (opcional, solo para debug) -->
+<script src="verification.js"></script>
 
-<!-- Script de verificación (solo para desarrollo) -->
-<script src="verification.js" defer></script>
+<!-- Tu script principal existente -->
+<script src="main-script.js"></script>
 ```
 
-### PASO 5: Añadir CSS para Blur de Thumbnails
+### PASO 4: Añadir CSS para Blur de Premium
 
-En tu `styles.css`, asegúrate de tener:
+En tu styles.css, añade:
 
 ```css
-/* Blur para contenido bloqueado */
-.photo-item.locked img,
-.video-item.locked img,
-.gallery-item.locked img {
-    filter: blur(15px);
+/* Blur para contenido premium */
+.premium-blur {
+    filter: blur(20px);
     transition: filter 0.3s ease;
 }
 
-.photo-item.locked:hover img,
-.video-item.locked:hover img {
-    filter: blur(10px);
+.premium-blur:hover {
+    filter: blur(15px);
 }
 
 /* Overlay para contenido bloqueado */
-.photo-item.locked::after,
-.video-item.locked::after {
-    content: "🔒";
+.locked-overlay {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 48px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: white;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    font-size: 24px;
 }
 ```
 
 ---
 
-## 🧪 VERIFICACIÓN DEL SISTEMA
+## 🔍 VERIFICACIÓN DEL SISTEMA
 
-### Ejecutar en la Consola del Navegador:
-
-1. **Verificación Completa:**
+### 1. **Verificación Completa:**
    ```javascript
    // El script verification.js se ejecutará automáticamente
    // O puedes ejecutar manualmente:
    debugModularSystem();
    ```
 
-2. **Verificar Contenido:**
+### 2. **Verificar Contenido:**
    ```javascript
    console.log('Total imágenes públicas:', FULL_IMAGES_POOL.length); // Debe ser 127
    console.log('Total premium parte 1:', PREMIUM_IMAGES_PART1.length); // Debe ser 186
@@ -227,7 +109,7 @@ En tu `styles.css`, asegúrate de tener:
    console.log('Total videos:', PREMIUM_VIDEOS_POOL.length); // Debe ser 67
    ```
 
-3. **Probar APIs:**
+### 3. **Probar APIs:**
    ```javascript
    // Obtener contenido aleatorio
    const content = ContentAPI.getPublicImages(5);
@@ -327,15 +209,25 @@ Si encuentras problemas:
 
 ## 🎉 ¡LISTO!
 
-Una vez completados todos los pasos y verificaciones, tu sistema estará completamente funcional con:
+Tu sistema modular está configurado. Verifica:
 
-- ✅ 517 imágenes (127 públicas + 390 premium)
-- ✅ 67 videos premium
-- ✅ Sistema de rotación diaria
-- ✅ PayPal integrado (€15/mes, €100 lifetime)
-- ✅ Thumbnails con blur para contenido bloqueado
-- ✅ Anuncios configurados
-- ✅ Service Worker para caché offline
-- ✅ APIs completas para gestión de contenido
+1. **Consola sin errores** ✓
+2. **Contenido cargando** ✓
+3. **APIs funcionando** ✓
+4. **PayPal activo** ✓
+5. **Anuncios visibles** ✓
 
-**¡Tu sitio IbizaGirl.pics está listo para producción!** 🌊🏖️
+```javascript
+// Test final rápido
+console.log('Sistema funcionando:', {
+    fotos: ALL_PHOTOS_POOL.length,
+    videos: ALL_VIDEOS_POOL.length,
+    apis: !!ContentAPI && !!UnifiedContentAPI
+});
+```
+
+---
+
+**Versión**: 4.1.0 FIXED  
+**Fecha**: 2024  
+**Estado**: ✅ Producción
