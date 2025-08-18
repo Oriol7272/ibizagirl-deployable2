@@ -1,13 +1,12 @@
-// ============================
-// CONTENT DATA 3 - IMÁGENES PREMIUM PARTE 1 v4.1.0
-// Primera mitad del contenido premium
-// ============================
-
-'use strict';
+/**
+ * content-data3.js - Premium Images Part 1 v4.1.0 FIXED
+ * Primera mitad del contenido premium (186 archivos)
+ */
 
 // ============================
-// POOL DE IMÁGENES PREMIUM - PARTE 1
+// POOL DE IMÁGENES PREMIUM - PARTE 1 (186 imágenes)
 // ============================
+
 const PREMIUM_IMAGES_PART1 = [
     'uncensored/00wd2wVE89BJnQVenuNP.webp',
     'uncensored/46yy65BCWILWvvLCbqn2.webp',
@@ -49,7 +48,7 @@ const PREMIUM_IMAGES_PART1 = [
     'uncensored/0yj7DvfXP6ajqAXoac8A.webp',
     'uncensored/12IdAS832WEcngM0TmiU.webp',
     'uncensored/15rRK9JyAaWsDxwVzCRM.webp',
-    'uncensored/17LWLAXi4sDIHDlFpdOg.webp',
+    'uncensored/17LWLAXi4sDIHDlFpmdOg.webp',
     'uncensored/18VQaczW5kdfdiqUVasH.webp',
     'uncensored/1DCEysi2B2gEWgZnDyqg.webp',
     'uncensored/1G4FDSg9HpEVWWDhmpDO.webp',
@@ -204,32 +203,31 @@ const PREMIUM_IMAGES_PART1 = [
 // ============================
 // GESTOR DE CONTENIDO PREMIUM PARTE 1
 // ============================
+
 class PremiumContentPart1 {
     constructor() {
         this.images = PREMIUM_IMAGES_PART1;
         this.initialized = false;
     }
     
-    // Inicializar
     initialize() {
         this.initialized = true;
         console.log(`✅ PremiumContentPart1 inicializado - ${this.images.length} imágenes`);
     }
     
-    // Obtener todas las imágenes de la parte 1
     getAllImages() {
         return [...this.images];
     }
     
-    // Obtener imágenes aleatorias
     getRandomImages(count = 10) {
         if (!window.ArrayUtils) {
-            return this.images.slice(0, count);
+            // Fallback si ArrayUtils no está disponible
+            const shuffled = [...this.images].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, Math.min(count, shuffled.length));
         }
         return window.ArrayUtils.getRandomItems(this.images, count);
     }
     
-    // Buscar imágenes
     searchImages(query) {
         if (!query) return this.images;
         const queryLower = query.toLowerCase();
@@ -238,12 +236,14 @@ class PremiumContentPart1 {
         );
     }
     
-    // Verificar si una imagen existe
     hasImage(imagePath) {
         return this.images.includes(imagePath);
     }
     
-    // Obtener estadísticas
+    getImageSubset(start = 0, count = 10) {
+        return this.images.slice(start, start + count);
+    }
+    
     getStats() {
         return {
             totalImages: this.images.length,
@@ -256,6 +256,7 @@ class PremiumContentPart1 {
 // ============================
 // INICIALIZACIÓN Y EXPORTACIÓN
 // ============================
+
 const globalPremiumPart1 = new PremiumContentPart1();
 
 // Exponer APIs globales
@@ -271,4 +272,15 @@ if (document.readyState === 'loading') {
     globalPremiumPart1.initialize();
 }
 
-console.log(`📦 content-data3.js cargado - ${PREMIUM_IMAGES_PART1.length} imágenes premium (parte 1)`);
+// Log de inicialización
+console.log(`📦 content-data3.js v4.1.0 FIXED loaded`);
+console.log(`   - ${PREMIUM_IMAGES_PART1.length} imágenes premium (parte 1) disponibles`);
+console.log(`   - PremiumContentPart1 manager inicializado`);
+
+// Exportar para módulos ES6 si es necesario
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        PREMIUM_IMAGES_PART1,
+        PremiumContentPart1: globalPremiumPart1
+    };
+}
