@@ -633,6 +633,101 @@
                 }
             }, 500);
         }
-    </script>
+        <!-- 
+    ORDEN CORRECTO DE CARGA DE SCRIPTS PARA IBIZAGIRL.PICS
+    Este fragmento debe incluirse al final del <body> en main.html
+    El orden es CRÍTICO para el funcionamiento correcto
+-->
+
+<!-- ============================
+     MÓDULOS DE CONTENIDO (Orden crítico)
+     ============================ -->
+
+<!-- 1. Configuración y utilidades base -->
+<script src="content-data1.js"></script>
+
+<!-- 2. Imágenes públicas (127 archivos) -->
+<script src="content-data2.js"></script>
+
+<!-- 3. Imágenes premium parte 1 (186 archivos) -->
+<script src="content-data3.js"></script>
+
+<!-- 4. Imágenes premium parte 2 (204 archivos) -->
+<script src="content-data4.js"></script>
+
+<!-- 5. Videos premium (67 archivos) -->
+<script src="content-data5.js"></script>
+
+<!-- 6. API unificada y funciones principales -->
+<script src="content-data6.js"></script>
+
+<!-- 7. Integrador con main-script.js (CORREGIDO) -->
+<script src="content-data-integration.js"></script>
+
+<!-- ============================
+     SCRIPTS DE FUNCIONALIDAD
+     ============================ -->
+
+<!-- 8. Gestor de contenedores de anuncios -->
+<script src="ad-containers-manager.js"></script>
+
+<!-- 9. Verificación de anuncios -->
+<script src="ad-verification.js"></script>
+
+<!-- 10. Mejoras SEO -->
+<script src="seo-enhancements.js"></script>
+
+<!-- 11. Fix de Chrome para anuncios -->
+<script src="chrome-ads-fix.js"></script>
+
+<!-- 12. Corrector de URLs de ExoClick -->
+<script src="exoclick-urls-fix.js"></script>
+
+<!-- 13. Script principal de la aplicación (CORREGIDO) -->
+<script src="main-script-updated.js"></script>
+
+<!-- ============================
+     VERIFICACIÓN DE CARGA
+     ============================ -->
+<script>
+// Verificar que todos los módulos se cargaron correctamente
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        const requiredModules = [
+            'ContentConfig',           // content-data1.js
+            'FULL_IMAGES_POOL',       // content-data2.js
+            'PREMIUM_IMAGES_PART1',   // content-data3.js
+            'PREMIUM_IMAGES_PART2',   // content-data4.js
+            'PREMIUM_VIDEOS_POOL',    // content-data5.js
+            'ContentAPI',             // content-data6.js
+            'UnifiedContentAPI',      // content-data6.js
+            'IntegrationSystem'       // content-data-integration.js
+        ];
+        
+        const missingModules = [];
+        
+        requiredModules.forEach(module => {
+            if (!window[module]) {
+                missingModules.push(module);
+            }
+        });
+        
+        if (missingModules.length > 0) {
+            console.error('❌ Módulos faltantes:', missingModules);
+            console.error('Por favor, verifica que todos los archivos estén presentes y el orden de carga sea correcto.');
+        } else {
+            console.log('✅ Todos los módulos cargados correctamente');
+            console.log('📊 Estadísticas del sistema:', window.getContentStats ? window.getContentStats() : 'No disponible');
+        }
+        
+        // Mostrar estado del sistema
+        if (window.debugModularSystem) {
+            console.log('');
+            console.log('=== ESTADO DEL SISTEMA ===');
+            window.debugModularSystem();
+        }
+    }, 2000);
+});
+</script>    </script>
 </body>
 </html>
