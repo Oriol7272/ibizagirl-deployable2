@@ -1,7 +1,12 @@
 /**
- * content-data1.js - Configuration & Utilities v4.1.0 FIXED
+ * content-data1.js - Configuration and Base Utilities v4.1.0 FIXED
  * Configuración base y utilidades para el sistema modular
+ * IbizaGirl.pics - Paradise Gallery System
  */
+
+'use strict';
+
+console.log('📦 Cargando módulo content-data1.js - Configuración base...');
 
 // ============================
 // CONFIGURACIÓN GLOBAL
@@ -10,47 +15,55 @@
 const ContentConfig = {
     version: '4.1.0',
     environment: window.location.hostname === 'localhost' ? 'development' : 'production',
-    debug: window.location.hostname === 'localhost',
     
-    // Configuración de rotación
-    rotation: {
-        enabled: true,
-        intervalHours: 24,
-        bannersCount: 5,
-        teasersCount: 10,
-        dailyPhotosCount: 200,
-        dailyVideosCount: 40
+    // Configuración de contenido
+    content: {
+        photosPerPage: 24,
+        videosPerPage: 12,
+        bannersCount: 6,
+        teasersCount: 9,
+        rotationEnabled: true,
+        rotationIntervalHours: 1
     },
     
     // Configuración de caché
     cache: {
         enabled: true,
         duration: 3600000, // 1 hora
-        maxSize: 100 // items máximos
+        maxSize: 100 // MB
     },
     
     // Configuración de lazy loading
-    lazyLoading: {
+    lazyLoad: {
         enabled: true,
-        rootMargin: '50px',
-        threshold: 0.1
+        offset: 50,
+        throttle: 100
     },
     
-    // Configuración de contenido
-    content: {
-        photosPerPage: 30,
-        videosPerPage: 12,
-        enableInfiniteScroll: true,
-        enableSearch: true,
-        enableFilters: true
+    // PayPal configuración
+    paypal: {
+        clientId: 'AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5',
+        currency: 'EUR',
+        environment: 'production'
     },
     
-    // Configuración de acceso
-    access: {
-        guestPreview: true,
-        blurredContent: true,
-        watermark: false,
-        previewDuration: 30 // segundos para videos
+    // Precios
+    pricing: {
+        monthly: 15,
+        lifetime: 100,
+        packs: {
+            small: 10,
+            medium: 25,
+            large: 50
+        }
+    },
+    
+    // Configuración de anuncios
+    ads: {
+        enabled: true,
+        refreshInterval: 30000,
+        maxPerPage: 4,
+        networks: ['exoclick', 'trafficstars']
     }
 };
 
@@ -59,71 +72,47 @@ const ContentConfig = {
 // ============================
 
 const TimeUtils = {
-    // Obtener timestamp actual
-    now() {
-        return Date.now();
-    },
-    
     // Obtener fecha actual
-    today() {
+    getCurrentDate() {
         return new Date();
     },
     
-    // Obtener día del año
-    getDayOfYear(date = new Date()) {
-        const start = new Date(date.getFullYear(), 0, 0);
-        const diff = date - start;
-        const oneDay = 1000 * 60 * 60 * 24;
-        return Math.floor(diff / oneDay);
+    // Obtener seed diario para rotación
+    getDailySeed() {
+        const now = new Date();
+        return now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
     },
     
-    // Obtener semana del año
-    getWeekOfYear(date = new Date()) {
-        const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-        const dayNum = d.getUTCDay() || 7;
-        d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-        const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-        return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    // Obtener seed horario
+    getHourlySeed() {
+        const now = new Date();
+        return this.getDailySeed() * 100 + now.getHours();
     },
     
-    // Generar seed basado en fecha
-    getDateSeed(date = new Date()) {
-        return date.getFullYear() * 10000 + 
-               date.getMonth() * 100 + 
-               date.getDate();
-    },
-    
-    // Formatear fecha
-    formatDate(date, format = 'DD/MM/YYYY') {
-        const d = new Date(date);
-        const day = String(d.getDate()).padStart(2, '0');
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const year = d.getFullYear();
-        
-        return format
-            .replace('DD', day)
-            .replace('MM', month)
-            .replace('YYYY', year);
+    // Formatear tiempo
+    formatTime(date) {
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
     },
     
     // Tiempo relativo
     getRelativeTime(date) {
-        const seconds = Math.floor((Date.now() - date) / 1000);
+        const now = new Date();
+        const diff = now - date;
+        const seconds = Math.floor(diff / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
         
-        const intervals = {
-            año: 31536000,
-            mes: 2592000,
-            semana: 604800,
-            día: 86400,
-            hora: 3600,
-            minuto: 60
-        };
-        
-        for (const [unit, secondsInUnit] of Object.entries(intervals)) {
-            const interval = Math.floor(seconds / secondsInUnit);
-            if (interval >= 1) {
-                return `hace ${interval} ${unit}${interval > 1 ? 's' : ''}`;
-            }
+        if (days > 0) {
+            return `hace ${days} día${days > 1 ? 's' : ''}`;
+        } else if (hours > 0) {
+            return `hace ${hours} hora${hours > 1 ? 's' : ''}`;
+        } else if (minutes > 0) {
+            return `hace ${minutes} minuto${minutes > 1 ? 's' : ''}`;
+        } else if (seconds > 0) {
+            return `hace ${seconds} segundo${seconds > 1 ? 's' : ''}`;
         }
         
         return 'justo ahora';
@@ -235,122 +224,6 @@ const ArrayUtils = {
 };
 
 // ============================
-// UTILIDADES DE ALMACENAMIENTO
-// ============================
-
-const StorageUtils = {
-    // Guardar en localStorage
-    save(key, value) {
-        try {
-            localStorage.setItem(key, JSON.stringify(value));
-            return true;
-        } catch (e) {
-            console.error('Error saving to localStorage:', e);
-            return false;
-        }
-    },
-    
-    // Obtener de localStorage
-    load(key, defaultValue = null) {
-        try {
-            const item = localStorage.getItem(key);
-            return item ? JSON.parse(item) : defaultValue;
-        } catch (e) {
-            console.error('Error loading from localStorage:', e);
-            return defaultValue;
-        }
-    },
-    
-    // Eliminar de localStorage
-    remove(key) {
-        try {
-            localStorage.removeItem(key);
-            return true;
-        } catch (e) {
-            console.error('Error removing from localStorage:', e);
-            return false;
-        }
-    },
-    
-    // Limpiar localStorage
-    clear() {
-        try {
-            localStorage.clear();
-            return true;
-        } catch (e) {
-            console.error('Error clearing localStorage:', e);
-            return false;
-        }
-    },
-    
-    // Guardar en sessionStorage
-    saveSession(key, value) {
-        try {
-            sessionStorage.setItem(key, JSON.stringify(value));
-            return true;
-        } catch (e) {
-            console.error('Error saving to sessionStorage:', e);
-            return false;
-        }
-    },
-    
-    // Obtener de sessionStorage
-    loadSession(key, defaultValue = null) {
-        try {
-            const item = sessionStorage.getItem(key);
-            return item ? JSON.parse(item) : defaultValue;
-        } catch (e) {
-            console.error('Error loading from sessionStorage:', e);
-            return defaultValue;
-        }
-    }
-};
-
-// ============================
-// UTILIDADES DE VALIDACIÓN
-// ============================
-
-const Validators = {
-    // Validar email
-    isValidEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    },
-    
-    // Validar URL
-    isValidUrl(url) {
-        try {
-            new URL(url);
-            return true;
-        } catch (e) {
-            return false;
-        }
-    },
-    
-    // Validar ruta de imagen
-    isValidImagePath(path) {
-        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
-        return imageExtensions.some(ext => path.toLowerCase().endsWith(ext));
-    },
-    
-    // Validar ruta de video
-    isValidVideoPath(path) {
-        const videoExtensions = ['.mp4', '.webm', '.ogg', '.avi', '.mov'];
-        return videoExtensions.some(ext => path.toLowerCase().endsWith(ext));
-    },
-    
-    // Validar número
-    isNumber(value) {
-        return !isNaN(value) && isFinite(value);
-    },
-    
-    // Validar rango
-    isInRange(value, min, max) {
-        return this.isNumber(value) && value >= min && value <= max;
-    }
-};
-
-// ============================
 // GESTOR DE EVENTOS
 // ============================
 
@@ -359,115 +232,112 @@ class EventManager {
         this.events = {};
     }
     
-    // Suscribir a evento
-    on(eventName, callback) {
-        if (!this.events[eventName]) {
-            this.events[eventName] = [];
+    on(event, callback) {
+        if (!this.events[event]) {
+            this.events[event] = [];
         }
-        this.events[eventName].push(callback);
+        this.events[event].push(callback);
     }
     
-    // Desuscribir de evento
-    off(eventName, callback) {
-        if (!this.events[eventName]) return;
-        
-        const index = this.events[eventName].indexOf(callback);
-        if (index > -1) {
-            this.events[eventName].splice(index, 1);
+    off(event, callback) {
+        if (this.events[event]) {
+            this.events[event] = this.events[event].filter(cb => cb !== callback);
         }
     }
     
-    // Emitir evento
-    emit(eventName, data) {
-        if (!this.events[eventName]) return;
-        
-        this.events[eventName].forEach(callback => {
-            try {
-                callback(data);
-            } catch (error) {
-                console.error(`Error in event handler for ${eventName}:`, error);
-            }
-        });
+    emit(event, data) {
+        if (this.events[event]) {
+            this.events[event].forEach(callback => callback(data));
+        }
     }
     
-    // Suscribir una sola vez
-    once(eventName, callback) {
-        const onceWrapper = (data) => {
+    once(event, callback) {
+        const onceCallback = (data) => {
             callback(data);
-            this.off(eventName, onceWrapper);
+            this.off(event, onceCallback);
         };
-        this.on(eventName, onceWrapper);
+        this.on(event, onceCallback);
     }
 }
 
 // ============================
-// SISTEMA DE CACHÉ
+// GESTOR DE ALMACENAMIENTO
 // ============================
 
-class CacheSystem {
-    constructor(maxSize = 100, ttl = 3600000) {
-        this.cache = new Map();
-        this.maxSize = maxSize;
-        this.ttl = ttl; // Time to live en ms
+class StorageManager {
+    constructor(prefix = 'ibizagirl_') {
+        this.prefix = prefix;
+        this.storage = this.isAvailable() ? localStorage : this.memoryStorage();
     }
     
-    // Guardar en caché
-    set(key, value) {
-        // Si alcanzamos el límite, eliminar el más antiguo
-        if (this.cache.size >= this.maxSize) {
-            const firstKey = this.cache.keys().next().value;
-            this.cache.delete(firstKey);
+    isAvailable() {
+        try {
+            const test = '__storage_test__';
+            localStorage.setItem(test, test);
+            localStorage.removeItem(test);
+            return true;
+        } catch(e) {
+            return false;
         }
-        
-        this.cache.set(key, {
-            value,
-            timestamp: Date.now()
-        });
     }
     
-    // Obtener de caché
+    memoryStorage() {
+        const data = {};
+        return {
+            getItem: (key) => data[key] || null,
+            setItem: (key, value) => data[key] = value,
+            removeItem: (key) => delete data[key],
+            clear: () => Object.keys(data).forEach(key => delete data[key])
+        };
+    }
+    
     get(key) {
-        const item = this.cache.get(key);
-        
-        if (!item) return null;
-        
-        // Verificar si expiró
-        if (Date.now() - item.timestamp > this.ttl) {
-            this.cache.delete(key);
+        try {
+            const item = this.storage.getItem(this.prefix + key);
+            return item ? JSON.parse(item) : null;
+        } catch(e) {
             return null;
         }
-        
-        return item.value;
     }
     
-    // Verificar si existe
-    has(key) {
-        return this.get(key) !== null;
-    }
-    
-    // Eliminar de caché
-    delete(key) {
-        return this.cache.delete(key);
-    }
-    
-    // Limpiar caché
-    clear() {
-        this.cache.clear();
-    }
-    
-    // Obtener tamaño
-    size() {
-        return this.cache.size;
-    }
-    
-    // Limpiar expirados
-    cleanup() {
-        const now = Date.now();
-        for (const [key, item] of this.cache.entries()) {
-            if (now - item.timestamp > this.ttl) {
-                this.cache.delete(key);
-            }
+    set(key, value, ttl = null) {
+        try {
+            const item = {
+                value,
+                timestamp: Date.now(),
+                ttl
+            };
+            this.storage.setItem(this.prefix + key, JSON.stringify(item));
+            return true;
+        } catch(e) {
+            return false;
         }
+    }
+    
+    remove(key) {
+        try {
+            this.storage.removeItem(this.prefix + key);
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }
+    
+    clear() {
+        try {
+            Object.keys(this.storage)
+                .filter(key => key.startsWith(this.prefix))
+                .forEach(key => this.storage.removeItem(key));
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }
+    
+    isExpired(key) {
+        const item = this.get(key);
+        if (!item || !item.ttl) return false;
+        return Date.now() - item.timestamp > item.ttl;
     }
 }
 
@@ -481,15 +351,10 @@ const FeatureDetector = {
         const canvas = document.createElement('canvas');
         canvas.width = 1;
         canvas.height = 1;
-        return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+        return canvas.toDataURL('image/webp').indexOf('image/webp') === 0;
     },
     
-    // Detectar soporte de lazy loading nativo
-    supportsLazyLoading() {
-        return 'loading' in HTMLImageElement.prototype;
-    },
-    
-    // Detectar IntersectionObserver
+    // Detectar Intersection Observer
     supportsIntersectionObserver() {
         return 'IntersectionObserver' in window;
     },
@@ -499,117 +364,55 @@ const FeatureDetector = {
         return 'serviceWorker' in navigator;
     },
     
+    // Detectar modo oscuro
+    prefersDarkMode() {
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    },
+    
+    // Detectar conexión lenta
+    isSlowConnection() {
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (connection) {
+            return connection.effectiveType === 'slow-2g' || 
+                   connection.effectiveType === '2g' ||
+                   connection.saveData === true;
+        }
+        return false;
+    },
+    
     // Detectar dispositivo móvil
     isMobile() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     },
     
-    // Detectar dispositivo táctil
-    isTouchDevice() {
-        return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    },
-    
-    // Obtener información del navegador
-    getBrowserInfo() {
+    // Detectar navegador
+    getBrowser() {
         const ua = navigator.userAgent;
-        let browser = 'Unknown';
-        let version = 'Unknown';
-        
-        if (ua.indexOf('Chrome') > -1) {
-            browser = 'Chrome';
-            version = ua.match(/Chrome\/(\d+)/)?.[1] || version;
-        } else if (ua.indexOf('Safari') > -1) {
-            browser = 'Safari';
-            version = ua.match(/Version\/(\d+)/)?.[1] || version;
-        } else if (ua.indexOf('Firefox') > -1) {
-            browser = 'Firefox';
-            version = ua.match(/Firefox\/(\d+)/)?.[1] || version;
-        }
-        
-        return { browser, version, userAgent: ua };
+        if (ua.indexOf("Chrome") > -1) return "Chrome";
+        if (ua.indexOf("Safari") > -1) return "Safari";
+        if (ua.indexOf("Firefox") > -1) return "Firefox";
+        if (ua.indexOf("Edge") > -1) return "Edge";
+        return "Unknown";
     }
 };
 
 // ============================
-// INICIALIZACIÓN Y EXPORTACIÓN
+// EXPORTAR GLOBALMENTE
 // ============================
 
-// Crear instancias globales
-const globalEventManager = new EventManager();
-const globalCache = new CacheSystem(
-    ContentConfig.cache.maxSize,
-    ContentConfig.cache.duration
-);
-
-// Exponer APIs globales
 window.ContentConfig = ContentConfig;
 window.TimeUtils = TimeUtils;
 window.ArrayUtils = ArrayUtils;
-window.StorageUtils = StorageUtils;
-window.Validators = Validators;
-window.EventManager = globalEventManager;
-window.CacheSystem = globalCache;
+window.EventManager = new EventManager();
+window.StorageManager = new StorageManager();
 window.FeatureDetector = FeatureDetector;
 
-// Auto-limpiar caché periódicamente
-if (ContentConfig.cache.enabled) {
-    setInterval(() => {
-        globalCache.cleanup();
-    }, 300000); // Cada 5 minutos
-}
-
-// Log de inicialización
-console.log('📦 content-data1.js v4.1.0 FIXED loaded');
-console.log('   - Configuration loaded');
-console.log('   - Utilities initialized');
-console.log('   - Cache system ready');
-console.log('   - Event manager ready');
-console.log('   - Feature detector available');
-
-// Modo debug
-if (ContentConfig.debug) {
-    console.log('🔧 Debug mode enabled');
-    window.ContentDebug = {
-        config: ContentConfig,
-        cache: globalCache,
-        events: globalEventManager,
-        
-        // Funciones de debug
-        inspectCache() {
-            console.table(Array.from(globalCache.cache.entries()).map(([key, value]) => ({
-                key,
-                value: value.value,
-                age: Date.now() - value.timestamp
-            })));
-        },
-        
-        testFeatures() {
-            console.table({
-                WebP: FeatureDetector.supportsWebP(),
-                LazyLoading: FeatureDetector.supportsLazyLoading(),
-                IntersectionObserver: FeatureDetector.supportsIntersectionObserver(),
-                ServiceWorker: FeatureDetector.supportsServiceWorker(),
-                Mobile: FeatureDetector.isMobile(),
-                Touch: FeatureDetector.isTouchDevice()
-            });
-        },
-        
-        browserInfo() {
-            console.table(FeatureDetector.getBrowserInfo());
-        }
-    };
-}
-
-// Exportar para módulos ES6 si es necesario
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        ContentConfig,
-        TimeUtils,
-        ArrayUtils,
-        StorageUtils,
-        Validators,
-        EventManager: globalEventManager,
-        CacheSystem: globalCache,
-        FeatureDetector
-    };
-}
+console.log('✅ Módulo content-data1.js cargado correctamente');
+console.log('📊 Configuración:', ContentConfig);
+console.log('🛠️ Utilidades disponibles:', {
+    TimeUtils: !!TimeUtils,
+    ArrayUtils: !!ArrayUtils,
+    EventManager: !!window.EventManager,
+    StorageManager: !!window.StorageManager,
+    FeatureDetector: !!FeatureDetector
+});
