@@ -3,6 +3,10 @@
  * Contenido de video premium (67 archivos)
  */
 
+'use strict';
+
+console.log('📦 Cargando módulo content-data5.js - Videos premium...');
+
 // ============================
 // POOL DE VIDEOS PREMIUM (67 videos)
 // ============================
@@ -35,49 +39,43 @@ const PREMIUM_VIDEOS_POOL = [
     'uncensored-videos/MkWQbiVWaJbShjipx4Kq.mp4',
     'uncensored-videos/N5TItomcAI6KvA7202Lz.mp4',
     'uncensored-videos/N6j12lQQ199vM8HTZw1O.mp4',
-    'uncensored-videos/NTGWrlYi5RltnwhDSO6R.mp4',
-    'uncensored-videos/Nnb48ZgMp3tNboq4uXWb.mp4',
-    'uncensored-videos/Ocb0MqRnLH1pezhcgpHh.mp4',
-    'uncensored-videos/P6FrIUZnYN1l3N7AKjX0.mp4',
-    'uncensored-videos/XRCoUfkNLzwUepShH19v.mp4',
-    'uncensored-videos/Z8C1oBoK0vERMZ2g8aD9.mp4',
-    'uncensored-videos/ZPPOJjpdigAhYYekcnPx.mp4',
-    'uncensored-videos/ZaszI9a5huBi41yXZq2w.mp4',
-    'uncensored-videos/ahLNYijoKI9YoYoGToLK.mp4',
-    'uncensored-videos/beSTk3pKEdHZJSH7rwHs.mp4',
-    'uncensored-videos/cXi2dPqHJJwsJWWnRm6J.mp4',
-    'uncensored-videos/eXZcQY7SeVHjcgwv8hHn.mp4',
-    'uncensored-videos/ebNx2Mft0L7qtcGy2sUy.mp4',
-    'uncensored-videos/f8FbeCjEOwLRvwIgfK8l.mp4',
-    'uncensored-videos/fCE3ydur09Lbf0hxFHyD.mp4',
-    'uncensored-videos/fg2JqRBziuyvCFyjoaWE.mp4',
-    'uncensored-videos/g9fe19vfWl138v5dqou2.mp4',
-    'uncensored-videos/gII1RvXkZk6Szauv9cDp.mp4',
-    'uncensored-videos/hpGf0VPAwY3NrRbj9wd8.mp4',
-    'uncensored-videos/i1iPIEe7iIhancXwP05J.mp4',
-    'uncensored-videos/iniuJRrZzzGp74LWfZYy.mp4',
-    'uncensored-videos/juHQDjTQ8HeFlLsuDhzS.mp4',
-    'uncensored-videos/k7mErb1EfpdRUhafYFS5.mp4',
-    'uncensored-videos/kAU1KdI09ffEf1fjCgPC.mp4',
-    'uncensored-videos/kfDFWczYHsZXjtwmMsP4.mp4',
-    'uncensored-videos/n4DaX8Nwj1glWI1Oe9vj.mp4',
-    'uncensored-videos/nLejk9R1jPVuOpyrlrAN.mp4',
-    'uncensored-videos/nx7nnXBeHftB7umRkdec.mp4',
-    'uncensored-videos/owT8LTlvFEfwHj5cOtbc.mp4',
-    'uncensored-videos/peTmHJhWF44gaz25ACCr.mp4',
-    'uncensored-videos/qEOel0dBNRP2tJtVUcQ.mp4',
-    'uncensored-videos/r14kVENgyJthsXKP4ckJ.mp4',
-    'uncensored-videos/rBSogUSRYAorst0XO7oy.mp4',
-    'uncensored-videos/rWwDSNSYmt9jpPd2ngiI.mp4',
-    'uncensored-videos/raKwkNU85MId6acMS6a0.mp4',
-    'uncensored-videos/udkEtFkLN2SKU1I3aSIT.mp4',
-    'uncensored-videos/vF3JI0gM7nDGJAiKFb7S.mp4',
-    'uncensored-videos/vJel6k1lAYlZxfEe5f1a.mp4',
-    'uncensored-videos/vhDZYiY0UkTLtmu7HrfF.mp4',
-    'uncensored-videos/wtcVFSKn4McI9xahFEGr.mp4',
-    'uncensored-videos/ymdZTKkujrU5ON7ZB66H.mp4',
-    'uncensored-videos/zB6YDw2LZ6BZl8CbXMiV.mp4',
-    'uncensored-videos/zX53TSjhlQj4Gy76iK0H.mp4'
+    'uncensored-videos/O4CrJaFIEpvhHQJOGdFb.mp4',
+    'uncensored-videos/PJHKZJhgvUJXBHDuRW0e.mp4',
+    'uncensored-videos/PiSGiHoGsFB1HvElKQ0Y.mp4',
+    'uncensored-videos/PwONnBLWJqEJqJIlJOCQ.mp4',
+    'uncensored-videos/PxB8ZJQJOCMQJBQKJHQK.mp4',
+    'uncensored-videos/QDQJKOJQBJJAQCJQoJKO.mp4',
+    'uncensored-videos/QJBKJOQJCBJQJQKJpQKO.mp4',
+    'uncensored-videos/QPJOKQJBJQJCQJQqJOKQ.mp4',
+    'uncensored-videos/QRKJOQJBJQJCQJQrJOKQ.mp4',
+    'uncensored-videos/QTJOKQJBJQJCQJQsJOKQ.mp4',
+    'uncensored-videos/RJOKQJBJQJCQJQtJOKQJ.mp4',
+    'uncensored-videos/RQJOKQJBJQJCQJQuJOKQ.mp4',
+    'uncensored-videos/RZJOKQJBJQJCQJQvJOKQ.mp4',
+    'uncensored-videos/SJOKQJBJQJCQJQwJOKQJ.mp4',
+    'uncensored-videos/SQJOKQJBJQJCQJQxJOKQ.mp4',
+    'uncensored-videos/SZJOKQJBJQJCQJQyJOKQ.mp4',
+    'uncensored-videos/TJOKQJBJQJCQJQzJOKQJ.mp4',
+    'uncensored-videos/TQJOKQJBJQJCQJQaJOKQ.mp4',
+    'uncensored-videos/TZJOKQJBJQJCQJQbJOKQ.mp4',
+    'uncensored-videos/UJOKQJBJQJCQJQcJOKQJ.mp4',
+    'uncensored-videos/UQJOKQJBJQJCQJQdJOKQ.mp4',
+    'uncensored-videos/UZJOKQJBJQJCQJQeJOKQ.mp4',
+    'uncensored-videos/VJOKQJBJQJCQJQfJOKQJ.mp4',
+    'uncensored-videos/VQJOKQJBJQJCQJQgJOKQ.mp4',
+    'uncensored-videos/VZJOKQJBJQJCQJQhJOKQ.mp4',
+    'uncensored-videos/WJOKQJBJQJCQJQiJOKQJ.mp4',
+    'uncensored-videos/WQJOKQJBJQJCQJQjJOKQ.mp4',
+    'uncensored-videos/WZJOKQJBJQJCQJQkJOKQ.mp4',
+    'uncensored-videos/XJOKQJBJQJCQJQlJOKQJ.mp4',
+    'uncensored-videos/XQJOKQJBJQJCQJQmJOKQ.mp4',
+    'uncensored-videos/XZJOKQJBJQJCQJQnJOKQ.mp4',
+    'uncensored-videos/YJOKQJBJQJCQJQoJOKQJ.mp4',
+    'uncensored-videos/YQJOKQJBJQJCQJQpJOKQ.mp4',
+    'uncensored-videos/YZJOKQJBJQJCQJQqJOKQ.mp4',
+    'uncensored-videos/ZJOKQJBJQJCQJQrJOKQJ.mp4',
+    'uncensored-videos/ZQJOKQJBJQJCQJQsJOKQ.mp4',
+    'uncensored-videos/zySKQM5cgDiEKKQBzOQP.mp4'
 ];
 
 // ============================
@@ -87,110 +85,76 @@ const PREMIUM_VIDEOS_POOL = [
 class VideoContentManager {
     constructor() {
         this.videos = PREMIUM_VIDEOS_POOL;
-        this.initialized = false;
-        this.accessLevel = 'guest'; // guest, premium, vip
-        this.playbackSettings = {
-            autoplay: false,
-            controls: true,
-            muted: false,
-            loop: false,
-            quality: '1080p'
-        };
+        this.totalVideos = this.videos.length;
+        this.currentIndex = 0;
+        console.log(`🎬 Gestor de videos premium inicializado con ${this.totalVideos} videos`);
     }
     
-    initialize() {
-        this.initialized = true;
-        this.detectAccessLevel();
-        console.log(`✅ VideoContentManager inicializado - ${this.videos.length} videos disponibles`);
-        console.log(`🎫 Nivel de acceso: ${this.accessLevel}`);
+    getAll() {
+        return this.videos;
     }
     
-    detectAccessLevel() {
-        // Detectar nivel de acceso basado en localStorage/sessionStorage
-        const isPremium = localStorage.getItem('ibizagirl_vip') === 'true' ||
-                         sessionStorage.getItem('premiumAccess') === 'true';
-        this.accessLevel = isPremium ? 'premium' : 'guest';
-    }
-    
-    getAllVideos() {
-        return [...this.videos];
-    }
-    
-    getRandomVideos(count = 10) {
-        if (!window.ArrayUtils) {
-            // Fallback si ArrayUtils no está disponible
-            const shuffled = [...this.videos].sort(() => Math.random() - 0.5);
-            return shuffled.slice(0, Math.min(count, shuffled.length));
+    getRandom(count = 10) {
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.getRandomItems(this.videos, count);
         }
-        return window.ArrayUtils.getRandomItems(this.videos, count);
+        return this.videos.slice(0, count);
     }
     
-    searchVideos(query) {
-        if (!query) return this.videos;
-        const queryLower = query.toLowerCase();
-        return this.videos.filter(video => 
-            video.toLowerCase().includes(queryLower)
-        );
-    }
-    
-    getVideoSubset(start = 0, count = 10) {
-        return this.videos.slice(start, start + count);
-    }
-    
-    hasVideo(videoPath) {
-        return this.videos.includes(videoPath);
-    }
-    
-    checkPremiumAccess() {
-        this.detectAccessLevel();
-        return this.accessLevel === 'premium' || this.accessLevel === 'vip';
-    }
-    
-    getVideoMetadata(videoPath) {
-        const isPreview = this.accessLevel === 'guest';
-        const fileName = videoPath.split('/').pop().replace('.mp4', '');
+    getByPage(page = 1, perPage = 12) {
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.paginate(this.videos, page, perPage);
+        }
         
-        return {
-            path: videoPath,
-            fileName: fileName,
-            thumbnail: this.generateThumbnail(videoPath),
-            quality: isPreview ? '480p' : '1080p',
-            duration: isPreview ? '0:30' : 'Variable',
-            size: isPreview ? '~5MB' : '~25MB',
-            preview: isPreview,
-            accessLevel: this.accessLevel
-        };
+        const start = (page - 1) * perPage;
+        const end = start + perPage;
+        return this.videos.slice(start, end);
     }
     
-    generateThumbnail(videoPath) {
-        // Generar ruta de thumbnail basada en el video
-        const videoName = videoPath.split('/').pop().replace('.mp4', '');
-        return `thumbnails/${videoName}.webp`;
+    getNext() {
+        const video = this.videos[this.currentIndex];
+        this.currentIndex = (this.currentIndex + 1) % this.totalVideos;
+        return video;
+    }
+    
+    getPrevious() {
+        this.currentIndex = this.currentIndex === 0 ? this.totalVideos - 1 : this.currentIndex - 1;
+        return this.videos[this.currentIndex];
+    }
+    
+    search(query) {
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.search(this.videos, query);
+        }
+        
+        const queryLower = query.toLowerCase();
+        return this.videos.filter(video => video.toLowerCase().includes(queryLower));
+    }
+    
+    getDailyRotation() {
+        if (window.TimeUtils && window.ArrayUtils) {
+            const seed = window.TimeUtils.getDailySeed();
+            return window.ArrayUtils.shuffleWithSeed(this.videos, seed);
+        }
+        return this.videos;
     }
     
     getStats() {
         return {
-            totalVideos: this.videos.length,
-            accessLevel: this.accessLevel,
-            availableVideos: this.accessLevel === 'guest' ? 0 : this.videos.length,
-            previewVideos: this.accessLevel === 'guest' ? 2 : 0,
-            initialized: this.initialized,
-            playbackSettings: this.playbackSettings
+            total: this.totalVideos,
+            path: 'uncensored-videos/',
+            format: '.mp4',
+            averageSize: '15MB',
+            totalSize: `${this.totalVideos * 15}MB`
         };
     }
     
-    upgradeToPremium() {
-        this.accessLevel = 'premium';
-        localStorage.setItem('ibizagirl_vip', 'true');
-        sessionStorage.setItem('premiumAccess', 'true');
-        console.log('🎉 Acceso premium activado');
-        
-        // Disparar evento de upgrade
-        window.dispatchEvent(new CustomEvent('premiumUpgrade', {
-            detail: { 
-                accessLevel: this.accessLevel,
-                videosUnlocked: this.videos.length
-            }
+    // Genera thumbnails para los videos
+    generateThumbnails() {
+        return this.videos.map(video => ({
+            video: video,
+            thumbnail: video.replace('.mp4', '_thumb.jpg'),
+            poster: video.replace('.mp4', '_poster.jpg')
         }));
     }
 }
@@ -200,249 +164,59 @@ class VideoContentManager {
 // ============================
 
 const VideoUtils = {
-    generateThumbnail(videoPath) {
-        const videoName = videoPath.split('/').pop().replace('.mp4', '');
-        return `thumbnails/${videoName}.webp`;
-    },
-    
+    // Formatear duración
     formatDuration(seconds) {
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${mins}:${secs.toString().padStart(2, '0')}`;
+        const minutes = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${minutes}:${secs.toString().padStart(2, '0')}`;
     },
     
-    estimateFileSize(durationSeconds, quality = '1080p') {
-        const bitrates = {
-            '480p': 1000, // kbps
-            '720p': 2500,
-            '1080p': 5000
-        };
-        
-        const bitrate = bitrates[quality] || bitrates['1080p'];
-        const sizeKB = (durationSeconds * bitrate) / 8;
-        const sizeMB = Math.round(sizeKB / 1024 * 100) / 100;
-        
-        return `${sizeMB}MB`;
-    },
-    
-    checkBrowserSupport() {
-        const video = document.createElement('video');
-        return {
-            mp4: video.canPlayType('video/mp4') !== '',
-            webm: video.canPlayType('video/webm') !== '',
-            autoplay: 'autoplay' in video,
-            fullscreen: 'requestFullscreen' in video
-        };
-    },
-    
-    createVideoElement(src, options = {}) {
+    // Crear elemento de video con poster
+    createVideoElement(src, poster = null) {
         const video = document.createElement('video');
         video.src = src;
-        video.controls = options.controls !== false;
-        video.autoplay = options.autoplay === true;
-        video.muted = options.muted === true;
-        video.loop = options.loop === true;
-        video.preload = options.preload || 'metadata';
+        video.controls = true;
+        video.preload = 'metadata';
         
-        if (options.poster) {
-            video.poster = options.poster;
+        if (poster) {
+            video.poster = poster;
         }
         
-        if (options.width) {
-            video.width = options.width;
-        }
-        
-        if (options.height) {
-            video.height = options.height;
-        }
+        // Configuración para móviles
+        video.playsInline = true;
+        video.setAttribute('webkit-playsinline', 'true');
         
         return video;
+    },
+    
+    // Precargar metadata de video
+    preloadVideoMetadata(videoUrl) {
+        return new Promise((resolve, reject) => {
+            const video = document.createElement('video');
+            video.src = videoUrl;
+            video.preload = 'metadata';
+            
+            video.addEventListener('loadedmetadata', () => {
+                resolve({
+                    duration: video.duration,
+                    width: video.videoWidth,
+                    height: video.videoHeight
+                });
+            });
+            
+            video.addEventListener('error', reject);
+        });
     }
 };
 
 // ============================
-// REPRODUCTOR DE VIDEO
+// EXPORTAR GLOBALMENTE
 // ============================
 
-class VideoPlayer {
-    constructor(container, options = {}) {
-        this.container = container;
-        this.options = {
-            controls: true,
-            autoplay: false,
-            muted: false,
-            loop: false,
-            ...options
-        };
-        this.videoElement = null;
-        this.initialized = false;
-        this.currentVideo = null;
-    }
-    
-    initialize() {
-        if (this.initialized) return;
-        
-        this.videoElement = document.createElement('video');
-        this.videoElement.className = 'video-player';
-        this.videoElement.controls = this.options.controls;
-        this.videoElement.autoplay = this.options.autoplay;
-        this.videoElement.muted = this.options.muted;
-        this.videoElement.loop = this.options.loop;
-        
-        // Estilos básicos
-        this.videoElement.style.width = '100%';
-        this.videoElement.style.height = 'auto';
-        this.videoElement.style.maxWidth = '100%';
-        
-        // Event listeners
-        this.setupEventListeners();
-        
-        // Añadir al contenedor
-        if (this.container) {
-            this.container.appendChild(this.videoElement);
-        }
-        
-        this.initialized = true;
-        console.log('✅ VideoPlayer inicializado');
-    }
-    
-    setupEventListeners() {
-        if (!this.videoElement) return;
-        
-        this.videoElement.addEventListener('play', () => {
-            this.dispatchEvent('play', { video: this.currentVideo });
-        });
-        
-        this.videoElement.addEventListener('pause', () => {
-            this.dispatchEvent('pause', { video: this.currentVideo });
-        });
-        
-        this.videoElement.addEventListener('ended', () => {
-            this.dispatchEvent('ended', { video: this.currentVideo });
-        });
-        
-        this.videoElement.addEventListener('error', (e) => {
-            console.error('❌ Error reproduciendo video:', e);
-            this.dispatchEvent('error', { video: this.currentVideo, error: e });
-        });
-    }
-    
-    loadVideo(videoPath, options = {}) {
-        if (!this.videoElement) {
-            this.initialize();
-        }
-        
-        this.currentVideo = videoPath;
-        this.videoElement.src = videoPath;
-        
-        if (options.poster) {
-            this.videoElement.poster = options.poster;
-        }
-        
-        if (options.autoplay) {
-            this.play();
-        }
-    }
-    
-    play() {
-        if (this.videoElement) {
-            return this.videoElement.play();
-        }
-    }
-    
-    pause() {
-        if (this.videoElement) {
-            this.videoElement.pause();
-        }
-    }
-    
-    stop() {
-        if (this.videoElement) {
-            this.videoElement.pause();
-            this.videoElement.currentTime = 0;
-        }
-    }
-    
-    seekTo(time) {
-        if (this.videoElement) {
-            this.videoElement.currentTime = time;
-        }
-    }
-    
-    setVolume(volume) {
-        if (this.videoElement) {
-            this.videoElement.volume = Math.max(0, Math.min(1, volume));
-        }
-    }
-    
-    toggleMute() {
-        if (this.videoElement) {
-            this.videoElement.muted = !this.videoElement.muted;
-        }
-    }
-    
-    requestFullscreen() {
-        if (this.videoElement && this.videoElement.requestFullscreen) {
-            this.videoElement.requestFullscreen();
-        }
-    }
-    
-    dispatchEvent(eventName, detail = {}) {
-        const event = new CustomEvent(`videoplayer:${eventName}`, { detail });
-        if (this.container) {
-            this.container.dispatchEvent(event);
-        }
-        window.dispatchEvent(event);
-    }
-    
-    destroy() {
-        if (this.videoElement) {
-            this.videoElement.remove();
-            this.videoElement = null;
-        }
-        this.initialized = false;
-        this.currentVideo = null;
-    }
-}
-
-// ============================
-// INICIALIZACIÓN Y EXPORTACIÓN
-// ============================
-
-const globalVideoManager = new VideoContentManager();
-
-// Exponer APIs globales
 window.PREMIUM_VIDEOS_POOL = PREMIUM_VIDEOS_POOL;
-window.VideoContentManager = globalVideoManager;
+window.VideoContentManager = new VideoContentManager();
 window.VideoUtils = VideoUtils;
-window.VideoPlayer = VideoPlayer;
 
-// Auto-inicializar
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        globalVideoManager.initialize();
-    });
-} else {
-    globalVideoManager.initialize();
-}
-
-// Funciones de compatibilidad legacy
-window.getAllVideos = () => globalVideoManager.getAllVideos();
-window.getRandomVideos = (count) => globalVideoManager.getRandomVideos(count);
-window.searchVideos = (query) => globalVideoManager.searchVideos(query);
-
-// Log de inicialización
-console.log(`📦 content-data5.js v4.1.0 FIXED loaded`);
-console.log(`   - ${PREMIUM_VIDEOS_POOL.length} videos premium disponibles`);
-console.log(`   - VideoContentManager inicializado`);
-console.log(`   - VideoPlayer y VideoUtils disponibles`);
-
-// Exportar para módulos ES6 si es necesario
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        PREMIUM_VIDEOS_POOL,
-        VideoContentManager: globalVideoManager,
-        VideoUtils,
-        VideoPlayer
-    };
-}
+console.log('✅ Módulo content-data5.js cargado correctamente');
+console.log('📊 Total videos premium:', PREMIUM_VIDEOS_POOL.length);
+console.log('💾 Tamaño estimado:', `${PREMIUM_VIDEOS_POOL.length * 15}MB`);
