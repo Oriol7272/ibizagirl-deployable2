@@ -3,15 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>IbizaGirl.pics - Verificación de Edad | Age Verification</title>
     
-    <title>IbizaGirl.pics - Verificación de Edad</title>
-    <meta name="description" content="Verificación de edad requerida. Este sitio contiene material para adultos.">
-    <meta name="robots" content="noindex, nofollow">
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="IbizaGirl.pics - Galería premium de Ibiza. Verificación de edad requerida. Must be 18+ to enter.">
+    <meta name="keywords" content="Ibiza, gallery, premium, adult content, age verification">
+    <meta name="robots" content="index, follow">
     
-    <!-- Favicons -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="IbizaGirl.pics - Premium Gallery">
+    <meta property="og:description" content="Exclusive Ibiza content. Age verification required.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ibizagirl.pics/">
+    <meta property="og:image" content="https://ibizagirl.pics/full/bikini.webp">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/full/bikini.webp" type="image/webp">
+    <link rel="shortcut icon" href="/full/bikini.webp" type="image/webp">
     
     <style>
         * {
@@ -21,175 +29,30 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            color: #fff;
         }
         
-        .age-verification-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+        .verification-container {
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             padding: 40px;
             max-width: 500px;
             width: 100%;
-            text-align: center;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
         }
         
-        .logo {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            animation: wave 2s ease-in-out infinite;
-        }
-        
-        @keyframes wave {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        h1 span {
-            color: #00d4ff;
-        }
-        
-        .warning-icon {
-            font-size: 4rem;
-            margin: 30px 0;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        
-        h2 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: #fff;
-        }
-        
-        p {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            color: rgba(255, 255, 255, 0.9);
-            line-height: 1.6;
-        }
-        
-        .warning-text {
-            background: rgba(255, 0, 0, 0.2);
-            border: 2px solid rgba(255, 0, 0, 0.4);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .warning-text strong {
-            color: #ff6b6b;
-            font-size: 1.2rem;
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        button {
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .btn-enter {
-            background: linear-gradient(135deg, #00d4ff, #00a8cc);
-            color: #001f3f;
-            flex: 1;
-            min-width: 150px;
-        }
-        
-        .btn-enter:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
-        }
-        
-        .btn-leave {
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            flex: 1;
-            min-width: 150px;
-        }
-        
-        .btn-leave:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .legal-text {
-            margin-top: 30px;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.5;
-        }
-        
-        .legal-text a {
-            color: #00d4ff;
-            text-decoration: none;
-        }
-        
-        .legal-text a:hover {
-            text-decoration: underline;
-        }
-        
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            h2 {
-                font-size: 1.5rem;
-            }
-            
-            .warning-icon {
-                font-size: 3rem;
-            }
-            
-            button {
-                padding: 12px 30px;
-                font-size: 1rem;
-            }
-        }
-        
-        /* Animación de entrada */
-        .age-verification-container {
-            animation: fadeInUp 0.6s ease-out;
-        }
-        
-        @keyframes fadeInUp {
+        @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(-30px);
             }
             to {
                 opacity: 1;
@@ -197,196 +60,235 @@
             }
         }
         
-        /* Efecto de partículas de fondo */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-            z-index: -1;
-        }
-        
-        .particle {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.1);
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
             border-radius: 50%;
-            animation: float 20s infinite linear;
+            object-fit: cover;
+            border: 4px solid #667eea;
         }
         
-        @keyframes float {
-            from {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
+        h1 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .warning-box h2 {
+            color: #856404;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .warning-icon {
+            font-size: 1.5em;
+        }
+        
+        .warning-text {
+            color: #856404;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .age-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-enter {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-enter:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-leave {
+            background: #e0e0e0;
+            color: #666;
+        }
+        
+        .btn-leave:hover {
+            background: #d0d0d0;
+        }
+        
+        .legal-text {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        
+        .languages {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .lang-btn {
+            padding: 5px 15px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover, .lang-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        @media (max-width: 480px) {
+            .verification-container {
+                padding: 30px 20px;
             }
-            10% {
-                opacity: 1;
+            
+            h1 {
+                font-size: 1.5em;
             }
-            90% {
-                opacity: 1;
+            
+            .age-buttons {
+                flex-direction: column;
             }
-            to {
-                transform: translateY(-100vh) rotate(360deg);
-                opacity: 0;
+            
+            .btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Partículas de fondo -->
-    <div class="particles" id="particles"></div>
-    
-    <div class="age-verification-container">
-        <div class="logo">🌊</div>
-        <h1>IbizaGirl<span>.pics</span></h1>
+    <div class="verification-container">
+        <img src="/full/bikini.webp" alt="IbizaGirl.pics" class="logo" onerror="this.style.display='none'">
         
-        <div class="warning-icon">⚠️</div>
+        <h1>IbizaGirl.pics</h1>
+        <p class="subtitle">Premium Ibiza Gallery</p>
         
-        <h2>Verificación de Edad Requerida</h2>
-        
-        <div class="warning-text">
-            <strong>¡ADVERTENCIA!</strong>
-            <p>Este sitio contiene material explícito para adultos</p>
+        <div class="warning-box">
+            <h2>
+                <span class="warning-icon">⚠️</span>
+                <span>Age Verification Required</span>
+            </h2>
+            <p class="warning-text">
+                This website contains adult content and is intended for persons 18 years or older.
+                By entering, you confirm that you are at least 18 years old and agree to our terms.
+            </p>
+            <p class="warning-text">
+                Este sitio web contiene contenido para adultos y está destinado a personas mayores de 18 años.
+            </p>
         </div>
         
-        <p>
-            Debes tener al menos 18 años de edad (o la mayoría de edad en tu jurisdicción) 
-            para acceder a este sitio web. Al hacer clic en "ENTRAR", confirmas que:
-        </p>
-        
-        <ul style="text-align: left; display: inline-block; margin-bottom: 30px;">
-            <li>Tienes 18 años o más</li>
-            <li>Aceptas ver contenido para adultos</li>
-            <li>Acceder a este contenido es legal en tu país</li>
-            <li>No permitirás que menores accedan a este sitio</li>
-        </ul>
-        
-        <div class="button-group">
-            <button class="btn-enter" onclick="verifyAge()">
-                Sí, tengo 18+ años
+        <div class="age-buttons">
+            <button onclick="enterSite()" class="btn btn-enter">
+                I am 18+ / Soy mayor de 18
             </button>
-            <button class="btn-leave" onclick="leavesSite()">
-                No, soy menor
+            <button onclick="leaveSite()" class="btn btn-leave">
+                Leave / Salir
             </button>
+        </div>
+        
+        <div class="languages">
+            <a href="#" class="lang-btn active" onclick="setLanguage('es')">Español</a>
+            <a href="#" class="lang-btn" onclick="setLanguage('en')">English</a>
+            <a href="#" class="lang-btn" onclick="setLanguage('fr')">Français</a>
+            <a href="#" class="lang-btn" onclick="setLanguage('de')">Deutsch</a>
+            <a href="#" class="lang-btn" onclick="setLanguage('it')">Italiano</a>
         </div>
         
         <div class="legal-text">
-            <p>
-                Al entrar, aceptas nuestros 
-                <a href="/terms.html">Términos y Condiciones</a> y 
-                <a href="/privacy.html">Política de Privacidad</a>
-            </p>
-            <p style="margin-top: 10px;">
-                Este sitio cumple con 18 U.S.C. 2257
-            </p>
+            <p>© 2025 IbizaGirl.pics - All rights reserved</p>
+            <p>By entering this site, you agree to our Terms of Service and Privacy Policy.</p>
+            <p>This site uses cookies to enhance your experience.</p>
         </div>
     </div>
     
     <script>
-        // Crear partículas de fondo
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 50;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-                particlesContainer.appendChild(particle);
-            }
+        // Verificar si el usuario ya verificó su edad
+        if (localStorage.getItem('ageVerified') === 'true') {
+            // Si ya verificó, redirigir a main.html
+            window.location.href = '/main.html';
         }
         
-        // Verificar edad y redirigir
-        function verifyAge() {
-            // Guardar verificación en localStorage
+        function enterSite() {
+            // Guardar verificación de edad
             localStorage.setItem('ageVerified', 'true');
             localStorage.setItem('ageVerifiedDate', new Date().toISOString());
             
-            // Agregar efecto de transición
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.5s ease';
-            
-            // Redirigir después de la animación
-            setTimeout(() => {
-                window.location.href = '/main.html';
-            }, 500);
+            // Redirigir a la página principal
+            window.location.href = '/main.html';
         }
         
-        // Salir del sitio si es menor
-        function leavesSite() {
-            // Redirigir a un sitio seguro
+        function leaveSite() {
+            // Redirigir a Google
             window.location.href = 'https://www.google.com';
         }
         
-        // Verificar si ya está verificado
-        window.addEventListener('DOMContentLoaded', () => {
-            // Crear partículas
-            createParticles();
+        function setLanguage(lang) {
+            // Actualizar botones activos
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
             
-            // Verificar si ya confirmó la edad
-            const ageVerified = localStorage.getItem('ageVerified');
-            const verifiedDate = localStorage.getItem('ageVerifiedDate');
+            // Guardar preferencia de idioma
+            localStorage.setItem('preferredLanguage', lang);
             
-            if (ageVerified === 'true' && verifiedDate) {
-                // Verificar que no hayan pasado más de 30 días
-                const daysSinceVerification = (new Date() - new Date(verifiedDate)) / (1000 * 60 * 60 * 24);
-                
-                if (daysSinceVerification < 30) {
-                    // Redirigir automáticamente si ya verificó
-                    window.location.href = '/main.html';
-                } else {
-                    // Limpiar verificación antigua
-                    localStorage.removeItem('ageVerified');
-                    localStorage.removeItem('ageVerifiedDate');
-                }
-            }
+            // Aquí podrías cambiar los textos según el idioma
+            console.log('Language set to:', lang);
+        }
+        
+        // Prevenir clic derecho
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
         });
         
-        // Prevenir acceso con teclas de atajo
-        document.addEventListener('keydown', (e) => {
-            // Bloquear F12 (DevTools)
-            if (e.keyCode === 123) {
-                e.preventDefault();
-                return false;
-            }
-            
-            // Bloquear Ctrl+Shift+I (DevTools)
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-                e.preventDefault();
-                return false;
-            }
-            
-            // Bloquear Ctrl+Shift+J (Console)
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
-                e.preventDefault();
-                return false;
-            }
-        });
-        
-        // Detectar si intentan inspeccionar
-        let devtools = {open: false, orientation: null};
-        const threshold = 160;
-        
-        setInterval(() => {
-            if (window.outerHeight - window.innerHeight > threshold || 
-                window.outerWidth - window.innerWidth > threshold) {
-                if (!devtools.open) {
-                    devtools.open = true;
-                    console.clear();
-                    console.log('%c¡ALTO!', 'color: red; font-size: 50px; font-weight: bold;');
-                    console.log('%cEste es un área restringida solo para adultos.', 'color: red; font-size: 20px;');
-                    console.log('%cSi eres menor de edad, por favor sal del sitio.', 'color: red; font-size: 20px;');
-                }
-            } else {
-                devtools.open = false;
-            }
-        }, 500);
+        // Log para analytics
+        console.log('Age verification page loaded');
     </script>
 </body>
 </html>
