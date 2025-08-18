@@ -44,36 +44,39 @@
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo español.">
-    <meta name="keywords" content="ibiza, galería, premium, fotos, videos, españa, mediterráneo, paraíso, playa, verano">
+    <meta name="keywords" content="Ibiza, galería, premium, fotos HD, videos exclusivos, contenido VIP, paradise gallery, Mediterranean, Spanish beaches">
     <meta name="author" content="IbizaGirl.pics">
-    <meta name="robots" content="index, follow">
+    <meta name="copyright" content="IbizaGirl.pics 2025">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="googlebot" content="index, follow">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="IbizaGirl.pics - Galería Premium">
-    <meta property="og:description" content="Galería premium de Ibiza con contenido exclusivo actualizado diariamente">
+    <meta property="og:title" content="IbizaGirl.pics - Premium Ibiza Gallery">
+    <meta property="og:description" content="400+ exclusive photos and 80+ HD videos from Ibiza paradise. Daily updates with premium content.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://ibizagirl.pics/main.html">
-    <meta property="og:image" content="https://ibizagirl.pics/full/bikbanner.webp">
+    <meta property="og:url" content="https://ibizagirl.pics/">
+    <meta property="og:image" content="https://ibizagirl.pics/full/bikini.webp">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:site_name" content="IbizaGirl.pics">
     <meta property="og:locale" content="es_ES">
+    <meta property="og:locale:alternate" content="en_US">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="IbizaGirl.pics - Galería Premium">
-    <meta name="twitter:description" content="Galería premium de Ibiza con contenido exclusivo">
-    <meta name="twitter:image" content="https://ibizagirl.pics/full/bikbanner.webp">
+    <meta name="twitter:title" content="IbizaGirl.pics - Premium Gallery">
+    <meta name="twitter:description" content="Exclusive Ibiza content with daily updates">
+    <meta name="twitter:image" content="https://ibizagirl.pics/full/bikini.webp">
     
     <!-- Preconnect para optimización -->
     <link rel="preconnect" href="https://www.paypal.com">
     <link rel="preconnect" href="https://www.googletagmanager.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     
     <!-- DNS Prefetch para anuncios -->
     <link rel="dns-prefetch" href="//www.paypal.com">
     <link rel="dns-prefetch" href="//www.googletagmanager.com">
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
@@ -99,329 +102,78 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-DBXYNPBSPY', {
-            page_title: 'Premium Gallery',
-            page_path: '/main.html'
-        });
+        gtag('config', 'G-DBXYNPBSPY');
     </script>
 </head>
 <body>
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="loading-spinner"></div>
-        <p>Cargando paraíso...</p>
-    </div>
-
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <img src="/full/bikini.webp" alt="Logo" class="nav-logo">
-                <span class="nav-title">IbizaGirl.pics</span>
-            </div>
-            
-            <div class="nav-menu">
-                <a href="#photosSection" class="nav-link" data-translate="photos">Fotos</a>
-                <a href="#videosSection" class="nav-link" data-translate="videos">Videos</a>
-                <a href="#" class="nav-link nav-vip" onclick="showVIPModal()" data-translate="vip_button">💎 VIP</a>
-                <a href="#" class="nav-link nav-pack" onclick="showPackModal()" data-translate="pack_button">📦 Packs</a>
-            </div>
-            
-            <div class="nav-actions">
-                <select id="languageSelector" class="language-selector" onchange="changeLanguage(this.value)">
-                    <option value="es">🇪🇸 ES</option>
-                    <option value="en">🇬🇧 EN</option>
-                    <option value="fr">🇫🇷 FR</option>
-                    <option value="de">🇩🇪 DE</option>
-                    <option value="it">🇮🇹 IT</option>
-                    <option value="pt">🇵🇹 PT</option>
-                </select>
-                
-                <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1 class="hero-title" data-translate="hero_title">🌴 Paradise Gallery 🌴</h1>
-            <p class="hero-subtitle" data-translate="hero_subtitle">Tu escape diario al paraíso mediterráneo</p>
-            <div class="hero-stats">
-                <div class="stat-item">
-                    <span class="stat-number">400+</span>
-                    <span class="stat-label" data-translate="stat_photos">Fotos HD</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">80+</span>
-                    <span class="stat-label" data-translate="stat_videos">Videos Premium</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">24/7</span>
-                    <span class="stat-label" data-translate="stat_updates">Actualizaciones</span>
-                </div>
-            </div>
-            <button class="hero-cta" onclick="showVIPModal()" data-translate="hero_cta">
-                🔓 Desbloquear Todo el Contenido
-            </button>
-        </div>
-    </section>
-
-    <!-- Banner Section -->
-    <section class="banner-section">
-        <div class="container">
-            <div class="banner-grid" id="bannerGrid">
-                <!-- Los banners se cargarán dinámicamente -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Teaser Section -->
-    <section class="teaser-section">
-        <div class="container">
-            <h2 class="section-title" data-translate="teaser_title">🔥 Contenido Destacado</h2>
-            <div class="teaser-grid" id="teaserGrid">
-                <!-- Los teasers se cargarán dinámicamente -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Photos Section -->
-    <section id="photosSection" class="content-section">
-        <div class="container">
-            <h2 class="section-title" data-translate="photos_title">📸 Galería de Fotos</h2>
-            <div class="filter-buttons">
-                <button class="filter-btn active" onclick="filterContent('all')" data-translate="filter_all">Todas</button>
-                <button class="filter-btn" onclick="filterContent('public')" data-translate="filter_public">Públicas</button>
-                <button class="filter-btn" onclick="filterContent('premium')" data-translate="filter_premium">Premium</button>
-            </div>
-            <div class="photo-grid" id="photoGrid">
-                <!-- Las fotos se cargarán dinámicamente -->
-            </div>
-            <button class="load-more-btn" onclick="loadMorePhotos()" data-translate="load_more">
-                Cargar Más
-            </button>
-        </div>
-    </section>
-
-    <!-- Videos Section -->
-    <section id="videosSection" class="content-section">
-        <div class="container">
-            <h2 class="section-title" data-translate="videos_title">🎬 Videos Premium</h2>
-            <div class="video-grid" id="videoGrid">
-                <!-- Los videos se cargarán dinámicamente -->
-            </div>
-            <button class="load-more-btn" onclick="loadMoreVideos()" data-translate="load_more_videos">
-                Ver Más Videos
-            </button>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2 class="cta-title" data-translate="cta_title">🎉 Oferta Especial Limitada</h2>
-                <p class="cta-text" data-translate="cta_text">
-                    Acceso VIP de por vida por solo €100 - Ahorra más del 80%
-                </p>
-                <div class="cta-buttons">
-                    <button class="cta-btn primary" onclick="showVIPModal()" data-translate="cta_vip">
-                        💎 Hazte VIP Ahora
-                    </button>
-                    <button class="cta-btn secondary" onclick="showPackModal()" data-translate="cta_packs">
-                        📦 Ver Mega Packs
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- VIP Modal -->
-    <div class="modal" id="vipModal" style="display: none;">
-        <div class="modal-backdrop" onclick="closeModal('vipModal')"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" data-translate="vip_title">💎 Acceso VIP Ilimitado</h2>
-                <button class="modal-close" onclick="closeModal('vipModal')">×</button>
-            </div>
-            
-            <div class="vip-options">
-                <div class="vip-option" onclick="selectVIPPlan('monthly')">
-                    <h3 data-translate="plan_monthly">Mensual</h3>
-                    <div class="vip-price">€15/mes</div>
-                    <ul class="vip-features">
-                        <li>✅ Acceso completo</li>
-                        <li>✅ Actualizaciones diarias</li>
-                        <li>✅ Sin límites</li>
-                    </ul>
-                </div>
-                
-                <div class="vip-option selected" onclick="selectVIPPlan('lifetime')">
-                    <h3 data-translate="plan_lifetime">De Por Vida</h3>
-                    <div class="vip-price">€100</div>
-                    <div class="vip-badge" data-translate="best_value">Mejor Oferta</div>
-                    <ul class="vip-features">
-                        <li>✅ Pago único</li>
-                        <li>✅ Acceso de por vida</li>
-                        <li>✅ Todo el contenido futuro</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div id="paypal-button-container-vip" class="paypal-button-container"></div>
-        </div>
-    </div>
-
-    <!-- Pack Modal -->
-    <div class="modal" id="packModal" style="display: none;">
-        <div class="modal-backdrop" onclick="closeModal('packModal')"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" data-translate="pack_selection">📦 MEGA PACKS - Ahorra 70%</h2>
-                <button class="modal-close" onclick="closeModal('packModal')">×</button>
-            </div>
-            
-            <div class="packs-container">
-                <div class="pack-card" onclick="selectPack('starter')">
-                    <div class="pack-title" data-translate="pack_starter">Starter Pack</div>
-                    <div class="pack-items">10</div>
-                    <div class="pack-label" data-translate="items">contenidos</div>
-                    <div class="pack-price">€10</div>
-                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 33%</div>
-                </div>
-                
-                <div class="pack-card" onclick="selectPack('bronze')">
-                    <div class="pack-title" data-translate="pack_bronze">Bronze Pack</div>
-                    <div class="pack-items">25</div>
-                    <div class="pack-label" data-translate="items">contenidos</div>
-                    <div class="pack-price">€25</div>
-                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 50%</div>
-                </div>
-                
-                <div class="pack-card selected" onclick="selectPack('silver')">
-                    <div class="pack-title" data-translate="pack_silver">Silver Pack</div>
-                    <div class="pack-items">50</div>
-                    <div class="pack-label" data-translate="items">contenidos</div>
-                    <div class="pack-price">€50</div>
-                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 60%</div>
-                </div>
-            </div>
-            
-            <div id="paypal-button-container-pack" class="paypal-button-container"></div>
-        </div>
-    </div>
-
-    <!-- PPV Modal -->
-    <div class="modal" id="ppvModal" style="display: none;">
-        <div class="modal-backdrop" onclick="closeModal('ppvModal')"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="ppvTitle" data-translate="unlock_content">🔓 Desbloquear Contenido</h2>
-                <button class="modal-close" onclick="closeModal('ppvModal')">×</button>
-            </div>
-            <div class="ppv-price" id="ppvPrice">€0.10</div>
-            <div id="paypal-button-container-ppv" class="paypal-button-container"></div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>IbizaGirl.pics</h3>
-                <p data-translate="footer_desc">Tu destino diario para contenido exclusivo del paraíso mediterráneo.</p>
-                <div style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
-                    🔧 Sistema Modular v4.1.0 | 📊 Content API Unificada
-                </div>
-            </div>
-            
-            <div class="footer-section">
-                <h3 data-translate="quick_links">Enlaces Rápidos</h3>
-                <ul class="footer-links">
-                    <li><a href="#photosSection" data-translate="photos">Fotos</a></li>
-                    <li><a href="#videosSection" data-translate="videos">Videos</a></li>
-                    <li><a href="#" onclick="showVIPModal()" data-translate="vip_subscription">Suscripción VIP</a></li>
-                    <li><a href="#" onclick="showPackModal()" data-translate="mega_packs">Mega Packs</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-section">
-                <h3 data-translate="support">Soporte</h3>
-                <ul class="footer-links">
-                    <li><a href="/terms.html" data-translate="terms">Términos de Servicio</a></li>
-                    <li><a href="/privacy.html" data-translate="privacy">Política de Privacidad</a></li>
-                    <li><a href="/contact.html" data-translate="contact">Contacto</a></li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <p data-translate="copyright">© 2025 IbizaGirl.pics - Todos los derechos reservados | 18+ Solo Adultos</p>
-        </div>
-    </footer>
-
-    <!-- ================================================ -->
-    <!-- ORDEN CRÍTICO DE SCRIPTS - NO CAMBIAR EL ORDEN  -->
-    <!-- ================================================ -->
+    <!-- El contenido del body será generado dinámicamente por JavaScript -->
+    <div id="app-root"></div>
     
-    <!-- 1️⃣ PRIMERO: Módulos de Contenido (ORDEN ESTRICTO) -->
-    <script src="content-data1.js"></script>  <!-- Configuración y utilidades base -->
-    <script src="content-data2.js"></script>  <!-- 127 imágenes públicas -->
-    <script src="content-data3.js"></script>  <!-- 186 imágenes premium parte 1 -->
-    <script src="content-data4.js"></script>  <!-- 204 imágenes premium parte 2 -->
-    <script src="content-data5.js"></script>  <!-- 67 videos premium -->
-    <script src="content-data6.js"></script>  <!-- API unificada -->
+    <!-- Loading Screen -->
+    <div id="loading-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);display:flex;justify-content:center;align-items:center;z-index:9999;">
+        <div style="text-align:center;color:white;">
+            <h2 style="font-size:2em;margin-bottom:20px;">IbizaGirl.pics</h2>
+            <div class="spinner" style="border:4px solid rgba(255,255,255,0.3);border-top:4px solid white;border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;margin:0 auto;"></div>
+            <style>@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style>
+        </div>
+    </div>
     
-    <!-- 2️⃣ SEGUNDO: Módulo de Integración -->
+    <!-- ============================
+         SISTEMA MODULAR DE CONTENIDO v4.1.0
+         Orden de carga CRÍTICO - NO MODIFICAR
+         ============================ -->
+    
+    <!-- 1. Configuración y utilidades base -->
+    <script src="content-data1.js"></script>
+    
+    <!-- 2. Imágenes públicas (127 archivos) -->
+    <script src="content-data2.js"></script>
+    
+    <!-- 3. Imágenes premium parte 1 (186 archivos) -->
+    <script src="content-data3.js"></script>
+    
+    <!-- 4. Imágenes premium parte 2 (204 archivos) -->
+    <script src="content-data4.js"></script>
+    
+    <!-- 5. Videos premium (67 archivos) -->
+    <script src="content-data5.js"></script>
+    
+    <!-- 6. API unificada -->
+    <script src="content-data6.js"></script>
+    
+    <!-- 7. Integrador de contenido -->
     <script src="content-data-integration.js"></script>
     
-    <!-- 3️⃣ TERCERO: Script de Verificación (opcional, solo para debug) -->
-    <!-- <script src="verification.js"></script> -->
+    <!-- 8. Script de verificación (solo desarrollo) -->
+    <script src="verification.js"></script>
     
-    <!-- 4️⃣ CUARTO: Gestores de Anuncios (si los tienes) -->
-    <!-- <script src="ad-containers-manager.js"></script> -->
-    <!-- <script src="exoclick-urls-fix.js"></script> -->
-    
-    <!-- 5️⃣ ÚLTIMO: Tu Script Principal -->
+    <!-- 9. Script principal -->
     <script src="main-script.js"></script>
     
-    <!-- ================================================ -->
-    <!-- FIN DE SCRIPTS CRÍTICOS                         -->
-    <!-- ================================================ -->
-    
-    <!-- Service Worker para PWA -->
+    <!-- Service Worker Registration -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js')
-                    .then(registration => console.log('SW registrado:', registration))
-                    .catch(error => console.log('SW error:', error));
+                    .then(reg => console.log('Service Worker registrado:', reg))
+                    .catch(err => console.log('Service Worker error:', err));
             });
         }
     </script>
     
-    <!-- Script de verificación rápida (opcional) -->
+    <!-- Ocultar loading cuando todo esté listo -->
     <script>
-        // Verificación rápida del sistema
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
-                console.log('🔍 Verificación del sistema:');
-                console.log('Config:', !!window.ContentConfig);
-                console.log('Públicas:', !!window.FULL_IMAGES_POOL);
-                console.log('Premium1:', !!window.PREMIUM_IMAGES_PART1);
-                console.log('Premium2:', !!window.PREMIUM_IMAGES_PART2);
-                console.log('Videos:', !!window.PREMIUM_VIDEOS_POOL);
-                console.log('API:', !!window.ContentAPI);
-                console.log('Sistema listo:', !!window.getRandomContentForMainScript);
-                
-                // Ocultar loading overlay
-                const overlay = document.getElementById('loadingOverlay');
-                if (overlay) {
-                    overlay.style.display = 'none';
+                const loadingScreen = document.getElementById('loading-screen');
+                if (loadingScreen) {
+                    loadingScreen.style.transition = 'opacity 0.5s';
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 500);
                 }
-            }, 2000);
+            }, 1500);
         });
     </script>
 </body>
