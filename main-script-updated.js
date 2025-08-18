@@ -1340,3 +1340,12 @@ if (ENVIRONMENT.isDevelopment) {
 }
 
 console.log('✅ Script loaded and ready - v15.0.0 MODULAR INTEGRATION COMPLETE!');
+if ('caches' in window) {
+    caches.keys().then(names => {
+        names.forEach(name => {
+            if (!name.includes('1.4.3')) {
+                caches.delete(name);
+            }
+        });
+    });
+}
