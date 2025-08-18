@@ -1,11 +1,15 @@
 /**
- * content-data2.js - Public Images Module v2.0.0 FIXED
+ * content-data2.js - Public Images Module v4.1.0 FIXED
  * Contains all public/full images (127 files)
  * Provides banner and teaser management
  */
 
+'use strict';
+
+console.log('📦 Cargando módulo content-data2.js - Imágenes públicas...');
+
 // ============================
-// PUBLIC IMAGES POOL (127 images)
+// PUBLIC IMAGES POOL (127 images) - LISTA COMPLETA
 // ============================
 
 const FULL_IMAGES_POOL = [
@@ -55,94 +59,82 @@ const FULL_IMAGES_POOL = [
     'full/LoOgRN7V5M1HTlMOdOx9.webp',
     'full/MFzl3cW8ePBkYW9Df18O.webp',
     'full/MH98E5xp8a1QJVRWaQXa.webp',
-    'full/MJhP1PtUiw8T5t6vfGME.webp',
-    'full/Ma4pNp5Nqk2P3RhGh96d.webp',
-    'full/NJQKAp1c3oUnGhX65QOi.webp',
-    'full/Nfj2RYWdkYzqy8tXXJSx.webp',
-    'full/OKrIxyDbmUotvjJUc3Yg.webp',
-    'full/OZxhqcxQOTSJG8q2KUyy.webp',
-    'full/OejORb3WEG2n3g6X6wl0.webp',
-    'full/PCA3DHB5xAMZHgKOWdRy.webp',
-    'full/PxY1T43xqNEoqLJiXhqe.webp',
-    'full/Q2v8VjBAOCekWJdxUxj4.webp',
-    'full/Q4Oo6gJnCN9PNQYYZ38B.webp',
-    'full/Q5Uw1VdGOrvJFvtQnOVF.webp',
-    'full/QRRbuwLjWCLFzwQaJsjp.webp',
-    'full/RSjxPBQWRJNTL9TBNzGo.webp',
-    'full/RsqG8NVcrTPRFJwfzWsP.webp',
-    'full/SM3v0sRxMSWD7hX9NkOY.webp',
-    'full/SQJP34XBE9cOHPGAHYj5.webp',
-    'full/TaekJvnJHxRuSx9IrZnN.webp',
-    'full/TlFRGcP5KYj2cCTkMiSd.webp',
-    'full/UG4Hm8SiQ4Ayd4zTsODh.webp',
-    'full/VOHbXGDPqQ7UHM8VhXJb.webp',
-    'full/VQO8W0v1G8fsBYTFjTxw.webp',
-    'full/VXUP5NNg5n2zT1J8fLbT.webp',
-    'full/XDBPX1vb0zw9sjCx8DFz.webp',
-    'full/YX6rz0eEqhfgjGdKWLcW.webp',
-    'full/ZQlJrRBJP0f6xOpFJHud.webp',
-    'full/ZksRGE3yBPzgJVRBMSSk.webp',
-    'full/Znx2fvXGJy8mOSKJLZBH.webp',
-    'full/aJgXRnfXXHCO0n31hjyI.webp',
-    'full/aMEo3OJBcg4bvxYOlJr2.webp',
-    'full/auTojRSoSJm8XFGX4Bqb.webp',
-    'full/dCQhXJ5M6H0E3HDLJRKa.webp',
-    'full/dyqJfHgJaJqiORZZlG92.webp',
-    'full/e9TjLXTDhxMBRTa0DNKD.webp',
-    'full/eqo8m6gFrOxF45nVdJ1b.webp',
-    'full/fxhbLp5F0XQu8NdKzgJE.webp',
-    'full/gEdPiXBnRXpOxJWRfhAj.webp',
-    'full/gTcZQCpJMxQxbvvSGJFj.webp',
-    'full/hdPLlrQHoRnRLk6vRBMz.webp',
-    'full/hw5n4EeO7pEgjqYCzz3F.webp',
-    'full/i3YzLBaKnCy1QI2oCgq1.webp',
-    'full/iFOOYFOjpv0tBiCsQVx5.webp',
-    'full/iPLH9pZsXGLnzZhgY9Sc.webp',
-    'full/jNOKVMXzlRg7HfznKm0R.webp',
-    'full/joRNXJx7i0H2FRGX1Kkv.webp',
-    'full/kGGdEqPfbxnE4XCUJXmY.webp',
-    'full/knA5WRBjOVD9o2w4IxJH.webp',
-    'full/kw4qROGQNFB9CJHvT1FA.webp',
-    'full/lH31C1OXBaLQGgpq1xHlH.webp',
-    'full/lXpckkGACDNcXPAHEQqu.webp',
-    'full/mFuqtladZr2hO3Tszm3m.webp',
-    'full/nJvZXk80qguZvwOeSai6.webp',
-    'full/nm6YKc38NLqwGPaNiDhc.webp',
-    'full/owPT3Y4puK3dRHWNsj47.webp',
-    'full/psZEFLlVAhAiq10uJ8qd.webp',
-    'full/qLDeRznPthcmYSmggfbm.webp',
-    'full/qhK8inhLxacOs8w7mRbE.webp',
-    'full/qxIzW9ZMuhkEY6dmGKSv.webp',
-    'full/sMAD8T2U7A3aMQjxsUdd.webp',
-    'full/sda0bXv4LRWxnW49KPWT.webp',
-    'full/sfz7eFmqHWlf6wrpTDD9.webp',
-    'full/t9WqMZxXkmUTMrq3d13l.webp',
-    'full/tMxzKdT8rjZm3gpe0StS.webp',
-    'full/tQ41YocTwqSnd8mFsDc5.webp',
-    'full/tQInulLfQHQTFNIK6yEV.webp',
-    'full/tzico6mUJuc7Lz8HYdEF.webp',
-    'full/uMSW2oj0qrbVEmIEotZ1.webp',
-    'full/ufXYerfLKedF1f6OYNhd.webp',
-    'full/wrs60TS7VJQlmWbyKKUu.webp',
-    'full/xhQTgYHiVAYbnYrKIsOq.webp',
-    'full/yqTobCZL2AABmmNJ7EPU.webp',
-    'full/zNzTQ476q4sOPWRaVPEw.webp',
-    'full/zRPnijTCwLqQeZLXLvzu.webp',
-    'full/zSzYfjo7gtKbVBWGhbJN.webp',
-    'full/zUNmPEaVFiJfL1mo27ga.webp',
-    'full/zs7GNC0HKhDQwRIsB9IM.webp',
-    'full/zx83JCzdTKNfyKUY6Djs.webp',
-    'full/Sinoseup.webp',
-    'full/Sinportada.webp',
-    'full/Sintulo.webp',
-    'full/Siulo.webp',
+    'full/MsQjg7VkRrIQdEZeW4zs.webp',
+    'full/OAnK6W9zfmPZzJQzA6TC.webp',
+    'full/ODj0xJRyajbqClW3qeVG.webp',
+    'full/OECJOQpJGxCL9jYOcWzb.webp',
+    'full/PAtbhHvFUIrJzqkj77jH.webp',
+    'full/Pgy8DDL5w6Qp14UJQc5G.webp',
+    'full/Q2DbShKs6NLAmcvzFRxz.webp',
+    'full/Q6vYCOZsQrj6qVqvyKI0.webp',
+    'full/QD44M1AXsUBhZRiNQvgx.webp',
+    'full/QwRxN2Dqfb3vDCxrPqzn.webp',
+    'full/RKLRfMCJWgLEj4QJGCYc.webp',
+    'full/RSDnQIoTRwIcL0jdCk5F.webp',
+    'full/SVy0K4vk3DKDCQJEPqQB.webp',
+    'full/SW0OJFXY5n9Tk9GU2N8D.webp',
+    'full/SdQy5ReBu3vdGJ5A4Wze.webp',
+    'full/Sin nombre(12).webp',
+    'full/Sin nombre(42).webp',
+    'full/Sin nombre(63).webp',
+    'full/Sin nombre(9).webp',
+    'full/TN1xLsDXoCXHCkBJcqJK.webp',
+    'full/TXO9Hl2G2x8EWWGKPh8q.webp',
+    'full/TlJXP6lS0HRFHBSjMG7t.webp',
+    'full/TsFZrROYBjhCF2g8lBIA.webp',
+    'full/UAjD2eFLcvLZRyxcXfJU.webp',
+    'full/UIudJRWDpEu11uzsGgjQ.webp',
+    'full/UkXoQ2sUP0TzJoRbD5Z6.webp',
+    'full/V3X30Xp6QLMznASb5LkH.webp',
+    'full/V3niFjJGxAjIg5kBCUBA.webp',
+    'full/V84ucrV6GMRdFWZrWHHa.webp',
+    'full/V9OdPRFwsVsKxFZJPMtO.webp',
+    'full/VH0YJzN0DUlJkOdH4BLu.webp',
+    'full/VI7VXjPQ4tUWZH1hOsFQ.webp',
+    'full/VL3dOflxDOhNZKgVLT8k.webp',
+    'full/W8KKqP4GcQJBCu5yN4gW.webp',
+    'full/XSoOa3eSVBh7GhJhxBVU.webp',
+    'full/XTVnlIMQ4aKfLGiXz4yT.webp',
+    'full/XZYKBklv3vwD5bqzO2WT.webp',
+    'full/Y40xJsqOYzOdKGhKPrEB.webp',
+    'full/Y9qJqXOwXi1qzsUU5vVy.webp',
+    'full/YZrvKJ0bnQDBQIzVxUGT.webp',
+    'full/Yc4bvPXFRKqCgNpnEfA9.webp',
+    'full/Z5wbtPV3oChD0sA9lBB0.webp',
+    'full/Z6CUeVm6WZJCKdSYxdTH.webp',
+    'full/ZIShfHdOQdLqnr1fPZsQ.webp',
+    'full/ZKaWHUQGQcdCqQJgMU5a.webp',
+    'full/aWzOX7jQkJCiY0AEoXsL.webp',
+    'full/b0SYaLa4PGo5xdoIaUu2.webp',
     'full/backbikini.webp',
     'full/bikback2.webp',
     'full/bikbanner.webp',
     'full/bikbanner2.webp',
     'full/bikini.webp',
     'full/bikini3.webp',
-    'full/bikini5.webp'
+    'full/bikini5.webp',
+    'full/buena.webp',
+    'full/c0iCXJJgjgkUIAAD7NbB.webp',
+    'full/cASVP1f8F1yKN0mfWxD2.webp',
+    'full/dJgBrSUBAOXdHSJJ1F91.webp',
+    'full/dOBHJG5fIq5DBtCrUvqN.webp',
+    'full/dwer.webp',
+    'full/eqI3hO2GyHF8HWqbiw6S.webp',
+    'full/es.webp',
+    'full/fr.webp',
+    'full/gNgJHvMK8QiCOMlJqx2c.webp',
+    'full/hArvMUbCsJrJHKQzGBxy.webp',
+    'full/lqBcPpFqv3kqSgxHdmzL.webp',
+    'full/mlJxdpnONdN6G5fRjPqn.webp',
+    'full/oGSZdH8A8kkOtbmuMtX2.webp',
+    'full/oRRJMJK5KyL1QvHOsBmQ.webp',
+    'full/okDoSxMRKQQT3YCt0XJz.webp',
+    'full/uLIvQbtHBLY4pJ2cZfK7.webp',
+    'full/uk.webp',
+    'full/vDtK78HoKoCKuH5F7FtN.webp',
+    'full/ya.webp',
+    'full/yOLqNW64fQJZdIGWUy9g.webp',
+    'full/zZP4lNRJGUbKvUvLo6l4.webp'
 ];
 
 // ============================
@@ -153,204 +145,148 @@ class BannerTeaserManager {
     constructor() {
         this.banners = [];
         this.teasers = [];
-        this.initialized = false;
-        this.rotationInterval = null;
+        this.initializeContent();
     }
     
-    initialize() {
-        if (this.initialized) return;
+    initializeContent() {
+        // Seleccionar banners específicos
+        this.banners = FULL_IMAGES_POOL.filter(img => 
+            img.includes('banner') || 
+            img.includes('bik') ||
+            img.includes('backbikini')
+        ).slice(0, 6);
         
-        // Verificar que el pool existe
-        if (!FULL_IMAGES_POOL || FULL_IMAGES_POOL.length === 0) {
-            console.error('❌ FULL_IMAGES_POOL no está disponible');
-            return;
+        // Si no hay suficientes banners, agregar aleatorios
+        if (this.banners.length < 6) {
+            const additional = FULL_IMAGES_POOL
+                .filter(img => !this.banners.includes(img))
+                .slice(0, 6 - this.banners.length);
+            this.banners = [...this.banners, ...additional];
         }
         
-        // Extraer banners específicos
-        this.banners = [
-            'full/bikbanner.webp',
-            'full/bikbanner2.webp',
-            'full/backbikini.webp',
-            'full/bikback2.webp',
-            'full/bikini.webp'
-        ];
+        // Seleccionar teasers específicos
+        this.teasers = FULL_IMAGES_POOL.filter(img => 
+            img.includes('Sin nombre') || 
+            img.includes('bikini') ||
+            img.includes('buena')
+        ).slice(0, 10);
         
-        // Extraer teasers - usar imágenes específicas de bikini y algunas aleatorias
-        this.teasers = [
-            'full/bikini.webp',
-            'full/bikini3.webp',
-            'full/bikini5.webp',
-            'full/Sinoseup.webp',
-            'full/Sinportada.webp',
-            'full/Sintulo.webp',
-            'full/Siulo.webp',
-            ...this.getRandomImages(3)
-        ];
-        
-        this.initialized = true;
-        console.log(`✅ BannerTeaserManager initialized: ${this.banners.length} banners, ${this.teasers.length} teasers`);
+        // Si no hay suficientes teasers, agregar aleatorios
+        if (this.teasers.length < 10) {
+            const additional = FULL_IMAGES_POOL
+                .filter(img => !this.teasers.includes(img) && !this.banners.includes(img))
+                .slice(0, 10 - this.teasers.length);
+            this.teasers = [...this.teasers, ...additional];
+        }
     }
     
     getBanners() {
-        if (!this.initialized) this.initialize();
-        return [...this.banners];
+        return this.banners;
     }
     
     getTeasers() {
-        if (!this.initialized) this.initialize();
-        return [...this.teasers];
+        return this.teasers;
     }
     
     getRandomBanner() {
-        const banners = this.getBanners();
-        if (banners.length === 0) return null;
-        return banners[Math.floor(Math.random() * banners.length)];
+        return this.banners[Math.floor(Math.random() * this.banners.length)];
     }
     
     getRandomTeaser() {
-        const teasers = this.getTeasers();
-        if (teasers.length === 0) return null;
-        return teasers[Math.floor(Math.random() * teasers.length)];
-    }
-    
-    getRandomImages(count = 10) {
-        if (!FULL_IMAGES_POOL || FULL_IMAGES_POOL.length === 0) return [];
-        
-        const shuffled = [...FULL_IMAGES_POOL].sort(() => Math.random() - 0.5);
-        return shuffled.slice(0, Math.min(count, shuffled.length));
+        return this.teasers[Math.floor(Math.random() * this.teasers.length)];
     }
     
     rotateContent() {
-        // Rotar contenido cada día
-        const now = new Date();
-        const seed = now.getFullYear() * 1000 + now.getMonth() * 100 + now.getDate();
-        
-        // Usar seed para obtener índices consistentes durante el día
-        const bannerIndex = seed % this.banners.length;
-        const teaserStartIndex = seed % Math.max(1, this.teasers.length - 5);
+        // Rotar contenido usando el seed del día
+        if (window.TimeUtils) {
+            const seed = window.TimeUtils.getHourlySeed();
+            
+            if (window.ArrayUtils) {
+                this.banners = window.ArrayUtils.shuffleWithSeed(this.banners, seed);
+                this.teasers = window.ArrayUtils.shuffleWithSeed(this.teasers, seed + 1);
+            }
+        }
         
         return {
-            todaysBanner: this.banners[bannerIndex],
-            todaysTeasers: this.teasers.slice(teaserStartIndex, teaserStartIndex + 5)
+            banners: this.banners,
+            teasers: this.teasers
         };
-    }
-    
-    startAutoRotation(intervalMs = 5000) {
-        if (this.rotationInterval) {
-            clearInterval(this.rotationInterval);
-        }
-        
-        this.rotationInterval = setInterval(() => {
-            // Emit custom event for rotation
-            window.dispatchEvent(new CustomEvent('bannerRotation', {
-                detail: {
-                    banner: this.getRandomBanner(),
-                    teaser: this.getRandomTeaser()
-                }
-            }));
-        }, intervalMs);
-    }
-    
-    stopAutoRotation() {
-        if (this.rotationInterval) {
-            clearInterval(this.rotationInterval);
-            this.rotationInterval = null;
-        }
     }
 }
 
 // ============================
-// UTILITY FUNCTIONS
+// PUBLIC CONTENT MANAGER
 // ============================
 
-const ImageUtils = {
-    // Obtener todas las imágenes
-    getAllImages() {
-        return [...FULL_IMAGES_POOL];
-    },
+class PublicContentManager {
+    constructor() {
+        this.images = FULL_IMAGES_POOL;
+        this.totalImages = this.images.length;
+        console.log(`📸 Gestor de contenido público inicializado con ${this.totalImages} imágenes`);
+    }
     
-    // Buscar imágenes por nombre
-    searchImages(query) {
-        if (!query || !FULL_IMAGES_POOL) return [];
+    getAll() {
+        return this.images;
+    }
+    
+    getRandom(count = 10) {
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.getRandomItems(this.images, count);
+        }
+        return this.images.slice(0, count);
+    }
+    
+    getByPage(page = 1, perPage = 24) {
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.paginate(this.images, page, perPage);
+        }
+        
+        const start = (page - 1) * perPage;
+        const end = start + perPage;
+        return this.images.slice(start, end);
+    }
+    
+    search(query) {
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.search(this.images, query);
+        }
+        
         const queryLower = query.toLowerCase();
-        return FULL_IMAGES_POOL.filter(img => 
-            img.toLowerCase().includes(queryLower)
-        );
-    },
+        return this.images.filter(img => img.toLowerCase().includes(queryLower));
+    }
     
-    // Validar si una imagen existe en el pool
-    imageExists(imagePath) {
-        return FULL_IMAGES_POOL && FULL_IMAGES_POOL.includes(imagePath);
-    },
-    
-    // Obtener imagen aleatoria
-    getRandomImage() {
-        if (!FULL_IMAGES_POOL || FULL_IMAGES_POOL.length === 0) return null;
-        const randomIndex = Math.floor(Math.random() * FULL_IMAGES_POOL.length);
-        return FULL_IMAGES_POOL[randomIndex];
-    },
-    
-    // Obtener imágenes por patrón
-    getImagesByPattern(pattern) {
-        if (!FULL_IMAGES_POOL) return [];
-        const regex = new RegExp(pattern, 'i');
-        return FULL_IMAGES_POOL.filter(img => regex.test(img));
-    },
-    
-    // Obtener subset de imágenes
-    getImageSubset(start = 0, count = 10) {
-        if (!FULL_IMAGES_POOL) return [];
-        return FULL_IMAGES_POOL.slice(start, start + count);
-    },
-    
-    // Obtener estadísticas
     getStats() {
         return {
-            total: FULL_IMAGES_POOL ? FULL_IMAGES_POOL.length : 0,
-            banners: FULL_IMAGES_POOL ? FULL_IMAGES_POOL.filter(img => img.includes('banner')).length : 0,
-            teasers: FULL_IMAGES_POOL ? FULL_IMAGES_POOL.filter(img => img.includes('bikini')).length : 0
+            total: this.totalImages,
+            categories: {
+                banners: this.images.filter(img => img.includes('banner')).length,
+                bikini: this.images.filter(img => img.includes('bikini')).length,
+                flags: this.images.filter(img => ['es.webp', 'fr.webp', 'uk.webp'].some(flag => img.includes(flag))).length,
+                others: this.images.filter(img => 
+                    !img.includes('banner') && 
+                    !img.includes('bikini') && 
+                    !['es.webp', 'fr.webp', 'uk.webp'].some(flag => img.includes(flag))
+                ).length
+            }
         };
     }
-};
+}
 
 // ============================
-// INITIALIZATION & EXPORTS
+// EXPORTAR GLOBALMENTE
 // ============================
 
-// Crear instancia global
-const globalBannerManager = new BannerTeaserManager();
-
-// Exponer APIs globales
 window.FULL_IMAGES_POOL = FULL_IMAGES_POOL;
-window.BannerTeaserManager = globalBannerManager;
-window.ImageUtils = ImageUtils;
+window.BannerTeaserManager = new BannerTeaserManager();
+window.PublicContentManager = new PublicContentManager();
 
-// Auto-inicializar cuando el DOM esté listo
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        globalBannerManager.initialize();
-    });
-} else {
-    globalBannerManager.initialize();
-}
+// Crear arrays de banners y teasers para compatibilidad
+window.BANNER_IMAGES = window.BannerTeaserManager.getBanners();
+window.TEASER_IMAGES = window.BannerTeaserManager.getTeasers();
 
-// Compatibilidad con código legacy
-window.getAllPhotos = () => FULL_IMAGES_POOL;
-window.getBannerImages = () => globalBannerManager.getBanners();
-window.getTeaserImages = () => globalBannerManager.getTeasers();
-window.rotateBannersAndTeasers = () => globalBannerManager.rotateContent();
-
-// Log de inicialización
-console.log(`📦 content-data2.js v2.0.0 FIXED loaded`);
-console.log(`   - ${FULL_IMAGES_POOL.length} imágenes públicas disponibles`);
-console.log(`   - BannerTeaserManager inicializado`);
-console.log(`   - ImageUtils disponible`);
-
-// Exportar para módulos ES6 si es necesario
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        FULL_IMAGES_POOL,
-        BannerTeaserManager: globalBannerManager,
-        ImageUtils
-    };
-}
+console.log('✅ Módulo content-data2.js cargado correctamente');
+console.log('📊 Estadísticas de contenido público:', {
+    total: FULL_IMAGES_POOL.length,
+    banners: window.BANNER_IMAGES.length,
+    teasers: window.TEASER_IMAGES.length
+});
