@@ -1,174 +1,142 @@
 <?php
 /**
- * PROXY PARA CARGAR SCRIPTS DE ANUNCIOS BLOQUEADOS v3.0 - COMPLETAMENTE CORREGIDO
- * IbizaGirl.pics - Enhanced Security & Performance
- * 
- * FIXED: Dominios actualizados, rate limiting mejorado, mejor manejo de errores
- * Este script actúa como proxy para cargar scripts de terceros
- * que pueden estar bloqueados por CORS o protección contra rastreo
+ * Proxy Script for Ad Networks
+ * Version: 4.1.0
+ * Purpose: Safely proxy external ad scripts and resources
  */
 
-// Headers de seguridad mejorados
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Cache-Control');
-header('X-Frame-Options: SAMEORIGIN');
-header('Referrer-Policy: strict-origin-when-cross-origin');
+// Configuración básica
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/logs/proxy_errors.log');
+
+// Headers de seguridad
 header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: SAMEORIGIN');
 header('X-XSS-Protection: 1; mode=block');
-header('X-Proxy-Version: 3.0');
+header('Referrer-Policy: strict-origin-when-cross-origin');
 
-// Handle preflight OPTIONS request
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(204);
-    exit;
-}
-
-// Lista blanca de dominios actualizada y expandida - CORREGIDA
-$allowed_domains = [
-    // JuicyAds domains - COMPLETOS
-    'poweredby.jads.co',
-    'www.juicyads.com',
-    'cdn.juicyads.com',
-    'static.juicyads.com',
-    'js.juicyads.com',
-    'a.juicyads.com',
-    'media.juicyads.com',
-    
-    // ExoClick domains - COMPLETOS
-    'syndication.exoclick.com',
-    'a.realsrv.com',
-    'main.exoclick.com',
-    'www.exoclick.com',
-    'cdn.exoclick.com',
-    'static.exoclick.com',
-    'ads.exoclick.com',
-    
-    // EroAdvertising - AÑADIDOS
-    'www.eroadvertising.com',
-    'cdn.eroadvertising.com',
-    'js.eroadvertising.com',
-    'static.eroadvertising.com',
-    
-    // PopAds/PremiumVertising domains
-    'www.premiumvertising.com',
-    'cdn.premiumvertising.com',
-    'c.premiumvertising.com',
-    
-    // Ad networks adicionales
-    'adsco.re',
-    'cdn.adsco.re',
-    'www.adsco.re',
-    
-    // CDN permitidos
-    'cdn.jsdelivr.net',
-    'cdnjs.cloudflare.com',
-    'unpkg.com',
-    'ajax.googleapis.com',
-    'code.jquery.com',
-    
-    // Analytics permitidos
-    'www.googletagmanager.com',
-    'www.google-analytics.com',
-    'stats.g.doubleclick.net',
-    
-    // PayPal permitidos
-    'www.paypal.com',
-    'www.paypalobjects.com',
-    'www.sandbox.paypal.com'
-];
-
-// Rate limiting mejorado con diferentes límites por tipo
+// Iniciar sesión para rate limiting
 session_start();
-$client_ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-$user_agent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
-$rate_limit_key = "proxy_rate_limit_" . md5($client_ip);
-$rate_limit_key_heavy = "proxy_rate_limit_heavy_" . md5($client_ip);
 
-// Inicializar contadores si no existen
-if (!isset($_SESSION[$rate_limit_key])) {
-    $_SESSION[$rate_limit_key] = ['count' => 0, 'time' => time()];
+// Obtener IP del cliente
+$client_ip = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? 
+             $_SERVER['HTTP_X_FORWARDED_FOR'] ?? 
+             $_SERVER['REMOTE_ADDR'] ?? 
+             '0.0.0.0';
+
+// Rate limiting mejorado
+$rate_limit_key = 'rate_limit_' . md5($client_ip);
+$rate_limit_key_heavy = 'rate_limit_heavy_' . md5($client_ip);
+$current_time = time();
+
+// Límite general: 100 requests por minuto
+$rate_data = $_SESSION[$rate_limit_key] ?? ['count' => 0, 'reset_time' => $current_time + 60];
+
+if ($current_time > $rate_data['reset_time']) {
+    $rate_data = ['count' => 1, 'reset_time' => $current_time + 60];
+} else {
+    $rate_data['count']++;
+    if ($rate_data['count'] > 100) {
+        http_response_code(429);
+        header('Retry-After: ' . ($rate_data['reset_time'] - $current_time));
+        die('// Rate limit exceeded. Please try again later.');
+    }
 }
 
-if (!isset($_SESSION[$rate_limit_key_heavy])) {
-    $_SESSION[$rate_limit_key_heavy] = ['count' => 0, 'time' => time()];
-}
-
-$rate_data = $_SESSION[$rate_limit_key];
-$rate_data_heavy = $_SESSION[$rate_limit_key_heavy];
-
-// Reset counter if more than 1 minute has passed
-if (time() - $rate_data['time'] > 60) {
-    $rate_data = ['count' => 0, 'time' => time()];
-}
-
-if (time() - $rate_data_heavy['time'] > 3600) { // Reset heavy counter cada hora
-    $rate_data_heavy = ['count' => 0, 'time' => time()];
-}
-
-// Límite de 200 requests por minuto por IP (aumentado de 100)
-if ($rate_data['count'] > 200) {
-    http_response_code(429);
-    header('Retry-After: 60');
-    header('X-RateLimit-Limit: 200');
-    header('X-RateLimit-Remaining: 0');
-    header('X-RateLimit-Reset: ' . ($rate_data['time'] + 60));
-    die('// Error: Rate limit exceeded. Try again in 60 seconds.');
-}
-
-// Límite de 1000 requests pesados por hora
-if ($rate_data_heavy['count'] > 1000) {
-    http_response_code(429);
-    header('Retry-After: 3600');
-    header('X-RateLimit-Heavy-Limit: 1000');
-    header('X-RateLimit-Heavy-Remaining: 0');
-    die('// Error: Heavy rate limit exceeded. Try again in 1 hour.');
-}
-
-$rate_data['count']++;
 $_SESSION[$rate_limit_key] = $rate_data;
 
-// Obtener la URL solicitada
-$url = isset($_GET['url']) ? trim($_GET['url']) : '';
+// Límite para requests pesados: 20 por minuto
+$rate_data_heavy = $_SESSION[$rate_limit_key_heavy] ?? ['count' => 0, 'reset_time' => $current_time + 60];
 
-// Validación de URL más estricta
+if ($current_time > $rate_data_heavy['reset_time']) {
+    $rate_data_heavy = ['count' => 0, 'reset_time' => $current_time + 60];
+}
+
+if ($rate_data_heavy['count'] > 20) {
+    http_response_code(429);
+    header('Retry-After: ' . ($rate_data_heavy['reset_time'] - $current_time));
+    die('// Heavy rate limit exceeded. Please try again later.');
+}
+
+// Obtener y validar URL
+$url = $_GET['url'] ?? '';
+
 if (empty($url)) {
     http_response_code(400);
     die('// Error: No URL provided');
 }
 
-// Decodificar URL si está codificada
+// Decodificar URL si es necesario
 $url = urldecode($url);
 
-// Validar que la URL sea válida
+// Validar URL
 if (!filter_var($url, FILTER_VALIDATE_URL)) {
     http_response_code(400);
-    error_log("Proxy: Invalid URL format - $url from IP: $client_ip");
-    die('// Error: Invalid URL format');
+    error_log("Proxy: Invalid URL attempted - $url from IP: $client_ip");
+    die('// Error: Invalid URL');
 }
 
-// Validación adicional de esquema
+// Parsear URL
 $parsed_url = parse_url($url);
-if (!$parsed_url || !isset($parsed_url['scheme']) || !isset($parsed_url['host'])) {
+if (!$parsed_url || !isset($parsed_url['host'])) {
     http_response_code(400);
-    die('// Error: Invalid URL structure');
+    die('// Error: Malformed URL');
 }
 
-// Permitir tanto HTTP como HTTPS para mayor compatibilidad
-if (!in_array($parsed_url['scheme'], ['http', 'https'])) {
-    http_response_code(400);
-    die('// Error: Only HTTP/HTTPS URLs are allowed');
-}
+// Obtener User-Agent del cliente
+$user_agent = $_SERVER['HTTP_USER_AGENT'] ?? 'Mozilla/5.0 (compatible; ProxyBot/1.0)';
 
+// Lista blanca de dominios permitidos
+$allowed_domains = [
+    'poweredby.jads.co',
+    'juicyads.com',
+    'www.juicyads.com',
+    'js.juicyads.com',
+    'adserver.juicyads.com',
+    'syndication.exoclick.com',
+    'syndication.exosrv.com',
+    'a.exoclick.com',
+    'main.exoclick.com',
+    'realsrv.com',
+    'a.realsrv.com',
+    'tsyndicate.com',
+    'a.tsyndicate.com',
+    'trafficstars.com',
+    'a.trafficstars.com',
+    'trafficjunky.com',
+    'media.trafficjunky.com',
+    'premiumvertising.com',
+    'www.premiumvertising.com',
+    'eroadvertising.com',
+    'www.eroadvertising.com',
+    'adskeeper.com',
+    'jsc.adskeeper.com',
+    'googletagmanager.com',
+    'www.googletagmanager.com',
+    'google-analytics.com',
+    'www.google-analytics.com',
+    'googleapis.com',
+    'ajax.googleapis.com',
+    'cloudflare.com',
+    'cdnjs.cloudflare.com',
+    'jsdelivr.net',
+    'cdn.jsdelivr.net',
+    'unpkg.com',
+    'paypal.com',
+    'www.paypal.com',
+    'paypalobjects.com',
+    'www.paypalobjects.com'
+];
+
+// Verificar si el dominio está permitido
 $domain = strtolower($parsed_url['host']);
-
-// Verificación de dominio más robusta
 $domain_allowed = false;
+
 foreach ($allowed_domains as $allowed) {
-    $allowed = strtolower($allowed);
-    // Verificar dominio exacto o subdominio
     if ($domain === $allowed || 
-        str_ends_with($domain, '.' . $allowed) ||
+        ($allowed[0] === '.' && str_ends_with($domain, $allowed)) ||
         ($allowed[0] !== '.' && str_starts_with($domain, str_replace('www.', '', $allowed)))) {
         $domain_allowed = true;
         break;
@@ -244,7 +212,7 @@ $context_options = [
         'protocol_version' => 1.1
     ],
     'ssl' => [
-        'verify_peer' => false, // Cambiar a false para mayor compatibilidad
+        'verify_peer' => false,
         'verify_peer_name' => false,
         'allow_self_signed' => true,
         'disable_compression' => false,
@@ -306,9 +274,9 @@ if ($content === false || $http_code >= 400) {
                 'Cache-Control: no-cache',
                 'DNT: 1'
             ],
-            CURLOPT_ENCODING => '', // Automatically handle compression
+            CURLOPT_ENCODING => '',
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
-            CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4 // Forzar IPv4 para mayor compatibilidad
+            CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4
         ]);
         
         $content = curl_exec($ch);
@@ -378,7 +346,7 @@ if ($extension === 'js' || $extension === 'css') {
     header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 3600) . ' GMT');
     
     // Guardar en caché si APCu está disponible
-    if (function_exists('apcu_store') && strlen($content) < 1048576) { // Solo cachear si es menor a 1MB
+    if (function_exists('apcu_store') && strlen($content) < 1048576) {
         apcu_store($cache_key, $content, 3600);
     }
 } elseif ($extension === 'json' || $extension === 'xml') {
@@ -386,115 +354,29 @@ if ($extension === 'js' || $extension === 'css') {
     header('Cache-Control: public, max-age=300, must-revalidate');
     header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 300) . ' GMT');
 } else {
-    // Otros contenidos: cache por 30 minutos
-    header('Cache-Control: public, max-age=1800, stale-while-revalidate=900');
-    header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 1800) . ' GMT');
+    // Otros: no cachear
+    header('Cache-Control: no-cache, no-store, must-revalidate');
+    header('Pragma: no-cache');
+    header('Expires: 0');
 }
 
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-header('ETag: "' . md5($content . $url . $http_code) . '"');
-header('X-Proxy-Version: 3.0');
+// CORS headers para compatibilidad
+header('Access-Control-Allow-Origin: https://ibizagirl.pics');
+header('Access-Control-Allow-Methods: GET');
+header('Access-Control-Max-Age: 3600');
+header('Timing-Allow-Origin: https://ibizagirl.pics');
 
-// Manejo especial para JavaScript con mejor wrapper de errores
-if ($extension === 'js' || $extension === 'mjs') {
-    echo "/* Proxied from: $url */\n";
-    echo "/* Proxy version: 3.0 - Enhanced Security & Performance */\n";
-    echo "/* Timestamp: " . date('Y-m-d H:i:s') . " */\n";
-    echo "(function() {\n";
-    echo "    'use strict';\n";
-    echo "    try {\n";
-    
-    // Limpiar y preparar el contenido JavaScript
-    $content = preg_replace('/^\s*\/\*.*?\*\/\s*/s', '', $content); // Remove initial comments
-    $content = trim($content);
-    
-    // Asegurar que el contenido no termine con punto y coma para evitar errores de sintaxis
-    $content = rtrim($content, ';') . ';';
-    
-    echo $content;
-    echo "\n    } catch(proxyError) {\n";
-    echo "        console.warn('Proxy script error from $domain:', proxyError);\n";
-    echo "        if (window.trackEvent) {\n";
-    echo "            window.trackEvent('proxy_script_error', { \n";
-    echo "                url: '$url', \n";
-    echo "                domain: '$domain',\n";
-    echo "                error: proxyError.message \n";
-    echo "            });\n";
-    echo "        }\n";
-    echo "    }\n";
-    echo "})();\n";
-    echo "/* End of proxied content */\n";
-} elseif ($extension === 'css') {
-    // Para CSS, añadir comentario informativo
-    echo "/* Proxied from: $url */\n";
-    echo "/* Proxy version: 3.0 */\n";
-    echo "/* Timestamp: " . date('Y-m-d H:i:s') . " */\n\n";
-    echo $content;
-    echo "\n/* End of proxied content */";
-} else {
-    // Para otros tipos de contenido, devolver tal como es
-    echo $content;
+// Logging exitoso para debugging
+if ($rate_data['count'] % 10 === 0) {
+    error_log("Proxy: Successful fetch - $url (Request #" . $rate_data['count'] . " from IP: $client_ip)");
 }
 
-// Log de éxito más detallado
-$log_data = [
-    'timestamp' => date('Y-m-d H:i:s'),
-    'url' => $url,
-    'domain' => $domain,
-    'client_ip' => $client_ip,
-    'user_agent' => substr($user_agent, 0, 100),
-    'content_type' => $content_type,
-    'content_length' => strlen($content),
-    'http_code' => $http_code,
-    'cache_status' => $cached_content !== null ? 'HIT' : 'MISS',
-    'sanitized' => $is_dangerous
-];
+// Enviar el contenido
+echo $content;
 
-// Solo loguear si es exitoso
-if ($http_code < 400) {
-    error_log("Proxy success: " . json_encode($log_data));
-}
+// Limpiar variables para liberar memoria
+unset($content);
+unset($cached_content);
 
-// Actualizar estadísticas de uso (opcional)
-if (isset($_SESSION['proxy_stats'])) {
-    $_SESSION['proxy_stats']['requests']++;
-    $_SESSION['proxy_stats']['bytes_served'] += strlen($content);
-    $_SESSION['proxy_stats']['last_request'] = time();
-    
-    // Estadísticas por dominio
-    if (!isset($_SESSION['proxy_stats']['domains'])) {
-        $_SESSION['proxy_stats']['domains'] = [];
-    }
-    if (!isset($_SESSION['proxy_stats']['domains'][$domain])) {
-        $_SESSION['proxy_stats']['domains'][$domain] = 0;
-    }
-    $_SESSION['proxy_stats']['domains'][$domain]++;
-} else {
-    $_SESSION['proxy_stats'] = [
-        'requests' => 1,
-        'bytes_served' => strlen($content),
-        'first_request' => time(),
-        'last_request' => time(),
-        'domains' => [$domain => 1]
-    ];
-}
-
-// Función para obtener estadísticas (opcional, para debugging)
-if (isset($_GET['stats']) && $_GET['stats'] === 'true') {
-    header('Content-Type: application/json');
-    echo json_encode([
-        'status' => 'ok',
-        'version' => '3.0',
-        'stats' => $_SESSION['proxy_stats'] ?? null,
-        'allowed_domains_count' => count($allowed_domains),
-        'rate_limit' => [
-            'current' => $rate_data['count'],
-            'limit' => 200,
-            'reset_in' => max(0, 60 - (time() - $rate_data['time']))
-        ]
-    ]);
-    exit;
-}
-
+// Fin del script
 exit;
-?>
