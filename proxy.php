@@ -1,179 +1,121 @@
 <?php
 /**
- * Proxy Script for Ad Networks
- * Version: 4.1.0
- * Purpose: Safely proxy external ad scripts and resources
+ * IbizaGirl.pics - Advanced Proxy v3.0.0
+ * Enhanced security, performance and reliability
  */
 
-// Configuración básica
-error_reporting(E_ALL);
+// Configuración de errores para producción
+error_reporting(0);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/logs/proxy_errors.log');
 
-// Headers de seguridad
+// Headers de seguridad tempranos
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('X-XSS-Protection: 1; mode=block');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 
-// Iniciar sesión para rate limiting
-session_start();
-
-// Obtener IP del cliente
-$client_ip = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? 
-             $_SERVER['HTTP_X_FORWARDED_FOR'] ?? 
-             $_SERVER['REMOTE_ADDR'] ?? 
-             '0.0.0.0';
-
-// Rate limiting mejorado
-$rate_limit_key = 'rate_limit_' . md5($client_ip);
-$rate_limit_key_heavy = 'rate_limit_heavy_' . md5($client_ip);
-$current_time = time();
-
-// Límite general: 100 requests por minuto
-$rate_data = $_SESSION[$rate_limit_key] ?? ['count' => 0, 'reset_time' => $current_time + 60];
-
-if ($current_time > $rate_data['reset_time']) {
-    $rate_data = ['count' => 1, 'reset_time' => $current_time + 60];
-} else {
-    $rate_data['count']++;
-    if ($rate_data['count'] > 100) {
-        http_response_code(429);
-        header('Retry-After: ' . ($rate_data['reset_time'] - $current_time));
-        die('// Rate limit exceeded. Please try again later.');
-    }
-}
-
-$_SESSION[$rate_limit_key] = $rate_data;
-
-// Límite para requests pesados: 20 por minuto
-$rate_data_heavy = $_SESSION[$rate_limit_key_heavy] ?? ['count' => 0, 'reset_time' => $current_time + 60];
-
-if ($current_time > $rate_data_heavy['reset_time']) {
-    $rate_data_heavy = ['count' => 0, 'reset_time' => $current_time + 60];
-}
-
-if ($rate_data_heavy['count'] > 20) {
-    http_response_code(429);
-    header('Retry-After: ' . ($rate_data_heavy['reset_time'] - $current_time));
-    die('// Heavy rate limit exceeded. Please try again later.');
-}
-
-// Obtener y validar URL
-$url = $_GET['url'] ?? '';
-
-if (empty($url)) {
-    http_response_code(400);
-    die('// Error: No URL provided');
-}
-
-// Decodificar URL si es necesario
-$url = urldecode($url);
-
-// Validar URL
-if (!filter_var($url, FILTER_VALIDATE_URL)) {
-    http_response_code(400);
-    error_log("Proxy: Invalid URL attempted - $url from IP: $client_ip");
-    die('// Error: Invalid URL');
-}
-
-// Parsear URL
-$parsed_url = parse_url($url);
-if (!$parsed_url || !isset($parsed_url['host'])) {
-    http_response_code(400);
-    die('// Error: Malformed URL');
-}
-
-// Obtener User-Agent del cliente
-$user_agent = $_SERVER['HTTP_USER_AGENT'] ?? 'Mozilla/5.0 (compatible; ProxyBot/1.0)';
-
-// Lista blanca de dominios permitidos
-$allowed_domains = [
-    'poweredby.jads.co',
+// Configuración
+$ALLOWED_DOMAINS = [
     'juicyads.com',
     'www.juicyads.com',
-    'js.juicyads.com',
-    'adserver.juicyads.com',
+    'ads.juicyads.com',
+    'cdn.juicyads.com',
+    'exoclick.com',
+    'www.exoclick.com',
     'syndication.exoclick.com',
-    'syndication.exosrv.com',
-    'a.exoclick.com',
     'main.exoclick.com',
-    'realsrv.com',
-    'a.realsrv.com',
-    'tsyndicate.com',
-    'a.tsyndicate.com',
-    'trafficstars.com',
-    'a.trafficstars.com',
-    'trafficjunky.com',
-    'media.trafficjunky.com',
-    'premiumvertising.com',
-    'www.premiumvertising.com',
     'eroadvertising.com',
     'www.eroadvertising.com',
-    'adskeeper.com',
-    'jsc.adskeeper.com',
-    'googletagmanager.com',
-    'www.googletagmanager.com',
-    'google-analytics.com',
-    'www.google-analytics.com',
-    'googleapis.com',
-    'ajax.googleapis.com',
-    'cloudflare.com',
-    'cdnjs.cloudflare.com',
+    'popads.net',
+    'www.popads.net',
+    'c1.popads.net',
+    'c2.popads.net',
+    'serve.popads.net',
+    'chaturbate.com',
+    'www.chaturbate.com',
+    'mmcdn.com',
     'jsdelivr.net',
-    'cdn.jsdelivr.net',
-    'unpkg.com',
-    'paypal.com',
-    'www.paypal.com',
-    'paypalobjects.com',
-    'www.paypalobjects.com'
+    'cdn.jsdelivr.net'
 ];
 
-// Verificar si el dominio está permitido
-$domain = strtolower($parsed_url['host']);
-$domain_allowed = false;
+$BLOCKED_PATTERNS = [
+    '/eval\s*\(/i',
+    '/document\.write/i',
+    '/innerHTML\s*=/i',
+    '/\.cookie\s*=/i',
+    '/localStorage\./i',
+    '/sessionStorage\./i'
+];
 
-foreach ($allowed_domains as $allowed) {
-    if ($domain === $allowed || 
-        ($allowed[0] === '.' && str_ends_with($domain, $allowed)) ||
-        ($allowed[0] !== '.' && str_starts_with($domain, str_replace('www.', '', $allowed)))) {
-        $domain_allowed = true;
-        break;
-    }
+// Rate limiting mejorado
+session_start();
+$client_ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+$rate_limit_key = 'rate_limit_' . md5($client_ip);
+$rate_data = $_SESSION[$rate_limit_key] ?? ['count' => 0, 'reset_time' => time() + 3600];
+
+if (time() > $rate_data['reset_time']) {
+    $rate_data = ['count' => 0, 'reset_time' => time() + 3600];
 }
 
-if (!$domain_allowed) {
+$rate_data['count']++;
+$_SESSION[$rate_limit_key] = $rate_data;
+
+// Aplicar límites más estrictos por IP
+$max_requests = 1000; // Por hora
+if ($rate_data['count'] > $max_requests) {
+    http_response_code(429);
+    header('Retry-After: ' . ($rate_data['reset_time'] - time()));
+    die('// Rate limit exceeded. Please try again later.');
+}
+
+// Validación de entrada mejorada
+$url = filter_input(INPUT_GET, 'url', FILTER_SANITIZE_URL);
+
+if (!$url) {
+    http_response_code(400);
+    header('Content-Type: application/javascript');
+    die('// Error: Invalid or missing URL parameter');
+}
+
+// Decodificar y validar URL
+$url = urldecode($url);
+if (!filter_var($url, FILTER_VALIDATE_URL)) {
+    http_response_code(400);
+    header('Content-Type: application/javascript');
+    die('// Error: Invalid URL format');
+}
+
+// Extraer y validar dominio
+$parsed_url = parse_url($url);
+$domain = $parsed_url['host'] ?? '';
+
+if (!$domain || !in_array($domain, $ALLOWED_DOMAINS)) {
     http_response_code(403);
-    error_log("Proxy: Domain not allowed - $domain from IP: $client_ip, UA: $user_agent");
-    header('X-Proxy-Error: Domain not in whitelist');
-    die('// Error: Domain not allowed: ' . htmlspecialchars($domain));
+    error_log("Proxy: Blocked request to unauthorized domain: $domain from IP: $client_ip");
+    header('Content-Type: application/javascript');
+    die('// Error: Unauthorized domain');
 }
 
-// Incrementar contador para requests pesados
-$rate_data_heavy['count']++;
-$_SESSION[$rate_limit_key_heavy] = $rate_data_heavy;
-
-// Determinar el tipo de contenido basado en la extensión y headers
+// Determinar tipo de contenido basado en la extensión y el dominio
 $path = $parsed_url['path'] ?? '';
 $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
 
-$content_types = [
-    'js' => 'application/javascript; charset=utf-8',
-    'mjs' => 'application/javascript; charset=utf-8',
-    'css' => 'text/css; charset=utf-8',
-    'json' => 'application/json; charset=utf-8',
-    'html' => 'text/html; charset=utf-8',
-    'xml' => 'application/xml; charset=utf-8',
-    'txt' => 'text/plain; charset=utf-8',
+// Tipo de contenido más específico
+$content_type = match($extension) {
+    'js' => 'application/javascript',
+    'json' => 'application/json',
+    'css' => 'text/css',
+    'html', 'htm' => 'text/html',
+    'xml' => 'application/xml',
+    'jpg', 'jpeg' => 'image/jpeg',
+    'png' => 'image/png',
+    'gif' => 'image/gif',
+    'webp' => 'image/webp',
     'svg' => 'image/svg+xml',
-    'woff' => 'font/woff',
-    'woff2' => 'font/woff2',
-    'ttf' => 'font/ttf',
-    'eot' => 'application/vnd.ms-fontobject'
-];
-
-$content_type = $content_types[$extension] ?? 'text/plain; charset=utf-8';
+    default => 'text/plain; charset=utf-8'
+};
 
 // User-Agent pool actualizado
 $user_agents = [
@@ -309,7 +251,7 @@ if (empty($content)) {
     die('// Error: Empty content received');
 }
 
-// Filtrado de contenido potencialmente malicioso (mejorado)
+// Filtrado de contenido potencialmente malicioso (CORREGIDO)
 $dangerous_patterns = [
     '/<script[^>]*>.*?document\.cookie.*?<\/script>/si',
     '/<script[^>]*>.*?localStorage\.setItem.*?<\/script>/si',
@@ -371,12 +313,12 @@ if ($rate_data['count'] % 10 === 0) {
     error_log("Proxy: Successful fetch - $url (Request #" . $rate_data['count'] . " from IP: $client_ip)");
 }
 
-// Enviar el contenido
+// Output final del contenido
 echo $content;
 
-// Limpiar variables para liberar memoria
+// Cleanup y optimización de memoria
 unset($content);
-unset($cached_content);
-
-// Fin del script
-exit;
+if (function_exists('gc_collect_cycles')) {
+    gc_collect_cycles();
+}
+?>
