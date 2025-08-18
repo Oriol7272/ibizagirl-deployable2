@@ -3,14 +3,15 @@
  * API unificada y funciones principales del sistema
  */
 
+'use strict';
+
+console.log('📦 Cargando módulo content-data6.js - API unificada...');
+
 // ============================
 // VERIFICACIÓN DE DEPENDENCIAS
 // ============================
 
 (function() {
-    'use strict';
-    
-    // Verificar que los módulos anteriores están cargados
     const requiredModules = [
         { name: 'ContentConfig', module: 'content-data1.js' },
         { name: 'FULL_IMAGES_POOL', module: 'content-data2.js' },
@@ -74,10 +75,9 @@ const ContentAPI = {
             return window.BannerTeaserManager.getBanners();
         }
         
-        // Fallback: buscar imágenes con 'banner' en el nombre
         return (window.FULL_IMAGES_POOL || [])
             .filter(img => img.includes('banner') || img.includes('bik'))
-            .slice(0, 5);
+            .slice(0, 6);
     },
     
     // Obtener teasers
@@ -86,7 +86,6 @@ const ContentAPI = {
             return window.BannerTeaserManager.getTeasers();
         }
         
-        // Fallback: buscar imágenes específicas para teasers
         return (window.FULL_IMAGES_POOL || [])
             .filter(img => img.includes('teaser') || img.includes('Sin') || img.includes('bikini'))
             .slice(0, 10);
@@ -156,7 +155,6 @@ const ContentAPI = {
             window.BannerTeaserManager.rotateContent();
         }
         
-        // Disparar evento de rotación
         if (window.EventManager) {
             window.EventManager.emit('contentRotated', {
                 timestamp: Date.now()
@@ -172,6 +170,28 @@ const ContentAPI = {
 // ============================
 
 const UnifiedContentAPI = {
+    initialized: false,
+    
+    // Inicializar API
+    async initialize() {
+        if (this.initialized) return true;
+        
+        console.log('🚀 Inicializando UnifiedContentAPI...');
+        
+        // Verificar dependencias
+        const required = ['FULL_IMAGES_POOL', 'PREMIUM_IMAGES_PART1', 'PREMIUM_IMAGES_PART2', 'PREMIUM_VIDEOS_POOL'];
+        const missing = required.filter(dep => !window[dep]);
+        
+        if (missing.length > 0) {
+            console.error('❌ Dependencias faltantes:', missing);
+            return false;
+        }
+        
+        this.initialized = true;
+        console.log('✅ UnifiedContentAPI inicializada');
+        return true;
+    },
+    
     // Obtener todas las imágenes públicas
     getAllPublicImages() {
         return window.FULL_IMAGES_POOL || [];
@@ -195,7 +215,9 @@ const UnifiedContentAPI = {
         return {
             publicImages: this.getAllPublicImages(),
             premiumImages: this.getAllPremiumImages(),
-            videos: this.getAllVideos()
+            videos: this.getAllVideos(),
+            banners: ContentAPI.getBanners(),
+            teasers: ContentAPI.getTeasers()
         };
     },
     
@@ -217,98 +239,71 @@ const UnifiedContentAPI = {
             ),
             videos: all.videos.filter(video => 
                 video.toLowerCase().includes(queryLower)
+            ),
+            banners: all.banners.filter(img =>
+                img.toLowerCase().includes(queryLower)
+            ),
+            teasers: all.teasers.filter(img =>
+                img.toLowerCase().includes(queryLower)
             )
         };
     },
     
     // Obtener estadísticas del sistema
     getSystemStats() {
-        const stats = {
+        return {
             photos: {
                 public: this.getAllPublicImages().length,
                 premium: this.getAllPremiumImages().length,
-                total: 0
+                total: this.getAllPublicImages().length + this.getAllPremiumImages().length
             },
             videos: {
-                total: this.getAllVideos().length
+                total: this.getAllVideos().length,
+                estimatedSize: `${this.getAllVideos().length * 15}MB`
+            },
+            total: {
+                files: this.getAllPublicImages().length + 
+                       this.getAllPremiumImages().length + 
+                       this.getAllVideos().length,
+                images: this.getAllPublicImages().length + 
+                        this.getAllPremiumImages().length,
+                videos: this.getAllVideos().length
             },
             system: {
-                cacheSize: 0,
-                memoryUsage: 0,
-                loadTime: 0
+                version: window.ContentConfig?.version || '4.1.0',
+                environment: window.ContentConfig?.environment || 'production',
+                initialized: this.initialized
             }
         };
-        
-        stats.photos.total = stats.photos.public + stats.photos.premium;
-        
-        // Estadísticas de caché si está disponible
-        if (window.CacheSystem) {
-            stats.system.cacheSize = window.CacheSystem.size();
-        }
-        
-        // Estimación de uso de memoria
-        if (performance && performance.memory) {
-            stats.system.memoryUsage = Math.round(performance.memory.usedJSHeapSize / 1048576);
-        }
-        
-        // Tiempo de carga
-        if (performance && performance.timing) {
-            stats.system.loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
-        }
-        
-        return stats;
     },
     
     // Obtener contenido del día
     getTodaysContent() {
-        const seed = window.TimeUtils ? window.TimeUtils.getDateSeed() : Date.now();
+        if (!window.TimeUtils || !window.ArrayUtils) {
+            console.warn('⚠️ TimeUtils o ArrayUtils no disponibles');
+            return this.getAllContent();
+        }
         
-        // Obtener contenido mezclado con seed del día
-        const publicPhotos = window.ArrayUtils 
-            ? window.ArrayUtils.shuffleWithSeed(this.getAllPublicImages(), seed)
-            : this.getAllPublicImages();
-            
-        const premiumPhotos = window.ArrayUtils
-            ? window.ArrayUtils.shuffleWithSeed(this.getAllPremiumImages(), seed)
-            : this.getAllPremiumImages();
-            
-        const videos = window.ArrayUtils
-            ? window.ArrayUtils.shuffleWithSeed(this.getAllVideos(), seed)
-            : this.getAllVideos();
-        
-        // Configuración de rotación
-        const config = window.ContentConfig?.rotation || {
-            dailyPhotosCount: 200,
-            dailyVideosCount: 40,
-            bannersCount: 5,
-            teasersCount: 10
-        };
-        
-        // Combinar fotos públicas y premium
-        const allPhotos = [];
-        const publicCount = Math.floor(config.dailyPhotosCount * 0.3);
-        const premiumCount = config.dailyPhotosCount - publicCount;
-        
-        allPhotos.push(...publicPhotos.slice(0, publicCount));
-        allPhotos.push(...premiumPhotos.slice(0, premiumCount));
-        
-        // Mezclar fotos finales
-        const finalPhotos = window.ArrayUtils
-            ? window.ArrayUtils.shuffleWithSeed(allPhotos, seed + 1)
-            : allPhotos;
+        const seed = window.TimeUtils.getDailySeed();
         
         return {
-            photos: finalPhotos.slice(0, config.dailyPhotosCount),
-            videos: videos.slice(0, config.dailyVideosCount),
-            banners: ContentAPI.getBanners(),
-            teasers: ContentAPI.getTeasers(),
+            photos: [
+                ...window.ArrayUtils.shuffleWithSeed(this.getAllPublicImages(), seed).slice(0, 50),
+                ...window.ArrayUtils.shuffleWithSeed(this.getAllPremiumImages(), seed + 1).slice(0, 150)
+            ],
+            videos: window.ArrayUtils.shuffleWithSeed(this.getAllVideos(), seed + 2).slice(0, 50),
+            banners: window.ArrayUtils.shuffleWithSeed(ContentAPI.getBanners(), seed + 3),
+            teasers: window.ArrayUtils.shuffleWithSeed(ContentAPI.getTeasers(), seed + 4),
+            newPhotoIndices: new Set([0, 1, 2, 3, 4, 10, 11, 12, 20, 21, 22, 30, 31, 32]),
+            newVideoIndices: new Set([0, 1, 2, 5, 6, 7]),
+            lastUpdate: new Date(),
             seed: seed,
-            date: new Date()
+            stats: this.getSystemStats()
         };
     },
     
-    // Obtener contenido por página
-    getContentByPage(page = 1, perPage = 30, type = 'all') {
+    // Paginar contenido
+    paginateContent(type, page = 1, perPage = 24) {
         let content = [];
         
         switch(type) {
@@ -320,20 +315,22 @@ const UnifiedContentAPI = {
                 break;
             case 'videos':
                 content = this.getAllVideos();
+                perPage = 12; // Menos videos por página
                 break;
             case 'all':
-            default:
                 content = [
                     ...this.getAllPublicImages(),
                     ...this.getAllPremiumImages()
                 ];
+                break;
+            default:
+                content = [];
         }
         
         if (window.ArrayUtils) {
             return window.ArrayUtils.paginate(content, page, perPage);
         }
         
-        // Fallback pagination
         const start = (page - 1) * perPage;
         const end = start + perPage;
         
@@ -348,217 +345,123 @@ const UnifiedContentAPI = {
         };
     },
     
-    // Validar contenido
-    validateContent() {
-        const errors = [];
-        const warnings = [];
-        
-        // Verificar pools de contenido
-        if (!window.FULL_IMAGES_POOL || window.FULL_IMAGES_POOL.length === 0) {
-            errors.push('FULL_IMAGES_POOL no está disponible o está vacío');
-        }
-        
-        if (!window.PREMIUM_IMAGES_PART1 || window.PREMIUM_IMAGES_PART1.length === 0) {
-            warnings.push('PREMIUM_IMAGES_PART1 no está disponible o está vacío');
-        }
-        
-        if (!window.PREMIUM_IMAGES_PART2 || window.PREMIUM_IMAGES_PART2.length === 0) {
-            warnings.push('PREMIUM_IMAGES_PART2 no está disponible o está vacío');
-        }
-        
-        if (!window.PREMIUM_VIDEOS_POOL || window.PREMIUM_VIDEOS_POOL.length === 0) {
-            warnings.push('PREMIUM_VIDEOS_POOL no está disponible o está vacío');
-        }
-        
-        // Verificar utilidades
+    // Obtener contenido aleatorio con seed
+    getRandomContentWithSeed(seed, photosCount = 200, videosCount = 50) {
         if (!window.ArrayUtils) {
-            warnings.push('ArrayUtils no está disponible');
+            return {
+                photos: [],
+                videos: []
+            };
         }
         
-        if (!window.TimeUtils) {
-            warnings.push('TimeUtils no está disponible');
-        }
+        const allPhotos = [
+            ...this.getAllPublicImages(),
+            ...this.getAllPremiumImages()
+        ];
         
         return {
-            valid: errors.length === 0,
-            errors,
-            warnings,
-            stats: this.getSystemStats()
+            photos: window.ArrayUtils.shuffleWithSeed(allPhotos, seed).slice(0, photosCount),
+            videos: window.ArrayUtils.shuffleWithSeed(this.getAllVideos(), seed + 1).slice(0, videosCount)
         };
-    },
-    
-    // Precargar contenido
-    preloadContent(urls = []) {
-        const promises = urls.map(url => {
-            return new Promise((resolve, reject) => {
-                if (url.endsWith('.mp4')) {
-                    // Precargar video
-                    const video = document.createElement('video');
-                    video.preload = 'metadata';
-                    video.onloadedmetadata = () => resolve(url);
-                    video.onerror = () => reject(new Error(`Failed to preload video: ${url}`));
-                    video.src = url;
-                } else {
-                    // Precargar imagen
-                    const img = new Image();
-                    img.onload = () => resolve(url);
-                    img.onerror = () => reject(new Error(`Failed to preload image: ${url}`));
-                    img.src = url;
-                }
-            });
-        });
-        
-        return Promise.allSettled(promises);
     }
 };
 
 // ============================
-// SISTEMA DE ROTACIÓN DIARIA
+// CONTENT SYSTEM MANAGER
 // ============================
 
-class DailyRotationSystem {
+class ContentSystemManager {
     constructor() {
-        this.lastRotation = null;
-        this.currentContent = null;
         this.initialized = false;
+        this.currentRotation = null;
+        this.lastRotationTime = null;
     }
     
-    initialize() {
-        if (this.initialized) return;
+    async initialize() {
+        console.log('🎯 Inicializando ContentSystemManager...');
         
-        // Cargar última rotación de localStorage
-        if (window.StorageUtils) {
-            this.lastRotation = window.StorageUtils.load('lastRotation');
+        // Inicializar UnifiedContentAPI
+        const apiReady = await UnifiedContentAPI.initialize();
+        
+        if (!apiReady) {
+            console.error('❌ No se pudo inicializar UnifiedContentAPI');
+            return false;
         }
         
-        // Verificar si necesita rotación
-        this.checkRotation();
+        // Generar primera rotación
+        this.generateRotation();
         
-        // Programar próxima rotación
-        this.scheduleNextRotation();
+        // Configurar rotación automática
+        if (window.ContentConfig?.content?.rotationEnabled) {
+            this.setupAutoRotation();
+        }
         
         this.initialized = true;
-        console.log('✅ DailyRotationSystem inicializado');
+        console.log('✅ ContentSystemManager inicializado');
+        return true;
     }
     
-    checkRotation() {
-        const now = new Date();
-        const today = now.toDateString();
-        
-        if (!this.lastRotation || this.lastRotation.date !== today) {
-            this.rotate();
-        } else {
-            this.currentContent = this.lastRotation.content;
-        }
-    }
-    
-    rotate() {
-        console.log('🔄 Ejecutando rotación diaria...');
-        
-        // Obtener nuevo contenido
-        this.currentContent = UnifiedContentAPI.getTodaysContent();
-        
-        // Guardar rotación
-        this.lastRotation = {
-            date: new Date().toDateString(),
-            timestamp: Date.now(),
-            content: this.currentContent
-        };
-        
-        if (window.StorageUtils) {
-            window.StorageUtils.save('lastRotation', this.lastRotation);
-        }
+    generateRotation() {
+        this.currentRotation = UnifiedContentAPI.getTodaysContent();
+        this.lastRotationTime = new Date();
         
         // Emitir evento
         if (window.EventManager) {
-            window.EventManager.emit('dailyRotation', this.currentContent);
+            window.EventManager.emit('rotationGenerated', this.currentRotation);
         }
         
-        console.log('✅ Rotación diaria completada');
+        return this.currentRotation;
     }
     
-    scheduleNextRotation() {
-        const now = new Date();
-        const tomorrow = new Date(now);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(0, 0, 0, 0);
+    setupAutoRotation() {
+        const intervalHours = window.ContentConfig?.content?.rotationIntervalHours || 1;
+        const intervalMs = intervalHours * 60 * 60 * 1000;
         
-        const msUntilMidnight = tomorrow - now;
+        setInterval(() => {
+            this.generateRotation();
+            console.log('🔄 Rotación automática ejecutada');
+        }, intervalMs);
         
-        setTimeout(() => {
-            this.rotate();
-            this.scheduleNextRotation();
-        }, msUntilMidnight);
-        
-        console.log(`⏰ Próxima rotación en ${Math.floor(msUntilMidnight / 3600000)} horas`);
+        console.log(`⏰ Rotación automática configurada cada ${intervalHours} hora(s)`);
     }
     
-    getCurrentContent() {
-        if (!this.currentContent) {
-            this.checkRotation();
+    getContent() {
+        if (!this.currentRotation) {
+            this.generateRotation();
         }
-        return this.currentContent;
+        return this.currentRotation;
     }
     
-    forceRotation() {
-        this.rotate();
-        return this.currentContent;
+    getStats() {
+        return {
+            ...UnifiedContentAPI.getSystemStats(),
+            rotation: {
+                lastUpdate: this.lastRotationTime,
+                currentSeed: this.currentRotation?.seed,
+                enabled: window.ContentConfig?.content?.rotationEnabled
+            }
+        };
     }
 }
 
 // ============================
-// INICIALIZACIÓN Y EXPORTACIÓN
+// EXPORTAR GLOBALMENTE
 // ============================
 
-// Crear instancia del sistema de rotación
-const globalRotationSystem = new DailyRotationSystem();
-
-// Exponer APIs globales
 window.ContentAPI = ContentAPI;
 window.UnifiedContentAPI = UnifiedContentAPI;
-window.DailyRotationSystem = globalRotationSystem;
+window.ContentSystemManager = ContentSystemManager;
 
-// Inicializar cuando el DOM esté listo
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        globalRotationSystem.initialize();
-    });
-} else {
-    globalRotationSystem.initialize();
-}
-
-// Funciones helper para compatibilidad
-window.getContentAPI = () => ContentAPI;
-window.getUnifiedAPI = () => UnifiedContentAPI;
-window.getDailyContent = () => globalRotationSystem.getCurrentContent();
-window.forceRotation = () => globalRotationSystem.forceRotation();
-
-// Log de inicialización
-console.log('📦 content-data6.js v4.1.0 FIXED loaded');
-console.log('   - ContentAPI disponible');
-console.log('   - UnifiedContentAPI disponible');
-console.log('   - DailyRotationSystem inicializado');
-
-// Validar contenido en modo debug
-if (window.ContentConfig?.debug) {
-    const validation = UnifiedContentAPI.validateContent();
-    
-    if (validation.errors.length > 0) {
-        console.error('❌ Errores de validación:', validation.errors);
+// Auto-inicializar UnifiedContentAPI
+UnifiedContentAPI.initialize().then(success => {
+    if (success) {
+        console.log('✅ Sistema de contenido unificado listo');
     }
-    
-    if (validation.warnings.length > 0) {
-        console.warn('⚠️ Advertencias:', validation.warnings);
-    }
-    
-    console.log('📊 Estadísticas del sistema:', validation.stats);
-}
+});
 
-// Exportar para módulos ES6 si es necesario
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        ContentAPI,
-        UnifiedContentAPI,
-        DailyRotationSystem: globalRotationSystem
-    };
-}
+console.log('✅ Módulo content-data6.js cargado correctamente');
+console.log('📊 APIs disponibles:', {
+    ContentAPI: !!window.ContentAPI,
+    UnifiedContentAPI: !!window.UnifiedContentAPI,
+    ContentSystemManager: !!window.ContentSystemManager
+});
