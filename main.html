@@ -2,281 +2,383 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
     <!-- SEO Meta Tags -->
-    <title>IbizaGirl Paradise Gallery - Exclusive Ibiza Beach Photos & Videos</title>
-    <meta name="description" content="Discover the ultimate collection of exclusive Ibiza beach photos and videos. Premium paradise content from the most beautiful beaches and locations in Ibiza.">
-    <meta name="keywords" content="Ibiza, beach, photos, videos, paradise, gallery, exclusive, premium, Mediterranean, Balearic">
+    <title>IbizaGirl Premium Gallery - Contenido Exclusivo +18</title>
+    <meta name="description" content="Galería premium de IbizaGirl con contenido exclusivo para adultos. Fotos y videos HD diarios. Acceso VIP disponible.">
+    <meta name="keywords" content="ibiza, premium, gallery, exclusive, adult, content, vip, photos, videos">
+    <meta name="author" content="IbizaGirl">
+    <meta name="robots" content="index, follow">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="IbizaGirl Paradise Gallery">
-    <meta property="og:description" content="Exclusive Ibiza beach photos and videos collection">
+    <meta property="og:title" content="IbizaGirl Premium Gallery">
+    <meta property="og:description" content="Contenido exclusivo premium +18">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://ibizagirl.pics/">
-    <meta property="og:image" content="https://ibizagirl.pics/images/og-image.jpg">
+    <meta property="og:url" content="https://ibizagirl.pics">
+    <meta property="og:image" content="https://ibizagirl.pics/assets/og-image.jpg">
+    <meta property="og:site_name" content="IbizaGirl.pics">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="IbizaGirl Paradise Gallery">
-    <meta name="twitter:description" content="Exclusive Ibiza beach photos and videos">
+    <meta name="twitter:title" content="IbizaGirl Premium Gallery">
+    <meta name="twitter:description" content="Contenido exclusivo premium +18">
+    <meta name="twitter:image" content="https://ibizagirl.pics/assets/twitter-card.jpg">
     
     <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     
-    <!-- Critical CSS inline para prevenir CLS -->
-    <style>
-        /* Critical CSS - Prevenir Layout Shift */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        
-        /* Reservar espacio para anuncios - Prevenir CLS */
-        .ad-container {
-            min-height: 90px;
-            width: 100%;
-            display: block;
-            position: relative;
-            margin: 20px auto;
-            background: rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .ad-header { min-height: 90px; }
-        .ad-sidebar { min-height: 250px; }
-        .ad-footer { min-height: 90px; }
-        
-        /* Loading screen optimizado */
-        #loadingScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            transition: opacity 0.5s ease;
-        }
-        
-        .loader {
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* Contenedores principales con aspect-ratio para prevenir CLS */
-        .gallery-container {
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        
-        .gallery-item {
-            aspect-ratio: 1;
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .gallery-item img,
-        .gallery-item video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        /* Skeleton loaders para contenido */
-        .skeleton-item {
-            aspect-ratio: 1;
-            width: 100%;
-            background: linear-gradient(90deg, 
-                rgba(255, 255, 255, 0.1) 0%, 
-                rgba(255, 255, 255, 0.2) 50%, 
-                rgba(255, 255, 255, 0.1) 100%);
-            background-size: 200% 100%;
-            animation: skeleton 1.5s ease infinite;
-            border-radius: 12px;
-        }
-        
-        @keyframes skeleton {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        
-        /* Optimización de fuentes */
-        @font-face {
-            font-family: 'System';
-            font-style: normal;
-            font-weight: 400;
-            font-display: swap;
-            src: local('System'), local('-apple-system'), local('BlinkMacSystemFont');
-        }
-    </style>
-    
-    <!-- Preconectar a dominios externos -->
-    <link rel="preconnect" href="https://syndication.exoclick.com">
+    <!-- Preconnect para mejorar performance -->
     <link rel="preconnect" href="https://www.paypal.com">
-    <link rel="preconnect" href="https://www.paypalobjects.com">
-    <link rel="dns-prefetch" href="https://a.magsrv.com">
-    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://poweredby.jads.co">
+    <link rel="preconnect" href="https://www.juicyads.com">
+    <link rel="preconnect" href="https://syndication.exoclick.com">
+    <link rel="preconnect" href="https://a.realsrv.com">
+    <link rel="preconnect" href="https://www.premiumvertising.com">
+    <link rel="preconnect" href="https://www.eroadvertising.com">
     
-    <!-- Preload de recursos críticos - ORDEN OPTIMIZADO -->
-    <link rel="preload" href="/css/styles.css" as="style">
-    <link rel="preload" href="/content-data6.js" as="script">
-    <link rel="preload" href="/ad-containers-manager.js" as="script">
-    <link rel="preload" href="/main-script-updated.js" as="script">
+    <!-- Preload de recursos críticos -->
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="/full/bikini.webp" as="image">
+    <link rel="preload" href="/full/bikbanner.webp" as="image">
     
-    <!-- Estilos principales -->
-    <link rel="stylesheet" href="/css/styles.css">
+    <!-- DNS Prefetch para anuncios -->
+    <link rel="dns-prefetch" href="//www.paypal.com">
+    <link rel="dns-prefetch" href="//www.googletagmanager.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//poweredby.jads.co">
+    <link rel="dns-prefetch" href="//www.juicyads.com">
+    <link rel="dns-prefetch" href="//syndication.exoclick.com">
+    <link rel="dns-prefetch" href="//a.realsrv.com">
+    <link rel="dns-prefetch" href="//main.exoclick.com">
+    <link rel="dns-prefetch" href="//www.premiumvertising.com">
+    <link rel="dns-prefetch" href="//www.eroadvertising.com">
     
-    <!-- Scripts de configuración inicial (síncronos) -->
-    <script>
-        // Configuración global inicial
-        window.APP_CONFIG = {
-            version: '15.0.0',
-            environment: 'production',
-            debug: false,
-            startTime: performance.now()
-        };
-        
-        // Detector de rendimiento
-        window.performanceMonitor = {
-            marks: {},
-            mark: function(name) {
-                this.marks[name] = performance.now();
-                performance.mark(name);
-            },
-            measure: function(name, start, end) {
-                if (this.marks[start] && this.marks[end]) {
-                    const duration = this.marks[end] - this.marks[start];
-                    console.log(`⏱️ ${name}: ${duration.toFixed(2)}ms`);
-                    return duration;
-                }
-            }
-        };
-        
-        // Marcar inicio
-        performanceMonitor.mark('app-start');
-        
-        // Prevenir FOUC (Flash of Unstyled Content)
-        document.documentElement.className = 'js-enabled';
-    </script>
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="canonical" href="https://ibizagirl.pics/main.html">
     
-    <!-- PayPal SDK - Carga asíncrona temprana -->
-    <script async src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR"></script>
+    <!-- Language Alternates -->
+    <link rel="alternate" href="https://ibizagirl.pics/main.html" hreflang="es">
+    <link rel="alternate" href="https://ibizagirl.pics/main.html?lang=en" hreflang="en">
+    <link rel="alternate" href="https://ibizagirl.pics/main.html?lang=fr" hreflang="fr">
+    <link rel="alternate" href="https://ibizagirl.pics/main.html?lang=de" hreflang="de">
+    <link rel="alternate" href="https://ibizagirl.pics/main.html?lang=it" hreflang="it">
+    <link rel="alternate" href="https://ibizagirl.pics/main.html?lang=pt" hreflang="pt">
+    <link rel="alternate" href="https://ibizagirl.pics/main.html" hreflang="x-default">
     
-    <!-- Google Analytics - Async -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR-ID"></script>
+    <!-- Estilos -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR"></script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DBXYNPBSPY"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-YOUR-ID');
+        gtag('config', 'G-DBXYNPBSPY', {
+            page_title: 'Premium Gallery',
+            page_path: '/main.html'
+        });
     </script>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div id="loadingScreen">
-        <div class="loader"></div>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <h1>🌊 IbizaGirl<span>.pics</span></h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#daily" data-translate="daily">Diarias</a></li>
+                    <li><a href="#premium" data-translate="premium">Premium</a></li>
+                    <li><a href="#vip" onclick="showVIPModal()" data-translate="vip">VIP</a></li>
+                    <li><a href="#packs" onclick="showPackModal()" data-translate="packages">Paquetes</a></li>
+                </ul>
+            </nav>
+            <div class="language-selector">
+                <select onchange="changeLanguage(this.value)">
+                    <option value="es">🇪🇸 ES</option>
+                    <option value="en">🇬🇧 EN</option>
+                    <option value="fr">🇫🇷 FR</option>
+                    <option value="de">🇩🇪 DE</option>
+                    <option value="it">🇮🇹 IT</option>
+                    <option value="pt">🇵🇹 PT</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner Principal -->
+    <section class="hero-banner">
+        <div class="banner-slideshow">
+            <div class="banner-slide active">
+                <img src="/full/bikbanner.webp" alt="Banner 1" loading="eager">
+            </div>
+            <div class="banner-slide">
+                <img src="/full/bikini.webp" alt="Banner 2" loading="lazy">
+            </div>
+        </div>
+        <div class="banner-overlay">
+            <h2 data-translate="welcome">Bienvenido</h2>
+            <p>Contenido Exclusivo +18</p>
+        </div>
+    </section>
+
+    <!-- Estadísticas -->
+    <section class="stats-section">
+        <div class="stats-container">
+            <div class="stat-item">
+                <span class="stat-number" id="photoCount">0</span>
+                <span class="stat-label" data-translate="photos">Fotos</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="videoCount">0</span>
+                <span class="stat-label" data-translate="videos">Videos</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galería Principal -->
+    <main id="main-content" class="main-content">
+        <!-- Fotos Diarias -->
+        <section id="daily" class="gallery-section">
+            <h3 class="section-title" data-translate="daily">Fotos Diarias</h3>
+            <div id="daily-photos" class="photo-grid">
+                <!-- Las fotos se cargarán dinámicamente aquí -->
+            </div>
+        </section>
+
+        <!-- Videos Premium -->
+        <section id="premium" class="gallery-section vip-section">
+            <h3 class="section-title">
+                <span data-translate="premium">Videos Premium</span>
+                <span class="vip-badge">VIP</span>
+            </h3>
+            <div id="daily-videos" class="video-grid">
+                <!-- Los videos se cargarán dinámicamente aquí -->
+            </div>
+        </section>
+
+        <!-- Teasers -->
+        <section id="teasers" class="gallery-section">
+            <h3 class="section-title">Teasers</h3>
+            <div id="teaser-grid" class="photo-grid">
+                <!-- Los teasers se cargarán dinámicamente aquí -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Contenido Isabella (Oculto por defecto) -->
+    <div id="isabella-content" style="display: none;">
+        <div class="isabella-container">
+            <h2>Isabella Mode</h2>
+            <p>Contenido especial de Isabella</p>
+            <button onclick="toggleIsabella()">Volver</button>
+        </div>
     </div>
+
+    <!-- Modal VIP -->
+    <div id="vipModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('vipModal')">&times;</span>
+            <h2>🌟 Membresía VIP</h2>
+            <p>Accede a todo el contenido premium</p>
+            
+            <div class="pricing-plans">
+                <div class="plan-card" onclick="selectPlan('monthly')">
+                    <h3>Mensual</h3>
+                    <p class="price">€29.99</p>
+                    <ul>
+                        <li>✅ Acceso completo</li>
+                        <li>✅ Videos HD</li>
+                        <li>✅ Contenido diario</li>
+                    </ul>
+                    <button class="btn-primary">Seleccionar</button>
+                </div>
+                
+                <div class="plan-card featured" onclick="selectPlan('quarterly')">
+                    <h3>Trimestral</h3>
+                    <p class="price">€79.99</p>
+                    <span class="badge">Mejor Valor</span>
+                    <ul>
+                        <li>✅ Todo lo del plan mensual</li>
+                        <li>✅ 15% de descuento</li>
+                        <li>✅ Contenido exclusivo</li>
+                    </ul>
+                    <button class="btn-primary">Seleccionar</button>
+                </div>
+                
+                <div class="plan-card" onclick="selectPlan('annual')">
+                    <h3>Anual</h3>
+                    <p class="price">€299.99</p>
+                    <ul>
+                        <li>✅ Todo incluido</li>
+                        <li>✅ 30% de descuento</li>
+                        <li>✅ Sorpresas mensuales</li>
+                    </ul>
+                    <button class="btn-primary">Seleccionar</button>
+                </div>
+            </div>
+            
+            <div id="paypal-button-container"></div>
+        </div>
+    </div>
+
+    <!-- Modal Paquetes -->
+    <div id="packModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('packModal')">&times;</span>
+            <h2>📦 Paquetes de Contenido</h2>
+            
+            <div class="pack-grid">
+                <div class="pack-card" onclick="selectPack('pack10')">
+                    <h3>Pack 10</h3>
+                    <p>10 Fotos Premium</p>
+                    <p class="price">€14.99</p>
+                    <button class="btn-primary">Comprar</button>
+                </div>
+                
+                <div class="pack-card" onclick="selectPack('pack25')">
+                    <h3>Pack 25</h3>
+                    <p>25 Fotos Premium</p>
+                    <p class="price">€29.99</p>
+                    <button class="btn-primary">Comprar</button>
+                </div>
+                
+                <div class="pack-card" onclick="selectPack('pack50')">
+                    <h3>Pack 50</h3>
+                    <p>50 Fotos Premium</p>
+                    <p class="price">€49.99</p>
+                    <button class="btn-primary">Comprar</button>
+                </div>
+                
+                <div class="pack-card featured" onclick="selectPack('packAll')">
+                    <h3>Pack Completo</h3>
+                    <p>Todas las Fotos</p>
+                    <p class="price">€99.99</p>
+                    <span class="badge">Mejor Oferta</span>
+                    <button class="btn-primary">Comprar</button>
+                </div>
+            </div>
+            
+            <div id="paypal-container-pack"></div>
+        </div>
+    </div>
+
+    <!-- Modal PPV -->
+    <div id="ppvModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('ppvModal')">&times;</span>
+            <h2>🔥 Contenido PPV</h2>
+            <p>Paga por ver - Contenido exclusivo individual</p>
+            
+            <div class="ppv-preview">
+                <img src="/assets/ppv-preview.jpg" alt="PPV Preview" style="width: 100%; border-radius: 10px;">
+            </div>
+            
+            <div class="ppv-options">
+                <button class="btn-primary" onclick="selectPack('ppv-photo')">
+                    Foto Individual - €4.99
+                </button>
+                <button class="btn-primary" onclick="selectPack('ppv-video')">
+                    Video Individual - €9.99
+                </button>
+            </div>
+            
+            <div id="paypal-container-ppv"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>IbizaGirl.pics</h4>
+                <p>Contenido Premium +18</p>
+                <p>© 2024 Todos los derechos reservados</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Enlaces</h4>
+                <ul>
+                    <li><a href="/terms.html">Términos y Condiciones</a></li>
+                    <li><a href="/privacy.html">Política de Privacidad</a></li>
+                    <li><a href="/2257.html">18 U.S.C. 2257</a></li>
+                    <li><a href="/contact.html">Contacto</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Síguenos</h4>
+                <div class="social-links">
+                    <a href="#" aria-label="Instagram">📷</a>
+                    <a href="#" aria-label="Twitter">🐦</a>
+                    <a href="#" aria-label="OnlyFans">🔥</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>Este sitio contiene material para adultos. Debes tener 18 años o más para acceder.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts del Sistema Modular -->
+    <script src="content-data1.js"></script>
+    <script src="content-data2.js"></script>
+    <script src="content-data3.js"></script>
+    <script src="content-data4.js"></script>
+    <script src="content-data5.js"></script>
+    <script src="content-data6.js"></script>
+    <script src="content-data-integration.js"></script>
     
-    <!-- Contenido principal aquí... -->
-    <!-- MANTÉN EL RESTO DEL BODY COMO LO TIENES -->
+    <!-- Script Principal -->
+    <script src="main-script.js"></script>
     
-    <!-- Scripts de contenido - ORDEN OPTIMIZADO -->
-    <script defer src="/content-data1.js"></script>
-    <script defer src="/content-data2.js"></script>
-    <script defer src="/content-data3.js"></script>
-    <script defer src="/content-data4.js"></script>
-    <script defer src="/content-data5.js"></script>
-    <script defer src="/content-data6.js"></script>
-    <script defer src="/content-data-integration.js"></script>
-    
-    <!-- Script principal -->
-    <script defer src="/main-script-updated.js"></script>
-    
-    <!-- Scripts de anuncios - Carga después del contenido -->
-    <script defer src="/ad-containers-manager.js"></script>
-    <script defer src="/ad-verification.js"></script>
-    <script defer src="/chrome-ads-fix.js"></script>
-    <script defer src="/exoclick-urls-fix.js"></script>
-    
-    <!-- Scripts de optimización -->
-    <script defer src="/seo-enhancements.js"></script>
-    
-    <!-- Script de inicialización final -->
+    <!-- Scripts de Anuncios con Proxy -->
     <script>
-        // Esperar a que todo esté listo
-        document.addEventListener('DOMContentLoaded', function() {
-            performanceMonitor.mark('dom-ready');
-            console.log('📊 DOM Ready en:', performanceMonitor.marks['dom-ready'] - performanceMonitor.marks['app-start'], 'ms');
-            
-            // Inicializar estado de anuncios
-            console.log('📊 Estado inicial de anuncios:', window.AdContainersManager?.initialized);
-        });
+        // JuicyAds
+        (function() {
+            var script = document.createElement('script');
+            script.src = '/proxy.php?url=' + encodeURIComponent('https://poweredby.jads.co/js/jads.js');
+            script.async = true;
+            script.setAttribute('data-url', 'ibizagirl.pics');
+            document.head.appendChild(script);
+        })();
         
-        window.addEventListener('load', function() {
-            performanceMonitor.mark('window-load');
-            console.log('📊 Window Load en:', performanceMonitor.marks['window-load'] - performanceMonitor.marks['app-start'], 'ms');
-            
-            // Ocultar loading screen con fade
-            setTimeout(function() {
-                const loadingScreen = document.getElementById('loadingScreen');
-                if (loadingScreen) {
-                    loadingScreen.style.opacity = '0';
-                    setTimeout(() => {
-                        loadingScreen.style.display = 'none';
-                    }, 500);
-                }
-            }, 500);
-        });
-        
-        // Monitor de errores
-        window.addEventListener('error', function(e) {
-            console.error('❌ Error global:', e.message, e.filename, e.lineno);
-            
-            // Reintentar carga de anuncios si hay error
-            if (e.message.includes('ExoClick') || e.message.includes('404')) {
-                console.log('🔄 Reintentando carga de anuncios...');
-                setTimeout(() => {
-                    if (window.refreshAds) {
-                        window.refreshAds();
-                    }
-                }, 2000);
-            }
-        });
+        // ExoClick
+        (function() {
+            var script = document.createElement('script');
+            script.src = '/proxy.php?url=' + encodeURIComponent('https://syndication.exoclick.com/splash.php?idzone=YOUR_ZONE_ID');
+            script.async = true;
+            document.body.appendChild(script);
+        })();
+    </script>
+    
+    <!-- Verificación de edad -->
+    <script>
+        // Verificar si el usuario ya confirmó su edad
+        if (!localStorage.getItem('ageVerified')) {
+            window.location.href = '/index.html';
+        }
     </script>
 </body>
 </html>
