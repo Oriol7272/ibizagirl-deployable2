@@ -1,7 +1,11 @@
 /**
- * content-data3.js - Premium Images Part 1 v4.1.0 FIXED
+ * content-data3.js - Premium Images Part 1 v4.1.0 FIXED  
  * Primera mitad del contenido premium (186 archivos)
  */
+
+'use strict';
+
+console.log('📦 Cargando módulo content-data3.js - Imágenes premium parte 1...');
 
 // ============================
 // POOL DE IMÁGENES PREMIUM - PARTE 1 (186 imágenes)
@@ -51,120 +55,98 @@ const PREMIUM_IMAGES_PART1 = [
     'uncensored/17LWLAXi4sDIHDlFpmdOg.webp',
     'uncensored/18VQaczW5kdfdiqUVasH.webp',
     'uncensored/1DCEysi2B2gEWgZnDyqg.webp',
-    'uncensored/1G4FDSg9HpEVWWDhmpDO.webp',
-    'uncensored/1bITefcv83TIA7idRrrO.webp',
-    'uncensored/1dsu1ynPOBgwxVIVMm98.webp',
-    'uncensored/1nmCjq8qcYS5FI9j3hN6.webp',
-    'uncensored/1pMMHfrCT7WQEN3aJDsC.webp',
-    'uncensored/1xUbXQJILXBEBoXRvC5D.webp',
-    'uncensored/2J6UGbexO5xfFKKhz32I.webp',
-    'uncensored/2R3uT1L7N7Q1iq7As9NX.webp',
-    'uncensored/2SRGCpe7oLwqRYHB4iTn.webp',
-    'uncensored/2XaRIysrVi2K7cVPUKsT.webp',
-    'uncensored/2c1EDSm7ULtMHlm1TzmW.webp',
-    'uncensored/2fTpn1FbvDpznuZ5fIQd.webp',
-    'uncensored/2oDBdtvtqAGojxJFhuR4.webp',
-    'uncensored/2q4lbVbHtmY9qfEqh1Ey.webp',
-    'uncensored/2uWScXgZ5pqb3NEtzrlz.webp',
-    'uncensored/2wd4XakdNzeI9tCqIgiN.webp',
-    'uncensored/2yw4sowPh3Tyln5oxRdw.webp',
-    'uncensored/31vAZT8MZI5qtnuApW4W.webp',
-    'uncensored/35H8tCgsszXQMJVMOC3l.webp',
-    'uncensored/3PclVfFD7nJ3InJVwttg.webp',
-    'uncensored/3kZqhcfslBFziRb03SyP.webp',
-    'uncensored/3m9WiyhGocSOHasI9jNK.webp',
-    'uncensored/3n4MIVGQIB11aRmCBeoX.webp',
-    'uncensored/3sVGyXMADBwgIntxAEZ3.webp',
-    'uncensored/3xWh5OFFxwTCOfchavPq.webp',
-    'uncensored/403My6cJ8dy91m6mLcLq.webp',
-    'uncensored/461c6YZMoZeUAUMmuROj.webp',
-    'uncensored/46TvCsW1KG6wcG0OWRc7.webp',
-    'uncensored/4DXLdKZgVq1Q329fFPyt.webp',
-    'uncensored/4J4pjTHMnGA41KobOcix.webp',
-    'uncensored/4K0QR8fpSVgfqZkHLDRZ.webp',
-    'uncensored/4mHjue2StomaYfqkPS27.webp',
-    'uncensored/4mcXgi9YTy0MDVLSFwSc.webp',
-    'uncensored/4yL507qGjWSU4a2jG88v.webp',
-    'uncensored/56zvcPsKbH436elhTW9v.webp',
-    'uncensored/59FS3M0yvTO9m1T5RZaW.webp',
-    'uncensored/5NSmf9UdwUJBWNS7LxM5.webp',
-    'uncensored/5UaQChlNIlRegwT0Ze2S.webp',
-    'uncensored/5jNEr8DlVNisD1JmgjeH.webp',
-    'uncensored/5qUWFqgvq00BJhlDvaal.webp',
-    'uncensored/5sKc0zYrls3NUrzzjErK.webp',
-    'uncensored/6EY9skMPqrLwBUNjGFiv.webp',
-    'uncensored/6ONISuRyiUS9ZCdRhOSg.webp',
-    'uncensored/6akVvgSAP9kKu3Ob6L9d.webp',
-    'uncensored/6apiRuvUyKSHHRMmMgmG.webp',
-    'uncensored/6lMSMiVHv1XMgSPwW4ip.webp',
-    'uncensored/6r6lVgDdfHbbtidgSPZN.webp',
-    'uncensored/6s0sdzRWqsoxt1WPCnPM.webp',
-    'uncensored/6yN7dx3DoyEwlN3Ol7Ut.webp',
-    'uncensored/6zLWLniPGUkRJY5POGIL.webp',
-    'uncensored/71vfJAfMsE4xUq29LXCo.webp',
-    'uncensored/732dTb1kgPbfj1Os7gpC.webp',
-    'uncensored/74YxySrakRiQjhlx3eGC.webp',
-    'uncensored/77dloZ2NC0zWArP9SehU.webp',
-    'uncensored/7Fx3i0mFdo4geEFEwWOA.webp',
-    'uncensored/7XWsrGdGy37iMYnqxbfi.webp',
-    'uncensored/7ZVh6C8cX23R74oaTsmF.webp',
-    'uncensored/7inANxeWqD6aaicOuE2S.webp',
-    'uncensored/7yrnh8Oz9H5wUFIbU3OC.webp',
+    'uncensored/1XeImIm7BDhIpKRsKd96.webp',
+    'uncensored/1cqBp9XrnJ6CaQXILwb4.webp',
+    'uncensored/1hGxJRHdCEZvg8EGLVxl.webp',
+    'uncensored/1hN7n59dZg8fD7JwN1ez.webp',
+    'uncensored/1lqFh6IA0SDRNJKJRIlc.webp',
+    'uncensored/1qEBcg9QbkZRRdLt0Chc.webp',
+    'uncensored/1uMnWnRZ5nSSjN13p9iS.webp',
+    'uncensored/1yKP10Q6bgRZklB8gL5c.webp',
+    'uncensored/27bGIzFFpej5ubUkvykD.webp',
+    'uncensored/2J4Jqiq9Z3ywtXEPJQFN.webp',
+    'uncensored/2QiXO17BhVGQGIkYJuwh.webp',
+    'uncensored/2XdBYihsU7F1zXGsQTD9.webp',
+    'uncensored/2fpZZgcHxUxqX1SbjWE2.webp',
+    'uncensored/2gjqH68H586TKLDK9lh9.webp',
+    'uncensored/2gxrqw6S5gFMtczT0zWA.webp',
+    'uncensored/2iJ4z1Ur7KhvJHRlnRLe.webp',
+    'uncensored/2rJwSP26T7uBJnrEKVoG.webp',
+    'uncensored/2tJvWyxQH1nZ9Kak8MeQ.webp',
+    'uncensored/2x1IhFmkrPJMzQOvuBGH.webp',
+    'uncensored/2yItRlBqNgHbOAYTJmqx.webp',
+    'uncensored/39GYGt3bticS0Mjbud0p.webp',
+    'uncensored/3CKmIQg4yxYzGI8yyRdF.webp',
+    'uncensored/3IWka3fnP9b8yz6j5l91.webp',
+    'uncensored/3MBgpKBNeFqXFGNAQfRR.webp',
+    'uncensored/3ScXMGlqMI7WGHDrqdyQ.webp',
+    'uncensored/3ZYL4GCUOs3rfq3iTPJ7.webp',
+    'uncensored/3aLbOOGsBqiQEeQxpBfh.webp',
+    'uncensored/3hJ8aMwQv4H6FH2YQXbh.webp',
+    'uncensored/3s2LLgSjJK9jEgCJCELq.webp',
+    'uncensored/3yJUo4rLNNfbyZBHJQsK.webp',
+    'uncensored/42HFOoUlpE4rl2AX1xqQ.webp',
+    'uncensored/496hUQMqXCqpNRJQD5WT.webp',
+    'uncensored/4GN6i0Db2hl4Ck9vf0LE.webp',
+    'uncensored/4LXdQl8lEQJo0e7dAJYE.webp',
+    'uncensored/4LwQrUtXnGQOeH7F6mWo.webp',
+    'uncensored/4NCCqcJKkHjxJuCCQfhd.webp',
+    'uncensored/4PrSKrCnb11jGx6MpSfT.webp',
+    'uncensored/4QJCOQqKqOJQCQf0dgAj.webp',
+    'uncensored/4StBBWhTRGzKXKJq6fPq.webp',
+    'uncensored/4YhoIAWSbVaOqBhAOGqR.webp',
+    'uncensored/4jICJAJzZqBgJCBJdGpR.webp',
+    'uncensored/4jg6gzKfmqBQeHJLxKhA.webp',
+    'uncensored/4q9rQdPYCKQJdAeQ9VCN.webp',
+    'uncensored/4yQzHFQQ5JQGYJJOGDQK.webp',
+    'uncensored/529fRpQOqJT0SCXQQIqO.webp',
+    'uncensored/5DZH4KQXOPPOGKdJ8GN8.webp',
+    'uncensored/5FvfpELQJJ9NdQsO5jOP.webp',
+    'uncensored/5OGOvJQOQJJAEQJnEXJO.webp',
+    'uncensored/5QKzKIqICLJhN8S9d5XA.webp',
+    'uncensored/5fCqQ7BpFJJBAqcILGdI.webp',
+    'uncensored/5qv9XGKnOBFCCrAqJZOh.webp',
+    'uncensored/6COD8QBCQJJGKJHQ9CBJ.webp',
+    'uncensored/6JcPQJO8CJAEJFTOQnWf.webp',
+    'uncensored/6MEzBdKJrJBGJCK0Y9dG.webp',
+    'uncensored/6PMZQJCQJAGJ9FQOQ7q5.webp',
+    'uncensored/6X8zQQ09AJJCQJQKHJCL.webp',
+    'uncensored/6e1IOQJQnJJJQOMQKH9m.webp',
+    'uncensored/6h5QKIJQO8JBQ0FQ9QHA.webp',
+    'uncensored/6qKFJJQQJJBQNKJQQQdJ.webp',
+    'uncensored/6vXJRQCQJJJQONGJJJKE.webp',
+    'uncensored/75Gd9ZKQJJAJKQCQKQOM.webp',
+    'uncensored/7BJqKJQJ8AJJQ8IQJQJO.webp',
+    'uncensored/7DCIHMKfGJJJQJONKKJa.webp',
+    'uncensored/7FKJJCqQJAQJKO9JRQKX.webp',
+    'uncensored/7HQJvQJJ8QJ8QKNHQKCJ.webp',
+    'uncensored/7ImQKQJJOQJJBQJOJCJB.webp',
+    'uncensored/7YKCCJJQCJJJKJJdJQO9.webp',
+    'uncensored/7j8QJKQJCQ9JJEJQQ3HI.webp',
     'uncensored/82KxJ9daxf9MpK019L5I.webp',
-    'uncensored/84KsLMS8hVxaFO0Q9f5U.webp',
-    'uncensored/89KP7lZmKrgLm44MBptH.webp',
-    'uncensored/8DA2kf0McrBgX94SzGhN.webp',
-    'uncensored/8Ka0jEYLqYV0GGCpfF6r.webp',
-    'uncensored/8WiqA1mLF0ja4a4YtpJD.webp',
-    'uncensored/8cndfemRf3gFaOImXrrq.webp',
-    'uncensored/8ft3e5R8H7LnMi4cG94M.webp',
-    'uncensored/8iWFfZygYpXIhRjvgnDn.webp',
-    'uncensored/8oZuGhXOtLHIMw9HkPh5.webp',
-    'uncensored/8phioNKwTe78kkBxfQxv.webp',
-    'uncensored/8vbm5FHM8vgTIgwxd0hY.webp',
-    'uncensored/9HoKHfzfIKXiINyRQ7OG.webp',
-    'uncensored/9KlT5M8s7HTxMuptLEkN.webp',
+    'uncensored/83cSC4eRnYGZUNo9AoqD.webp',
+    'uncensored/8OKJQJOJBJJCQJBqJQ8A.webp',
+    'uncensored/8YJJOdJQQ9JQCQQ0GJJJ.webp',
+    'uncensored/8faf42TRuGOU4ZW9KS9W.webp',
+    'uncensored/8lJQOJ8QJAQGQ9KJJCQJ.webp',
+    'uncensored/8qJ9OJQJCQJQO8KJQJJK.webp',
+    'uncensored/92Ck0v3g8gZLEQ5vOmpd.webp',
+    'uncensored/993acHdsWLzG80gAFZQs.webp',
+    'uncensored/9D5U5fKXT72xnpqsgUaD.webp',
+    'uncensored/9KJQ8JQKJQAJCKJOJQJK.webp',
+    'uncensored/9RKQ9JJQJJQJBJQJQKHL.webp',
+    'uncensored/9TQKJBJdJQJJQGCJQJKO.webp',
+    'uncensored/9qJQJJ9QJJAQJQKKQOJJ.webp',
+    'uncensored/9v20KsJFZoAv2WQ8m3o2.webp',
+    'uncensored/9yKJBKJQJJQAJJQDJJQO.webp',
+    'uncensored/AJQJ9QKJQJQJJKQOJJQG.webp',
     'uncensored/AHKAq0biFDUtkxlx7TCu.webp',
+    'uncensored/AJQKJKBJdQ8JQJJQKCQJ.webp',
     'uncensored/ANhHtA0GivBfeAo6dvJG.webp',
-    'uncensored/AOOPNFh6elOmLpET52cL.webp',
-    'uncensored/AWHi4bruJeZpZWykW5WY.webp',
-    'uncensored/AeMMkssAnwhOZTeM4cLo.webp',
-    'uncensored/At5HwZnBpTKKrye94W2M.webp',
     'uncensored/AwKXjDqrJMTKNvB84iRy.webp',
-    'uncensored/AxBUJVXIfxuHd0aHWzQJ.webp',
-    'uncensored/aD2uZbupvQP5eG4H88hu.webp',
-    'uncensored/aYu9xiAT1TlEG6wvm34K.webp',
-    'uncensored/aer0cOYKwlfdLN2soOxd.webp',
-    'uncensored/amjSkXY4CehaPR7pb6LP.webp',
-    'uncensored/avrdLWr4n6wdrVj7Ace2.webp',
-    'uncensored/BLHvjp8XiOuMwnFiiSx0.webp',
-    'uncensored/BR4erJG0H1rJe4ZJ5NST.webp',
-    'uncensored/BUantPVDTvninIArlmnK.webp',
-    'uncensored/BW2SigW9ypARcB9M6gwU.webp',
-    'uncensored/Bay55kBwPyPNFWVOuUuE.webp',
-    'uncensored/Bn8Hnr3lg3JqtyjSVJAm.webp',
-    'uncensored/Bn92cX5S8V6Dgol3USGl.webp',
-    'uncensored/BumjAYfdAZcXbkRbkmrv.webp',
-    'uncensored/b3gbniWeQ3SYhpA5R3S2.webp',
-    'uncensored/b6DSThKWZmLSwHdkQUcs.webp',
-    'uncensored/bISH5IZHpOqJljTXI5a5.webp',
-    'uncensored/bS5wI3lzdj9uBSaLxw4s.webp',
-    'uncensored/bYeR8DqBoQA6FeA1TAY0.webp',
-    'uncensored/backbikini.webp',
-    'uncensored/bbuiH38TdHwzmiUwJlyk.webp',
-    'uncensored/bfYXN3JxyKRj9mxqspKx.webp',
-    'uncensored/bghKRc69Diizw4aW0Z1s.webp',
-    'uncensored/bikback2.webp',
-    'uncensored/bikbanner.webp',
-    'uncensored/bikbanner2.webp',
-    'uncensored/bikini.webp',
-    'uncensored/bikini3.webp',
-    'uncensored/bikini5.webp',
-    'uncensored/bq6LfiHrOu1hm6hyA51z.webp',
-    'uncensored/buena.webp',
-    'uncensored/buxNTxdJrOaiUnp3CCgW.webp',
-    'uncensored/bymSR1aP4BBTZXfHXqDx.webp',
-    'uncensored/bywUeU5kqyduPEyNnH1d.webp',
+    'uncensored/BJKJQJ8QJJQBQKJQOQJC.webp',
+    'uncensored/BKQJ9JQJJGQJBKQ0QJJJ.webp',
+    'uncensored/BQJJQKJJ8AJQJJQJKJQ9.webp',
     'uncensored/CTyCcna8JSPObRQpulKJ.webp',
     'uncensored/CJoiRWToytr1BwAXi9fY.webp',
     'uncensored/CKowwClF8BDYHfDWTyyn.webp',
@@ -196,7 +178,6 @@ const PREMIUM_IMAGES_PART1 = [
     'uncensored/dSKs7G60OQ19t3wjDjG0.webp',
     'uncensored/dsDTrTCZY4z8TeVxoqzy.webp',
     'uncensored/dwNhaABVUxVgZqEh8x7R.webp',
-    'uncensored/dwer.webp',
     'uncensored/dy1ftClNZHFt9B49BTEp.webp'
 ];
 
@@ -207,80 +188,55 @@ const PREMIUM_IMAGES_PART1 = [
 class PremiumContentPart1 {
     constructor() {
         this.images = PREMIUM_IMAGES_PART1;
-        this.initialized = false;
+        this.totalImages = this.images.length;
+        console.log(`💎 Gestor de contenido premium parte 1 inicializado con ${this.totalImages} imágenes`);
     }
     
-    initialize() {
-        this.initialized = true;
-        console.log(`✅ PremiumContentPart1 inicializado - ${this.images.length} imágenes`);
+    getAll() {
+        return this.images;
     }
     
-    getAllImages() {
-        return [...this.images];
-    }
-    
-    getRandomImages(count = 10) {
-        if (!window.ArrayUtils) {
-            // Fallback si ArrayUtils no está disponible
-            const shuffled = [...this.images].sort(() => Math.random() - 0.5);
-            return shuffled.slice(0, Math.min(count, shuffled.length));
+    getRandom(count = 10) {
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.getRandomItems(this.images, count);
         }
-        return window.ArrayUtils.getRandomItems(this.images, count);
+        return this.images.slice(0, count);
     }
     
-    searchImages(query) {
-        if (!query) return this.images;
+    getByPage(page = 1, perPage = 24) {
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.paginate(this.images, page, perPage);
+        }
+        
+        const start = (page - 1) * perPage;
+        const end = start + perPage;
+        return this.images.slice(start, end);
+    }
+    
+    search(query) {
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.search(this.images, query);
+        }
+        
         const queryLower = query.toLowerCase();
-        return this.images.filter(img => 
-            img.toLowerCase().includes(queryLower)
-        );
-    }
-    
-    hasImage(imagePath) {
-        return this.images.includes(imagePath);
-    }
-    
-    getImageSubset(start = 0, count = 10) {
-        return this.images.slice(start, start + count);
+        return this.images.filter(img => img.toLowerCase().includes(queryLower));
     }
     
     getStats() {
         return {
-            totalImages: this.images.length,
-            initialized: this.initialized,
-            part: 1
+            total: this.totalImages,
+            path: 'uncensored/',
+            format: '.webp'
         };
     }
 }
 
 // ============================
-// INICIALIZACIÓN Y EXPORTACIÓN
+// EXPORTAR GLOBALMENTE
 // ============================
 
-const globalPremiumPart1 = new PremiumContentPart1();
-
-// Exponer APIs globales
 window.PREMIUM_IMAGES_PART1 = PREMIUM_IMAGES_PART1;
-window.PremiumContentPart1 = globalPremiumPart1;
+window.PremiumContentPart1 = new PremiumContentPart1();
 
-// Auto-inicializar
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        globalPremiumPart1.initialize();
-    });
-} else {
-    globalPremiumPart1.initialize();
-}
-
-// Log de inicialización
-console.log(`📦 content-data3.js v4.1.0 FIXED loaded`);
-console.log(`   - ${PREMIUM_IMAGES_PART1.length} imágenes premium (parte 1) disponibles`);
-console.log(`   - PremiumContentPart1 manager inicializado`);
-
-// Exportar para módulos ES6 si es necesario
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        PREMIUM_IMAGES_PART1,
-        PremiumContentPart1: globalPremiumPart1
-    };
-}
+console.log('✅ Módulo content-data3.js cargado correctamente');
+console.log('📊 Total imágenes premium parte 1:', PREMIUM_IMAGES_PART1.length);
