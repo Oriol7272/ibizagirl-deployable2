@@ -1,13 +1,12 @@
-// ============================
-// CONTENT DATA 5 - VIDEOS PREMIUM v4.1.0
-// Contenido de video premium
-// ============================
-
-'use strict';
+/**
+ * content-data5.js - Premium Videos v4.1.0 FIXED
+ * Contenido de video premium (67 archivos)
+ */
 
 // ============================
-// POOL DE VIDEOS PREMIUM (67 archivos)
+// POOL DE VIDEOS PREMIUM (67 videos)
 // ============================
+
 const PREMIUM_VIDEOS_POOL = [
     'uncensored-videos/0nF138CMxl1eGWUxaG2d.mp4',
     'uncensored-videos/0xXK6PxXSv6cpYxvI7HX.mp4',
@@ -66,7 +65,7 @@ const PREMIUM_VIDEOS_POOL = [
     'uncensored-videos/nx7nnXBeHftB7umRkdec.mp4',
     'uncensored-videos/owT8LTlvFEfwHj5cOtbc.mp4',
     'uncensored-videos/peTmHJhWF44gaz25ACCr.mp4',
-    'uncensored-videos/qEOel0dBNRP2ttJtVUcQ.mp4',
+    'uncensored-videos/qEOel0dBNRP2tJtVUcQ.mp4',
     'uncensored-videos/r14kVENgyJthsXKP4ckJ.mp4',
     'uncensored-videos/rBSogUSRYAorst0XO7oy.mp4',
     'uncensored-videos/rWwDSNSYmt9jpPd2ngiI.mp4',
@@ -84,6 +83,7 @@ const PREMIUM_VIDEOS_POOL = [
 // ============================
 // GESTOR DE CONTENIDO DE VIDEO
 // ============================
+
 class VideoContentManager {
     constructor() {
         this.videos = PREMIUM_VIDEOS_POOL;
@@ -93,11 +93,11 @@ class VideoContentManager {
             autoplay: false,
             controls: true,
             muted: false,
-            loop: false
+            loop: false,
+            quality: '1080p'
         };
     }
     
-    // Inicializar gestor de videos
     initialize() {
         this.initialized = true;
         this.detectAccessLevel();
@@ -105,118 +105,55 @@ class VideoContentManager {
         console.log(`🎫 Nivel de acceso: ${this.accessLevel}`);
     }
     
-    // Detectar nivel de acceso del usuario
     detectAccessLevel() {
-        // Lógica para detectar si el usuario tiene acceso premium
-        const isPremium = this.checkPremiumAccess();
+        // Detectar nivel de acceso basado en localStorage/sessionStorage
+        const isPremium = localStorage.getItem('ibizagirl_vip') === 'true' ||
+                         sessionStorage.getItem('premiumAccess') === 'true';
         this.accessLevel = isPremium ? 'premium' : 'guest';
     }
     
-    // Verificar acceso premium (placeholder)
-    checkPremiumAccess() {
-        // Aquí iría la lógica real de verificación de suscripción
-        return localStorage.getItem('premiumAccess') === 'true' || 
-               sessionStorage.getItem('premiumAccess') === 'true';
-    }
-    
-    // Obtener todos los videos (solo para usuarios premium)
     getAllVideos() {
-        if (this.accessLevel === 'guest') {
-            console.warn('🚫 Acceso denegado: Se requiere suscripción premium para videos');
-            return [];
-        }
         return [...this.videos];
     }
     
-    // Obtener videos aleatorios
-    getRandomVideos(count = 5) {
-        if (this.accessLevel === 'guest') {
-            return this.getPreviewVideos(Math.min(count, 2));
-        }
-        
+    getRandomVideos(count = 10) {
         if (!window.ArrayUtils) {
-            return this.videos.slice(0, count);
+            // Fallback si ArrayUtils no está disponible
+            const shuffled = [...this.videos].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, Math.min(count, shuffled.length));
         }
         return window.ArrayUtils.getRandomItems(this.videos, count);
     }
     
-    // Obtener videos de preview para usuarios no premium
-    getPreviewVideos(count = 2) {
-        const previewVideos = this.videos.slice(0, count);
-        return previewVideos.map(video => ({
-            path: video,
-            preview: true,
-            watermarked: true,
-            duration: '0:30', // Solo primeros 30 segundos
-            message: 'Suscríbete para ver el video completo'
-        }));
-    }
-    
-    // Buscar videos
     searchVideos(query) {
-        const availableVideos = this.accessLevel === 'guest' ? [] : this.videos;
-        
-        if (!query) return availableVideos;
+        if (!query) return this.videos;
         const queryLower = query.toLowerCase();
-        return availableVideos.filter(video => 
+        return this.videos.filter(video => 
             video.toLowerCase().includes(queryLower)
         );
     }
     
-    // Obtener video específico
-    getVideo(index) {
-        if (this.accessLevel === 'guest') {
-            return this.getPreviewVideos(1)[0] || null;
-        }
-        
-        return this.videos[index] || null;
+    getVideoSubset(start = 0, count = 10) {
+        return this.videos.slice(start, start + count);
     }
     
-    // Verificar si un video existe
     hasVideo(videoPath) {
         return this.videos.includes(videoPath);
     }
     
-    // Configurar reproducción
-    setPlaybackSettings(settings) {
-        this.playbackSettings = { ...this.playbackSettings, ...settings };
+    checkPremiumAccess() {
+        this.detectAccessLevel();
+        return this.accessLevel === 'premium' || this.accessLevel === 'vip';
     }
     
-    // Obtener configuración de reproducción
-    getPlaybackSettings() {
-        return { ...this.playbackSettings };
-    }
-    
-    // Generar URL de video con parámetros
-    getVideoUrl(videoPath, options = {}) {
-        if (this.accessLevel === 'guest' && !options.preview) {
-            return null;
-        }
-        
-        const baseUrl = options.baseUrl || '';
-        const params = new URLSearchParams();
-        
-        if (options.preview) {
-            params.append('preview', 'true');
-            params.append('duration', '30');
-        }
-        
-        if (this.playbackSettings.autoplay) {
-            params.append('autoplay', '1');
-        }
-        
-        const url = `${baseUrl}${videoPath}`;
-        return params.toString() ? `${url}?${params.toString()}` : url;
-    }
-    
-    // Obtener metadatos de video
     getVideoMetadata(videoPath) {
         const isPreview = this.accessLevel === 'guest';
+        const fileName = videoPath.split('/').pop().replace('.mp4', '');
         
         return {
             path: videoPath,
-            name: videoPath.split('/').pop().replace('.mp4', ''),
-            format: 'mp4',
+            fileName: fileName,
+            thumbnail: this.generateThumbnail(videoPath),
             quality: isPreview ? '480p' : '1080p',
             duration: isPreview ? '0:30' : 'Variable',
             size: isPreview ? '~5MB' : '~25MB',
@@ -225,7 +162,12 @@ class VideoContentManager {
         };
     }
     
-    // Obtener estadísticas
+    generateThumbnail(videoPath) {
+        // Generar ruta de thumbnail basada en el video
+        const videoName = videoPath.split('/').pop().replace('.mp4', '');
+        return `thumbnails/${videoName}.webp`;
+    }
+    
     getStats() {
         return {
             totalVideos: this.videos.length,
@@ -237,9 +179,9 @@ class VideoContentManager {
         };
     }
     
-    // Simular upgrade a premium
     upgradeToPremium() {
         this.accessLevel = 'premium';
+        localStorage.setItem('ibizagirl_vip', 'true');
         sessionStorage.setItem('premiumAccess', 'true');
         console.log('🎉 Acceso premium activado');
         
@@ -251,34 +193,24 @@ class VideoContentManager {
             }
         }));
     }
-    
-    // Validar formato de video
-    isValidVideoFormat(videoPath) {
-        if (!window.Validators) {
-            return videoPath.toLowerCase().endsWith('.mp4');
-        }
-        return window.Validators.isValidVideoPath(videoPath);
-    }
 }
 
 // ============================
 // UTILIDADES DE VIDEO
 // ============================
+
 const VideoUtils = {
-    // Generar thumbnail placeholder
     generateThumbnail(videoPath) {
         const videoName = videoPath.split('/').pop().replace('.mp4', '');
         return `thumbnails/${videoName}.webp`;
     },
     
-    // Formatear duración
     formatDuration(seconds) {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     },
     
-    // Calcular tamaño estimado
     estimateFileSize(durationSeconds, quality = '1080p') {
         const bitrates = {
             '480p': 1000, // kbps
@@ -293,7 +225,6 @@ const VideoUtils = {
         return `${sizeMB}MB`;
     },
     
-    // Verificar compatibilidad del navegador
     checkBrowserSupport() {
         const video = document.createElement('video');
         return {
@@ -302,12 +233,37 @@ const VideoUtils = {
             autoplay: 'autoplay' in video,
             fullscreen: 'requestFullscreen' in video
         };
+    },
+    
+    createVideoElement(src, options = {}) {
+        const video = document.createElement('video');
+        video.src = src;
+        video.controls = options.controls !== false;
+        video.autoplay = options.autoplay === true;
+        video.muted = options.muted === true;
+        video.loop = options.loop === true;
+        video.preload = options.preload || 'metadata';
+        
+        if (options.poster) {
+            video.poster = options.poster;
+        }
+        
+        if (options.width) {
+            video.width = options.width;
+        }
+        
+        if (options.height) {
+            video.height = options.height;
+        }
+        
+        return video;
     }
 };
 
 // ============================
-// COMPONENTE DE REPRODUCTOR
+// REPRODUCTOR DE VIDEO
 // ============================
+
 class VideoPlayer {
     constructor(container, options = {}) {
         this.container = container;
@@ -320,85 +276,86 @@ class VideoPlayer {
         };
         this.videoElement = null;
         this.initialized = false;
+        this.currentVideo = null;
     }
     
-    // Inicializar reproductor
     initialize() {
-        this.createVideoElement();
-        this.setupEventListeners();
-        this.initialized = true;
-    }
-    
-    // Crear elemento de video
-    createVideoElement() {
+        if (this.initialized) return;
+        
         this.videoElement = document.createElement('video');
+        this.videoElement.className = 'video-player';
         this.videoElement.controls = this.options.controls;
         this.videoElement.autoplay = this.options.autoplay;
         this.videoElement.muted = this.options.muted;
         this.videoElement.loop = this.options.loop;
+        
+        // Estilos básicos
         this.videoElement.style.width = '100%';
         this.videoElement.style.height = 'auto';
+        this.videoElement.style.maxWidth = '100%';
         
+        // Event listeners
+        this.setupEventListeners();
+        
+        // Añadir al contenedor
         if (this.container) {
             this.container.appendChild(this.videoElement);
         }
+        
+        this.initialized = true;
+        console.log('✅ VideoPlayer inicializado');
     }
     
-    // Configurar event listeners
     setupEventListeners() {
         if (!this.videoElement) return;
         
-        this.videoElement.addEventListener('loadstart', () => {
-            this.dispatchEvent('loadstart');
-        });
-        
-        this.videoElement.addEventListener('canplay', () => {
-            this.dispatchEvent('ready');
-        });
-        
         this.videoElement.addEventListener('play', () => {
-            this.dispatchEvent('play');
+            this.dispatchEvent('play', { video: this.currentVideo });
         });
         
         this.videoElement.addEventListener('pause', () => {
-            this.dispatchEvent('pause');
+            this.dispatchEvent('pause', { video: this.currentVideo });
         });
         
         this.videoElement.addEventListener('ended', () => {
-            this.dispatchEvent('ended');
+            this.dispatchEvent('ended', { video: this.currentVideo });
         });
         
         this.videoElement.addEventListener('error', (e) => {
-            this.dispatchEvent('error', { error: e });
+            console.error('❌ Error reproduciendo video:', e);
+            this.dispatchEvent('error', { video: this.currentVideo, error: e });
         });
     }
     
-    // Cargar video
-    loadVideo(videoPath) {
+    loadVideo(videoPath, options = {}) {
         if (!this.videoElement) {
-            console.error('VideoPlayer no inicializado');
-            return;
+            this.initialize();
         }
         
+        this.currentVideo = videoPath;
         this.videoElement.src = videoPath;
-        this.videoElement.load();
+        
+        if (options.poster) {
+            this.videoElement.poster = options.poster;
+        }
+        
+        if (options.autoplay) {
+            this.play();
+        }
     }
     
-    // Reproducir
     play() {
         if (this.videoElement) {
             return this.videoElement.play();
         }
     }
     
-    // Pausar
     pause() {
         if (this.videoElement) {
             this.videoElement.pause();
         }
     }
     
-    // Detener
     stop() {
         if (this.videoElement) {
             this.videoElement.pause();
@@ -406,35 +363,30 @@ class VideoPlayer {
         }
     }
     
-    // Buscar posición
     seekTo(time) {
         if (this.videoElement) {
             this.videoElement.currentTime = time;
         }
     }
     
-    // Cambiar volumen
     setVolume(volume) {
         if (this.videoElement) {
             this.videoElement.volume = Math.max(0, Math.min(1, volume));
         }
     }
     
-    // Silenciar/Desilenciar
     toggleMute() {
         if (this.videoElement) {
             this.videoElement.muted = !this.videoElement.muted;
         }
     }
     
-    // Pantalla completa
     requestFullscreen() {
         if (this.videoElement && this.videoElement.requestFullscreen) {
             this.videoElement.requestFullscreen();
         }
     }
     
-    // Disparar eventos personalizados
     dispatchEvent(eventName, detail = {}) {
         const event = new CustomEvent(`videoplayer:${eventName}`, { detail });
         if (this.container) {
@@ -443,19 +395,20 @@ class VideoPlayer {
         window.dispatchEvent(event);
     }
     
-    // Destruir reproductor
     destroy() {
         if (this.videoElement) {
             this.videoElement.remove();
             this.videoElement = null;
         }
         this.initialized = false;
+        this.currentVideo = null;
     }
 }
 
 // ============================
 // INICIALIZACIÓN Y EXPORTACIÓN
 // ============================
+
 const globalVideoManager = new VideoContentManager();
 
 // Exponer APIs globales
@@ -473,210 +426,23 @@ if (document.readyState === 'loading') {
     globalVideoManager.initialize();
 }
 
-// ============================
-// FUNCIONES DE COMPATIBILIDAD LEGACY
-// ============================
+// Funciones de compatibilidad legacy
 window.getAllVideos = () => globalVideoManager.getAllVideos();
 window.getRandomVideos = (count) => globalVideoManager.getRandomVideos(count);
-window.checkVideoAccess = () => globalVideoManager.accessLevel;
+window.searchVideos = (query) => globalVideoManager.searchVideos(query);
 
-// ============================
-// SISTEMA DE PAYWALL PARA VIDEOS
-// ============================
-class VideoPaywall {
-    constructor() {
-        this.isActive = true;
-        this.previewDuration = 30; // segundos
-        this.upgradeUrl = '/premium';
-    }
-    
-    // Verificar si se debe mostrar paywall
-    shouldShowPaywall(videoPath) {
-        return globalVideoManager.accessLevel === 'guest';
-    }
-    
-    // Crear overlay de paywall
-    createPaywallOverlay(container) {
-        const overlay = document.createElement('div');
-        overlay.className = 'video-paywall-overlay';
-        overlay.innerHTML = `
-            <div class="paywall-content">
-                <h3>🔒 Contenido Premium</h3>
-                <p>Suscríbete para acceder a todos los videos en calidad HD</p>
-                <button class="upgrade-btn" onclick="window.location.href='${this.upgradeUrl}'">
-                    ⭐ Obtener Acceso Premium
-                </button>
-                <p class="preview-notice">Vista previa: primeros ${this.previewDuration} segundos</p>
-            </div>
-        `;
-        
-        overlay.style.cssText = `
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            color: white;
-            text-align: center;
-        `;
-        
-        container.style.position = 'relative';
-        container.appendChild(overlay);
-        
-        return overlay;
-    }
-    
-    // Remover paywall (después de upgrade)
-    removePaywall(container) {
-        const overlay = container.querySelector('.video-paywall-overlay');
-        if (overlay) {
-            overlay.remove();
-        }
-    }
-}
+// Log de inicialización
+console.log(`📦 content-data5.js v4.1.0 FIXED loaded`);
+console.log(`   - ${PREMIUM_VIDEOS_POOL.length} videos premium disponibles`);
+console.log(`   - VideoContentManager inicializado`);
+console.log(`   - VideoPlayer y VideoUtils disponibles`);
 
-// Instancia global del paywall
-const globalVideoPaywall = new VideoPaywall();
-window.VideoPaywall = globalVideoPaywall;
-
-// ============================
-// EVENT LISTENERS PARA PREMIUM UPGRADE
-// ============================
-window.addEventListener('premiumUpgrade', (event) => {
-    console.log('🎉 Premium upgrade detectado, removiendo paywalls de video');
-    
-    // Remover todos los paywalls activos
-    const paywallOverlays = document.querySelectorAll('.video-paywall-overlay');
-    paywallOverlays.forEach(overlay => overlay.remove());
-    
-    // Recargar videos si es necesario
-    const videoElements = document.querySelectorAll('video[data-premium="true"]');
-    videoElements.forEach(video => {
-        if (video.dataset.fullSrc) {
-            video.src = video.dataset.fullSrc;
-            video.load();
-        }
-    });
-});
-
-// ============================
-// FUNCIONES DE UTILIDAD PARA LA UI
-// ============================
-const VideoUIHelpers = {
-    // Crear botón de reproducción personalizado
-    createPlayButton(onClick) {
-        const button = document.createElement('button');
-        button.innerHTML = '▶️';
-        button.className = 'video-play-btn';
-        button.onclick = onClick;
-        return button;
-    },
-    
-    // Crear indicador de progreso
-    createProgressBar(duration) {
-        const container = document.createElement('div');
-        container.className = 'video-progress-container';
-        
-        const bar = document.createElement('div');
-        bar.className = 'video-progress-bar';
-        
-        const progress = document.createElement('div');
-        progress.className = 'video-progress';
-        progress.style.width = '0%';
-        
-        bar.appendChild(progress);
-        container.appendChild(bar);
-        
-        return { container, progress };
-    },
-    
-    // Formatear tiempo para mostrar
-    formatTime(seconds) {
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const secs = Math.floor(seconds % 60);
-        
-        if (hours > 0) {
-            return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        }
-        return `${minutes}:${secs.toString().padStart(2, '0')}`;
-    },
-    
-    // Crear thumbnail con overlay de reproducción
-    createVideoThumbnail(videoPath, onClick) {
-        const container = document.createElement('div');
-        container.className = 'video-thumbnail-container';
-        container.style.cssText = `
-            position: relative;
-            cursor: pointer;
-            border-radius: 8px;
-            overflow: hidden;
-            background: #000;
-        `;
-        
-        const thumbnail = document.createElement('img');
-        thumbnail.src = VideoUtils.generateThumbnail(videoPath);
-        thumbnail.alt = 'Video thumbnail';
-        thumbnail.style.cssText = 'width: 100%; height: auto; display: block;';
-        
-        const playOverlay = document.createElement('div');
-        playOverlay.innerHTML = '▶️';
-        playOverlay.style.cssText = `
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 3rem;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            pointer-events: none;
-        `;
-        
-        container.appendChild(thumbnail);
-        container.appendChild(playOverlay);
-        container.onclick = onClick;
-        
-        return container;
-    }
-};
-
-window.VideoUIHelpers = VideoUIHelpers;
-
-// ============================
-// LOG DE INICIALIZACIÓN
-// ============================
-console.log(`📦 content-data5.js cargado - ${PREMIUM_VIDEOS_POOL.length} videos premium disponibles`);
-console.log('🎬 VideoContentManager, VideoPlayer y VideoPaywall listos');
-console.log('🔧 VideoUIHelpers y VideoUtils disponibles');
-
-// ============================
-// CONFIGURACIÓN DE DESARROLLO
-// ============================
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    console.log('🧪 Modo desarrollo detectado');
-    
-    // En desarrollo, simular acceso premium
-    window.enablePremiumForTesting = () => {
-        globalVideoManager.upgradeToPremium();
-        console.log('🎭 Acceso premium habilitado para testing');
-    };
-    
-    // Función para probar reproductor
-    window.testVideoPlayer = (containerId) => {
-        const container = document.getElementById(containerId);
-        if (container) {
-            const player = new VideoPlayer(container, { controls: true });
-            player.initialize();
-            const testVideo = globalVideoManager.getRandomVideos(1)[0];
-            if (testVideo) {
-                player.loadVideo(testVideo.path || testVideo);
-            }
-            return player;
-        }
+// Exportar para módulos ES6 si es necesario
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        PREMIUM_VIDEOS_POOL,
+        VideoContentManager: globalVideoManager,
+        VideoUtils,
+        VideoPlayer
     };
 }
