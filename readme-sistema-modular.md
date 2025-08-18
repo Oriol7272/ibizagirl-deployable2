@@ -1,4 +1,4 @@
-# 🌊 IbizaGirl.pics - Sistema Modular v4.1.0
+# 🌊 IbizaGirl.pics - Sistema Modular v4.1.0 FIXED
 
 ## 📋 Descripción General
 
@@ -23,12 +23,14 @@ Este sistema modular divide el contenido multimedia de IbizaGirl.pics en módulo
 
 ```
 ├── index.html                    - Página de verificación de edad
-├── main-html-updated.html        - Página principal (actualizada)
+├── main.html                     - Página principal
 ├── styles.css                    - Estilos CSS
 ├── sw.js                         - Service Worker
 ├── manifest.json                 - PWA Manifest
 ├── robots.txt                    - SEO robots
-└── proxy.php                     - Proxy para anuncios
+├── proxy.php                     - Proxy para anuncios
+├── ad-containers-manager.js      - Gestor de contenedores de anuncios
+└── exoclick-urls-fix.js         - Corrector de URLs de ExoClick
 ```
 
 ## 🔧 Instalación y Configuración
@@ -37,7 +39,6 @@ Este sistema modular divide el contenido multimedia de IbizaGirl.pics en módulo
 
 ```bash
 # Reemplazar archivos principales
-cp main-html-updated.html main.html
 cp main-script-updated.js main-script.js
 
 # Mantener otros archivos existentes
@@ -57,9 +58,19 @@ touch content-data6.js
 touch content-data-integration.js
 ```
 
-### 3. Integrar Contenido de `index-MODULAR.js`
+### 3. Orden de Carga en HTML
 
-El archivo `index-MODULAR.js` contiene el sistema modular completo. Divídelo en los archivos individuales según las secciones marcadas.
+```html
+<!-- En main.html, antes del cierre de </body> -->
+<script src="content-data1.js"></script>
+<script src="content-data2.js"></script>
+<script src="content-data3.js"></script>
+<script src="content-data4.js"></script>
+<script src="content-data5.js"></script>
+<script src="content-data6.js"></script>
+<script src="content-data-integration.js"></script>
+<script src="main-script.js"></script>
+```
 
 ## ⚙️ Configuración del Contenido
 
@@ -145,211 +156,121 @@ getContentStats()
 2. **Módulos 1-6** → Inicializar sistemas de contenido
 3. **API Unificada** → Consolidar todo el contenido
 4. **Integración** → Exponer APIs para main-script
-5. **Main Script** → Renderizar interfaz
+5. **Main Script** → Renderizar UI y contenido
 
-### Event System
+### Verificación de Estado
 
 ```javascript
-// Eventos del sistema
-window.addEventListener('contentSystemReady', (event) => {
-    console.log('Sistema listo:', event.detail);
-});
+// En la consola del navegador
+window.debugModularSystem()
 
-window.addEventListener('contentSystemFallback', (event) => {
-    console.log('Modo fallback activado:', event.detail);
+// Verificar APIs disponibles
+console.log('ContentAPI:', !!window.ContentAPI);
+console.log('UnifiedContentAPI:', !!window.UnifiedContentAPI);
+console.log('Arrays disponibles:', {
+    photos: !!window.ALL_PHOTOS_POOL,
+    videos: !!window.ALL_VIDEOS_POOL,
+    banners: !!window.BANNER_IMAGES,
+    teasers: !!window.TEASER_IMAGES
 });
 ```
 
 ## 🛠️ Debugging
 
-### Funciones de Debug (Desarrollo)
+### Comandos Disponibles
 
 ```javascript
-// Estado del sistema modular
+// Debug del sistema modular
 debugModularSystem()
 
-// Probar contenido
+// Test de contenido modular
 testModularContent()
 
-// Forzar recarga
+// Forzar recarga de contenido
 forceReloadContent()
 
-// Estado de módulos
-debugContentSystem()
+// Ver estadísticas
+getContentStats()
 
-// Inspeccionar dependencias
-window.ContentDebug.inspectDependencies()
+// Debug de anuncios
+adDebug()
+
+// Refrescar anuncios
+refreshAds()
 ```
 
-### Console Logs
+### Logs del Sistema
 
-```javascript
-// Verificar carga de módulos
-console.log('Módulos:', window.ContentModuleLoader);
+El sistema genera logs detallados durante la inicialización:
 
-// Verificar APIs
-console.log('ContentAPI:', window.ContentAPI);
-console.log('UnifiedAPI:', window.UnifiedContentAPI);
+- `📦` - Carga de módulos
+- `✅` - Operaciones exitosas
+- `⚠️` - Advertencias
+- `❌` - Errores
+- `🔄` - Operaciones de recarga/refresco
+- `📊` - Estadísticas
 
-// Verificar arrays
-console.log('Photos:', window.ALL_PHOTOS_POOL?.length);
-console.log('Videos:', window.ALL_VIDEOS_POOL?.length);
-```
+## 🐛 Solución de Problemas
 
-## 📊 Estadísticas del Sistema
+### Contenido No Se Carga
 
-### Contenido Total
+1. Verificar orden de carga de scripts
+2. Comprobar consola para errores
+3. Ejecutar `debugModularSystem()`
+4. Verificar rutas de archivos
 
-- **Fotos Públicas**: 127 archivos
-- **Fotos Premium**: 390 archivos (186 + 204)
-- **Videos Premium**: 67 archivos
-- **Total**: 584 archivos multimedia
+### APIs No Disponibles
 
-### Rendimiento
+1. Asegurar que todos los módulos están cargados
+2. Verificar que `content-data-integration.js` se ejecuta
+3. Revisar timing de inicialización
 
-- **Carga Modular**: Reduce tiempo inicial
-- **Lazy Loading**: Solo carga módulos necesarios
-- **Caché Inteligente**: Optimiza acceso a contenido
-- **Error Recovery**: Sistema robusto de fallbacks
+### Problemas de Rendimiento
 
-## 🔄 Rotación Diaria
+1. Habilitar lazy loading
+2. Verificar Service Worker activo
+3. Comprobar caché del navegador
+4. Reducir número de items por página
 
-### Sistema de Seeds
+## 📈 Optimizaciones Implementadas
 
-```javascript
-// Seed basado en fecha
-const dateSeed = year * 10000 + month * 100 + day;
+- ✅ Lazy loading de imágenes y videos
+- ✅ Service Worker con caché inteligente
+- ✅ Compresión WebP para imágenes
+- ✅ Code splitting modular
+- ✅ Rotación diaria automática
+- ✅ Fallback para errores de carga
+- ✅ Gestión inteligente de anuncios
 
-// Contenido determinístico por día
-const todayContent = shuffleWithSeed(content, dateSeed);
-```
+## 🔄 Actualizaciones Recientes (v4.1.0)
 
-### Nuevo Contenido
+- Fixed: Errores de regex en proxy.php
+- Fixed: Variables undefined en main-script
+- Fixed: Memory leaks en Service Worker
+- Fixed: Código truncado en varios archivos
+- Improved: Manejo de errores más robusto
+- Added: Sistema de fallback mejorado
+- Updated: Gestión de contenedores de anuncios
 
-- **30%** del contenido marcado como "nuevo" diariamente
-- **Banners**: Rotan cada hora
-- **Teasers**: Rotan con banners
-- **Estadísticas**: Actualizan automáticamente
+## 📝 Notas Importantes
 
-## 🔐 Sistema de Acceso
+1. **Siempre** mantener el orden de carga de scripts
+2. **No** modificar los nombres de las APIs globales
+3. **Verificar** compatibilidad con main-script.js existente
+4. **Testear** en dispositivos móviles y desktop
+5. **Monitorear** logs de consola en producción
 
-### Niveles de Usuario
+## 🚨 Contacto y Soporte
 
-1. **Guest**: Solo preview (borroso)
-2. **Pack Credits**: Desbloqueo por créditos
-3. **VIP**: Acceso ilimitado
+Para problemas técnicos o consultas sobre el sistema modular, revisar:
 
-### PayPal Integration
-
-- **Mensual**: €15/mes
-- **Lifetime**: €100 (una vez)
-- **Packs**: €10-50 (créditos)
-- **PPV**: €0.10-0.30 (por item)
-
-## 🎨 Personalización
-
-### Modificar Contenido
-
-```javascript
-// Añadir nuevas imágenes
-FULL_IMAGES_POOL.push('nueva-imagen.webp');
-
-// Añadir videos
-PREMIUM_VIDEOS_POOL.push('nuevo-video.mp4');
-
-// Regenerar rotación
-window.ContentAPI.rotate();
-```
-
-### Configurar Rotación
-
-```javascript
-// En content-data1.js
-const ContentConfig = {
-    rotation: {
-        enabled: true,
-        intervalHours: 1,
-        bannersCount: 6,
-        teasersCount: 9
-    }
-};
-```
-
-## 🚨 Solución de Problemas
-
-### Problemas Comunes
-
-1. **Módulos no cargan**
-   ```javascript
-   // Verificar orden de scripts en HTML
-   // Verificar console para errores de red
-   debugModularSystem()
-   ```
-
-2. **Contenido no aparece**
-   ```javascript
-   // Verificar arrays
-   console.log(window.ALL_PHOTOS_POOL);
-   // Forzar recarga
-   forceReloadContent()
-   ```
-
-3. **Error en rotación**
-   ```javascript
-   // Verificar TimeUtils y ArrayUtils
-   console.log(window.TimeUtils, window.ArrayUtils);
-   ```
-
-### Modo Fallback
-
-Si el sistema modular falla, automáticamente activa:
-- Contenido de emergencia (6 imágenes básicas)
-- APIs simplificadas
-- Event listeners de recuperación
-
-## 📱 Compatibilidad
-
-### Navegadores Soportados
-
-- ✅ Chrome 90+
-- ✅ Firefox 88+
-- ✅ Safari 14+
-- ✅ Edge 90+
-- ✅ Móviles (iOS/Android)
-
-### Progressive Web App
-
-- 📱 Instalable
-- 🔄 Service Worker
-- 💾 Caché inteligente
-- 📶 Funciona offline
-
-## 🔄 Actualizaciones
-
-### Versioning
-
-```
-v4.1.0 - Sistema modular completo
-v4.0.x - Módulos individuales
-v3.x.x - Sistema monolítico anterior
-```
-
-### Migration Path
-
-1. Backup del sistema actual
-2. Implementar módulos uno por uno
-3. Verificar funcionamiento
-4. Activar sistema completo
-
-## 📞 Soporte
-
-Para problemas o preguntas:
-
-1. **Verificar console logs**
-2. **Usar funciones de debug**
-3. **Comprobar orden de carga**
-4. **Revisar dependencias**
+- Logs de consola del navegador
+- Network tab para verificar carga de recursos
+- Estado del Service Worker
+- Métricas de rendimiento
 
 ---
 
-🌊 **IbizaGirl.pics** - Paradise Gallery con Sistema Modular v4.1.0
+**Versión**: 4.1.0 FIXED  
+**Última actualización**: 2024  
+**Estado**: ✅ Producción
