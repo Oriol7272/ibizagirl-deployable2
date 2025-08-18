@@ -1,474 +1,564 @@
-// content-data6.js - API Unificada con Singleton Pattern
-// Previene múltiples inicializaciones y mejora el rendimiento
+/**
+ * content-data6.js - Unified API v4.1.0 FIXED
+ * API unificada y funciones principales del sistema
+ */
+
+// ============================
+// VERIFICACIÓN DE DEPENDENCIAS
+// ============================
 
 (function() {
     'use strict';
     
-    // Variable singleton global
-    let apiInstance = null;
-    let initializationPromise = null;
+    // Verificar que los módulos anteriores están cargados
+    const requiredModules = [
+        { name: 'ContentConfig', module: 'content-data1.js' },
+        { name: 'FULL_IMAGES_POOL', module: 'content-data2.js' },
+        { name: 'PREMIUM_IMAGES_PART1', module: 'content-data3.js' },
+        { name: 'PREMIUM_IMAGES_PART2', module: 'content-data4.js' },
+        { name: 'PREMIUM_VIDEOS_POOL', module: 'content-data5.js' }
+    ];
     
-    class UnifiedContentAPI {
-        constructor() {
-            // Implementar patrón Singleton
-            if (apiInstance) {
-                console.log('♻️ Retornando instancia existente de UnifiedContentAPI');
-                return apiInstance;
-            }
-            
-            console.log('🚀 Creando nueva instancia de UnifiedContentAPI...');
-            
-            this.initialized = false;
-            this.initializing = false;
-            this.dependencies = {
-                ContentManager: false,
-                BannerTeaserManager: false,
-                PremiumContentPart1: false,
-                PremiumContentPart2: false,
-                VideoContentManager: false
-            };
-            
-            this.cache = {
-                publicImages: null,
-                premiumImages: null,
-                videos: null,
-                banners: null,
-                teasers: null,
-                lastUpdate: null
-            };
-            
-            this.config = {
-                cacheTimeout: 5 * 60 * 1000, // 5 minutos
-                rotationInterval: 60 * 60 * 1000, // 1 hora
-                batchSize: 50
-            };
-            
-            // Guardar instancia singleton
-            apiInstance = this;
-            
-            // Auto-inicializar
-            this.initialize();
+    const missingModules = requiredModules.filter(m => !window[m.name]);
+    
+    if (missingModules.length > 0) {
+        console.warn('⚠️ Módulos faltantes:', missingModules.map(m => m.module));
+        console.log('⏳ Esperando carga de módulos...');
+    }
+})();
+
+// ============================
+// CONTENT API SIMPLIFICADA
+// ============================
+
+const ContentAPI = {
+    // Obtener imágenes públicas
+    getPublicImages(count = 10) {
+        if (!window.FULL_IMAGES_POOL) return [];
+        
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.getRandomItems(window.FULL_IMAGES_POOL, count);
         }
         
-        async initialize() {
-            // Prevenir múltiples inicializaciones
-            if (this.initialized) {
-                console.log('✅ UnifiedContentAPI ya está inicializada');
-                return Promise.resolve(this);
-            }
-            
-            if (this.initializing) {
-                console.log('⏳ UnifiedContentAPI ya se está inicializando, esperando...');
-                return initializationPromise;
-            }
-            
-            this.initializing = true;
-            
-            // Crear promesa de inicialización
-            initializationPromise = new Promise(async (resolve, reject) => {
-                try {
-                    console.log('🔄 Inicializando UnifiedContentAPI...');
-                    
-                    // Verificar dependencias
-                    await this.checkDependencies();
-                    
-                    // Cargar datos iniciales en caché
-                    await this.preloadCache();
-                    
-                    // Configurar rotación automática
-                    this.setupAutoRotation();
-                    
-                    // Marcar como inicializada
-                    this.initialized = true;
-                    this.initializing = false;
-                    
-                    console.log('✅ UnifiedContentAPI inicializada correctamente');
-                    
-                    // Disparar evento
-                    window.dispatchEvent(new CustomEvent('unifiedContentAPIReady', {
-                        detail: { api: this }
-                    }));
-                    
-                    resolve(this);
-                } catch (error) {
-                    console.error('❌ Error inicializando UnifiedContentAPI:', error);
-                    this.initializing = false;
-                    reject(error);
-                }
+        return window.FULL_IMAGES_POOL.slice(0, count);
+    },
+    
+    // Obtener imágenes premium
+    getPremiumImages(count = 10) {
+        const allPremium = [
+            ...(window.PREMIUM_IMAGES_PART1 || []),
+            ...(window.PREMIUM_IMAGES_PART2 || [])
+        ];
+        
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.getRandomItems(allPremium, count);
+        }
+        
+        return allPremium.slice(0, count);
+    },
+    
+    // Obtener videos
+    getVideos(count = 10) {
+        if (!window.PREMIUM_VIDEOS_POOL) return [];
+        
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.getRandomItems(window.PREMIUM_VIDEOS_POOL, count);
+        }
+        
+        return window.PREMIUM_VIDEOS_POOL.slice(0, count);
+    },
+    
+    // Obtener banners
+    getBanners() {
+        if (window.BannerTeaserManager) {
+            return window.BannerTeaserManager.getBanners();
+        }
+        
+        // Fallback: buscar imágenes con 'banner' en el nombre
+        return (window.FULL_IMAGES_POOL || [])
+            .filter(img => img.includes('banner') || img.includes('bik'))
+            .slice(0, 5);
+    },
+    
+    // Obtener teasers
+    getTeasers() {
+        if (window.BannerTeaserManager) {
+            return window.BannerTeaserManager.getTeasers();
+        }
+        
+        // Fallback: buscar imágenes específicas para teasers
+        return (window.FULL_IMAGES_POOL || [])
+            .filter(img => img.includes('teaser') || img.includes('Sin') || img.includes('bikini'))
+            .slice(0, 10);
+    },
+    
+    // Buscar contenido
+    search(query) {
+        const results = {
+            photos: [],
+            videos: []
+        };
+        
+        if (!query) return results;
+        
+        const queryLower = query.toLowerCase();
+        
+        // Buscar en fotos
+        const allPhotos = [
+            ...(window.FULL_IMAGES_POOL || []),
+            ...(window.PREMIUM_IMAGES_PART1 || []),
+            ...(window.PREMIUM_IMAGES_PART2 || [])
+        ];
+        
+        results.photos = allPhotos.filter(img => 
+            img.toLowerCase().includes(queryLower)
+        );
+        
+        // Buscar en videos
+        results.videos = (window.PREMIUM_VIDEOS_POOL || []).filter(video => 
+            video.toLowerCase().includes(queryLower)
+        );
+        
+        return results;
+    },
+    
+    // Obtener estadísticas
+    getStats() {
+        return {
+            total: this.getTotalCount(),
+            public: window.FULL_IMAGES_POOL ? window.FULL_IMAGES_POOL.length : 0,
+            premium: this.getPremiumCount(),
+            videos: window.PREMIUM_VIDEOS_POOL ? window.PREMIUM_VIDEOS_POOL.length : 0
+        };
+    },
+    
+    // Obtener conteo total
+    getTotalCount() {
+        let total = 0;
+        total += window.FULL_IMAGES_POOL ? window.FULL_IMAGES_POOL.length : 0;
+        total += window.PREMIUM_IMAGES_PART1 ? window.PREMIUM_IMAGES_PART1.length : 0;
+        total += window.PREMIUM_IMAGES_PART2 ? window.PREMIUM_IMAGES_PART2.length : 0;
+        total += window.PREMIUM_VIDEOS_POOL ? window.PREMIUM_VIDEOS_POOL.length : 0;
+        return total;
+    },
+    
+    // Obtener conteo premium
+    getPremiumCount() {
+        let count = 0;
+        count += window.PREMIUM_IMAGES_PART1 ? window.PREMIUM_IMAGES_PART1.length : 0;
+        count += window.PREMIUM_IMAGES_PART2 ? window.PREMIUM_IMAGES_PART2.length : 0;
+        return count;
+    },
+    
+    // Rotar contenido
+    rotate() {
+        if (window.BannerTeaserManager) {
+            window.BannerTeaserManager.rotateContent();
+        }
+        
+        // Disparar evento de rotación
+        if (window.EventManager) {
+            window.EventManager.emit('contentRotated', {
+                timestamp: Date.now()
             });
-            
-            return initializationPromise;
         }
         
-        async checkDependencies() {
-            return new Promise((resolve) => {
-                let checkCount = 0;
-                const maxChecks = 50;
-                
-                const checkInterval = setInterval(() => {
-                    // Verificar cada dependencia
-                    this.dependencies.ContentManager = !!(window.ContentManager?.initialized);
-                    this.dependencies.BannerTeaserManager = !!(window.BannerTeaserManager?.initialized);
-                    this.dependencies.PremiumContentPart1 = !!(window.PremiumContentPart1?.initialized);
-                    this.dependencies.PremiumContentPart2 = !!(window.PremiumContentPart2?.initialized);
-                    this.dependencies.VideoContentManager = !!(window.VideoContentManager?.initialized);
-                    
-                    const allLoaded = Object.values(this.dependencies).every(dep => dep === true);
-                    
-                    if (allLoaded) {
-                        clearInterval(checkInterval);
-                        console.log('✅ Todas las dependencias cargadas correctamente');
-                        resolve();
-                    } else if (++checkCount >= maxChecks) {
-                        clearInterval(checkInterval);
-                        console.warn('⚠️ Timeout esperando dependencias, continuando con las disponibles');
-                        console.log('Estado de dependencias:', this.dependencies);
-                        resolve();
-                    }
-                }, 100);
-            });
+        return true;
+    }
+};
+
+// ============================
+// UNIFIED CONTENT API COMPLETA
+// ============================
+
+const UnifiedContentAPI = {
+    // Obtener todas las imágenes públicas
+    getAllPublicImages() {
+        return window.FULL_IMAGES_POOL || [];
+    },
+    
+    // Obtener todas las imágenes premium
+    getAllPremiumImages() {
+        return [
+            ...(window.PREMIUM_IMAGES_PART1 || []),
+            ...(window.PREMIUM_IMAGES_PART2 || [])
+        ];
+    },
+    
+    // Obtener todos los videos
+    getAllVideos() {
+        return window.PREMIUM_VIDEOS_POOL || [];
+    },
+    
+    // Obtener todo el contenido
+    getAllContent() {
+        return {
+            publicImages: this.getAllPublicImages(),
+            premiumImages: this.getAllPremiumImages(),
+            videos: this.getAllVideos()
+        };
+    },
+    
+    // Buscar en todo el contenido
+    searchAll(query) {
+        if (!query) {
+            return this.getAllContent();
         }
         
-        async preloadCache() {
-            console.log('📦 Precargando caché de contenido...');
-            
-            try {
-                // Precargar imágenes públicas
-                if (this.dependencies.ContentManager) {
-                    this.cache.publicImages = this.getAllPublicImages();
-                }
-                
-                // Precargar imágenes premium
-                if (this.dependencies.PremiumContentPart1 || this.dependencies.PremiumContentPart2) {
-                    this.cache.premiumImages = this.getAllPremiumImages();
-                }
-                
-                // Precargar videos
-                if (this.dependencies.VideoContentManager) {
-                    this.cache.videos = window.VideoContentManager.getAllVideos();
-                }
-                
-                // Precargar banners y teasers
-                if (this.dependencies.BannerTeaserManager) {
-                    this.cache.banners = window.BannerTeaserManager.getCurrentBanners();
-                    this.cache.teasers = window.BannerTeaserManager.getCurrentTeasers();
-                }
-                
-                this.cache.lastUpdate = Date.now();
-                
-                console.log('✅ Caché precargado:', {
-                    publicImages: this.cache.publicImages?.length || 0,
-                    premiumImages: this.cache.premiumImages?.length || 0,
-                    videos: this.cache.videos?.length || 0,
-                    banners: this.cache.banners?.length || 0,
-                    teasers: this.cache.teasers?.length || 0
-                });
-            } catch (error) {
-                console.error('❌ Error precargando caché:', error);
-            }
-        }
+        const queryLower = query.toLowerCase();
+        const all = this.getAllContent();
         
-        setupAutoRotation() {
-            // Rotación automática cada hora
-            setInterval(() => {
-                console.log('🔄 Rotación automática de contenido...');
-                this.refreshCache();
-                this.notifyRotation();
-            }, this.config.rotationInterval);
-        }
-        
-        refreshCache() {
-            // Invalidar caché
-            this.cache.lastUpdate = null;
-            
-            // Recargar
-            this.preloadCache();
-        }
-        
-        notifyRotation() {
-            window.dispatchEvent(new CustomEvent('contentRotation', {
-                detail: {
-                    timestamp: Date.now(),
-                    cache: this.cache
-                }
-            }));
-        }
-        
-        // Verificación de inicialización con auto-inicialización
-        ensureInitialized() {
-            if (!this.initialized && !this.initializing) {
-                console.log('⚠️ UnifiedContentAPI no está inicializada. Inicializando...');
-                return this.initialize();
-            }
-            return Promise.resolve(this);
-        }
-        
-        // Métodos para obtener contenido con caché
-        getAllPublicImages() {
-            // Usar caché si está disponible y no ha expirado
-            if (this.cache.publicImages && this.isCacheValid()) {
-                return [...this.cache.publicImages];
-            }
-            
-            let allImages = [];
-            
-            if (window.ContentManager?.publicPhotos) {
-                allImages = [...window.ContentManager.publicPhotos];
-            }
-            
-            // Actualizar caché
-            this.cache.publicImages = allImages;
-            
-            return allImages;
-        }
-        
-        getRandomPublicImages(count = 20) {
-            const allImages = this.getAllPublicImages();
-            return this.shuffleArray([...allImages]).slice(0, count);
-        }
-        
-        getAllPremiumImages() {
-            // Usar caché si está disponible
-            if (this.cache.premiumImages && this.isCacheValid()) {
-                return [...this.cache.premiumImages];
-            }
-            
-            let allPremium = [];
-            
-            if (window.CombinedPremiumContent?.allImages) {
-                allPremium = [...window.CombinedPremiumContent.allImages];
-            } else {
-                if (window.PremiumContentPart1?.images) {
-                    allPremium = [...window.PremiumContentPart1.images];
-                }
-                if (window.PremiumContentPart2?.images) {
-                    allPremium = [...allPremium, ...window.PremiumContentPart2.images];
-                }
-            }
-            
-            // Actualizar caché
-            this.cache.premiumImages = allPremium;
-            
-            return allPremium;
-        }
-        
-        getRandomPremiumImages(count = 30) {
-            const allImages = this.getAllPremiumImages();
-            return this.shuffleArray([...allImages]).slice(0, count);
-        }
-        
-        getCurrentBanners() {
-            if (this.cache.banners && this.isCacheValid()) {
-                return [...this.cache.banners];
-            }
-            
-            const banners = window.BannerTeaserManager?.getCurrentBanners() || [];
-            this.cache.banners = banners;
-            
-            return banners;
-        }
-        
-        getCurrentTeasers() {
-            if (this.cache.teasers && this.isCacheValid()) {
-                return [...this.cache.teasers];
-            }
-            
-            const teasers = window.BannerTeaserManager?.getCurrentTeasers() || [];
-            this.cache.teasers = teasers;
-            
-            return teasers;
-        }
-        
-        searchContent(query, options = {}) {
-            const {
-                type = 'all', // 'public', 'premium', 'videos', 'all'
-                limit = 20,
-                sortBy = 'relevance' // 'relevance', 'date', 'random'
-            } = options;
-            
-            let results = [];
-            const searchTerm = query.toLowerCase();
-            
-            // Buscar en diferentes tipos según el parámetro
-            if (type === 'all' || type === 'public') {
-                const publicImages = this.getAllPublicImages();
-                const publicResults = publicImages.filter(img => 
-                    img.title?.toLowerCase().includes(searchTerm) ||
-                    img.description?.toLowerCase().includes(searchTerm) ||
-                    img.tags?.some(tag => tag.toLowerCase().includes(searchTerm))
-                );
-                results = [...results, ...publicResults];
-            }
-            
-            if (type === 'all' || type === 'premium') {
-                const premiumImages = this.getAllPremiumImages();
-                const premiumResults = premiumImages.filter(img =>
-                    img.title?.toLowerCase().includes(searchTerm) ||
-                    img.description?.toLowerCase().includes(searchTerm)
-                );
-                results = [...results, ...premiumResults];
-            }
-            
-            if (type === 'all' || type === 'videos') {
-                const videos = window.VideoContentManager?.searchVideos(query) || [];
-                results = [...results, ...videos];
-            }
-            
-            // Ordenar resultados
-            if (sortBy === 'random') {
-                results = this.shuffleArray(results);
-            } else if (sortBy === 'date' && results[0]?.date) {
-                results.sort((a, b) => new Date(b.date) - new Date(a.date));
-            }
-            
-            return results.slice(0, limit);
-        }
-        
-        getRandomVideos(count = 5) {
-            const videos = window.VideoContentManager?.getRandomVideos(count) || [];
-            return videos;
-        }
-        
-        getDailyRotation() {
-            // Generar rotación diaria basada en la fecha
-            const today = new Date().toDateString();
-            const seed = this.hashCode(today);
-            
-            return {
-                photos: this.getSeededRandom(this.getAllPublicImages(), 50, seed),
-                videos: this.getSeededRandom(window.VideoContentManager?.getAllVideos() || [], 3, seed + 1),
-                premium: this.getSeededRandom(this.getAllPremiumImages(), 20, seed + 2),
-                banners: this.getCurrentBanners(),
-                teasers: this.getCurrentTeasers()
-            };
-        }
-        
-        getContentStats() {
-            return {
+        return {
+            publicImages: all.publicImages.filter(img => 
+                img.toLowerCase().includes(queryLower)
+            ),
+            premiumImages: all.premiumImages.filter(img => 
+                img.toLowerCase().includes(queryLower)
+            ),
+            videos: all.videos.filter(video => 
+                video.toLowerCase().includes(queryLower)
+            )
+        };
+    },
+    
+    // Obtener estadísticas del sistema
+    getSystemStats() {
+        const stats = {
+            photos: {
                 public: this.getAllPublicImages().length,
                 premium: this.getAllPremiumImages().length,
-                videos: window.VideoContentManager?.getAllVideos()?.length || 0,
-                banners: this.getCurrentBanners().length,
-                teasers: this.getCurrentTeasers().length,
-                total: this.getAllPublicImages().length + 
-                       this.getAllPremiumImages().length + 
-                       (window.VideoContentManager?.getAllVideos()?.length || 0),
-                cacheAge: this.cache.lastUpdate ? 
-                    Date.now() - this.cache.lastUpdate : null,
-                initialized: this.initialized
-            };
-        }
-        
-        // Utilidades
-        isCacheValid() {
-            if (!this.cache.lastUpdate) return false;
-            return (Date.now() - this.cache.lastUpdate) < this.config.cacheTimeout;
-        }
-        
-        shuffleArray(array) {
-            const shuffled = [...array];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                total: 0
+            },
+            videos: {
+                total: this.getAllVideos().length
+            },
+            system: {
+                cacheSize: 0,
+                memoryUsage: 0,
+                loadTime: 0
             }
-            return shuffled;
+        };
+        
+        stats.photos.total = stats.photos.public + stats.photos.premium;
+        
+        // Estadísticas de caché si está disponible
+        if (window.CacheSystem) {
+            stats.system.cacheSize = window.CacheSystem.size();
         }
         
-        hashCode(str) {
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                const char = str.charCodeAt(i);
-                hash = ((hash << 5) - hash) + char;
-                hash = hash & hash;
-            }
-            return Math.abs(hash);
+        // Estimación de uso de memoria
+        if (performance && performance.memory) {
+            stats.system.memoryUsage = Math.round(performance.memory.usedJSHeapSize / 1048576);
         }
         
-        getSeededRandom(array, count, seed) {
-            if (!array || array.length === 0) return [];
-            
-            // Generador de números pseudo-aleatorios con seed
-            const random = (seed) => {
-                const x = Math.sin(seed) * 10000;
-                return x - Math.floor(x);
-            };
-            
-            const shuffled = [...array];
-            let currentSeed = seed;
-            
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                currentSeed++;
-                const j = Math.floor(random(currentSeed) * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-            
-            return shuffled.slice(0, Math.min(count, shuffled.length));
+        // Tiempo de carga
+        if (performance && performance.timing) {
+            stats.system.loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
         }
         
-        // Método para resetear el singleton (útil para testing)
-        static reset() {
-            apiInstance = null;
-            initializationPromise = null;
-            console.log('🔄 Singleton reseteado');
+        return stats;
+    },
+    
+    // Obtener contenido del día
+    getTodaysContent() {
+        const seed = window.TimeUtils ? window.TimeUtils.getDateSeed() : Date.now();
+        
+        // Obtener contenido mezclado con seed del día
+        const publicPhotos = window.ArrayUtils 
+            ? window.ArrayUtils.shuffleWithSeed(this.getAllPublicImages(), seed)
+            : this.getAllPublicImages();
+            
+        const premiumPhotos = window.ArrayUtils
+            ? window.ArrayUtils.shuffleWithSeed(this.getAllPremiumImages(), seed)
+            : this.getAllPremiumImages();
+            
+        const videos = window.ArrayUtils
+            ? window.ArrayUtils.shuffleWithSeed(this.getAllVideos(), seed)
+            : this.getAllVideos();
+        
+        // Configuración de rotación
+        const config = window.ContentConfig?.rotation || {
+            dailyPhotosCount: 200,
+            dailyVideosCount: 40,
+            bannersCount: 5,
+            teasersCount: 10
+        };
+        
+        // Combinar fotos públicas y premium
+        const allPhotos = [];
+        const publicCount = Math.floor(config.dailyPhotosCount * 0.3);
+        const premiumCount = config.dailyPhotosCount - publicCount;
+        
+        allPhotos.push(...publicPhotos.slice(0, publicCount));
+        allPhotos.push(...premiumPhotos.slice(0, premiumCount));
+        
+        // Mezclar fotos finales
+        const finalPhotos = window.ArrayUtils
+            ? window.ArrayUtils.shuffleWithSeed(allPhotos, seed + 1)
+            : allPhotos;
+        
+        return {
+            photos: finalPhotos.slice(0, config.dailyPhotosCount),
+            videos: videos.slice(0, config.dailyVideosCount),
+            banners: ContentAPI.getBanners(),
+            teasers: ContentAPI.getTeasers(),
+            seed: seed,
+            date: new Date()
+        };
+    },
+    
+    // Obtener contenido por página
+    getContentByPage(page = 1, perPage = 30, type = 'all') {
+        let content = [];
+        
+        switch(type) {
+            case 'public':
+                content = this.getAllPublicImages();
+                break;
+            case 'premium':
+                content = this.getAllPremiumImages();
+                break;
+            case 'videos':
+                content = this.getAllVideos();
+                break;
+            case 'all':
+            default:
+                content = [
+                    ...this.getAllPublicImages(),
+                    ...this.getAllPremiumImages()
+                ];
+        }
+        
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.paginate(content, page, perPage);
+        }
+        
+        // Fallback pagination
+        const start = (page - 1) * perPage;
+        const end = start + perPage;
+        
+        return {
+            data: content.slice(start, end),
+            page,
+            perPage,
+            total: content.length,
+            totalPages: Math.ceil(content.length / perPage),
+            hasNext: end < content.length,
+            hasPrev: page > 1
+        };
+    },
+    
+    // Validar contenido
+    validateContent() {
+        const errors = [];
+        const warnings = [];
+        
+        // Verificar pools de contenido
+        if (!window.FULL_IMAGES_POOL || window.FULL_IMAGES_POOL.length === 0) {
+            errors.push('FULL_IMAGES_POOL no está disponible o está vacío');
+        }
+        
+        if (!window.PREMIUM_IMAGES_PART1 || window.PREMIUM_IMAGES_PART1.length === 0) {
+            warnings.push('PREMIUM_IMAGES_PART1 no está disponible o está vacío');
+        }
+        
+        if (!window.PREMIUM_IMAGES_PART2 || window.PREMIUM_IMAGES_PART2.length === 0) {
+            warnings.push('PREMIUM_IMAGES_PART2 no está disponible o está vacío');
+        }
+        
+        if (!window.PREMIUM_VIDEOS_POOL || window.PREMIUM_VIDEOS_POOL.length === 0) {
+            warnings.push('PREMIUM_VIDEOS_POOL no está disponible o está vacío');
+        }
+        
+        // Verificar utilidades
+        if (!window.ArrayUtils) {
+            warnings.push('ArrayUtils no está disponible');
+        }
+        
+        if (!window.TimeUtils) {
+            warnings.push('TimeUtils no está disponible');
+        }
+        
+        return {
+            valid: errors.length === 0,
+            errors,
+            warnings,
+            stats: this.getSystemStats()
+        };
+    },
+    
+    // Precargar contenido
+    preloadContent(urls = []) {
+        const promises = urls.map(url => {
+            return new Promise((resolve, reject) => {
+                if (url.endsWith('.mp4')) {
+                    // Precargar video
+                    const video = document.createElement('video');
+                    video.preload = 'metadata';
+                    video.onloadedmetadata = () => resolve(url);
+                    video.onerror = () => reject(new Error(`Failed to preload video: ${url}`));
+                    video.src = url;
+                } else {
+                    // Precargar imagen
+                    const img = new Image();
+                    img.onload = () => resolve(url);
+                    img.onerror = () => reject(new Error(`Failed to preload image: ${url}`));
+                    img.src = url;
+                }
+            });
+        });
+        
+        return Promise.allSettled(promises);
+    }
+};
+
+// ============================
+// SISTEMA DE ROTACIÓN DIARIA
+// ============================
+
+class DailyRotationSystem {
+    constructor() {
+        this.lastRotation = null;
+        this.currentContent = null;
+        this.initialized = false;
+    }
+    
+    initialize() {
+        if (this.initialized) return;
+        
+        // Cargar última rotación de localStorage
+        if (window.StorageUtils) {
+            this.lastRotation = window.StorageUtils.load('lastRotation');
+        }
+        
+        // Verificar si necesita rotación
+        this.checkRotation();
+        
+        // Programar próxima rotación
+        this.scheduleNextRotation();
+        
+        this.initialized = true;
+        console.log('✅ DailyRotationSystem inicializado');
+    }
+    
+    checkRotation() {
+        const now = new Date();
+        const today = now.toDateString();
+        
+        if (!this.lastRotation || this.lastRotation.date !== today) {
+            this.rotate();
+        } else {
+            this.currentContent = this.lastRotation.content;
         }
     }
     
-    // API simplificada con métodos estáticos
-    window.ContentAPI = {
-        async getPublicImages(count) {
-            await apiInstance?.ensureInitialized();
-            return count ? 
-                apiInstance?.getRandomPublicImages(count) : 
-                apiInstance?.getAllPublicImages();
-        },
+    rotate() {
+        console.log('🔄 Ejecutando rotación diaria...');
         
-        async getPremiumImages(count) {
-            await apiInstance?.ensureInitialized();
-            return count ? 
-                apiInstance?.getRandomPremiumImages(count) : 
-                apiInstance?.getAllPremiumImages();
-        },
+        // Obtener nuevo contenido
+        this.currentContent = UnifiedContentAPI.getTodaysContent();
         
-        async getVideos(count) {
-            await apiInstance?.ensureInitialized();
-            return apiInstance?.getRandomVideos(count);
-        },
+        // Guardar rotación
+        this.lastRotation = {
+            date: new Date().toDateString(),
+            timestamp: Date.now(),
+            content: this.currentContent
+        };
         
-        async getBanners() {
-            await apiInstance?.ensureInitialized();
-            return apiInstance?.getCurrentBanners();
-        },
-        
-        async getTeasers() {
-            await apiInstance?.ensureInitialized();
-            return apiInstance?.getCurrentTeasers();
-        },
-        
-        async search(query, options) {
-            await apiInstance?.ensureInitialized();
-            return apiInstance?.searchContent(query, options);
-        },
-        
-        async getDailyContent() {
-            await apiInstance?.ensureInitialized();
-            return apiInstance?.getDailyRotation();
-        },
-        
-        async getStats() {
-            await apiInstance?.ensureInitialized();
-            return apiInstance?.getContentStats();
-        },
-        
-        getInstance() {
-            return apiInstance;
+        if (window.StorageUtils) {
+            window.StorageUtils.save('lastRotation', this.lastRotation);
         }
+        
+        // Emitir evento
+        if (window.EventManager) {
+            window.EventManager.emit('dailyRotation', this.currentContent);
+        }
+        
+        console.log('✅ Rotación diaria completada');
+    }
+    
+    scheduleNextRotation() {
+        const now = new Date();
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0);
+        
+        const msUntilMidnight = tomorrow - now;
+        
+        setTimeout(() => {
+            this.rotate();
+            this.scheduleNextRotation();
+        }, msUntilMidnight);
+        
+        console.log(`⏰ Próxima rotación en ${Math.floor(msUntilMidnight / 3600000)} horas`);
+    }
+    
+    getCurrentContent() {
+        if (!this.currentContent) {
+            this.checkRotation();
+        }
+        return this.currentContent;
+    }
+    
+    forceRotation() {
+        this.rotate();
+        return this.currentContent;
+    }
+}
+
+// ============================
+// INICIALIZACIÓN Y EXPORTACIÓN
+// ============================
+
+// Crear instancia del sistema de rotación
+const globalRotationSystem = new DailyRotationSystem();
+
+// Exponer APIs globales
+window.ContentAPI = ContentAPI;
+window.UnifiedContentAPI = UnifiedContentAPI;
+window.DailyRotationSystem = globalRotationSystem;
+
+// Inicializar cuando el DOM esté listo
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        globalRotationSystem.initialize();
+    });
+} else {
+    globalRotationSystem.initialize();
+}
+
+// Funciones helper para compatibilidad
+window.getContentAPI = () => ContentAPI;
+window.getUnifiedAPI = () => UnifiedContentAPI;
+window.getDailyContent = () => globalRotationSystem.getCurrentContent();
+window.forceRotation = () => globalRotationSystem.forceRotation();
+
+// Log de inicialización
+console.log('📦 content-data6.js v4.1.0 FIXED loaded');
+console.log('   - ContentAPI disponible');
+console.log('   - UnifiedContentAPI disponible');
+console.log('   - DailyRotationSystem inicializado');
+
+// Validar contenido en modo debug
+if (window.ContentConfig?.debug) {
+    const validation = UnifiedContentAPI.validateContent();
+    
+    if (validation.errors.length > 0) {
+        console.error('❌ Errores de validación:', validation.errors);
+    }
+    
+    if (validation.warnings.length > 0) {
+        console.warn('⚠️ Advertencias:', validation.warnings);
+    }
+    
+    console.log('📊 Estadísticas del sistema:', validation.stats);
+}
+
+// Exportar para módulos ES6 si es necesario
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        ContentAPI,
+        UnifiedContentAPI,
+        DailyRotationSystem: globalRotationSystem
     };
-    
-    // Crear instancia única (singleton)
-    window.UnifiedContentAPI = new UnifiedContentAPI();
-    
-    console.log('📦 content-data6.js cargado - API unificada con Singleton disponible');
-    console.log('🎯 Usar window.ContentAPI para acceso simplificado');
-    console.log('🔧 Usar window.UnifiedContentAPI para acceso completo');
-    
-})();
+}
