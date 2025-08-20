@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # BeachGirl.pics - Clean Repository
 # Node modules (if any)
 node_modules/
@@ -27,11 +28,29 @@ content-data*.js
 .gitconfig
 .vscode/
 .idea/
+=======
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+>>>>>>> 2605afd1078c28a88b0c9f9589a5dea632e8c75e
 
 # Logs
 *.log
 logs/
 
+<<<<<<< HEAD
 # Runtime data
 pids/
 *.pid
@@ -55,3 +74,26 @@ jspm_packages/
 
 # Yarn Integrity file
 .yarn-integrity
+=======
+# Temporary files
+tmp/
+temp/
+
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build outputs
+dist/
+build/
+
+# Emergent system files (should not be in repo)
+.emergent/
+.emergent*
+
+# Server logs
+server*.log
+*.log
+>>>>>>> 2605afd1078c28a88b0c9f9589a5dea632e8c75e

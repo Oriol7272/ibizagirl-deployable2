@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+<<<<<<< HEAD
 
 # BeachGirl.pics - Premium Beach Content
 # Only for adults 18+
@@ -22,3 +23,21 @@ Allow: /decorative-images/
 
 # Search engine optimization
 Crawl-delay: 1
+=======
+Allow: /age-verification.html
+Allow: /gallery.html
+Allow: /premium.html
+Allow: /videos.html
+Allow: /subscription.html
+
+# Disallow sensitive content for crawlers
+Disallow: /uncensored/
+Disallow: /uncensored-videos/
+
+# Allow ad verification files
+Allow: /f67a56f266e834d596c42122f88bb88d.html
+Allow: /97ce8adfbeb6e153ef4ebf2566dfeb7d.html
+Allow: /eroads__5f8afe77e5b70fec960d89b314e045a4.html
+
+Sitemap: https://ibizagirl.pics/sitemap.xml
+>>>>>>> 2605afd1078c28a88b0c9f9589a5dea632e8c75e
