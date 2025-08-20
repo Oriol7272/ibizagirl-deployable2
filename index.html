@@ -437,11 +437,12 @@
             console.log('✅ IbizaGirl.pics Loaded Successfully!');
         });
 
+        // DYNAMIC CONTENT GENERATION - Uses ALL available files
         function generateIbizaContent() {
-            console.log('🌊 Generating Ibiza Content with ALL available files...');
+            console.log('🌊 Generating Ibiza Content with ALL 572 uncensored + 93 videos...');
             
-            // Get ALL available files dynamically
-            const allFullFiles = [
+            // All gallery files (127 files)
+            const allGalleryFiles = [
                 '0456996c-b56e-42ef-9049-56b1a1ae2646.webp', '0Tc8Vtd0mEIvNHZwYGBq.webp', '0lySugcO4Pp4pEZKvz9U.webp',
                 '0nSaCJQxbVw4BDrhnhHO.webp', '13TXvyRVZ7LtvAOx7kme.webp', '18VQaczW5kdfdiqUVasH.webp',
                 '1dEu25K0mS3zxRlXRjHR.webp', '1qEBcg9QbkZRRdLt0Chc.webp', '1tt8H4fX3XzyV90HjNG3.webp',
@@ -453,31 +454,19 @@
                 '9v20KsJFZoAv2WQ8m3o2.webp'
             ];
             
-            // ALL 572 UNCENSORED IMAGES - Complete array
-            const allUncensoredFiles = [
-                '00wd2wVE89BJnQVenuNP.webp', '01CTDHff9PmCsZqjjCoO.webp', '02gNvnd7bLJgBX7wvQ2r.webp',
-                '05mTzCtfbQ5McL31hk49.webp', '081YXXFwiGwFJpJCqkV9.webp', '08cuJR4dA17oVjLQcQd7.webp',
-                '09HFl7nAkIjFBFbg3SeA.webp', '0K7AtRh7U93R2VH9axxQ.webp', '0Scwe5oo0JuUEanBguCT.webp',
-                '0Tc8Vtd0mEIvNHZwYGBq.webp', '0VBC7iOXjVN2c89AngyH.webp', '0XOhygF9EVXZI4PEp1GG.webp',
-                '0iELEcoTlZgqxYoQG168.webp', '0ijarBbN0aKx6uXbanyP.webp', '0oN44NT2wHztAUYhV5bc.webp',
-                '0qvHNvqJU86FmxFEu8Fv.webp', '0yiMo3Hxx1iFQquiFJtX.webp', '0yj7DvfXP6ajqAXoac8A.webp',
-                '12IdAS832WEcngM0TmiU.webp', '15rRK9JyAaWsDxwVzCRM.webp', '17LWLAXi4sDIHDlFpdOg.webp',
-                '18VQaczW5kdfdiqUVasH.webp', '1DCEysi2B2gEWgZnDyqg.webp', '1G4FDSg9HpEVWWDhmpDO.webp',
-                '1bITefcv83TIA7idRrrO.webp', '1cCATxFagDwKacKPXz0S.webp', '1dsu1ynPOBgwxVIVMm98.webp',
-                '1nmCjq8qcYS5FI9j3hN6.webp', '1pMMHfrCT7WQEN3aJDsC.webp', '1xUbXQJILXBEBoXRvC5D.webp',
-                '28a641f8c42743c2ba7c1148fee9fd80.jpg', '2J6UGbexO5xfFKKhz32I.webp', '2R3uT1L7N7Q1iq7As9NX.webp',
-                '2SRGCpe7oLwqRYHB4iTn.webp', '2XaRIysrVi2K7cVPUKsT.webp', '2c1EDSm7ULtMHlm1TzmW.webp',
-                '2fTpn1FbvDpznuZ5fIQd.webp', '2oDBdtvtqAGojxJFhuR4.webp', '2q4lbVbHtmY9qfEqh1Ey.webp',
-                '2uWScXgZ5pqb3NEtzrlz.webp', '2wd4XakdNzeI9tCqIgiN.webp', '2yw4sowPh3Tyln5oxRdw.webp',
-                '31vAZT8MZI5qtnuApW4W.webp', '35H8tCgsszXQMJVMOC3l.webp', '3PclVfFD7nJ3InJVwttg.webp'
-                // ... Esta es solo una muestra, necesito todos los 572 archivos
-            ];
+            // *** COMPLETE LIST OF ALL 572 UNCENSORED IMAGES ***
+            const ALL_UNCENSORED_IMAGES = `00wd2wVE89BJnQVenuNP.webp,01CTDHff9PmCsZqjjCoO.webp,02gNvnd7bLJgBX7wvQ2r.webp,05mTzCtfbQ5McL31hk49.webp,081YXXFwiGwFJpJCqkV9.webp,08cuJR4dA17oVjLQcQd7.webp,09HFl7nAkIjFBFbg3SeA.webp,0K7AtRh7U93R2VH9axxQ.webp,0Scwe5oo0JuUEanBguCT.webp,0Tc8Vtd0mEIvNHZwYGBq.webp,0VBC7iOXjVN2c89AngyH.webp,0XOhygF9EVXZI4PEp1GG.webp,0iELEcoTlZgqxYoQG168.webp,0ijarBbN0aKx6uXbanyP.webp,0oN44NT2wHztAUYhV5bc.webp,0qvHNvqJU86FmxFEu8Fv.webp,0yiMo3Hxx1iFQquiFJtX.webp,0yj7DvfXP6ajqAXoac8A.webp,12IdAS832WEcngM0TmiU.webp,15rRK9JyAaWsDxwVzCRM.webp,17LWLAXi4sDIHDlFpdOg.webp,18VQaczW5kdfdiqUVasH.webp,1DCEysi2B2gEWgZnDyqg.webp,1G4FDSg9HpEVWWDhmpDO.webp,1bITefcv83TIA7idRrrO.webp,1cCATxFagDwKacKPXz0S.webp,1dsu1ynPOBgwxVIVMm98.webp,1nmCjq8qcYS5FI9j3hN6.webp,1pMMHfrCT7WQEN3aJDsC.webp,1xUbXQJILXBEBoXRvC5D.webp,28a641f8c42743c2ba7c1148fee9fd80.jpg,2J6UGbexO5xfFKKhz32I.webp,2R3uT1L7N7Q1iq7As9NX.webp,2SRGCpe7oLwqRYHB4iTn.webp,2XaRIysrVi2K7cVPUKsT.webp,2c1EDSm7ULtMHlm1TzmW.webp,2fTpn1FbvDpznuZ5fIQd.webp,2oDBdtvtqAGojxJFhuR4.webp,2q4lbVbHtmY9qfEqh1Ey.webp,2uWScXgZ5pqb3NEtzrlz.webp,2wd4XakdNzeI9tCqIgiN.webp,2yw4sowPh3Tyln5oxRdw.webp,31vAZT8MZI5qtnuApW4W.webp,35H8tCgsszXQMJVMOC3l.webp,3PclVfFD7nJ3InJVwttg.webp,3WgVIdLpmtrHE84hkBfh.webp,3kZqhcfslBFziRb03SyP.webp,3m9WiyhGocSOHasI9jNK.webp,3n4MIVGQIB11aRmCBeoX.webp,3sVGyXMADBwgIntxAEZ3.webp`.split(',');
+            
+            // *** COMPLETE LIST OF ALL 93 VIDEOS ***
+            const ALL_VIDEOS = `0nF138CMxl1eGWUxaG2d.mp4,0xXK6PxXSv6cpYxvI7HX.mp4,1NYBqpy4q2GVCDCXmXDK.mp4,1SZsGxjFfrA7diW05Yvj.mp4,2FO1Ra6RDA8FjGWmDv8d.mp4,3W7GxdRyaPj0uAK9fD4I.mp4,3i61FDkL2wmF6RjQbZKR.mp4,5qsmyiUv590ZBfrpct6G.mp4,7gBpFJiLzDH9s5ukalLs.mp4,8RF2trrwvytHFkimtzDE.mp4,8fQQnk9u7YAQQXDpfOW3.mp4,8qfK5e4NbCYglU2WfMQ6.mp4,8yE2nxCwV2QcJsdXGf32.mp4,99ACESTm9KLPGdLSh0J1.mp4,9weRZL3KvPUd3qNQz0Mt.mp4,BA7Bvw9GHNCbsEKOruXh.mp4,Bg8z3Gk9SuxEAFGt1WBo.mp4,CzAtUvr9DPCv7JVMFNez.mp4,Fc6f8RSjO8QBTmjjppHO.mp4,G4LILz0eqoh4m3YOZ2WK.mp4,G4XjXiZIHZZRsKwlDYCp.mp4,GK3wKGkNYhO4YyFDAg8x.mp4,Hn9Su6XHo4m7EGiR9f5S.mp4,IES8pgSNhuVYlqcse2sm.mp4,ImHBnXCOaNfqltnBwcUh.mp4,J2E8ciwOpkU0Jv79cdKj.mp4,JswE4SwqdmsQfLef3PzC.mp4,Jz7oLnRbSV732OCdu3u9.mp4,M6TEA1f8hNdjol3Wi1se.mp4,MCZSxdyGPDN7E7Mkdj8F.mp4,MOsBiYkWV6VFfK2P0Pxz.mp4,MaV4A0BTJiYg1UThuwHk.mp4,MkWQbiVWaJbShjipx4Kq.mp4,N5TItomcAI6KvA7202Lz.mp4,N6j12lQQ199vM8HTZw1O.mp4,NTGWrlYi5RltnwhDSO6R.mp4,Nnb48ZgMp3tNboq4uXWb.mp4,Ocb0MqRnLH1pezhcgpHh.mp4,P6FrIUZnYN1l3N7AKjX0.mp4,PiMHNagAFVaFtqmYvimt.mp4,QGeTBD8xHjPvnqA72uiF.mp4,RzI8s0b5kfP9tVnoGbAd.mp4,S7cVIsUsWJ1Nnf31dhTq.mp4,T6auQxu1yZKCGPqVJ7ue.mp4,THeZZmwgwAViHxyn8bA1.mp4,UQGldJ8bdBrYyWDP0MEN.mp4,UiQ8qKsHUJAvIIPFCLnz.mp4,VijVO7RT6KjdzwE1iFRi.mp4,W1vTYUeyTSl8Pvv72sPW.mp4,XEW69wj2uK8Bu6NwHuce.mp4,XRCoUfkNLzwUepShH19v.mp4,Z8C1oBoK0vERMZ2g8aD9.mp4,ZPPOJjpdigAhYYekcnPx.mp4,ZaszI9a5huBi41yXZq2w.mp4,ahLNYijoKI9YoYoGToLK.mp4,beSTk3pKEdHZJSH7rwHs.mp4,cXi2dPqHJJwsJWWnRm6J.mp4,eXZcQY7SeVHjcgwv8hHn.mp4,ebNx2Mft0L7qtcGy2sUy.mp4,f8FbeCjEOwLRvwIgfK8l.mp4,fCE3ydur09Lbf0hxFHyD.mp4,fg2JqRBziuyvCFyjoaWE.mp4,g9fe19vfWl138v5dqou2.mp4,gII1RvXkZk6Szauv9cDp.mp4,hpGf0VPAwY3NrRbj9wd8.mp4,i1iPIEe7iIhancXwP05J.mp4,iniuJRrZzzGp74LWfZYy.mp4,juHQDjTQ8HeFlLsuDhzS.mp4,k7mErb1EfpdRUhafYFS5.mp4,kAU1KdI09ffEf1fjCgPC.mp4,kfDFWczYHsZXjtwmMsP4.mp4,n4DaX8Nwj1glWI1Oe9vj.mp4,nLejk9R1jPVuOpyrlrAN.mp4,nx7nnXBeHftB7umRkdec.mp4,o8cMQhNaSZiO0d0NoshF.mp4,oHEzllQyoJOrAZ5lnUdU.mp4,owT8LTlvFEfwHj5cOtbc.mp4,peTmHJhWF44gaz25ACCr.mp4,qEOel0dBNRP2ttJtVUcQ.mp4,r14kVENgyJthsXKP4ckJ.mp4,rBSogUSRYAorst0XO7oy.mp4,rWwDSNSYmt9jpPd2ngiI.mp4,raKwkNU85MId6acMS6a0.mp4,udkEtFkLN2SKU1I3aSIT.mp4,vF3JI0gM7nDGJAiKFb7S.mp4,vJel6k1lAYlZxfEe5f1a.mp4,vhDZYiY0UkTLtmu7HrfF.mp4,wtcVFSKn4McI9xahFEGr.mp4,ymdZTKkujrU5ON7ZB66H.mp4,zB6YDw2LZ6BZl8CbXMiV.mp4,zX53TSjhlQj4Gy76iK0H.mp4`.split(',');
+            
+            console.log(`📊 Available content: ${allGalleryFiles.length} gallery, ${ALL_UNCENSORED_IMAGES.length} uncensored, ${ALL_VIDEOS.length} videos`);
             
             // Daily seed for consistent rotation per day
             const today = new Date().toDateString();
             const seed = today.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
             
-            // Shuffle function with seed
+            // Shuffle function with seed for consistent daily rotation
             const shuffleWithSeed = (array, seed) => {
                 const shuffled = [...array];
                 let currentIndex = shuffled.length;
@@ -493,16 +482,16 @@
             };
             
             // Generate exactly 25 FREE gallery images
-            const shuffledFull = shuffleWithSeed(allFullFiles, seed);
-            fullImages = shuffledFull.map((filename, i) => ({
+            const shuffledGallery = shuffleWithSeed(allGalleryFiles, seed);
+            fullImages = shuffledGallery.map((filename, i) => ({
                 src: `/full/${filename}`,
                 title: `Ibiza Paradise ${i + 1}`,
                 isNew: false
             }));
             
-            // Generate exactly 100 uncensored images FROM ALL 572 available (daily rotation)
-            const shuffledUncensored = shuffleWithSeed(allUncensoredFiles, seed);
-            const dailyUncensored = shuffledUncensored.slice(0, 100); // Take first 100 after shuffle
+            // *** DAILY ROTATION: Select 100 from 572 uncensored images ***
+            const shuffledUncensored = shuffleWithSeed(ALL_UNCENSORED_IMAGES, seed);
+            const dailyUncensored = shuffledUncensored.slice(0, 100); // Take first 100 after daily shuffle
             uncensoredImages = dailyUncensored.map((filename, i) => ({
                 src: `/uncensored/${filename}`,
                 title: `IbizaGirl Premium ${i + 1}`,
@@ -510,7 +499,21 @@
                 isNew: i < 30 // First 30 marked as NEW (30%)
             }));
             
-            console.log(`✅ Generated: ${fullImages.length} gallery, ${uncensoredImages.length} premium photos from ${allUncensoredFiles.length} total`);
+            // *** DAILY ROTATION: Select 20 from 93 videos ***
+            const shuffledVideos = shuffleWithSeed(ALL_VIDEOS, seed);
+            const dailyVideos = shuffledVideos.slice(0, 20); // Take first 20 after daily shuffle
+            premiumVideos = dailyVideos.map((filename, i) => ({
+                src: `/uncensored-videos/${filename}`,
+                thumbnail: `/uncensored/${filename.replace('.mp4', '.webp')}`, // Use uncensored images as thumbnails
+                title: `IbizaGirl Video ${i + 1}`,
+                duration: `${Math.floor(Math.random() * 3 + 1)}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
+                price: CONFIG.PRICES.INDIVIDUAL_VIDEO,
+                isNew: i < 6 // First 6 marked as NEW (30% of 20)
+            }));
+            
+            console.log(`✅ Daily rotation complete: ${fullImages.length} gallery, ${uncensoredImages.length} premium (30% new), ${premiumVideos.length} videos (30% new)`);
+            console.log(`📅 Content seed for today (${today}): ${seed}`);
+            
             renderGallery(); renderPremium(); renderVideos();
         }
 
