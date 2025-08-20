@@ -2812,22 +2812,7 @@
         });
         
         window.addEventListener('load', function() { 
-            console.log('⚡ IbizaGirl.pics cargado completamente en', performance.now(), 'ms'); 
-=======
-                        console.log('✅ Bundle payment successful:', details);
-                        
-                        // Unlock 10 random premium images
-                        unlockBundleContent(type, 10);
-                        
-                        // Track purchase
-                        trackPayment(amount, description);
-                        gtag('event', 'purchase_bundle', {
-                            event_category: 'Premium',
-                            event_label: description,
-                            value: parseFloat(amount)
-                        });
-                        
-                        showSuccessMessage('¡Paquete comprado! 10 fotos desbloqueadas.');
+            console.log('⚡ IbizaGirl.pics cargado completamente en', performance.now(), 'ms');
                         button.innerHTML = '✅ Paquete Comprado';
                         button.style.background = '#28a745';
                         button.disabled = true;
