@@ -1,74 +1,66 @@
 <analysis>
-The previous AI engineer's work involved a complex, iterative process to migrate and stabilize a static website, initially , then primarily . Key challenges included fixing pervasive JavaScript errors (SyntaxError, TypeError), PayPal integration issues, and errors with multiple ad networks (JuicyAds, ExoClick, Ero-Advertising). A significant and recurring problem was the inability to reliably synchronize changes to GitHub, which often led to repository corruption or loss of recent modifications, forcing the AI to manually provide code snippets and repeatedly reconfigure Git. Despite fixing critical functionality like content generation, image paths, and PayPal, and ensuring proper branding and performance for BeachGirl.pics, the persistent Git sync issues and the unintended deletion of critical content-data files led to user frustration. The final decision, driven by user feedback, was to pivot to perfecting the  repository first, then porting the stable changes to , acknowledging the inefficiency of previous attempts.
+The previous AI engineer's trajectory was characterized by iterative attempts to stabilize and perfect a static website, primarily  (after an initial pivot from ). A persistent challenge was severe GitHub synchronization issues, manifesting as frequent merge conflicts, revertions, and the inability to push changes, forcing manual code transfers and leading to recurring syntax errors () due to unmerged Git conflict markers in .
+
+Despite initial successful rebranding from BeachGirl.pics to IbizaGirl.pics and verification of core UI elements, the AI repeatedly struggled with critical backend integrations and content management. A major misstep was the AI's failure to recognize and utilize existing  files, leading it to generate redundant or incomplete content arrays directly within . This resulted in user frustration regarding wasted time and credits.
+
+Further debugging revealed PayPal was in demo mode, ads were disabled, and content counts (uncensored images, videos) were incorrect. The AI implemented fixes for these, including live PayPal integration, enabling all ad networks (JuicyAds, ExoClick, EroAdvertising, PopAds), and adjusting content logic to simulate rotation from full pools. However, the user's ultimate dissatisfaction stemmed from the recurring Git conflicts and the AI's fundamental misunderstanding of the  files. The trajectory concludes with the user resetting the task, explicitly providing a last working GitHub repo for  and a clear, re-stated list of requirements. The AI performed a hard reset to this remote repository, ready to restart development.
 </analysis>
 
 <product_requirements>
-The user requires two static websites, IbizaGirl.pics and BeachGirl.pics, to sell images and videos. Content is tiered: full (free, randomized daily), uncensored (paid, 100 photos), and uncensored-videos (paid, 40 videos), with 30% marked NEW daily. Monetization is via PayPal for one-time purchases, monthly (€19.99), and lifetime (€100) subscriptions, disabling credit/debit. Multiple ad networks (JuicyAds, ExoClick, Ero-Advertising, PopAds) must integrate correctly. UI/UX elements include blurred premium thumbnails, an Isabella AI assistant, multi-language support (Spanish, English, French, German, Italian), a tropical-themed age verification, and a hero banner with Caveat and Dancing Script fonts (later changed to Great Vibes). Google Analytics, SEO (, ), and PWA support are needed. A Premium VIP tier for ad-free access is also required. A Twitter bot for promotion was previously fixed. The primary evolving goal was to debug and stabilize , then clone and adapt it for  with unique branding, ad IDs, ensuring a functional, error-free frontend, especially for PayPal and ad integrations, and to resolve GitHub synchronization issues. The latest request is to perfect  first, then copy the functional state to .
+The application consists of two static websites, IbizaGirl.pics and BeachGirl.pics, designed to sell premium images and videos. Content is structured into full (free, daily randomized), uncensored (paid, ~100 photos), and uncensored-videos (paid, ~40 videos), with 30% of paid content marked NEW daily. Monetization is via PayPal, supporting one-time purchases and monthly/lifetime subscriptions (€19.99/month, €100/lifetime), with credit/debit options disabled. Multiple ad networks (JuicyAds, ExoClick, Ero-Advertising, PopAds) must be integrated. The UI/UX requires blurred premium thumbnails, an Isabella AI chatbot, multi-language support (Spanish, English, French, German, Italian), a tropical-themed age verification, and a hero banner using Great Vibes font. Essential features include Google Analytics, SEO (robots.txt, sitemap.xml), and PWA support. A Premium VIP tier for ad-free access is also required. A Twitter bot for promotion was previously addressed. The overarching goal is to perfect  first, ensuring all features are functional and error-free (PayPal, all ads, correct content galleries/rotation, chatbot, languages, performance), and then adapt this stable version for , resolving persistent GitHub synchronization issues. The current immediate focus is to build  from its last more or less working GitHub state.
 </product_requirements>
 
 <key_technical_concepts>
--   **Static Site Development**: HTML5, CSS3, Vanilla JavaScript for client-side logic and content rendering.
--   **Third-Party Integrations**: PayPal SDK for payments, various ad networks (JuicyAds, ExoClick, Ero-Advertising), Twitter API for promotion.
--   **Deployment & SEO**: GitHub for version control, Vercel for hosting, PWA (Service Worker, Manifest), , .
--   **Frontend Debugging**: Troubleshooting JavaScript errors (SyntaxError, TypeError), network errors (400, 404), asynchronous script loading, and performance optimization (lazy loading, smooth scrolling).
--   **Version Control**: Manual Git repository management, addressing recurrent Git corruption and synchronization issues.
+-   **Static Site Development**: HTML5, CSS3, Vanilla JavaScript for client-side rendering.
+-   **Third-Party Integrations**: PayPal SDK for payments, multiple ad networks (JuicyAds, ExoClick, Ero-Advertising, PopAds).
+-   **Deployment & Version Control**: GitHub for source control, troubleshooting Git conflicts (merge markers, unrelated histories).
+-   **Content Management**: Dynamic content loading (or simulation), daily rotation logic based on seed.
+-   **UI/UX**: Modals, image/video galleries, lazy loading, smooth scrolling, multilingual support.
 </key_technical_concepts>
 
 <code_architecture>
-The application is a single-page static website comprising HTML, CSS, and JavaScript files, served directly from the client side.
+The application is a single-page static website primarily built with HTML, CSS, and JavaScript. The architecture relies heavily on  for both structure and most of the application's logic.
 
 
 
--   **index.html**: The core application entry point.
-    -   **Importance**: Contains the main structure, all JavaScript logic for content rendering, PayPal integration, ad loading, language switching, chatbot, and modals.
-    -   **Changes**: Received extensive modifications for BeachGirl.pics branding (titles, meta, URLs, footer), integrated ad networks (JuicyAds, ExoClick, Ero-Advertising) with error handling, updated PayPal Client ID to , dynamically generates image/video content paths, implements lazy loading, smooth scrolling, and content rotation logic. The font for the hero banner was changed to Great Vibes.
--   **styles.css**: Global CSS.
-    -   **Importance**: Defines the visual theme and responsiveness.
-    -   **Changes**: Adapted for a tropical BeachGirl theme, new fonts (including Great Vibes), color schemes, responsive adjustments, and styles for lazy loading and smooth scrolling.
--   **content-data*.js**: Files intended to hold content arrays.
-    -   **Importance**: Crucial for defining the paths to multimedia content (images and videos).
-    -   **Changes**: Initially considered placeholder, then confirmed to be important for multimedia file names by the user. The  logic was adjusted to use specific counts (100 uncensored images, 40 videos) and generate paths based on assumptions like  and actual files found in , , .
--   **age-verification.html, premium.html, videos.html, subscription.html**: Auxiliary static pages.
-    -   **Importance**: Provide specific sections for age gating, premium content, video content, and subscription options.
-    -   **Changes**:  was created/themed. Content unlocking and PayPal SDK interactions are primarily handled within .
--   **manifest.json & service-worker.js**: PWA support files.
-    -   **Importance**: Enable Progressive Web App features like offline access and installability.
-    -   **Changes**: Created and linked in , branded for BeachGirl.
--   **robots.txt & sitemap.xml**: SEO files.
-    -   **Importance**: Guide search engine crawlers for optimal indexing.
-    -   **Changes**: Created and adapted for BeachGirl.
--   **f67a56f266e834d596c42122f88bb88d.html, 97ce8adfbeb6e153ef4ebf2566dfeb7d.html, eroads__5f8afe77e5b70fec960d89b314e045a4.html, 8179717.html**: Ad network verification files.
-    -   **Importance**: Essential for ad network integration and verification.
-    -   **Changes**: Updated with correct ad network verification codes;  created specifically for BeachGirl.pics.
--   **favicon.ico**: Site icon.
-    -   **Importance**: Site branding in browser tabs.
-    -   **Changes**: Created/re-created to resolve 404s and update to a beach theme.
--   **twitter-bot-ibiza/ (directory)**: Contains the Twitter bot.
-    -   **Importance**: Automates content promotion on Twitter.
-    -   **Changes**:  was replaced by fixed versions (, ) to address rate limiting, image paths, error handling, and API token issues. While initially for IbizaGirl, its presence became a point of contention during BeachGirl.pics GitHub cleanup.
--   **Temporary/Generated Files**: Various HTML and TXT files (e.g., , , ) were created by the AI engineer to facilitate manual content transfer due to persistent Git issues.  was a staging directory for a clean GitHub upload attempt. Many of these temporary files caused clutter in the GitHub repository.
+-   **index.html**: The primary entry point.
+    -   **Importance**: Contains the main page structure, content rendering logic, PayPal integration, ad loading, language switching, chatbot, and modals.
+    -   **Changes**: Has undergone extensive modifications for IbizaGirl.pics branding (titles, meta, URLs, footer), integrated ad networks (JuicyAds, ExoClick, Ero-Advertising, PopAds) with real loading (not placeholders), updated PayPal Client ID to  for live mode, and dynamically generates image/video content paths. The previous AI attempted to manage content arrays directly within this file or create new  files, leading to conflicts and errors. It has also been recently cleaned of Git merge conflict markers (, , ).
+-   **styles.css**: Global CSS for styling and responsiveness.
+    -   **Importance**: Defines the visual theme.
+    -   **Changes**: Adapted for IbizaGirl theme, fonts, color schemes, and responsive adjustments.
+-   **content-data*.js**: Files intended to hold multimedia content arrays (paths to images/videos).
+    -   **Importance**: Critical for defining the paths to multimedia content. The user has repeatedly emphasized their importance and that the arrays *already exist* within these files.
+    -   **Changes**: The previous AI engineer initially failed to use these existing files, attempting to recreate content arrays in  or new  files. The latest state, after the HEAD is now at a8309c0 Initial commit, should reflect the version of these files from the  GitHub repository.
+-   **uncensored/, uncensored-videos/, full/**: Directories containing the actual multimedia files (webp, mp4).
+    -   **Importance**: Store the primary content for the site. The site's logic must correctly reference files within these directories.
+-   **8179717.html, f67a56f266e834d596c42122f88bb88d.html, 97ce8adfbeb6e153ef4ebf2566dfeb7d.html, eroads__5f8afe77e5b70fec960d89b314e045a4.html**: Ad network verification files.
+    -   **Importance**: Essential for ad network integration and verification.  was corrected from BeachGirl to IbizaGirl.
+-   **twitter-bot-ibiza/ (directory)**: Contains the Twitter bot logic.
+    -   **Importance**: Automates content promotion. While not directly part of the website, its presence and historical issues with GitHub cleanup are noted.
+
+The core of the application resides in  and its reliance on the content paths defined within the  files, coupled with JavaScript for interactive elements, payments, and ads.
 </code_architecture>
 
 <pending_tasks>
--   Switch to  repository.
--   Completely perfect the  site, ensuring all features (PayPal, ads, chatbot, galleries, languages, performance) are fully functional.
--   Once  is perfected, clone and adapt its complete and verified state to , applying specific branding changes for BeachGirl.pics.
+-   Completely rebuild and debug  starting from the  repository.
+-   Ensure 20  images rotate randomly daily/per page load.
+-   Ensure 100  images rotate randomly daily/per page load from the total pool, with 30% marked NEW.
+-   Ensure 20  rotate randomly daily/per page load from the total pool, with 30% marked NEW.
+-   Implement PayPal LIVE functionality with smaller price icons on each thumbnail, supporting monthly, annual, and lifetime subscriptions.
+-   Ensure all four ad networks (Exoclick, JuicyAds, EroAdvertising, PopAds) are fully functional and loading.
+-   Verify the chatbot is working correctly.
+-   Delete old or unnecessary files from the repository.
 </pending_tasks>
 
 <current_work>
-Immediately prior to this summary, the AI engineer was attempting to finalize the  website and resolve critical GitHub synchronization issues. After a Save to GitHub operation resulted in a reverted, incomplete version of  on the live site () and the GitHub repository, the AI identified missing features (galleries, Isabella, languages, PayPal buttons, ads) and numerous 404 errors for image assets, along with PayPal  errors.
+Immediately prior to this summary, the previous AI engineer was battling persistent Git synchronization issues (force push/create branch options appearing instead of a standard push) and critical JavaScript syntax errors caused by unmerged Git conflict markers (, , ) within . The user expressed extreme frustration, highlighting that the AI had wasted time by failing to utilize the existing  files for multimedia content arrays and by introducing code that broke the site or didn't meet requirements.
 
-The AI then performed a series of fixes:
-1.  **File Path Correction**: Identified existing image/video files in , ,  and updated  to use these correct paths.
-2.  **PayPal Fixes**: Updated the PayPal client ID to a valid test ID and simplified the  function to resolve initialization errors.
-3.  **Ad Error Handling**: Improved error handling for ad network scripts.
-4.  **Verification**: Took screenshots and confirmed the site was visually correct, images were loading, and core functionalities (banner, navigation, language selector, chatbot, PayPal in demo mode) appeared functional.
-5.  **GitHub Cleanup Attempt**: Upon user request, attempted to remove unnecessary files (e.g., ,  files, old temporary  versions) and update . This local cleanup, however, did not reflect on GitHub due to persistent synchronization challenges.
+The AI successfully removed all identified Git conflict markers from , which should resolve the  issues. However, the user then provided a ZIP archive of what they claimed was the last working repo and, in a critical directive, instructed the AI to completely abandon the current local state and instead pull from the  GitHub repository and fix it from there.
 
-The user then expressed significant frustration, noting that  files (which the AI had previously considered unnecessary and deleted during cleanup attempts) are critical for multimedia content. The user highlighted that ads, paid galleries, and other improvements were still missing or broken after a Save to GitHub and proposed a new strategy: perfect  (repo ) first, then copy the perfected state to . The AI agreed with this pivot, recognizing the inefficiency of the current approach.
+The AI subsequently performed a  and HEAD is now at ef78642 Add files via upload to synchronize its local environment with the  branch of , effectively resetting the local codebase to the state of that remote repository. This action cleared all local changes and brought the environment to the last working state as desired by the user. The AI's immediate last action was to list the files in the now-synced  directory to understand the current structure, confirming the presence of  (a key point of contention) and other files. The work is at the very beginning of re-evaluating the codebase based on the pulled GitHub repository and the newly stated detailed requirements from the user.
 </current_work>
 
 <optional_next_step>
-The next step is to switch the focus to  to perfect  completely.
+Examine the  and  files from the  repository to understand the current content logic and branding, as per the user's latest explicit instructions.
 </optional_next_step>
-
