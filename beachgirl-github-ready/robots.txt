@@ -1,0 +1,24 @@
+User-agent: *
+Allow: /
+
+# BeachGirl.pics - Premium Beach Content
+# Only for adults 18+
+
+Sitemap: https://beachgirl.pics/sitemap.xml
+
+# Block bots from premium content
+Disallow: /uncensored/
+Disallow: /uncensored-videos/
+
+# Allow free gallery
+Allow: /full/
+
+# Allow main pages
+Allow: /index.html
+Allow: /age-verification.html
+Allow: /manifest.json
+Allow: /service-worker.js
+Allow: /decorative-images/
+
+# Search engine optimization
+Crawl-delay: 1

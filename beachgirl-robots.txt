@@ -1,0 +1,36 @@
+# BeachGirl.pics - Paradise Beach Collection
+# Robots.txt for search engine optimization
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: *.log
+Disallow: /uncensored/
+Disallow: /uncensored-videos/
+
+# Specific crawl rules for adult content
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 5
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 5
+
+User-agent: Yandex
+Allow: /
+Crawl-delay: 10
+
+# Block aggressive crawlers
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+# Sitemap location
+Sitemap: https://beachgirl.pics/sitemap.xml

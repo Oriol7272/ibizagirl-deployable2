@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BeachGirl.pics - Colección exclusiva de fotos y videos de playa. Contenido premium de alta calidad con acceso VIP.">
+    <meta name="keywords" content="beach, playa, fotos, videos, premium, VIP, exclusivo, alta calidad, contenido">
+    <meta name="author" content="BeachGirl.pics">
+    <meta name="robots" content="index, follow">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="BeachGirl.pics">
+    <meta name="theme-color" content="#4facfe">
+    
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="8X6z4G2uDlqxoV6RU42Gpv8XCP4LHCDuXO2fxg9LhoM">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="BeachGirl.pics - Premium Beach Content">
+    <meta property="og:description" content="Colección exclusiva de fotos y videos de playa premium">
+    <meta property="og:image" content="/decorative-images/paradise-beach.png">
+    <meta property="og:url" content="https://beachgirl.pics">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="BeachGirl.pics - Premium Beach Content">
+    <meta name="twitter:description" content="Colección exclusiva de fotos y videos de playa premium">
+    <meta name="twitter:image" content="/decorative-images/paradise-beach.png">
+    
+    <title>BeachGirl.pics - Paradise Beach Collection</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "BeachGirl.pics",
+      "description": "Premium beach photos and videos collection",
+      "url": "https://beachgirl.pics",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://beachgirl.pics/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: 
+                url('/decorative-images/paradise-beach.png') center/cover no-repeat fixed,
+                linear-gradient(135deg, #4facfe 0%, #00f2fe 25%, #0072ff 75%, #764ba2 100%);
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Tropical Background Elements - PARADISE BEACH THEME */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                url('/decorative-images/paradise-beach.png') no-repeat 15% 20%,
+                url('/decorative-images/paradise-beach.png') no-repeat 85% 60%,
+                url('/decorative-images/paradise-beach.png') no-repeat 10% 80%,
+                radial-gradient(circle at 20% 80%, rgba(255,215,0,0.2) 0%, transparent 60%),
+                radial-gradient(circle at 80% 20%, rgba(0,255,255,0.1) 0%, transparent 60%),
+                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            background-size: 200px auto, 150px auto, 180px auto, 300px 300px, 250px 250px, 200px 200px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        /* Static tropical decorative elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        .floating-palm {
+            position: absolute;
+            opacity: 0.7;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .floating-palm:nth-child(1) { 
+            top: 15%; left: 8%; 
+            transform: rotate(-15deg);
+            font-size: 3em;
+            opacity: 0.7;
+        }
+        .floating-palm:nth-child(2) { 
+            top: 65%; right: 12%; 
+            transform: rotate(15deg);
+            background: url('/decorative-images/paradise-beach.png') no-repeat center;
+            background-size: 80px 80px;
+            width: 80px;
+            height: 80px;
+        }
+        .floating-palm:nth-child(3) { 
+            bottom: 25%; left: 15%; 
+            transform: rotate(-10deg);
+            background: url('/decorative-images/paradise-beach.png') no-repeat center;
+            background-size: 90px 90px;
+            width: 90px;
+            height: 90px;
+        }
+        .floating-palm:nth-child(4) { 
+            top: 40%; right: 25%; 
+            font-size: 2em;
+        }
+        .floating-palm:nth-child(5) { 
+            bottom: 60%; left: 40%; 
+            font-size: 2.5em;
+        }
+
+        /* Header with Language Selector */
+        .header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .language-selector {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 10px 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .language-selector select {
+            background: transparent;
+            color: white;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .language-selector option {
+            background: #333;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.6;
+            filter: blur(1px);
+        }
+
+        .hero-title {
+            font-family: 'Caveat', cursive;
+            font-size: 8em;
+            font-weight: 700;
+            text-shadow: 6px 6px 12px rgba(0,0,0,0.7);
+            margin-bottom: 25px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f093fb, #ffd700);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 3px;
+            position: relative;
+        }
+        
+        .hero-title::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -50px;
+            width: 120px;
+            height: 120px;
+            background: url('/decorative-images/paradise-beach.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.5;
+            border-radius: 50%;
+        }
+        
+        .hero-title::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: -40px;
+            width: 100px;
+            height: 100px;
+            background: url('/decorative-images/paradise-beach.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.4;
+            border-radius: 50%;
+        }
+
+        .hero-subtitle {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3em;
+            font-weight: 400;
+            color: rgba(255,255,255,0.9);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            margin-bottom: 50px;
+        }
+
+        /* Static waves decoration with paradise beach */
+        .waves-decoration {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,60L40,55C80,50,160,40,240,45C320,50,400,70,480,75C560,80,640,70,720,65C800,60,880,60,960,65C1040,70,1120,80,1160,85L1200,90L1200,120L1160,120C1120,120,1040,120,960,120C880,120,800,120,720,120C640,120,560,120,480,120C400,120,320,120,240,120C160,120,80,120,40,120L0,120Z" fill="%23ffffff" fill-opacity="0.5"></path></svg>') repeat-x;
+        }
+        
+        .waves-decoration::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+            background: url('/decorative-images/paradise-beach.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.4;
+            border-radius: 50%;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            background: rgba(255,255,255,0.1);
+            padding: 25px 50px;
+            border-radius: 50px;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Section Styling with decorative elements */
+        .section {
+            position: relative;
+            padding: 100px 30px;
+            max-width: 1500px;
+            margin: 0 auto;
+            z-index: 5;
+        }
+        
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 100px;
+            height: 100px;
+            background: url('/decorative-images/paradise-beach.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.3;
+            z-index: -1;
+            border-radius: 50%;
+        }
+        
+        .section::after {
+            content: '';
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            width: 80px;
+            height: 80px;
+            background: url('/decorative-images/paradise-beach.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.25;
+            z-index: -1;
+            border-radius: 50%;
+        }
+
+        .section-title {
+            font-family: 'Caveat', cursive;
+            font-size: 4em;
+            text-align: center;
+            margin-bottom: 60px;
+            color: rgba(255,255,255,0.9);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+        }
+
+        .section-subtitle {
+            font-size: 1.3em;
+            text-align: center;
+            margin-bottom: 50px;
+            color: rgba(255,255,255,0.8);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .content-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .content-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .content-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: all 0.3s;
+        }
+
+        .content-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .content-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 25px 20px 20px;
+            color: white;
+        }
+
+        .content-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .content-price {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .new-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ff4757, #ff6b6b);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: bold;
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(255,71,87,0.4);
+        }
+
+        .blur-content {
+            filter: blur(8px);
+        }
+
+        .unlock-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .unlock-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+
+        .unlock-text {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* PayPal Button Styling */
+        .paypal-button {
+            background: linear-gradient(135deg, #0070ba, #003f7f);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1em;
+        }
+
+        .paypal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,112,186,0.4);
+        }
+
+        /* Video Thumbnails */
+        .video-thumbnail {
+            position: relative;
+            height: 200px;
+            background: #333;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .video-play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+            color: rgba(255,255,255,0.9);
+            pointer-events: none;
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+
+        /* Chatbot */
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .chatbot-toggle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .chatbot-toggle::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 40px;
+            height: 40px;
+            background: url('/decorative-images/paradise-beach.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.6;
+            border-radius: 50%;
+        }
+
+        .chatbot-toggle:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.3);
+            border-top: 5px solid white;
+            border-radius: 50%;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.2);
+            color: white;
+            text-align: center;
+        }
+
+        .close {
+            color: rgba(255,255,255,0.7);
+            float: right;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close:hover {
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .hero-title { font-size: 6em; }
+            .hero-subtitle { font-size: 2.5em; }
+            .nav-links { gap: 20px; padding: 20px 40px; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 4em; }
+            .hero-subtitle { font-size: 2em; }
+            .nav-links { 
+                flex-direction: column; 
+                gap: 10px; 
+                padding: 20px 30px;
+                width: 90%;
+            }
+            .nav-container { bottom: 60px; }
+            .section { padding: 60px 20px; }
+            .section-title { font-size: 3em; }
+            .content-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+            .floating-palm { font-size: 2em !important; }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title { font-size: 3em; }
+            .hero-subtitle { font-size: 1.5em; }
+            .section-title { font-size: 2.5em; }
+            .nav-links { padding: 15px 20px; }
+            .nav-links a { padding: 10px 15px; font-size: 1em; }
+        }
+
+        /* Updated floating elements HTML with paradise beach */
+        .floating-palm:nth-child(2)::before { 
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('/decorative-images/paradise-beach.png') no-repeat center;
+            background-size: contain;
+            border-radius: 50%;
+        }
+        .floating-palm:nth-child(3)::before { 
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('/decorative-images/paradise-beach.png') no-repeat center;
+            background-size: contain;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating tropical decorative elements with new images -->
+    <div class="floating-elements">
+        <div class="floating-palm" style="--rotation: -15deg;">🌴</div>
+        <div class="floating-palm" style="--rotation: 15deg;"></div>
+        <div class="floating-palm" style="--rotation: -10deg;"></div>
+        <div class="floating-palm" style="--rotation: 5deg;">🏖️</div>
+        <div class="floating-palm" style="--rotation: -5deg;">🌸</div>
+    </div>
+
+    <!-- Header with Language Selector -->
+    <div class="header">
+        <div class="language-selector">
+            <select id="languageSelect" onchange="changeLanguage()">
+                <option value="es">🇪🇸 Español</option>
+                <option value="en">🇺🇸 English</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="it">🇮🇹 Italiano</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="waves-decoration"></div>
+        
+        <h1 class="hero-title">BEACHGIRL</h1>
+        <h2 class="hero-subtitle">Bienvenido al Paraíso</h2>
+        
+        <!-- Navigation -->
+        <div class="nav-container">
+            <nav class="nav-links">
+                <a href="#gallery" onclick="showSection('gallery')">🏖️ Galería</a>
+                <a href="#premium" onclick="showSection('premium')">💎 Premium</a>
+                <a href="#videos" onclick="showSection('videos')">🎬 Videos</a>
+                <a href="#subscription" onclick="showSection('subscription')">⭐ Suscripción</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Gallery Section -->
+    <div id="gallery" class="section" style="display: block;">
+        <h2 class="section-title">Paradise Gallery</h2>
+        <p class="section-subtitle">25 nuevas fotos cada día • Contenido gratuito renovado constantemente</p>
+        
+        <div class="content-grid" id="galleryGrid">
+            <!-- Content loaded dynamically -->
+        </div>
+    </div>
+
+    <!-- Premium Section -->
+    <div id="premium" class="section" style="display: none;">
+        <h2 class="section-title">Premium Photos Collection</h2>
+        <p class="section-subtitle">100+ fotos exclusivas de alta calidad • €0.10 c/u • ¡30% marcadas como NUEVAS!</p>
+        
+        <div style="text-align: center; margin-bottom: 40px;">
+            <button class="paypal-button" onclick="openModal('bundleModal')" style="margin-right: 20px;">
+                💎 Ver Opciones de Compra
+            </button>
+            <button class="paypal-button" onclick="openModal('vipModal')" style="background: linear-gradient(135deg, #ff6b6b, #f093fb);">
+                ⭐ VIP Sin Anuncios €9.99/mes
+            </button>
+        </div>
+        
+        <div class="content-grid" id="premiumGrid">
+            <!-- Premium content loaded dynamically -->
+        </div>
+    </div>
+
+    <!-- Videos Section -->
+    <div id="videos" class="section" style="display: none;">
+        <h2 class="section-title">Premium Videos Collection</h2>
+        <p class="section-subtitle">30+ videos HD exclusivos • €0.30 c/u • ¡30% marcados como NUEVOS!</p>
+        
+        <div class="content-grid" id="videosGrid">
+            <!-- Video content loaded dynamically -->
+        </div>
+    </div>
+
+    <!-- Subscription Section -->
+    <div id="subscription" class="section" style="display: none;">
+        <h2 class="section-title">Planes VIP Premium</h2>
+        <p class="section-subtitle">Acceso ilimitado a todo el contenido • Sin anuncios • Descargas HD</p>
+        
+        <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 50px;">
+            <div class="content-item" style="max-width: 300px; text-align: center; padding: 40px 30px;">
+                <h3 style="font-size: 1.8em; margin-bottom: 20px; color: #ffd700;">💎 Mensual</h3>
+                <div style="font-size: 3em; margin-bottom: 15px;">€19.99</div>
+                <p style="margin-bottom: 30px; opacity: 0.8;">Acceso total por 30 días</p>
+                <div id="paypal-monthly-button"></div>
+            </div>
+            
+            <div class="content-item" style="max-width: 300px; text-align: center; padding: 40px 30px; border: 3px solid #ffd700;">
+                <h3 style="font-size: 1.8em; margin-bottom: 20px; color: #ffd700;">⭐ Lifetime</h3>
+                <div style="font-size: 3em; margin-bottom: 15px;">€100</div>
+                <p style="margin-bottom: 30px; opacity: 0.8;">Acceso de por vida</p>
+                <div id="paypal-lifetime-button"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Bundle Modal -->
+    <div id="bundleModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('bundleModal')">&times;</span>
+            <h2 style="margin-bottom: 30px;">💎 Opciones de Compra Premium</h2>
+            <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap;">
+                <div style="text-align: center;">
+                    <h3>📸 Pack Completo Fotos</h3>
+                    <p>100 fotos premium</p>
+                    <p style="font-size: 1.5em; color: #ffd700;">€10.00</p>
+                    <div id="paypal-photos-bundle"></div>
+                </div>
+                <div style="text-align: center;">
+                    <h3>🎬 Pack Completo Videos</h3>
+                    <p>30 videos HD</p>
+                    <p style="font-size: 1.5em; color: #ffd700;">€9.00</p>
+                    <div id="paypal-videos-bundle"></div>
+                </div>
+                <div style="text-align: center;">
+                    <h3>🔥 MEGA Pack</h3>
+                    <p>Todo el contenido</p>
+                    <p style="font-size: 1.5em; color: #ffd700;">€15.00</p>
+                    <div id="paypal-mega-bundle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIP Modal -->
+    <div id="vipModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('vipModal')">&times;</span>
+            <h2 style="margin-bottom: 30px;">⭐ Acceso VIP Premium</h2>
+            <ul style="text-align: left; margin-bottom: 30px;">
+                <li>✅ Sin anuncios molestos</li>
+                <li>✅ Acceso a todo el contenido premium</li>
+                <li>✅ Descargas en HD</li>
+                <li>✅ Contenido exclusivo VIP</li>
+                <li>✅ Actualizaciones diarias</li>
+            </ul>
+            <div id="paypal-vip-button"></div>
+        </div>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <button class="chatbot-toggle" onclick="toggleChat()">💬</button>
+    </div>
+
+    <!-- Chat Interface (hidden by default) -->
+    <div id="chatInterface" style="display: none; position: fixed; bottom: 120px; right: 30px; width: 350px; height: 500px; background: rgba(255,255,255,0.1); backdrop-filter: blur(15px); border-radius: 20px; border: 2px solid rgba(255,255,255,0.2); z-index: 999;">
+        <div style="padding: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
+            <h3 style="color: white; margin: 0;">💬 Isabella - Asistente</h3>
+        </div>
+        <div id="chatMessages" style="height: 350px; overflow-y: auto; padding: 20px;">
+            <div style="color: white; opacity: 0.8;">¡Hola! Soy Isabella, tu asistente virtual. ¿En qué puedo ayudarte?</div>
+        </div>
+        <div style="padding: 20px;">
+            <input type="text" id="chatInput" placeholder="Escribe tu mensaje..." style="width: 100%; padding: 10px; border-radius: 25px; border: none; background: rgba(255,255,255,0.2); color: white;" onkeypress="if(event.key==='Enter') sendMessage()">
+        </div>
+    </div>
+
+    <!-- Decorative footer with paradise beach theme -->
+    <footer style="
+        position: relative;
+        padding: 60px 30px 30px;
+        text-align: center;
+        background: linear-gradient(135deg, rgba(75,172,254,0.2) 0%, rgba(0,242,254,0.1) 100%);
+        margin-top: 100px;
+        border-top: 3px solid rgba(255,255,255,0.2);
+    ">
+        <div style="
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 120px;
+            background: url('/decorative-images/paradise-beach.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.7;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        "></div>
+        
+        <div style="
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            height: 80px;
+            background: url('/decorative-images/paradise-beach.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.5;
+            border-radius: 50%;
+        "></div>
+        
+        <div style="
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            background: url('/decorative-images/paradise-beach.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.5;
+            border-radius: 50%;
+        "></div>
+        
+        <p style="color: white; font-size: 1.1em; opacity: 0.9; margin-bottom: 10px;">
+            🏝️ BeachGirl.pics - Paradise Beach Collection 🏝️
+        </p>
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.9em;">
+            Diseño actualizado con tema de playa paradisíaca • Una sola imagen hermosa como decoración
+        </p>
+    </footer>
+
+    <!-- Load ad scripts with BeachGirl IDs -->
+    <script src="https://poweredby.jads.co/js/jads.js" async></script>
+    <script src="https://a.exdynsrv.com/ad-provider.js" async></script>
+
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=EUR&disable-funding=credit,card,bancontact,blik,eps,giropay,ideal,mercadopago,mybank,p24,sepa,sofort,venmo"></script>
+
+    <script>
+        // ============================================
+        // BEACHGIRL.PICS MAIN APPLICATION SCRIPT
+        // ============================================
+
+        // Global Variables and Configuration
+        const CONFIG = {
+            SITE_NAME: 'BeachGirl.pics',
+            CURRENCY: 'EUR',
+            PRICES: {
+                INDIVIDUAL_PHOTO: 0.10,
+                INDIVIDUAL_VIDEO: 0.30,
+                PHOTO_BUNDLE: 10.00,
+                VIDEO_BUNDLE: 9.00,
+                MEGA_BUNDLE: 15.00,
+                VIP_MONTHLY: 9.99,
+                MONTHLY_SUBSCRIPTION: 19.99,
+                LIFETIME_SUBSCRIPTION: 100.00
+            },
+            AD_IDS: {
+                EXOCLICK: '5702700',
+                JUICYADS_ZONE: '1099077',
+                JUICYADS_AD: '2093063',
+                EROADS_ZONE: '8179717',
+                EROADS_BANNER: '2309173',
+                POPADS: 'YOUR_POPADS_ID'
+            }
+        };
+
+        // Content Arrays
+        let fullImages = [];
+        let uncensoredImages = [];
+        let premiumVideos = [];
+        let currentLanguage = 'es';
+        let isVIPUser = false;
+
+        // Language Translations
+        const translations = {
+            es: {
+                welcome: "Bienvenido al Paraíso",
+                gallery: "Galería",
+                premium: "Premium", 
+                videos: "Videos",
+                subscription: "Suscripción",
+                newPhotos: "nuevas fotos cada día",
+                freeContent: "Contenido gratuito renovado constantemente",
+                premiumPhotos: "fotos exclusivas de alta calidad",
+                premiumVideos: "videos HD exclusivos",
+                buyOptions: "Ver Opciones de Compra",
+                vipAccess: "VIP Sin Anuncios",
+                unlimitedAccess: "Acceso ilimitado a todo el contenido",
+                monthly: "Mensual",
+                lifetime: "Lifetime",
+                totalAccess: "Acceso total por 30 días",
+                lifetimeAccess: "Acceso de por vida"
+            },
+            en: {
+                welcome: "Welcome to Paradise",
+                gallery: "Gallery",
+                premium: "Premium",
+                videos: "Videos", 
+                subscription: "Subscription",
+                newPhotos: "new photos every day",
+                freeContent: "Free content constantly renewed",
+                premiumPhotos: "exclusive high quality photos",
+                premiumVideos: "exclusive HD videos",
+                buyOptions: "View Purchase Options",
+                vipAccess: "VIP Ad-Free",
+                unlimitedAccess: "Unlimited access to all content",
+                monthly: "Monthly",
+                lifetime: "Lifetime",
+                totalAccess: "Total access for 30 days",
+                lifetimeAccess: "Lifetime access"
+            },
+            fr: {
+                welcome: "Bienvenue au Paradis",
+                gallery: "Galerie",
+                premium: "Premium",
+                videos: "Vidéos",
+                subscription: "Abonnement",
+                newPhotos: "nouvelles photos chaque jour",
+                freeContent: "Contenu gratuit constamment renouvelé",
+                premiumPhotos: "photos exclusives de haute qualité",
+                premiumVideos: "vidéos HD exclusives",
+                buyOptions: "Voir les Options d'Achat",
+                vipAccess: "VIP Sans Pub",
+                unlimitedAccess: "Accès illimité à tout le contenu",
+                monthly: "Mensuel",
+                lifetime: "À Vie",
+                totalAccess: "Accès total pendant 30 jours",
+                lifetimeAccess: "Accès à vie"
+            },
+            de: {
+                welcome: "Willkommen im Paradies",
+                gallery: "Galerie",
+                premium: "Premium",
+                videos: "Videos",
+                subscription: "Abonnement",
+                newPhotos: "neue Fotos jeden Tag",
+                freeContent: "Kostenlose Inhalte ständig erneuert",
+                premiumPhotos: "exklusive hochwertige Fotos",
+                premiumVideos: "exklusive HD-Videos",
+                buyOptions: "Kaufoptionen Anzeigen",
+                vipAccess: "VIP Werbefrei",
+                unlimitedAccess: "Unbegrenzter Zugang zu allen Inhalten",
+                monthly: "Monatlich",
+                lifetime: "Lebenslang",
+                totalAccess: "Vollzugang für 30 Tage",
+                lifetimeAccess: "Lebenslanger Zugang"
+            },
+            it: {
+                welcome: "Benvenuto in Paradiso",
+                gallery: "Galleria",
+                premium: "Premium",
+                videos: "Video",
+                subscription: "Abbonamento",
+                newPhotos: "nuove foto ogni giorno",
+                freeContent: "Contenuto gratuito costantemente rinnovato",
+                premiumPhotos: "foto esclusive di alta qualità",
+                premiumVideos: "video HD esclusivi",
+                buyOptions: "Vedi Opzioni di Acquisto",
+                vipAccess: "VIP Senza Pubblicità",
+                unlimitedAccess: "Accesso illimitato a tutti i contenuti",
+                monthly: "Mensile",
+                lifetime: "A Vita",
+                totalAccess: "Accesso totale per 30 giorni",
+                lifetimeAccess: "Accesso a vita"
+            }
+        };
+
+        // Initialize Application
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏖️ BeachGirl.pics Loading...');
+            
+            // Initialize content
+            generateRealContent();
+            
+            // Set up PayPal buttons
+            setTimeout(initializePayPal, 1000);
+            
+            // Load ads
+            setTimeout(loadAds, 2000);
+            
+            // Initialize language
+            detectLanguage();
+            
+            // Background rotation
+            rotateHeroBackgrounds();
+            
+            console.log('✅ BeachGirl.pics Loaded Successfully!');
+        });
+
+        // Generate Real Content from Files
+        function generateRealContent() {
+            console.log('📸 Loading real content from files...');
+            
+            // Generate content arrays from actual files
+            // This would be populated from your actual file structure
+            fullImages = [
+                ...Array(25).fill().map((_, i) => ({
+                    src: `/full/beach${i + 1}.webp`,
+                    title: `Paradise Photo ${i + 1}`,
+                    isNew: Math.random() > 0.7
+                }))
+            ];
+            
+            uncensoredImages = [
+                ...Array(100).fill().map((_, i) => ({
+                    src: `/uncensored/premium${i + 1}.webp`,
+                    title: `Premium ${i + 1}`,
+                    price: CONFIG.PRICES.INDIVIDUAL_PHOTO,
+                    isNew: Math.random() > 0.7
+                }))
+            ];
+            
+            premiumVideos = [
+                ...Array(30).fill().map((_, i) => ({
+                    src: `/uncensored-videos/video${i + 1}.mp4`,
+                    thumbnail: `/uncensored-videos/thumb${i + 1}.webp`,
+                    title: `Premium Video ${i + 1}`,
+                    duration: "2:30",
+                    price: CONFIG.PRICES.INDIVIDUAL_VIDEO,
+                    isNew: Math.random() > 0.7
+                }))
+            ];
+            
+            // Render initial gallery
+            renderGallery();
+            renderPremium();
+            renderVideos();
+        }
+
+        // Render Functions
+        function renderGallery() {
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = '';
+            
+            fullImages.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'content-item';
+                div.innerHTML = `
+                    <img src="${item.src}" alt="${item.title}" loading="lazy" onerror="this.src='/placeholder.jpg'">
+                    ${item.isNew ? '<div class="new-badge">NUEVO</div>' : ''}
+                    <div class="content-overlay">
+                        <div class="content-title">${item.title}</div>
+                        <div class="content-price">GRATIS</div>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function renderPremium() {
+            const grid = document.getElementById('premiumGrid');
+            grid.innerHTML = '';
+            
+            uncensoredImages.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'content-item';
+                div.innerHTML = `
+                    <img src="${item.src}" alt="${item.title}" loading="lazy" class="blur-content" onerror="this.src='/placeholder.jpg'">
+                    ${item.isNew ? '<div class="new-badge">NUEVO</div>' : ''}
+                    <div class="unlock-overlay">
+                        <div class="unlock-icon">🔒</div>
+                        <div class="unlock-text">Premium Content</div>
+                        <button class="paypal-button" onclick="createPayPalPayment(${item.price}, 'photo', ${index})">
+                            €${item.price.toFixed(2)} PayPal
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function renderVideos() {
+            const grid = document.getElementById('videosGrid');
+            grid.innerHTML = '';
+            
+            premiumVideos.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'content-item';
+                div.innerHTML = `
+                    <div class="video-thumbnail blur-content">
+                        <img src="${item.thumbnail}" alt="${item.title}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/placeholder.jpg'">
+                        <div class="video-play-icon">▶️</div>
+                        <div class="video-duration">${item.duration}</div>
+                    </div>
+                    ${item.isNew ? '<div class="new-badge">NUEVO</div>' : ''}
+                    <div class="unlock-overlay">
+                        <div class="unlock-icon">🔒</div>
+                        <div class="unlock-text">Descargar €${item.price.toFixed(2)}</div>
+                        <button class="paypal-button" onclick="createPayPalPayment(${item.price}, 'video', ${index})">
+                            €${item.price.toFixed(2)} PayPal
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        // Navigation Functions
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show target section
+            document.getElementById(sectionName).style.display = 'block';
+            
+            // Smooth scroll to top of section
+            document.getElementById(sectionName).scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // PayPal Integration
+        function initializePayPal() {
+            console.log('💳 Initializing PayPal buttons...');
+            
+            // Individual payment buttons are created dynamically
+            // Subscription buttons
+            if (window.paypal) {
+                // Monthly subscription
+                paypal.Buttons({
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: CONFIG.PRICES.MONTHLY_SUBSCRIPTION.toString(),
+                                    currency_code: CONFIG.CURRENCY
+                                },
+                                description: 'BeachGirl.pics Monthly VIP Subscription'
+                            }]
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            handlePaymentSuccess('monthly_subscription', details);
+                        });
+                    }
+                }).render('#paypal-monthly-button');
+
+                // Lifetime subscription
+                paypal.Buttons({
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: CONFIG.PRICES.LIFETIME_SUBSCRIPTION.toString(),
+                                    currency_code: CONFIG.CURRENCY
+                                },
+                                description: 'BeachGirl.pics Lifetime VIP Access'
+                            }]
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            handlePaymentSuccess('lifetime_subscription', details);
+                        });
+                    }
+                }).render('#paypal-lifetime-button');
+
+                // Bundle buttons
+                createBundleButtons();
+            }
+        }
+
+        function createBundleButtons() {
+            // Photo bundle
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: CONFIG.PRICES.PHOTO_BUNDLE.toString(),
+                                currency_code: CONFIG.CURRENCY
+                            },
+                            description: 'BeachGirl.pics Complete Photo Bundle'
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        handlePaymentSuccess('photo_bundle', details);
+                    });
+                }
+            }).render('#paypal-photos-bundle');
+
+            // Video bundle  
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: CONFIG.PRICES.VIDEO_BUNDLE.toString(),
+                                currency_code: CONFIG.CURRENCY
+                            },
+                            description: 'BeachGirl.pics Complete Video Bundle'
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        handlePaymentSuccess('video_bundle', details);
+                    });
+                }
+            }).render('#paypal-videos-bundle');
+
+            // Mega bundle
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: CONFIG.PRICES.MEGA_BUNDLE.toString(),
+                                currency_code: CONFIG.CURRENCY
+                            },
+                            description: 'BeachGirl.pics MEGA Bundle - All Content'
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        handlePaymentSuccess('mega_bundle', details);
+                    });
+                }
+            }).render('#paypal-mega-bundle');
+
+            // VIP button
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: CONFIG.PRICES.VIP_MONTHLY.toString(),
+                                currency_code: CONFIG.CURRENCY
+                            },
+                            description: 'BeachGirl.pics VIP Ad-Free Access'
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        handlePaymentSuccess('vip_monthly', details);
+                    });
+                }
+            }).render('#paypal-vip-button');
+        }
+
+        function createPayPalPayment(amount, type, index) {
+            if (!window.paypal) {
+                console.error('PayPal SDK not loaded');
+                return;
+            }
+
+            // Create dynamic PayPal button
+            const tempDiv = document.createElement('div');
+            document.body.appendChild(tempDiv);
+
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: amount.toString(),
+                                currency_code: CONFIG.CURRENCY
+                            },
+                            description: `BeachGirl.pics ${type} #${index + 1}`
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        handlePaymentSuccess(type, details, index);
+                        document.body.removeChild(tempDiv);
+                    });
+                },
+                onCancel: function() {
+                    document.body.removeChild(tempDiv);
+                },
+                onError: function(err) {
+                    console.error('PayPal Error:', err);
+                    document.body.removeChild(tempDiv);
+                }
+            }).render(tempDiv);
+
+            // Auto-click first button
+            setTimeout(() => {
+                const button = tempDiv.querySelector('[role="link"]');
+                if (button) button.click();
+            }, 100);
+        }
+
+        function handlePaymentSuccess(type, details, index = null) {
+            console.log('✅ Payment successful:', type, details);
+            
+            // Store purchase in localStorage
+            let purchases = JSON.parse(localStorage.getItem('beachgirl_purchases')) || [];
+            purchases.push({
+                type: type,
+                index: index,
+                transactionId: details.id,
+                timestamp: Date.now()
+            });
+            localStorage.setItem('beachgirl_purchases', JSON.stringify(purchases));
+
+            // Handle different purchase types
+            switch(type) {
+                case 'monthly_subscription':
+                case 'lifetime_subscription':
+                case 'vip_monthly':
+                    isVIPUser = true;
+                    localStorage.setItem('beachgirl_vip', 'true');
+                    hideAds();
+                    alert('¡Bienvenido al VIP! Disfruta de tu acceso sin anuncios.');
+                    break;
+                case 'photo_bundle':
+                case 'video_bundle': 
+                case 'mega_bundle':
+                    unlockBundleContent(type);
+                    break;
+                default:
+                    unlockIndividualContent(type, index);
+            }
+
+            // Close any open modals
+            closeModal('bundleModal');
+            closeModal('vipModal');
+        }
+
+        function unlockIndividualContent(type, index) {
+            if (type === 'photo' && index !== null) {
+                // Unlock specific photo
+                const item = document.querySelectorAll('#premiumGrid .content-item')[index];
+                if (item) {
+                    item.querySelector('.blur-content').classList.remove('blur-content');
+                    item.querySelector('.unlock-overlay').style.display = 'none';
+                }
+            } else if (type === 'video' && index !== null) {
+                // Unlock specific video
+                const item = document.querySelectorAll('#videosGrid .content-item')[index];
+                if (item) {
+                    item.querySelector('.blur-content').classList.remove('blur-content');
+                    item.querySelector('.unlock-overlay').innerHTML = '<div class="unlock-text">✅ Descarga Disponible</div>';
+                }
+            }
+        }
+
+        function unlockBundleContent(bundleType) {
+            switch(bundleType) {
+                case 'photo_bundle':
+                    document.querySelectorAll('#premiumGrid .blur-content').forEach(img => {
+                        img.classList.remove('blur-content');
+                    });
+                    document.querySelectorAll('#premiumGrid .unlock-overlay').forEach(overlay => {
+                        overlay.style.display = 'none';
+                    });
+                    break;
+                case 'video_bundle':
+                    document.querySelectorAll('#videosGrid .blur-content').forEach(img => {
+                        img.classList.remove('blur-content');
+                    });
+                    document.querySelectorAll('#videosGrid .unlock-overlay').forEach(overlay => {
+                        overlay.innerHTML = '<div class="unlock-text">✅ Descarga Disponible</div>';
+                    });
+                    break;
+                case 'mega_bundle':
+                    unlockBundleContent('photo_bundle');
+                    unlockBundleContent('video_bundle');
+                    break;
+            }
+        }
+
+        // Language Functions
+        function changeLanguage() {
+            const select = document.getElementById('languageSelect');
+            currentLanguage = select.value;
+            localStorage.setItem('beachgirl_language', currentLanguage);
+            updateLanguage();
+        }
+
+        function detectLanguage() {
+            const saved = localStorage.getItem('beachgirl_language');
+            if (saved) {
+                currentLanguage = saved;
+            } else {
+                const browserLang = navigator.language.split('-')[0];
+                if (translations[browserLang]) {
+                    currentLanguage = browserLang;
+                }
+            }
+            document.getElementById('languageSelect').value = currentLanguage;
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const t = translations[currentLanguage];
+            
+            // Update text content
+            document.querySelector('.hero-subtitle').textContent = t.welcome;
+            
+            // Update navigation
+            document.querySelectorAll('.nav-links a').forEach((link, i) => {
+                const keys = ['gallery', 'premium', 'videos', 'subscription'];
+                if (keys[i]) {
+                    link.innerHTML = link.innerHTML.replace(/[^🏖️💎🎬⭐\s]+/, t[keys[i]]);
+                }
+            });
+
+            // Update section titles and subtitles would go here
+            // This is a simplified version - you'd want to update all translatable text
+        }
+
+        // Chatbot Functions
+        function toggleChat() {
+            const chatInterface = document.getElementById('chatInterface');
+            chatInterface.style.display = chatInterface.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            
+            if (input.value.trim()) {
+                // Add user message
+                const userMsg = document.createElement('div');
+                userMsg.style.cssText = 'margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 10px; color: white;';
+                userMsg.textContent = input.value;
+                messages.appendChild(userMsg);
+
+                // Simulate Isabella response
+                setTimeout(() => {
+                    const botMsg = document.createElement('div');
+                    botMsg.style.cssText = 'margin: 10px 0; padding: 10px; background: rgba(255,105,180,0.2); border-radius: 10px; color: white;';
+                    botMsg.innerHTML = getIsabellaResponse(input.value);
+                    messages.appendChild(botMsg);
+                    messages.scrollTop = messages.scrollHeight;
+                }, 1000);
+
+                input.value = '';
+                messages.scrollTop = messages.scrollHeight;
+            }
+        }
+
+        function getIsabellaResponse(message) {
+            const msg = message.toLowerCase();
+            
+            if (msg.includes('precio') || msg.includes('cost') || msg.includes('price')) {
+                return '💰 Los precios son: Fotos €0.10 c/u, Videos €0.30 c/u. ¡Tenemos packs con descuento!';
+            } else if (msg.includes('vip') || msg.includes('subscription')) {
+                return '⭐ El VIP te da acceso sin anuncios por €9.99/mes o €100 de por vida. ¡Vale la pena!';
+            } else if (msg.includes('paypal') || msg.includes('pago') || msg.includes('payment')) {
+                return '💳 Aceptamos PayPal para pagos seguros. ¡Es rápido y confiable!';
+            } else if (msg.includes('nuevo') || msg.includes('new') || msg.includes('content')) {
+                return '🆕 Subimos contenido nuevo cada día. ¡Siempre hay algo fresco que ver!';
+            } else {
+                return '🏖️ ¡Hola! Estoy aquí para ayudarte con cualquier pregunta sobre BeachGirl.pics. ¿Qué te interesa saber?';
+            }
+        }
+
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Ad Loading Functions
+        function loadAds() {
+            if (isVIPUser || localStorage.getItem('beachgirl_vip') === 'true') {
+                console.log('🚫 Ads disabled for VIP user');
+                return;
+            }
+
+            console.log('📢 Loading ads...');
+            
+            // Load JuicyAds
+            if (window.JuicyAdsStart) {
+                window.JuicyAdsStart(CONFIG.AD_IDS.JUICYADS_ZONE);
+            }
+
+            // Load ExoClick
+            loadExoClickAds();
+            
+            // Load PopAds (be careful with popup blockers)
+            loadPopAds();
+
+            // Load EroAdvertising
+            loadEroAds();
+        }
+
+        function loadExoClickAds() {
+            // ExoClick banner implementation
+            const script = document.createElement('script');
+            script.src = `//syndication.exoclick.com/tag.js?id=${CONFIG.AD_IDS.EXOCLICK}`;
+            script.async = true;
+            document.head.appendChild(script);
+        }
+
+        function loadPopAds() {
+            // PopAds implementation (use carefully to avoid user annoyance)
+            const script = document.createElement('script');
+            script.innerHTML = `
+                var uid = '${CONFIG.AD_IDS.POPADS}';
+                var wid = '${Math.floor(Math.random() * 1000000)}';
+                var pop_tag = document.createElement('script');
+                pop_tag.src='//cdn.popadstag.com/advert.js';
+                document.head.appendChild(pop_tag);
+            `;
+            document.head.appendChild(script);
+        }
+
+        function loadEroAds() {
+            // EroAdvertising banner
+            const bannerDiv = document.createElement('div');
+            bannerDiv.innerHTML = `
+                <script type="text/javascript">
+                    var EroAds = {
+                        zoneId: ${CONFIG.AD_IDS.EROADS_ZONE},
+                        bannerId: ${CONFIG.AD_IDS.EROADS_BANNER}
+                    };
+                </script>
+                <script src="//dsp.ero-advertising.com/tag.js" async></script>
+            `;
+            
+            // Insert banner in footer
+            document.querySelector('footer').appendChild(bannerDiv);
+        }
+
+        function hideAds() {
+            console.log('🚫 Hiding ads for VIP user...');
+            // Remove ad elements
+            document.querySelectorAll('[id*="ad"], [class*="ad"], [id*="banner"], [class*="banner"]').forEach(el => {
+                if (!el.id.includes('paypal')) { // Don't hide PayPal buttons
+                    el.style.display = 'none';
+                }
+            });
+        }
+
+        // Utility Functions
+        function rotateHeroBackgrounds() {
+            const backgrounds = [
+                '/decorative-images/paradise-beach.png',
+                '/full/beach1.webp',
+                '/full/beach2.webp',
+                '/full/beach3.webp'
+            ];
+            
+            let currentIndex = 0;
+            const heroBg = document.querySelector('.hero-bg');
+            
+            function changeBackground() {
+                heroBg.style.backgroundImage = `url('${backgrounds[currentIndex]}')`;
+                currentIndex = (currentIndex + 1) % backgrounds.length;
+            }
+            
+            changeBackground(); // Set initial
+            setInterval(changeBackground, 8000); // Change every 8 seconds
+        }
+
+        // Check for existing purchases on load
+        function checkExistingPurchases() {
+            const purchases = JSON.parse(localStorage.getItem('beachgirl_purchases')) || [];
+            const vipStatus = localStorage.getItem('beachgirl_vip');
+            
+            if (vipStatus === 'true') {
+                isVIPUser = true;
+                hideAds();
+            }
+
+            // Restore purchased content
+            purchases.forEach(purchase => {
+                if (purchase.type === 'photo_bundle' || purchase.type === 'mega_bundle') {
+                    unlockBundleContent('photo_bundle');
+                }
+                if (purchase.type === 'video_bundle' || purchase.type === 'mega_bundle') {
+                    unlockBundleContent('video_bundle');
+                }
+                if (purchase.type === 'photo' && purchase.index !== null) {
+                    unlockIndividualContent('photo', purchase.index);
+                }
+                if (purchase.type === 'video' && purchase.index !== null) {
+                    unlockIndividualContent('video', purchase.index);
+                }
+            });
+        }
+
+        // Initialize purchases check after content loads
+        setTimeout(checkExistingPurchases, 2000);
+
+        // Error Handling
+        window.addEventListener('error', function(e) {
+            console.error('🚨 BeachGirl.pics Error:', e.error);
+        });
+
+        // Performance Monitoring
+        window.addEventListener('load', function() {
+            console.log('⚡ BeachGirl.pics fully loaded in', performance.now(), 'ms');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Videos - IbizaGirl.pics</title>
+    
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(0,0,0,0.3);
+            padding: 20px 0;
+            text-align: center;
+        }
+        
+        .logo { font-size: 2em; margin-bottom: 10px; }
+        
+        .nav {
+            margin-top: 15px;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.2);
+            transition: background 0.3s;
+        }
+        
+        .nav a:hover { background: rgba(255,255,255,0.3); }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .videos-info {
+            text-align: center;
+            margin: 30px 0;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+        }
+        
+        .price-tag {
+            font-size: 2em;
+            color: #ff4757;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .video-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .video-card:hover { transform: scale(1.05); }
+        
+        .video-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            color: white;
+            position: relative;
+        }
+        
+        .video-card.unlocked .video-thumbnail {
+            background: rgba(0,100,0,0.3);
+        }
+        
+        .video-info {
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .duration {
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.9em;
+        }
+        
+        .unlock-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+        
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .language-selector select {
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            color: black;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .close-btn {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        #paypal-button-container {
+            margin-top: 20px;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4em;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <select id="languageSelect">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+            <option value="de">Deutsch</option>
+            <option value="it">Italiano</option>
+            <option value="fr">Français</option>
+        </select>
+    </div>
+
+    <div class="header">
+        <div class="logo">🌴 IbizaGirl.pics 🌴</div>
+        <div class="nav">
+            <a href="/">Home</a>
+            <a href="/gallery.html">Gallery</a>
+            <a href="/premium.html">Premium</a>
+            <a href="/videos.html">Videos</a>
+            <a href="/subscription.html">Subscribe</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="videos-info">
+            <h1 id="videosTitle">🎬 Premium Videos</h1>
+            <div class="price-tag">€0.30</div>
+            <p id="videosDesc">Exclusive HD videos from Ibiza paradise</p>
+            <p id="totalVideos">40+ premium videos available</p>
+        </div>
+
+        <div class="videos-grid" id="videosGrid">
+            <!-- Premium videos will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle">Unlock Premium Video</h3>
+            <p id="modalDesc">Pay €0.30 to unlock this exclusive HD video</p>
+            <div id="paypal-button-container"></div>
+        </div>
+    </div>
+
+    <script src="content-data5.js"></script>
+
+    <script>
+        const translations = {
+            es: {
+                videosTitle: "🎬 Videos Premium",
+                videosDesc: "Videos HD exclusivos desde el paraíso de Ibiza",
+                totalVideos: "40+ videos premium disponibles",
+                unlockText: "€0.30 - Desbloquear",
+                modalTitle: "Desbloquear Video Premium",
+                modalDesc: "Paga €0.30 para desbloquear este video HD exclusivo",
+                duration: "min"
+            },
+            en: {
+                videosTitle: "🎬 Premium Videos",
+                videosDesc: "Exclusive HD videos from Ibiza paradise",
+                totalVideos: "40+ premium videos available",
+                unlockText: "€0.30 - Unlock",
+                modalTitle: "Unlock Premium Video",
+                modalDesc: "Pay €0.30 to unlock this exclusive HD video",
+                duration: "min"
+            }
+        };
+
+        let currentLanguage = 'es';
+        let selectedVideo = null;
+        let unlockedVideos = JSON.parse(localStorage.getItem('unlockedVideos') || '[]');
+
+        function changeLanguage() {
+            currentLanguage = document.getElementById('languageSelect').value;
+            const t = translations[currentLanguage] || translations.en;
+            
+            document.getElementById('videosTitle').textContent = t.videosTitle;
+            document.getElementById('videosDesc').textContent = t.videosDesc;
+            document.getElementById('totalVideos').textContent = t.totalVideos;
+            document.getElementById('modalTitle').textContent = t.modalTitle;
+            document.getElementById('modalDesc').textContent = t.modalDesc;
+            
+            localStorage.setItem('preferred-language', currentLanguage);
+            loadPremiumVideos();
+        }
+
+        function loadPremiumVideos() {
+            try {
+                if (typeof PREMIUM_VIDEOS_POOL !== 'undefined') {
+                    const premiumVideos = PREMIUM_VIDEOS_POOL.slice(0, 40);
+                    displayPremiumVideos(premiumVideos);
+                    console.log(`🎬 Loaded ${premiumVideos.length} premium videos`);
+                } else {
+                    console.error('PREMIUM_VIDEOS_POOL not found');
+                }
+            } catch (error) {
+                console.error('Error loading premium videos:', error);
+            }
+        }
+
+        function displayPremiumVideos(videos) {
+            const grid = document.getElementById('videosGrid');
+            const t = translations[currentLanguage] || translations.en;
+            
+            grid.innerHTML = '';
+            
+            videos.forEach((video, index) => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'video-card';
+                
+                if (unlockedVideos.includes(video)) {
+                    videoCard.classList.add('unlocked');
+                }
+                
+                const thumbnail = document.createElement('div');
+                thumbnail.className = 'video-thumbnail';
+                
+                const playButton = document.createElement('div');
+                playButton.className = 'play-button';
+                playButton.innerHTML = '▶️';
+                
+                const duration = document.createElement('div');
+                duration.className = 'duration';
+                duration.textContent = `${Math.floor(Math.random() * 10) + 2} ${t.duration || 'min'}`;
+                
+                thumbnail.appendChild(playButton);
+                thumbnail.appendChild(duration);
+                
+                const videoInfo = document.createElement('div');
+                videoInfo.className = 'video-info';
+                
+                const title = document.createElement('h4');
+                title.textContent = `Premium Video ${index + 1}`;
+                
+                const unlockBtn = document.createElement('button');
+                unlockBtn.className = 'unlock-btn';
+                
+                if (unlockedVideos.includes(video)) {
+                    unlockBtn.textContent = '▶️ Watch Now';
+                    unlockBtn.onclick = () => watchVideo(video);
+                } else {
+                    unlockBtn.textContent = t.unlockText || '€0.30 - Unlock';
+                    unlockBtn.onclick = () => openPaymentModal(video);
+                }
+                
+                videoInfo.appendChild(title);
+                videoInfo.appendChild(unlockBtn);
+                
+                videoCard.appendChild(thumbnail);
+                videoCard.appendChild(videoInfo);
+                grid.appendChild(videoCard);
+            });
+        }
+
+        function watchVideo(video) {
+            // Create video player modal
+            const videoModal = document.createElement('div');
+            videoModal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.9);
+                z-index: 2000;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            `;
+            
+            const videoElement = document.createElement('video');
+            videoElement.src = video;
+            videoElement.controls = true;
+            videoElement.autoplay = true;
+            videoElement.style.cssText = 'max-width: 90%; max-height: 90%;';
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '×';
+            closeBtn.style.cssText = `
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background: rgba(255,255,255,0.8);
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                padding: 10px;
+                border-radius: 50%;
+            `;
+            closeBtn.onclick = () => document.body.removeChild(videoModal);
+            
+            videoModal.appendChild(videoElement);
+            videoModal.appendChild(closeBtn);
+            document.body.appendChild(videoModal);
+        }
+
+        function openPaymentModal(video) {
+            selectedVideo = video;
+            document.getElementById('paymentModal').style.display = 'flex';
+            initPayPal();
+        }
+
+        function closeModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+
+        function initPayPal() {
+            document.getElementById('paypal-button-container').innerHTML = '';
+            
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: '0.30'
+                            },
+                            description: 'Premium Video Access'
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        // Unlock the video
+                        unlockedVideos.push(selectedVideo);
+                        localStorage.setItem('unlockedVideos', JSON.stringify(unlockedVideos));
+                        
+                        alert('Payment successful! Video unlocked.');
+                        closeModal();
+                        loadPremiumVideos(); // Refresh display
+                    });
+                },
+                onError: function(err) {
+                    console.error('PayPal error:', err);
+                    alert('Payment failed. Please try again.');
+                }
+            }).render('#paypal-button-container');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('preferred-language') || 'es';
+            document.getElementById('languageSelect').value = savedLang;
+            changeLanguage();
+            
+            document.getElementById('languageSelect').addEventListener('change', changeLanguage);
+            
+            setTimeout(loadPremiumVideos, 1000);
+            
+            console.log('🎬 Videos page loaded');
+        });
+    </script>
+</body>
+</html>

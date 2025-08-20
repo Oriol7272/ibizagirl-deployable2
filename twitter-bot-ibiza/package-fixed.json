@@ -1,0 +1,23 @@
+{
+  "name": "twitter-bot-ibiza-fixed",
+  "version": "2.0.0",
+  "description": "Bot de Twitter seguro para IbizaGirl.pics con protección anti-429",
+  "main": "twitter-bot-FIXED.js",
+  "scripts": {
+    "start": "node twitter-bot-FIXED.js",
+    "test": "node -e \"console.log('✅ Bot listo para ejecutar')\"",
+    "check": "node -e \"require('dotenv').config({path:'./twitter.env'}); console.log('Keys:', !!process.env.TWITTER_API_KEY)\""
+  },
+  "keywords": ["twitter", "bot", "ibiza", "social-media", "rate-limiting"],
+  "author": "IbizaGirl.pics",
+  "license": "MIT",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "node-cron": "^3.0.3",
+    "twitter-api-v2": "^1.17.2"
+  }
+}

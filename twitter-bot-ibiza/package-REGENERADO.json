@@ -1,0 +1,43 @@
+{
+  "name": "twitter-bot-ibiza-regenerado",
+  "version": "3.0.0",
+  "description": "Bot de Twitter REGENERADO para IbizaGirl.pics con credenciales nuevas 2025",
+  "main": "twitter-bot-REGENERADO.js",
+  "scripts": {
+    "start": "node twitter-bot-REGENERADO.js",
+    "dev": "node twitter-bot-REGENERADO.js",
+    "test": "node -e \"console.log('✅ Bot regenerado listo')\"",
+    "check": "node -e \"require('dotenv').config({path:'./twitter-NEW.env'}); console.log('🔑 API Key:', !!process.env.TWITTER_API_KEY); console.log('🔑 Secret:', !!process.env.TWITTER_API_SECRET); console.log('🔑 Token:', !!process.env.TWITTER_ACCESS_TOKEN);\"",
+    "logs": "tail -f logs/twitter-bot.log",
+    "status": "ps aux | grep twitter-bot"
+  },
+  "keywords": [
+    "twitter",
+    "bot", 
+    "ibiza",
+    "social-media",
+    "rate-limiting",
+    "regenerated",
+    "2025"
+  ],
+  "author": "IbizaGirl.pics Team",
+  "license": "MIT",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "node-cron": "^3.0.3", 
+    "twitter-api-v2": "^1.17.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "private"
+  },
+  "config": {
+    "rate_limit_safe": true,
+    "max_tweets_daily": 15,
+    "environment": "production"
+  }
+}
