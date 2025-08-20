@@ -1288,21 +1288,27 @@
             uncensoredImages = content.uncensoredImages;
             premiumVideos = content.premiumVideos;
 
-            // Daily randomization
+            // ROTACIÓN EXACTA SEGÚN REQUERIMIENTOS DEL USUARIO
             const today = new Date().toDateString();
             const savedDate = localStorage.getItem('contentDate');
             
             if (savedDate !== today) {
-                shuffleArray(fullImages);
-                shuffleArray(uncensoredImages); 
-                shuffleArray(premiumVideos);
+                // Mezclar contenido diariamente
+                shuffleArray(content.fullImages);
+                shuffleArray(content.uncensoredImages); 
+                shuffleArray(content.premiumVideos);
                 localStorage.setItem('contentDate', today);
                 console.log('🔄 Daily content shuffled');
             }
 
-            console.log(`📸 Loaded ${fullImages.length} full images`);
-            console.log(`💎 Loaded ${uncensoredImages.length} premium images`);
-            console.log(`🎬 Loaded ${premiumVideos.length} premium videos`);
+            // SELECCIONAR EXACTAMENTE SEGÚN REQUERIMIENTOS:
+            fullImages = content.fullImages.slice(0, 25); // 25 fotos del pool total
+            uncensoredImages = content.uncensoredImages.slice(0, 100); // 100 fotos del pool total
+            premiumVideos = content.premiumVideos.slice(0, 20); // 20 videos del pool total
+            
+            console.log(`📸 Loaded ${fullImages.length} full images (requirement: 25)`);
+            console.log(`💎 Loaded ${uncensoredImages.length} premium images (requirement: 100)`);
+            console.log(`🎬 Loaded ${premiumVideos.length} premium videos (requirement: 20)`);
         }
 
         function shuffleArray(array) {
