@@ -1246,219 +1246,38 @@
             }
         };
 
-        // Generate REAL content using actual file names - COMPLETELY FIXED
-        function generateRealContent() {
-            // REAL files from /full/ directory - ALL existing files
-            const fullFilesList = [
-                'full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
-                'full/0Tc8Vtd0mEIvNHZwYGBq.webp',
-                'full/0lySugcO4Pp4pEZKvz9U.webp',
-                'full/0nSaCJQxbVw4BDrhnhHO.webp',
-                'full/13TXvyRVZ7LtvAOx7kme.webp',
-                'full/18VQaczW5kdfdiqUVasH.webp',
-                'full/1dEu25K0mS3zxRlXRjHR.webp',
-                'full/1qEBcg9QbkZRRdLt0Chc.webp',
-                'full/1tt8H4fX3XzyV90HjNG3.webp',
-                'full/27bGIzFFpej5ubUkvykD.webp',
-                'full/2gjqH68H586TKLDK9lh9.webp',
-                'full/2yw4sowPh3Tyln5oxRdw.webp',
-                'full/39GYGt3bticS0Mjbud0p.webp',
-                'full/3IWka3fnP9b8yz6j5l91.webp',
-                'full/3ZYL4GCUOs3rfq3iTPJ7.webp',
-                'full/4GN6i0Db2hl4Ck9vf0LE.webp',
-                'full/4YhoIAWSbVaOqBhAOGqR.webp',
-                'full/82KxJ9daxf9MpK019L5I.webp',
-                'full/83cSC4eRnYGZUNo9AoqD.webp',
-                'full/85158b64-4168-45fa-9cb4-0b40634f7fa1.webp',
-                'full/8faf42TRuGOU4ZW9KS9W.webp',
-                'full/92Ck0v3g8gZLEQ5vOmpd.webp',
-                'full/993acHdsWLzG80gAFZQs.webp',
-                'full/9D5U5fKXT72xnpqsgUaD.webp',
-                'full/9v20KsJFZoAv2WQ8m3o2.webp',
-                'full/AHKAq0biFDUtkxlx7TCu.webp',
-                'full/ANhHtA0GivBfeAo6dvJG.webp',
-                'full/AwKXjDqrJMTKNvB84iRy.webp',
-                'full/CTyCcna8JSPObRQpulKJ.webp',
-                'full/CmxJm1VLBBhvZoUwxWTJ.webp',
-                'full/CuX7zQzCBToIMKBYVcA8.webp',
-                'full/D3QdNfIR9B8YKPIYl0Hg.webp',
-                'full/FElwiy3A7OtgubeV9Qsh.webp',
-                'full/Fz2ORrJSrERl0BZGOH24.webp',
-                'full/G4YdNFtdunscrnPe5Qb6.webp',
-                'full/G5tR4rjmD4dWct9aKfMu.webp',
-                'full/I2enQjaFiBfPB2hml0xQ.webp',
-                'full/ICDQwh9QLaL3SpYTmk4i.webp',
-                'full/IXCJwuZEjxFfPTinm4Cq.webp',
-                'full/Jc4OmrYPCcAkzNGKXhE1.webp',
-                'full/K6AqNa8lHyPw8rujRCux.webp',
-                'full/KRGZrnrhKdEiv6bUM0B8.webp',
-                'full/KSIgono33EvDrKQDut47.webp',
-                'full/KSft2d50fGqVzjnvaQsP.webp',
-                'full/McOBxMX6PoUZbroTTgP4.webp',
-                'full/NDGfqsuUip0F4dU9wgVL.webp',
-                'full/NDH6z4lZlrQn9bJrR8sl.webp',
-                'full/NqO93fUipM4zuYSCRSt5.webp',
-                'full/NzzddX28psM9wi68V6CK.webp',
-                'full/PYxGx0lKZ43QPf1qdvLZ.webp',
-                'full/QrxqDwp4XM84wYYND3uT.webp',
-                'full/RwJSQRDcYLUL3itNeBsI.webp',
-                'full/SPz0O8J0T6G5uVWIoDzQ.webp',
-                'full/backbikini.webp',
-                'full/bikback2.webp',
-                'full/bikbanner.webp',
-                'full/bikbanner2.webp',
-                'full/bikini.webp',
-                'full/bikini3.webp',
-                'full/bikini5.webp'
+        // Get content from existing content-data*.js files - NO MORE HARDCODING!
+        function getContentFromDataFiles() {
+            console.log('📦 Cargando contenido desde content-data*.js files...');
+            
+            // Verificar que los módulos estén cargados
+            if (!window.FULL_IMAGES_POOL || !window.PREMIUM_IMAGES_PART1 || !window.PREMIUM_IMAGES_PART2 || !window.PREMIUM_VIDEOS_POOL) {
+                console.error('❌ Los módulos content-data*.js no están cargados correctamente');
+                console.log('Checking modules:', {
+                    FULL_IMAGES_POOL: !!window.FULL_IMAGES_POOL,
+                    PREMIUM_IMAGES_PART1: !!window.PREMIUM_IMAGES_PART1,
+                    PREMIUM_IMAGES_PART2: !!window.PREMIUM_IMAGES_PART2,
+                    PREMIUM_VIDEOS_POOL: !!window.PREMIUM_VIDEOS_POOL
+                });
+                return { fullImages: [], uncensoredImages: [], premiumVideos: [] };
+            }
+            
+            // Combinar ambas partes de imágenes premium
+            const allPremiumImages = [
+                ...window.PREMIUM_IMAGES_PART1,
+                ...window.PREMIUM_IMAGES_PART2
             ];
-
-            // REAL files from /uncensored/ directory - 100 existing files 
-            const uncensoredFilesList = [
-                'uncensored/Vxm8ZimCcJVYL4fuaX2C.webp',
-                'uncensored/GfKCNq1M1XRsuyZCSr46.webp',
-                'uncensored/SyWKyUgFoMmXtcTCGRcD.webp',
-                'uncensored/46TvCsW1KG6wcG0OWRc7.webp',
-                'uncensored/bS5wI3lzdj9uBSaLxw4s.webp',
-                'uncensored/nTNsF9TsXAR57edrOwt7.webp',
-                'uncensored/j6QQvBGsx56JEmd2x6Lb.webp',
-                'uncensored/5UaQChlNIlRegwT0Ze2S.webp',
-                'uncensored/8phioNKwTe78kkBxfQxv.webp',
-                'uncensored/xRSeg3ANfcjoJX8N4o2B.webp',
-                'uncensored/Ty5J5IaTVkbdQJyS0hC2.webp',
-                'uncensored/WGqmQbPGcAFj3zRebbtZ.webp',
-                'uncensored/vKQoBDqUoPXarpR3vYpP.webp',
-                'uncensored/HJk26Z6e0TG9m5R4FGSF.webp',
-                'uncensored/JcqsT7TH5R7mNg2HhQ4V.webp',
-                'uncensored/1DCEysi2B2gEWgZnDyqg.webp',
-                'uncensored/gKzWF1nTDITgeW5ncsqP.webp',
-                'uncensored/pi6Lxcrb5ba8mRgO6a7n.webp',
-                'uncensored/HWU31WfJnKiOnncOIS1Y.webp',
-                'uncensored/UQzUY6tuS0GVfhvLeNK4.webp',
-                'uncensored/eQReQsoJjyZmW1cToOUj.webp',
-                'uncensored/yfg3k230t90RBUEUoBGz.webp',
-                'uncensored/35H8tCgsszXQMJVMOC3l.webp',
-                'uncensored/dSKs7G60OQ19t3wjDjG0.webp',
-                'uncensored/SaBqVqA0TXxRXMI1vQc5.webp',
-                'uncensored/GP5wSnfYofnNsHVYeLIU.webp',
-                'uncensored/omcO6PYtLWtwCXQjf8UG.webp',
-                'uncensored/bywUeU5kqyduPEyNnH1d.webp',
-                'uncensored/f113QHZHP04PMmqpBMfa.webp',
-                'uncensored/frByUlLa0C2K5lgDkcQ4.webp',
-                'uncensored/3PclVfFD7nJ3InJVwttg.webp',
-                'uncensored/ocMCWfpPdb0UdxA8X5DJ.webp',
-                'uncensored/UZ5Mj9Kkrz5rI2xN625S.webp',
-                'uncensored/bbuiH38TdHwzmiUwJlyk.webp',
-                'uncensored/Pnvie5aGzyIEzsD9vFwR.webp',
-                'uncensored/amjSkXY4CehaPR7pb6LP.webp',
-                'uncensored/qtxWuSAFLyXBjHVE1Tpu.webp',
-                'uncensored/ZgVIcYVuhSWbyRHZp2Gz.webp',
-                'uncensored/g9YZrmTt09PEvbCs4RPE.webp',
-                'uncensored/KJKm1yAasOarP8RCmqTL.webp',
-                'uncensored/2wd4XakdNzeI9tCqIgiN.webp',
-                'uncensored/DuE3kpTijyH0TXZeNRov.webp',
-                'uncensored/EPmllKLsG506WCkz199l.webp',
-                'uncensored/rFIV6bdwk3cQHzeM8Dwc.webp',
-                'uncensored/dwNhaABVUxVgZqEh8x7R.webp',
-                'uncensored/d2VE38Jpn8y8IzBvUgXb.webp',
-                'uncensored/Ufy0mWkrko5ed2UkruWI.webp',
-                'uncensored/uRtZMBc6s4Qo1ABNeFx7.webp',
-                'uncensored/rPEZ7xbwNUIAYKKEhpaE.webp',
-                'uncensored/GVj1Znv6r8n25DVL35Sg.webp',
-                'uncensored/y2djGXOKJEz8Bb6eTeUc.webp',
-                'uncensored/kl7uL0kYuxv1ywgVArK6.webp',
-                'uncensored/Te2nfJ7cUJ4CLzPXOGNP.webp',
-                'uncensored/6akVvgSAP9kKu3Ob6L9d.webp',
-                'uncensored/PcP60ZVq56xmJvq4dvqW.webp',
-                'uncensored/Fpd4oXLjygVVcjFoUwMJ.webp',
-                'uncensored/Cd9njNgqaD1K2K4mdQti.webp',
-                'uncensored/qOlZbg4apVmI99ZjBWZl.webp',
-                'uncensored/4DXLdKZgVq1Q329fFPyt.webp',
-                'uncensored/xjZqnXA5GEJed7iEaR0G.webp',
-                'uncensored/gcLWreCoolbJqNwOf8U1.webp',
-                'uncensored/xIEZ7YxNcUjgUTQKaHbx.webp',
-                'uncensored/MLsK990TwEGQUcWiIHtN.webp',
-                'uncensored/ivlJ70pfwGp4OvaZWKDI.webp',
-                'uncensored/WfBluuqqYqgsHlgtxRm3.webp',
-                'uncensored/461c6YZMoZeUAUMmuROj.webp',
-                'uncensored/OEgHK5KXpZFdq6NLoG5Y.webp',
-                'uncensored/Sc2yy5V2ajuciQ8FN4in.webp',
-                'uncensored/e0cgUGya6Zd2knd2FWo4.webp',
-                'uncensored/ekmYbNBjpyWxZwRlc1EK.webp',
-                'uncensored/Bay55kBwPyPNFWVOuUuE.webp',
-                'uncensored/chD2c0Gum1c5kFk0yeGN.webp',
-                'uncensored/QMeka4uzpb3ymNmeUgbG.webp',
-                'uncensored/Dxm1dyC83PKkRYOrfJiW.webp',
-                'uncensored/n2SCfQGfx3Si6ccI10hp.webp',
-                'uncensored/jFnhrqggWafAUbJzHDGv.webp',
-                'uncensored/31vAZT8MZI5qtnuApW4W.webp',
-                'uncensored/R6xtD32yLznN3ooTRBP9.webp',
-                'uncensored/OWmeGkbmX9ThZv53PWJt.webp',
-                'uncensored/ADUXgNEjqj33SnghngrT.webp',
-                'uncensored/f0D2KiSpjpCMZplrZTut.webp',
-                'uncensored/qjHfE9t6JL0S68R40RxG.webp',
-                'uncensored/IMyLo4zdadFK6kHpBMZb.webp',
-                'uncensored/02gNvnd7bLJgBX7wvQ2r.webp',
-                'uncensored/wmLduS9rO8qU9aX2uWIe.webp',
-                'uncensored/nPwyzQniFFbKSfS8aYCr.webp',
-                'uncensored/Z7Z7UTXyqeJ8LszoaSgW.webp',
-                'uncensored/SV2MqZOgdWI9rGY314Tz.webp',
-                'uncensored/6apiRuvUyKSHHRMmMgmG.webp',
-                'uncensored/uuWZbWHBiO61Hak3zs4Y.webp',
-                'uncensored/PKqJWd0mti9zeAi90dHg.webp',
-                'uncensored/kBZg980vFtgITgH3U9eP.webp',
-                'uncensored/9YLpn3gsg8sTGaN0CmZm.webp',
-                'uncensored/7yrnh8Oz9H5wUFIbU3OC.webp',
-                'uncensored/R72I1Vrwagr4YQFpwcZp.webp',
-                'uncensored/Vdk4r7LEyIWXicSheqOV.webp',
-                'uncensored/qZPA1xJ6KVyLzp2jMc4y.webp',
-                'uncensored/zl3FIFdh4OZMogOhLQXv.webp',
-                'uncensored/1bITefcv83TIA7idRrrO.webp',
-                'uncensored/MS78j8iZVCPITPEZSJyS.webp',
-                'uncensored/05mTzCtfbQ5McL31hk49.webp',
-                'uncensored/081YXXFwiGwFJpJCqkV9.webp',
-                'uncensored/08cuJR4dA17oVjLQcQd7.webp',
-                'uncensored/09HFl7nAkIjFBFbg3SeA.webp',
-                'uncensored/0K7AtRh7U93R2VH9axxQ.webp'
-            ];
-
-            // REAL files from /uncensored-videos/ directory - first 30 existing files
-            const videoFilesList = [
-                'uncensored-videos/GK3wKGkNYhO4YyFDAg8x.mp4',
-                'uncensored-videos/T6auQxu1yZKCGPqVJ7ue.mp4',
-                'uncensored-videos/r14kVENgyJthsXKP4ckJ.mp4',
-                'uncensored-videos/zX53TSjhlQj4Gy76iK0H.mp4',
-                'uncensored-videos/kfDFWczYHsZXjtwmMsP4.mp4',
-                'uncensored-videos/M6TEA1f8hNdjol3Wi1se.mp4',
-                'uncensored-videos/n4DaX8Nwj1glWI1Oe9vj.mp4',
-                'uncensored-videos/XRCoUfkNLzwUepShH19v.mp4',
-                'uncensored-videos/8yE2nxCwV2QcJsdXGf32.mp4',
-                'uncensored-videos/0xXK6PxXSv6cpYxvI7HX.mp4',
-                'uncensored-videos/beSTk3pKEdHZJSH7rwHs.mp4',
-                'uncensored-videos/rWwDSNSYmt9jpPd2ngiI.mp4',
-                'uncensored-videos/ZPPOJjpdigAhYYekcnPx.mp4',
-                'uncensored-videos/nLejk9R1jPVuOpyrlrAN.mp4',
-                'uncensored-videos/BA7Bvw9GHNCbsEKOruXh.mp4',
-                'uncensored-videos/QGeTBD8xHjPvnqA72uiF.mp4',
-                'uncensored-videos/f8FbeCjEOwLRvwIgfK8l.mp4',
-                'uncensored-videos/Ocb0MqRnLH1pezhcgpHh.mp4',
-                'uncensored-videos/ahLNYijoKI9YoYoGToLK.mp4',
-                'uncensored-videos/8fQQnk9u7YAQQXDpfOW3.mp4',
-                'uncensored-videos/G4XjXiZIHZZRsKwlDYCp.mp4',
-                'uncensored-videos/Bg8z3Gk9SuxEAFGt1WBo.mp4',
-                'uncensored-videos/fCE3ydur09Lbf0hxFHyD.mp4',
-                'uncensored-videos/qEOel0dBNRP2ttJtVUcQ.mp4',
-                'uncensored-videos/NTGWrlYi5RltnwhDSO6R.mp4',
-                'uncensored-videos/MCZSxdyGPDN7E7Mkdj8F.mp4',
-                'uncensored-videos/i1iPIEe7iIhancXwP05J.mp4',
-                'uncensored-videos/iniuJRrZzzGp74LWfZYy.mp4',
-                'uncensored-videos/UQGldJ8bdBrYyWDP0MEN.mp4',
-                'uncensored-videos/0nF138CMxl1eGWUxaG2d.mp4'
-            ];
-
+            
+            console.log(`📊 Contenido cargado desde content-data*.js:`);
+            console.log(`- ${window.FULL_IMAGES_POOL.length} imágenes públicas`);
+            console.log(`- ${allPremiumImages.length} imágenes premium (${window.PREMIUM_IMAGES_PART1.length} + ${window.PREMIUM_IMAGES_PART2.length})`);
+            console.log(`- ${window.PREMIUM_VIDEOS_POOL.length} videos premium`);
+            console.log(`🎯 TOTAL: ${window.FULL_IMAGES_POOL.length + allPremiumImages.length + window.PREMIUM_VIDEOS_POOL.length} archivos`);
+            
             return {
-                fullImages: fullFilesList,
-                uncensoredImages: uncensoredFilesList,
-                premiumVideos: videoFilesList
+                fullImages: window.FULL_IMAGES_POOL,
+                uncensoredImages: allPremiumImages,
+                premiumVideos: window.PREMIUM_VIDEOS_POOL
             };
         }
 
