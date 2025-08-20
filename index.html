@@ -674,9 +674,9 @@
         function handlePaymentSuccess(type, details, index = null) {
             console.log('✅ Pago exitoso:', type, details);
             alert('¡Pago realizado con éxito! Gracias por tu compra.');
-            let purchases = JSON.parse(localStorage.getItem('beachgirl_purchases')) || [];
+            let purchases = JSON.parse(localStorage.getItem('ibizagirl_purchases')) || [];
             purchases.push({ type: type, index: index, transactionId: details.id, timestamp: Date.now() });
-            localStorage.setItem('beachgirl_purchases', JSON.stringify(purchases));
+            localStorage.setItem('ibizagirl_purchases', JSON.stringify(purchases));
             
             switch(type) {
                 case 'monthly_subscription': 
