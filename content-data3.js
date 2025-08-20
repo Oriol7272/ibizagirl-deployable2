@@ -1,14 +1,52 @@
-// BeachGirl.pics - Premium Videos Content Data
-// This file contains the actual filenames for the 'uncensored-videos' directory content
-const premiumVideos = [
-    { src: '/uncensored-videos/GK3wKGkNYhO4YyFDAg8x.mp4', thumbnail: '/uncensored/GK3wKGkNYhO4YyFDAg8x.webp', title: 'BeachGirl Video 1', price: 0.30, isNew: false },
-    { src: '/uncensored-videos/T6auQxu1yZKCGPqVJ7ue.mp4', thumbnail: '/uncensored/T6auQxu1yZKCGPqVJ7ue.webp', title: 'BeachGirl Video 2', price: 0.30, isNew: true },
-    { src: '/uncensored-videos/r14kVENgyJthsXKP4ckJ.mp4', thumbnail: '/uncensored/r14kVENgyJthsXKP4ckJ.webp', title: 'BeachGirl Video 3', price: 0.30, isNew: false },
-    { src: '/uncensored-videos/zX53TSjhlQj4Gy76iK0H.mp4', thumbnail: '/uncensored/zX53TSjhlQj4Gy76iK0H.webp', title: 'BeachGirl Video 4', price: 0.30, isNew: false },
-    { src: '/uncensored-videos/kfDFWczYHsZXjtwmMsP4.mp4', thumbnail: '/uncensored/kfDFWczYHsZXjtwmMsP4.webp', title: 'BeachGirl Video 5', price: 0.30, isNew: true }
+// BeachGirl.pics - Full Images Content Data PART 3 (FINAL)
+const fullImages_Part3 = [
+    { src: '/full/buxNTxdJrOaiUnp3CCgW.webp', title: 'Beach Paradise buxNTxdJ', isNew: false },
+    { src: '/full/cRNjL0pgJXBWVxKdsFON.webp', title: 'Beach Paradise cRNjL0pg', isNew: false },
+    { src: '/full/dy1ftClNZHFt9B49BTEp.webp', title: 'Beach Paradise dy1ftClN', isNew: false },
+    { src: '/full/edLlsnFaeB1b2IIz0ZfU.webp', title: 'Beach Paradise edLlsnFa', isNew: false },
+    { src: '/full/eh5N2OaEJgk0paLySHvU.webp', title: 'Beach Paradise eh5N2OaE', isNew: false },
+    { src: '/full/f0D2KiSpjpCMZplrZTut.webp', title: 'Beach Paradise f0D2KiSp', isNew: false },
+    { src: '/full/fI2l2bTRfnxfGmRrsiWc.webp', title: 'Beach Paradise fI2l2bTR', isNew: false },
+    { src: '/full/fY0jj2fqRxuZBKRIgcPT.webp', title: 'Beach Paradise fY0jj2fq', isNew: false },
+    { src: '/full/gNncVGzxclrLja7UdRZz.webp', title: 'Beach Paradise gNncVGzx', isNew: false },
+    { src: '/full/hEus9oo2ED2ofExFZwrO.webp', title: 'Beach Paradise hEus9oo2', isNew: false },
+    { src: '/full/hxxXN7wkWVNaytlNJnWi.webp', title: 'Beach Paradise hxxXN7wk', isNew: false },
+    { src: '/full/i9FeoaoF6cHVtVzqkjwQ.webp', title: 'Beach Paradise i9FeoaoF', isNew: false },
+    { src: '/full/j6QQvBGsx56JEmd2x6Lb.webp', title: 'Beach Paradise j6QQvBGs', isNew: false },
+    { src: '/full/jIcLZTpAQWe6dfKiyoAN.webp', title: 'Beach Paradise jIcLZTpA', isNew: false },
+    { src: '/full/jJaZUgqOEgXYWCFljYz3.webp', title: 'Beach Paradise jJaZUgqO', isNew: false },
+    { src: '/full/jTSyAJInaPJl7z7HJD4a.webp', title: 'Beach Paradise jTSyAJIn', isNew: false },
+    { src: '/full/kSifqxFJOiBwilLR65bV.webp', title: 'Beach Paradise kSifqxFJ', isNew: false },
+    { src: '/full/kZcyiAnC5K1YAXKulB2e.webp', title: 'Beach Paradise kZcyiAnC', isNew: false },
+    { src: '/full/kr5FiUdTaiQ7imq1xHlH.webp', title: 'Beach Paradise kr5FiUdT', isNew: false },
+    { src: '/full/lXpckkGACDNcXPAHEQqu.webp', title: 'Beach Paradise lXpckkGA', isNew: false },
+    { src: '/full/mFuqtladZr2hO3Tszm3m.webp', title: 'Beach Paradise mFuqtlad', isNew: false },
+    { src: '/full/nJvZXk80qguZvwOeSai6.webp', title: 'Beach Paradise nJvZXk80', isNew: false },
+    { src: '/full/nm6YKc38NLqwGPaNiDhc.webp', title: 'Beach Paradise nm6YKc38', isNew: false },
+    { src: '/full/owPT3Y4puK3dRHWNsj47.webp', title: 'Beach Paradise owPT3Y4p', isNew: false },
+    { src: '/full/psZEFLlVAhAiq10uJ8qd.webp', title: 'Beach Paradise psZEFLlV', isNew: false },
+    { src: '/full/qLDeRznPthcmYSmggfbm.webp', title: 'Beach Paradise qLDeRznP', isNew: false },
+    { src: '/full/qhK8inhLxacOs8w7mRbE.webp', title: 'Beach Paradise qhK8inhL', isNew: false },
+    { src: '/full/qxIzW9ZMuhkEY6dmGKSv.webp', title: 'Beach Paradise qxIzW9ZM', isNew: false },
+    { src: '/full/sMAD8T2U7A3aMQjxsUdd.webp', title: 'Beach Paradise sMAD8T2U', isNew: false },
+    { src: '/full/sda0bXv4LRWxnW49KPWT.webp', title: 'Beach Paradise sda0bXv4', isNew: false },
+    { src: '/full/sfz7eFmqHWlf6wrpTDD9.webp', title: 'Beach Paradise sfz7eFmq', isNew: false },
+    { src: '/full/t9WqMZxXkmUTMrq3d13l.webp', title: 'Beach Paradise t9WqMZxX', isNew: false },
+    { src: '/full/tMxzKdT8rjZm3gpe0StS.webp', title: 'Beach Paradise tMxzKdT8', isNew: false },
+    { src: '/full/tQ41YocTwqSnd8mFsDc5.webp', title: 'Beach Paradise tQ41YocT', isNew: false },
+    { src: '/full/tQInulLfQHQTFNIK6yEV.webp', title: 'Beach Paradise tQInulLf', isNew: false },
+    { src: '/full/tzico6mUJuc7Lz8HYdEF.webp', title: 'Beach Paradise tzico6mU', isNew: false },
+    { src: '/full/uMSW2oj0qrbVEmIEotZ1.webp', title: 'Beach Paradise uMSW2oj0', isNew: false },
+    { src: '/full/ufXYerfLKedF1f6OYNhd.webp', title: 'Beach Paradise ufXYerfL', isNew: false },
+    { src: '/full/wrs60TS7VJQlmWbyKKUu.webp', title: 'Beach Paradise wrs60TS7', isNew: false },
+    { src: '/full/xhQTgYHiVAYbnYrKIsOq.webp', title: 'Beach Paradise xhQTgYHi', isNew: false },
+    { src: '/full/yqTobCZL2AABmmNJ7EPU.webp', title: 'Beach Paradise yqTobCZL', isNew: false },
+    { src: '/full/zNzTQ476q4sOPWRaVPEw.webp', title: 'Beach Paradise zNzTQ476', isNew: false },
+    { src: '/full/zRPnijTCwLqQeZLXLvzu.webp', title: 'Beach Paradise zRPnijTC', isNew: false },
+    { src: '/full/zSzYfjo7gtKbVBWGhbJN.webp', title: 'Beach Paradise zSzYfjo7', isNew: false },
+    { src: '/full/zUNmPEaVFiJfL1mo27ga.webp', title: 'Beach Paradise zUNmPEaV', isNew: false },
+    { src: '/full/zs7GNC0HKhDQwRIsB9IM.webp', title: 'Beach Paradise zs7GNC0H', isNew: false },
+    { src: '/full/zx83JCzdTKNfyKUY6Djs.webp', title: 'Beach Paradise zx83JCzd', isNew: false },
 ];
 
-// Export for use in other scripts
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { premiumVideos };
-}
+if (typeof module !== 'undefined' && module.exports) { module.exports = { fullImages_Part3 }; }
