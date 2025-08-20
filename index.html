@@ -1302,11 +1302,11 @@
             }
 
             // SELECCIONAR EXACTAMENTE SEGÚN REQUERIMIENTOS:
-            fullImages = content.fullImages.slice(0, 25); // 25 fotos del pool total
+            fullImages = content.fullImages.slice(0, 20); // 20 fotos del pool total (CORREGIDO)
             uncensoredImages = content.uncensoredImages.slice(0, 100); // 100 fotos del pool total
             premiumVideos = content.premiumVideos.slice(0, 20); // 20 videos del pool total
             
-            console.log(`📸 Loaded ${fullImages.length} full images (requirement: 25)`);
+            console.log(`📸 Loaded ${fullImages.length} full images (requirement: 20)`);
             console.log(`💎 Loaded ${uncensoredImages.length} premium images (requirement: 100)`);
             console.log(`🎬 Loaded ${premiumVideos.length} premium videos (requirement: 20)`);
         }
