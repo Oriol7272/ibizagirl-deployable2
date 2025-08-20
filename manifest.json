@@ -1,33 +1,4 @@
 {
-<<<<<<< HEAD
-  "name": "BeachGirl.pics - Paradise Beach Collection",
-  "short_name": "BeachGirl",
-  "description": "Premium beach photos and videos collection with tropical paradise theme",
-  "start_url": "/",
-  "display": "fullscreen",
-  "background_color": "#4facfe",
-  "theme_color": "#4facfe",
-  "orientation": "portrait-primary",
-  "scope": "/",
-  "lang": "es",
-  "icons": [
-    {
-      "src": "/favicon.ico",
-      "sizes": "32x32",
-      "type": "image/x-icon",
-      "purpose": "any maskable"
-    }
-  ],
-  "categories": ["entertainment", "lifestyle"],
-  "screenshots": [
-    {
-      "src": "/decorative-images/paradise-beach.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide"
-    }
-  ]
-=======
     "name": "IbizaGirl.pics - Paraíso Premium",
     "short_name": "IbizaGirl",
     "description": "Premium content from the paradise of Ibiza",
@@ -54,5 +25,4 @@
     "lang": "es",
     "scope": "/",
     "prefer_related_applications": false
->>>>>>> 2605afd1078c28a88b0c9f9589a5dea632e8c75e
 }
