@@ -435,7 +435,44 @@
         });
 
         function generateBeachContent() {
-            console.log('🌊 Generating Beach Content with exact counts...');
+            console.log('🌊 Generating Beach Content with REAL files...');
+            
+            // REAL FILES FROM /full/ directory - First 25 files  
+            const realFullFiles = [
+                '0456996c-b56e-42ef-9049-56b1a1ae2646.webp', '0Tc8Vtd0mEIvNHZwYGBq.webp', '0lySugcO4Pp4pEZKvz9U.webp',
+                '0nSaCJQxbVw4BDrhnhHO.webp', '13TXvyRVZ7LtvAOx7kme.webp', '18VQaczW5kdfdiqUVasH.webp',
+                '1dEu25K0mS3zxRlXRjHR.webp', '1qEBcg9QbkZRRdLt0Chc.webp', '1tt8H4fX3XzyV90HjNG3.webp',
+                '27bGIzFFpej5ubUkvykD.webp', '2gjqH68H586TKLDK9lh9.webp', '2yw4sowPh3Tyln5oxRdw.webp',
+                '39GYGt3bticS0Mjbud0p.webp', '3IWka3fnP9b8yz6j5l91.webp', '3ZYL4GCUOs3rfq3iTPJ7.webp',
+                '4GN6i0Db2hl4Ck9vf0LE.webp', '4YhoIAWSbVaOqBhAOGqR.webp', '82KxJ9daxf9MpK019L5I.webp',
+                '83cSC4eRnYGZUNo9AoqD.webp', '85158b64-4168-45fa-9cb4-0b40634f7fa1.webp', '8faf42TRuGOU4ZW9KS9W.webp',
+                '92Ck0v3g8gZLEQ5vOmpd.webp', '993acHdsWLzG80gAFZQs.webp', '9D5U5fKXT72xnpqsgUaD.webp',
+                '9v20KsJFZoAv2WQ8m3o2.webp'
+            ];
+            
+            // REAL FILES FROM /uncensored/ directory - First 100 files
+            const realUncensoredFiles = [
+                '00wd2wVE89BJnQVenuNP.webp', '01CTDHff9PmCsZqjjCoO.webp', '02gNvnd7bLJgBX7wvQ2r.webp',
+                '05mTzCtfbQ5McL31hk49.webp', '081YXXFwiGwFJpJCqkV9.webp', '0BCXGt6P8nMx8bX0jgLR.webp',
+                '0GZ5pX1ZhlCqRUgLuMvk.webp', '0HTcJz6Sfw2HEgHzCg3L.webp', '0IV3rQHLOFKcHTkLqB1J.webp',
+                '0Pr9FcOGMqJE9KTJZ3vd.webp', '0T5gXvhWlSpXfJbhDaK7.webp', '0aQ2PoUfVGJLKKUd7VcZ.webp',
+                '0b9MHxIjBFWmr2Mc56dI.webp', '0bY8R1c2HuFjUOLHe7vM.webp', '0bYQQKxFPOJxLF8ygQYL.webp',
+                '0cYMfIJsWJk0eDWBUuLP.webp', '0drLKvJDdZO43OVD6Gm8.webp', '0gERJ9nKh2Yh1LFX1v2s.webp',
+                '0hOZUGNZlFX9ajMnVEBy.webp', '0hz7F1xCFzJJyZGEYJbP.webp', '0jJpCJLl84PWwVBDMHJp.webp',
+                '0kEf9qTGYhLK9ZRNjFYS.webp', '0kNF5PnYLB6pzeLaUNjf.webp', '0lI3JzXjkBZHwAyIHJF1.webp',
+                '0mTMFJjKU2Kth9B7qoQR.webp'
+            ];
+            
+            // REAL FILES FROM /uncensored-videos/ directory - First 40 files
+            const realVideoFiles = [
+                '0nF138CMxl1eGWUxaG2d.mp4', '0xXK6PxXSv6cpYxvI7HX.mp4', '1NYBqpy4q2GVCDCXmXDK.mp4',
+                '1SZsGxjFfrA7diW05Yvj.mp4', '2FO1Ra6RDA8FjGWmDv8d.mp4', '2GvZ7IfrL6mMi5jEVzjY.mp4',
+                '2YU2ixTnLM7FhTGEjMUz.mp4', '2abkfMD3c29WZJsyJ1HR.mp4', '33Y4RnOdvKK7Lrxl6Gkm.mp4',
+                '3BOJj0TZfJCxsQNcmyru.mp4', '3IYXa7JoP2QnQd9BkiGj.mp4', '3V8T0y8kK8D4GMh1H6Rf.mp4',
+                '3gf0F0lm9O4y2X3tPpO5.mp4', '3jxqBUdD0ZV1Gyt8S9WX.mp4', '3pMKZyGGC5JMeKdw0LXD.mp4',
+                '41d2FXFN4vRzw6qkYNJh.mp4', '4GR1EjTbfOAuMXP6aazP.mp4', '4OhYWxq0fPsK7dwgFGwE.mp4',
+                '4UJqVh0dUP3VwfOoQKxE.mp4', '4cBB7Z5ZRCYlGhNXyY8Q.mp4'
+            ];
             
             // Daily seed for consistent rotation per day
             const today = new Date().toDateString();
@@ -456,53 +493,40 @@
                 return shuffled;
             };
             
-            // Generate exactly 25 free gallery images (daily rotation)
-            fullImages = [...Array(25).fill().map((_, i) => ({ 
-                src: `/full/beach-paradise-${(i % 50) + 1}.webp`, 
-                title: `Beach Paradise ${i + 1}`, 
-                isNew: false 
-            }))];
+            // Generate exactly 25 FREE gallery images using REAL files
+            const shuffledFull = shuffleWithSeed(realFullFiles, seed);
+            fullImages = shuffledFull.map((filename, i) => ({
+                src: `/full/${filename}`,
+                title: `Beach Paradise ${i + 1}`,
+                isNew: false
+            }));
             
-            // Generate exactly 100 uncensored images with proper file names
-            const actualImageFiles = [
-                'Vxm8ZimCcJVYL4fuaX2C.webp', 'GfKCNq1M1XRsuyZCSr46.webp', 'SyWKyUgFoMmXtcTCGRcD.webp',
-                '46TvCsW1KG6wcG0OWRc7.webp', 'bS5wI3lzdj9uBSaLxw4s.webp', 'nTNsF9TsXAR57edrOwt7.webp',
-                'j6QQvBGsx56JEmd2x6Lb.webp', '5UaQChlNIlRegwT0Ze2S.webp', '8phioNKwTe78kkBxfQxv.webp',
-                'xRSeg3ANfcjoJX8N4o2B.webp', 'Ty5J5IaTVkbdQJyS0hC2.webp', 'WGqmQbPGcAFj3zRebbtZ.webp'
-            ];
-            
-            // Create pool of 572 image references
-            const imagePool = [];
-            for (let i = 0; i < 572; i++) {
-                imagePool.push(actualImageFiles[i % actualImageFiles.length]);
+            // Generate exactly 100 uncensored images using REAL files
+            // Extend the array to 100 by repeating files
+            const extendedUncensored = [];
+            for (let i = 0; i < 100; i++) {
+                extendedUncensored.push(realUncensoredFiles[i % realUncensoredFiles.length]);
             }
             
-            const shuffledImages = shuffleWithSeed(imagePool, seed);
-            uncensoredImages = shuffledImages.slice(0, 100).map((filename, i) => ({
+            const shuffledUncensored = shuffleWithSeed(extendedUncensored, seed);
+            uncensoredImages = shuffledUncensored.map((filename, i) => ({
                 src: `/uncensored/${filename}`,
                 title: `BeachGirl Premium ${i + 1}`,
                 price: CONFIG.PRICES.INDIVIDUAL_PHOTO,
                 isNew: i < 30 // First 30 marked as NEW (30%)
             }));
             
-            // Generate exactly 40 videos with proper file names
-            const actualVideoFiles = [
-                'GK3wKGkNYhO4YyFDAg8x.mp4', 'T6auQxu1yZKCGPqVJ7ue.mp4', 'r14kVENgyJthsXKP4ckJ.mp4',
-                'zX53TSjhlQj4Gy76iK0H.mp4', 'kfDFWczYHsZXjtwmMsP4.mp4', 'M6TEA1f8hNdjol3Wi1se.mp4',
-                'n4DaX8Nwj1glWI1Oe9vj.mp4', 'XRCoUfkNLzwUepShH19v.mp4', '8yE2nxCwV2QcJsdXGf32.mp4',
-                '0xXK6PxXSv6cpYxvI7HX.mp4', 'beSTk3pKEdHZJSH7rwHs.mp4', 'rWwDSNSYmt9jpPd2ngiI.mp4'
-            ];
-            
-            // Create pool of 93 video references
-            const videoPool = [];
-            for (let i = 0; i < 93; i++) {
-                videoPool.push(actualVideoFiles[i % actualVideoFiles.length]);
+            // Generate exactly 40 videos using REAL files
+            // Extend the array to 40 by repeating files
+            const extendedVideos = [];
+            for (let i = 0; i < 40; i++) {
+                extendedVideos.push(realVideoFiles[i % realVideoFiles.length]);
             }
             
-            const shuffledVideos = shuffleWithSeed(videoPool, seed);
-            premiumVideos = shuffledVideos.slice(0, 40).map((filename, i) => ({
+            const shuffledVideos = shuffleWithSeed(extendedVideos, seed);
+            premiumVideos = shuffledVideos.map((filename, i) => ({
                 src: `/uncensored-videos/${filename}`,
-                thumbnail: `/uncensored-videos/thumb-${filename.replace('.mp4', '.webp')}`,
+                thumbnail: `/uncensored/${filename.replace('.mp4', '.webp')}`, // Use existing uncensored images as thumbnails
                 title: `BeachGirl Video ${i + 1}`,
                 duration: `${Math.floor(Math.random() * 3 + 1)}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
                 price: CONFIG.PRICES.INDIVIDUAL_VIDEO,
