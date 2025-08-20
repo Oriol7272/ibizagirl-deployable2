@@ -1540,10 +1540,11 @@
             });
         }
         
-        // SUSCRIPCIONES CON PAYPAL LIVE - MENSUAL Y LIFETIME SOLAMENTE
+        // SUSCRIPCIONES CON PAYPAL LIVE - MENSUAL, ANUAL Y LIFETIME
         function purchaseContent(subscriptionType) {
             const subscriptions = {
                 monthly: { price: '19.99', label: 'Suscripción Mensual' },
+                yearly: { price: '199.99', label: 'Suscripción Anual' },
                 lifetime: { price: '100.00', label: 'Acceso de por Vida' }
             };
             
