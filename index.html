@@ -2400,18 +2400,15 @@
                                 currency_code: 'EUR'
                             },
                             description: `${CONFIG.SITE_NAME} - ${type} ${index !== null ? '#' + (index + 1) : ''}`
-=======
-                                value: amount,
+                                value: amount.toFixed(2),
                                 currency_code: 'EUR'
                             },
-                            description: description
->>>>>>> 2605afd1078c28a88b0c9f9589a5dea632e8c75e
+                            description: `${CONFIG.SITE_NAME} - ${type} ${index !== null ? '#' + (index + 1) : ''}`
                         }]
                     });
                 },
                 onApprove: function(data, actions) {
                     return actions.order.capture().then(function(details) {
-<<<<<<< HEAD
                         console.log('✅ PayPal payment successful:', details);
                         handlePaymentSuccess(type, details, index);
                         modal.remove();
