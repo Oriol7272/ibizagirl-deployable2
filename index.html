@@ -549,16 +549,22 @@
         }
         
         .content-item {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px; /* Ligeramente más grande */
+            background: rgba(30, 58, 138, 0.1);
+            border-radius: 12px; 
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             position: relative;
-            aspect-ratio: 1; /* Keep square aspect ratio */
-            min-height: 160px; /* Aumentado de 120px a 160px */
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.15);
+            aspect-ratio: 1; 
+            min-height: 160px; 
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+        }
+        
+        .content-item:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(30, 58, 138, 0.4);
+            border-color: rgba(255, 255, 255, 0.5);
         }
         
         .content-item:hover {
