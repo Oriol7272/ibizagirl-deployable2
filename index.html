@@ -60,9 +60,9 @@
         }
         
         .hero-title {
-            font-family: 'Caveat', cursive;
+            font-family: 'Great Vibes', cursive;
             font-size: 4.5rem;
-            font-weight: 700;
+            font-weight: 400;
             text-shadow: 6px 6px 12px rgba(0,0,0,0.7);
             margin-bottom: 25px;
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f093fb, #ffd700);
@@ -72,6 +72,11 @@
             background-clip: text;
             letter-spacing: 3px;
             position: relative;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
         
         .hero-subtitle {
