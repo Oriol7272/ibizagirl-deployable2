@@ -97,3 +97,5 @@ const PREMIUM_VIDEOS_POOL = [
 ];
 
 console.log("✅ 93 videos premium cargados desde /uncensored-videos/");
+
+window.PREMIUM_VIDEOS_POOL = PREMIUM_VIDEOS_POOL;

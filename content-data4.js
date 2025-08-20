@@ -290,3 +290,5 @@ const PREMIUM_IMAGES_PART2 = [
 ];
 
 console.log("✅ 286 imágenes premium parte 2 cargadas desde /uncensored/");
+
+window.PREMIUM_IMAGES_PART2 = PREMIUM_IMAGES_PART2;
