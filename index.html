@@ -324,7 +324,43 @@
             letter-spacing: 1px;
         }
         
-        /* Static waves decoration with paradise beach */
+        /* Efectos de olas elegantes */
+        .wave-effect {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,60C40,30 80,90 120,60C160,30 200,90 240,60C280,30 320,90 360,60C400,30 440,90 480,60C520,30 560,90 600,60C640,30 680,90 720,60C760,30 800,90 840,60C880,30 920,90 960,60C1000,30 1040,90 1080,60C1120,30 1160,90 1200,60L1200,120L0,120Z" fill="%231e3a8a" fill-opacity="0.3"/></svg>') repeat-x;
+            animation: waveAnimation 10s infinite linear;
+        }
+        
+        @keyframes waveAnimation {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 1200px; }
+        }
+        
+        /* Masks elegantes para premium content */
+        .elegant-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 20%, rgba(30, 58, 138, 0.8) 80%);
+            backdrop-filter: blur(8px);
+            border-radius: inherit;
+        }
+        
+        /* Micro-interactions */
+        .micro-interaction {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .micro-interaction:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
+        }
         .waves-decoration {
             position: absolute;
             bottom: 0;
