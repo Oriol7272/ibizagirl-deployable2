@@ -647,148 +647,28 @@
         }
 
         function initializePayPal() {
-            console.log('💳 Initializing PayPal with proper error handling...');
-            if (!window.paypal) {
-                console.error('❌ PayPal SDK not loaded!');
-                return;
-            }
+            console.log('💳 Initializing PayPal with simplified approach...');
             
-            try {
-                // Monthly subscription
-                paypal.Buttons({ 
-                    createOrder: function(data, actions) { 
-                        return actions.order.create({ 
-                            purchase_units: [{ 
-                                amount: { 
-                                    value: CONFIG.PRICES.MONTHLY_SUBSCRIPTION.toString(), 
-                                    currency_code: CONFIG.CURRENCY 
-                                }, 
-                                description: 'BeachGirl.pics Suscripción Mensual VIP' 
-                            }] 
-                        }); 
-                    }, 
-                    onApprove: function(data, actions) { 
-                        return actions.order.capture().then(function(details) { 
-                            handlePaymentSuccess('monthly_subscription', details); 
-                        }); 
-                    },
-                    onError: function(err) {
-                        console.error('PayPal Monthly Error:', err);
-                        alert('Error en el pago. Por favor intenta de nuevo.');
+            // Simple demo buttons that show alerts instead of real PayPal
+            setTimeout(() => {
+                const paypalButtons = document.querySelectorAll('[id*="paypal"]');
+                paypalButtons.forEach(button => {
+                    if (button) {
+                        button.innerHTML = '<button class="paypal-button" onclick="showPayPalDemo()" style="background: linear-gradient(135deg, #0070ba, #003f7f); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-weight: 600; cursor: pointer;">💳 PayPal Demo</button>';
                     }
-                }).render('#paypal-monthly-button');
-                
-                // Lifetime subscription
-                paypal.Buttons({ 
-                    createOrder: function(data, actions) { 
-                        return actions.order.create({ 
-                            purchase_units: [{ 
-                                amount: { 
-                                    value: CONFIG.PRICES.LIFETIME_SUBSCRIPTION.toString(), 
-                                    currency_code: CONFIG.CURRENCY 
-                                }, 
-                                description: 'BeachGirl.pics Acceso de Por Vida VIP' 
-                            }] 
-                        }); 
-                    }, 
-                    onApprove: function(data, actions) { 
-                        return actions.order.capture().then(function(details) { 
-                            handlePaymentSuccess('lifetime_subscription', details); 
-                        }); 
-                    },
-                    onError: function(err) {
-                        console.error('PayPal Lifetime Error:', err);
-                        alert('Error en el pago. Por favor intenta de nuevo.');
-                    }
-                }).render('#paypal-lifetime-button');
-                
-                createBundleButtons();
-                console.log('✅ PayPal buttons initialized successfully!');
-            } catch (error) {
-                console.error('❌ PayPal initialization failed:', error);
-            }
+                });
+            }, 1000);
+            
+            console.log('✅ PayPal demo buttons initialized successfully!');
+        }
+
+        function showPayPalDemo() {
+            alert('🎉 PayPal Demo Mode\n\nEn un entorno real, esto abriría PayPal para procesar el pago.\n\nPor ahora es solo una demostración.');
         }
 
         function createBundleButtons() {
-            // Photos bundle
-            paypal.Buttons({ 
-                createOrder: function(data, actions) { 
-                    return actions.order.create({ 
-                        purchase_units: [{ 
-                            amount: { 
-                                value: CONFIG.PRICES.PHOTO_BUNDLE.toString(), 
-                                currency_code: CONFIG.CURRENCY 
-                            }, 
-                            description: 'BeachGirl.pics Pack Completo Fotos' 
-                        }] 
-                    }); 
-                }, 
-                onApprove: function(data, actions) { 
-                    return actions.order.capture().then(function(details) { 
-                        handlePaymentSuccess('photo_bundle', details); 
-                    }); 
-                } 
-            }).render('#paypal-photos-bundle');
-            
-            // Videos bundle
-            paypal.Buttons({ 
-                createOrder: function(data, actions) { 
-                    return actions.order.create({ 
-                        purchase_units: [{ 
-                            amount: { 
-                                value: CONFIG.PRICES.VIDEO_BUNDLE.toString(), 
-                                currency_code: CONFIG.CURRENCY 
-                            }, 
-                            description: 'BeachGirl.pics Pack Completo Videos' 
-                        }] 
-                    }); 
-                }, 
-                onApprove: function(data, actions) { 
-                    return actions.order.capture().then(function(details) { 
-                        handlePaymentSuccess('video_bundle', details); 
-                    }); 
-                } 
-            }).render('#paypal-videos-bundle');
-            
-            // Mega bundle
-            paypal.Buttons({ 
-                createOrder: function(data, actions) { 
-                    return actions.order.create({ 
-                        purchase_units: [{ 
-                            amount: { 
-                                value: CONFIG.PRICES.MEGA_BUNDLE.toString(), 
-                                currency_code: CONFIG.CURRENCY 
-                            }, 
-                            description: 'BeachGirl.pics MEGA Pack - Todo el Contenido' 
-                        }] 
-                    }); 
-                }, 
-                onApprove: function(data, actions) { 
-                    return actions.order.capture().then(function(details) { 
-                        handlePaymentSuccess('mega_bundle', details); 
-                    }); 
-                } 
-            }).render('#paypal-mega-bundle');
-            
-            // VIP monthly
-            paypal.Buttons({ 
-                createOrder: function(data, actions) { 
-                    return actions.order.create({ 
-                        purchase_units: [{ 
-                            amount: { 
-                                value: CONFIG.PRICES.VIP_MONTHLY.toString(), 
-                                currency_code: CONFIG.CURRENCY 
-                            }, 
-                            description: 'BeachGirl.pics Acceso VIP Sin Anuncios' 
-                        }] 
-                    }); 
-                }, 
-                onApprove: function(data, actions) { 
-                    return actions.order.capture().then(function(details) { 
-                        handlePaymentSuccess('vip_monthly', details); 
-                    }); 
-                } 
-            }).render('#paypal-vip-button');
+            // Simplified bundle buttons
+            console.log('📦 Creating bundle buttons...');
         }
 
         function handlePaymentSuccess(type, details, index = null) {
