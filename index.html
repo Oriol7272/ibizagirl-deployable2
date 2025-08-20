@@ -1443,7 +1443,7 @@
 
         // Initialize content with daily randomization
         function initializeContent() {
-            const content = generateRealContent();
+            const content = getContentFromDataFiles();
             fullImages = content.fullImages;
             uncensoredImages = content.uncensoredImages;
             premiumVideos = content.premiumVideos;
