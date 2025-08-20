@@ -866,6 +866,27 @@
     </style>
 </head>
 <body>
+    <!-- Load Content Data Files FIRST - CRITICAL FOR CONTENT LOADING -->
+    <script src="content-data1.js"></script>
+    <script src="content-data2.js"></script>
+    <script src="content-data3.js"></script>
+    <script src="content-data4.js"></script>
+    <script src="content-data5.js"></script>
+    <script src="content-data6.js"></script>
+    <script>
+        console.log('✅ ALL content-data*.js files loaded');
+        console.log('📊 Content loaded:', {
+            full: window.FULL_IMAGES_POOL ? window.FULL_IMAGES_POOL.length : 0,
+            premium_part1: window.PREMIUM_IMAGES_PART1 ? window.PREMIUM_IMAGES_PART1.length : 0,
+            premium_part2: window.PREMIUM_IMAGES_PART2 ? window.PREMIUM_IMAGES_PART2.length : 0,
+            videos: window.PREMIUM_VIDEOS_POOL ? window.PREMIUM_VIDEOS_POOL.length : 0,
+            total: (window.FULL_IMAGES_POOL ? window.FULL_IMAGES_POOL.length : 0) + 
+                   (window.PREMIUM_IMAGES_PART1 ? window.PREMIUM_IMAGES_PART1.length : 0) + 
+                   (window.PREMIUM_IMAGES_PART2 ? window.PREMIUM_IMAGES_PART2.length : 0) + 
+                   (window.PREMIUM_VIDEOS_POOL ? window.PREMIUM_VIDEOS_POOL.length : 0)
+        });
+    </script>
+
     <!-- Floating tropical elements with decorative images -->
     <div class="floating-elements">
         <div class="floating-palm" style="--rotation: -15deg;">🌴</div>
