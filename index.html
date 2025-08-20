@@ -2245,6 +2245,9 @@
             // Check age verification first
             if (!checkAgeVerification()) return;
             
+            // Load night mode preference
+            loadNightMode();
+            
             // Initialize language
             const savedLang = localStorage.getItem('preferred-language') || 'es';
             document.getElementById('languageSelect').value = savedLang;
