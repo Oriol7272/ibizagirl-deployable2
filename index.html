@@ -877,6 +877,50 @@
             }
         }
 
+        function loadPopAds() {
+            try {
+                // PopAds implementation for popup advertisements
+                console.log('📢 Loading PopAds...');
+                
+                const popScript = document.createElement('script');
+                popScript.src = 'https://cdn.popcash.net/pop.js';
+                popScript.async = true;
+                popScript.onload = function() {
+                    console.log('✅ PopAds script loaded');
+                    
+                    // Initialize PopAds with your site ID
+                    if (window.popConfig) {
+                        window.popConfig = {
+                            ...window.popConfig,
+                            frequency: 1, // Show pop every 1 page view
+                            delay: 3000   // 3 second delay
+                        };
+                    }
+                };
+                popScript.onerror = function() { 
+                    console.log('❌ PopAds script failed to load'); 
+                };
+                document.head.appendChild(popScript);
+                
+                // Alternative PopAds implementation
+                const popConfig = document.createElement('script');
+                popConfig.innerHTML = `
+                    var _pop = _pop || [];
+                    _pop.push(['siteId', 8179717]); // Using same ID as Ero zone
+                    _pop.push(['minBid', 0]);
+                    _pop.push(['popundersPerIP', 2]);
+                    _pop.push(['delayBetween', 3600]);
+                    _pop.push(['default', false]);
+                    _pop.push(['defaultPerDay', 2]);
+                    _pop.push(['topmostLayer', false]);
+                `;
+                document.head.appendChild(popConfig);
+                
+            } catch (e) {
+                console.log('PopAds initialization error:', e);
+            }
+        }
+
         function hideAds() { 
             console.log('🚫 Hiding ads for VIP user...'); 
             document.querySelectorAll('.ad-container').forEach(el => { 
