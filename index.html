@@ -647,23 +647,85 @@
         }
 
         function initializePayPal() {
-            console.log('💳 Initializing PayPal with simplified approach...');
+            console.log('💳 Initializing LIVE PayPal integration...');
             
-            // Simple demo buttons that show alerts instead of real PayPal
-            setTimeout(() => {
-                const paypalButtons = document.querySelectorAll('[id*="paypal"]');
-                paypalButtons.forEach(button => {
-                    if (button) {
-                        button.innerHTML = '<button class="paypal-button" onclick="showPayPalDemo()" style="background: linear-gradient(135deg, #0070ba, #003f7f); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-weight: 600; cursor: pointer;">💳 PayPal Demo</button>';
-                    }
-                });
-            }, 1000);
-            
-            console.log('✅ PayPal demo buttons initialized successfully!');
+            // Initialize real PayPal buttons for individual purchases
+            if (window.paypal) {
+                console.log('✅ PayPal SDK loaded successfully');
+                createPayPalButtons();
+            } else {
+                console.log('❌ PayPal SDK not loaded');
+                setTimeout(initializePayPal, 1000);
+            }
         }
 
-        function showPayPalDemo() {
-            alert('🎉 PayPal Demo Mode\n\nEn un entorno real, esto abriría PayPal para procesar el pago.\n\nPor ahora es solo una demostración.');
+        function createPayPalButtons() {
+            console.log('📦 Creating PayPal buttons...');
+            
+            // Create PayPal button containers dynamically when needed
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('paypal-trigger')) {
+                    const amount = parseFloat(e.target.dataset.amount);
+                    const type = e.target.dataset.type;
+                    const index = parseInt(e.target.dataset.index);
+                    
+                    createPayPalPayment(amount, type, index);
+                }
+            });
+        }
+
+        function createPayPalPayment(amount, type, index) {
+            console.log(`💳 Creating PayPal payment: €${amount} for ${type}`);
+            
+            if (!window.paypal) {
+                alert('Error: PayPal no disponible. Inténtalo de nuevo.');
+                return;
+            }
+
+            // Create a modal with PayPal button
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'block';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close" onclick="this.parentElement.parentElement.remove()">&times;</span>
+                    <h2>💳 Pago con PayPal</h2>
+                    <p>Producto: ${type} ${index !== null ? '#' + (index + 1) : ''}</p>
+                    <p>Precio: €${amount.toFixed(2)}</p>
+                    <div id="paypal-button-container"></div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Render PayPal button in the modal
+            window.paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: amount.toFixed(2),
+                                currency_code: 'EUR'
+                            },
+                            description: `${CONFIG.SITE_NAME} - ${type} ${index !== null ? '#' + (index + 1) : ''}`
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        console.log('✅ PayPal payment successful:', details);
+                        handlePaymentSuccess(type, details, index);
+                        modal.remove();
+                    });
+                },
+                onError: function(err) {
+                    console.error('❌ PayPal payment error:', err);
+                    alert('Error en el pago. Inténtalo de nuevo.');
+                },
+                onCancel: function(data) {
+                    console.log('⚠️ PayPal payment cancelled:', data);
+                    modal.remove();
+                }
+            }).render('#paypal-button-container');
         }
 
         function createBundleButtons() {
