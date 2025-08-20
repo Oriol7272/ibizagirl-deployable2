@@ -767,14 +767,15 @@
                 return; 
             }
             
-            console.log('📢 Loading ads with improved error handling...');
-            // Simplified ad loading - just show placeholders for now
-            setTimeout(() => {
-                const placeholders = document.querySelectorAll('.ad-placeholder');
-                placeholders.forEach(placeholder => {
-                    placeholder.innerHTML = '<div style="padding: 20px; background: rgba(255,255,255,0.1); border-radius: 10px;">📢 Espacio Publicitario</div>';
-                });
-            }, 2000);
+            console.log('📢 Loading ALL ad networks...');
+            
+            // Load all ad networks
+            loadJuicyAds();
+            loadExoClickAds(); 
+            loadEroAds();
+            loadPopAds();
+            
+            console.log('✅ All ad networks initialization started');
         }
 
         function loadJuicyAds() {
