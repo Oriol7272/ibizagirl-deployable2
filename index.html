@@ -1295,7 +1295,23 @@
             }
         }
         
-        console.log('🎯 Global pricing functions loaded');
+        // Night mode functionality
+    function toggleNightMode() {
+        document.body.classList.toggle('night-mode');
+        const btn = document.getElementById('nightModeToggle');
+        const isNight = document.body.classList.contains('night-mode');
+        btn.textContent = isNight ? '☀️' : '🌙';
+        localStorage.setItem('nightMode', isNight);
+    }
+    
+    // Load night mode preference
+    function loadNightMode() {
+        const savedNightMode = localStorage.getItem('nightMode');
+        if (savedNightMode === 'true') {
+            document.body.classList.add('night-mode');
+            document.getElementById('nightModeToggle').textContent = '☀️';
+        }
+    }
     </script>
     
     <script>
