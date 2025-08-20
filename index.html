@@ -822,47 +822,7 @@
         }
 
         function createPayPalPayment(amount, type, index) { 
-            if (!window.paypal) { 
-                console.error('PayPal SDK not loaded'); 
-                alert('Sistema de pagos no disponible. Recarga la página.');
-                return; 
-            } 
-            
-            const tempDiv = document.createElement('div'); 
-            document.body.appendChild(tempDiv); 
-            
-            paypal.Buttons({ 
-                createOrder: function(data, actions) { 
-                    return actions.order.create({ 
-                        purchase_units: [{ 
-                            amount: { 
-                                value: amount.toString(), 
-                                currency_code: CONFIG.CURRENCY 
-                            }, 
-                            description: `BeachGirl.pics ${type} #${index + 1}` 
-                        }] 
-                    }); 
-                }, 
-                onApprove: function(data, actions) { 
-                    return actions.order.capture().then(function(details) { 
-                        handlePaymentSuccess(type, details, index); 
-                        document.body.removeChild(tempDiv); 
-                    }); 
-                }, 
-                onCancel: function() { 
-                    document.body.removeChild(tempDiv); 
-                }, 
-                onError: function(err) { 
-                    console.error('PayPal Error:', err); 
-                    alert('Error en el pago. Por favor intenta de nuevo.');
-                    document.body.removeChild(tempDiv); 
-                } 
-            }).render(tempDiv); 
-            
-            setTimeout(() => { 
-                const button = tempDiv.querySelector('[role="link"]'); 
-                if (button) button.click(); 
-            }, 100); 
+            alert(`💳 PayPal Demo\n\nPago de €${amount.toFixed(2)} para ${type} #${index + 1}\n\nEn producción, esto abriría PayPal real.`);
         }
 
         function unlockIndividualContent(type, index) { 
