@@ -1540,6 +1540,116 @@
             });
         }
         
+        // SUSCRIPCIONES CON PAYPAL LIVE - MENSUAL, ANUAL Y LIFETIME
+        function purchaseContent(subscriptionType) {
+            const subscriptions = {
+                monthly: { price: '19.99', label: 'Suscripción Mensual' },
+                yearly: { price: '199.99', label: 'Suscripción Anual' },  
+                lifetime: { price: '100.00', label: 'Acceso de por Vida' }
+            };
+            
+            const subscription = subscriptions[subscriptionType];
+            if (!subscription) return;
+            
+            console.log(`💳 Initiating PayPal payment for ${subscription.label}: €${subscription.price}`);
+            
+            // Crear botón de PayPal dinámicamente
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: subscription.price,
+                                currency_code: 'EUR'
+                            },
+                            description: subscription.label
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(orderData) {
+                        console.log('✅ Payment completed:', orderData);
+                        alert('🎉 ¡Pago completado con éxito! Ahora tienes acceso premium.');
+                        
+                        // Guardar estado de suscripción
+                        localStorage.setItem('subscriptionType', subscriptionType);
+                        localStorage.setItem('subscriptionDate', new Date().toISOString());
+                        
+                        // Recargar página para mostrar contenido desbloqueado
+                        setTimeout(() => location.reload(), 2000);
+                    });
+                },
+                onError: function(err) {
+                    console.error('❌ PayPal payment error:', err);
+                    alert('Error en el pago. Por favor, inténtalo de nuevo.');
+                }
+            }).render('#paypal-button-container');
+        }
+        
+        function createPayPalPayment(type, price, description, itemUrl) {
+            console.log(`💳 Creating PayPal payment: ${type} - €${price}`);
+            
+            // Crear modal de pago
+            const modal = document.createElement('div');
+            modal.className = 'paypal-modal';
+            modal.innerHTML = `
+                <div class="modal-content" style="background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 400px; position: relative;">
+                    <span class="close-modal" onclick="this.closest('.paypal-modal').remove()" style="position: absolute; top: 10px; right: 15px; font-size: 28px; cursor: pointer; color: #333;">×</span>
+                    <h3>💳 Pago con PayPal</h3>
+                    <p><strong>${description}</strong></p>
+                    <p>Precio: <strong>€${price}</strong></p>
+                    <div id="paypal-button-container"></div>
+                </div>
+            `;
+            
+            // Estilos del modal
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Inicializar botón de PayPal
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: price,
+                                currency_code: 'EUR'
+                            },
+                            description: description
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(orderData) {
+                        console.log('✅ Payment completed:', orderData);
+                        modal.remove();
+                        alert('🎉 ¡Pago completado! Contenido desbloqueado.');
+                        
+                        // Desbloquear contenido específico
+                        if (type === 'photo') {
+                            localStorage.setItem(`unlocked_${itemUrl}`, 'true');
+                        }
+                    });
+                },
+                onError: function(err) {
+                    console.error('❌ PayPal error:', err);
+                    alert('Error en el pago. Inténtalo de nuevo.');
+                }
+            }).render('#paypal-button-container');
+        }
+        
         // Create bundle payment (10 photos for €0.80)
         function createBundlePayment(type, amount, description) {
             console.log(`🎁 Creating bundle payment: ${description} - €${amount}`);
