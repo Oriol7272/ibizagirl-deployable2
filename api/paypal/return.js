@@ -1,4 +1,3 @@
-// api/paypal/return.js
 const PAYPAL_BASE = 'https://api-m.paypal.com';
 
 async function getAccessToken() {
@@ -17,9 +16,17 @@ async function getAccessToken() {
   return j.access_token;
 }
 
-function setCookie(res, name, val, days=30){
+function setCookie(res, name, val, days=30, {httpOnly=true} = {}){
   const max = days*24*60*60;
-  res.setHeader('Set-Cookie', `${name}=${encodeURIComponent(val)}; Path=/; Max-Age=${max}; SameSite=Lax; HttpOnly; Secure`);
+  const parts = [
+    `${name}=${encodeURIComponent(val)}`,
+    'Path=/',
+    `Max-Age=${max}`,
+    'SameSite=Lax',
+    'Secure'
+  ];
+  if (httpOnly) parts.push('HttpOnly');
+  res.setHeader('Set-Cookie', [...(res.getHeader('Set-Cookie')||[]), parts.join('; ')]);
 }
 
 function parseCookies(req){
@@ -34,6 +41,7 @@ module.exports = async (req, res) => {
     const resourceId= (req.query.resourceId||'').toString();
     if (!orderId) { res.status(400).end('Missing token'); return; }
 
+    // Captura en PayPal LIVE
     const token = await getAccessToken();
     const capRes = await fetch(`${PAYPAL_BASE}/v2/checkout/orders/${orderId}/capture`, {
       method:'POST',
@@ -42,11 +50,16 @@ module.exports = async (req, res) => {
     const data = await capRes.json();
     if (!capRes.ok) { res.status(500).end('Capture failed'); return; }
 
-    // Actualiza cookie de items desbloqueados
+    // Actualiza lista de items (server y UI)
     const cookies = parseCookies(req);
     const list = new Set((cookies.ibg_items||'').split(',').map(s=>s.trim()).filter(Boolean));
     if (resourceId) list.add(resourceId);
-    setCookie(res, 'ibg_items', Array.from(list).join(','), 30);
+    const value = Array.from(list).join(',');
+
+    // Server (HttpOnly) para gate
+    setCookie(res, 'ibg_items', value, 30, { httpOnly:true });
+    // UI (no HttpOnly) para quitar blur en el front
+    setCookie(res, 'ibg_items_ui', value, 30, { httpOnly:false });
 
     // Redirige a la home con flag
     res.status(302).setHeader('Location','/index.html?unlocked=1');
@@ -55,4 +68,3 @@ module.exports = async (req, res) => {
     res.status(500).end('Server error');
   }
 };
-
