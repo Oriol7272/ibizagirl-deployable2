@@ -1,98 +1,149 @@
-// js/daily-rotator.js
-(() => {
-  // 1) Unimos los pools de content-data*.js (debes cargarlos antes en <script>).
-  // Admite arrays de strings (rutas) o de objetos { id, kind, src }.
-  const all = [];
-  for (const k of Object.keys(window)) {
-    if (/^CONTENT_DATA/i.test(k) && Array.isArray(window[k])) all.push(...window[k]);
+/* daily-rotator.js
+   - Gallery: 20 de /full
+   - Uncensored: 100 de /uncensored (30% marcadas NEW)
+   - Vídeos: 20 de /uncensored-videos
+   - Modo: window.__ROTATOR_MODE__ = "daily" | "reload"
+   - Overlay: botón “Unlock” que llama a IBG_PAY.buyItem()
+*/
+
+(function() {
+  const MODE = (window.__ROTATOR_MODE__ || 'daily').toLowerCase();
+
+  // PRNG determinista por día (o aleatorio por recarga)
+  function prng(seed) {
+    let a = seed >>> 0;
+    return function() {
+      a += 0x6D2B79F5;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
   }
-  if (!all.length) { console.warn('No se detectaron pools en content-data*.js'); return; }
-
-  const normItem = (x) => {
-    if (typeof x === 'string') {
-      const src = x;
-      const id = src.split('/').pop();
-      const kind = /\.(mp4|webm)$/i.test(src) ? 'video' : 'image';
-      const price = kind === 'image' ? 0.10 : 0.30; // precios por defecto
-      return { id, kind, src, price };
+  function seedForMode() {
+    if (MODE === 'daily') {
+      const now = new Date();
+      const key = `${now.getUTCFullYear()}-${now.getUTCMonth()+1}-${now.getUTCDate()}`;
+      let s = 0;
+      for (let i=0;i<key.length;i++) s = (s*31 + key.charCodeAt(i)) >>> 0;
+      return s;
     }
-    // objeto ya formado
-    const price = x.price ?? (x.kind === 'video' ? 0.30 : 0.10);
-    return { ...x, price };
-  };
+    return (Math.random()*0xFFFFFFFF) >>> 0;
+  }
+  const rnd = prng(seedForMode());
 
-  const pool = all.map(normItem);
-
-  // 2) Semilla diaria (YYYY-MM-DD) o aleatoria por recarga
-  const mode = window.__ROTATOR_MODE__ || 'daily'; // 'daily' | 'reload'
-  const seedStr = mode === 'daily'
-    ? new Date().toISOString().slice(0,10)
-    : String(Math.random());
-
-  // PRNG determinista
-  function xmur3(str){for(var i=0,h=1779033703^str.length;i<str.length;i++)h=Math.imul(h^str.charCodeAt(i),3432918353),h=h<<13|h>>>19;return function(){h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return (h^h>>>16)>>>0}}
-  function mulberry32(a){return function(){var t=a+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296}}
-  const rand = mulberry32(xmur3(seedStr)());
-
-  function shuffled(arr) {
-    const a = arr.slice();
-    for (let i=a.length-1;i>0;i--) {
-      const j = Math.floor(rand()*(i+1));
-      [a[i],a[j]]=[a[j],a[i]];
+  // Descubre pools desde content-data*.js
+  function normalizeItem(x) {
+    if (typeof x === 'string') return { src: x };
+    return x && x.src ? x : null;
+  }
+  function discover() {
+    const buckets = [];
+    for (const k in window) {
+      try {
+        const v = window[k];
+        if (Array.isArray(v) && v.length) {
+          const n = normalizeItem(v[0]);
+          if (n && typeof n.src === 'string') buckets.push(v.map(normalizeItem).filter(Boolean));
+        }
+      } catch(_) {}
     }
-    return a;
+    const flat = buckets.flat();
+
+    const full  = flat.filter(o => /\/full\//.test(o.src));
+    const unc   = flat.filter(o => /\/uncensored\//.test(o.src));
+    const vids  = flat.filter(o => /\/uncensored-videos\//.test(o.src) || /(\.mp4|\.webm)$/i.test(o.src));
+
+    return { full, unc, vids };
   }
 
-  const s = shuffled(pool);
+  function sampleN(arr, n) {
+    const src = arr.slice();
+    const out = [];
+    n = Math.min(n, src.length);
+    for (let i=0;i<n;i++) {
+      const idx = Math.floor(rnd()*src.length);
+      out.push(src.splice(idx,1)[0]);
+    }
+    return out;
+  }
 
-  // 3) Selecciones
-  const gallery = s.filter(o => /\/full\//i.test(o.src)).slice(0,20);
-  const uncensored = s.filter(o => /\/uncensored\//i.test(o.src)).slice(0,100);
-  const videos = s.filter(o => /\/uncensored-videos\//i.test(o.src)).slice(0,20);
+  function pickWithNew(arr, total, pctNew=0.3) {
+    const chosen = sampleN(arr, total);
+    const nNew = Math.floor(chosen.length * pctNew);
+    const marks = new Set();
+    while (marks.size < nNew && marks.size < chosen.length) {
+      marks.add(Math.floor(rnd()*chosen.length));
+    }
+    return chosen.map((it, i) => ({...it, isNew: marks.has(i)}));
+  }
 
-  // 30% NEW en uncensored
-  const newCount = Math.floor(uncensored.length * 0.30);
-  for (let i=0;i<newCount;i++) uncensored[i].isNew = true;
+  function euro(n) {
+    return n.toLocaleString('es-ES', {style:'currency', currency:'EUR', minimumFractionDigits:2});
+  }
 
-  // 4) Render helpers
-  const money = (n) => (Number(n).toFixed(2)).replace('.', ',') + '€';
+  function renderGrid(containerId, items, opts) {
+    const root = document.getElementById(containerId);
+    if (!root) return;
+    root.className = 'grid';
+    root.innerHTML = items.map(item => {
+      const isPrem = !!opts.censored;
+      const price  = opts.kind === 'video' ? 0.30 : 0.10;
+      const displaySrc = isPrem ? (item.preview || '/img/preview-blur.webp') : item.src;
 
-  const cardHTML = (o) => {
-    const isPay = /\/uncensored(-videos)?\//i.test(o.src);
-    const cls = ['thumb', isPay ? 'censored' : ''].join(' ').trim();
-    const pay = isPay ? `
-      <div class="badges">
-        <span class="badge price">${money(o.price)}</span>
-        <button class="badge pay" onclick="window.renderPayButton('${o.id}','${o.kind}','${o.src}', ${o.price})">
-          <svg class="icon" viewBox="0 0 24 24"><use href="#icon-lock"/></svg> Pagar
+      const priceText = euro(price).replace('€','€').replace('.',',');
+      const newBadge  = item.isNew ? `<span class="badge badge-new">NEW</span>` : '';
+
+      const lockBtn = isPrem ? `
+        <button class="unlock-btn" data-kind="${opts.kind||'photo'}" data-src="${item.src}" data-amount="${price}">
+          <svg class="i i-lock"><use href="#icon-lock"></use></svg>
+          <span class="price">${priceText}</span>
         </button>
-      </div>
-      <div id="pp-${o.id}" class="paypal-ctr"></div>
-    ` : '';
-    const ribbon = o.isNew ? `<span class="new-ribbon">NEW</span>` : '';
-    return `
-      <div class="card">
-        ${ribbon}
-        <img class="${cls}" src="${o.src}" alt="${o.id}" loading="lazy">
-        ${pay}
-      </div>
-    `;
-  };
+      ` : '';
 
-  const byId = (id) => document.getElementById(id);
-  const inject = (id, items) => {
-    const el = byId(id);
-    if (!el) return;
-    el.classList.add('grid');
-    el.innerHTML = items.map(cardHTML).join('');
-  };
+      const media = (opts.kind === 'video')
+        ? `<video class="thumb ${isPrem?'censored':''}" preload="metadata" muted playsinline poster="/img/video-poster-blur.webp"></video>`
+        : `<img class="thumb ${isPrem?'censored':''}" src="${displaySrc}" loading="lazy" alt="">`;
 
-  // 5) Pintar en contenedores (crea divs con estos IDs en tus páginas)
-  inject('galleryGrid', gallery);         // 20 de /full/
-  inject('uncensoredGrid', uncensored);   // 100 de /uncensored/ (30% NEW)
-  inject('videosGrid', videos);           // 20 de /uncensored-videos/
+      return `
+        <div class="card">
+          <div class="thumb-wrap">
+            ${media}
+            ${newBadge}
+            ${lockBtn}
+          </div>
+        </div>`;
+    }).join('');
 
-  // Exponer por si necesitas depurar
-  window.IBG_CURRENT = { gallery, uncensored, videos, seed: seedStr, mode };
+    // Bind botones Unlock
+    root.querySelectorAll('.unlock-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const src  = btn.getAttribute('data-src');
+        const kind = btn.getAttribute('data-kind') || 'photo';
+        const amt  = parseFloat(btn.getAttribute('data-amount') || '0.10');
+        if (window.IBG_PAY && typeof window.IBG_PAY.buyItem === 'function') {
+          window.IBG_PAY.buyItem({ src, kind, amount: amt, currency: 'EUR' });
+        } else {
+          alert('Pago no disponible (IBG_PAY no cargado).');
+        }
+      });
+    });
+  }
+
+  // Ejecutar
+  document.addEventListener('DOMContentLoaded', () => {
+    const { full, unc, vids } = discover();
+
+    const gallery20 = sampleN(full, 20);
+    const photos100 = pickWithNew(unc, 100, 0.30);
+    const videos20  = pickWithNew(vids, 20, 0.30).map(v => ({...v, kind:'video'}));
+
+    // Guarda selección por si la quieres inspeccionar en consola
+    window.IBG_CURRENT = { gallery: gallery20, uncensored: photos100, videos: videos20 };
+
+    renderGrid('galleryGrid',   gallery20, { censored:false, kind:'photo' });
+    renderGrid('uncensoredGrid',photos100, { censored:true,  kind:'photo' });
+    renderGrid('videosGrid',    videos20,  { censored:true,  kind:'video' });
+  });
 })();
 

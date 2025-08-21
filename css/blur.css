@@ -1,12 +1,41 @@
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
-.card{position:relative;overflow:hidden;border-radius:14px;background:#000}
-.thumb{width:100%;display:block;aspect-ratio:3/4;object-fit:cover;background:#111}
-.censored{filter:blur(14px) contrast(1.05) saturate(0.9)}
-.badges{position:absolute;left:8px;bottom:8px;display:flex;gap:8px;align-items:center}
-.badge{background:rgba(0,0,0,.65);color:#fff;padding:3px 6px;font-size:.72rem;border-radius:8px;line-height:1;display:inline-flex;align-items:center;gap:4px;border:1px solid rgba(255,255,255,.2)}
-.badge.price{font-weight:700;opacity:.9}
-.badge.pay{cursor:pointer;border:none}
-.new-ribbon{position:absolute;top:8px;right:-6px;transform:rotate(20deg);background:#e91e63;color:#fff;font-weight:700;padding:2px 6px;font-size:.7rem}
-.paypal-ctr{position:absolute;inset:auto 8px 8px auto;background:rgba(0,0,0,.85);padding:8px;border-radius:10px;display:none}
-.paypal-ctr.visible{display:block}
+:root{
+  --g:12px;
+  --bg:#0b0b0b;
+  --card:#121212;
+  --txt:#f2f2f2;
+  --muted:#999;
+  --accent:#ffcd00;
+}
+*{box-sizing:border-box}
+body{background:#000;color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+h1,h2{margin:.25rem 0 .5rem}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:var(--g);
+}
+.card{background:var(--card);border-radius:16px;overflow:hidden;position:relative}
+.thumb-wrap{position:relative;aspect-ratio:1/1; background:#050505}
+.thumb{width:100%;height:100%;object-fit:cover;display:block}
+
+.censored{filter:blur(12px) saturate(.8) brightness(.9); transform:translateZ(0)}
+/* Ajusta si quieres más o menos blur: 10-14px */
+
+.badge{
+  position:absolute;top:8px;left:8px;padding:4px 6px;
+  background:#d00;color:#fff;border-radius:10px;font-size:10px;line-height:1;font-weight:700;
+}
+.badge-new{background:#0bb20b}
+
+.unlock-btn{
+  position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:6px;
+  background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.15);
+  color:#fff;font-size:11px;padding:6px 8px;border-radius:999px;cursor:pointer;
+  backdrop-filter:blur(4px);
+}
+.unlock-btn .i{width:14px;height:14px;display:inline-block;vertical-align:middle;fill:#fff;opacity:.9}
+.unlock-btn .price{font-weight:700;opacity:.9}
+
+header, main{max-width:1200px;margin:0 auto}
 

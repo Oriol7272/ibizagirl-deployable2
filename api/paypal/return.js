@@ -1,0 +1,58 @@
+// api/paypal/return.js
+const PAYPAL_BASE = 'https://api-m.paypal.com';
+
+async function getAccessToken() {
+  const id = process.env.PAYPAL_CLIENT_ID;
+  const se = process.env.PAYPAL_SECRET;
+  const r = await fetch(`${PAYPAL_BASE}/v1/oauth2/token`, {
+    method:'POST',
+    headers:{
+      'Authorization':'Basic ' + Buffer.from(`${id}:${se}`).toString('base64'),
+      'Content-Type':'application/x-www-form-urlencoded'
+    },
+    body:'grant_type=client_credentials'
+  });
+  if (!r.ok) throw new Error('paypal oauth failed');
+  const j = await r.json();
+  return j.access_token;
+}
+
+function setCookie(res, name, val, days=30){
+  const max = days*24*60*60;
+  res.setHeader('Set-Cookie', `${name}=${encodeURIComponent(val)}; Path=/; Max-Age=${max}; SameSite=Lax; HttpOnly; Secure`);
+}
+
+function parseCookies(req){
+  const h=req.headers.cookie||''; const out={};
+  h.split(';').forEach(p=>{ const [k,...v]=p.trim().split('='); if(!k) return; out[decodeURIComponent(k)]=decodeURIComponent(v.join('=')||''); });
+  return out;
+}
+
+module.exports = async (req, res) => {
+  try{
+    const orderId   = req.query.token || req.query.orderId;
+    const resourceId= (req.query.resourceId||'').toString();
+    if (!orderId) { res.status(400).end('Missing token'); return; }
+
+    const token = await getAccessToken();
+    const capRes = await fetch(`${PAYPAL_BASE}/v2/checkout/orders/${orderId}/capture`, {
+      method:'POST',
+      headers:{ 'Authorization': `Bearer ${token}`, 'Content-Type':'application/json' }
+    });
+    const data = await capRes.json();
+    if (!capRes.ok) { res.status(500).end('Capture failed'); return; }
+
+    // Actualiza cookie de items desbloqueados
+    const cookies = parseCookies(req);
+    const list = new Set((cookies.ibg_items||'').split(',').map(s=>s.trim()).filter(Boolean));
+    if (resourceId) list.add(resourceId);
+    setCookie(res, 'ibg_items', Array.from(list).join(','), 30);
+
+    // Redirige a la home con flag
+    res.status(302).setHeader('Location','/index.html?unlocked=1');
+    res.end();
+  }catch(e){
+    res.status(500).end('Server error');
+  }
+};
+
