@@ -411,8 +411,25 @@
         function initPayPal() {
             document.getElementById('paypal-button-container').innerHTML = '';
             
-            const amount = selectedPlan === 'monthly' ? '19.99' : '100.00';
-            const description = selectedPlan === 'monthly' ? 'Monthly Premium Subscription' : 'Lifetime Premium Access';
+            let amount, description;
+            
+            switch (selectedPlan) {
+                case 'monthly':
+                    amount = '19.99';
+                    description = 'Monthly Premium Subscription';
+                    break;
+                case 'yearly':
+                    amount = '100.00';
+                    description = 'Annual Premium Subscription';
+                    break;
+                case 'lifetime':
+                    amount = '200.00';
+                    description = 'Lifetime Premium Access';
+                    break;
+                default:
+                    amount = '19.99';
+                    description = 'Premium Subscription';
+            }
             
             paypal.Buttons({
                 createOrder: function(data, actions) {
@@ -435,11 +452,17 @@
                             orderId: data.orderID
                         };
                         
+                        // Set expiry date for time-limited plans
                         if (selectedPlan === 'monthly') {
                             const nextMonth = new Date();
                             nextMonth.setMonth(nextMonth.getMonth() + 1);
                             newSubscription.expiryDate = nextMonth.toISOString();
+                        } else if (selectedPlan === 'yearly') {
+                            const nextYear = new Date();
+                            nextYear.setFullYear(nextYear.getFullYear() + 1);
+                            newSubscription.expiryDate = nextYear.toISOString();
                         }
+                        // Lifetime has no expiry date
                         
                         subscription = newSubscription;
                         localStorage.setItem('subscription', JSON.stringify(subscription));
