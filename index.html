@@ -1642,16 +1642,18 @@
                     
                     item.innerHTML = `
                         <div class="video-thumbnail">
-                            <video muted preload="metadata" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.6;" onloadedmetadata="this.currentTime = 3;">
+                            <video muted preload="metadata" style="width: 100%; height: 100%; object-fit: cover; filter: blur(3px);" onloadedmetadata="this.currentTime = 3;">
                                 <source src="${video}" type="video/mp4">
                             </video>
                             <div class="play-button">▶️</div>
                             <div class="video-duration">2:30</div>
                             ${isNew ? '<div class="new-badge">' + (t.newLabel || '¡NUEVO!') + '</div>' : ''}
-                        </div>
-                        <div class="content-overlay">
-                            <h4>Premium Video ${index + 1}</h4>
-                            <div class="unlock-price">${t.unlockText || 'Desbloquear'} ${price}</div>
+                            <div class="content-overlay-simple">
+                                <div class="price-small">${price}</div>
+                                <button class="paypal-icon-btn" onclick="createPayPalPayment('video', '0.30', 'Premium Video ${index+1}', '${video}')" title="Comprar con PayPal">
+                                    💳
+                                </button>
+                            </div>
                         </div>
                     `;
                     
