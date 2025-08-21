@@ -1,22 +1,19 @@
+cat > premium.html <<'HTML'
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>IbizaGirl.pics — Premium</title>
+  <meta name="description" content="Acceso premium: fotos y vídeos sin censura de IbizaGirl.pics" />
+  <link rel="stylesheet" href="/css/blur.css" />
 
-  <link rel="stylesheet" href="/css/blur.css">
-  <meta name="description" content="Acceso premium: fotos y vídeos sin censura de IbizaGirl.pics">
-
-  <!-- Config del front: trae PAYPAL_CLIENT_ID desde backend -->
-  <script>
-    window.PAYPAL_CLIENT_ID = "";
-    fetch('/api/config').then(r=>r.json()).then(j=>{
-      if (j && j.paypalClientId) window.PAYPAL_CLIENT_ID = j.paypalClientId;
-    });
-    window.CRISP_WEBSITE_ID = "TU_CRISP_WEBSITE_ID";
+  <!-- CRISP -->
+  <script type="text/javascript">
+  window.$crisp=[];
+  window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";
+  (function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
   </script>
-  <script src="/js/chatbot.js" defer></script>
 </head>
 <body>
   <header style="padding:16px 12px;">
@@ -33,22 +30,15 @@
     </section>
     <section style="margin: 14px 0;">
       <script async src="https://adserver.juicyads.com/js/jads.js"></script>
-      <ins id="2092250"></ins>
-      <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 2092250});</script>
-      <ins id="2092251"></ins>
-      <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 2092251});</script>
-      <ins id="208469"></ins>
-      <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 208469});</script>
-      <ins id="209470"></ins>
-      <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 209470});</script>
-      <ins id="209471"></ins>
-      <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 209471});</script>
+      <ins id="2092250"></ins><script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 2092250});</script>
+      <ins id="2092251"></ins><script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 2092251});</script>
+      <ins id="208469"></ins><script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 208469});</script>
+      <ins id="209470"></ins><script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 209470});</script>
+      <ins id="209471"></ins><script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 209471});</script>
     </section>
-    <!-- EroAdvertising cuando tengas el snippet:
     <section style="margin: 14px 0;">
       <script async src="https://syndication.eroadvertising.com/show_ad.js?zone=8177575"></script>
     </section>
-    -->
     <section style="margin: 14px 0;">
       <script type="text/javascript" data-cfasync="false">
       /*<![CDATA[/* */
@@ -57,14 +47,6 @@
       </script>
     </section>
     <!-- /ANUNCIOS -->
-
-    <section style="margin:20px 0;">
-      <h2>Opciones</h2>
-      <ul>
-        <li><strong>Pago por ítem:</strong> fotos 0,10€ / vídeos 0,30€.</li>
-        <li><strong>Suscripción:</strong> mensual, anual o lifetime.</li>
-      </ul>
-    </section>
 
     <section style="margin:20px 0;">
       <h2>Suscripciones</h2>
@@ -110,7 +92,11 @@
     <symbol id="icon-lock" viewBox="0 0 24 24">
       <path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm0 2a3 3 0 0 1 3 3v3H9V7a3 3 0 0 1 3-3Z"/>
     </symbol>
+    <symbol id="icon-play" viewBox="0 0 24 24">
+      <path d="M8 5v14l11-7z"/>
+    </symbol>
   </svg>
 </body>
 </html>
+HTML
 
