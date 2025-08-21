@@ -990,20 +990,33 @@
             font-weight: bold;
         }
         
-        /* Ad Zones MEJORADOS */
+        /* Ad Zones VISIBLES Y FUNCIONALES */
         .ad-zone {
-            background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.2));
-            border-radius: 25px;
-            padding: 40px;
+            background: linear-gradient(45deg, rgba(30, 58, 138, 0.1), rgba(14, 165, 233, 0.2));
+            border-radius: 15px;
+            padding: 20px;
             text-align: center;
-            margin: 60px 0;
-            min-height: 150px;
+            margin: 40px 0;
+            min-height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255,255,255,0.3);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        /* Ensure ads are visible */
+        [data-juicy-zone], .eas6a97888e2, [data-ero-ad] {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            min-height: 100px !important;
+            background: rgba(30, 58, 138, 0.1) !important;
+            border: 1px solid rgba(14, 165, 233, 0.3) !important;
+            border-radius: 10px !important;
+            margin: 20px 0 !important;
+            padding: 15px !important;
         }
         
         /* Loading Animation MEJORADO */
