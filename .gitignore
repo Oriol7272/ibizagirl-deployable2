@@ -6,3 +6,5 @@ Thumbs.db
 # evitar zips pesados
 *.zip
 ibizagirl-deployable2-main.zip
+.vercel
+.env*.local
