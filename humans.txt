@@ -5,18 +5,19 @@ Website: IbizaGirl.pics
 Location: Ibiza, Spain
 
 /* SITE */
-Last update: 2025/08/19
+Last update: 2025/08/21
 Language: Spanish / English / French / German / Italian
 Doctype: HTML5
 IDE: Visual Studio Code
 
 /* COMPONENTS */
 Framework: Vanilla JavaScript
-Fonts: Google Fonts (Caveat, Dancing Script, Kalam, Poppins)
-Images: WebP format for optimization
-Payment: PayPal SDK
+Fonts: Google Fonts (Allura, Inter)
+Images: WebP/JPG format for optimization
+Payment: PayPal SDK Live Mode
 Analytics: Google Analytics G-DBXYNPBSPY
-Ads: JuicyAds, ExoClick, EroAdvertising, PopAds
+Ad Networks: JuicyAds, ExoClick, EroAdvertising, PopAds
+Design: Ocean theme with wave effects, night mode
 
 /* THANKS */
 Ibiza for the inspiration
