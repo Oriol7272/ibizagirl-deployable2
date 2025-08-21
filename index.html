@@ -2094,7 +2094,7 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
-        // Initialize ads with ENHANCED visibility and performance
+        // Initialize ads with REAL ad loading and proper timing
         function initializeAds() {
             // Check VIP status first
             const vipStatus = JSON.parse(localStorage.getItem('vipSubscription') || '{}');
@@ -2104,77 +2104,62 @@
                 return;
             }
             
-            console.log('🎯 Initializing ads with enhanced visibility...');
+            console.log('🎯 Initializing REAL ads with proper loading...');
             
-            // Force ad elements to be visible
-            const adElements = document.querySelectorAll('[data-juicy-zone], .eas6a97888e2, [data-ero-ad]');
-            adElements.forEach(el => {
-                el.style.display = 'block';
-                el.style.visibility = 'visible';
-                el.style.opacity = '1';
-                el.style.minHeight = '100px';
-            });
-            
-            // JuicyAds with enhanced loading
-            if (window.adsbyjuicy && window.juicyZones) {
-                let currentZoneIndex = 0;
-                const rotateJuicyAds = () => {
-                    const zone = window.juicyZones[currentZoneIndex];
-                    const adElement = document.querySelector(`[data-juicy-zone]`);
-                    if (adElement) {
-                        adElement.setAttribute('data-juicy-zone', zone);
-                        adElement.innerHTML = `<div style="background: rgba(30,58,138,0.1); padding: 15px; border-radius: 10px; color: white; text-align: center;">🍊 JuicyAds Zone ${zone} Loading...</div>`;
+            // Wait for all ad scripts to load
+            setTimeout(() => {
+                // JuicyAds - Force load real ads
+                if (window.adsbyjuicy && window.juicyZones) {
+                    const juicyElements = document.querySelectorAll('[data-juicy-zone]');
+                    juicyElements.forEach((element, index) => {
+                        const zone = window.juicyZones[index % window.juicyZones.length];
+                        element.innerHTML = ''; // Clear placeholder
+                        element.setAttribute('data-juicy-zone', zone);
                         
                         // Force JuicyAds to render
-                        if (window.adsbyjuicy.cmd) {
-                            window.adsbyjuicy.cmd.push(function() {
-                                window.adsbyjuicy.ads.push({
-                                    adunit: zone,
-                                    div: adElement.id || 'juicy-ad-' + zone
-                                });
+                        window.adsbyjuicy.cmd.push(function() {
+                            window.adsbyjuicy.ads.push({
+                                adunit: zone,
+                                div: element.id || `juicy-ad-${zone}-${index}`
                             });
-                        }
-                    }
-                    currentZoneIndex = (currentZoneIndex + 1) % window.juicyZones.length;
-                };
+                        });
+                    });
+                    console.log('🍊 JuicyAds initialized with real ads');
+                }
                 
-                rotateJuicyAds();
-                setInterval(rotateJuicyAds, 45000); // Rotate every 45 seconds
-            }
-            
-            // ExoClick with enhanced visibility
-            if (window.AdProvider) {
-                const exoElements = document.querySelectorAll('.eas6a97888e2');
-                exoElements.forEach((element, index) => {
-                    element.setAttribute('data-zoneid', '5696328');
-                    element.innerHTML = `<div style="background: rgba(30,58,138,0.1); padding: 15px; border-radius: 10px; color: white; text-align: center;">🎯 ExoClick Zone 5696328 Loading...</div>`;
-                    element.style.display = 'block';
-                    element.style.minHeight = '120px';
-                });
-            }
-            
-            // EroAdvertising with enhanced visibility
-            if (window.eroAdId) {
-                const eroElements = document.querySelectorAll('[data-ero-ad]');
-                eroElements.forEach(element => {
-                    element.setAttribute('data-ad-id', window.eroAdId);
-                    element.setAttribute('data-website-id', window.eroWebsiteId);
-                    element.innerHTML = `<div style="background: rgba(30,58,138,0.1); padding: 15px; border-radius: 10px; color: white; text-align: center;">💎 EroAdvertising ID ${window.eroAdId} Loading...</div>`;
-                    element.style.display = 'block';
-                    element.style.minHeight = '120px';
-                });
-            }
-            
-            console.log('✅ All ad networks initialized with enhanced visibility');
-            
-            // Force re-render after 2 seconds
-            setTimeout(() => {
-                const allAds = document.querySelectorAll('[data-juicy-zone], .eas6a97888e2, [data-ero-ad]');
-                allAds.forEach(ad => {
-                    ad.style.display = 'block';
-                    ad.style.visibility = 'visible';
-                });
-            }, 2000);
+                // ExoClick - Load real ads
+                if (window.AdProvider && Array.isArray(window.AdProvider)) {
+                    const exoElements = document.querySelectorAll('.eas6a97888e2');
+                    exoElements.forEach((element) => {
+                        element.innerHTML = ''; // Clear placeholder
+                        element.setAttribute('data-zoneid', '5696328');
+                        
+                        // Trigger ExoClick
+                        window.AdProvider.push({"serve": {}});
+                    });
+                    console.log('🎯 ExoClick initialized with real ads');
+                }
+                
+                // EroAdvertising - Load real ads
+                if (window.eroAdId) {
+                    const eroElements = document.querySelectorAll('[data-ero-ad]');
+                    eroElements.forEach((element) => {
+                        element.innerHTML = ''; // Clear placeholder
+                        element.setAttribute('data-ad-id', window.eroAdId);
+                        element.setAttribute('data-website-id', window.eroWebsiteId);
+                        
+                        // Create EroAdvertising script
+                        const eroScript = document.createElement('script');
+                        eroScript.src = `https://ads.ero-advertising.com/ads.js?id=${window.eroAdId}`;
+                        eroScript.async = true;
+                        element.appendChild(eroScript);
+                    });
+                    console.log('💎 EroAdvertising initialized with real ads');
+                }
+                
+                console.log('✅ All REAL ad networks initialized and loading...');
+                
+            }, 3000); // Wait 3 seconds for scripts to fully load
         }
         
         // Hide all ads for VIP users
