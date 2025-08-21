@@ -636,6 +636,45 @@
             background: #0ea5e9;
         }
         
+        /* Simple overlay for premium content */
+        .content-overlay-simple {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .price-small {
+            font-size: 1.2em;
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .paypal-icon-btn {
+            background: linear-gradient(45deg, #0284c7, #0ea5e9);
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .paypal-icon-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        
         .content-item img {
             width: 100%;
             height: 120px; /* Reduced from 250px to match smaller grid */
