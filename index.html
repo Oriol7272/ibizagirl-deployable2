@@ -153,10 +153,63 @@
     </script>
     
     <style>
+        /* Optimizaciones de rendimiento */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+        
+        /* Hardware acceleration */
+        .content-item, .carousel-item, .hero-title, .paypal-icon-btn {
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        /* Smooth scrolling optimizado */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+                line-height: 1.4;
+            }
+            
+            .content-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 10px;
+            }
+            
+            .content-item {
+                min-height: 120px;
+            }
+            
+            .hero-title {
+                font-size: 4em;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.8em;
+            }
+            
+            .section-title {
+                font-size: 2.5em;
+            }
+        }
+        
+        /* iOS Safari specific fixes */
+        @media screen and (-webkit-min-device-pixel-ratio: 1) {
+            body {
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .content-item {
+                -webkit-transform: translateZ(0);
+                -webkit-backface-visibility: hidden;
+            }
         }
         
         body {
