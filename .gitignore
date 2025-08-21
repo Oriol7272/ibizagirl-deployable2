@@ -1,83 +1,42 @@
-<<<<<<< HEAD
-# BeachGirl.pics - Clean Repository
-# Node modules (if any)
-node_modules/
-npm-debug.log*
+# IbizaGirl.pics - Clean Repository
 
-# Temporary files
-*.tmp
-*.temp
-*~
-.DS_Store
-Thumbs.db
-
-# Development files
-*.docx
-*.doc
-*.pdf
-*.zip
-
-# Old versions and backups
-*-old.*
-*-backup.*
-*-fixed.*
-index-*.html
-content-data*.js
-
-# System files
-.gitconfig
-.vscode/
-.idea/
-=======
 # Node modules
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# IDE
+# IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# OS
+# OS files
 .DS_Store
 Thumbs.db
->>>>>>> 2605afd1078c28a88b0c9f9589a5dea632e8c75e
 
-# Logs
-*.log
-logs/
-
-<<<<<<< HEAD
-# Runtime data
-pids/
-*.pid
-*.seed
-
-# Coverage directory used by tools like istanbul
-coverage/
-
-# Dependency directories
-node_modules/
-jspm_packages/
-
-# Optional npm cache directory
-.npm
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-=======
 # Temporary files
+*.tmp
+*.temp
+*~
 tmp/
 temp/
+
+# Development files  
+*.docx
+*.doc
+*.pdf
+*.zip
+
+# Old versions and backups (keep content-data files active!)
+*-old.*
+*-backup.*
+*-fixed.*
+index-*.html
+beachgirl-*.html
+BEACHGIRL-*
+COPY-PASTE-*
 
 # Environment variables
 .env.local
@@ -89,11 +48,31 @@ temp/
 dist/
 build/
 
-# Emergent system files (should not be in repo)
+# Emergent system files
 .emergent/
 .emergent*
 
-# Server logs
-server*.log
+# Logs
 *.log
->>>>>>> 2605afd1078c28a88b0c9f9589a5dea632e8c75e
+logs/
+server*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+
+# Coverage directory
+coverage/
+
+# Optional npm cache
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# npm pack output
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
