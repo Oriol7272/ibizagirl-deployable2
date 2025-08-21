@@ -82,7 +82,7 @@
       const priceText= euro(price).replace('.',',');
 
       const mediaLocked = isVideo
-        ? `<video class="thumb censored" preload="metadata" muted playsinline poster="/img/video-poster-blur.webp"></video>`
+        ? `<video class="thumb censored" preload="metadata" muted playsinline poster="/img/video-poster-blur.svg"></video>`
         : `<img class="thumb censored" src="${item.preview || '/img/preview-blur.webp'}" loading="lazy" alt="">`;
 
       const mediaUnlocked = isVideo

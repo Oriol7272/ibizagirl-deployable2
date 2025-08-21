@@ -17,15 +17,11 @@
     },
     {
       "source": "/js/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=60, s-maxage=60" }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=60, s-maxage=60" }]
     },
     {
       "source": "/css/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=300, s-maxage=300" }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=300, s-maxage=300" }]
     }
   ]
 }

@@ -1,55 +1,38 @@
-cat > js/payments.js <<'JS'
+/* IbizaGirl - Payments front */
 (function(){
-  function basename(p){ return (p||'').split('/').pop(); }
-
-  async function createOrder({amount, currency, resourceId}) {
-    const r = await fetch('/api/paypal/create-order', {
+  async function postJSON(url, data){
+    const r = await fetch(url, {
       method:'POST',
-      headers:{'content-type':'application/json'},
-      body: JSON.stringify({ amount, currency, resourceId })
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(data)
     });
-    if (!r.ok) throw new Error('No se pudo crear el pedido');
-    return await r.json();
+    const j = await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(j.error || 'Request failed');
+    return j;
   }
 
-  async function buyItem({src, amount=0.10, currency='EUR'}) {
-    const resourceId = basename(src);
-    const data = await createOrder({amount, currency, resourceId});
-    const approve = (data.links||[]).find(l=>l.rel==='approve')?.href || data.approveUrl;
-    if (!approve) throw new Error('Sin enlace de aprobación');
-    window.location.href = approve;
+  async function buyItem({ src, amount=0.10, currency='EUR', kind='photo' }){
+    try{
+      const resourceId = (src||'').split('/').pop();
+      const res = await postJSON('/api/paypal/create-order', { amount, currency, resourceId });
+      if (res.approveUrl) window.location.href = res.approveUrl;
+      else alert('No se recibió approveUrl de PayPal.');
+    }catch(e){
+      console.error('buyItem error', e);
+      alert('Error creando el pago.');
+    }
   }
 
-  async function createSubscription(planId, tier){
-    const r = await fetch('/api/paypal/create-subscription', {
-      method:'POST',
-      headers:{'content-type':'application/json'},
-      body: JSON.stringify({ planId, tier })
-    });
-    const j = await r.json();
-    if(!r.ok || !j.approveUrl) throw new Error('No se pudo iniciar suscripción');
-    window.location.href = j.approveUrl;
+  async function subscribe({ planId, tier }){
+    try{
+      const res = await postJSON('/api/paypal/create-subscription', { planId, tier });
+      if (res.approveUrl) window.location.href = res.approveUrl;
+      else alert('No se recibió approveUrl de PayPal (subs).');
+    }catch(e){
+      console.error('subscribe error', e);
+      alert('Error creando la suscripción.');
+    }
   }
 
-  function makeBtn(targetId, label, onClick){
-    const el = document.getElementById(targetId);
-    if(!el) return;
-    el.innerHTML = '';
-    const b = document.createElement('button');
-    b.textContent = label;
-    b.style = 'padding:10px 14px;border-radius:999px;border:1px solid #333;background:#111;color:#fff;cursor:pointer;font-weight:700;font-size:14px';
-    b.addEventListener('click', onClick);
-    el.appendChild(b);
-  }
-
-  function renderSubscriptionButtons({ monthlyPlanId, annualPlanId, lifetimePlanId }){
-    if (monthlyPlanId)  makeBtn('pp-sub-monthly',  'Suscribirme (Mensual)',  ()=>createSubscription(monthlyPlanId,'monthly'));
-    if (annualPlanId)   makeBtn('pp-sub-annual',   'Suscribirme (Anual)',    ()=>createSubscription(annualPlanId,'annual'));
-    if (lifetimePlanId) makeBtn('pp-sub-lifetime', 'Suscribirme (Lifetime)', ()=>createSubscription(lifetimePlanId,'lifetime'));
-  }
-
-  window.IBG_PAY = { buyItem };
-  window.renderSubscriptionButtons = renderSubscriptionButtons;
+  window.IBG_PAY = { buyItem, subscribe };
 })();
-JS
-
