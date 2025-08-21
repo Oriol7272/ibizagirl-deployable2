@@ -118,7 +118,7 @@
         console.log('🔧 Ad namespaces initialized');
     </script>
     
-    <!-- JuicyAds Integration - UPDATED WITH NEW CODES -->
+    <!-- JuicyAds Integration - ENHANCED LOADING -->
     <script>
         window.adsbyjuicy = window.adsbyjuicy || {};
         window.adsbyjuicy.cmd = window.adsbyjuicy.cmd || [];
@@ -126,8 +126,22 @@
         // JuicyAds Zone IDs: 2092250, 2092251, 208469, 209470, 209471
         window.juicyZones = [2092250, 2092251, 208469, 209470, 209471];
         console.log('🍊 JuicyAds zones configured:', window.juicyZones);
+        
+        // Force load JuicyAds immediately
+        (function() {
+            var script = document.createElement('script');
+            script.src = 'https://poweredby.jads.co/js/jads.js';
+            script.async = true;
+            script.onload = function() {
+                console.log('🍊 JuicyAds script loaded successfully');
+                // Force initialize ads after script loads
+                if (typeof initializeAds === 'function') {
+                    setTimeout(initializeAds, 1000);
+                }
+            };
+            document.head.appendChild(script);
+        })();
     </script>
-    <script defer src="https://poweredby.jads.co/js/jads.js"></script>
     
     <!-- ExoClick Integration - UPDATED -->
     <script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
