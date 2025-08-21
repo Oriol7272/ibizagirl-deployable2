@@ -143,13 +143,19 @@
         })();
     </script>
     
-    <!-- ExoClick Integration - UPDATED -->
+    <!-- ExoClick Integration - ENHANCED -->
     <script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
     <script>
         // ExoClick Zone 5696328
         window.exoToken = '5d8f8a623f30480757534640fc47aeaed4bb3edf';
-        (window.AdProvider = window.AdProvider || []).push({"serve": {}});
-        console.log('🎯 ExoClick configured with zone 5696328');
+        
+        // Force ExoClick initialization
+        window.addEventListener('load', function() {
+            if (window.AdProvider && Array.isArray(window.AdProvider)) {
+                window.AdProvider.push({"serve": {}});
+                console.log('🎯 ExoClick initialized with zone 5696328');
+            }
+        });
     </script>
     
     <!-- EroAdvertising Integration - UPDATED -->
