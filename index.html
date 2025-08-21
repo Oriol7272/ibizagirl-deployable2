@@ -1833,38 +1833,41 @@
             modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 10000;';
             document.body.appendChild(modal);
             
-            // Initialize PayPal button in the modal
-            paypal.Buttons({
-                createOrder: function(data, actions) {
-                    return actions.order.create({
-                        purchase_units: [{
-                            amount: {
-                                value: subscription.price,
-                                currency_code: 'EUR'
-                            },
-                            description: subscription.label
-                        }]
-                    });
-                },
-                onApprove: function(data, actions) {
-                    return actions.order.capture().then(function(orderData) {
-                        console.log('✅ Payment completed:', orderData);
-                        modal.remove();
-                        alert('🎉 ¡Pago completado con éxito! Ahora tienes acceso premium.');
-                        
-                        // Guardar estado de suscripción
-                        localStorage.setItem('subscriptionType', subscriptionType);
-                        localStorage.setItem('subscriptionDate', new Date().toISOString());
-                        
-                        // Recargar página para mostrar contenido desbloqueado
-                        setTimeout(() => location.reload(), 2000);
-                    });
-                },
-                onError: function(err) {
-                    console.error('❌ PayPal payment error:', err);
-                    alert('Error en el pago. Por favor, inténtalo de nuevo.');
-                }
-            }).render(`#subscription-paypal-container-${subscriptionType}`);
+            // Wait for modal to render, then initialize PayPal
+            setTimeout(() => {
+                // Initialize PayPal button in the modal
+                paypal.Buttons({
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: subscription.price,
+                                    currency_code: 'EUR'
+                                },
+                                description: subscription.label
+                            }]
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(orderData) {
+                            console.log('✅ Payment completed:', orderData);
+                            modal.remove();
+                            alert('🎉 ¡Pago completado con éxito! Ahora tienes acceso premium.');
+                            
+                            // Guardar estado de suscripción
+                            localStorage.setItem('subscriptionType', subscriptionType);
+                            localStorage.setItem('subscriptionDate', new Date().toISOString());
+                            
+                            // Recargar página para mostrar contenido desbloqueado
+                            setTimeout(() => location.reload(), 2000);
+                        });
+                    },
+                    onError: function(err) {
+                        console.error('❌ PayPal payment error:', err);
+                        alert('Error en el pago. Por favor, inténtalo de nuevo.');
+                    }
+                }).render(`#subscription-paypal-container-${subscriptionType}`);
+            }, 100); // Small delay for modal rendering
         }
         
         function createPayPalPayment(type, price, description, itemUrl) {
