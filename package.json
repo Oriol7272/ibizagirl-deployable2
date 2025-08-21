@@ -1,0 +1,10 @@
+{
+  "name": "ibizagirl-deployable2",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vercel dev --listen 3000",
+    "start": "vercel dev --listen 3000"
+  },
+  "engines": { "node": ">=18" }
+}

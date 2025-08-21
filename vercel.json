@@ -1,0 +1,20 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "rewrites": [
+    { "source": "/uncensored/(.*)", "destination": "/api/gate?path=/uncensored/$1" },
+    { "source": "/uncensored-videos/(.*)", "destination": "/api/gate?path=/uncensored-videos/$1" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' https: 'unsafe-inline'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; frame-src https:; connect-src 'self' https:;"
+        }
+      ]
+    }
+  ]
+}
+

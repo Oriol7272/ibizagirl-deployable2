@@ -1,358 +1,116 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Photos - IbizaGirl.pics</title>
-    
-    <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR"></script>
-    
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            min-height: 100vh;
-        }
-        
-        .header {
-            background: rgba(0,0,0,0.3);
-            padding: 20px 0;
-            text-align: center;
-        }
-        
-        .logo { font-size: 2em; margin-bottom: 10px; }
-        
-        .nav {
-            margin-top: 15px;
-        }
-        
-        .nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            padding: 8px 15px;
-            border-radius: 20px;
-            background: rgba(255,255,255,0.2);
-            transition: background 0.3s;
-        }
-        
-        .nav a:hover { background: rgba(255,255,255,0.3); }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .premium-info {
-            text-align: center;
-            margin: 30px 0;
-            background: rgba(255,255,255,0.1);
-            padding: 30px;
-            border-radius: 15px;
-        }
-        
-        .price-tag {
-            font-size: 2em;
-            color: #ff4757;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 30px;
-        }
-        
-        .photo-card {
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-            transition: transform 0.3s;
-            cursor: pointer;
-        }
-        
-        .photo-card:hover { transform: scale(1.05); }
-        
-        .photo-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            display: block;
-            filter: blur(8px);
-        }
-        
-        .photo-card.unlocked img { filter: none; }
-        
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .photo-card.unlocked .overlay { display: none; }
-        
-        .unlock-btn {
-            background: #ff4757;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        
-        .language-selector {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-        }
-        
-        .language-selector select {
-            padding: 8px;
-            border-radius: 5px;
-            border: none;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background: white;
-            color: black;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-        }
-        
-        .close-btn {
-            float: right;
-            font-size: 24px;
-            cursor: pointer;
-            color: #999;
-        }
-        
-        #paypal-button-container {
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>IbizaGirl.pics — Premium</title>
+
+  <link rel="stylesheet" href="/css/blur.css">
+  <meta name="description" content="Acceso premium: fotos y vídeos sin censura de IbizaGirl.pics">
+
+  <!-- Config del front: trae PAYPAL_CLIENT_ID desde backend -->
+  <script>
+    window.PAYPAL_CLIENT_ID = "";
+    fetch('/api/config').then(r=>r.json()).then(j=>{
+      if (j && j.paypalClientId) window.PAYPAL_CLIENT_ID = j.paypalClientId;
+    });
+    window.CRISP_WEBSITE_ID = "TU_CRISP_WEBSITE_ID";
+  </script>
+  <script src="/js/chatbot.js" defer></script>
 </head>
 <body>
-    <!-- Language Selector -->
-    <div class="language-selector">
-        <select id="languageSelect">
-            <option value="es">Español</option>
-            <option value="en">English</option>
-            <option value="de">Deutsch</option>
-            <option value="it">Italiano</option>
-            <option value="fr">Français</option>
-        </select>
-    </div>
+  <header style="padding:16px 12px;">
+    <h1 style="margin:0;">Premium</h1>
+    <p style="opacity:.8;margin:.25rem 0 0">Desbloquea el contenido con pago por ítem o suscripción</p>
+  </header>
 
-    <div class="header">
-        <div class="logo">🌴 IbizaGirl.pics 🌴</div>
-        <div class="nav">
-            <a href="/">Home</a>
-            <a href="/gallery.html">Gallery</a>
-            <a href="/premium.html">Premium</a>
-            <a href="/videos.html">Videos</a>
-            <a href="/subscription.html">Subscribe</a>
+  <main style="padding:12px; max-width:1000px; margin:0 auto;">
+    <!-- ANUNCIOS -->
+    <section style="margin: 14px 0;">
+      <script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
+      <ins class="eas6a97888e2" data-zoneid="5696328"></ins>
+      <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
+    </section>
+    <section style="margin: 14px 0;">
+      <script async src="https://adserver.juicyads.com/js/jads.js"></script>
+      <ins id="2092250"></ins>
+      <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 2092250});</script>
+      <ins id="2092251"></ins>
+      <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 2092251});</script>
+      <ins id="208469"></ins>
+      <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 208469});</script>
+      <ins id="209470"></ins>
+      <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 209470});</script>
+      <ins id="209471"></ins>
+      <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 209471});</script>
+    </section>
+    <!-- EroAdvertising cuando tengas el snippet:
+    <section style="margin: 14px 0;">
+      <script async src="https://syndication.eroadvertising.com/show_ad.js?zone=8177575"></script>
+    </section>
+    -->
+    <section style="margin: 14px 0;">
+      <script type="text/javascript" data-cfasync="false">
+      /*<![CDATA[/* */
+      (function(){var p=window,j="e494ffb82839a29122608e933394c091",d=[["siteId",595+467*6*350+302+4245161],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],v=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL3pTL2J3ZHZmL3R0YWJsZXRvcC5taW4uanM=","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvaG1kYi5taW4uanM=","d3d3Lmh6Z2Vua3ZkLmNvbS9ObmtBaC9mQy96dGFibGV0b3AubWluLmpz","d3d3LmpzZ2Zyend0eWdmLmNvbS9qbWRiLm1pbi5qcw=="],e=-1,a,y,m=function(){clearTimeout(y);e++;if(v[e]&&!(1781539757000<(new Date).getTime()&&1<e)){a=p.document.createElement("script");a.type="text/javascript";a.async=!0;var s=p.document.getElementsByTagName("script")[0];a.src="https://"+atob(v[e]);a.crossOrigin="anonymous";a.onerror=m;a.onload=function(){clearTimeout(y);p[j.slice(0,16)+j.slice(0,16)]||m()};y=setTimeout(m,5E3);s.parentNode.insertBefore(a,s)}};if(!p[j]){try{Object.freeze(p[j]=d)}catch(e){}m()}})();
+      /*]]>/* */
+      </script>
+    </section>
+    <!-- /ANUNCIOS -->
+
+    <section style="margin:20px 0;">
+      <h2>Opciones</h2>
+      <ul>
+        <li><strong>Pago por ítem:</strong> fotos 0,10€ / vídeos 0,30€.</li>
+        <li><strong>Suscripción:</strong> mensual, anual o lifetime.</li>
+      </ul>
+    </section>
+
+    <section style="margin:20px 0;">
+      <h2>Suscripciones</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+        <div class="card" style="padding:16px;background:#0b0b0b;color:#fff;">
+          <h3 style="margin-top:0">Mensual</h3>
+          <div id="pp-sub-monthly"></div>
         </div>
-    </div>
-
-    <div class="container">
-        <div class="premium-info">
-            <h1 id="premiumTitle">💎 Premium Photos</h1>
-            <div class="price-tag">€0.10</div>
-            <p id="premiumDesc">Exclusive high-quality photos from Ibiza</p>
-            <p id="totalPhotos">200+ premium photos available</p>
+        <div class="card" style="padding:16px;background:#0b0b0b;color:#fff;">
+          <h3 style="margin-top:0">Anual</h3>
+          <div id="pp-sub-annual"></div>
         </div>
-
-        <div class="gallery-grid" id="premiumGrid">
-            <!-- Premium photos will be loaded here -->
+        <div class="card" style="padding:16px;background:#0b0b0b;color:#fff;">
+          <h3 style="margin-top:0">Lifetime</h3>
+          <div id="pp-sub-lifetime"></div>
         </div>
-    </div>
+      </div>
+      <p style="opacity:.8;margin-top:8px">Tras suscribirte, el acceso premium se activa automáticamente.</p>
+    </section>
 
-    <!-- Payment Modal -->
-    <div class="modal" id="paymentModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h3 id="modalTitle">Unlock Premium Photo</h3>
-            <p id="modalDesc">Pay €0.10 to unlock this exclusive photo</p>
-            <div id="paypal-button-container"></div>
-        </div>
-    </div>
+    <section style="margin: 20px 0;">
+      <h2>¿Qué incluye?</h2>
+      <div class="grid">
+        <div class="card"><img class="thumb" src="/full/example1.webp" alt="preview" loading="lazy"></div>
+        <div class="card"><img class="thumb" src="/full/example2.webp" alt="preview" loading="lazy"></div>
+        <div class="card"><img class="thumb" src="/full/example3.webp" alt="preview" loading="lazy"></div>
+      </div>
+    </section>
+  </main>
 
-    <script src="content-data3.js"></script>
+  <script src="/js/payments.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      window.renderSubscriptionButtons({
+        monthlyPlanId:  "PLAN_ID_MENSUAL",
+        annualPlanId:   "PLAN_ID_ANUAL",
+        lifetimePlanId: "PLAN_ID_LIFETIME"
+      });
+    });
+  </script>
 
-    <script>
-        const translations = {
-            es: {
-                premiumTitle: "💎 Fotos Premium",
-                premiumDesc: "Fotos exclusivas de alta calidad desde Ibiza",
-                totalPhotos: "200+ fotos premium disponibles",
-                unlockText: "€0.10 - Desbloquear",
-                modalTitle: "Desbloquear Foto Premium",
-                modalDesc: "Paga €0.10 para desbloquear esta foto exclusiva"
-            },
-            en: {
-                premiumTitle: "💎 Premium Photos",
-                premiumDesc: "Exclusive high-quality photos from Ibiza",
-                totalPhotos: "200+ premium photos available",
-                unlockText: "€0.10 - Unlock",
-                modalTitle: "Unlock Premium Photo",
-                modalDesc: "Pay €0.10 to unlock this exclusive photo"
-            }
-        };
-
-        let currentLanguage = 'es';
-        let selectedPhoto = null;
-        let unlockedPhotos = JSON.parse(localStorage.getItem('unlockedPhotos') || '[]');
-
-        function changeLanguage() {
-            currentLanguage = document.getElementById('languageSelect').value;
-            const t = translations[currentLanguage] || translations.en;
-            
-            document.getElementById('premiumTitle').textContent = t.premiumTitle;
-            document.getElementById('premiumDesc').textContent = t.premiumDesc;
-            document.getElementById('totalPhotos').textContent = t.totalPhotos;
-            document.getElementById('modalTitle').textContent = t.modalTitle;
-            document.getElementById('modalDesc').textContent = t.modalDesc;
-            
-            localStorage.setItem('preferred-language', currentLanguage);
-            loadPremiumPhotos();
-        }
-
-        function loadPremiumPhotos() {
-            try {
-                if (typeof PREMIUM_IMAGES_PART1 !== 'undefined') {
-                    const premiumPhotos = PREMIUM_IMAGES_PART1.slice(0, 50);
-                    displayPremiumPhotos(premiumPhotos);
-                    console.log(`💎 Loaded ${premiumPhotos.length} premium photos`);
-                } else {
-                    console.error('PREMIUM_IMAGES_PART1 not found');
-                }
-            } catch (error) {
-                console.error('Error loading premium photos:', error);
-            }
-        }
-
-        function displayPremiumPhotos(photos) {
-            const grid = document.getElementById('premiumGrid');
-            const t = translations[currentLanguage] || translations.en;
-            
-            grid.innerHTML = '';
-            
-            photos.forEach((photo, index) => {
-                const photoCard = document.createElement('div');
-                photoCard.className = 'photo-card';
-                
-                if (unlockedPhotos.includes(photo)) {
-                    photoCard.classList.add('unlocked');
-                }
-                
-                const img = document.createElement('img');
-                img.src = photo;
-                img.alt = `Premium Photo ${index + 1}`;
-                img.loading = 'lazy';
-                
-                const overlay = document.createElement('div');
-                overlay.className = 'overlay';
-                
-                const unlockBtn = document.createElement('button');
-                unlockBtn.className = 'unlock-btn';
-                unlockBtn.textContent = t.unlockText || '€0.10 - Unlock';
-                unlockBtn.onclick = () => openPaymentModal(photo);
-                
-                overlay.appendChild(document.createTextNode('🔒'));
-                overlay.appendChild(unlockBtn);
-                
-                photoCard.appendChild(img);
-                photoCard.appendChild(overlay);
-                grid.appendChild(photoCard);
-            });
-        }
-
-        function openPaymentModal(photo) {
-            selectedPhoto = photo;
-            document.getElementById('paymentModal').style.display = 'flex';
-            initPayPal();
-        }
-
-        function closeModal() {
-            document.getElementById('paymentModal').style.display = 'none';
-        }
-
-        function initPayPal() {
-            document.getElementById('paypal-button-container').innerHTML = '';
-            
-            paypal.Buttons({
-                createOrder: function(data, actions) {
-                    return actions.order.create({
-                        purchase_units: [{
-                            amount: {
-                                value: '0.10'
-                            },
-                            description: 'Premium Photo Access'
-                        }]
-                    });
-                },
-                onApprove: function(data, actions) {
-                    return actions.order.capture().then(function(details) {
-                        // Unlock the photo
-                        unlockedPhotos.push(selectedPhoto);
-                        localStorage.setItem('unlockedPhotos', JSON.stringify(unlockedPhotos));
-                        
-                        alert('Payment successful! Photo unlocked.');
-                        closeModal();
-                        loadPremiumPhotos(); // Refresh display
-                    });
-                },
-                onError: function(err) {
-                    console.error('PayPal error:', err);
-                    alert('Payment failed. Please try again.');
-                }
-            }).render('#paypal-button-container');
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedLang = localStorage.getItem('preferred-language') || 'es';
-            document.getElementById('languageSelect').value = savedLang;
-            changeLanguage();
-            
-            document.getElementById('languageSelect').addEventListener('change', changeLanguage);
-            
-            setTimeout(loadPremiumPhotos, 1000);
-            
-            console.log('💎 Premium page loaded');
-        });
-    </script>
+  <svg width="0" height="0" style="position:absolute">
+    <symbol id="icon-lock" viewBox="0 0 24 24">
+      <path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm0 2a3 3 0 0 1 3 3v3H9V7a3 3 0 0 1 3-3Z"/>
+    </symbol>
+  </svg>
 </body>
 </html>
+
