@@ -2,3 +2,7 @@
 *.bak
 .DS_Store
 Thumbs.db
+
+# evitar zips pesados
+*.zip
+ibizagirl-deployable2-main.zip
