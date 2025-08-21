@@ -2,8 +2,14 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "rewrites": [
-    { "source": "/uncensored/(.*)", "destination": "/api/gate?path=/uncensored/$1" },
-    { "source": "/uncensored-videos/(.*)", "destination": "/api/gate?path=/uncensored-videos/$1" }
+    {
+      "source": "/uncensored/(.*)",
+      "destination": "/api/gate?path=/uncensored/$1"
+    },
+    {
+      "source": "/uncensored-videos/(.*)",
+      "destination": "/api/gate?path=/uncensored-videos/$1"
+    }
   ],
   "headers": [
     {
@@ -15,6 +21,18 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.ibizagirl.pics"
+        }
+      ],
+      "destination": "https://ibizagirl.pics/:path*",
+      "permanent": true
+    }
   ]
 }
-
