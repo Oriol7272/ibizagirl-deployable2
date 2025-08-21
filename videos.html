@@ -3,40 +3,34 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>IbizaGirl.pics — Galería</title>
+  <title>IbizaGirl.pics — Vídeos</title>
 
   <link rel="stylesheet" href="/css/blur.css">
+  <meta name="description" content="Vídeos premium (vista previa pixelada) de IbizaGirl.pics">
 
-  <!-- Config del front: trae PAYPAL_CLIENT_ID desde backend -->
   <script>
     window.PAYPAL_CLIENT_ID = "";
     fetch('/api/config').then(r=>r.json()).then(j=>{
       if (j && j.paypalClientId) window.PAYPAL_CLIENT_ID = j.paypalClientId;
     });
-    window.__ROTATOR_MODE__ = "daily";  /* 'daily' o 'reload' */
+    window.__ROTATOR_MODE__ = "daily";
     window.CRISP_WEBSITE_ID = "TU_CRISP_WEBSITE_ID";
   </script>
-
   <script src="/js/chatbot.js" defer></script>
-  <meta name="description" content="Galería y contenido premium de IbizaGirl.pics">
 </head>
 <body>
   <header style="padding:16px 12px;">
-    <h1 style="margin:0;">IbizaGirl.pics</h1>
-    <p style="opacity:.8;margin:.25rem 0 0">Galería diaria y contenido premium</p>
+    <h1 style="margin:0;">Vídeos</h1>
+    <p style="opacity:.8;margin:.25rem 0 0">20 vídeos que rotan a diario o por recarga</p>
   </header>
 
   <main style="padding:12px; max-width:1200px; margin:0 auto;">
-
-    <!-- ===================== ANUNCIOS (COMPLETO) ===================== -->
-    <!-- EXOCLICK (magsrv) — zoneid 5696328 -->
+    <!-- ANUNCIOS -->
     <section style="margin: 14px 0;">
       <script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
       <ins class="eas6a97888e2" data-zoneid="5696328"></ins>
       <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
     </section>
-
-    <!-- JUICYADS — 5 zonas -->
     <section style="margin: 14px 0;">
       <script async src="https://adserver.juicyads.com/js/jads.js"></script>
       <ins id="2092250"></ins>
@@ -50,14 +44,11 @@
       <ins id="209471"></ins>
       <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 209471});</script>
     </section>
-
-    <!-- EROADVERTISING (pega aquí su snippet oficial cuando lo tengas)
+    <!-- EroAdvertising cuando tengas el snippet:
     <section style="margin: 14px 0;">
       <script async src="https://syndication.eroadvertising.com/show_ad.js?zone=8177575"></script>
     </section>
     -->
-
-    <!-- POPADS — script íntegro -->
     <section style="margin: 14px 0;">
       <script type="text/javascript" data-cfasync="false">
       /*<![CDATA[/* */
@@ -65,26 +56,15 @@
       /*]]>/* */
       </script>
     </section>
-    <!-- =================== FIN ANUNCIOS =================== -->
+    <!-- /ANUNCIOS -->
 
-    <!-- CONTENIDO -->
+    <!-- GRID SOLO DE VÍDEOS -->
     <section style="margin: 18px 0;">
-      <h2>Gallery (20 de /full)</h2>
-      <div id="galleryGrid"></div>
-    </section>
-
-    <section style="margin: 18px 0;">
-      <h2>Fotos Premium (100 de /uncensored)</h2>
-      <div id="uncensoredGrid"></div>
-    </section>
-
-    <section style="margin: 18px 0;">
-      <h2>Vídeos Premium (20 de /uncensored-videos)</h2>
       <div id="videosGrid"></div>
     </section>
   </main>
 
-  <!-- Pools (ajusta a los que tengas) -->
+  <!-- Pools -->
   <script src="/content-data1.js"></script>
   <script src="/content-data2.js"></script>
   <script src="/content-data3.js"></script>
@@ -92,11 +72,9 @@
   <script src="/content-data5.js"></script>
   <script src="/content-data6.js"></script>
 
-  <!-- Lógica -->
   <script src="/js/daily-rotator.js"></script>
   <script src="/js/payments.js"></script>
 
-  <!-- SVG icono candado -->
   <svg width="0" height="0" style="position:absolute">
     <symbol id="icon-lock" viewBox="0 0 24 24">
       <path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm0 2a3 3 0 0 1 3 3v3H9V7a3 3 0 0 1 3-3Z"/>
