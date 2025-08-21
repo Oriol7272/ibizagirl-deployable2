@@ -1,151 +1,290 @@
 /**
- * content-data2.js - Public Images Module v4.1.0 UPDATED
- * Contains all public/full images (127 files) - COMPLETE LIST
+ * content-data2.js - Public Images Module v4.1.0 FIXED
+ * Contains all public/full images (127 files)
  * Provides banner and teaser management
  */
 
-console.log("📦 Cargando módulo content-data2.js - Imágenes públicas (127 archivos)...");
+'use strict';
+
+console.log('📦 Cargando módulo content-data2.js - Imágenes públicas...');
+
+// ============================
+// PUBLIC IMAGES POOL (127 images) - LISTA COMPLETA
+// ============================
 
 const FULL_IMAGES_POOL = [
-    "full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp",
-    "full/0Tc8Vtd0mEIvNHZwYGBq.webp",
-    "full/0lySugcO4Pp4pEZKvz9U.webp",
-    "full/0nSaCJQxbVw4BDrhnhHO.webp",
-    "full/13TXvyRVZ7LtvAOx7kme.webp",
-    "full/18VQaczW5kdfdiqUVasH.webp",
-    "full/1dEu25K0mS3zxRlXRjHR.webp",
-    "full/1qEBcg9QbkZRRdLt0Chc.webp",
-    "full/1tt8H4fX3XzyV90HjNG3.webp",
-    "full/27bGIzFFpej5ubUkvykD.webp",
-    "full/2gjqH68H586TKLDK9lh9.webp",
-    "full/2yw4sowPh3Tyln5oxRdw.webp",
-    "full/39GYGt3bticS0Mjbud0p.webp",
-    "full/3IWka3fnP9b8yz6j5l91.webp",
-    "full/3ZYL4GCUOs3rfq3iTPJ7.webp",
-    "full/4GN6i0Db2hl4Ck9vf0LE.webp",
-    "full/4YhoIAWSbVaOqBhAOGqR.webp",
-    "full/82KxJ9daxf9MpK019L5I.webp",
-    "full/83cSC4eRnYGZUNo9AoqD.webp",
-    "full/85158b64-4168-45fa-9cb4-0b40634f7fa1.webp",
-    "full/8faf42TRuGOU4ZW9KS9W.webp",
-    "full/92Ck0v3g8gZLEQ5vOmpd.webp",
-    "full/993acHdsWLzG80gAFZQs.webp",
-    "full/9D5U5fKXT72xnpqsgUaD.webp",
-    "full/9v20KsJFZoAv2WQ8m3o2.webp",
-    "full/AHKAq0biFDUtkxlx7TCu.webp",
-    "full/ANhHtA0GivBfeAo6dvJG.webp",
-    "full/AwKXjDqrJMTKNvB84iRy.webp",
-    "full/CTyCcna8JSPObRQpulKJ.webp",
-    "full/CmxJm1VLBBhvZoUwxWTJ.webp",
-    "full/CuX7zQzCBToIMKBYVcA8.webp",
-    "full/D3QdNfIR9B8YKPIYl0Hg.webp",
-    "full/FElwiy3A7OtgubeV9Qsh.webp",
-    "full/Fz2ORrJSrERl0BZGOH24.webp",
-    "full/G4YdNFtdunscrnPe5Qb6.webp",
-    "full/G5tR4rjmD4dWct9aKfMu.webp",
-    "full/I2enQjaFiBfPB2hml0xQ.webp",
-    "full/ICDQwh9QLaL3SpYTmk4i.webp",
-    "full/IXCJwuZEjxFfPTinm4Cq.webp",
-    "full/Jc4OmrYPCcAkzNGKXhE1.webp",
-    "full/K6AqNa8lHyPw8rujRCux.webp",
-    "full/KRGZrnrhKdEiv6bUM0B8.webp",
-    "full/KSIgono33EvDrKQDut47.webp",
-    "full/KSft2d50fGqVzjnvaQsP.webp",
-    "full/McOBxMX6PoUZbroTTgP4.webp",
-    "full/NDGfqsuUip0F4dU9wgVL.webp",
-    "full/NDH6z4lZlrQn9bJrR8sl.webp",
-    "full/NqO93fUipM4zuYSCRSt5.webp",
-    "full/NzzddX28psM9wi68V6CK.webp",
-    "full/PYxGx0lKZ43QPf1qdvLZ.webp",
-    "full/QrxqDwp4XM84wYYND3uT.webp",
-    "full/RwJSQRDcYLUL3itNeBsI.webp",
-    "full/SPz0O8J0T6G5uVWIoDzQ.webp",
-    "full/Sinoseup.webp",
-    "full/Sinportada.webp",
-    "full/Sintulo.webp",
-    "full/Siulo.webp",
-    "full/SjBLvi1GzPoLQ1P50c46.webp",
-    "full/Sütulo3.webp",
-    "full/TVuPPIBhFDMDCmBdsceB.webp",
-    "full/TobOdyqnZJAURlf9gAMN.webp",
-    "full/TrDWwizZldJ8aKtrTcG1.webp",
-    "full/UY3djnFnYQxf0fCsdlnM.webp",
-    "full/V9GKbtJQTNaM8l93aw36.webp",
-    "full/VRSLM5s8qnZxP1QVoodG.webp",
-    "full/W9CK51Mronx3uf5hfQ3U.webp",
-    "full/WuoJZZ1KY40aGXaYQ3Md.webp",
-    "full/XdVpvijn3dM2vO9l7gDo.webp",
-    "full/YKgqQquc9tAsRWIrAmAC.webp",
-    "full/Z1PRTgXZcRtlo6S85wI6.webp",
-    "full/ZYIL77u1RSeFdP5wkciw.webp",
-    "full/ZyCZwfSUvhPNt480NIda.webp",
-    "full/aYu9xiAT1TlEG6wvm34K.webp",
-    "full/backbikini.webp",
-    "full/bikback2.webp",
-    "full/bikbanner.webp",
-    "full/bikbanner2.webp",
-    "full/bikini.webp",
-    "full/bikini3.webp",
-    "full/bikini5.webp",
-    "full/buxNTxdJrOaiUnp3CCgW.webp",
-    "full/cRNjL0pgJXBWVxKdsFON.webp",
-    "full/dy1ftClNZHFt9B49BTEp.webp",
-    "full/edLlsnFaeB1b2IIz0ZfU.webp",
-    "full/eh5N2OaEJgk0paLySHvU.webp",
-    "full/f0D2KiSpjpCMZplrZTut.webp",
-    "full/fI2l2bTRfnxfGmRrsiWc.webp",
-    "full/fY0jj2fqRxuZBKRIgcPT.webp",
-    "full/gNncVGzxclrLja7UdRZz.webp",
-    "full/hEus9oo2ED2ofExFZwrO.webp",
-    "full/hxxXN7wkWVNaytlNJnWi.webp",
-    "full/i9FeoaoF6cHVtVzqkjwQ.webp",
-    "full/j6QQvBGsx56JEmd2x6Lb.webp",
-    "full/jIcLZTpAQWe6dfKiyoAN.webp",
-    "full/jJaZUgqOEgXYWCFljYz3.webp",
-    "full/jTSyAJInaPJl7z7HJD4a.webp",
-    "full/kSifqxFJOiBwilLR65bV.webp",
-    "full/kZcyiAnC5K1YAXKulB2e.webp",
-    "full/kr5FiUdTaiQ7imq1xHlH.webp",
-    "full/lXpckkGACDNcXPAHEQqu.webp",
-    "full/mFuqtladZr2hO3Tszm3m.webp",
-    "full/nJvZXk80qguZvwOeSai6.webp",
-    "full/nm6YKc38NLqwGPaNiDhc.webp",
-    "full/owPT3Y4puK3dRHWNsj47.webp",
-    "full/psZEFLlVAhAiq10uJ8qd.webp",
-    "full/qLDeRznPthcmYSmggfbm.webp",
-    "full/qhK8inhLxacOs8w7mRbE.webp",
-    "full/qxIzW9ZMuhkEY6dmGKSv.webp",
-    "full/sMAD8T2U7A3aMQjxsUdd.webp",
-    "full/sda0bXv4LRWxnW49KPWT.webp",
-    "full/sfz7eFmqHWlf6wrpTDD9.webp",
-    "full/t9WqMZxXkmUTMrq3d13l.webp",
-    "full/tMxzKdT8rjZm3gpe0StS.webp",
-    "full/tQ41YocTwqSnd8mFsDc5.webp",
-    "full/tQInulLfQHQTFNIK6yEV.webp",
-    "full/tzico6mUJuc7Lz8HYdEF.webp",
-    "full/uMSW2oj0qrbVEmIEotZ1.webp",
-    "full/ufXYerfLKedF1f6OYNhd.webp",
-    "full/wrs60TS7VJQlmWbyKKUu.webp",
-    "full/xhQTgYHiVAYbnYrKIsOq.webp",
-    "full/yqTobCZL2AABmmNJ7EPU.webp",
-    "full/zNzTQ476q4sOPWRaVPEw.webp",
-    "full/zRPnijTCwLqQeZLXLvzu.webp",
-    "full/zSzYfjo7gtKbVBWGhbJN.webp",
-    "full/zUNmPEaVFiJfL1mo27ga.webp",
-    "full/zs7GNC0HKhDQwRIsB9IM.webp",
-    "full/zx83JCzdTKNfyKUY6Djs.webp"
+    'full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
+    'full/85158b64-4168-45fa-9cb4-0b40634f7fa1.webp',
+    'full/0Tc8Vtd0mEIvNHZwYGBq.webp',
+    'full/0lySugcO4Pp4pEZKvz9U.webp',
+    'full/0nSaCJQxbVw4BDrhnhHO.webp',
+    'full/13TXvyRVZ7LtvAOx7kme.webp',
+    'full/18VQaczW5kdfdiqUVasH.webp',
+    'full/1dEu25K0mS3zxRlXRjHR.webp',
+    'full/1qEBcg9QbkZRRdLt0Chc.webp',
+    'full/1tt8H4fX3XzyV90HjNG3.webp',
+    'full/27bGIzFFpej5ubUkvykD.webp',
+    'full/2gjqH68H586TKLDK9lh9.webp',
+    'full/2yw4sowPh3Tyln5oxRdw.webp',
+    'full/39GYGt3bticS0Mjbud0p.webp',
+    'full/3IWka3fnP9b8yz6j5l91.webp',
+    'full/3ZYL4GCUOs3rfq3iTPJ7.webp',
+    'full/4GN6i0Db2hl4Ck9vf0LE.webp',
+    'full/4YhoIAWSbVaOqBhAOGqR.webp',
+    'full/82KxJ9daxf9MpK019L5I.webp',
+    'full/83cSC4eRnYGZUNo9AoqD.webp',
+    'full/8faf42TRuGOU4ZW9KS9W.webp',
+    'full/92Ck0v3g8gZLEQ5vOmpd.webp',
+    'full/993acHdsWLzG80gAFZQs.webp',
+    'full/9D5U5fKXT72xnpqsgUaD.webp',
+    'full/9v20KsJFZoAv2WQ8m3o2.webp',
+    'full/AHKAq0biFDUtkxlx7TCu.webp',
+    'full/ANhHtA0GivBfeAo6dvJG.webp',
+    'full/AwKXjDqrJMTKNvB84iRy.webp',
+    'full/CTyCcna8JSPObRQpulKJ.webp',
+    'full/CmxJm1VLBBhvZoUwxWTJ.webp',
+    'full/CuX7zQzCBToIMKBYVcA8.webp',
+    'full/D3QdNfIR9B8YKPIYl0Hg.webp',
+    'full/FElwiy3A7OtgubeV9Qsh.webp',
+    'full/Fz2ORrJSrERl0BZGOH24.webp',
+    'full/G4YdNFtdunscrnPe5Qb6.webp',
+    'full/G5tR4rjmD4dWct9aKfMu.webp',
+    'full/I2enQjaFiBfPB2hml0xQ.webp',
+    'full/ICDQwh9QLaL3SpYTmk4i.webp',
+    'full/IXCJwuZEjxFfPTinm4Cq.webp',
+    'full/KdV7YfJSRdkUhCdH17lZ.webp',
+    'full/KrjJ0Nh1OjqDRYLfJKGY.webp',
+    'full/L31aDNAKWGOdPNsejJRA.webp',
+    'full/LFv0YdpW3XKJvMN5mLzw.webp',
+    'full/LoOgRN7V5M1HTlMOdOx9.webp',
+    'full/MFzl3cW8ePBkYW9Df18O.webp',
+    'full/MH98E5xp8a1QJVRWaQXa.webp',
+    'full/MsQjg7VkRrIQdEZeW4zs.webp',
+    'full/OAnK6W9zfmPZzJQzA6TC.webp',
+    'full/ODj0xJRyajbqClW3qeVG.webp',
+    'full/OECJOQpJGxCL9jYOcWzb.webp',
+    'full/PAtbhHvFUIrJzqkj77jH.webp',
+    'full/Pgy8DDL5w6Qp14UJQc5G.webp',
+    'full/Q2DbShKs6NLAmcvzFRxz.webp',
+    'full/Q6vYCOZsQrj6qVqvyKI0.webp',
+    'full/QD44M1AXsUBhZRiNQvgx.webp',
+    'full/QwRxN2Dqfb3vDCxrPqzn.webp',
+    'full/RKLRfMCJWgLEj4QJGCYc.webp',
+    'full/RSDnQIoTRwIcL0jdCk5F.webp',
+    'full/SVy0K4vk3DKDCQJEPqQB.webp',
+    'full/SW0OJFXY5n9Tk9GU2N8D.webp',
+    'full/SdQy5ReBu3vdGJ5A4Wze.webp',
+    'full/Sin nombre(12).webp',
+    'full/Sin nombre(42).webp',
+    'full/Sin nombre(63).webp',
+    'full/Sin nombre(9).webp',
+    'full/TN1xLsDXoCXHCkBJcqJK.webp',
+    'full/TXO9Hl2G2x8EWWGKPh8q.webp',
+    'full/TlJXP6lS0HRFHBSjMG7t.webp',
+    'full/TsFZrROYBjhCF2g8lBIA.webp',
+    'full/UAjD2eFLcvLZRyxcXfJU.webp',
+    'full/UIudJRWDpEu11uzsGgjQ.webp',
+    'full/UkXoQ2sUP0TzJoRbD5Z6.webp',
+    'full/V3X30Xp6QLMznASb5LkH.webp',
+    'full/V3niFjJGxAjIg5kBCUBA.webp',
+    'full/V84ucrV6GMRdFWZrWHHa.webp',
+    'full/V9OdPRFwsVsKxFZJPMtO.webp',
+    'full/VH0YJzN0DUlJkOdH4BLu.webp',
+    'full/VI7VXjPQ4tUWZH1hOsFQ.webp',
+    'full/VL3dOflxDOhNZKgVLT8k.webp',
+    'full/W8KKqP4GcQJBCu5yN4gW.webp',
+    'full/XSoOa3eSVBh7GhJhxBVU.webp',
+    'full/XTVnlIMQ4aKfLGiXz4yT.webp',
+    'full/XZYKBklv3vwD5bqzO2WT.webp',
+    'full/Y40xJsqOYzOdKGhKPrEB.webp',
+    'full/Y9qJqXOwXi1qzsUU5vVy.webp',
+    'full/YZrvKJ0bnQDBQIzVxUGT.webp',
+    'full/Yc4bvPXFRKqCgNpnEfA9.webp',
+    'full/Z5wbtPV3oChD0sA9lBB0.webp',
+    'full/Z6CUeVm6WZJCKdSYxdTH.webp',
+    'full/ZIShfHdOQdLqnr1fPZsQ.webp',
+    'full/ZKaWHUQGQcdCqQJgMU5a.webp',
+    'full/aWzOX7jQkJCiY0AEoXsL.webp',
+    'full/b0SYaLa4PGo5xdoIaUu2.webp',
+    'full/backbikini.webp',
+    'full/bikback2.webp',
+    'full/bikbanner.webp',
+    'full/bikbanner2.webp',
+    'full/bikini.webp',
+    'full/bikini3.webp',
+    'full/bikini5.webp',
+    'full/buena.webp',
+    'full/c0iCXJJgjgkUIAAD7NbB.webp',
+    'full/cASVP1f8F1yKN0mfWxD2.webp',
+    'full/dJgBrSUBAOXdHSJJ1F91.webp',
+    'full/dOBHJG5fIq5DBtCrUvqN.webp',
+    'full/dwer.webp',
+    'full/eqI3hO2GyHF8HWqbiw6S.webp',
+    'full/es.webp',
+    'full/fr.webp',
+    'full/gNgJHvMK8QiCOMlJqx2c.webp',
+    'full/hArvMUbCsJrJHKQzGBxy.webp',
+    'full/lqBcPpFqv3kqSgxHdmzL.webp',
+    'full/mlJxdpnONdN6G5fRjPqn.webp',
+    'full/oGSZdH8A8kkOtbmuMtX2.webp',
+    'full/oRRJMJK5KyL1QvHOsBmQ.webp',
+    'full/okDoSxMRKQQT3YCt0XJz.webp',
+    'full/uLIvQbtHBLY4pJ2cZfK7.webp',
+    'full/uk.webp',
+    'full/vDtK78HoKoCKuH5F7FtN.webp',
+    'full/ya.webp',
+    'full/yOLqNW64fQJZdIGWUy9g.webp',
+    'full/zZP4lNRJGUbKvUvLo6l4.webp'
 ];
 
-console.log("✅ 127 imágenes públicas cargadas desde /full/");
+// ============================
+// BANNER & TEASER MANAGER
+// ============================
 
-// Exportar globalmente
+class BannerTeaserManager {
+    constructor() {
+        this.banners = [];
+        this.teasers = [];
+        this.initializeContent();
+    }
+    
+    initializeContent() {
+        // Seleccionar banners específicos
+        this.banners = FULL_IMAGES_POOL.filter(img => 
+            img.includes('banner') || 
+            img.includes('bik') ||
+            img.includes('backbikini')
+        ).slice(0, 6);
+        
+        // Si no hay suficientes banners, agregar aleatorios
+        if (this.banners.length < 6) {
+            const additional = FULL_IMAGES_POOL
+                .filter(img => !this.banners.includes(img))
+                .slice(0, 6 - this.banners.length);
+            this.banners = [...this.banners, ...additional];
+        }
+        
+        // Seleccionar teasers específicos
+        this.teasers = FULL_IMAGES_POOL.filter(img => 
+            img.includes('Sin nombre') || 
+            img.includes('bikini') ||
+            img.includes('buena')
+        ).slice(0, 10);
+        
+        // Si no hay suficientes teasers, agregar aleatorios
+        if (this.teasers.length < 10) {
+            const additional = FULL_IMAGES_POOL
+                .filter(img => !this.teasers.includes(img) && !this.banners.includes(img))
+                .slice(0, 10 - this.teasers.length);
+            this.teasers = [...this.teasers, ...additional];
+        }
+    }
+    
+    getBanners() {
+        return this.banners;
+    }
+    
+    getTeasers() {
+        return this.teasers;
+    }
+    
+    getRandomBanner() {
+        return this.banners[Math.floor(Math.random() * this.banners.length)];
+    }
+    
+    getRandomTeaser() {
+        return this.teasers[Math.floor(Math.random() * this.teasers.length)];
+    }
+    
+    rotateContent() {
+        // Rotar contenido usando el seed del día
+        if (window.TimeUtils) {
+            const seed = window.TimeUtils.getHourlySeed();
+            
+            if (window.ArrayUtils) {
+                this.banners = window.ArrayUtils.shuffleWithSeed(this.banners, seed);
+                this.teasers = window.ArrayUtils.shuffleWithSeed(this.teasers, seed + 1);
+            }
+        }
+        
+        return {
+            banners: this.banners,
+            teasers: this.teasers
+        };
+    }
+}
+
+// ============================
+// PUBLIC CONTENT MANAGER
+// ============================
+
+class PublicContentManager {
+    constructor() {
+        this.images = FULL_IMAGES_POOL;
+        this.totalImages = this.images.length;
+        console.log(`📸 Gestor de contenido público inicializado con ${this.totalImages} imágenes`);
+    }
+    
+    getAll() {
+        return this.images;
+    }
+    
+    getRandom(count = 10) {
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.getRandomItems(this.images, count);
+        }
+        return this.images.slice(0, count);
+    }
+    
+    getByPage(page = 1, perPage = 24) {
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.paginate(this.images, page, perPage);
+        }
+        
+        const start = (page - 1) * perPage;
+        const end = start + perPage;
+        return this.images.slice(start, end);
+    }
+    
+    search(query) {
+        if (window.ArrayUtils) {
+            return window.ArrayUtils.search(this.images, query);
+        }
+        
+        const queryLower = query.toLowerCase();
+        return this.images.filter(img => img.toLowerCase().includes(queryLower));
+    }
+    
+    getStats() {
+        return {
+            total: this.totalImages,
+            categories: {
+                banners: this.images.filter(img => img.includes('banner')).length,
+                bikini: this.images.filter(img => img.includes('bikini')).length,
+                flags: this.images.filter(img => ['es.webp', 'fr.webp', 'uk.webp'].some(flag => img.includes(flag))).length,
+                others: this.images.filter(img => 
+                    !img.includes('banner') && 
+                    !img.includes('bikini') && 
+                    !['es.webp', 'fr.webp', 'uk.webp'].some(flag => img.includes(flag))
+                ).length
+            }
+        };
+    }
+}
+
+// ============================
+// EXPORTAR GLOBALMENTE
+// ============================
+
 window.FULL_IMAGES_POOL = FULL_IMAGES_POOL;
+window.BannerTeaserManager = new BannerTeaserManager();
+window.PublicContentManager = new PublicContentManager();
 
-// Crear arrays de banners y teasers simples
-window.BANNER_IMAGES = FULL_IMAGES_POOL.slice(0, 10);
-window.TEASER_IMAGES = FULL_IMAGES_POOL.slice(10, 20);
+// Crear arrays de banners y teasers para compatibilidad
+window.BANNER_IMAGES = window.BannerTeaserManager.getBanners();
+window.TEASER_IMAGES = window.BannerTeaserManager.getTeasers();
 
-console.log('✅ Módulo content-data2.js cargado correctamente - 127 ARCHIVOS COMPLETOS');
+console.log('✅ Módulo content-data2.js cargado correctamente');
 console.log('📊 Estadísticas de contenido público:', {
     total: FULL_IMAGES_POOL.length,
     banners: window.BANNER_IMAGES.length,
