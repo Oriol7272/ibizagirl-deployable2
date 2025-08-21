@@ -1542,24 +1542,11 @@
                         <img src="${photo}" alt="Premium ${index+1}" loading="lazy" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDI1MCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyNTAiIGhlaWdodD0iMjUwIiBmaWxsPSIjNjY3ZWVhIi8+Cjx0ZXh0IHg9IjEyNSIgeT0iMTI1IiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxOCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UHJlbWl1bSBQaG90bzwvdGV4dD4KPC9zdmc+'">
                             <div class="elegant-mask"></div>
                         ${isNew ? `<div class="new-badge">${t.newLabel}</div>` : ''}
-                        <div class="content-overlay">
-                            <div style="font-size: 2em; margin-bottom: 5px;">🔒</div>
-                            <h4 style="font-size: 0.5em; margin: 0; opacity: 0.7;">Premium ${index+1}</h4>
-                            <div class="unlock-price">€0.10</div>
-                            <div class="pricing-options" style="margin-top: 10px;">
-                                <button class="paypal-button small micro-interaction" onclick="createPayPalPayment('photo', '0.10', 'Premium Photo ${index+1}', '${photo}')" title="Compra individual">
-                                    💳 €0.10
-                                </button>
-                                <button class="subscription-btn small micro-interaction" onclick="purchaseContent('monthly')" title="Suscripción mensual">
-                                    📅 €19.99/mes
-                                </button>
-                                <button class="subscription-btn small micro-interaction" onclick="purchaseContent('yearly')" title="Suscripción anual">
-                                    📅 €100/año
-                                </button>
-                                <button class="subscription-btn small micro-interaction" onclick="purchaseContent('lifetime')" title="Acceso vitalicio">
-                                    ⭐ €200
-                                </button>
-                            </div>
+                        <div class="content-overlay-simple">
+                            <div class="price-small">€0.10</div>
+                            <button class="paypal-icon-btn" onclick="createPayPalPayment('photo', '0.10', 'Premium Photo ${index+1}', '${photo}')" title="Comprar con PayPal">
+                                💳
+                            </button>
                         </div>
                     `;
                     
