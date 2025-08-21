@@ -2083,7 +2083,7 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
-        // Initialize ads with UPDATED CODES and VIP check
+        // Initialize ads with ENHANCED visibility and performance
         function initializeAds() {
             // Check VIP status first
             const vipStatus = JSON.parse(localStorage.getItem('vipSubscription') || '{}');
@@ -2093,98 +2093,77 @@
                 return;
             }
             
-            console.log('🎯 Initializing ads with rotation and optimization...');
+            console.log('🎯 Initializing ads with enhanced visibility...');
             
-            // JuicyAds with rotation - Using zones: 2092250, 2092251, 208469, 209470, 209471
+            // Force ad elements to be visible
+            const adElements = document.querySelectorAll('[data-juicy-zone], .eas6a97888e2, [data-ero-ad]');
+            adElements.forEach(el => {
+                el.style.display = 'block';
+                el.style.visibility = 'visible';
+                el.style.opacity = '1';
+                el.style.minHeight = '100px';
+            });
+            
+            // JuicyAds with enhanced loading
             if (window.adsbyjuicy && window.juicyZones) {
-                // Rotate through different zones every 30 seconds
                 let currentZoneIndex = 0;
-                
                 const rotateJuicyAds = () => {
                     const zone = window.juicyZones[currentZoneIndex];
                     const adElement = document.querySelector(`[data-juicy-zone]`);
                     if (adElement) {
                         adElement.setAttribute('data-juicy-zone', zone);
-                        adElement.innerHTML = `🍊 Premium JuicyAds Space - Zone ${zone}`;
+                        adElement.innerHTML = `<div style="background: rgba(30,58,138,0.1); padding: 15px; border-radius: 10px; color: white; text-align: center;">🍊 JuicyAds Zone ${zone} Loading...</div>`;
                         
-                        window.adsbyjuicy.cmd.push(function() {
-                            window.adsbyjuicy.ads.push({
-                                adunit: zone,
-                                div: adElement.id
+                        // Force JuicyAds to render
+                        if (window.adsbyjuicy.cmd) {
+                            window.adsbyjuicy.cmd.push(function() {
+                                window.adsbyjuicy.ads.push({
+                                    adunit: zone,
+                                    div: adElement.id || 'juicy-ad-' + zone
+                                });
                             });
-                        });
-                        
-                        console.log(`🍊 JuicyAds rotated to zone ${zone}`);
-                        
-                        // Track ad impression
-                        gtag('event', 'ad_impression', {
-                            event_category: 'Advertising',
-                            event_label: 'JuicyAds - Zone: ' + zone,
-                            value: 1
-                        });
+                        }
                     }
-                    
                     currentZoneIndex = (currentZoneIndex + 1) % window.juicyZones.length;
                 };
                 
-                // Initial load and rotation
                 rotateJuicyAds();
-                setInterval(rotateJuicyAds, 30000); // Rotate every 30 seconds
+                setInterval(rotateJuicyAds, 45000); // Rotate every 45 seconds
             }
             
-            // ExoClick - Zone 5696328 with enhanced tracking
+            // ExoClick with enhanced visibility
             if (window.AdProvider) {
                 const exoElements = document.querySelectorAll('.eas6a97888e2');
                 exoElements.forEach((element, index) => {
                     element.setAttribute('data-zoneid', '5696328');
-                    element.addEventListener('click', () => {
-                        trackAdClick('ExoClick', '5696328');
-                    });
-                    
-                    // Add click tracking
-                    element.style.cursor = 'pointer';
-                });
-                console.log('🎯 ExoClick zone 5696328 configured with tracking');
-                
-                // Track impression
-                gtag('event', 'ad_impression', {
-                    event_category: 'Advertising',
-                    event_label: 'ExoClick - Zone: 5696328',
-                    value: 1
+                    element.innerHTML = `<div style="background: rgba(30,58,138,0.1); padding: 15px; border-radius: 10px; color: white; text-align: center;">🎯 ExoClick Zone 5696328 Loading...</div>`;
+                    element.style.display = 'block';
+                    element.style.minHeight = '120px';
                 });
             }
             
-            // EroAdvertising - ID 8177575 with tracking
+            // EroAdvertising with enhanced visibility
             if (window.eroAdId) {
                 const eroElements = document.querySelectorAll('[data-ero-ad]');
                 eroElements.forEach(element => {
                     element.setAttribute('data-ad-id', window.eroAdId);
                     element.setAttribute('data-website-id', window.eroWebsiteId);
-                    element.addEventListener('click', () => {
-                        trackAdClick('EroAdvertising', window.eroAdId);
-                    });
-                });
-                console.log(`💎 EroAdvertising ID ${window.eroAdId} configured with tracking`);
-                
-                // Track impression
-                gtag('event', 'ad_impression', {
-                    event_category: 'Advertising',
-                    event_label: 'EroAdvertising - ID: ' + window.eroAdId,
-                    value: 1
+                    element.innerHTML = `<div style="background: rgba(30,58,138,0.1); padding: 15px; border-radius: 10px; color: white; text-align: center;">💎 EroAdvertising ID ${window.eroAdId} Loading...</div>`;
+                    element.style.display = 'block';
+                    element.style.minHeight = '120px';
                 });
             }
             
-            // PopAds - Already initialized via script with tracking
-            console.log('🚀 PopAds initialized with enhanced tracking');
+            console.log('✅ All ad networks initialized with enhanced visibility');
             
-            // Track total ad session
-            gtag('event', 'ads_loaded', {
-                event_category: 'Advertising',
-                event_label: 'All Networks Loaded',
-                value: 4
-            });
-            
-            console.log('✅ All ad networks initialized with optimization and tracking');
+            // Force re-render after 2 seconds
+            setTimeout(() => {
+                const allAds = document.querySelectorAll('[data-juicy-zone], .eas6a97888e2, [data-ero-ad]');
+                allAds.forEach(ad => {
+                    ad.style.display = 'block';
+                    ad.style.visibility = 'visible';
+                });
+            }, 2000);
         }
         
         // Hide all ads for VIP users
