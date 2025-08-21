@@ -1711,7 +1711,13 @@
                 const t = translations[currentLanguage];
                 
                 const videosToShow = premiumVideos.slice(0, 20);
-                const newIndices = new Set([0, 1, 2, 5, 6, 7, 10, 11, 12]); // 30% marked as NEW
+                
+                // Mark 30% as NEW (6 out of 20 videos)
+                const newCount = Math.floor(videosToShow.length * 0.3); // 6 videos
+                const newIndices = new Set();
+                for (let i = 0; i < newCount; i++) {
+                    newIndices.add(i);
+                }
                 
                 videosToShow.forEach((video, index) => {
                     const item = document.createElement('div');
