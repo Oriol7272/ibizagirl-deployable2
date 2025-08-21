@@ -1,4 +1,3 @@
-// api/paypal/create-order.js
 const PAYPAL_BASE = 'https://api-m.paypal.com'; // LIVE
 
 async function getAccessToken() {
@@ -16,13 +15,11 @@ async function getAccessToken() {
   const j = await r.json();
   return j.access_token;
 }
-
 function getBaseUrl(req){
   const proto = req.headers['x-forwarded-proto'] || 'https';
   const host  = req.headers['x-forwarded-host'] || req.headers.host;
   return `${proto}://${host}`;
 }
-
 module.exports = async (req, res) => {
   try{
     if (req.method !== 'POST') { res.status(405).end('Method Not Allowed'); return; }
@@ -66,4 +63,3 @@ module.exports = async (req, res) => {
     res.status(500).json({error:e.message||'server error'});
   }
 };
-

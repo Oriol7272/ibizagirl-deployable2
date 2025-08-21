@@ -1,4 +1,3 @@
-// api/gate.js
 const fs = require('fs');
 const path = require('path');
 
@@ -12,14 +11,12 @@ function parseCookies(req){
   });
   return out;
 }
-
 function allowedByCookie(cookies, reqPath) {
   if (cookies.ibg_sub && /^(monthly|annual|lifetime)$/.test(cookies.ibg_sub)) return true;
   const base = path.basename(reqPath);
   const list = (cookies.ibg_items || '').split(',').map(s=>s.trim()).filter(Boolean);
   return list.includes(base);
 }
-
 function mimeFor(p){
   const ext = p.split('.').pop().toLowerCase();
   if (['jpg','jpeg'].includes(ext)) return 'image/jpeg';
@@ -42,15 +39,14 @@ module.exports = async (req, res) => {
       res.end(); return;
     }
 
-    // Si definimos un bucket/CDN, redirige allí (no cargamos desde Vercel)
     const base = (process.env.IBG_ASSETS_BASE_URL || '').replace(/\/+$/,'');
     if (base) {
-      const target = base + reqPath; // ej: https://bucket.s3.amazonaws.com/uncensored/xxx.webp
+      const target = base + reqPath;
       res.status(302).setHeader('Location', target);
       res.end(); return;
     }
 
-    // Fallback local (útil en dev): leer del filesystem del deploy
+    // Fallback local (dev)
     const abs = path.join(process.cwd(), '.' + reqPath);
     const buf = fs.readFileSync(abs);
     res.setHeader('Content-Type', mimeFor(abs));
@@ -60,4 +56,3 @@ module.exports = async (req, res) => {
     res.status(404).json({error:'not found'});
   }
 };
-
