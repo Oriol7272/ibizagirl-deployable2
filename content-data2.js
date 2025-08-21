@@ -140,12 +140,10 @@ console.log("✅ 127 imágenes públicas cargadas desde /full/");
 
 // Exportar globalmente
 window.FULL_IMAGES_POOL = FULL_IMAGES_POOL;
-window.BannerTeaserManager = new BannerTeaserManager();
-window.PublicContentManager = new PublicContentManager();
 
-// Crear arrays de banners y teasers para compatibilidad
-window.BANNER_IMAGES = window.BannerTeaserManager.getBanners();
-window.TEASER_IMAGES = window.BannerTeaserManager.getTeasers();
+// Crear arrays de banners y teasers simples
+window.BANNER_IMAGES = FULL_IMAGES_POOL.slice(0, 10);
+window.TEASER_IMAGES = FULL_IMAGES_POOL.slice(10, 20);
 
 console.log('✅ Módulo content-data2.js cargado correctamente - 127 ARCHIVOS COMPLETOS');
 console.log('📊 Estadísticas de contenido público:', {
