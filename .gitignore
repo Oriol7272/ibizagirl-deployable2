@@ -8,3 +8,6 @@ Thumbs.db
 ibizagirl-deployable2-main.zip
 .vercel
 .env*.local
+# evitar archivos gigantes
+ibizagirl-deployable2-main.zip
+*.zip
