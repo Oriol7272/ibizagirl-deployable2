@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>IbizaGirl.pics — Home</title>
 
-  <link rel="stylesheet" href="/css/site.css?v=20250822131252">
-  <link rel="stylesheet" href="/css/blur.css?v=20250822131252">
+  <link rel="stylesheet" href="/css/site.css?v=20250822133126">
+  <link rel="stylesheet" href="/css/blur.css?v=20250822133126">
 
   <!-- Pools (contenido) -->
   <script src="/content-data1.js"></script>
@@ -17,7 +17,24 @@
   <script src="/content-data6.js"></script>
 
   <!-- Helpers -->
-  <script src="/js/unified-helpers.js?v=20250822131252"></script>
+  <script src="/js/unified-helpers.js?v=20250822133126"></script>
+
+  <style>
+    :root{color-scheme:dark light}
+    body{margin:0;background:#0c0c0f;color:#ddd;font:15px/1.4 system-ui,Segoe UI,Roboto,Helvetica,Arial}
+    .site-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #1c1c22}
+    .site-header h1{margin:0;font-size:20px}
+    .site-header nav a{color:#9fd3ff;text-decoration:none;margin-left:16px}
+    .container{padding:18px 20px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:16px}
+    .card{position:relative;border-radius:14px;background:#111;box-shadow:0 6px 20px rgba(0,0,0,.35);overflow:hidden;min-height:150px}
+    .card img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .3s ease}
+    .card.ready img{opacity:1}
+    .badge-premium{position:absolute;top:8px;left:-36px;transform:rotate(-18deg);background:#ffbf00;color:#111;
+      font-weight:700;font-size:12px;padding:6px 38px;border-radius:8px;box-shadow:0 8px 18px rgba(0,0,0,.35)}
+    .blurred{filter:blur(18px) brightness(.6)}
+    footer{padding:18px 20px;border-top:1px solid #1c1c22;color:#888}
+  </style>
 
   <!-- Crisp -->
   <script>
@@ -40,75 +57,56 @@
     <div id="grid" class="grid"></div>
   </main>
 
-  <footer class="site-footer">
-    <small>© IbizaGirl.pics</small>
-  </footer>
+  <footer>© IbizaGirl.pics</footer>
 
   <script>
-    // ========= utilidades =========
-    const FALLBACKS = ['bikini5.webp','W9CK51Mronx3uf5hfQ3U.webp'];
+    // ---------- utilidades ----------
+    const FALLBACKS = ['bikini5.webp','W9CK51Mronx3uf5hfQ3U.webp']; // por si acaso
     const shuffle = arr => { for(let i=arr.length-1;i>0;i--){const j=(Math.random()*(i+1))|0; [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; };
     const pick = (arr, n) => shuffle(arr.slice()).slice(0,n);
-    const isImgName = s => typeof s==='string' && /\.(webp|jpg|jpeg|png)$/i.test(s);
-    const isSimpleFile = s => isImgName(s) && !String(s).includes('/'); // sólo nombres (sin 'uncensored/...')
+    const isImg = s => typeof s==='string' && /\.(webp|jpg|jpeg|png)$/i.test(s);
+    const normName = n => String(n).split('?')[0].split('/').pop(); // "full/foo.webp" -> "foo.webp"
 
-    const normalize = (name) => String(name).replace(/^full\/?/i,'');
-    const toSrc = (name) => '/full/'+normalize(name);
+    const toFull = n => '/full/' + normName(n);
+    const toUnc  = n => '/uncensored/' + String(n).replace(/^uncensored\/?/i,'');
 
     function loadCheck(src, timeoutMs=3500){
       return new Promise(resolve=>{
-        const img = new Image();
-        let done=false;
-        const clean=()=>{if(done) return; done=true; img.onload=img.onerror=null;};
-        const timer=setTimeout(()=>{ clean(); resolve(false); }, timeoutMs);
-        img.onload=()=>{ clearTimeout(timer); clean(); resolve(true); };
-        img.onerror=()=>{ clearTimeout(timer); clean(); resolve(false); };
+        const img=new Image(); let done=false;
+        const end=(ok)=>{ if(done) return; done=true; clearTimeout(t); img.onload=img.onerror=null; resolve(ok); };
+        const t=setTimeout(()=>end(false), timeoutMs);
+        img.onload=()=>end(true);
+        img.onerror=()=>end(false);
         img.decoding='async'; img.loading='eager';
         img.src=src + (src.includes('?')?'&':'?') + 'cb=' + Date.now();
       });
     }
 
-    function discoverFullCandidates(){
-      const cands = [];
-      try { if (Array.isArray(window.U?.pools?.full)) cands.push(window.U.pools.full); } catch(_){}
-      try { if (Array.isArray(window.UnifiedContentAPI?.pools?.full)) cands.push(window.UnifiedContentAPI.pools.full); } catch(_){}
-      try { const a = window.ContentAPI?.full || window.ContentAPI?.getFull?.(); if (Array.isArray(a)) cands.push(a); } catch(_){}
-
-      // Heurística de respaldo
-      try {
-        for (const k of Object.getOwnPropertyNames(window)) {
-          const v = window[k];
-          if (Array.isArray(v) && v.length>=50 && v.slice(0,20).every(isImgName)) cands.push(v);
-        }
-      } catch(_){}
-
-      // Únicos por referencia
-      const uniq=[]; for(const a of cands) if(!uniq.includes(a)) uniq.push(a);
-      return uniq;
+    function getPools(){
+      const pools = (window.U && window.U.pools) || (window.UnifiedContentAPI && window.UnifiedContentAPI.pools) || {};
+      return {
+        full: Array.isArray(pools.full) ? pools.full : [],
+        uncensored: Array.isArray(pools.uncensored) ? pools.uncensored : [],
+      };
     }
 
-    async function chooseFullPool(){
-      const cands = discoverFullCandidates();
-      for (const cand of cands) {
-        // nos quedamos sólo con nombres simples (sin rutas tipo 'uncensored/...')
-        const simple = cand.filter(isSimpleFile).map(normalize);
-        if (simple.length < 10) continue;
+    async function resolveFullWorking(max=20){
+      const { full } = getPools();
+      // ACEPTA "foo.webp" y "full/foo.webp"
+      const list = full.filter(isImg).map(normName);
+      const unique = [...new Set(list)];
+      const order = shuffle(unique);
 
-        // validamos 2 de 3 cargas reales con <img> (no usa CORS)
-        const test = pick(simple, Math.min(3, simple.length));
-        const results = await Promise.all(test.map(n => loadCheck(toSrc(n))));
-        const ok = results.filter(Boolean).length;
-        if (ok >= Math.min(2, results.length)) {
-          console.log('🖼️ index: FULL elegido →', simple.length, 'items');
-          return simple;
-        }
+      const ok = [];
+      for (const name of order) {
+        if (ok.length >= max) break;
+        if (await loadCheck(toFull(name))) ok.push(name);
       }
-      console.warn('⚠️ index: ningún pool FULL válido encontrado; usando fallbacks');
-      return FALLBACKS;
+      return ok;
     }
 
     async function render(){
-      // Limpia SW y caches por si acaso
+      // limpia SW/caches para evitar residuos
       try{
         if('serviceWorker' in navigator){
           const regs = await navigator.serviceWorker.getRegistrations();
@@ -120,23 +118,39 @@
         }
       }catch(_){}
 
-      const pool = await chooseFullPool();
-      const files = pick(pool, 20);
-      console.log('index: render con', files.length, 'items');
-
       const grid = document.getElementById('grid');
-      grid.innerHTML = '';
+      grid.innerHTML='';
 
-      for (const name of files) {
+      const fullOk = await resolveFullWorking(20);
+      let finalFiles = fullOk.map(n => ({src: toFull(n), premium:false}));
+
+      // Si por lo que sea hay menos de 20, rellena con blur premium
+      if (finalFiles.length < 20) {
+        const { uncensored } = getPools();
+        const need = 20 - finalFiles.length;
+        const fill = pick(uncensored.filter(isImg), Math.min(need, uncensored.length))
+                      .map(n => ({src: toUnc(n), premium:true}));
+        finalFiles = finalFiles.concat(fill);
+        console.warn(`⚠️ Home: FULL válidas ${fullOk.length}, relleno ${fill.length} premium blur.`);
+      }
+
+      console.log('index: render con', finalFiles.length, 'items');
+
+      for (const item of finalFiles) {
         const fig = document.createElement('figure'); fig.className='card';
         const img = document.createElement('img');
         img.alt='IbizaGirl'; img.loading='lazy'; img.decoding='async';
+        img.src = item.src;
 
-        const src = toSrc(name);
-        img.src = src;
+        if (item.premium) {
+          img.classList.add('blurred');
+          const badge = document.createElement('div');
+          badge.className='badge-premium'; badge.textContent='Premium';
+          fig.appendChild(badge);
+        }
 
-        img.addEventListener('load', ()=>{ img.classList.add('loaded'); fig.classList.add('ready'); }, {once:true});
-        img.addEventListener('error', ()=>{ img.onerror=null; img.src='/full/'+FALLBACKS[0]; img.classList.add('loaded'); fig.classList.add('ready'); }, {once:true});
+        img.addEventListener('load', ()=>{ fig.classList.add('ready'); }, {once:true});
+        img.addEventListener('error', ()=>{ img.onerror=null; img.src=toFull(FALLBACKS[0]); fig.classList.add('ready'); }, {once:true});
 
         fig.appendChild(img);
         grid.appendChild(fig);
