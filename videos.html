@@ -3,199 +3,108 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>IbizaGirl — Videos</title>
+  <title>IbizaGirl.pics — Vídeos</title>
 
-  <link rel="stylesheet" href="/css/site.css?v=20250822183234">
-  <link rel="stylesheet" href="/css/blur.css?v=20250822183234">
+  <link rel="stylesheet" href="/css/site.css?v=20250822212312"/>
+  <link rel="stylesheet" href="/css/blur.css?v=20250822212312"/>
+
+  <!-- PayPal SDK: botones + suscripciones -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AfQdeilelw5m3wF08p9pcxqR3gpZ8VRUNtKY4A8WNGQAkt6is0NYr2i7BsjVz5wpeCwR7TTDPq5&currency=EUR&components=buttons,subscriptions&disable-funding=paylater&intent=capture" defer></script>
+
+  <!-- Sistema de contenido / helpers -->
+  <script src="/content-data1.js"></script>
+  <script src="/content-data5.js"></script>
+  <script src="/content-data6.js"></script>
+  <script src="/js/unified-helpers.js?v=20250822212312" defer></script>
+  <script src="/js/payments.js?v=20250822212312" defer></script>
+
   <style>
-    .grid-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-    .tile{position:relative;border-radius:10px;overflow:hidden;background:#111}
-    .tile video{width:100%;height:180px;object-fit:cover;background:#000}
-    .over{position:absolute;inset:auto 8px 8px 8px;display:flex;justify-content:space-between;align-items:center}
-    .badge{background:#222;color:#eee;border:1px solid #444;font-size:11px;padding:3px 6px;border-radius:999px}
-    .pp-btn{border:none;background:#ffc439;border-radius:6px;font-size:10px;padding:3px 6px;cursor:pointer}
+    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 16px; }
+    header.nav a { margin-right: 16px; color: #7fc3ff; text-decoration: none; }
+    h1 { font-size: 22px; margin: 12px 0 18px }
+    .sub-cta { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 12px; margin: 10px 0 20px; }
+    .sub-card { background: rgba(255,255,255,.04); border-radius: 14px; padding: 14px; border: 1px solid rgba(255,255,255,.08); }
+    .sub-card h3 { font-size: 16px; margin: 0 0 6px }
+    .sub-price { font-weight: 700; margin: 0 0 10px }
+    /* Grid de vídeos: el HTML lo crea el helper existente */
+    #videos-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: 14px; }
+    #videos-grid .card { background: rgba(255,255,255,.05); border-radius: 14px; overflow: hidden; }
   </style>
 </head>
+
 <body>
-<header class="site-header">
-  <h1>Videos</h1>
-  <nav class="nav">
-    <a href="/">Home</a>
-    <a href="/premium.html">Premium</a>
-    <a href="/videos.html" aria-current="page">Videos</a>
-    <a href="/subscription.html">Suscripción</a>
-  </nav>
-</header>
+  <div class="page-wrap">
+    <header class="nav">
+      <a href="/">Home</a>
+      <a href="/premium.html">Premium</a>
+      <a href="/videos.html" style="font-weight:700">Vídeos</a>
+      <a href="/subscription.html">Suscripción</a>
+    </header>
 
-<main class="container">
-  <section class="packs">
-    <h2>Packs</h2>
-    <div class="pack-grid">
-      <div class="pack" data-paypal="single" data-product="Pack 10 fotos" data-price="0.80"><h3>Pack 10 fotos</h3><p class="price">0,80 €</p><div class="paypal-button"></div></div>
-      <div class="pack" data-paypal="single" data-product="Pack 5 vídeos" data-price="1.00"><h3>Pack 5 vídeos</h3><p class="price">1,00 €</p><div class="paypal-button"></div></div>
-    </div>
-  </section>
-  <h2>🎬 20 videos premium</h2>
-  <div id="grid" class="grid-tiles"></div>
-  <p id="diag" class="muted"></p>
-</main>
+    <h1>Vídeos Premium</h1>
 
-<!-- === ADS START === -->
-<div class="ads-row" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin:16px 0;">
-  <div class="ad-slot" id="ad-exo-1"></div>
-  <div class="ad-slot" id="ad-juicy-1">
-    <ins class="adsbyjuicy" data-adzone="2092250" style="display:inline-block;width:300px;height:262px"></ins>
+    <!-- Mini CTA de suscripciones (los botones se pintan con payments.js) -->
+    <section class="sub-cta" aria-label="Suscripciones rápidas">
+      <div class="sub-card">
+        <h3>Mensual</h3>
+        <div class="sub-price">14,99&nbsp;€/mes</div>
+        <div id="pp-videos-sub-monthly"></div>
+      </div>
+      <div class="sub-card">
+        <h3>Anual</h3>
+        <div class="sub-price">49,99&nbsp;€/año</div>
+        <div id="pp-videos-sub-annual"></div>
+      </div>
+    </section>
+
+    <!-- Grid de vídeos -->
+    <section>
+      <div id="videos-grid" class="grid"></div>
+    </section>
   </div>
-  <div class="ad-slot" id="ad-ero-1"></div>
-</div>
 
-<!-- ExoClick -->
-<script async src="https://a.magsrv.com/ad-provider.js"></script>
-<script>
-try{ (AdProvider=window.AdProvider||[]).push({"serve":{"siteId":5696328}}); }
-catch(e){ console.warn('exo err', e); }
-</script>
+  <script>
+    // Render del grid de vídeos con el helper que ya tienes
+    (function () {
+      const grid = document.getElementById('videos-grid');
+      if (!grid) return;
 
-<!-- JuicyAds -->
-<script async src="https://adserver.juicyads.com/js/jads.js"></script>
-<script>
-try{ (window.adsbyjuicy = window.adsbyjuicy || []).push({"adzone":2092250}); }
-catch(e){ console.warn('juicy err', e); }
-</script>
+      // Usa tu API unificada si existe; si no, content-data5 (videosList)
+      const list = (window.UnifiedContentAPI && UnifiedContentAPI.getVideos)
+        ? UnifiedContentAPI.getVideos({ limit: 100, shuffle: true })
+        : (window.videosList || []);
 
-<!-- EroAdvertising -->
-<script async src="https://www.premiumvertising.com/zS/bwdvf/ttabletop.min.js"></script>
-<script async src="https://www.premiumvertising.com/LmkfhR/tW/ptabletop.min.js"></script>
+      console.log("🎬 videos: total =", list.length);
+      const frag = document.createDocumentFragment();
 
-<!-- PopAds -->
-<script type="text/javascript" data-cfasync="false">
-(function(){
-  var k=window,g="e494ffb82839a29122608e933394c091",
-      b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],
-      t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz",
-         "ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=",
-         "d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz",
-         "d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],
-      r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){
-        e=k.document.createElement("script");e.type="text/javascript";e.async=!0;
-        var p=k.document.getElementsByTagName("script")[0];
-        e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;
-        e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};
-        a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)
-      }};
-  if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()}
-})();
-</script>
-<!-- === ADS END === -->
+      list.slice(0, 100).forEach((v) => {
+        const card = document.createElement('div');
+        card.className = 'card';
 
+        const a = document.createElement('a');
+        a.href = v.url || ("/uncensored-videos/" + (v.file || ""));
+        a.target = "_blank";
+        a.rel = "noopener";
 
-<footer class="site-footer"><small>© IbizaGirl.pics</small></footer>
+        const img = document.createElement('img');
+        img.loading = "lazy";
+        img.alt = v.title || "Video";
+        img.src = v.thumb || "/img/placeholder-video.webp";
+        img.style.width = "100%";
+        img.style.display = "block";
 
-<!-- DATA -->
-<script src="/content-data1.js"></script>
-<script src="/content-data2.js"></script>
-<script src="/content-data3.js"></script>
-<script src="/content-data4.js"></script>
-<script src="/content-data5.js"></script>
-<script src="/content-data6.js"></script>
+        a.appendChild(img);
+        card.appendChild(a);
+        frag.appendChild(card);
+      });
 
-<!-- Helpers -->
-<script src="/js/payments.js?v=20250822184223"></script>
-<script src="/js/ads-safe.js?v=20250822174925"></script>
+      grid.appendChild(frag);
 
-<script>
-(function(){
-  const $g=document.getElementById('grid');
-  const $d=document.getElementById('diag');
-
-  const VID_EXT = /\.(mp4|webm)$/i;
-  const FALLBACK_POSTER = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMzIwJyBoZWlnaHQ9JDE4MCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48cmVjdCBmaWxsPScjMTExJyB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJy8+PHBvbHlnb24gZmlsbD0nI2ZmZicgcG9pbnRzPScxMTAsOTAgMTk1LDEzMCAxOTUsNTAnLz48L3N2Zz4=';
-
-  function collectVideosPool(){
-    // 1) unified
-    if (window.UnifiedContentAPI && typeof UnifiedContentAPI.getPremiumVideos === 'function'){
-      try{
-        const all = UnifiedContentAPI.getPremiumVideos();
-        if (Array.isArray(all) && all.length) return all;
-      }catch(e){}
-    }
-    // 2) barrido por prefijo
-    const out=new Set();
-    for (const k in window){
-      try{
-        const v=window[k];
-        if (Array.isArray(v)){
-          v.forEach(s=>{
-            if (typeof s==='string' && s.startsWith('uncensored-videos/') && VID_EXT.test(s)) out.add(s);
-          });
-        }
-      }catch(_){}
-    }
-    return Array.from(out);
-  }
-
-  function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a;}
-
-  function guessPoster(src){
-    const base = src.replace(VID_EXT,'');
-    const candidates = [
-      '/'+base+'.webp',
-      '/'+base+'.jpg',
-      '/'+base+'.jpeg',
-      '/'+base+'.png'
-    ];
-    return candidates[0]; // si 404, el navegador ignora el poster; quedará negro (ok)
-  }
-
-  function render(list){
-    $g.innerHTML='';
-    let shown=0;
-    list.forEach(src=>{
-      const fig=document.createElement('figure');fig.className='tile';
-      const vid=document.createElement('video');
-      vid.controls=true; vid.preload='none';
-      vid.poster=guessPoster(src) || FALLBACK_POSTER;
-      const s=document.createElement('source');
-      s.src='/'+src; s.type=src.endsWith('.webm')?'video/webm':'video/mp4';
-      vid.appendChild(s);
-
-      const over=document.createElement('div');over.className='over';
-      const price=document.createElement('span');price.className='badge';price.textContent='€14.99';
-      const btn=document.createElement('button');btn.className='pp-btn';btn.textContent='PayPal';
-      btn.addEventListener('click',(ev)=>{ev.preventDefault(); window.IBG_Pay && window.IBG_Pay.open('monthly','Premium Video');});
-      over.appendChild(price);over.appendChild(btn);
-
-      fig.appendChild(vid);fig.appendChild(over);
-      $g.appendChild(fig);
-      shown++;
-    });
-    $d.textContent=`VIDEOS total pool: ${window.__VID_TOTAL__||list.length} | Mostrando: ${shown}`;
-  }
-
-  const pool = collectVideosPool();
-  window.__VID_TOTAL__ = pool.length;
-  const selection = shuffle(pool.slice()).slice(0,20);
-  render(selection);
-
-  window.IBG_ADS && window.IBG_ADS.loadAll();
-})();
-</script>
-  <script defer src="/js/ads.js?v=20250822204832"></script>
-
-<!-- Purchase Modal -->
-<div id="purchase-modal" class="pmodal hidden">
-  <div class="pwrap">
-    <button class="pm-close" aria-label="Cerrar">✕</button>
-    <h3 class="pm-title">Compra</h3>
-    <div class="pm-sub"></div>
-    <div class="pm-price"></div>
-    <div id="paypal-oneoff" class="pm-paypal"></div>
-    <p class="pm-note">Pago seguro con PayPal · Entrega inmediata en sitio</p>
-  </div>
-  <div class="pm-backdrop pm-close"></div>
-</div>
-<script defer src="/js/store.js?v=1755889720030"></script>
-
-
+      // (Opcional redundante) Forzar hidratación de PayPal mini botones
+      if (window.IBG && IBG.Payments) {
+        IBG.Payments.hydrateVideosPageIfPresent();
+      }
+    })();
+  </script>
 </body>
 </html>

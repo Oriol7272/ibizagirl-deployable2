@@ -1,112 +1,54 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <title>Suscripción | IbizaGirl.pics</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="preconnect" href="https://www.paypal.com" />
-  <link rel="stylesheet" href="/css/site.css?v=20250822194320" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>IbizaGirl.pics — Suscripciones</title>
+
+  <link rel="stylesheet" href="/css/site.css?v=20250822212312"/>
+  <link rel="stylesheet" href="/css/blur.css?v=20250822212312"/>
+
+  <script src="https://www.paypal.com/sdk/js?client-id=AfQdeilelw5m3wF08p9pcxqR3gpZ8VRUNtKY4A8WNGQAkt6is0NYr2i7BsjVz5wpeCwR7TTDPq5&currency=EUR&components=buttons,subscriptions&disable-funding=paylater&intent=capture" defer></script>
+
+  <script src="/js/payments.js?v=20250822212312" defer></script>
+
   <style>
-    .plans { display:grid; gap:20px; max-width:900px; margin:40px auto; }
-    .plan { background:#111; border:1px solid #222; border-radius:14px; padding:18px; box-shadow:0 6px 24px rgba(0,0,0,.25); }
-    .plan h3 { margin:0 0 6px 0; font-size:20px; color:#cfe5ff; }
-    .price { font-size:26px; margin:2px 0 6px; }
-    .desc { opacity:.8; font-size:14px; margin-bottom:10px; }
-    .btn-area { min-height:48px; display:flex; align-items:center; justify-content:flex-start; }
-    .muted { opacity:.6; font-size:12px; margin-top:10px; }
-    .row { display:grid; grid-template-columns:1fr; gap:16px; }
-    @media (min-width:800px){ .row{ grid-template-columns:1fr 1fr 1fr; } }
-    .tag { display:inline-block; background:#0e2b4a; color:#9fd0ff; font-size:12px; padding:3px 8px; border-radius:999px; margin-left:8px; }
-    .btn { background:#0ea5e9; color:#001018; padding:10px 14px; border-radius:999px; text-decoration:none; font-weight:600; }
+    .page-wrap { max-width: 1000px; margin: 0 auto; padding: 16px; }
+    .plans { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 16px; margin-top: 14px; }
+    .plan { background: rgba(255,255,255,.04); border-radius: 16px; border: 1px solid rgba(255,255,255,.08); padding: 16px; }
+    .plan h3 { margin: 0 0 6px; font-size: 18px; }
+    .plan .price { font-weight: 700; margin-bottom: 10px; }
   </style>
 </head>
 <body>
-  <header class="topnav">
-    <a href="/">Home</a>
-    <a href="/premium.html">Premium</a>
-    <a href="/videos.html">Videos</a>
-    <a class="active" href="/subscription.html">Suscripción</a>
-  </header>
+  <div class="page-wrap">
+    <header class="nav">
+      <a href="/">Home</a>
+      <a href="/premium.html">Premium</a>
+      <a href="/videos.html">Vídeos</a>
+      <a href="/subscription.html" style="font-weight:700">Suscripción</a>
+    </header>
 
-  <main class="container">
     <h1>Suscripciones</h1>
     <p>Desbloquea todas las fotos y vídeos sin límites.</p>
 
     <section class="plans">
-      <div class="row">
-        <div class="plan" id="plan-monthly">
-          <h3>Mensual <span class="tag">14,99 €</span></h3>
-          <div class="price">14,99 € <small>/ mes</small></div>
-          <div class="desc">Acceso total recurrente. Cancela cuando quieras.</div>
-          <div class="btn-area"><span class="loading">Cargando botón…</span></div>
-          <div class="muted">Tras el pago, refresca la página si no ves todo desbloqueado al instante.</div>
-        </div>
-
-        <div class="plan" id="plan-annual">
-          <h3>Anual <span class="tag">49,99 €</span></h3>
-          <div class="price">49,99 € <small>/ año</small></div>
-          <div class="desc">El mejor precio anual. Se renueva automáticamente.</div>
-          <div class="btn-area"><span class="loading">Cargando botón…</span></div>
-          <div class="muted">Puedes cancelar la renovación desde tu cuenta PayPal.</div>
-        </div>
-
-        <div class="plan" id="plan-lifetime">
-          <h3>Lifetime <span class="tag">100 €</span></h3>
-          <div class="price">100,00 € <small>pago único</small></div>
-          <div class="desc">Acceso ilimitado para siempre, sin cuotas.</div>
-          <div class="btn-area"><a class="btn" href="/premium.html#lifetime">Comprar vía Checkout</a></div>
-          <div class="muted">El pago lifetime se procesa como “pago único” (no suscripción).</div>
-        </div>
+      <div class="plan">
+        <h3>Mensual <small>14,99&nbsp;€</small></h3>
+        <div class="price">14,99 € / mes</div>
+        <div id="pp-sub-monthly"></div>
+      </div>
+      <div class="plan">
+        <h3>Anual <small>49,99&nbsp;€</small></h3>
+        <div class="price">49,99 € / año</div>
+        <div id="pp-sub-annual"></div>
+      </div>
+      <div class="plan">
+        <h3>Lifetime <small>100,00&nbsp;€</small></h3>
+        <div class="price">100,00 € pago único</div>
+        <div id="pp-buy-lifetime"></div>
       </div>
     </section>
-  </main>
-
-  <script>
-  (async function(){
-    const cfgRes = await fetch('/api/config', {cache:'no-store'});
-    const cfg = await cfgRes.json();
-    if(!cfg.ok || !cfg.paypalClientId){
-      console.error('PayPal config no disponible', cfg);
-      document.querySelectorAll('.btn-area .loading').forEach(el => el.textContent = 'Config PayPal no disponible');
-      return;
-    }
-
-    // Carga SDK PayPal con vault & intent=subscription
-    const sdkUrl = new URL('https://www.paypal.com/sdk/js');
-    sdkUrl.searchParams.set('client-id', cfg.paypalClientId);
-    sdkUrl.searchParams.set('vault', 'true');
-    sdkUrl.searchParams.set('intent', 'subscription');
-    sdkUrl.searchParams.set('components', 'buttons');
-    await new Promise((resolve, reject) => {
-      const s = document.createElement('script');
-      s.src = sdkUrl.toString();
-      s.onload = resolve;
-      s.onerror = reject;
-      document.head.appendChild(s);
-    });
-
-    const renderButton = (container, planId) => {
-      if(!planId){ container.textContent = 'Plan no configurado'; return; }
-      container.innerHTML = '';
-      paypal.Buttons({
-        style: { layout:'horizontal', color:'gold', shape:'pill', label:'subscribe' },
-        createSubscription: (data, actions) => actions.subscription.create({ plan_id: planId }),
-        onApprove: (data) => {
-          console.log('Subscription OK', data);
-          alert('✅ Suscripción activada. ¡Gracias!');
-          location.href = '/premium.html';
-        },
-        onError: (err) => {
-          console.error('PayPal error:', err);
-          alert('❌ Error con PayPal. Reintenta en un momento.');
-        }
-      }).render(container);
-    };
-
-    renderButton(document.querySelector('#plan-monthly .btn-area'), cfg.paypalPlanMonthly1499);
-    renderButton(document.querySelector('#plan-annual  .btn-area'), cfg.paypalPlanAnnual4999);
-  })();
-  </script>
-  <script defer src="/js/ads.js?v=20250822204832"></script>
+  </div>
 </body>
 </html>
