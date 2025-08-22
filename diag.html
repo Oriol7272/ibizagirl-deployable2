@@ -1,0 +1,19 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Diag CDN FULL</title>
+<pre id="out">Cargando…</pre>
+<script>
+(async()=>{
+  try{
+    const u=new URL('/api/cdn',location.origin);
+    u.searchParams.set('prefix','full');
+    u.searchParams.set('limit','20');
+    u.searchParams.set('shuffle','1');
+    const r=await fetch(u); const j=await r.json();
+    const arr=Array.isArray(j)?j:(j.files||j.items||j.keys||[]);
+    document.getElementById('out').textContent = JSON.stringify(arr,null,2);
+  }catch(e){
+    document.getElementById('out').textContent = 'Error: '+e;
+  }
+})();
+</script>
