@@ -1,57 +1,128 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>IbizaGirl.pics — Videos</title>
-  <link rel="stylesheet" href="/css/site.css?v=20250822155733">
-  <link rel="stylesheet" href="/css/blur.css?v=20250822155733">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>IbizaGirl — Videos</title>
+
+  <link rel="stylesheet" href="/css/site.css?v=20250822174925">
+  <link rel="stylesheet" href="/css/blur.css?v=20250822174925">
   <style>
-    .container{max-width:1100px;margin:0 auto;padding:16px}
-    .vgrid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
-    .vcard{position:relative}
-    .topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px}
-    .nav a{margin-left:14px;opacity:.85}
-    .footer{opacity:.6;font-size:.9rem;margin-top:24px}
+    .grid-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+    .tile{position:relative;border-radius:10px;overflow:hidden;background:#111}
+    .tile video{width:100%;height:180px;object-fit:cover;background:#000}
+    .over{position:absolute;inset:auto 8px 8px 8px;display:flex;justify-content:space-between;align-items:center}
+    .badge{background:#222;color:#eee;border:1px solid #444;font-size:11px;padding:3px 6px;border-radius:999px}
+    .pp-btn{border:none;background:#ffc439;border-radius:6px;font-size:10px;padding:3px 6px;cursor:pointer}
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">IbizaGirl.pics</div>
-    <nav class="nav">
-      <a href="/index.html">Home</a>
-      <a href="/premium.html">Premium</a>
-      <a href="/subscription.html">Suscripción</a>
-    </nav>
-  </header>
+<header class="site-header">
+  <h1>Videos</h1>
+  <nav class="nav">
+    <a href="/">Home</a>
+    <a href="/premium.html">Premium</a>
+    <a href="/videos.html" aria-current="page">Videos</a>
+    <a href="/subscription.html">Suscripción</a>
+  </nav>
+</header>
 
-  <main class="container">
-    <h2>Vídeos (20 aleatorios, rotación diaria)</h2>
-    <div id="grid" class="vgrid"></div>
-    <footer class="footer">© IbizaGirl.pics</footer>
-  </main>
+<main class="container">
+  <h2>🎬 20 videos premium</h2>
+  <div id="grid" class="grid-tiles"></div>
+  <p id="diag" class="muted"></p>
+</main>
 
-  <script src="/content-data1.js" defer></script>
-  <script src="/content-data5.js" defer></script>
-  <script src="/content-data6.js" defer></script>
+<footer class="site-footer"><small>© IbizaGirl.pics</small></footer>
 
-  <script src="/js/unified-helpers.js?v=20250822155733" defer></script>
-  <script>
-  (function(){
-    function boot(){
-      const all = UHelpers.detectPool('videos');
-      console.log('Videos: total =', all.length);
-      const pick = UHelpers.sampleDaily(all, 20, 'videos-page');
-      UHelpers.renderVideoCards(document.getElementById('grid'), pick, 'uncensored-videos');
+<!-- DATA -->
+<script src="/content-data1.js"></script>
+<script src="/content-data2.js"></script>
+<script src="/content-data3.js"></script>
+<script src="/content-data4.js"></script>
+<script src="/content-data5.js"></script>
+<script src="/content-data6.js"></script>
+
+<!-- Helpers -->
+<script src="/js/payments.js?v=20250822174925"></script>
+<script src="/js/ads-safe.js?v=20250822174925"></script>
+
+<script>
+(function(){
+  const $g=document.getElementById('grid');
+  const $d=document.getElementById('diag');
+
+  const VID_EXT = /\.(mp4|webm)$/i;
+  const FALLBACK_POSTER = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMzIwJyBoZWlnaHQ9JDE4MCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48cmVjdCBmaWxsPScjMTExJyB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJy8+PHBvbHlnb24gZmlsbD0nI2ZmZicgcG9pbnRzPScxMTAsOTAgMTk1LDEzMCAxOTUsNTAnLz48L3N2Zz4=';
+
+  function collectVideosPool(){
+    // 1) unified
+    if (window.UnifiedContentAPI && typeof UnifiedContentAPI.getPremiumVideos === 'function'){
+      try{
+        const all = UnifiedContentAPI.getPremiumVideos();
+        if (Array.isArray(all) && all.length) return all;
+      }catch(e){}
     }
-    if (document.readyState!=='loading') setTimeout(boot,0); else document.addEventListener('DOMContentLoaded', boot);
-  })();
-  </script>
+    // 2) barrido por prefijo
+    const out=new Set();
+    for (const k in window){
+      try{
+        const v=window[k];
+        if (Array.isArray(v)){
+          v.forEach(s=>{
+            if (typeof s==='string' && s.startsWith('uncensored-videos/') && VID_EXT.test(s)) out.add(s);
+          });
+        }
+      }catch(_){}
+    }
+    return Array.from(out);
+  }
 
-  <script async src="https://a.magsrv.com/ad-provider.js"></script>
-  <script async src="https://adserver.juicyads.com/js/jads.js"></script>
-  <script async src="https://www.premiumvertising.com/LmkfhR/tW/ptabletop.min.js"></script>
-  <script type="text/javascript" data-cfasync="false">
-  (function(){var k=window,g="e494ffb82839a29122608e933394c091",b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=","d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz","d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){e=k.document.createElement("script");e.type="text/javascript";e.async=!0;var p=k.document.getElementsByTagName("script")[0];e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)}};if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()})();</script>
+  function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a;}
+
+  function guessPoster(src){
+    const base = src.replace(VID_EXT,'');
+    const candidates = [
+      '/'+base+'.webp',
+      '/'+base+'.jpg',
+      '/'+base+'.jpeg',
+      '/'+base+'.png'
+    ];
+    return candidates[0]; // si 404, el navegador ignora el poster; quedará negro (ok)
+  }
+
+  function render(list){
+    $g.innerHTML='';
+    let shown=0;
+    list.forEach(src=>{
+      const fig=document.createElement('figure');fig.className='tile';
+      const vid=document.createElement('video');
+      vid.controls=true; vid.preload='none';
+      vid.poster=guessPoster(src) || FALLBACK_POSTER;
+      const s=document.createElement('source');
+      s.src='/'+src; s.type=src.endsWith('.webm')?'video/webm':'video/mp4';
+      vid.appendChild(s);
+
+      const over=document.createElement('div');over.className='over';
+      const price=document.createElement('span');price.className='badge';price.textContent='€14.99';
+      const btn=document.createElement('button');btn.className='pp-btn';btn.textContent='PayPal';
+      btn.addEventListener('click',(ev)=>{ev.preventDefault(); window.IBG_Pay && window.IBG_Pay.open('monthly','Premium Video');});
+      over.appendChild(price);over.appendChild(btn);
+
+      fig.appendChild(vid);fig.appendChild(over);
+      $g.appendChild(fig);
+      shown++;
+    });
+    $d.textContent=`VIDEOS total pool: ${window.__VID_TOTAL__||list.length} | Mostrando: ${shown}`;
+  }
+
+  const pool = collectVideosPool();
+  window.__VID_TOTAL__ = pool.length;
+  const selection = shuffle(pool.slice()).slice(0,20);
+  render(selection);
+
+  window.IBG_ADS && window.IBG_ADS.loadAll();
+})();
+</script>
 </body>
 </html>
