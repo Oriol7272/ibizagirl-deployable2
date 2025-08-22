@@ -1,110 +1,180 @@
-(function(){
-  const IBG = window.IBG = window.IBG || {};
-  // ---------- utils ----------
-  IBG.seedFor = (salt='')=>{
-    // fija por día para rotación diaria
+/**
+ * unified-helpers.js
+ * - Detecta pools desde content-data* (FULL / UNCENSORED / VIDEOS).
+ * - Selección diaria (seed por fecha) estable, cambia al día siguiente o al recargar.
+ * - Render helpers (cards con overlay de iconos/precio/NEW).
+ */
+
+(function(global){
+  'use strict';
+
+  // ---------- RNG con seed (mulberry32) ----------
+  function mulberry32(a){ return function(){ var t = a += 0x6D2B79F5; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; } }
+  function dailySeed(seedBase){
     const d = new Date();
-    const key = `${d.getUTCFullYear()}-${d.getUTCMonth()+1}-${d.getUTCDate()}|${salt}`;
-    let h=0; for(let i=0;i<key.length;i++) h = Math.imul(31,h) + key.charCodeAt(i) | 0;
-    let s = (h>>>0) / 4294967295;
-    return ()=> (s = (1103515245*s + 12345) % 2147483647) / 2147483647;
-  };
-  IBG.shufflePick = (arr, n, salt='')=>{
-    const rnd = IBG.seedFor(salt);
-    const a = [...new Set(arr)];
-    for (let i=a.length-1; i>0; i--) { const j = Math.floor(rnd()* (i+1)); [a[i],a[j]]=[a[j],a[i]]; }
-    return a.slice(0, Math.min(n, a.length));
-  };
-  const isImg = f=>/\.(webp|jpe?g|png)$/i.test(f);
-  const isVid = f=>/\.(mp4|webm)$/i.test(f);
-
-  // ---------- descubrimiento de pools ----------
-  function fromCatalog(obj){
-    if (!obj) return null;
-    const cat = obj.catalog || obj.pools || obj.data || obj;
-    const full = [...new Set((cat.full||cat.public||cat.fullImages||[]).filter(isImg))];
-    const unc  = [...new Set((cat.uncensored||cat.premium||cat.uncensoredImages||[]).filter(isImg))];
-    const vids = [...new Set((cat.videos||cat.premiumVideos||[]).filter(isVid))];
-    return (full.length+unc.length+vids.length)>0 ? {full,uncensored:unc,videos:vids} : null;
+    const key = `${seedBase}:${d.getUTCFullYear()}-${d.getUTCMonth()+1}-${d.getUTCDate()}`;
+    let h=0; for(let i=0;i<key.length;i++){ h = Math.imul(31, h) + key.charCodeAt(i) | 0; }
+    return Math.abs(h) || 1;
   }
-  function scanGlobals(){
-    // intenta APIs conocidas
-    const candidates = [
-      fromCatalog(window.UnifiedContentAPI),
-      fromCatalog(window.ContentSystemManager),
-      fromCatalog(window.ContentAPI)
-    ].filter(Boolean);
-    if (candidates[0]) return candidates[0];
+  function sampleDaily(arr, n, tag='pool'){
+    const seed = dailySeed(tag);
+    const rng  = mulberry32(seed);
+    const A = arr.slice();
+    for(let i=A.length-1;i>0;i--){ const j=Math.floor(rng()*(i+1)); [A[i],A[j]]=[A[j],A[i]]; }
+    return A.slice(0, n);
+  }
 
-    // fallback: buscar arrays grandes de strings por toda la ventana
-    const pools = {full:[], uncensored:[], videos:[]};
-    for (const [k,v] of Object.entries(window)) {
-      if (!v) continue;
-      if (Array.isArray(v) && v.length>10 && typeof v[0]==='string') {
-        if (isVid(v[0])) {
-          pools.videos.push(...v.filter(isVid));
-        } else if (isImg(v[0])) {
-          const key = k.toLowerCase();
-          if (key.includes('uncensored') || key.includes('premium')) pools.uncensored.push(...v.filter(isImg));
-          else if (key.includes('full') || key.includes('public')) pools.full.push(...v.filter(isImg));
+  // ---------- helpers nombre/normalización ----------
+  const isImg = v => typeof v === 'string' && /\.(webp|jpe?g|png)$/i.test(v);
+  const isVid = v => typeof v === 'string' && /\.(mp4|webm)$/i.test(v);
+  const fromItemName = (it) => {
+    if (typeof it === 'string') return it;
+    if (!it || typeof it !== 'object') return '';
+    return it.file || it.name || it.src || it.url || it.path || '';
+  };
+  const norm = (s) => String(s||'').trim().replace(/^\.?\/*/,'');
+  const uniq = (a) => Array.from(new Set(a));
+
+  // ---------- detección robusta de pools ----------
+  function detectPool(kind){ // 'full' | 'uncensored' | 'videos'
+    const out = [];
+
+    function pushList(list){ if (Array.isArray(list) && list.length) out.push(...list); }
+
+    // Rutas típicas por tus content-data*
+    try {
+      const IBG = global.IBG || {};
+      if (IBG.pools && Array.isArray(IBG.pools[kind])) pushList(IBG.pools[kind]);
+    } catch(e){}
+    try {
+      const pools = global.pools || global.POOLS || {};
+      if (Array.isArray(pools[kind])) pushList(pools[kind]);
+    } catch(e){}
+    try {
+      const U = global.UnifiedContentAPI || global.unifiedContentAPI;
+      if (U) {
+        if (Array.isArray(U[kind])) pushList(U[kind]);
+        if (U.pools && Array.isArray(U.pools[kind])) pushList(U.pools[kind]);
+        if (typeof U.getPool === 'function'){ const p=U.getPool(kind); if (Array.isArray(p)) pushList(p); }
+      }
+    } catch(e){}
+    try {
+      const CSM = global.ContentSystemManager || {};
+      if (CSM.pools && Array.isArray(CSM.pools[kind])) pushList(CSM.pools[kind]);
+      if (typeof CSM.getPool === 'function'){ const p=CSM.getPool(kind); if (Array.isArray(p)) pushList(p); }
+    } catch(e){}
+    try {
+      const CAP = global.ContentAPI || {};
+      if (Array.isArray(CAP[kind])) pushList(CAP[kind]);
+      if (CAP.public && Array.isArray(CAP.public[kind])) pushList(CAP.public[kind]);
+      if (typeof CAP.getPublic === 'function'){ const p=CAP.getPublic(); if (p && Array.isArray(p[kind])) pushList(p[kind]); }
+    } catch(e){}
+
+    // Si sigue vacío, escaneo global (por si cambiase el nombre)
+    if (!out.length){
+      const props = Object.getOwnPropertyNames(global);
+      for (const key of props){
+        let val; try { val = global[key]; } catch(e){ continue; }
+        if (!val) continue;
+
+        // arrays con nombres válidos
+        if (Array.isArray(val) && val.length){
+          const names = val.map(fromItemName).map(norm);
+          const imgs = names.filter(isImg);
+          const vids = names.filter(isVid);
+          if (kind==='videos' && vids.length >= 10) { pushList(vids); }
+          if (kind!=='videos' && imgs.length >= 10) { pushList(imgs); }
         }
-      } else if (typeof v==='object' && Array.isArray(v.list) && v.list.length>10 && typeof v.list[0]==='string') {
-        const guess = (v.kind||v.type||'').toLowerCase();
-        if (isVid(v.list[0])) pools.videos.push(...v.list.filter(isVid));
-        else if (guess.includes('uncensored') || guess.includes('premium')) pools.uncensored.push(...v.list.filter(isImg));
-        else pools.full.push(...v.list.filter(isImg));
+
+        // objetos con possible .full / .uncensored / .videos
+        if (typeof val === 'object' && !Array.isArray(val)){
+          const maybe = val[kind] || (val.public && val.public[kind]) || (val.pools && val.pools[kind]);
+          if (Array.isArray(maybe) && maybe.length){
+            const names = maybe.map(fromItemName).map(norm);
+            if (kind==='videos' ? names.some(isVid) : names.some(isImg)) pushList(names);
+          }
+        }
       }
     }
-    pools.full      = [...new Set(pools.full)].filter(isImg);
-    pools.uncensored= [...new Set(pools.uncensored)].filter(isImg);
-    pools.videos    = [...new Set(pools.videos)].filter(isVid);
-    return pools;
+
+    // Normalización
+    let names = uniq(out.map(fromItemName).map(norm).filter(Boolean));
+    if (kind==='videos') names = names.filter(isVid); else names = names.filter(isImg);
+    return names;
   }
 
-  IBG.pools = scanGlobals();
-  console.log('🔎 unified-helpers: pools', { ...IBG.pools, mode:'daily' });
+  // ---------- render cards ----------
+  function priceFromConfig(){
+    const cfg = (global.CONFIG && global.CONFIG.pricing) || {};
+    return {
+      monthly: cfg.monthly || 9.99,
+      annual:  cfg.annual  || 59.99,
+      life:    cfg.lifetime|| 119.99
+    };
+  }
+  function planBadgeHTML(){
+    const p = priceFromConfig();
+    // Precio pequeño dentro de la chapita PayPal
+    return `<span class="badge badge-pp" title="Suscríbete en PayPal">
+      <img src="/assets/icons/paypal.svg" alt="PayPal" aria-hidden="true"/>
+      <span class="pp-price">desde €${(p.monthly).toFixed(2)}</span>
+    </span>`;
+  }
+  function newBadgeHTML(){ return `<span class="badge badge-new">NUEVO</span>`; }
 
-  // ---------- render ----------
-  IBG.renderGrid = (sel, items, opts={})=>{
-    const wrap = document.querySelector(sel);
-    if (!wrap){ console.warn('container not found', sel); return; }
-    wrap.innerHTML = '';
-    const paid = localStorage.getItem('ibg_paid')==='1';
-    const lockedClass = (opts.lockWhenNotPaid && !paid) ? 'locked' : '';
-    for (const it of items) {
-      const card = document.createElement('a');
-      card.href = it.href || '#';
-      card.target = it.target || '_self';
-      card.className = `card ${lockedClass}`;
-      if (it.type==='video') {
-        const v = document.createElement('video');
-        v.muted = true; v.loop = true; v.autoplay = false; v.playsInline = true;
-        if (it.poster) v.poster = it.poster;
-        const src = document.createElement('source');
-        src.src = it.src; src.type = it.mime || 'video/mp4';
-        v.appendChild(src);
-        card.appendChild(v);
-      } else {
-        const img = document.createElement('img');
-        img.src = it.src;
-        if (opts.blur || it.blur) img.classList.add('blur');
-        card.appendChild(img);
-      }
-      if (it.badge){
-        const b = document.createElement('div'); b.className='badge'; b.textContent=it.badge; card.appendChild(b);
-      }
-      if (it.showLock && (!paid)){
-        const l = document.createElement('div'); l.className='lock'; l.textContent='Premium'; card.appendChild(l);
-      }
-      if (it.price){
-        const p = document.createElement('div'); p.className='price'; p.textContent=it.price; card.appendChild(p);
-      }
-      if (it.payIcon){
-        const i = document.createElement('div'); i.className='pay-icon';
-        i.innerHTML = '<img alt="PayPal" src="https://www.paypalobjects.com/webstatic/icon/pp258.png"/>';
-        card.appendChild(i);
-      }
-      wrap.appendChild(card);
+  function renderImageCards(container, names, basePath, markNewPct=0){
+    const pick = names;
+    const total = pick.length;
+    const newCount = Math.round(total * markNewPct);
+    const rng = mulberry32(dailySeed('news:'+basePath));
+    const newIdx = new Set();
+    while(newIdx.size < newCount && newIdx.size < total){
+      newIdx.add(Math.floor(rng()*total));
     }
+    const html = pick.map((n,idx)=>{
+      const src = `/${basePath}/${n.replace(/^.*\//,'')}`;
+      return `<a class="card" href="${src}" target="_blank" rel="noopener">
+                <img loading="lazy" decoding="async" src="${src}" onerror="this.closest('a').style.display='none'">
+                ${planBadgeHTML()}
+                ${newIdx.has(idx) ? newBadgeHTML() : ''}
+              </a>`;
+    }).join('');
+    container.innerHTML = html;
+  }
+
+  function renderVideoCards(container, names, basePath){
+    const pick = names;
+    const html = pick.map(n=>{
+      const file = n.replace(/^.*\//,'');
+      const src = `/${basePath}/${file}`;
+      return `<div class="vcard">
+        <video preload="metadata" playsinline muted controls
+               onmouseenter="this.muted=true; this.play().catch(()=>{})"
+               onmouseleave="this.pause()"
+               src="${src}" onerror="this.closest('.vcard').style.display='none'"></video>
+        ${planBadgeHTML()}
+      </div>`;
+    }).join('');
+    container.innerHTML = html;
+  }
+
+  // estilos mínimos para badges si el CSS del proyecto no los tuviera
+  const style = document.createElement('style');
+  style.textContent = `
+    .card,.vcard{position:relative}
+    .badge{position:absolute; z-index:3; display:inline-flex; align-items:center; gap:6px;
+           background:rgba(0,0,0,.6); color:#fff; padding:4px 6px; border-radius:999px; font-size:11px}
+    .badge-pp{top:8px; left:8px}
+    .badge-pp img{width:16px; height:16px; display:block}
+    .badge-pp .pp-price{opacity:.9; font-size:10px}
+    .badge-new{bottom:8px; right:8px; background:#e11; font-weight:600; letter-spacing:.4px}
+    .vgrid{display:grid; gap:16px; grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+    .vgrid video{width:100%; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,.35)}
+  `;
+  document.head.appendChild(style);
+
+  // API pública
+  global.UHelpers = {
+    detectPool, sampleDaily, renderImageCards, renderVideoCards
   };
-})();
+})(window);

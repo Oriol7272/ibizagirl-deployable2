@@ -1,60 +1,90 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>IbizaGirl.pics — Suscripción</title>
-  <link rel="stylesheet" href="/css/site.css?v=20250822a"/>
-  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){var d=document,s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+  <link rel="stylesheet" href="/css/site.css?v=20250822153546">
+  <style>
+    .container{max-width:980px;margin:0 auto;padding:16px}
+    .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:12px}
+    .plan{background:#121212;border-radius:16px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+    .plan h3{margin:.2rem 0 .6rem}
+    .p{opacity:.8}
+    .price{font-size:28px;font-weight:700;margin:.4rem 0 1rem}
+  </style>
 </head>
 <body>
-  <header class="header">
-    <div class="brand">IbizaGirl.pics</div>
-    <nav class="nav">
-      <a href="/">Gallery</a>
-      <a href="/premium.html">Premium</a>
-      <a href="/videos.html">Vídeos</a>
-      <a href="/subscription.html">Suscripción</a>
-    </nav>
-  </header>
+  <main class="container">
+    <h1>Elige tu suscripción</h1>
+    <p class="p">Pago seguro con PayPal. Acceso a todo el contenido premium.</p>
 
-  <section class="hero">
-    <h1>Suscripción</h1>
-    <p>Acceso completo a fotos premium y vídeos. Paga con PayPal y se desbloquea al instante.</p>
-  </section>
-
-  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));padding:16px;">
-    <div class="card" style="padding:14px;">
-      <h3>Mensual</h3>
-      <p>Acceso 30 días • Renovable</p>
-      <div id="paypal-monthly" style="margin-top:10px;"></div>
+    <div class="plans">
+      <div class="plan">
+        <h3>Mensual</h3>
+        <div class="price">€<span id="p-monthly">9.99</span>/mes</div>
+        <div id="pp-monthly"></div>
+      </div>
+      <div class="plan">
+        <h3>Anual</h3>
+        <div class="price">€<span id="p-annual">59.99</span>/año</div>
+        <div id="pp-annual"></div>
+      </div>
+      <div class="plan">
+        <h3>Lifetime</h3>
+        <div class="price">€<span id="p-life">119.99</span> pago único</div>
+        <div id="pp-life"></div>
+      </div>
     </div>
-    <div class="card" style="padding:14px;">
-      <h3>Anual</h3>
-      <p>Acceso 365 días • Renovable</p>
-      <div id="paypal-yearly" style="margin-top:10px;"></div>
-    </div>
-    <div class="card" style="padding:14px;">
-      <h3>Lifetime</h3>
-      <p>Pago único • Acceso permanente</p>
-      <div id="paypal-lifetime" style="margin-top:10px;"></div>
-    </div>
-  </div>
 
-  <footer class="footer">© IbizaGirl.pics</footer>
+    <p class="p" style="margin-top:16px">Tras el pago, recibirás acceso en tu email.</p>
+  </main>
 
-  <script src="/js/payments.js?v=20250822a"></script>
+  <!-- datasets para leer pricing/planIds si existen -->
+  <script src="/content-data1.js"></script>
+  <!-- PayPal Smart Buttons (LIVE). Reemplaza la moneda si deseas otra. -->
   <script>
-    // Monta botones (importes de ejemplo; ajusta a tus precios)
-    IBGPay.mountButton('#paypal-monthly',  "14.99", "EUR");
-    IBGPay.mountButton('#paypal-yearly',   "59.99", "EUR");
-    IBGPay.mountButton('#paypal-lifetime', "99.00", "EUR");
+    // Puedes definir estos ids en content-data1.js -> CONFIG.paypal.planIds
+    const PLAN_IDS = (window.CONFIG && window.CONFIG.paypal && window.CONFIG.paypal.planIds) || {
+      monthly: "RELLENA_PLAN_ID_MENSUAL",
+      annual:  "RELLENA_PLAN_ID_ANUAL",
+      life:    "" // para pago único usamos order.create
+    };
+    const PRICES = (window.CONFIG && window.CONFIG.pricing) || { monthly:9.99, annual:59.99, lifetime:119.99 };
+    document.getElementById('p-monthly').textContent = (PRICES.monthly||9.99).toFixed(2);
+    document.getElementById('p-annual').textContent  = (PRICES.annual||59.99).toFixed(2);
+    document.getElementById('p-life').textContent    = (PRICES.lifetime||119.99).toFixed(2);
   </script>
-
-  <ins data-zoneid="5696328"></ins>
-  <script async src="https://a.magsrv.com/ad-provider.js"></script>
-  <script type="text/javascript" data-cfasync="false">
-  (function(){var k=window,g="e494ffb82839a29122608e933394c091",b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=","d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz","d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){e=k.document.createElement("script");e.type="text/javascript";e.async=!0;var p=k.document.getElementsByTagName("script")[0];e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)}};if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()})();
+  <script src="https://www.paypal.com/sdk/js?client-id=<?php echo getenv('PAYPAL_CLIENT_ID') ?: 'RELLENA_CLIENT_ID' ?>&vault=true&intent=subscription&currency=EUR" data-sdk-integration-source="button-factory"></script>
+  <script>
+    // Suscripciones (mensual / anual) por plan_id
+    if (PLAN_IDS.monthly && PLAN_IDS.monthly!=='RELLENA_PLAN_ID_MENSUAL'){
+      paypal.Buttons({
+        style:{shape:'pill',color:'gold',layout:'vertical',label:'subscribe'},
+        createSubscription: function(data, actions) {
+          return actions.subscription.create({ plan_id: PLAN_IDS.monthly });
+        },
+        onApprove: function(data) { alert('¡Gracias! ID subscripción: '+data.subscriptionID); }
+      }).render('#pp-monthly');
+    }
+    if (PLAN_IDS.annual && PLAN_IDS.annual!=='RELLENA_PLAN_ID_ANUAL'){
+      paypal.Buttons({
+        style:{shape:'pill',color:'gold',layout:'vertical',label:'subscribe'},
+        createSubscription: function(data, actions) {
+          return actions.subscription.create({ plan_id: PLAN_IDS.annual });
+        },
+        onApprove: function(data) { alert('¡Gracias! ID subscripción: '+data.subscriptionID); }
+      }).render('#pp-annual');
+    }
+    // Pago único (lifetime) – order.create
+    const lifeAmount = (PRICES.lifetime||119.99).toFixed(2);
+    paypal.Buttons({
+      style:{shape:'pill',color:'gold',layout:'vertical',label:'paypal'},
+      createOrder: function(data, actions){
+        return actions.order.create({ purchase_units: [{ amount: { value: lifeAmount, currency_code: 'EUR' }, description: 'Lifetime access — IbizaGirl.pics' }] });
+      },
+      onApprove: function(data, actions){ return actions.order.capture().then(function(details){ alert('Pago recibido: '+details.id); }); }
+    }).render('#pp-life');
   </script>
 </body>
 </html>
