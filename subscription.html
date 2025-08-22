@@ -2,36 +2,23 @@
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Suscripciones — IbizaGirl.pics</title>
-  <link rel="stylesheet" href="/css/site.css?v=20250822214334"/>
-  <link rel="stylesheet" href="/css/blur.css?v=20250822214334"/>
-  <style>
-    .plans { display:grid; gap:24px; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); margin-top:24px; }
-    .card { background:#101216; border-radius:16px; padding:20px; box-shadow:0 0 0 1px #1f2430 inset; }
-    .card h3 { margin:0 0 8px; font-size:20px; }
-    .pill { font-size:12px; background:#1e2a; padding:2px 8px; border-radius:999px; margin-left:8px; }
-    .price { font-size:28px; font-weight:700; margin:6px 0 12px; }
-    .small { color:#aab; font-size:13px; line-height:1.5; }
-    .footer-note { margin-top:12px; color:#99a; font-size:12px }
-  </style>
-  <script>
-    // Inyectar IDs REALES que me diste
-    window.IBG_PLANS = {
-      monthly: 'P-3WE8037612641383DNCUKNJI',
-      annual:  'P-43K261214Y571983RNCUKN7I'
-    };
-  </script>
-  <script src="/content-data1.js"></script>
-  <script src="/js/payments.js?v=20250822214334"></script>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Suscripción | IbizaGirl.pics</title>
+  <link rel="stylesheet" href="/css/site.css?v=20250822215546"/>
 </head>
-<body>
-  <header class="topbar">
+<!-- data-page=subscription para que payments.js sepa dónde está -->
+<!-- Pega aquí tus PLAN IDs reales (los que me diste): -->
+<!-- Mensual: P-3WE8037612641383DNCUKNJI | Anual: P-43K261214Y571983RNCUKN7I -->
+<body data-page="subscription"
+      data-plan-monthly="P-3WE8037612641383DNCUKNJI"
+      data-plan-annual="P-43K261214Y571983RNCUKN7I">
+
+  <header class="navbar">
     <nav class="nav">
-      <a href="/">Home</a>
+      <a href="/" class="brand">IbizaGirl.pics</a>
       <a href="/premium.html">Premium</a>
-      <a href="/videos.html">Videos</a>
-      <a class="active" href="/subscription.html">Suscripción</a>
+      <a href="/videos.html">Vídeos</a>
+      <a href="/subscription.html" class="active">Suscripción</a>
     </nav>
   </header>
 
@@ -39,33 +26,46 @@
     <h1>Suscripciones</h1>
     <p>Desbloquea todas las fotos y vídeos sin límites.</p>
 
-    <section class="plans">
-
-      <article class="card">
-        <h3>Mensual <span class="pill">14,99 €</span></h3>
-        <div class="price">14,99 € <span class="small">/ mes</span></div>
-        <p class="small">Acceso total recurrente. Cancela cuando quieras.</p>
-        <div id="paypal-monthly"></div>
-        <p class="footer-note">Tras el pago, refresca la página si no ves todo desbloqueado al instante.</p>
+    <section class="plans-grid">
+      <!-- Mensual -->
+      <article class="plan-card">
+        <div class="plan-head">
+          <h2>Mensual <span class="badge">14,99 €</span></h2>
+          <div class="price"><strong>14,99 €</strong> <small>/ mes</small></div>
+        </div>
+        <p>Acceso total recurrente. Cancela cuando quieras.</p>
+        <div id="pp-monthly" class="pp-btn"></div>
       </article>
 
-      <article class="card">
-        <h3>Anual <span class="pill">49,99 €</span></h3>
-        <div class="price">49,99 € <span class="small">/ año</span></div>
-        <p class="small">El mejor precio anual. Se renueva automáticamente.</p>
-        <div id="paypal-annual"></div>
-        <p class="footer-note">Puedes cancelar la renovación desde tu cuenta PayPal.</p>
+      <!-- Anual -->
+      <article class="plan-card">
+        <div class="plan-head">
+          <h2>Anual <span class="badge">49,99 €</span></h2>
+          <div class="price"><strong>49,99 €</strong> <small>/ año</small></div>
+        </div>
+        <p>El mejor precio anual. Se renueva automáticamente.</p>
+        <div id="pp-annual" class="pp-btn"></div>
       </article>
 
-      <article class="card">
-        <h3>Lifetime <span class="pill">100 €</span></h3>
-        <div class="price">100,00 € <span class="small">pago único</span></div>
-        <p class="small">Acceso ilimitado para siempre, sin cuotas.</p>
-        <div id="paypal-lifetime"></div>
-        <p class="footer-note">El pago lifetime se procesa como “pago único”.</p>
+      <!-- Lifetime -->
+      <article class="plan-card">
+        <div class="plan-head">
+          <h2>Lifetime <span class="badge">100 €</span></h2>
+          <div class="price"><strong>100,00 €</strong> <small>pago único</small></div>
+        </div>
+        <p>Acceso ilimitado para siempre, sin cuotas.</p>
+        <div id="pp-lifetime" class="pp-btn"></div>
       </article>
-
     </section>
+
+    <p class="note">Tras el pago, refresca la página si no ves todo desbloqueado al instante.</p>
   </main>
+
+  <!-- Config básica + APIs unificadas (ya las usas en el resto de páginas) -->
+  <script src="/content-data1.js?v=20250822215546"></script>
+  <script src="/content-data6.js?v=20250822215546"></script>
+
+  <!-- Pagos (el SDK lo inyecta internamente con los parámetros correctos) -->
+  <script src="/js/payments.js?v=20250822215546"></script>
 </body>
 </html>
