@@ -1,97 +1,137 @@
-// js/ads.js
-// Llama a loadAds() después del load del DOM:
-//   window.addEventListener('load', ()=> window.loadAds && window.loadAds());
+/**
+ * IbizaGirl.pics - Ads bootstrap (ExoClick + JuicyAds + PopAds)
+ * Carga segura (idempotente), soporta adblock (no rompe), y registra eventos en consola.
+ * Requiere: CSP con script-src https:, y 'unsafe-inline' para los tags de los proveedores.
+ */
+(() => {
+  if (window.__ADS_BOOTSTRAP__) return; // idempotencia
+  window.__ADS_BOOTSTRAP__ = true;
 
-(function () {
-  const EXO_ZONE = "5696328"; // ExoClick zoneid (magsrv) :contentReference[oaicite:3]{index=3}
-  const JUICY_ZONES = ["2092250", "2092251", "208469", "209470", "209471"]; // :contentReference[oaicite:4]{index=4}
-  const ERO_ZONE = "8177575"; // tienes también website name id 2309065 (necesita snippet oficial) :contentReference[oaicite:5]{index=5}
+  const LOG = (...a) => console.log("🧩 ads:", ...a);
+  const ERR = (...a) => console.warn("⚠️ ads:", ...a);
 
-  // Utilidades
-  function ensureSlot(id) {
-    let el = document.getElementById(id);
-    if (!el) {
-      el = document.createElement('div');
-      el.id = id;
-      // Si no existe el contenedor, lo añadimos al final del body
-      (document.body || document.documentElement).appendChild(el);
+  // === CONFIG REAL (tus IDs) ===
+  const EXO = {
+    zoneId: 5696328,                                   // ExoClick
+    script: "https://a.magsrv.com/ad-provider.js",
+    className: "eas6a97888e2"
+  };
+
+  const JUICY = {
+    script: "https://adserver.juicyads.com/js/jads.js",
+    zones: {
+      // elige 2–3 ubicaciones por página; tenemos 5 zonas disponibles
+      rightRail: 2092250,
+      inContent: 2092251,
+      footer:   209470,   // extra
+      spare:    209471,   // extra
+      legacy:   208469    // extra
     }
-    return el;
-  }
-  function loadScript(src, attrs = {}, cb) {
-    const s = document.createElement('script');
-    s.async = true;
-    Object.entries(attrs).forEach(([k, v]) => s.setAttribute(k, v));
-    s.src = src;
-    if (cb) s.onload = cb;
-    document.head.appendChild(s);
-  }
+  };
 
-  // =============== ExoClick (magsrv) ===============
-  function mountExoClick(slotId, zoneId) {
-    const slot = ensureSlot(slotId);
-    slot.innerHTML = `<ins class="eas6a97888e2" data-zoneid="${zoneId}"></ins>`;
-    // Cargar su SDK y servir
-    if (!window.AdProvider) {
-      loadScript("https://a.magsrv.com/ad-provider.js", { type: "application/javascript" }, () => {
-        (window.AdProvider = window.AdProvider || []).push({ serve: {} });
-      });
-    } else {
+  // PopAds (tu snippet dado – respetado tal cual)
+  const POPADS = {
+    snippet: () => {
+      try {
+        /* PopAds code (según tu DOC) */
+        (function(){var p=window,j="e494ffb82839a29122608e933394c091",d=[["siteId",595+467*6*350+302+4245161],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],v=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL3pTL2J3ZHZmL3R0YWJsZXRvcC5taW4uanM=","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvaG1kYi5taW4uanM=","d3d3Lmh6Z2Vua3ZkLmNvbS9ObmtBaC9mQy96dGFibGV0b3AubWluLmpz","d3d3LmpzZ2Zyend0eWdmLmNvbS9qbWRiLm1pbi5qcw=="],e=-1,a,y,m=function(){clearTimeout(y);e++;if(v[e]&&!(1781539757000<(new Date).getTime()&&1<e)){a=p.document.createElement("script");a.type="text/javascript";a.async=!0;var s=p.document.getElementsByTagName("script")[0];a.src="https://"+atob(v[e]);a.crossOrigin="anonymous";a.onerror=m;a.onload=function(){clearTimeout(y);p[j.slice(0,16)+j.slice(0,16)]||m()};y=setTimeout(m,5E3);s.parentNode.insertBefore(a,s)}};if(!p[j]){try{Object.freeze(p[j]=d)}catch(e){}m()}})();
+      } catch (e) { ERR("PopAds error", e); }
+    }
+  };
+
+  // === helpers ===
+  const loadScript = (src, {async=true,defer=true,attrs={}} = {}) =>
+    new Promise((resolve,reject) => {
+      if ([...document.scripts].some(s => s.src === src)) return resolve("already");
+      const el = document.createElement("script");
+      el.src = src; el.async = async; el.defer = defer;
+      Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k, v));
+      el.onload = () => resolve("loaded");
+      el.onerror = (e) => reject(new Error(`script load failed: ${src}`));
+      document.head.appendChild(el);
+    });
+
+  const ensureContainer = (id, parent = document.body, pos = "afterbegin") => {
+    let c = document.getElementById(id);
+    if (!c) {
+      c = document.createElement("div");
+      c.id = id;
+      parent.insertAdjacentElement(pos === "afterbegin" ? "afterbegin" : "beforeend", c);
+    }
+    return c;
+  };
+
+  const cssOnce = () => {
+    if (document.getElementById("ads-style")) return;
+    const s = document.createElement("style");
+    s.id = "ads-style";
+    s.textContent = `
+      .ad-slot{display:block;margin:12px auto;max-width:100%}
+      .ad-slot--strip{min-height:90px}
+      .ad-slot--box{min-height:250px}
+      .ad-rail{position:sticky; top:12px; max-width:320px; margin-left:auto}
+      @media (max-width: 1023px){ .ad-rail{display:none} }
+    `;
+    document.head.appendChild(s);
+  };
+
+  // === ExoClick ===
+  const mountExo = async (container) => {
+    try {
+      await loadScript(EXO.script, {async:true,defer:true});
+      const ins = document.createElement("ins");
+      ins.className = `${EXO.className} ad-slot ad-slot--strip`;
+      ins.setAttribute("data-zoneid", String(EXO.zoneId));
+      container.appendChild(ins);
       (window.AdProvider = window.AdProvider || []).push({ serve: {} });
+      LOG("ExoClick colocado (zone)", EXO.zoneId);
+    } catch (e) {
+      ERR("ExoClick", e);
     }
-  }
+  };
 
-  // =============== JuicyAds (jads.js) ===============
-  // Patrón: cargar jads.js y empujar {adzone: Z} por cada zona. :contentReference[oaicite:6]{index=6}
-  function mountJuicy(slotId, zoneId, dims) {
-    const slot = ensureSlot(slotId);
-    // Usamos <ins id="{zoneId}"> para que jads.js mapee correctamente el contenedor
-    const { width = "", height = "" } = dims || {};
-    slot.innerHTML = `<ins id="${zoneId}" ${width ? `data-width="${width}"` : ""} ${height ? `data-height="${height}"` : ""}></ins>`;
-    // Queue antes o después: la librería procesará el queue al cargar
-    window.adsbyjuicy = window.adsbyjuicy || [];
-    window.adsbyjuicy.push({ adzone: Number(zoneId) });
+  // === JuicyAds ===
+  let juicyLoaded = false;
+  const mountJuicy = async (container, zoneId) => {
+    try {
+      if (!juicyLoaded) {
+        await loadScript(JUICY.script, {async:true,defer:false});
+        juicyLoaded = true;
+      }
+      // patrón oficial
+      const ins = document.createElement("ins");
+      ins.id = `ja${zoneId}`;
+      ins.className = "ad-slot ad-slot--box";
+      container.appendChild(ins);
 
-    // Cargar jads.js una sola vez
-    if (!document.querySelector('script[src*="adserver.juicyads.com/js/jads.js"],script[src*="poweredby.jads.co/js/jads.js"]')) {
-      // cualquiera de los dos hosts sirve el lib
-      loadScript("https://adserver.juicyads.com/js/jads.js");
-      // alternativo:
-      // loadScript("https://poweredby.jads.co/js/jads.js");
+      window.adsbyjuicy = window.adsbyjuicy || [];
+      window.adsbyjuicy.push({ adzone: zoneId });
+      LOG("JuicyAds colocado (zone)", zoneId);
+    } catch (e) {
+      ERR("JuicyAds", e);
     }
-  }
+  };
 
-  // =============== EroAdvertising ===============
-  // Necesita SU snippet oficial (normalmente dan un <script src=... zone=...>)
-  // Dejamos hook para que al pegarlo se ejecute sin inline en HTML.
-  function mountEro(slotId /*, zoneId */) {
-    const slot = ensureSlot(slotId);
-    // TODO: pega aquí tu snippet oficial de EroAdvertising:
-    // Ejemplo (PSEUDOCÓDIGO): loadScript("https://cdn.ero-advertising.com/show_ad.js?zone=8177575");
-    console.warn("EroAdvertising: pega el snippet oficial aquí para zone:", ERO_ZONE);
-    slot.innerHTML = '<div style="display:none">EroAdvertising slot</div>';
-  }
+  // === Layout: creamos contenedores sin tocar tus HTMLs ===
+  document.addEventListener("DOMContentLoaded", async () => {
+    cssOnce();
 
-  // =============== PopAds (popunder) ===============
-  // Inyectamos tu script tal cual, como inline JS dentro de un <script> creado desde aquí. :contentReference[oaicite:7]{index=7} :contentReference[oaicite:8]{index=8}
-  function mountPopAds() {
-    const s = document.createElement('script');
-    s.type = "text/javascript";
-    s.setAttribute("data-cfasync", "false");
-    s.textContent = String.raw`/*<![CDATA[/* */
-(function(){var p=window,j="e494ffb82839a29122608e933394c091",d=[["siteId",595+467*6*350+302+4245161],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],v=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL3pTL2J3ZHZmL3R0YWJsZXRvcC5taW4uanM=","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvaG1kYi5taW4uanM=","d3d3Lmh6Z2Vua3ZkLmNvbS9ObmtBaC9mQy96dGFibGV0b3AubWluLmpz","d3d3LmpzZ2Zyend0eWdmLmNvbS9qbWRiLm1pbi5qcw=="],e=-1,a,y,m=function(){clearTimeout(y);e++;if(v[e]&&!(1781539757000<(new Date).getTime()&&1<e)){a=p.document.createElement("script");a.type="text/javascript";a.async=!0;var s=p.document.getElementsByTagName("script")[0];a.src="https://"+atob(v[e]);a.crossOrigin="anonymous";a.onerror=m;a.onload=function(){clearTimeout(y);p[j.slice(0,16)+j.slice(0,16)]||m()};y=setTimeout(m,5E3);s.parentNode.insertBefore(a,s)}};if(!p[j]){try{Object.freeze(p[j]=d)}catch(e){}m()}})();
-/*]]>/* */`;
-    document.head.appendChild(s);
-  }
+    // tiras superior e inferior
+    const topStrip    = ensureContainer("ad-top-strip",    document.body, "afterbegin");
+    const footerStrip = ensureContainer("ad-footer-strip", document.body, "beforeend");
 
-  // =============== Entrada pública ===============
-  window.loadAds = function () {
-    // Map de slots (puedes cambiar IDs de destino si quieres)
-    mountExoClick("ad-slot-1", EXO_ZONE);
+    // rail derecho en desktop
+    const rail = ensureContainer("ad-right-rail", document.body, "beforeend");
+    rail.classList.add("ad-rail");
 
-    // JuicyAds: reparte tus 5 zonas en 5 contenedores (#ad-slot-2 .. #ad-slot-6)
-    const targets = ["ad-slot-2", "ad-slot-3", "ad-slot-4", "ad-slot-5", "ad-slot-6"];
-    JUICY_ZONES.forEach((zone, i) => mountJuicy(targets[i] || `ad-slot-ja-${i+1}`, zone));
+    // Montaje (mezcla de proveedores para repartir impresiones)
+    await mountExo(topStrip);                                    // ExoClick arriba
+    await mountJuicy(rail, JUICY.zones.rightRail);               // Juicy en rail
+    await mountJuicy(footerStrip, JUICY.zones.inContent);        // Juicy en footer
 
-    // Er
+    // PopAds (popunder / tabunder)
+    POPADS.snippet();
 
+    LOG("inicializado");
+  });
+})();
