@@ -1,281 +1,201 @@
-/**
- * IbizaGirl.pics - Payments SDK helper (subscripciones y compras sueltas)
- * Expone exactamente:
- *   - Payments.init(config?)
- *   - Payments.renderSubscriptions(opts?)
- *   - Payments.renderMiniBuyButton(container, opts)
- *   - Payments.renderImageBuyButton(container, opts)
- *
- * Requisitos:
- *   - window.IBG?.paypal?.clientId  (o IBG.PAYPAL_CLIENT_ID / PAYPAL_CLIENT_ID global)
- *   - window.IBG?.paypal?.plans?.monthly / .annual (opcional; se pueden pasar por parámetro)
- *
- * Notas:
- *   - Moneda por defecto: EUR
- *   - Intent para subscripciones: 'subscribe' (con components=subscriptions&vault=true)
- *   - Intent para compras sueltas: 'capture' (components=buttons)
- */
-(function () {
-  const LOG_PREFIX = '[payments]';
-  const DEFAULT_CURRENCY = 'EUR';
+/* =========================================================================
+ * IbizaGirl.pics — payments.js (FULL)
+ * - Expone: Payments.renderSubscriptions, Payments.renderMiniBuyButton, Payments.renderLifetime
+ * - Carga dinámica del PayPal SDK (una sola vez) con parámetros correctos.
+ * - Evita el 400 anterior (usamos components=buttons; vault=true solo en subs).
+ * ========================================================================= */
+(function (w, d) {
+  const LOG = (...a) => console.log('[payments]', ...a);
+  const WARN = (...a) => console.warn('[payments]', ...a);
+  const ERR = (...a) => console.error('[payments]', ...a);
 
-  /** Lee el CLIENT_ID desde varias fuentes */
-  function getClientId(override) {
-    if (override) return override;
-    if (window.IBG?.paypal?.clientId) return window.IBG.paypal.clientId;
-    if (window.IBG?.PAYPAL_CLIENT_ID) return window.IBG.PAYPAL_CLIENT_ID;
-    if (window.PAYPAL_CLIENT_ID) return window.PAYPAL_CLIENT_ID;
-    const meta = document.querySelector('meta[name="paypal-client-id"]');
-    if (meta?.content) return meta.content;
-    return '';
-  }
-
-  /** Estado interno del loader del SDK */
-  const sdkState = {
-    loading: false,
-    loaded: false,
-    components: new Set(), // p.ej. 'buttons', 'subscriptions'
-    clientId: '',
-    currency: DEFAULT_CURRENCY,
+  const DEFAULTS = {
+    currency: 'EUR',
+    locale: 'es_ES',
+    // Tus planes REALES (cámbialos si los renuevas):
+    plans: {
+      monthly: 'P-3WE8037612641383DNCUKNJI',  // 14,99 €/mes
+      annual:  'P-43K261214Y571983RNCUKN7I'   // 49,99 €/año
+    },
+    amounts: {
+      lifetime: '100.00',  // 100 €
+      photo:    '0.10',    // 0,10 € (si alguna vez renderizas mini-botón en fotos)
+      video:    '0.30'     // 0,30 € (mini-botón por vídeo)
+    }
   };
 
-  /** Carga el SDK de PayPal (evita duplicados). Devuelve Promise<void> */
-  function loadPayPalSDK({ clientId, currency = DEFAULT_CURRENCY, needSubscriptions = false } = {}) {
-    return new Promise((resolve, reject) => {
-      const cid = getClientId(clientId);
-      if (!cid) {
-        console.warn(`${LOG_PREFIX} Falta CLIENT_ID; no se renderizan botones`);
-        return reject(new Error('CLIENT_ID missing'));
+  const state = {
+    clientId: null,          // para suscripciones y pago único (puede ser el mismo)
+    sdkLoadingKey: null,     // cadena con los parámetros de la URL del SDK
+    sdkPromise: null
+  };
+
+  /** Construye la URL del SDK con parámetros válidos */
+  function buildSdkUrl({ clientId, currency, locale, intent = 'capture', vault = false }) {
+    const u = new URL('https://www.paypal.com/sdk/js');
+    u.searchParams.set('client-id', clientId);
+    u.searchParams.set('components', 'buttons'); // IMPORTANTE: "buttons" (nada de "subscriptions")
+    u.searchParams.set('currency', currency || DEFAULTS.currency);
+    u.searchParams.set('intent', intent);        // 'subscription' para subs, 'capture' para pagos únicos
+    if (vault) u.searchParams.set('vault', 'true');
+    // (Opcional) idioma
+    if (locale) u.searchParams.set('locale', locale);
+    return u.toString();
+  }
+
+  /** Carga el SDK una sola vez con una combinación de parámetros */
+  function loadSdk({ clientId, currency, locale, intent, vault }) {
+    if (!clientId) {
+      WARN('Falta CLIENT_ID, no se puede cargar PayPal SDK');
+      return Promise.reject(new Error('CLIENT_ID missing'));
+    }
+    const key = JSON.stringify({ clientId, currency, locale, intent, vault });
+    if (state.sdkPromise && state.sdkLoadingKey === key && w.paypal) {
+      return state.sdkPromise;
+    }
+    const url = buildSdkUrl({ clientId, currency, locale, intent, vault });
+    state.sdkLoadingKey = key;
+
+    state.sdkPromise = new Promise((resolve, reject) => {
+      // Si ya está inyectado con exactamente la misma URL, resolvemos
+      const existing = Array.from(d.querySelectorAll('script[src*="paypal.com/sdk/js"]'))[0];
+      if (existing && w.paypal) {
+        LOG('SDK ya presente');
+        resolve(w.paypal);
+        return;
       }
-
-      // Si ya hay script y cubre componentes necesarios, resolvemos.
-      if (sdkState.loaded) {
-        // Si el script previo no traía subscriptions y ahora sí las necesitamos, recargamos.
-        const hasSubs = sdkState.components.has('subscriptions');
-        if (needSubscriptions && !hasSubs) {
-          // recarga forzada con subscriptions
-        } else {
-          return resolve();
-        }
-      }
-
-      // Construir parámetros
-      const components = new Set(['buttons']);
-      if (needSubscriptions) components.add('subscriptions');
-
-      const params = new URLSearchParams();
-      params.set('client-id', cid);
-      params.set('currency', currency);
-      params.set('components', Array.from(components).join(','));
-      if (needSubscriptions) {
-        params.set('vault', 'true');
-      } else {
-        // compras sueltas
-        params.set('intent', 'capture');
-      }
-
-      const src = `https://www.paypal.com/sdk/js?${params.toString()}`;
-
-      // Si ya existe un <script> con mismo src, esperamos a que termine
-      const existing = Array.from(document.scripts).find(s => s.src && s.src.startsWith('https://www.paypal.com/sdk/js?'));
-      if (existing && existing.src === src) {
-        // Esperar a que paypal esté disponible
-        const waitReady = () => {
-          if (window.paypal && typeof window.paypal.Buttons === 'function') {
-            sdkState.loaded = true;
-            sdkState.components = components;
-            sdkState.clientId = cid;
-            sdkState.currency = currency;
-            resolve();
-          } else {
-            setTimeout(waitReady, 50);
-          }
-        };
-        return waitReady();
-      }
-
-      // Insertar script nuevo
-      const script = document.createElement('script');
-      script.src = src;
-      script.async = true;
-      script.onload = () => {
-        if (window.paypal && typeof window.paypal.Buttons === 'function') {
-          sdkState.loaded = true;
-          sdkState.components = components;
-          sdkState.clientId = cid;
-          sdkState.currency = currency;
-          console.debug(`${LOG_PREFIX} SDK cargado (${params.get('components')})`);
-          resolve();
-        } else {
-          reject(new Error('PayPal SDK loaded but paypal.Buttons is undefined'));
-        }
+      const s = d.createElement('script');
+      s.src = url;
+      s.async = true;
+      s.onload = () => {
+        LOG('SDK cargado OK');
+        resolve(w.paypal);
       };
-      script.onerror = (e) => {
-        reject(new Error('No se pudo cargar PayPal SDK'));
+      s.onerror = (e) => {
+        ERR('No se pudo cargar PayPal SDK', e);
+        reject(new Error('paypal_sdk_load_error'));
       };
-      document.head.appendChild(script);
+      d.head.appendChild(s);
     });
+
+    return state.sdkPromise;
   }
 
-  /** Utilidad genérica para renderizar botones con Buttons */
-  async function renderButtons(container, configLoader) {
-    const el = (typeof container === 'string') ? document.querySelector(container) : container;
-    if (!el) {
-      console.warn(`${LOG_PREFIX} contenedor no encontrado`, container);
-      return;
-    }
-    const cfg = await configLoader();
-    if (!window.paypal || typeof window.paypal.Buttons !== 'function') {
-      console.error(`${LOG_PREFIX} paypal.Buttons no disponible`);
-      return;
-    }
-    const btn = window.paypal.Buttons(cfg);
-    btn.render(el);
-  }
-
-  /** --------- API PÚBLICA --------- **/
-
-  /** Inicializa (opcional). Puedes pasar {clientId, currency} */
-  async function init(opts = {}) {
-    try {
-      await loadPayPalSDK({ clientId: opts.clientId, currency: opts.currency || DEFAULT_CURRENCY, needSubscriptions: !!opts.needSubscriptions });
-    } catch (e) {
-      console.warn(`${LOG_PREFIX} Init warning`, e);
-    }
-  }
-
-  /**
-   * Renderiza los tres planes:
-   *   - mensual (plan_id)
-   *   - anual (plan_id)
-   *   - lifetime (importe único, por defecto 100€)
-   *
-   * Si no pasas contenedores, usará (si existen):
-   *   #pp-sub-monthly, #pp-sub-annual, #pp-lifetime
-   *
-   * opts:
-   * {
-   *   clientId?: string,
-   *   currency?: 'EUR'|'USD'|...,
-   *   monthlyPlanId?: string,
-   *   annualPlanId?: string,
-   *   lifetimeAmount?: string|'100.00',
-   *   containers?: { monthly?: selector|Element, annual?: selector|Element, lifetime?: selector|Element }
-   * }
-   */
+  /** Renderiza los 2 botones de suscripción (Mensual/Anual) */
   async function renderSubscriptions(opts = {}) {
-    const plans = {
-      monthly: opts.monthlyPlanId || window.IBG?.paypal?.plans?.monthly || '',
-      annual:  opts.annualPlanId  || window.IBG?.paypal?.plans?.annual  || '',
+    const clientId = opts.clientId || state.clientId;
+    if (!clientId) {
+      WARN('Falta CLIENT_ID, no se renderizan botones de suscripción');
+      return;
+    }
+    const monthlyPlanId = opts.monthlyPlanId || DEFAULTS.plans.monthly;
+    const annualPlanId  = opts.annualPlanId  || DEFAULTS.plans.annual;
+    const selMonthly = (opts.selectors && opts.selectors.monthly) || '#paypal-monthly';
+    const selAnnual  = (opts.selectors && opts.selectors.annual)  || '#paypal-annual';
+
+    // Carga SDK con intent=subscription y vault=true
+    await loadSdk({ clientId, currency: DEFAULTS.currency, locale: DEFAULTS.locale, intent: 'subscription', vault: true });
+
+    const renderSub = (selector, planId, label) => {
+      const el = d.querySelector(selector);
+      if (!el) return WARN(`No existe el contenedor ${selector} para ${label}`);
+      el.innerHTML = ''; // limpia "Cargando..."
+      return w.paypal.Buttons({
+        style: { layout: 'vertical', color: 'gold', shape: 'pill', label: 'subscribe' },
+        createSubscription: (data, actions) => actions.subscription.create({ plan_id: planId }),
+        onApprove: (data) => {
+          LOG(`${label} suscrito OK`, data);
+          alert('🎉 Suscripción completada correctamente.');
+          try { localStorage.setItem('ibg_subscribed', '1'); } catch (_) {}
+        },
+        onError: (err) => { ERR(`${label} error`, err); alert('⚠️ Error con PayPal. Inténtalo de nuevo.'); }
+      }).render(el);
     };
-    const lifetimeAmount = (opts.lifetimeAmount || window.IBG?.paypal?.lifetimeAmount || '100.00').toString();
 
-    await loadPayPalSDK({
-      clientId: opts.clientId,
-      currency: opts.currency || DEFAULT_CURRENCY,
-      needSubscriptions: true
-    });
+    await renderSub(selMonthly, monthlyPlanId, 'Mensual');
+    await renderSub(selAnnual,  annualPlanId,  'Anual');
+  }
 
-    // Mensual
-    if (plans.monthly) {
-      await renderButtons(opts.containers?.monthly || '#pp-sub-monthly', async () => ({
-        style: { layout: 'vertical', color: 'gold', height: 45 },
-        createSubscription: (_d, actions) => actions.subscription.create({ plan_id: plans.monthly }),
-        onApprove: (data, actions) => {
-          console.log(`${LOG_PREFIX} mensual OK`, data);
-          try { alert('¡Suscripción mensual activada!'); } catch(e){}
-        },
-        onError: (err) => console.error(`${LOG_PREFIX} mensual error`, err),
-      }));
-    }
+  /** Renderiza botón de pago único (Lifetime u otros “one-shot”) */
+  async function renderLifetime(opts = {}) {
+    const clientId = opts.clientId || state.clientId;
+    if (!clientId) { WARN('Falta CLIENT_ID para Lifetime'); return; }
+    const container = opts.container || '#paypal-lifetime';
+    const amount = (opts.amount || DEFAULTS.amounts.lifetime).toString();
 
-    // Anual
-    if (plans.annual) {
-      await renderButtons(opts.containers?.annual || '#pp-sub-annual', async () => ({
-        style: { layout: 'vertical', color: 'gold', height: 45 },
-        createSubscription: (_d, actions) => actions.subscription.create({ plan_id: plans.annual }),
-        onApprove: (data, actions) => {
-          console.log(`${LOG_PREFIX} anual OK`, data);
-          try { alert('¡Suscripción anual activada!'); } catch(e){}
-        },
-        onError: (err) => console.error(`${LOG_PREFIX} anual error`, err),
-      }));
-    }
+    await loadSdk({ clientId, currency: DEFAULTS.currency, locale: DEFAULTS.locale, intent: 'capture', vault: false });
 
-    // Lifetime (compra suelta)
-    await loadPayPalSDK({
-      clientId: opts.clientId,
-      currency: opts.currency || DEFAULT_CURRENCY,
-      needSubscriptions: false
-    });
-
-    await renderButtons(opts.containers?.lifetime || '#pp-lifetime', async () => ({
-      style: { layout: 'vertical', color: 'blue', height: 45 },
-      createOrder: (_d, actions) => actions.order.create({
+    const el = d.querySelector(container);
+    if (!el) return WARN(`No existe contenedor Lifetime ${container}`);
+    el.innerHTML = '';
+    return w.paypal.Buttons({
+      style: { layout: 'vertical', color: 'blue', shape: 'pill', label: 'pay' },
+      createOrder: (_data, actions) => actions.order.create({
         purchase_units: [{
-          amount: { currency_code: opts.currency || DEFAULT_CURRENCY, value: lifetimeAmount },
-          description: 'IbizaGirl.pics — Acceso Lifetime',
-        }]
+          amount: { currency_code: DEFAULTS.currency, value: amount },
+          description: 'IbizaGirl.pics — Acceso Lifetime'
+        }],
+        application_context: { shipping_preference: 'NO_SHIPPING' }
       }),
-      onApprove: async (data, actions) => {
-        try {
-          const details = await actions.order.capture();
-          console.log(`${LOG_PREFIX} lifetime OK`, details);
-          try { alert('¡Compra lifetime completada!'); } catch(e){}
-        } catch (e) {
-          console.error(`${LOG_PREFIX} lifetime capture error`, e);
-        }
+      onApprove: async (_data, actions) => {
+        try { await actions.order.capture(); } catch(e){ /* noop */ }
+        LOG('Lifetime pagado OK');
+        alert('🎉 Pago completado. ¡Gracias!');
+        try { localStorage.setItem('ibg_lifetime', '1'); } catch (_) {}
       },
-      onError: (err) => console.error(`${LOG_PREFIX} lifetime error`, err),
-    }));
+      onError: (err) => { ERR('Lifetime error', err); alert('⚠️ Error con PayPal.'); }
+    }).render(el);
   }
 
   /**
-   * Botón mini de compra (para vídeos a 0,30€ etc.)
-   * container: selector o Element donde renderizar el botón
-   * opts: { amount: '0.30', currency?: 'EUR', description?: 'Video XYZ' }
+   * Mini-botón “Comprar” para cada ítem (p. ej., vídeos a 0,30 €)
+   * Firmas compatibles con tu código existente:
+   *   Payments.renderMiniBuyButton(selector|element, { amount: '0.30', description: 'Vídeo XYZ' })
    */
-  async function renderMiniBuyButton(container, opts = {}) {
-    const amount = (opts.amount || window.IBG?.prices?.video || '0.30').toString();
-    const currency = opts.currency || DEFAULT_CURRENCY;
+  async function renderMiniBuyButton(target, options = {}) {
+    const clientId = options.clientId || state.clientId;
+    if (!clientId) { WARN('Falta CLIENT_ID en mini-botón'); return; }
+    const amount = (options.amount || DEFAULTS.amounts.video).toString();
+    const description = options.description || 'Compra individual';
 
-    await loadPayPalSDK({ clientId: opts.clientId, currency, needSubscriptions: false });
+    await loadSdk({ clientId, currency: DEFAULTS.currency, locale: DEFAULTS.locale, intent: 'capture', vault: false });
 
-    await renderButtons(container, async () => ({
-      style: { layout: 'horizontal', color: 'gold', height: 35, label: 'buynow' },
-      createOrder: (_d, actions) => actions.order.create({
+    const el = typeof target === 'string' ? d.querySelector(target) : target;
+    if (!el) return WARN('Mini-buy: contenedor no encontrado', target);
+    el.innerHTML = '';
+    el.classList.add('pp-mini-ready');
+
+    return w.paypal.Buttons({
+      style: { layout: 'horizontal', color: 'gold', height: 35, label: 'pay', shape: 'pill' },
+      createOrder: (_data, actions) => actions.order.create({
         purchase_units: [{
-          amount: { currency_code: currency, value: amount },
-          description: opts.description || 'Compra de vídeo',
-        }]
+          amount: { currency_code: DEFAULTS.currency, value: amount },
+          description
+        }],
+        application_context: { shipping_preference: 'NO_SHIPPING' }
       }),
-      onApprove: async (data, actions) => {
-        try {
-          const details = await actions.order.capture();
-          console.log(`${LOG_PREFIX} mini buy OK`, details);
-          try { alert('¡Gracias! Compra realizada.'); } catch(e){}
-        } catch (e) {
-          console.error(`${LOG_PREFIX} mini buy capture error`, e);
-        }
+      onApprove: async (_data, actions) => {
+        try { await actions.order.capture(); } catch(e){ /* noop */ }
+        LOG('Mini-buy OK', { amount, description });
+        alert('✅ Compra realizada.');
       },
-      onError: (err) => console.error(`${LOG_PREFIX} mini buy error`, err),
-    }));
+      onError: (err) => { ERR('Mini-buy error', err); alert('⚠️ Error con PayPal.'); }
+    }).render(el);
   }
 
-  /**
-   * Botón de compra para imágenes sueltas (0,10 € por defecto)
-   * opts: { amount?: '0.10', currency?: 'EUR', description?: string }
-   */
-  async function renderImageBuyButton(container, opts = {}) {
-    const amount = (opts.amount || window.IBG?.prices?.image || '0.10').toString();
-    await renderMiniBuyButton(container, { ...opts, amount, description: opts.description || 'Compra de imagen' });
-  }
-
-  // Exponer en window con las firmas que usan tus páginas
-  window.Payments = {
-    init,
+  /** API pública */
+  const API = {
+    /** Inicializa clientId (opcional si lo pasas en cada render) */
+    init: (cfg = {}) => {
+      if (cfg.clientId) state.clientId = cfg.clientId;
+      if (cfg.plans) DEFAULTS.plans = Object.assign({}, DEFAULTS.plans, cfg.plans);
+      if (cfg.amounts) DEFAULTS.amounts = Object.assign({}, DEFAULTS.amounts, cfg.amounts);
+      LOG('init', { clientId: state.clientId, plans: DEFAULTS.plans });
+    },
     renderSubscriptions,
-    renderMiniBuyButton,
-    renderImageBuyButton,
+    renderLifetime,
+    renderMiniBuyButton
   };
-})();
+
+  w.Payments = API;
+})(window, document);
