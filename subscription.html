@@ -4,57 +4,69 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>IbizaGirl.pics — Suscripción</title>
-  <link rel="stylesheet" href="/css/site.css?v=20250822a"/>
-  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){var d=document,s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+  <link rel="stylesheet" href="/css/site.css"/>
+  <style>
+    .plans { display:grid; gap:16px; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); }
+    .plan { background:#0b0b0b; border:1px solid #222; border-radius:16px; padding:18px; }
+    .plan h3 { margin:0 0 4px; }
+    .price { font-size:22px; font-weight:800; margin:6px 0 4px; }
+    .small { color:#9aa; font-size:13px; }
+    .btn-slot { margin-top:12px; min-height:46px; display:flex; align-items:center; }
+  </style>
 </head>
 <body>
-  <header class="header">
-    <div class="brand">IbizaGirl.pics</div>
-    <nav class="nav">
-      <a href="/">Gallery</a>
-      <a href="/premium.html">Premium</a>
-      <a href="/videos.html">Vídeos</a>
-      <a href="/subscription.html">Suscripción</a>
+  <header class="topbar">
+    <nav>
+      <a href="/">Home</a>
+      <a href="/premium">Premium</a>
+      <a href="/videos">Vídeos</a>
+      <a class="active" href="/subscription">Suscripción</a>
     </nav>
   </header>
 
-  <section class="hero">
-    <h1>Suscripción</h1>
-    <p>Acceso completo a fotos premium y vídeos. Paga con PayPal y se desbloquea al instante.</p>
-  </section>
+  <main class="container">
+    <h1>Suscripciones</h1>
+    <p>Desbloquea todas las fotos y vídeos sin límites.</p>
 
-  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));padding:16px;">
-    <div class="card" style="padding:14px;">
-      <h3>Mensual</h3>
-      <p>Acceso 30 días • Renovable</p>
-      <div id="paypal-monthly" style="margin-top:10px;"></div>
-    </div>
-    <div class="card" style="padding:14px;">
-      <h3>Anual</h3>
-      <p>Acceso 365 días • Renovable</p>
-      <div id="paypal-yearly" style="margin-top:10px;"></div>
-    </div>
-    <div class="card" style="padding:14px;">
-      <h3>Lifetime</h3>
-      <p>Pago único • Acceso permanente</p>
-      <div id="paypal-lifetime" style="margin-top:10px;"></div>
-    </div>
-  </div>
+    <section class="plans">
+      <article class="plan">
+        <h3>Mensual <span class="small">14,99 €</span></h3>
+        <div class="price">14,99 € <span class="small">/ mes</span></div>
+        <p class="small">Acceso total recurrente. Cancela cuando quieras.</p>
+        <div id="sub-monthly-btn" class="btn-slot">Cargando…</div>
+      </article>
 
-  <footer class="footer">© IbizaGirl.pics</footer>
+      <article class="plan">
+        <h3>Anual <span class="small">49,99 €</span></h3>
+        <div class="price">49,99 € <span class="small">/ año</span></div>
+        <p class="small">El mejor precio anual. Renovación automática.</p>
+        <div id="sub-annual-btn" class="btn-slot">Cargando…</div>
+      </article>
 
-  <script src="/js/payments.js?v=20250822a"></script>
+      <article class="plan">
+        <h3>Lifetime <span class="small">100 €</span></h3>
+        <div class="price">100,00 € <span class="small">pago único</span></div>
+        <p class="small">Acceso ilimitado para siempre, sin cuotas.</p>
+        <div id="sub-lifetime-btn" class="btn-slot">Cargando…</div>
+      </article>
+    </section>
+
+    <p class="small" style="margin-top:16px">Tras el pago, refresca la página si no ves todo desbloqueado al instante.</p>
+  </main>
+
+  <script src="/js/content-data1.js"></script>
+  <script src="/js/payments.js"></script>
   <script>
-    // Monta botones (importes de ejemplo; ajusta a tus precios)
-    IBGPay.mountButton('#paypal-monthly',  "14.99", "EUR");
-    IBGPay.mountButton('#paypal-yearly',   "59.99", "EUR");
-    IBGPay.mountButton('#paypal-lifetime', "99.00", "EUR");
-  </script>
-
-  <ins data-zoneid="5696328"></ins>
-  <script async src="https://a.magsrv.com/ad-provider.js"></script>
-  <script type="text/javascript" data-cfasync="false">
-  (function(){var k=window,g="e494ffb82839a29122608e933394c091",b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=","d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz","d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){e=k.document.createElement("script");e.type="text/javascript";e.async=!0;var p=k.document.getElementsByTagName("script")[0];e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)}};if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()})();
+    // Llama a la API de payments. Si falta clientId, no rompe y deja los "Cargando…"
+    (function(){
+      if (!window.Payments) return;
+      Payments.renderSubscriptions({
+        selMonthly:  '#sub-monthly-btn',
+        selAnnual:   '#sub-annual-btn',
+        selLifetime: '#sub-lifetime-btn',
+        onSubscribed: () => location.reload()
+      });
+    })();
   </script>
 </body>
 </html>

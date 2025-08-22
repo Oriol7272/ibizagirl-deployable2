@@ -1,78 +1,88 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>IbizaGirl.pics — Vídeos</title>
-  <link rel="stylesheet" href="/css/site.css?v=20250822124703">
-  <link rel="stylesheet" href="/css/blur.css?v=20250822124703">
-  <script src="/content-data1.js"></script>
-  <script src="/content-data5.js"></script>
-  <script src="/content-data6.js"></script>
-  <script src="/js/unified-helpers.js?v=20250822124703"></script>
+  <link rel="stylesheet" href="/css/site.css"/>
+  <style>
+    .video-card { position: relative; overflow: hidden; border-radius: 12px; background:#111; }
+    .video-card .meta { display:flex; align-items:center; justify-content:space-between; padding:8px 10px; color:#ddd; font-size:13px; }
+    .video-card .thumb { width:100%; aspect-ratio:16/9; display:block; background:#0f0f0f; color:#666; 
+      display:flex; align-items:center; justify-content:center; font-size:12px; }
+    .badge { position:absolute; top:8px; left:8px; background:#22c55e; color:#061; font-weight:700; padding:2px 6px; border-radius:10px; font-size:11px; }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <h1>Vídeos</h1>
-    <nav><a href="/">Home</a> · <a href="/premium.html">Premium</a></nav>
+  <header class="topbar">
+    <nav>
+      <a href="/">Home</a>
+      <a href="/premium">Premium</a>
+      <a class="active" href="/videos">Vídeos</a>
+      <a href="/subscription">Suscripción</a>
+    </nav>
   </header>
 
   <main class="container">
-    <h2>Vídeos (20 aleatorios)</h2>
-    <div id="list" class="video-list"></div>
+    <h1>Vídeos (20 aleatorios)</h1>
+    <section id="grid" class="grid"></section>
   </main>
 
-  <footer class="site-footer"><small>© IbizaGirl.pics</small></footer>
+  <script src="/js/content-data1.js"></script>
+  <script src="/js/content-data2.js"></script>
+  <script src="/js/content-data3.js"></script>
+  <script src="/js/content-data4.js"></script>
+  <script src="/js/content-data5.js"></script>
+  <script src="/js/content-data6.js"></script>
+  <script src="/js/payments.js"></script>
 
   <script>
-  (async function(){
-    const normalize=(n)=>String(n).replace(/^uncensored-videos\/?/,'');
-    const pick=(a,n)=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a.slice(0,n)};
-
-    function fromHelpers(n){
-      try{
-        if(window.U && (U.pools?.videos)){
-          const v=(U.pools.videos||[]).map(normalize);
-          if(v.length) return pick(v,n);
-        }
-      }catch(e){}
-      return null;
+  (function (){
+    const G = (window.IBG_CONFIG || window.IBG || {});
+    const ASSETS = (G.assets && G.assets.baseUrl) || 'https://ibizagirl-assets.s3.eu-north-1.amazonaws.com';
+    const U = window.UnifiedContentAPI || {};
+    let pool = [];
+    if (U.getVideosPool) {
+      try { pool = U.getVideosPool(); } catch (_) {}
     }
-    async function fromCdn(n){
-      try{
-        const u=new URL('/api/cdn',location.origin);
-        u.searchParams.set('prefix','uncensored-videos');
-        u.searchParams.set('limit',String(n));
-        u.searchParams.set('shuffle','1');
-        const r=await fetch(u); if(!r.ok) return null;
-        const j=await r.json();
-        let f=(Array.isArray(j)?j:(j.files||j.items||j.keys||[])).map(normalize);
-        return f.slice(0,n);
-      }catch(e){ return null; }
+    if (!pool || !pool.length) {
+      pool = (window.PREMIUM_VIDEOS_POOL || []).map(fn => ({ filename: fn }));
     }
 
-    const list=document.getElementById('list');
-    const files=fromHelpers(20) || await fromCdn(20) || [];
-    list.innerHTML='';
-    for(const name of files){
-      const card=document.createElement('div'); card.className='video-card';
-      const v=document.createElement('video'); v.controls=true; v.preload='none'; v.src='/uncensored-videos/'+name;
-      card.appendChild(v); list.appendChild(card);
+    function sample(arr, n) {
+      const a = arr.slice();
+      for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+      return a.slice(0,n);
     }
-  })();
-  </script>
 
-  <!-- PopAds -->
-  <script type="text/javascript" data-cfasync="false">
-  (function(){
-    var k=window,g="e494ffb82839a29122608e933394c091",
-      b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],
-      t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz",
-         "ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=",
-         "d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz",
-         "d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],
-      r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){e=k.document.createElement("script");e.type="text/javascript";e.async=!0;var p=k.document.getElementsByTagName("script")[0];e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)}};
-    if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()}
+    const chosen = sample(pool, 20);
+    const grid = document.getElementById('grid'); grid.innerHTML = '';
+
+    chosen.forEach((it, idx) => {
+      const file = it.filename || it;
+      const src  = file.startsWith('uncensored-videos/') ? `${ASSETS}/${file}` : `${ASSETS}/uncensored-videos/${file}`;
+      const card = document.createElement('div');
+      card.className = 'video-card card';
+
+      const isNew = idx < Math.floor(chosen.length * 0.3);
+
+      card.innerHTML = `
+        ${isNew ? '<span class="badge">NEW</span>' : ''}
+        <a class="thumb" href="${src}" target="_blank" rel="noopener">Play</a>
+        <div class="meta">
+          <span>Vídeo</span>
+          <span id="mini-btn-${idx}"></span>
+        </div>
+      `;
+      grid.appendChild(card);
+
+      // Mini botón (placeholder → /subscription)
+      if (window.Payments && Payments.renderMiniBuyButton) {
+        Payments.renderMiniBuyButton({ selector: `#mini-btn-${idx}`, label: '0,30 €' });
+      }
+    });
+
+    console.log('Videos: pool =', pool.length, '| render =', chosen.length);
   })();
   </script>
 </body>
