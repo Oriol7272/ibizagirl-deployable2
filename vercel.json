@@ -6,7 +6,7 @@
   ],
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/:all*",
       "headers": [
         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
         { "key": "Referrer-Policy", "value": "no-referrer-when-downgrade" },
@@ -18,12 +18,33 @@
         }
       ]
     },
-    {
-      "source": "/(.*)\\.(?:webp|jpg|jpeg|png)$",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" },
-        { "key": "Accept-Ranges", "value": "bytes" }
-      ]
-    }
+
+    /* Cache fuerte por extensión (sin regex avanzado) */
+    { "source": "/:path*.webp", "headers": [
+      { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" },
+      { "key": "Accept-Ranges", "value": "bytes" }
+    ]},
+    { "source": "/:path*.jpg", "headers": [
+      { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" },
+      { "key": "Accept-Ranges", "value": "bytes" }
+    ]},
+    { "source": "/:path*.jpeg", "headers": [
+      { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" },
+      { "key": "Accept-Ranges", "value": "bytes" }
+    ]},
+    { "source": "/:path*.png", "headers": [
+      { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" },
+      { "key": "Accept-Ranges", "value": "bytes" }
+    ]},
+
+    /* (opcional) cache fuerte de vídeos si los sirves directo algún día */
+    { "source": "/:path*.mp4", "headers": [
+      { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" },
+      { "key": "Accept-Ranges", "value": "bytes" }
+    ]},
+    { "source": "/:path*.webm", "headers": [
+      { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" },
+      { "key": "Accept-Ranges", "value": "bytes" }
+    ]}
   ]
 }
