@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>IbizaGirl.pics — Home</title>
 
-  <link rel="stylesheet" href="/css/site.css?v=20250822125802">
-  <link rel="stylesheet" href="/css/blur.css?v=20250822125802">
+  <link rel="stylesheet" href="/css/site.css?v=20250822130612">
+  <link rel="stylesheet" href="/css/blur.css?v=20250822130612">
 
   <!-- Pools (contenido) -->
   <script src="/content-data1.js"></script>
@@ -17,12 +17,12 @@
   <script src="/content-data6.js"></script>
 
   <!-- Helpers unificados -->
-  <script src="/js/unified-helpers.js?v=20250822125802"></script>
+  <script src="/js/unified-helpers.js?v=20250822130612"></script>
 
   <!-- Crisp -->
   <script>
-  window.$crisp=[]; window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";
-  (function(){var d=document,s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.head.appendChild(s)})();
+    window.$crisp=[]; window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";
+    (function(){var d=document,s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.head.appendChild(s)})();
   </script>
 </head>
 <body>
@@ -45,100 +45,115 @@
   </footer>
 
   <script>
-  // Desactiva SW + caches por si estaban interfiriendo
-  (function(){
-    try{
-      if('serviceWorker' in navigator){
-        navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister()));
-      }
-      if (window.caches) caches.keys().then(keys=>keys.forEach(k=>caches.delete(k)));
-    }catch(_){}
-  })();
-
-  (function(){
-    const FALLBACK = ['bikini5.webp','W9CK51Mronx3uf5hfQ3U.webp'];
-
-    const pick = (arr, n) => {
-      arr = arr.slice();
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr.slice(0, n);
-    };
-
-    const normalize = (name, prefix) => {
-      if (!name) return '';
-      // si viene URL absoluta, dejarla tal cual
-      if (/^https?:\/\//i.test(name)) return name;
-      // quitar prefijo "full/" si viene
-      name = String(name).replace(new RegExp('^'+prefix+'\/?','i'),'');
-      return name;
-    };
-
-    const buildSrc = (name) => {
-      if (!name) return '/full/bikini5.webp';
-      if (/^https?:\/\//i.test(name)) return name;
-      if (name.startsWith('/full/')) return name;
-      return '/full/' + name;
-    };
-
-    function fromHelpers(n){
+    // 0) Purga SW/caches por si algo viejo interfiere
+    (async function purge(){
       try{
-        const raw = (window.U?.pools?.full) || (window.U?.full) || [];
-        const files = raw.map(x => normalize(x,'full'));
-        if (files.length) {
-          console.log('🖼️ index: U.pools.full →', files.length, files.slice(0,5));
-          return pick(files, n);
+        if('serviceWorker' in navigator){
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map(r=>r.unregister()));
         }
-      }catch(e){ console.warn('helpers error', e); }
-      return null;
+        if (window.caches) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k=>caches.delete(k)));
+        }
+      }catch(_){}
+    })();
+
+    // Utilidades
+    const FALLBACKS = ['bikini5.webp','W9CK51Mronx3uf5hfQ3U.webp'];
+    const shuffle = arr => { for(let i=arr.length-1;i>0;i--){const j=(Math.random()*(i+1))|0; [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; };
+    const pick = (arr, n) => shuffle(arr.slice()).slice(0,n);
+    const isImgName = s => typeof s==='string' && /\.(webp|jpg|jpeg|png)$/i.test(s);
+
+    // Normaliza valores posibles: URL absoluta, con/ sin prefijo `full/`
+    const normalize = (name) => {
+      if(!name) return '';
+      if(/^https?:\/\//i.test(name)) return name; // (no lo usaremos en Home)
+      return String(name).replace(/^full\/?/i,'');
+    };
+    const toSrc = (name) => /^https?:\/\//i.test(name) ? name : '/full/'+name;
+
+    // 1) Descubre el pool FULL correcto dentro de los globals
+    function discoverFullCandidates(){
+      const cands = [];
+
+      // a) unified helpers
+      try { const a = window.U?.pools?.full; if (Array.isArray(a)) cands.push(a); } catch(_){}
+
+      // b) otros posibles lugares
+      try { const a = window.UnifiedContentAPI?.pools?.full; if (Array.isArray(a)) cands.push(a); } catch(_){}
+      try { const a = window.ContentAPI?.full || window.ContentAPI?.getFull?.(); if (Array.isArray(a)) cands.push(a); } catch(_){}
+
+      // c) heurística: escanear globals y quedarnos con arrays de ≥ 50 nombres de imágenes
+      try{
+        for (const k of Object.getOwnPropertyNames(window)) {
+          const v = window[k];
+          if (Array.isArray(v) && v.length>=50 && v.slice(0,10).every(isImgName)) {
+            cands.push(v);
+          }
+        }
+      }catch(_){}
+
+      // Limpiar duplicados por referencia
+      const uniq = [];
+      for (const a of cands) if (!uniq.includes(a)) uniq.push(a);
+      return uniq;
     }
 
-    async function fromCdn(n){
-      try{
-        const url = new URL('/api/cdn', location.origin);
-        url.searchParams.set('prefix','full');
-        url.searchParams.set('limit', String(n));
-        url.searchParams.set('shuffle','1');
-        const res = await fetch(url, { credentials:'same-origin' });
-        if (!res.ok) { console.warn('cdn api status', res.status); return null; }
-        const json = await res.json();
-        let files = Array.isArray(json) ? json : (json.files || json.items || json.keys || []);
-        files = (files || []).map(x => normalize(x,'full'));
-        if (files.length) {
-          console.log('🖼️ index: /api/cdn full →', files.length, files.slice(0,5));
-          return files.slice(0, n);
-        }
-      } catch(e){ console.warn('cdn api error', e); }
-      return null;
+    // 2) Verifica cuál de los candidatos realmente existe en /full/ (HEAD 2/3 ok)
+    async function verifyFullArray(arr){
+      if(!Array.isArray(arr) || arr.length===0) return false;
+      const test = pick(arr.filter(isImgName).map(normalize), Math.min(3, arr.length));
+      let ok=0;
+      await Promise.all(test.map(async name=>{
+        try{
+          const r = await fetch(toSrc(name), { method:'HEAD', cache:'no-store' });
+          if (r.ok) ok++;
+        }catch(_){}
+      }));
+      return ok >= Math.min(2, test.length); // 2 de 3 (o 1 de 1)
     }
 
-    async function loadFull(n){
-      return fromHelpers(n) || await fromCdn(n) || FALLBACK.slice(0, n);
+    async function getFullPool(){
+      const cands = discoverFullCandidates();
+      for (const cand of cands) {
+        if (await verifyFullArray(cand)) {
+          const norm = cand.map(normalize);
+          console.log('🖼️ index: FULL pool elegido →', norm.length, 'items');
+          return norm;
+        }
+      }
+      console.warn('⚠️ index: ningún pool FULL válido encontrado; usando fallbacks');
+      return FALLBACKS;
     }
 
     async function render(){
-      const files = await loadFull(20);
+      const pool = await getFullPool();
+      const files = pick(pool, 20);
       console.log('🖼️ index: render con', files.length, 'items');
+
       const grid = document.getElementById('grid');
       grid.innerHTML = '';
-      let errors=0;
       for (const name of files) {
         const fig = document.createElement('figure'); fig.className='card';
         const img = document.createElement('img');
         img.loading='lazy'; img.decoding='async'; img.alt='IbizaGirl';
 
-        const src = buildSrc(name);
+        const src = toSrc(name);
         img.src = src;
 
-        img.onerror = () => {
-          errors++; 
-          if (errors < 5) console.warn('img error →', src);
-          img.onerror=null; img.src='/full/bikini5.webp';
-          img.classList.add('loaded'); fig.classList.add('ready');
-        };
-        img.onload = () => { img.classList.add('loaded'); fig.classList.add('ready'); };
+        img.addEventListener('load', ()=>{
+          img.classList.add('loaded');
+          fig.classList.add('ready');
+        }, { once:true });
+
+        img.addEventListener('error', ()=>{
+          // Fallback local que sabemos que existe
+          img.onerror=null;
+          img.src = '/full/'+FALLBACKS[0];
+          img.classList.add('loaded');
+          fig.classList.add('ready');
+        }, { once:true });
 
         fig.appendChild(img);
         grid.appendChild(fig);
@@ -146,11 +161,10 @@
     }
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', render);
+      document.addEventListener('DOMContentLoaded', render, { once:true });
     } else {
       render();
     }
-  })();
   </script>
 
   <!-- PopAds -->
