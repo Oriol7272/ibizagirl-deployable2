@@ -181,5 +181,21 @@ catch(e){ console.warn('juicy err', e); }
 })();
 </script>
   <script defer src="/js/ads.js?v=20250822204832"></script>
+
+<!-- Purchase Modal -->
+<div id="purchase-modal" class="pmodal hidden">
+  <div class="pwrap">
+    <button class="pm-close" aria-label="Cerrar">✕</button>
+    <h3 class="pm-title">Compra</h3>
+    <div class="pm-sub"></div>
+    <div class="pm-price"></div>
+    <div id="paypal-oneoff" class="pm-paypal"></div>
+    <p class="pm-note">Pago seguro con PayPal · Entrega inmediata en sitio</p>
+  </div>
+  <div class="pm-backdrop pm-close"></div>
+</div>
+<script defer src="/js/store.js?v=1755889720030"></script>
+
+
 </body>
 </html>

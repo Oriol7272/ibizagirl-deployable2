@@ -110,3 +110,54 @@ small{color:var(--muted)}
 .ad-rail{position:sticky; top:12px; max-width:320px; margin-left:auto}
 @media (max-width: 1023px){ .ad-rail{display:none} }
 
+/* === Store / one-off === */
+.buyable .price-badge {
+  position:absolute; right:8px; bottom:8px;
+  background:rgba(0,0,0,.75); color:#fff;
+  font-size:12px; padding:4px 6px; border-radius:6px;
+  backdrop-filter:saturate(150%) blur(2px);
+}
+.buyable .new-badge {
+  position:absolute; left:8px; top:8px;
+  background:#ff2965; color:#fff; font-weight:700;
+  font-size:11px; padding:3px 6px; border-radius:6px;
+}
+
+/* Packs bar */
+.packs-bar{
+  position:sticky; top:0; z-index:20;
+  display:flex; gap:8px; justify-content:center;
+  padding:8px; background:rgba(0,0,0,.5); backdrop-filter:blur(6px);
+}
+.packs-bar .btn-pack{
+  border:0; padding:8px 12px; border-radius:8px;
+  cursor:pointer; font-weight:600;
+}
+
+/* Modal */
+.pmodal.hidden{ display:none; }
+.pmodal{ position:fixed; inset:0; z-index:1000; }
+.pmodal .pm-backdrop{ position:absolute; inset:0; background:rgba(0,0,0,.55); }
+.pmodal .pwrap{
+  position:relative; z-index:2; max-width:480px; margin:10vh auto; background:#111;
+  color:#fff; border-radius:14px; padding:18px 16px; box-shadow:0 10px 40px rgba(0,0,0,.6);
+}
+.pmodal .pm-close{
+  position:absolute; right:10px; top:10px; border:0; background:#222; color:#fff;
+  border-radius:8px; width:32px; height:32px; cursor:pointer;
+}
+.pmodal .pm-title{ margin:0 0 6px; font-size:20px; }
+.pmodal .pm-sub{ opacity:.8; margin-bottom:10px; word-break:break-all; }
+.pmodal .pm-price{
+  font-weight:700; margin-bottom:8px; background:#1e293b; padding:6px 10px; border-radius:8px; display:inline-block;
+}
+.pmodal .pm-paypal{ margin-top:8px; }
+
+/* Toast */
+#toast{
+  position:fixed; bottom:16px; left:50%; transform:translateX(-50%);
+  background:#111; color:#fff; padding:8px 12px; border-radius:8px; opacity:0;
+  transition:opacity .2s ease; z-index:1200;
+}
+#toast.show{ opacity:1; }
+
