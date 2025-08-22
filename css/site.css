@@ -86,3 +86,19 @@ small{color:var(--muted)}
 .topbar { display:flex; justify-content:space-between; align-items:center; padding:10px 16px; }
 .nav a { margin-left: 14px; opacity:.85; }
 .footer { opacity:.6; font-size:.9rem; margin-top:24px; }
+
+/* IBG PAY CSS */
+.buy-inline { position:absolute; bottom:8px; right:8px; z-index:6; width:120px; pointer-events:auto; }
+.buy-inline .paypal-button iframe { transform: scale(0.85); transform-origin: bottom right; }
+.card,.tile,.item,.media-card,.gallery-item,figure { position: relative; }
+
+/* Packs */
+.packs { margin: 20px 0; }
+.packs .pack-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+.packs .pack { border:1px solid #2a2a2a; border-radius:12px; padding:14px; background:#0a0a0a; }
+.packs .pack .price { opacity:.9; font-size: .95rem; margin-top: 4px; }
+
+/* Subs */
+.subs-grid { display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); margin:20px 0;}
+.plan-card { background:#0b0b0b; border:1px solid #222; border-radius:16px; padding:16px; }
+.plan-card .price { opacity:.9; }
