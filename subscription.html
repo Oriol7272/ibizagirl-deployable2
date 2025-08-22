@@ -1,54 +1,55 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>IbizaGirl.pics — Suscripciones</title>
-
-  <link rel="stylesheet" href="/css/site.css?v=20250822212312"/>
-  <link rel="stylesheet" href="/css/blur.css?v=20250822212312"/>
-
-  <script src="https://www.paypal.com/sdk/js?client-id=AfQdeilelw5m3wF08p9pcxqR3gpZ8VRUNtKY4A8WNGQAkt6is0NYr2i7BsjVz5wpeCwR7TTDPq5&currency=EUR&components=buttons,subscriptions&disable-funding=paylater&intent=capture" defer></script>
-
-  <script src="/js/payments.js?v=20250822212312" defer></script>
-
-  <style>
-    .page-wrap { max-width: 1000px; margin: 0 auto; padding: 16px; }
-    .plans { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 16px; margin-top: 14px; }
-    .plan { background: rgba(255,255,255,.04); border-radius: 16px; border: 1px solid rgba(255,255,255,.08); padding: 16px; }
-    .plan h3 { margin: 0 0 6px; font-size: 18px; }
-    .plan .price { font-weight: 700; margin-bottom: 10px; }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IbizaGirl.pics — Suscripción</title>
+  <link rel="stylesheet" href="css/site.css?v=20250822213156">
 </head>
-<body>
-  <div class="page-wrap">
-    <header class="nav">
-      <a href="/">Home</a>
-      <a href="/premium.html">Premium</a>
-      <a href="/videos.html">Vídeos</a>
-      <a href="/subscription.html" style="font-weight:700">Suscripción</a>
-    </header>
+<body data-page="subscription" class="page page-subscription">
+  <header class="topbar"><nav><a href="/">Home</a> <a href="/premium">Premium</a> <a href="/videos">Videos</a> <span class="active">Suscripción</span></nav></header>
 
+  <main class="container">
     <h1>Suscripciones</h1>
     <p>Desbloquea todas las fotos y vídeos sin límites.</p>
 
-    <section class="plans">
-      <div class="plan">
-        <h3>Mensual <small>14,99&nbsp;€</small></h3>
-        <div class="price">14,99 € / mes</div>
-        <div id="pp-sub-monthly"></div>
-      </div>
-      <div class="plan">
-        <h3>Anual <small>49,99&nbsp;€</small></h3>
-        <div class="price">49,99 € / año</div>
-        <div id="pp-sub-annual"></div>
-      </div>
-      <div class="plan">
-        <h3>Lifetime <small>100,00&nbsp;€</small></h3>
-        <div class="price">100,00 € pago único</div>
-        <div id="pp-buy-lifetime"></div>
-      </div>
+    <section class="plans-grid">
+      <article class="plan-card">
+        <div class="plan-head">
+          <h2>Mensual <span class="badge">14,99 €</span></h2>
+        </div>
+        <div class="plan-price"><strong>14,99 €</strong> / mes</div>
+        <p>Acceso total recurrente. Cancela cuando quieras.</p>
+        <div id="pp-monthly" class="pp-slot"></div>
+      </article>
+
+      <article class="plan-card">
+        <div class="plan-head">
+          <h2>Anual <span class="badge">49,99 €</span></h2>
+        </div>
+        <div class="plan-price"><strong>49,99 €</strong> / año</div>
+        <p>El mejor precio anual. Se renueva automáticamente.</p>
+        <div id="pp-annual" class="pp-slot"></div>
+      </article>
+
+      <article class="plan-card">
+        <div class="plan-head">
+          <h2>Lifetime <span class="badge">100 €</span></h2>
+        </div>
+        <div class="plan-price"><strong>100,00 €</strong> pago único</div>
+        <p>Acceso ilimitado para siempre, sin cuotas.</p>
+        <div id="pp-lifetime" class="pp-slot"></div>
+      </article>
     </section>
-  </div>
+
+    <p class="hint">Tras el pago, refresca la página si no ves todo desbloqueado al instante.</p>
+  </main>
+
+  <!-- Dependencias de contenido base (no interfieren con PayPal) -->
+  <script src="content-data1.js"></script>
+  <script src="content-data6.js"></script>
+
+  <!-- Nuestro módulo de pagos: carga el SDK por su cuenta con parámetros correctos -->
+  <script src="js/payments.js?v=20250822213156"></script>
 </body>
 </html>

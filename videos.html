@@ -1,108 +1,65 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>IbizaGirl.pics — Vídeos</title>
-
-  <link rel="stylesheet" href="/css/site.css?v=20250822212312"/>
-  <link rel="stylesheet" href="/css/blur.css?v=20250822212312"/>
-
-  <!-- PayPal SDK: botones + suscripciones -->
-  <script src="https://www.paypal.com/sdk/js?client-id=AfQdeilelw5m3wF08p9pcxqR3gpZ8VRUNtKY4A8WNGQAkt6is0NYr2i7BsjVz5wpeCwR7TTDPq5&currency=EUR&components=buttons,subscriptions&disable-funding=paylater&intent=capture" defer></script>
-
-  <!-- Sistema de contenido / helpers -->
-  <script src="/content-data1.js"></script>
-  <script src="/content-data5.js"></script>
-  <script src="/content-data6.js"></script>
-  <script src="/js/unified-helpers.js?v=20250822212312" defer></script>
-  <script src="/js/payments.js?v=20250822212312" defer></script>
-
-  <style>
-    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 16px; }
-    header.nav a { margin-right: 16px; color: #7fc3ff; text-decoration: none; }
-    h1 { font-size: 22px; margin: 12px 0 18px }
-    .sub-cta { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 12px; margin: 10px 0 20px; }
-    .sub-card { background: rgba(255,255,255,.04); border-radius: 14px; padding: 14px; border: 1px solid rgba(255,255,255,.08); }
-    .sub-card h3 { font-size: 16px; margin: 0 0 6px }
-    .sub-price { font-weight: 700; margin: 0 0 10px }
-    /* Grid de vídeos: el HTML lo crea el helper existente */
-    #videos-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: 14px; }
-    #videos-grid .card { background: rgba(255,255,255,.05); border-radius: 14px; overflow: hidden; }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IbizaGirl.pics — Videos</title>
+  <link rel="stylesheet" href="css/site.css?v=20250822213156">
 </head>
+<body data-page="videos" class="page page-videos">
+  <header class="topbar"><nav><a href="/">Home</a> <a href="/premium">Premium</a> <span class="active">Videos</span> <a href="/subscription">Suscripción</a></nav></header>
 
-<body>
-  <div class="page-wrap">
-    <header class="nav">
-      <a href="/">Home</a>
-      <a href="/premium.html">Premium</a>
-      <a href="/videos.html" style="font-weight:700">Vídeos</a>
-      <a href="/subscription.html">Suscripción</a>
-    </header>
+  <main class="container">
+    <h1>Vídeos (20 aleatorios)</h1>
+    <div id="grid" class="grid grid-videos"></div>
+  </main>
 
-    <h1>Vídeos Premium</h1>
+  <!-- Contenido -->
+  <script src="content-data1.js"></script>
+  <script src="content-data5.js"></script>
+  <script src="content-data6.js"></script>
 
-    <!-- Mini CTA de suscripciones (los botones se pintan con payments.js) -->
-    <section class="sub-cta" aria-label="Suscripciones rápidas">
-      <div class="sub-card">
-        <h3>Mensual</h3>
-        <div class="sub-price">14,99&nbsp;€/mes</div>
-        <div id="pp-videos-sub-monthly"></div>
-      </div>
-      <div class="sub-card">
-        <h3>Anual</h3>
-        <div class="sub-price">49,99&nbsp;€/año</div>
-        <div id="pp-videos-sub-annual"></div>
-      </div>
-    </section>
-
-    <!-- Grid de vídeos -->
-    <section>
-      <div id="videos-grid" class="grid"></div>
-    </section>
-  </div>
+  <!-- Helper y pagos -->
+  <script src="js/unified-helpers.js?v=20250822213156"></script>
+  <script src="js/payments.js?v=20250822213156"></script>
 
   <script>
-    // Render del grid de vídeos con el helper que ya tienes
-    (function () {
-      const grid = document.getElementById('videos-grid');
-      if (!grid) return;
+    (function() {
+      'use strict';
+      const grid = document.getElementById('grid');
+      const pool = Array.isArray(window.PREMIUM_VIDEOS_POOL) ? window.PREMIUM_VIDEOS_POOL.slice() : [];
+      if (!pool.length) { grid.innerHTML = '<p>No hay vídeos disponibles.</p>'; return; }
 
-      // Usa tu API unificada si existe; si no, content-data5 (videosList)
-      const list = (window.UnifiedContentAPI && UnifiedContentAPI.getVideos)
-        ? UnifiedContentAPI.getVideos({ limit: 100, shuffle: true })
-        : (window.videosList || []);
+      // 20 aleatorios
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      const pick = pool.slice(0, 20);
 
-      console.log("🎬 videos: total =", list.length);
       const frag = document.createDocumentFragment();
+      pick.forEach(name => {
+        const href = `/uncensored-videos/${name}`;
+        const card = document.createElement('article');
+        card.className = 'card video-card';
 
-      list.slice(0, 100).forEach((v) => {
-        const card = document.createElement('div');
-        card.className = 'card';
-
-        const a = document.createElement('a');
-        a.href = v.url || ("/uncensored-videos/" + (v.file || ""));
-        a.target = "_blank";
-        a.rel = "noopener";
-
-        const img = document.createElement('img');
-        img.loading = "lazy";
-        img.alt = v.title || "Video";
-        img.src = v.thumb || "/img/placeholder-video.webp";
-        img.style.width = "100%";
-        img.style.display = "block";
-
-        a.appendChild(img);
-        card.appendChild(a);
+        card.innerHTML = `
+          <a class="thumb thumb-video" href="${href}" target="_blank" rel="noopener">
+            <div class="play">▶</div>
+            <div class="meta">
+              <span>0:30 – 4K</span>
+            </div>
+          </a>
+          <div class="card-actions">
+            <div class="pp-mini" data-pp-price="0.30" data-pp-desc="Vídeo ${name} (0,30€)"></div>
+          </div>
+        `;
         frag.appendChild(card);
       });
-
       grid.appendChild(frag);
 
-      // (Opcional redundante) Forzar hidratación de PayPal mini botones
-      if (window.IBG && IBG.Payments) {
-        IBG.Payments.hydrateVideosPageIfPresent();
+      // Montar mini botones (payments.js)
+      if (window.IBGPayments && typeof window.IBGPayments.mountInlineBuyButtons === 'function') {
+        window.IBGPayments.mountInlineBuyButtons();
       }
     })();
   </script>

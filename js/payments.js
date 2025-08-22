@@ -1,236 +1,169 @@
 /**
- * IbizaGirl.pics - PayPal unified helpers
- * - One-time purchases (images/videos)
- * - Packs
- * - Subscriptions (monthly / annual)
- *
- * Requiere tener cargado el SDK de PayPal en la página (components=buttons,subscriptions).
- * Este módulo es "idempotente": lo puedes cargar en varias páginas.
+ * IbizaGirl.pics — Pagos (PayPal)
+ * - Carga correcta del SDK (sin 400) para suscripciones y pagos únicos
+ * - Mini-botones en cards de fotos/vídeos usando data-attributes
+ * - Suscripciones: usa plan_ids reales que ya nos diste
  */
 (function () {
-  const IBG = window.IBG || (window.IBG = {});
-  const log = (...a) => console.log("[payments]", ...a);
+  'use strict';
 
-  // === CONFIG ===
-  const CONFIG = {
-    currency: "EUR",
-    prices: {
-      imageSingle: "0.10",
-      imagePack10: "0.80",
-      videoSingle: "0.30",
-      videoPack5: "1.00",
-      lifetime: "100.00",
-    },
-    // Plan IDs reales (los que me pasaste):
-    plans: {
-      monthly: "P-3WE8037612641383DNCUKNJI",
-      annual:  "P-43K261214Y571983RNCUKN7I",
-    },
-    // Selectores heurísticos para detectar cards de video
-    videoGridSelectors: [
-      "#videos-grid", "#grid-videos", "#grid", ".videos-grid", ".grid",
-    ],
-    videoCardSelectors: [
-      ".card", ".video-card", ".item", ".thumb", "a[href*='/uncensored-videos/']",
-    ],
+  // ---- Config (lee de content-data1.js si existe; con fallback) ----
+  const CFG = (window.__IBG_CONFIG__ || window.__CONFIG || {}).paypal || {};
+  const CLIENT_ID = CFG.clientId || (window.IBG_PAYPAL_CLIENT_ID || '');
+  const CURRENCY  = CFG.currency || 'EUR';
+
+  // Precios (también intentamos leer de content-data1.js)
+  const PRICING = ((window.__IBG_CONFIG__ || window.__CONFIG || {}).pricing) || {};
+  const PRICE_PHOTO = Number(PRICING.photo || 0.10);
+  const PRICE_VIDEO = Number(PRICING.video || 0.30);
+  const PRICE_PACK10 = Number(PRICING.pack10 || 0.80);
+  const PRICE_PACK5V = Number(PRICING.pack5v || 1.00);
+
+  // Planes reales que nos diste
+  const PLANS = {
+    monthly: 'P-3WE8037612641383DNCUKNJI',
+    annual:  'P-43K261214Y571983RNCUKN7I'
   };
 
-  // Exponer config por si otras páginas lo leen
-  IBG.PaymentsConfig = CONFIG;
+  // Evita duplicar el SDK
+  let paypalReady = null;
+  function loadPayPal({ forSubscriptions=false } = {}) {
+    if (window.paypal) return Promise.resolve();
+    if (paypalReady) return paypalReady;
 
-  // === UTILS ===
-  function onPayPalReady(cb) {
-    if (window.paypal && typeof window.paypal.Buttons === "function") {
-      return cb();
+    // NOTA IMPORTANTE:
+    // Para suscripciones el SDK correcto es:
+    //   components=buttons&vault=true&intent=subscription
+    // (No usar "subscriptions" en components -> genera 400)
+    const params = new URLSearchParams();
+    params.set('client-id', CLIENT_ID);
+    params.set('currency', CURRENCY);
+    params.set('components', 'buttons');
+    if (forSubscriptions) {
+      params.set('vault', 'true');
+      params.set('intent', 'subscription');
+    } else {
+      params.set('intent', 'capture');
     }
-    let waited = 0;
-    const t = setInterval(() => {
-      waited += 150;
-      if (window.paypal && typeof window.paypal.Buttons === "function") {
-        clearInterval(t);
-        cb();
-      } else if (waited > 20000) {
-        clearInterval(t);
-        console.warn("[payments] PayPal SDK no llegó a cargar.");
+
+    const src = `https://www.paypal.com/sdk/js?${params.toString()}`;
+    paypalReady = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.async = true;
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error('No se pudo cargar PayPal SDK'));
+      document.head.appendChild(s);
+    });
+    return paypalReady;
+  }
+
+  // ---- Utils ----
+  function toCents(n) { return Math.round(Number(n) * 100) / 100; }
+
+  // Render de botón de compra única dentro de un contenedor
+  function renderMiniButtonCapture(el, { amount, description }) {
+    if (!el || !window.paypal) return;
+    el.innerHTML = ''; // limpiar
+
+    window.paypal.Buttons({
+      style: {
+        layout: 'horizontal',
+        height: 30,
+        label: 'buynow',
+        tagline: false,
+        color: 'gold',
+        shape: 'pill'
+      },
+      createOrder: (_, actions) => {
+        return actions.order.create({
+          purchase_units: [{
+            amount: { currency_code: CURRENCY, value: toCents(amount).toFixed(2) },
+            description: description || 'Compra'
+          }]
+        });
+      },
+      onApprove: async (_, actions) => {
+        try {
+          const details = await actions.order.capture();
+          console.log('[PayPal] Capturado:', details);
+          el.innerHTML = '<span style="font-size:12px">✅ Pagado</span>';
+        } catch (e) {
+          console.warn('[PayPal] Error en capture:', e);
+          el.innerHTML = '<span style="font-size:12px">⚠️ Error</span>';
+        }
       }
-    }, 150);
+    }).render(el);
   }
 
-  function markPremiumAndToast(kind, meta = {}) {
-    try {
-      localStorage.setItem("ibg:isPremium", "true");
-      localStorage.setItem("ibg:lastPurchase", JSON.stringify({kind, when: Date.now(), ...meta}));
-    } catch {}
-    alert("✅ Pago completado. Si no ves todo desbloqueado al instante, refresca la página.");
+  // Render de botón de suscripción en un contenedor
+  function renderSubscriptionButton(el, { planId }) {
+    if (!el || !window.paypal) return;
+    el.innerHTML = '';
+
+    window.paypal.Buttons({
+      style: {
+        layout: 'horizontal',
+        height: 40,
+        label: 'subscribe',
+        tagline: false,
+        color: 'gold',
+        shape: 'pill'
+      },
+      createSubscription: (_, actions) => {
+        return actions.subscription.create({ plan_id: planId });
+      },
+      onApprove: (data) => {
+        console.log('[PayPal] Subscription OK:', data);
+        el.innerHTML = '<span style="font-size:12px">✅ Suscrito</span>';
+      }
+    }).render(el);
   }
 
-  // === RENDERERS ===
-  function renderBuyButton({ mount, amount, description }) {
-    if (!mount) return;
-    const node = typeof mount === "string" ? document.querySelector(mount) : mount;
-    if (!node) return;
+  // ---- API pública ----
+  async function mountSubscriptionButtons(map) {
+    await loadPayPal({ forSubscriptions: true });
+    if (map.monthly)  renderSubscriptionButton(map.monthly,  { planId: PLANS.monthly });
+    if (map.annual)   renderSubscriptionButton(map.annual,   { planId: PLANS.annual  });
+    // Lifetime (100€) pago único
+    if (map.lifetime) renderMiniButtonCapture(map.lifetime,  { amount: 100.00, description: 'Lifetime' });
+  }
 
-    onPayPalReady(() => {
-      window.paypal.Buttons({
-        style: { layout: "horizontal", height: 35, label: "paypal" },
-        fundingSource: window.paypal.FUNDING.PAYPAL,
-        createOrder: function (data, actions) {
-          return actions.order.create({
-            purchase_units: [{
-              amount: { value: amount, currency_code: CONFIG.currency },
-              description: description || "Compra digital IbizaGirl.pics",
-            }],
-            application_context: { shipping_preference: "NO_SHIPPING" },
-          });
-        },
-        onApprove: function (data, actions) {
-          return actions.order.capture().then(function (details) {
-            log("capture ok", details);
-            markPremiumAndToast("one-time", { amount, description });
-          });
-        },
-        onError: function (err) {
-          console.error("[payments] onError", err);
-          alert("No se pudo completar el pago. Intenta de nuevo.");
-        }
-      }).render(node);
+  // Busca elementos con data-pp-price y les monta mini botón de compra única
+  async function mountInlineBuyButtons() {
+    const nodes = Array.from(document.querySelectorAll('[data-pp-price]'));
+    if (!nodes.length) {
+      console.log('[payments] videos/fotos: mini-botones renderizados = 0');
+      return;
+    }
+    await loadPayPal({ forSubscriptions: false });
+    nodes.forEach((el) => {
+      const price = Number(el.getAttribute('data-pp-price') || '0');
+      const desc  = el.getAttribute('data-pp-desc') || 'Compra';
+      renderMiniButtonCapture(el, { amount: price, description: desc });
     });
   }
 
-  function renderSubscriptionButton({ mount, planId, label }) {
-    if (!planId || !mount) return;
-    const node = typeof mount === "string" ? document.querySelector(mount) : mount;
-    if (!node) return;
-
-    onPayPalReady(() => {
-      window.paypal.Buttons({
-        style: { layout: "horizontal", height: 35, label: "subscribe" },
-        createSubscription: function (data, actions) {
-          return actions.subscription.create({ plan_id: planId });
-        },
-        onApprove: function (data, actions) {
-          log("subscription ok", data);
-          markPremiumAndToast("subscription", { planId, label });
-        },
-        onError: function (err) {
-          console.error("[payments] sub onError", err);
-          alert("No se pudo completar la suscripción. Intenta de nuevo.");
-        }
-      }).render(node);
-    });
-  }
-
-  // === PÁGINA DE SUSCRIPCIÓN ===
-  function hydrateSubscriptionPageIfPresent() {
-    // IDs esperados en subscription.html
-    const m = document.getElementById("pp-sub-monthly");
-    const a = document.getElementById("pp-sub-annual");
-    const lifetime = document.getElementById("pp-buy-lifetime");
-    if (!m && !a && !lifetime) return; // no estamos en esa página
-
-    if (m) renderSubscriptionButton({ mount: m, planId: CONFIG.plans.monthly, label: "monthly" });
-    if (a) renderSubscriptionButton({ mount: a, planId: CONFIG.plans.annual,  label: "annual"  });
-    if (lifetime) {
-      renderBuyButton({ mount: lifetime, amount: CONFIG.prices.lifetime, description: "Premium de por vida" });
-    }
-  }
-
-  // === PÁGINA DE VÍDEOS ===
-  function tryFindVideosGrid() {
-    for (const sel of CONFIG.videoGridSelectors) {
-      const n = document.querySelector(sel);
-      if (n) return n;
-    }
-    // fallback: el primer grid visible
-    return document.querySelector(".grid, [class*='grid']");
-  }
-
-  function findCandidateCardsIn(grid) {
-    if (!grid) return [];
-    for (const sel of CONFIG.videoCardSelectors) {
-      const list = grid.querySelectorAll(sel);
-      if (list && list.length) return Array.from(list);
-    }
-    return [];
-  }
-
-  function injectMiniButtonContainer(cardEl) {
-    // evita inyectar dos veces
-    if (cardEl.querySelector(".pp-mini")) return null;
-
-    const wrap = document.createElement("div");
-    wrap.className = "pp-mini";
-    wrap.innerHTML = `
-      <div class="pp-mini-price">0,30 €</div>
-      <div class="pp-mini-slot"></div>
-    `;
-    // posición: esquina inferior derecha
-    wrap.style.position = "absolute";
-    wrap.style.right = "8px";
-    wrap.style.bottom = "8px";
-    wrap.style.zIndex = "5";
-    wrap.style.display = "flex";
-    wrap.style.flexDirection = "column";
-    wrap.style.gap = "6px";
-    wrap.style.alignItems = "flex-end";
-
-    const price = wrap.querySelector(".pp-mini-price");
-    price.style.background = "rgba(0,0,0,.65)";
-    price.style.color = "#fff";
-    price.style.fontSize = "12px";
-    price.style.padding = "2px 6px";
-    price.style.borderRadius = "8px";
-
-    const slot = wrap.querySelector(".pp-mini-slot");
-    slot.style.transform = "scale(.85)"; // botón pequeño
-    slot.style.transformOrigin = "right bottom";
-
-    // El card debe ser posicionable
-    const s = getComputedStyle(cardEl);
-    if (s.position === "static") cardEl.style.position = "relative";
-
-    cardEl.appendChild(wrap);
-    return slot;
-  }
-
-  function hydrateVideosPageIfPresent() {
-    const grid = tryFindVideosGrid();
-    if (!grid) return;
-
-    // Bloque “suscríbete” si existe en vídeos (opcional)
-    const m = document.getElementById("pp-videos-sub-monthly");
-    const a = document.getElementById("pp-videos-sub-annual");
-    if (m) renderSubscriptionButton({ mount: m, planId: CONFIG.plans.monthly, label: "monthly" });
-    if (a) renderSubscriptionButton({ mount: a, planId: CONFIG.plans.annual,  label: "annual"  });
-
-    // Inyectar mini-botón en hasta 20 cards
-    const cards = findCandidateCardsIn(grid).slice(0, 20);
-    let rendered = 0;
-    cards.forEach((card) => {
-      const slot = injectMiniButtonContainer(card);
-      if (!slot) return;
-      renderBuyButton({
-        mount: slot,
-        amount: CONFIG.prices.videoSingle,
-        description: "Vídeo individual 0,30 €",
+  // Auto-init por página (si el body marca el data-page)
+  document.addEventListener('DOMContentLoaded', () => {
+    const page = (document.body.getAttribute('data-page') || '').trim();
+    if (page === 'subscription') {
+      mountSubscriptionButtons({
+        monthly : document.getElementById('pp-monthly'),
+        annual  : document.getElementById('pp-annual'),
+        lifetime: document.getElementById('pp-lifetime')
       });
-      rendered++;
-    });
-    log(`vídeos: mini-botones renderizados = ${rendered}`);
-  }
-
-  // === PÚBLICO ===
-  IBG.Payments = {
-    renderBuyButton,
-    renderSubscriptionButton,
-    hydrateSubscriptionPageIfPresent,
-    hydrateVideosPageIfPresent,
-    config: CONFIG,
-  };
-
-  // Auto-arranque en cada página
-  document.addEventListener("DOMContentLoaded", () => {
-    hydrateSubscriptionPageIfPresent();
-    hydrateVideosPageIfPresent();
+    } else {
+      // En fotos/vídeos montamos los mini-botones si existen contenedores
+      mountInlineBuyButtons();
+    }
   });
+
+  // Exponer por si quieres llamar manualmente
+  window.IBGPayments = {
+    loadPayPal,
+    mountSubscriptionButtons,
+    mountInlineBuyButtons,
+    PRICING: { PRICE_PHOTO, PRICE_VIDEO, PRICE_PACK10, PRICE_PACK5V }
+  };
 })();
