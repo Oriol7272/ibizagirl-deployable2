@@ -1,5 +1,5 @@
 /**
- * IbizaGirl.pics - Ads bootstrap (ExoClick + JuicyAds + PopAds)
+ * IbizaGirl.pics - Ads bootstrap (ExoClick + JuicyAds + EroAdvertising + PopAds)
  * Idempotente y tolerante a adblock. Si un proveedor falla, el resto sigue.
  */
 (() => {
@@ -9,25 +9,31 @@
   const LOG = (...a) => console.log("🧩 ads:", ...a);
   const ERR = (...a) => console.warn("⚠️ ads:", ...a);
 
-  // === TUS IDS REALES ===
+  // ======= IDS / CONFIG =======
   const EXO = {
-    zoneId: 5696328,                                   // ExoClick
+    zoneId: 5696328,
     script: "https://a.magsrv.com/ad-provider.js",
-    className: "eas6a97888e2"                          // clase que requiere Exo
+    className: "eas6a97888e2"
   };
 
   const JUICY = {
     script: "https://adserver.juicyads.com/js/jads.js",
     zones: {
       rightRail: 2092250,
-      inContent: 2092251,
-      footer:   209470,   // opcionales
-      spare:    209471,
-      legacy:   208469
+      inContent: 2092251
     }
   };
 
-  // PopAds (tu snippet adaptado 1:1)
+  // EroAdvertising (IDs que me pasaste)
+  const EROAD = {
+    pid: 152716,
+    spaceId: 8177575,
+    ctrlId: 798544,
+    loader: "https://go.easrv.cl/loadeactrl.go",
+    displayId: "sp_8177575_node"
+  };
+
+  // PopAds (snippet ofuscado, intacto)
   const POPADS = {
     run: () => {
       try {
@@ -36,7 +42,7 @@
     }
   };
 
-  // === helpers ===
+  // ======= helpers =======
   const loadScript = (src, {async=true,defer=true} = {}) =>
     new Promise((resolve,reject) => {
       if ([...document.scripts].some(s => s.src === src)) return resolve("already");
@@ -71,7 +77,7 @@
     document.head.appendChild(s);
   };
 
-  // === ExoClick ===
+  // ======= providers =======
   const mountExo = async (container) => {
     try {
       await loadScript(EXO.script, {async:true,defer:true});
@@ -86,7 +92,6 @@
     }
   };
 
-  // === JuicyAds ===
   let juicyLoaded = false;
   const mountJuicy = async (container, zoneId) => {
     try {
@@ -98,7 +103,6 @@
       ins.id = `ja${zoneId}`;
       ins.className = "ad-slot ad-slot--box";
       container.appendChild(ins);
-
       window.adsbyjuicy = window.adsbyjuicy || [];
       window.adsbyjuicy.push({ adzone: zoneId });
       LOG("Juicy ok (zone)", zoneId);
@@ -107,20 +111,43 @@
     }
   };
 
+  const mountEroad = async (container) => {
+    try {
+      // contenedor exacto que exige su SDK
+      const div = document.createElement("div");
+      div.id = EROAD.displayId;
+      div.className = "ad-slot ad-slot--box";
+      container.appendChild(div);
+
+      // patrón de queue oficial, con https
+      if (typeof window.eaCtrl === "undefined") {
+        window.eaCtrlRecs = [];
+        window.eaCtrl = { add: ag => window.eaCtrlRecs.push(ag) };
+        const src = `${EROAD.loader}?pid=${encodeURIComponent(EROAD.pid)}&spaceid=${encodeURIComponent(EROAD.spaceId)}&ctrlid=${encodeURIComponent(EROAD.ctrlId)}`;
+        await loadScript(src, {async:true,defer:true});
+      }
+      window.eaCtrl.add({ display: EROAD.displayId, sid: EROAD.spaceId, plugin: "banner" });
+      LOG("EroAdvertising ok (space)", EROAD.spaceId);
+    } catch (e) {
+      ERR("EroAdvertising", e);
+    }
+  };
+
+  // ======= boot =======
   document.addEventListener("DOMContentLoaded", async () => {
     cssOnce();
 
-    // contenedores (no tocamos tus HTML)
-    const topStrip    = ensure("ad-top-strip",    document.body, "afterbegin");
-    const footerStrip = ensure("ad-footer-strip", document.body, "beforeend");
-    const rail        = ensure("ad-right-rail",   document.body, "beforeend"); rail.classList.add("ad-rail");
+    // zonas visibles en desktop y mobile
+    const topStrip     = ensure("ad-top-strip",    document.body, "afterbegin");            // ExoClick
+    const rail         = ensure("ad-right-rail",   document.body, "beforeend"); rail.classList.add("ad-rail"); // Juicy
+    const midContent   = ensure("ad-mid-content",  document.body, "beforeend");             // EroAdvertising
+    const footerStrip  = ensure("ad-footer-strip", document.body, "beforeend");             // Juicy
 
-    // mezcla proveedores
-    await mountExo(topStrip);                              // Exo arriba
-    await mountJuicy(rail, JUICY.zones.rightRail);         // Juicy rail
-    await mountJuicy(footerStrip, JUICY.zones.inContent);  // Juicy footer
+    await mountExo(topStrip);
+    await mountJuicy(rail, JUICY.zones.rightRail);
+    await mountEroad(midContent);
+    await mountJuicy(footerStrip, JUICY.zones.inContent);
 
-    // popunder
     POPADS.run();
 
     LOG("inicializado");
