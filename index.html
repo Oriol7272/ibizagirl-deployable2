@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>IbizaGirl.pics — Home</title>
 
-  <link rel="stylesheet" href="/css/site.css?v=20250822111537">
-  <link rel="stylesheet" href="/css/blur.css?v=20250822111537">
+  <link rel="stylesheet" href="/css/site.css?v=20250822131252">
+  <link rel="stylesheet" href="/css/blur.css?v=20250822131252">
 
-  <!-- Datos (llenan pools) -->
+  <!-- Pools (contenido) -->
   <script src="/content-data1.js"></script>
   <script src="/content-data2.js"></script>
   <script src="/content-data3.js"></script>
@@ -17,15 +17,12 @@
   <script src="/content-data6.js"></script>
 
   <!-- Helpers -->
-  <script src="/js/unified-helpers.js?v=20250822111537"></script>
+  <script src="/js/unified-helpers.js?v=20250822131252"></script>
 
   <!-- Crisp -->
-  <script type="text/javascript">
-    window.$crisp = []; window.CRISP_WEBSITE_ID = "59e184b1-e679-4c93-b3ea-d60b63c1c04c";
-    (function(){var d=document;var s=d.createElement("script");
-      s.src="https://client.crisp.chat/l.js"; s.async=1;
-      d.head.appendChild(s);
-    })();
+  <script>
+    window.$crisp=[]; window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";
+    (function(){var d=document,s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.head.appendChild(s)})();
   </script>
 </head>
 <body>
@@ -48,75 +45,109 @@
   </footer>
 
   <script>
-  (function(){
-    const SVG_WAIT = 'data:image/svg+xml;utf8,' +
-      encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#777" font-size="24">Cargando…</text></svg>');
+    // ========= utilidades =========
+    const FALLBACKS = ['bikini5.webp','W9CK51Mronx3uf5hfQ3U.webp'];
+    const shuffle = arr => { for(let i=arr.length-1;i>0;i--){const j=(Math.random()*(i+1))|0; [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; };
+    const pick = (arr, n) => shuffle(arr.slice()).slice(0,n);
+    const isImgName = s => typeof s==='string' && /\.(webp|jpg|jpeg|png)$/i.test(s);
+    const isSimpleFile = s => isImgName(s) && !String(s).includes('/'); // sólo nombres (sin 'uncensored/...')
 
-    const HARDCODE_FALLBACK = ['bikini5.webp','W9CK51Mronx3uf5hfQ3U.webp']; // existen en /full/
+    const normalize = (name) => String(name).replace(/^full\/?/i,'');
+    const toSrc = (name) => '/full/'+normalize(name);
 
-    function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]} return a; }
-    function sample(arr, n){ return shuffle(arr.slice()).slice(0, n); }
-
-    function fromHelpers(count){
-      try{
-        if (window.U){
-          const pools = (U.pools || U.pool || {});
-          const full = pools.full || U.full || [];
-          if (Array.isArray(full) && full.length){
-            console.log('🖼️ index: U.pools.full →', full.length);
-            return sample(full, count);
-          }
-        }
-      }catch(e){ console.warn('helpers error', e); }
-      return null;
+    function loadCheck(src, timeoutMs=3500){
+      return new Promise(resolve=>{
+        const img = new Image();
+        let done=false;
+        const clean=()=>{if(done) return; done=true; img.onload=img.onerror=null;};
+        const timer=setTimeout(()=>{ clean(); resolve(false); }, timeoutMs);
+        img.onload=()=>{ clearTimeout(timer); clean(); resolve(true); };
+        img.onerror=()=>{ clearTimeout(timer); clean(); resolve(false); };
+        img.decoding='async'; img.loading='eager';
+        img.src=src + (src.includes('?')?'&':'?') + 'cb=' + Date.now();
+      });
     }
 
-    async function fromCdn(count){
-      try{
-        const u = new URL('/api/cdn', location.origin);
-        u.searchParams.set('prefix','full');   // sin barra
-        u.searchParams.set('limit', String(count));
-        u.searchParams.set('shuffle','1');
-        const res = await fetch(u, {credentials:'same-origin'});
-        if(!res.ok){ console.warn('cdn api status', res.status); return null; }
-        const json = await res.json();
-        let files = Array.isArray(json) ? json : (json.files || json.keys || json.items || []);
-        files = Array.isArray(files) ? files : [];
-        files = files.map(x => String(x).replace(/^full\//,''));
-        if (files.length){
-          console.log('🖼️ index: /api/cdn full →', files.length);
-          return files.slice(0, count);
+    function discoverFullCandidates(){
+      const cands = [];
+      try { if (Array.isArray(window.U?.pools?.full)) cands.push(window.U.pools.full); } catch(_){}
+      try { if (Array.isArray(window.UnifiedContentAPI?.pools?.full)) cands.push(window.UnifiedContentAPI.pools.full); } catch(_){}
+      try { const a = window.ContentAPI?.full || window.ContentAPI?.getFull?.(); if (Array.isArray(a)) cands.push(a); } catch(_){}
+
+      // Heurística de respaldo
+      try {
+        for (const k of Object.getOwnPropertyNames(window)) {
+          const v = window[k];
+          if (Array.isArray(v) && v.length>=50 && v.slice(0,20).every(isImgName)) cands.push(v);
         }
-      }catch(e){ console.warn('cdn api error', e); }
-      return null;
+      } catch(_){}
+
+      // Únicos por referencia
+      const uniq=[]; for(const a of cands) if(!uniq.includes(a)) uniq.push(a);
+      return uniq;
     }
 
-    async function getFull(count){
-      return fromHelpers(count) || await fromCdn(count) || HARDCODE_FALLBACK.slice(0, count);
+    async function chooseFullPool(){
+      const cands = discoverFullCandidates();
+      for (const cand of cands) {
+        // nos quedamos sólo con nombres simples (sin rutas tipo 'uncensored/...')
+        const simple = cand.filter(isSimpleFile).map(normalize);
+        if (simple.length < 10) continue;
+
+        // validamos 2 de 3 cargas reales con <img> (no usa CORS)
+        const test = pick(simple, Math.min(3, simple.length));
+        const results = await Promise.all(test.map(n => loadCheck(toSrc(n))));
+        const ok = results.filter(Boolean).length;
+        if (ok >= Math.min(2, results.length)) {
+          console.log('🖼️ index: FULL elegido →', simple.length, 'items');
+          return simple;
+        }
+      }
+      console.warn('⚠️ index: ningún pool FULL válido encontrado; usando fallbacks');
+      return FALLBACKS;
     }
 
     async function render(){
+      // Limpia SW y caches por si acaso
+      try{
+        if('serviceWorker' in navigator){
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map(r=>r.unregister()));
+        }
+        if (window.caches) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k=>caches.delete(k)));
+        }
+      }catch(_){}
+
+      const pool = await chooseFullPool();
+      const files = pick(pool, 20);
+      console.log('index: render con', files.length, 'items');
+
       const grid = document.getElementById('grid');
       grid.innerHTML = '';
-      const files = await getFull(20);
-      console.log('🖼️ index: render con', files.length, 'items');
-      for (const name of files){
-        const fig = document.createElement('figure');
-        fig.className = 'card';
+
+      for (const name of files) {
+        const fig = document.createElement('figure'); fig.className='card';
         const img = document.createElement('img');
-        img.loading = 'lazy';
-        img.decoding = 'async';
-        img.src = '/full/' + name;
-        img.alt = 'IbizaGirl';
-        img.onerror = () => { img.onerror = null; img.src = SVG_WAIT; };
+        img.alt='IbizaGirl'; img.loading='lazy'; img.decoding='async';
+
+        const src = toSrc(name);
+        img.src = src;
+
+        img.addEventListener('load', ()=>{ img.classList.add('loaded'); fig.classList.add('ready'); }, {once:true});
+        img.addEventListener('error', ()=>{ img.onerror=null; img.src='/full/'+FALLBACKS[0]; img.classList.add('loaded'); fig.classList.add('ready'); }, {once:true});
+
         fig.appendChild(img);
         grid.appendChild(fig);
       }
     }
 
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render);
-    else render();
-  })();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', render, {once:true});
+    } else {
+      render();
+    }
   </script>
 
   <!-- PopAds -->
