@@ -1,42 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <title>IbizaGirl.pics — VIP Subscription</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="icon" href="/favicon.ico">
-  <link rel="stylesheet" href="/css/site.css?v=20250822100731">
-  <link rel="stylesheet" href="/css/blur.css?v=20250822100731">
-  <!-- Crisp -->
-  <script>window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>IbizaGirl.pics — Suscripción</title>
+  <link rel="stylesheet" href="/css/site.css?v=20250822a"/>
+  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){var d=document,s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 </head>
 <body>
-  <header class="topbar">
+  <header class="header">
+    <div class="brand">IbizaGirl.pics</div>
     <nav class="nav">
-      <a href="/" class="logo">IbizaGirl.pics</a>
-      <a href="/premium.html">Uncensored</a>
-      <a href="/videos.html">Videos</a>
-      <a href="/subscription.html" class="active">VIP</a>
+      <a href="/">Gallery</a>
+      <a href="/premium.html">Premium</a>
+      <a href="/videos.html">Vídeos</a>
+      <a href="/subscription.html">Suscripción</a>
     </nav>
   </header>
 
-  <main class="container">
-    <h1>Suscripción VIP</h1>
-    <ul class="plans">
-      <li><strong>Mensual</strong> — €9.99</li>
-      <li><strong>Anual</strong> — €69.99</li>
-      <li><strong>Lifetime</strong> — €199.00</li>
-    </ul>
-    <p>Pago seguro con PayPal. Tras pagar, tendrás acceso a todo el contenido sin anuncios.</p>
-  </main>
+  <section class="hero">
+    <h1>Suscripción</h1>
+    <p>Acceso completo a fotos premium y vídeos. Paga con PayPal y se desbloquea al instante.</p>
+  </section>
 
-  <!-- PopAds -->
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));padding:16px;">
+    <div class="card" style="padding:14px;">
+      <h3>Mensual</h3>
+      <p>Acceso 30 días • Renovable</p>
+      <div id="paypal-monthly" style="margin-top:10px;"></div>
+    </div>
+    <div class="card" style="padding:14px;">
+      <h3>Anual</h3>
+      <p>Acceso 365 días • Renovable</p>
+      <div id="paypal-yearly" style="margin-top:10px;"></div>
+    </div>
+    <div class="card" style="padding:14px;">
+      <h3>Lifetime</h3>
+      <p>Pago único • Acceso permanente</p>
+      <div id="paypal-lifetime" style="margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <footer class="footer">© IbizaGirl.pics</footer>
+
+  <script src="/js/payments.js?v=20250822a"></script>
+  <script>
+    // Monta botones (importes de ejemplo; ajusta a tus precios)
+    IBGPay.mountButton('#paypal-monthly',  "14.99", "EUR");
+    IBGPay.mountButton('#paypal-yearly',   "59.99", "EUR");
+    IBGPay.mountButton('#paypal-lifetime', "99.00", "EUR");
+  </script>
+
+  <ins data-zoneid="5696328"></ins>
+  <script async src="https://a.magsrv.com/ad-provider.js"></script>
   <script type="text/javascript" data-cfasync="false">
-  (function(){var k=window,g="e494ffb82839a29122608e933394c091",b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=","d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz","d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){e=k.document.createElement("script");e.type="text/javascript";e.async=!0;var p=k.document.getElementsByTagName("script")[0];e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)}};if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()}})();
+  (function(){var k=window,g="e494ffb82839a29122608e933394c091",b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=","d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz","d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){e=k.document.createElement("script");e.type="text/javascript";e.async=!0;var p=k.document.getElementsByTagName("script")[0];e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)}};if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()})();
   </script>
 </body>
 </html>
-  <!-- PopAds -->
-  <script type="text/javascript" data-cfasync="false">
-(function(){var k=window,g="e494ffb82839a29122608e933394c091",b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=","d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz","d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){e=k.document.createElement("script");e.type="text/javascript";e.async=!0;var p=k.document.getElementsByTagName("script")[0];e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)}};if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()})();
-  </script>
