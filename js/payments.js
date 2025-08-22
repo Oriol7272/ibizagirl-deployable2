@@ -1,134 +1,102 @@
 (function () {
-  const STATE = {
-    cfg: null,
-    sdkLoaded: false,
-    hasSubs: false
-  };
-
-  const $all = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  const log = (...a) => console.log("💳 paypal:", ...a);
+  const warn = (...a) => console.warn("⚠️ paypal:", ...a);
+  const err = (...a) => console.error("❌ paypal:", ...a);
 
   async function fetchConfig() {
     try {
-      const r = await fetch('/api/config', { cache: 'no-store' });
-      if (!r.ok) throw new Error('config fetch failed');
+      const r = await fetch("/api/paypal");
+      if (!r.ok) throw new Error("http " + r.status);
       return await r.json();
     } catch (e) {
-      console.error('❌ /api/config error', e);
-      return { paypalClientId: "", paypalPlans: { monthly: "", annual: "", lifetime: "" } };
+      err("config fail", e);
+      return null;
     }
   }
 
-  function addScriptOnce(src) {
+  function loadSdk(clientId, currency) {
     return new Promise((resolve, reject) => {
-      const base = src.split('?')[0];
-      if (document.querySelector(`script[src^="${base}"]`)) return resolve();
-      const s = document.createElement('script');
-      s.src = src;
+      if (!clientId) return reject(new Error("missing clientId"));
+      if (window.paypal) return resolve(window.paypal);
+      const s = document.createElement("script");
+      s.src =
+        "https://www.paypal.com/sdk/js" +
+        `?client-id=${encodeURIComponent(clientId)}` +
+        `&currency=${encodeURIComponent(currency || "EUR")}` +
+        `&intent=capture&enable-funding=card,venmo&components=buttons`;
       s.async = true;
-      s.onload = () => resolve();
-      s.onerror = (e) => reject(e);
+      s.onload = () => resolve(window.paypal);
+      s.onerror = () => reject(new Error("sdk load error"));
       document.head.appendChild(s);
     });
   }
 
-  async function loadSDK(clientId, intent) {
-    const params = new URLSearchParams({
-      'client-id': clientId,
-      components: 'buttons',
-      currency: 'EUR',
-      'enable-funding': 'card',
-      vault: 'true',
-      intent
-    });
-    const url = `https://www.paypal.com/sdk/js?${params.toString()}`;
-    await addScriptOnce(url);
-  }
+  function renderButtons(paypal, cfg) {
+    const map = [
+      { sel: "#pp-monthly",  price: "3.99",  type: "subscription", plan: cfg.planMonthly },
+      { sel: "#pp-annual",   price: "24.99", type: "subscription", plan: cfg.planAnnual  },
+      { sel: "#pp-lifetime", price: "49.99", type: "one-time" }
+    ];
 
-  function mountSingleButtons() {
-    if (!window.paypal) return;
-    const targets = $all('[data-paypal="single"] .paypal-button, [data-paypal="single"].paypal-button');
-    targets.forEach(el => {
-      const host = el.closest('[data-paypal="single"]') || el;
-      const product = host.getAttribute('data-product') || 'Item';
-      const price = parseFloat(host.getAttribute('data-price') || '0.10').toFixed(2);
+    map.forEach((m) => {
+      const el = document.querySelector(m.sel);
+      if (!el) return;
 
+      const opts = {
+        style: { layout: "vertical", color: "gold", shape: "rect", label: "paypal" },
+        onError: (e) => err("render error", m.sel, e),
+      };
+
+      // Suscripción real si hay plan_id, si no pago único fallback
+      if (m.type === "subscription" && m.plan) {
+        opts.createSubscription = function (data, actions) {
+          return actions.subscription.create({ plan_id: m.plan });
+        };
+        opts.onApprove = function (data, actions) {
+          log("subscription approved", data);
+          try { localStorage.setItem("ibg_sub_active", "1"); } catch (e) {}
+          alert("¡Gracias! Suscripción activada.");
+        };
+      } else {
+        // Pago único (abre PayPal siempre)
+        opts.createOrder = function (data, actions) {
+          return actions.order.create({
+            purchase_units: [
+              {
+                amount: { value: m.price, currency_code: cfg.currency || "EUR" },
+                description: `IbizaGirl ${m.sel.replace("#pp-","")}`,
+              },
+            ],
+            application_context: { shipping_preference: "NO_SHIPPING" },
+          });
+        };
+        opts.onApprove = function (data, actions) {
+          return actions.order.capture().then(function (details) {
+            log("order captured", details);
+            try { localStorage.setItem("ibg_unlock_all", "1"); } catch (e) {}
+            alert("¡Gracias! Pago completado.");
+          });
+        };
+      }
       try {
-        window.paypal.Buttons({
-          style: { layout: 'horizontal', height: 35, label: 'pay' },
-          createOrder: (_, actions) => actions.order.create({
-            intent: 'CAPTURE',
-            application_context: { shipping_preference: 'NO_SHIPPING' },
-            purchase_units: [{ amount: { currency_code: 'EUR', value: price }, description: product }]
-          }),
-          onApprove: async (_, actions) => {
-            try {
-              const capture = await actions.order.capture();
-              console.log('✅ Pago OK', product, price, capture);
-              alert(`Pago completado: ${product} (${price} €)`);
-            } catch (e) {
-              console.error('❌ capture error', e);
-              alert('No se pudo completar el pago.');
-            }
-          },
-          onError: (err) => console.error('❌ PayPal single error', err)
-        }).render(el);
+        paypal.Buttons(opts).render(el);
       } catch (e) {
-        console.warn('⚠️ paypal render single', e);
+        err("buttons render fail", m.sel, e);
       }
     });
   }
 
-  function mountSubscriptions(cfg) {
-    if (!window.paypal) return;
-    const map = cfg?.paypalPlans || {};
-    const hosts = $all('[data-paypal="subscription"]');
-    hosts.forEach(host => {
-      const key = host.getAttribute('data-plan') || '';
-      const explicit = host.getAttribute('data-plan-id') || '';
-      const plan_id = explicit || map[key] || '';
-
-      const target = host.querySelector('.paypal-button') || host;
-      if (!plan_id) {
-        target.innerHTML = '<div class="pay-error">⚠️ Falta plan_id</div>';
-        console.warn('⚠️ Falta plan_id para', key);
-        return;
-      }
-
-      try {
-        window.paypal.Buttons({
-          style: { layout: 'vertical', label: 'subscribe', height: 40 },
-          createSubscription: (_, actions) => actions.subscription.create({ plan_id }),
-          onApprove: (data) => {
-            console.log('✅ Suscripción OK', data);
-            alert('¡Suscripción activa!');
-          },
-          onError: (err) => console.error('❌ PayPal subs error', err)
-        }).render(target);
-      } catch (e) {
-        console.warn('⚠️ paypal render subs', e);
-      }
-    });
-  }
-
-  async function main() {
-    STATE.cfg = await fetchConfig();
-    if (!STATE.cfg?.paypalClientId) {
-      console.error('❌ Falta PAYPAL_CLIENT_ID');
+  (async function start() {
+    const cfg = await fetchConfig();
+    if (!cfg || !cfg.clientId) {
+      warn("clientId no disponible. Revisa /api/paypal y las env vars en Vercel.");
       return;
     }
-
-    STATE.hasSubs = $all('[data-paypal="subscription"]').length > 0;
-    // Si hay suscripciones en la página, cargamos el SDK con intent=subscription (vale también para single)
-    await loadSDK(STATE.cfg.paypalClientId, STATE.hasSubs ? 'subscription' : 'capture');
-    STATE.sdkLoaded = true;
-
-    mountSingleButtons();
-    if (STATE.hasSubs) mountSubscriptions(STATE.cfg);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', main);
-  } else {
-    main();
-  }
+    try {
+      const paypal = await loadSdk(cfg.clientId, cfg.currency || "EUR");
+      renderButtons(paypal, cfg);
+    } catch (e) {
+      err("sdk fail", e);
+    }
+  })();
 })();

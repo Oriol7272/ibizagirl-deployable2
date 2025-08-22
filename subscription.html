@@ -1,105 +1,58 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>IbizaGirl — Suscripciones</title>
-
-  <!-- (opcional) fallback si /api/config no está -->
-  <meta name="paypal-client-id" content="">
-
-  <link rel="stylesheet" href="/css/site.css?v=20250822183234">
-  <link rel="stylesheet" href="/css/blur.css?v=20250822183234">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Suscripciones — IbizaGirl.pics</title>
+  <link rel="stylesheet" href="/css/site.css?v=20250822184904"/>
 </head>
-<body>
+<body class="dark">
   <header class="topbar">
-    <a href="/" class="brand">IbizaGirl.pics</a>
     <nav class="nav">
+      <a href="/" class="brand">IbizaGirl.pics</a>
+      <div class="spacer"></div>
       <a href="/">Home</a>
       <a href="/premium.html">Premium</a>
-      <a href="/videos.html">Videos</a>
-      <a href="/subscription.html" class="active">Suscripción</a>
+      <a href="/videos.html">Vídeos</a>
+      <a class="active" href="/subscription.html">Suscripción</a>
     </nav>
   </header>
 
-  <main class="container narrow">
+  <main class="container">
     <h1>Suscripciones</h1>
     <p>Desbloquea todas las fotos y vídeos sin límites.</p>
 
-    <div id="paypal-sdk-loader"></div>
+    <section class="pricing-grid">
+      <article class="card">
+        <h2>Mensual</h2>
+        <p class="price"><strong>3,99 €</strong> / mes</p>
+        <div id="pp-monthly" class="pp-slot"></div>
+        <p class="note">Cancela cuando quieras.</p>
+      </article>
 
-    <section class="plans">
-      <div class="plan">
-        <h3>Mensual</h3>
-        <p class="price">3,99 € / mes</p>
-        <div id="paypal-monthly" class="paypal-button"></div>
-      </div>
+      <article class="card">
+        <h2>Anual</h2>
+        <p class="price"><strong>24,99 €</strong> / año</p>
+        <div id="pp-annual" class="pp-slot"></div>
+        <p class="note">12 meses, mejor precio.</p>
+      </article>
 
-      <div class="plan">
-        <h3>Anual</h3>
-        <p class="price">24,99 € / año</p>
-        <div id="paypal-yearly" class="paypal-button"></div>
-      </div>
-
-      <div class="plan highlight">
-        <h3>Lifetime</h3>
-        <p class="price">49,99 € pago único</p>
-        <div id="paypal-lifetime" class="paypal-button"></div>
-      </div>
+      <article class="card">
+        <h2>Lifetime</h2>
+        <p class="price"><strong>49,99 €</strong> pago único</p>
+        <div id="pp-lifetime" class="pp-slot"></div>
+        <p class="note">Acceso permanente.</p>
+      </article>
     </section>
 
-    <p class="muted">Tras el pago, refresca la página si no ves todo desbloqueado al instante.</p>
+    <p class="tiny">Tras el pago, refresca la página si no ves todo desbloqueado al instante.</p>
   </main>
 
-<!-- === ADS START === -->
-<div class="ads-row" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin:16px 0;">
-  <div class="ad-slot" id="ad-exo-1"></div>
-  <div class="ad-slot" id="ad-juicy-1">
-    <ins class="adsbyjuicy" data-adzone="2092250" style="display:inline-block;width:300px;height:262px"></ins>
-  </div>
-  <div class="ad-slot" id="ad-ero-1"></div>
-</div>
+  <footer class="footer">
+    <span>© IbizaGirl.pics</span>
+  </footer>
 
-<!-- ExoClick -->
-<script async src="https://a.magsrv.com/ad-provider.js"></script>
-<script>
-try{ (AdProvider=window.AdProvider||[]).push({"serve":{"siteId":5696328}}); }
-catch(e){ console.warn('exo err', e); }
-</script>
-
-<!-- JuicyAds -->
-<script async src="https://adserver.juicyads.com/js/jads.js"></script>
-<script>
-try{ (window.adsbyjuicy = window.adsbyjuicy || []).push({"adzone":2092250}); }
-catch(e){ console.warn('juicy err', e); }
-</script>
-
-<!-- EroAdvertising -->
-<script async src="https://www.premiumvertising.com/zS/bwdvf/ttabletop.min.js"></script>
-<script async src="https://www.premiumvertising.com/LmkfhR/tW/ptabletop.min.js"></script>
-
-<!-- PopAds -->
-<script type="text/javascript" data-cfasync="false">
-(function(){
-  var k=window,g="e494ffb82839a29122608e933394c091",
-      b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],
-      t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz",
-         "ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=",
-         "d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz",
-         "d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],
-      r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){
-        e=k.document.createElement("script");e.type="text/javascript";e.async=!0;
-        var p=k.document.getElementsByTagName("script")[0];
-        e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;
-        e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};
-        a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)
-      }};
-  if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()}
-})();
-</script>
-<!-- === ADS END === -->
-
-
-  <script src="/js/payments.js?v=20250822184223"></script>
+  <!-- Loader pagos -->
+  <script src="/js/payments.js?v=20250822184904"></script>
 </body>
 </html>
