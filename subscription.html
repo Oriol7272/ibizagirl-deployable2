@@ -1,90 +1,71 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>IbizaGirl.pics — Suscripción</title>
-  <link rel="stylesheet" href="/css/site.css?v=20250822153546">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>IbizaGirl — Suscripción</title>
+
+  <link rel="stylesheet" href="/css/site.css?v=20250822175115">
   <style>
-    .container{max-width:980px;margin:0 auto;padding:16px}
-    .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:12px}
-    .plan{background:#121212;border-radius:16px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.35)}
-    .plan h3{margin:.2rem 0 .6rem}
-    .p{opacity:.8}
-    .price{font-size:28px;font-weight:700;margin:.4rem 0 1rem}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+    .card{background:#111;border:1px solid #333;border-radius:14px;padding:16px}
+    .price{font-size:22px;margin:8px 0}
+    .features{font-size:14px;opacity:.9;line-height:1.6}
+    .btn{border:none;background:#ffc439;border-radius:999px;padding:8px 12px;cursor:pointer}
+    .slot{margin-top:10px}
   </style>
 </head>
 <body>
-  <main class="container">
-    <h1>Elige tu suscripción</h1>
-    <p class="p">Pago seguro con PayPal. Acceso a todo el contenido premium.</p>
+<header class="site-header">
+  <h1>Suscripción</h1>
+  <nav class="nav">
+    <a href="/">Home</a>
+    <a href="/premium.html">Premium</a>
+    <a href="/videos.html">Videos</a>
+    <a href="/subscription.html" aria-current="page">Suscripción</a>
+  </nav>
+</header>
 
-    <div class="plans">
-      <div class="plan">
-        <h3>Mensual</h3>
-        <div class="price">€<span id="p-monthly">9.99</span>/mes</div>
-        <div id="pp-monthly"></div>
-      </div>
-      <div class="plan">
-        <h3>Anual</h3>
-        <div class="price">€<span id="p-annual">59.99</span>/año</div>
-        <div id="pp-annual"></div>
-      </div>
-      <div class="plan">
-        <h3>Lifetime</h3>
-        <div class="price">€<span id="p-life">119.99</span> pago único</div>
-        <div id="pp-life"></div>
-      </div>
+<main class="container">
+  <p>Elige tu plan para desbloquear <strong>Premium</strong> y <strong>Videos</strong>:</p>
+  <div class="cards">
+    <div class="card">
+      <h3>Monthly</h3>
+      <div class="price">€14.99</div>
+      <ul class="features">
+        <li>Acceso Premium + Videos</li>
+        <li>Soporte prioritario</li>
+        <li>Renovación mensual</li>
+      </ul>
+      <button class="btn" onclick="IBG_Pay && IBG_Pay.open('monthly','Monthly Subscription')">PayPal</button>
+      <div class="slot"></div>
     </div>
+    <div class="card">
+      <h3>Annual</h3>
+      <div class="price">€59.99</div>
+      <ul class="features">
+        <li>Acceso Premium + Videos</li>
+        <li>Ahorro vs mensual</li>
+        <li>Renovación anual</li>
+      </ul>
+      <button class="btn" onclick="IBG_Pay && IBG_Pay.open('annual','Annual Subscription')">PayPal</button>
+      <div class="slot"></div>
+    </div>
+    <div class="card">
+      <h3>Lifetime</h3>
+      <div class="price">€149</div>
+      <ul class="features">
+        <li>Acceso de por vida</li>
+        <li>Sin renovaciones</li>
+      </ul>
+      <button class="btn" onclick="IBG_Pay && IBG_Pay.open('lifetime','Lifetime Access')">PayPal</button>
+      <div class="slot"></div>
+    </div>
+  </div>
+</main>
 
-    <p class="p" style="margin-top:16px">Tras el pago, recibirás acceso en tu email.</p>
-  </main>
+<footer class="site-footer"><small>© IbizaGirl.pics</small></footer>
 
-  <!-- datasets para leer pricing/planIds si existen -->
-  <script src="/content-data1.js"></script>
-  <!-- PayPal Smart Buttons (LIVE). Reemplaza la moneda si deseas otra. -->
-  <script>
-    // Puedes definir estos ids en content-data1.js -> CONFIG.paypal.planIds
-    const PLAN_IDS = (window.CONFIG && window.CONFIG.paypal && window.CONFIG.paypal.planIds) || {
-      monthly: "RELLENA_PLAN_ID_MENSUAL",
-      annual:  "RELLENA_PLAN_ID_ANUAL",
-      life:    "" // para pago único usamos order.create
-    };
-    const PRICES = (window.CONFIG && window.CONFIG.pricing) || { monthly:9.99, annual:59.99, lifetime:119.99 };
-    document.getElementById('p-monthly').textContent = (PRICES.monthly||9.99).toFixed(2);
-    document.getElementById('p-annual').textContent  = (PRICES.annual||59.99).toFixed(2);
-    document.getElementById('p-life').textContent    = (PRICES.lifetime||119.99).toFixed(2);
-  </script>
-  <script src="https://www.paypal.com/sdk/js?client-id=<?php echo getenv('PAYPAL_CLIENT_ID') ?: 'RELLENA_CLIENT_ID' ?>&vault=true&intent=subscription&currency=EUR" data-sdk-integration-source="button-factory"></script>
-  <script>
-    // Suscripciones (mensual / anual) por plan_id
-    if (PLAN_IDS.monthly && PLAN_IDS.monthly!=='RELLENA_PLAN_ID_MENSUAL'){
-      paypal.Buttons({
-        style:{shape:'pill',color:'gold',layout:'vertical',label:'subscribe'},
-        createSubscription: function(data, actions) {
-          return actions.subscription.create({ plan_id: PLAN_IDS.monthly });
-        },
-        onApprove: function(data) { alert('¡Gracias! ID subscripción: '+data.subscriptionID); }
-      }).render('#pp-monthly');
-    }
-    if (PLAN_IDS.annual && PLAN_IDS.annual!=='RELLENA_PLAN_ID_ANUAL'){
-      paypal.Buttons({
-        style:{shape:'pill',color:'gold',layout:'vertical',label:'subscribe'},
-        createSubscription: function(data, actions) {
-          return actions.subscription.create({ plan_id: PLAN_IDS.annual });
-        },
-        onApprove: function(data) { alert('¡Gracias! ID subscripción: '+data.subscriptionID); }
-      }).render('#pp-annual');
-    }
-    // Pago único (lifetime) – order.create
-    const lifeAmount = (PRICES.lifetime||119.99).toFixed(2);
-    paypal.Buttons({
-      style:{shape:'pill',color:'gold',layout:'vertical',label:'paypal'},
-      createOrder: function(data, actions){
-        return actions.order.create({ purchase_units: [{ amount: { value: lifeAmount, currency_code: 'EUR' }, description: 'Lifetime access — IbizaGirl.pics' }] });
-      },
-      onApprove: function(data, actions){ return actions.order.capture().then(function(details){ alert('Pago recibido: '+details.id); }); }
-    }).render('#pp-life');
-  </script>
+<script src="/js/payments.js?v=20250822175115"></script>
 </body>
 </html>
