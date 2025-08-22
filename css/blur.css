@@ -1,12 +1,10 @@
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
-.card{position:relative;overflow:hidden;border-radius:14px;background:#000}
-.thumb{width:100%;display:block;aspect-ratio:3/4;object-fit:cover;background:#111}
-.censored{filter:blur(14px) contrast(1.05) saturate(0.9)}
-.badges{position:absolute;left:8px;bottom:8px;display:flex;gap:8px;align-items:center}
-.badge{background:rgba(0,0,0,.65);color:#fff;padding:3px 6px;font-size:.72rem;border-radius:8px;line-height:1;display:inline-flex;align-items:center;gap:4px;border:1px solid rgba(255,255,255,.2)}
-.badge.price{font-weight:700;opacity:.9}
-.badge.pay{cursor:pointer;border:none}
-.new-ribbon{position:absolute;top:8px;right:-6px;transform:rotate(20deg);background:#e91e63;color:#fff;font-weight:700;padding:2px 6px;font-size:.7rem}
-.paypal-ctr{position:absolute;inset:auto 8px 8px auto;background:rgba(0,0,0,.85);padding:8px;border-radius:10px;display:none}
-.paypal-ctr.visible{display:block}
-
+.thumb-wrap { position: relative; overflow: hidden; }
+.thumb.censored { filter: blur(12px); transform: scale(1.02); }
+.badge { position:absolute; top:8px; left:8px; padding:3px 6px; border-radius:6px; font-size:11px; line-height:1; color:#fff; background:#ff0066; }
+.badge-new { background:#19b700; }
+.unlock-btn { position:absolute; right:8px; bottom:8px; display:inline-flex; align-items:center; gap:6px; padding:6px 8px; border-radius:10px; border:0; cursor:pointer; background:rgba(0,0,0,.65); color:#fff; backdrop-filter: blur(4px); }
+.unlock-btn .i { width:18px; height:18px; display:inline-block; }
+.unlock-btn .price { font-size:11px; opacity:.95; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; }
+.card { background:#111; border-radius:14px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.25); }
+.thumb { width:100%; height:auto; display:block; background:#000; }

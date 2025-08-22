@@ -3,105 +3,113 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>IbizaGirl.pics — Galería</title>
-
-  <link rel="stylesheet" href="/css/blur.css">
-
-  <!-- Config del front: trae PAYPAL_CLIENT_ID desde backend -->
-  <script>
-    window.PAYPAL_CLIENT_ID = "";
-    fetch('/api/config').then(r=>r.json()).then(j=>{
-      if (j && j.paypalClientId) window.PAYPAL_CLIENT_ID = j.paypalClientId;
-    });
-    window.__ROTATOR_MODE__ = "daily";  /* 'daily' o 'reload' */
-    window.CRISP_WEBSITE_ID = "TU_CRISP_WEBSITE_ID";
-  </script>
-
-  <script src="/js/chatbot.js" defer></script>
-  <meta name="description" content="Galería y contenido premium de IbizaGirl.pics">
+  <title>IbizaGirl.pics — Home</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="css/site.css?v=20250821e">
+  <link rel="stylesheet" href="css/blur.css?v=20250821e">
+  <script defer src="js/chatbot.js?v=20250821e"></script>
+  <script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
 </head>
 <body>
-  <header style="padding:16px 12px;">
-    <h1 style="margin:0;">IbizaGirl.pics</h1>
-    <p style="opacity:.8;margin:.25rem 0 0">Galería diaria y contenido premium</p>
+  <header>
+    <nav>
+      <div class="brand">🌴 IbizaGirl.pics</div>
+      <a href="index.html">Home</a>
+      <a href="premium.html">Uncensored</a>
+      <a href="videos.html">Videos</a>
+      <a href="subscription.html">Subscribe</a>
+    </nav>
   </header>
 
-  <main style="padding:12px; max-width:1200px; margin:0 auto;">
-
-    <!-- ===================== ANUNCIOS (COMPLETO) ===================== -->
-    <!-- EXOCLICK (magsrv) — zoneid 5696328 -->
-    <section style="margin: 14px 0;">
-      <script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
-      <ins class="eas6a97888e2" data-zoneid="5696328"></ins>
-      <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
+  <main>
+    <section class="section">
+      <div class="ad-row">
+        <ins class="eas6a97888e2" data-zoneid="5696328" style="display:block;width:100%;min-height:90px"></ins>
+        <script>(AdProvider=window.AdProvider||[]).push({"serve":{}});</script>
+      </div>
     </section>
 
-    <!-- JUICYADS — 5 zonas -->
-    <section style="margin: 14px 0;">
-      <script async src="https://adserver.juicyads.com/js/jads.js"></script>
-      <ins id="2092250"></ins>
-      <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 2092250});</script>
-      <ins id="2092251"></ins>
-      <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 2092251});</script>
-      <ins id="208469"></ins>
-      <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 208469});</script>
-      <ins id="209470"></ins>
-      <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 209470});</script>
-      <ins id="209471"></ins>
-      <script>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone': 209471});</script>
+    <section class="section">
+      <h2>Gallery (20 daily random)</h2>
+      <div id="gallery-grid" class="grid"></div>
     </section>
 
-    <!-- EROADVERTISING (pega aquí su snippet oficial cuando lo tengas)
-    <section style="margin: 14px 0;">
-      <script async src="https://syndication.eroadvertising.com/show_ad.js?zone=8177575"></script>
-    </section>
-    -->
-
-    <!-- POPADS — script íntegro -->
-    <section style="margin: 14px 0;">
-      <script type="text/javascript" data-cfasync="false">
-      /*<![CDATA[/* */
-      (function(){var p=window,j="e494ffb82839a29122608e933394c091",d=[["siteId",595+467*6*350+302+4245161],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],v=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL3pTL2J3ZHZmL3R0YWJsZXRvcC5taW4uanM=","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvaG1kYi5taW4uanM=","d3d3Lmh6Z2Vua3ZkLmNvbS9ObmtBaC9mQy96dGFibGV0b3AubWluLmpz","d3d3LmpzZ2Zyend0eWdmLmNvbS9qbWRiLm1pbi5qcw=="],e=-1,a,y,m=function(){clearTimeout(y);e++;if(v[e]&&!(1781539757000<(new Date).getTime()&&1<e)){a=p.document.createElement("script");a.type="text/javascript";a.async=!0;var s=p.document.getElementsByTagName("script")[0];a.src="https://"+atob(v[e]);a.crossOrigin="anonymous";a.onerror=m;a.onload=function(){clearTimeout(y);p[j.slice(0,16)+j.slice(0,16)]||m()};y=setTimeout(m,5E3);s.parentNode.insertBefore(a,s)}};if(!p[j]){try{Object.freeze(p[j]=d)}catch(e){}m()}})();
-      /*]]>/* */
-      </script>
-    </section>
-    <!-- =================== FIN ANUNCIOS =================== -->
-
-    <!-- CONTENIDO -->
-    <section style="margin: 18px 0;">
-      <h2>Gallery (20 de /full)</h2>
-      <div id="galleryGrid"></div>
+    <section class="section">
+      <h2>Uncensored (100 random, 30% NEW)</h2>
+      <div id="uncensored-grid" class="grid"></div>
     </section>
 
-    <section style="margin: 18px 0;">
-      <h2>Fotos Premium (100 de /uncensored)</h2>
-      <div id="uncensoredGrid"></div>
+    <section class="section">
+      <h2>Videos (20 random)</h2>
+      <div id="videos-grid" class="grid"></div>
     </section>
 
-    <section style="margin: 18px 0;">
-      <h2>Vídeos Premium (20 de /uncensored-videos)</h2>
-      <div id="videosGrid"></div>
-    </section>
+    <footer>© IbizaGirl.pics</footer>
   </main>
 
-  <!-- Pools (ajusta a los que tengas) -->
-  <script src="/content-data1.js"></script>
-  <script src="/content-data2.js"></script>
-  <script src="/content-data3.js"></script>
-  <script src="/content-data4.js"></script>
-  <script src="/content-data5.js"></script>
-  <script src="/content-data6.js"></script>
-
-  <!-- Lógica -->
-  <script src="/js/daily-rotator.js"></script>
-  <script src="/js/payments.js"></script>
-
-  <!-- SVG icono candado -->
   <svg width="0" height="0" style="position:absolute">
     <symbol id="icon-lock" viewBox="0 0 24 24">
       <path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm0 2a3 3 0 0 1 3 3v3H9V7a3 3 0 0 1 3-3Z"/>
     </symbol>
   </svg>
+
+  <!-- Tus módulos de datos -->
+  <script src="content-data1.js"></script>
+  <script src="content-data2.js"></script>
+  <script src="content-data3.js"></script>
+  <script src="content-data4.js"></script>
+  <script src="content-data5.js"></script>
+  <script src="content-data6.js"></script>
+
+  <script src="js/payments.js?v=20250821e"></script>
+  <script>
+  // ======= render usando UnifiedContentAPI =======
+  const U = window.UnifiedContentAPI;
+  function todaySeed(){ const d=new Date(); const k=`${d.getUTCFullYear()}-${d.getUTCMonth()+1}-${d.getUTCDate()}`; let s=0; for(const ch of k) s=(s*31+ch.charCodeAt(0))>>>0; return s; }
+  function prng(seed){ let a=seed>>>0; return ()=>{ a+=0x6D2B79F5; let t=Math.imul(a^(a>>>15),1|a); t^=t+Math.imul(t^(t>>>7),61|t); return ((t^(t>>>14))>>>0)/4294967296; }; }
+  function shuffleTake(arr,n,seed){ const a=arr.slice(0); const rnd=prng(seed); for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]]} return a.slice(0,n); }
+  function srcOf(x){ return x.src || x.url || x.image || x.path || x; }
+
+  function cardImage(item, {censored=false, price="€0.10"}={}){
+    const wrap = document.createElement('div'); wrap.className='card thumb-wrap';
+    const img = document.createElement('img'); img.className='thumb' + (censored?' censored':''); img.loading='lazy'; img.decoding='async'; img.src=srcOf(item); wrap.appendChild(img);
+    const meta=document.createElement('div'); meta.className='meta'; meta.textContent=item.title||item.caption||''; wrap.appendChild(meta);
+    if (item.isNew){ const b=document.createElement('div'); b.className='badge badge-new'; b.textContent='NEW'; wrap.appendChild(b); }
+    if (censored){ const btn=document.createElement('button'); btn.className='unlock-btn'; btn.innerHTML=`<svg class="i"><use href="#icon-lock"></use></svg><span class="price">${price}</span>`; btn.addEventListener('click',()=>window.IBG_PAY?.buyItem?.({src:img.src,amount:0.10,currency:'EUR'})); wrap.appendChild(btn); }
+    return wrap;
+  }
+  function cardVideo(item, {price="€0.30"}={}){
+    const wrap=document.createElement('div'); wrap.className='card thumb-wrap';
+    const v=document.createElement('video'); v.className='thumb censored'; v.poster='img/video-poster-blur.svg'; v.muted=true; v.loop=true; v.playsInline=true;
+    const s=document.createElement('source'); s.type='video/mp4'; s.src=srcOf(item); v.appendChild(s); wrap.appendChild(v);
+    const meta=document.createElement('div'); meta.className='meta'; meta.textContent=item.title||'video'; wrap.appendChild(meta);
+    const btn=document.createElement('button'); btn.className='unlock-btn'; btn.innerHTML=`<svg class="i"><use href="#icon-lock"></use></svg><span class="price">${price}</span>`; btn.addEventListener('click',()=>window.IBG_PAY?.buyItem?.({src:s.src,amount:0.30,currency:'EUR',kind:'video'})); wrap.appendChild(btn);
+    return wrap;
+  }
+
+  (function render(){
+    if (!U){ console.error('UnifiedContentAPI no disponible'); return; }
+    const seed=todaySeed();
+
+    // 20 de full
+    const full = U.getFull();                      // <- usa tus nuevos content-data
+    const g20 = shuffleTake(full, 20, seed);
+    const gEl = document.getElementById('gallery-grid');
+    g20.forEach(it=>gEl.appendChild(cardImage(it,{censored:false})));
+
+    // 100 premium con 30% NEW
+    const prem = U.getPremiumPhotos();
+    const u100 = shuffleTake(prem, 100, seed^0x9e3779);
+    const n = Math.floor(u100.length*0.3); for(let i=0;i<n;i++) u100[i].isNew=true;
+    const uEl = document.getElementById('uncensored-grid');
+    u100.forEach(it=>uEl.appendChild(cardImage(it,{censored:true,price:'€0.10'})));
+
+    // 20 videos
+    const vids = U.getPremiumVideos();
+    const v20 = shuffleTake(vids, 20, seed^0xC001C0DE);
+    const vEl = document.getElementById('videos-grid');
+    v20.forEach(it=>vEl.appendChild(cardVideo(it,{price:'€0.30'})));
+  })();
+  </script>
 </body>
 </html>
-

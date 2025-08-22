@@ -1,98 +1,132 @@
-// js/daily-rotator.js
-(() => {
-  // 1) Unimos los pools de content-data*.js (debes cargarlos antes en <script>).
-  // Admite arrays de strings (rutas) o de objetos { id, kind, src }.
-  const all = [];
-  for (const k of Object.keys(window)) {
-    if (/^CONTENT_DATA/i.test(k) && Array.isArray(window[k])) all.push(...window[k]);
+(function() {
+  const MODE = (window.__ROTATOR_MODE__ || 'daily').toLowerCase();
+
+  // PRNG determinista por día (o aleatorio por recarga)
+  function prng(seed) {
+    let a = seed >>> 0;
+    return function() {
+      a += 0x6D2B79F5;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
   }
-  if (!all.length) { console.warn('No se detectaron pools en content-data*.js'); return; }
-
-  const normItem = (x) => {
-    if (typeof x === 'string') {
-      const src = x;
-      const id = src.split('/').pop();
-      const kind = /\.(mp4|webm)$/i.test(src) ? 'video' : 'image';
-      const price = kind === 'image' ? 0.10 : 0.30; // precios por defecto
-      return { id, kind, src, price };
+  function seedForMode() {
+    if (MODE === 'daily') {
+      const now = new Date();
+      const key = `${now.getUTCFullYear()}-${now.getUTCMonth()+1}-${now.getUTCDate()}`;
+      let s = 0; for (let i=0;i<key.length;i++) s = (s*31 + key.charCodeAt(i)) >>> 0;
+      return s;
     }
-    // objeto ya formado
-    const price = x.price ?? (x.kind === 'video' ? 0.30 : 0.10);
-    return { ...x, price };
-  };
+    return (Math.random()*0xFFFFFFFF) >>> 0;
+  }
+  const rnd = prng(seedForMode());
 
-  const pool = all.map(normItem);
+  function euro(n) { return n.toLocaleString('es-ES',{style:'currency',currency:'EUR',minimumFractionDigits:2}); }
+  function base(p){ return (p||'').split('/').pop(); }
 
-  // 2) Semilla diaria (YYYY-MM-DD) o aleatoria por recarga
-  const mode = window.__ROTATOR_MODE__ || 'daily'; // 'daily' | 'reload'
-  const seedStr = mode === 'daily'
-    ? new Date().toISOString().slice(0,10)
-    : String(Math.random());
-
-  // PRNG determinista
-  function xmur3(str){for(var i=0,h=1779033703^str.length;i<str.length;i++)h=Math.imul(h^str.charCodeAt(i),3432918353),h=h<<13|h>>>19;return function(){h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return (h^h>>>16)>>>0}}
-  function mulberry32(a){return function(){var t=a+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296}}
-  const rand = mulberry32(xmur3(seedStr)());
-
-  function shuffled(arr) {
-    const a = arr.slice();
-    for (let i=a.length-1;i>0;i--) {
-      const j = Math.floor(rand()*(i+1));
-      [a[i],a[j]]=[a[j],a[i]];
-    }
-    return a;
+  // Cookies
+  function readCookies(){
+    const h=document.cookie||'', out={};
+    h.split(';').forEach(p=>{ const [k,...v]=p.trim().split('='); if(!k) return; out[decodeURIComponent(k)]=decodeURIComponent(v.join('=')||''); });
+    return out;
+  }
+  function hasAccess(src){
+    const c = readCookies();
+    if (c.ibg_sub_ui && /^(monthly|annual|lifetime)$/.test(c.ibg_sub_ui)) return true;
+    const list = (c.ibg_items_ui||'').split(',').map(s=>s.trim()).filter(Boolean);
+    return list.includes(base(src));
   }
 
-  const s = shuffled(pool);
+  // Pools desde content-data*.js
+  function normalizeItem(x){ return (typeof x==='string') ? {src:x} : (x && x.src ? x : null); }
+  function discover() {
+    const buckets=[];
+    for (const k in window){
+      try {
+        const v = window[k];
+        if (Array.isArray(v) && v.length){
+          const n = normalizeItem(v[0]);
+          if (n && typeof n.src==='string') buckets.push(v.map(normalizeItem).filter(Boolean));
+        }
+      } catch(_){}
+    }
+    const flat = buckets.flat();
+    const full  = flat.filter(o => /\/full\//.test(o.src));
+    const unc   = flat.filter(o => /\/uncensored\//.test(o.src));
+    const vids  = flat.filter(o => /\/uncensored-videos\//.test(o.src) || /\.(mp4|webm)$/i.test(o.src));
+    return { full, unc, vids };
+  }
 
-  // 3) Selecciones
-  const gallery = s.filter(o => /\/full\//i.test(o.src)).slice(0,20);
-  const uncensored = s.filter(o => /\/uncensored\//i.test(o.src)).slice(0,100);
-  const videos = s.filter(o => /\/uncensored-videos\//i.test(o.src)).slice(0,20);
+  function sampleN(arr,n){
+    const src=arr.slice(), out=[];
+    n=Math.min(n,src.length);
+    for(let i=0;i<n;i++){ const idx=Math.floor(rnd()*src.length); out.push(src.splice(idx,1)[0]); }
+    return out;
+  }
+  function pickWithNew(arr,total,pctNew=0.3){
+    const chosen=sampleN(arr,total);
+    const target=Math.floor(chosen.length*pctNew);
+    const marks=new Set();
+    while(marks.size<target && marks.size<chosen.length) marks.add(Math.floor(rnd()*chosen.length));
+    return chosen.map((it,i)=>({...it,isNew:marks.has(i)}));
+  }
 
-  // 30% NEW en uncensored
-  const newCount = Math.floor(uncensored.length * 0.30);
-  for (let i=0;i<newCount;i++) uncensored[i].isNew = true;
+  function renderGrid(containerId, items, opts){
+    const root=document.getElementById(containerId); if(!root) return;
+    root.className='grid';
+    root.innerHTML = items.map(item=>{
+      const unlocked = hasAccess(item.src);
+      const isVideo  = (opts.kind==='video');
+      const price    = isVideo ? 0.30 : 0.10;
+      const priceText= euro(price).replace('.',',');
 
-  // 4) Render helpers
-  const money = (n) => (Number(n).toFixed(2)).replace('.', ',') + '€';
+      const mediaLocked = isVideo
+        ? `<video class="thumb censored" preload="metadata" muted playsinline poster="/img/video-poster-blur.svg"></video>`
+        : `<img class="thumb censored" src="${item.preview || '/img/preview-blur.webp'}" loading="lazy" alt="">`;
 
-  const cardHTML = (o) => {
-    const isPay = /\/uncensored(-videos)?\//i.test(o.src);
-    const cls = ['thumb', isPay ? 'censored' : ''].join(' ').trim();
-    const pay = isPay ? `
-      <div class="badges">
-        <span class="badge price">${money(o.price)}</span>
-        <button class="badge pay" onclick="window.renderPayButton('${o.id}','${o.kind}','${o.src}', ${o.price})">
-          <svg class="icon" viewBox="0 0 24 24"><use href="#icon-lock"/></svg> Pagar
-        </button>
-      </div>
-      <div id="pp-${o.id}" class="paypal-ctr"></div>
-    ` : '';
-    const ribbon = o.isNew ? `<span class="new-ribbon">NEW</span>` : '';
-    return `
-      <div class="card">
-        ${ribbon}
-        <img class="${cls}" src="${o.src}" alt="${o.id}" loading="lazy">
-        ${pay}
-      </div>
-    `;
-  };
+      const mediaUnlocked = isVideo
+        ? `<video class="thumb" src="${item.src}" preload="metadata" playsinline controls poster="" onmouseenter="this.play()" onmouseleave="this.pause()"></video>`
+        : `<img class="thumb" src="${item.src}" loading="lazy" alt="">`;
 
-  const byId = (id) => document.getElementById(id);
-  const inject = (id, items) => {
-    const el = byId(id);
-    if (!el) return;
-    el.classList.add('grid');
-    el.innerHTML = items.map(cardHTML).join('');
-  };
+      const newBadge = item.isNew ? `<span class="badge badge-new">NEW</span>` : '';
+      const lockBtn  = unlocked ? '' : `
+        <button class="unlock-btn" data-kind="${opts.kind||'photo'}" data-src="${item.src}" data-amount="${price}">
+          <svg class="i i-lock"><use href="#icon-lock"></use></svg>
+          <span class="price">${priceText}</span>
+        </button>`;
 
-  // 5) Pintar en contenedores (crea divs con estos IDs en tus páginas)
-  inject('galleryGrid', gallery);         // 20 de /full/
-  inject('uncensoredGrid', uncensored);   // 100 de /uncensored/ (30% NEW)
-  inject('videosGrid', videos);           // 20 de /uncensored-videos/
+      return `
+        <div class="card">
+          <div class="thumb-wrap">
+            ${unlocked ? mediaUnlocked : mediaLocked}
+            ${newBadge}
+            ${lockBtn}
+          </div>
+        </div>`;
+    }).join('');
 
-  // Exponer por si necesitas depurar
-  window.IBG_CURRENT = { gallery, uncensored, videos, seed: seedStr, mode };
+    // Bind pagos
+    root.querySelectorAll('.unlock-btn').forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        e.preventDefault();
+        const src = btn.getAttribute('data-src');
+        const amt = parseFloat(btn.getAttribute('data-amount')||'0.10');
+        if (window.IBG_PAY?.buyItem) window.IBG_PAY.buyItem({ src, amount: amt, currency:'EUR', kind: opts.kind||'photo' });
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const { full, unc, vids } = discover();
+    const gallery20 = sampleN(full, 20);
+    const photos100 = pickWithNew(unc, 100, 0.30);
+    const videos20  = pickWithNew(vids, 20, 0.30).map(v=>({...v, kind:'video'}));
+
+    window.IBG_CURRENT = { gallery:gallery20, uncensored:photos100, videos:videos20 };
+
+    renderGrid('galleryGrid',    gallery20, { censored:false, kind:'photo' });
+    renderGrid('uncensoredGrid', photos100, { censored:true,  kind:'photo' });
+    renderGrid('videosGrid',     videos20,  { censored:true,  kind:'video' });
+  });
 })();
-
