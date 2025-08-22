@@ -1,33 +1,15 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>IbizaGirl.pics — Gallery</title>
-  <link rel="stylesheet" href="/css/site.css?v=20250822a"/>
-  <link rel="stylesheet" href="/css/blur.css?v=20250822a"/>
-  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){var d=document,s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
-</head>
-<body>
-  <header class="header">
-    <div class="brand">IbizaGirl.pics</div>
-    <nav class="nav">
-      <a href="/">Gallery</a>
-      <a href="/premium.html">Premium</a>
-      <a href="/videos.html">Vídeos</a>
-      <a href="/subscription.html">Suscripción</a>
-    </nav>
-  </header>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IbizaGirl.pics — Home</title>
 
-  <section class="hero">
-    <h1>Galería pública (rotación diaria)</h1>
-    <p>20 fotos aleatorias del pool <em>full</em>. Actualiza o vuelve mañana para otras.</p>
-  </section>
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/site.css?v=20250822b">
+  <link rel="stylesheet" href="/css/blur.css?v=20250822b">
 
-  <main class="grid" id="grid-full"></main>
-  <footer class="footer">© IbizaGirl.pics</footer>
-
-  <!-- data sources -->
+  <!-- Datos de contenido -->
   <script src="/content-data1.js"></script>
   <script src="/content-data2.js"></script>
   <script src="/content-data3.js"></script>
@@ -35,25 +17,100 @@
   <script src="/content-data5.js"></script>
   <script src="/content-data6.js"></script>
 
-  <script src="/js/unified-helpers.js?v=20250822a"></script>
-  <script>
-  // SOLO full
-  window.addEventListener('DOMContentLoaded', ()=>{
-    const full = (window.IBG?.pools?.full)||[];
-    const pick = window.IBG.shufflePick(full, 20, 'index-full');
-    const items = pick.map(f=>({ src:`/full/${f}`, href:'/premium.html', price:'', payIcon:false, type:'image' }));
-    window.IBG.renderGrid('#grid-full', items, { blur:false, lockWhenNotPaid:false });
-    console.log('🖼️ index render: full items', items.length);
-  });
-  </script>
+  <!-- Helpers unificados -->
+  <script src="/js/unified-helpers.js?v=20250822b"></script>
 
-  <!-- ExoClick banner simple (no rompe si falla) -->
-  <ins data-zoneid="5696328"></ins>
-  <script async src="https://a.magsrv.com/ad-provider.js"></script>
+  <!-- CRISP -->
+  <script type="text/javascript">
+    window.$crisp = [];
+    window.CRISP_WEBSITE_ID = "59e184b1-e679-4c93-b3ea-d60b63c1c04c";
+    (function(){var d=document;var s=d.createElement("script");
+      s.src="https://client.crisp.chat/l.js"; s.async=1;
+      d.getElementsByTagName("head")[0].appendChild(s);
+    })();
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <h1>IbizaGirl.pics</h1>
+    <nav>
+      <a href="/premium.html">Premium</a>
+      <a href="/videos.html">Vídeos</a>
+      <a href="/subscription.html">Suscripción</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h2>Galería (20 aleatorias de FULL)</h2>
+    <div id="grid" class="grid"></div>
+  </main>
+
+  <footer class="site-footer">
+    <small>© IbizaGirl.pics</small>
+  </footer>
+
+  <!-- Render Home: SOLO /full/ (evitamos 404 de /uncensored/) -->
+  <script>
+  (function(){
+    const DATA_FALLBACK = 'data:image/svg+xml;utf8,' +
+      encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#777" font-size="24">Cargando…</text></svg>');
+
+    function pickFull(count){
+      if (window.U && typeof U.pick === 'function') {
+        const list = U.pick('full', count);
+        console.log('🖼️ index render: full items', list.length);
+        return list;
+      }
+      // fallback: intenta leer del módulo de públicas
+      const arr = (window.PublicContent && Array.isArray(window.PublicContent.files)) ? window.PublicContent.files : [];
+      const shuffled = arr.slice().sort(()=>Math.random()-0.5);
+      const cut = shuffled.slice(0, count);
+      console.log('🖼️ index render (fallback):', cut.length);
+      return cut;
+    }
+
+    function render(){
+      const files = pickFull(20);
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+
+      files.forEach(name=>{
+        const fig = document.createElement('figure');
+        fig.className = 'card';
+
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.src = '/full/' + name;
+        img.alt = 'IbizaGirl';
+        img.onerror = () => { img.onerror = null; img.src = DATA_FALLBACK; };
+
+        fig.appendChild(img);
+        grid.appendChild(fig);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', render);
+    } else {
+      render();
+    }
+  })();
+  </script>
 
   <!-- PopAds -->
   <script type="text/javascript" data-cfasync="false">
-  (function(){var k=window,g="e494ffb82839a29122608e933394c091",b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=","d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz","d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){e=k.document.createElement("script");e.type="text/javascript";e.async=!0;var p=k.document.getElementsByTagName("script")[0];e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)}};if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()})();
+  (function(){
+    var k=window,g="e494ffb82839a29122608e933394c091",
+      b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],
+      t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz",
+         "ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=",
+         "d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz",
+         "d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],
+      r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){e=k.document.createElement("script");e.type="text/javascript";e.async=!0;var p=k.document.getElementsByTagName("script")[0];e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)}};
+    if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()}
+  })();
   </script>
 </body>
 </html>
+
