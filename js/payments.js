@@ -1,91 +1,157 @@
-(function(){
-  const IBG = window.IBG_Pay = window.IBG_Pay || {};
-  let _clientId = null;
-  let _sdkLoaded = false;
+/**
+ * payments.js — PayPal (LIVE) para:
+ *  - Suscripciones: mensual/anual/lifetime (simulamos lifetime como pago único)
+ *  - Pagos por ítem (foto 0.10€, video 0.30€)
+ *  - Packs: 10 fotos 0.80€, 5 vídeos 1.00€
+ *
+ * Requiere que en el HTML exista un <div id="paypal-sdk-loader"></div> para cargar el SDK UNA vez.
+ * Y contenedores con data-product, data-price, etc.
+ */
 
-  async function getClientId(){
-    if (_clientId) return _clientId;
-    try{
-      const r = await fetch('/api/config', {cache:'no-store'});
-      const j = await r.json();
-      _clientId = j.paypalClientId || j.PAYPAL_CLIENT_ID || null;
-    }catch(_){}
-    return _clientId;
+(function () {
+  const ST = {
+    sdkLoaded: false,
+    sdkPromise: null,
+    clientId: null,
+    currency: 'EUR',
+  };
+
+  // 1) Descarga config (clientId) del backend si existe, o del meta
+  async function loadConfig() {
+    // Opción A: /api/config devuelve { paypalClientId: "..." }
+    try {
+      const r = await fetch('/api/config', { cache: 'no-store' });
+      if (r.ok) {
+        const j = await r.json();
+        if (j && j.paypalClientId) {
+          ST.clientId = j.paypalClientId;
+          return;
+        }
+      }
+    } catch (_) {}
+    // Opción B: meta-tag fallback
+    const meta = document.querySelector('meta[name="paypal-client-id"]');
+    if (meta) ST.clientId = meta.getAttribute('content');
   }
 
-  function loadSDK(clientId){
-    if (window.paypal) { _sdkLoaded = true; return Promise.resolve(); }
-    return new Promise((res,rej)=>{
-      const s=document.createElement('script');
-      s.src=`https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&components=buttons&currency=EUR`;
-      s.onload=()=>{_sdkLoaded=true;res();};
-      s.onerror=()=>res(); // no bloquear UI
+  // 2) Cargar SDK PayPal 1 sola vez
+  function ensurePayPalSDK(params = '') {
+    if (ST.sdkPromise) return ST.sdkPromise;
+    ST.sdkPromise = new Promise(async (resolve, reject) => {
+      if (!ST.clientId) await loadConfig();
+      if (!ST.clientId) {
+        console.error('PayPal: clientId no disponible');
+        return reject(new Error('clientId missing'));
+      }
+      const qs = params || `client-id=${encodeURIComponent(ST.clientId)}&currency=${ST.currency}&intent=capture&components=buttons`;
+      const src = `https://www.paypal.com/sdk/js?${qs}`;
+      if (window.paypal) {
+        ST.sdkLoaded = true;
+        return resolve(window.paypal);
+      }
+      const s = document.createElement('script');
+      s.src = src;
+      s.async = true;
+      s.onload = () => { ST.sdkLoaded = true; resolve(window.paypal); };
+      s.onerror = () => reject(new Error('No se pudo cargar PayPal SDK'));
       document.head.appendChild(s);
     });
+    return ST.sdkPromise;
   }
 
-  function ensureModal(){
-    let wrap = document.getElementById('pp-modal');
-    if (wrap) return wrap;
-    wrap = document.createElement('div');
-    wrap.id='pp-modal';
-    wrap.style.cssText='position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:9999;';
-    wrap.innerHTML = `
-      <div style="background:#111;border:1px solid #333;border-radius:12px;padding:16px;max-width:420px;width:92%">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <strong>Unlock Premium</strong>
-          <button id="pp-close" style="border:none;background:#222;color:#eee;border-radius:8px;padding:4px 8px">Cerrar</button>
-        </div>
-        <div id="pp-plans" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
-          <button data-plan="monthly"  style="flex:1;border:1px solid #444;background:#1a1a1a;color:#eee;border-radius:10px;padding:8px">Monthly<br><small>€14.99</small></button>
-          <button data-plan="annual"   style="flex:1;border:1px solid #444;background:#1a1a1a;color:#eee;border-radius:10px;padding:8px">Annual<br><small>€59.99</small></button>
-          <button data-plan="lifetime" style="flex:1;border:1px solid #444;background:#1a1a1a;color:#eee;border-radius:10px;padding:8px">Lifetime<br><small>€149</small></button>
-        </div>
-        <div id="pp-slot"></div>
-        <p id="pp-msg" style="font-size:12px;opacity:.7;margin-top:8px"></p>
-      </div>`;
-    document.body.appendChild(wrap);
-    wrap.querySelector('#pp-close').onclick=()=>wrap.remove();
-    wrap.querySelectorAll('#pp-plans [data-plan]').forEach(b=>{
-      b.onclick=()=>IBG.open(b.dataset.plan);
-    });
-    return wrap;
-  }
-
-  const PLAN_AMOUNTS = { monthly:'14.99', annual:'59.99', lifetime:'149.00' };
-
-  IBG.open = async function(plan='monthly', description='Premium Access'){
-    const wrap = ensureModal();
-    const msg = wrap.querySelector('#pp-msg');
-    msg.textContent = 'Cargando PayPal…';
-
-    const clientId = await getClientId();
-    if (!clientId){ msg.textContent='No se pudo cargar PayPal (client-id).'; return; }
-
-    await loadSDK(clientId);
-    if (!window.paypal){ msg.textContent='SDK PayPal no disponible.'; return; }
-
-    const slot = wrap.querySelector('#pp-slot');
-    slot.innerHTML='';
-    const amount = PLAN_AMOUNTS[plan] || PLAN_AMOUNTS.monthly;
-
+  // 3) Crear botón genérico (pago único)
+  async function renderSinglePayButton({ container, description, value }) {
+    const paypal = await ensurePayPalSDK();
     paypal.Buttons({
-      style:{ layout:'vertical', color:'gold', shape:'pill', label:'paypal' },
-      createOrder: (data, actions)=>{
+      style: { layout: 'horizontal', height: 40 },
+      createOrder: function (data, actions) {
         return actions.order.create({
-          purchase_units:[{
-            amount:{ value: amount, currency_code:'EUR' },
+          purchase_units: [{
+            amount: { currency_code: ST.currency, value: value.toFixed(2) },
             description
           }]
         });
       },
-      onApprove: async (data, actions)=>{
-        try{ await actions.order.capture(); }catch(_){}
-        slot.innerHTML = '<div style="padding:8px;background:#0f5132;color:#d1e7dd;border-radius:8px">✅ Pago completado. ¡Gracias!</div>';
-      },
-      onError: ()=>{ slot.innerHTML='<div style="padding:8px;background:#51210f;color:#f7d7cd;border-radius:8px">❌ Error en el pago.</div>'; }
-    }).render(slot);
+      onApprove: async function (data, actions) {
+        try {
+          const details = await actions.order.capture();
+          console.log('Pago capturado:', details);
+          // Desbloqueo simple client-side:
+          container.dispatchEvent(new CustomEvent('paid', { detail: { description, value, order: details } }));
+        } catch (e) {
+          console.error('Error al capturar:', e);
+          alert('No se pudo completar el pago.');
+        }
+      }
+    }).render(container);
+  }
 
-    msg.textContent='';
+  // 4) Inicializar contenedores "data-paypal"
+  async function initPayNowButtons() {
+    const nodes = document.querySelectorAll('[data-paypal="single"]');
+    nodes.forEach(async (el) => {
+      const price = parseFloat(el.getAttribute('data-price') || '0');
+      const label = el.getAttribute('data-label') || 'Compra';
+      const product = el.getAttribute('data-product') || 'Item';
+      const container = el.querySelector('.paypal-button') || el;
+      await renderSinglePayButton({
+        container,
+        description: `${product} — ${label}`,
+        value: price
+      });
+    });
+  }
+
+  // 5) Suscripciones
+  // Nota: PayPal suscripciones reales usan "subscriptions" componente y planes.
+  // Aquí, implementamos:
+  //  - Mensual/Anual: pago único simulado + storage "isSubscriber" con expiración aproximada.
+  //  - Lifetime: pago único y flag permanente.
+  async function initSubscriptions() {
+    const monthly = document.querySelector('#paypal-monthly');
+    const yearly  = document.querySelector('#paypal-yearly');
+    const life    = document.querySelector('#paypal-lifetime');
+
+    async function make(container, { description, value, subType }) {
+      await renderSinglePayButton({
+        container,
+        description,
+        value
+      });
+      container.addEventListener('paid', (ev) => {
+        try {
+          const now = Date.now();
+          if (subType === 'monthly') {
+            localStorage.setItem('ibg_sub_until', String(now + 30*24*3600*1000));
+          } else if (subType === 'yearly') {
+            localStorage.setItem('ibg_sub_until', String(now + 365*24*3600*1000));
+          } else if (subType === 'lifetime') {
+            localStorage.setItem('ibg_sub_life', '1');
+          }
+          localStorage.setItem('ibg_is_sub', '1');
+          alert('¡Suscripción activada! Refresca para desbloquear todo.');
+        } catch (e) { console.warn(e); }
+      });
+    }
+
+    if (monthly) await make(monthly, { description: 'Suscripción mensual', value: 3.99, subType: 'monthly' });
+    if (yearly)  await make(yearly,  { description: 'Suscripción anual',   value: 24.99, subType: 'yearly'  });
+    if (life)    await make(life,    { description: 'Acceso lifetime',     value: 49.99, subType: 'lifetime' });
+  }
+
+  // 6) API pública
+  window.IBGPayments = {
+    ensurePayPalSDK,
+    initPayNowButtons,
+    initSubscriptions,
   };
+
+  // 7) Auto-init si hay data-paypal o contenedores de suscripción
+  document.addEventListener('DOMContentLoaded', async () => {
+    const needsSDK = document.querySelector('[data-paypal="single"], #paypal-monthly, #paypal-yearly, #paypal-lifetime');
+    if (!needsSDK) return;
+    const loader = document.getElementById('paypal-sdk-loader') || document.body;
+    await ensurePayPalSDK(); // carga sdk
+    await Promise.all([initPayNowButtons(), initSubscriptions()]);
+  });
 })();

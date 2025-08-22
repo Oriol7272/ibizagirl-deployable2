@@ -1,71 +1,56 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>IbizaGirl — Suscripción</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IbizaGirl — Suscripciones</title>
 
-  <link rel="stylesheet" href="/css/site.css?v=20250822175115">
-  <style>
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
-    .card{background:#111;border:1px solid #333;border-radius:14px;padding:16px}
-    .price{font-size:22px;margin:8px 0}
-    .features{font-size:14px;opacity:.9;line-height:1.6}
-    .btn{border:none;background:#ffc439;border-radius:999px;padding:8px 12px;cursor:pointer}
-    .slot{margin-top:10px}
-  </style>
+  <!-- (opcional) fallback si /api/config no está -->
+  <meta name="paypal-client-id" content="">
+
+  <link rel="stylesheet" href="/css/site.css?v=20250822181232">
+  <link rel="stylesheet" href="/css/blur.css?v=20250822181232">
 </head>
 <body>
-<header class="site-header">
-  <h1>Suscripción</h1>
-  <nav class="nav">
-    <a href="/">Home</a>
-    <a href="/premium.html">Premium</a>
-    <a href="/videos.html">Videos</a>
-    <a href="/subscription.html" aria-current="page">Suscripción</a>
-  </nav>
-</header>
+  <header class="topbar">
+    <a href="/" class="brand">IbizaGirl.pics</a>
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/premium.html">Premium</a>
+      <a href="/videos.html">Videos</a>
+      <a href="/subscription.html" class="active">Suscripción</a>
+    </nav>
+  </header>
 
-<main class="container">
-  <p>Elige tu plan para desbloquear <strong>Premium</strong> y <strong>Videos</strong>:</p>
-  <div class="cards">
-    <div class="card">
-      <h3>Monthly</h3>
-      <div class="price">€14.99</div>
-      <ul class="features">
-        <li>Acceso Premium + Videos</li>
-        <li>Soporte prioritario</li>
-        <li>Renovación mensual</li>
-      </ul>
-      <button class="btn" onclick="IBG_Pay && IBG_Pay.open('monthly','Monthly Subscription')">PayPal</button>
-      <div class="slot"></div>
-    </div>
-    <div class="card">
-      <h3>Annual</h3>
-      <div class="price">€59.99</div>
-      <ul class="features">
-        <li>Acceso Premium + Videos</li>
-        <li>Ahorro vs mensual</li>
-        <li>Renovación anual</li>
-      </ul>
-      <button class="btn" onclick="IBG_Pay && IBG_Pay.open('annual','Annual Subscription')">PayPal</button>
-      <div class="slot"></div>
-    </div>
-    <div class="card">
-      <h3>Lifetime</h3>
-      <div class="price">€149</div>
-      <ul class="features">
-        <li>Acceso de por vida</li>
-        <li>Sin renovaciones</li>
-      </ul>
-      <button class="btn" onclick="IBG_Pay && IBG_Pay.open('lifetime','Lifetime Access')">PayPal</button>
-      <div class="slot"></div>
-    </div>
-  </div>
-</main>
+  <main class="container narrow">
+    <h1>Suscripciones</h1>
+    <p>Desbloquea todas las fotos y vídeos sin límites.</p>
 
-<footer class="site-footer"><small>© IbizaGirl.pics</small></footer>
+    <div id="paypal-sdk-loader"></div>
 
-<script src="/js/payments.js?v=20250822175115"></script>
+    <section class="plans">
+      <div class="plan">
+        <h3>Mensual</h3>
+        <p class="price">3,99 € / mes</p>
+        <div id="paypal-monthly" class="paypal-button"></div>
+      </div>
+
+      <div class="plan">
+        <h3>Anual</h3>
+        <p class="price">24,99 € / año</p>
+        <div id="paypal-yearly" class="paypal-button"></div>
+      </div>
+
+      <div class="plan highlight">
+        <h3>Lifetime</h3>
+        <p class="price">49,99 € pago único</p>
+        <div id="paypal-lifetime" class="paypal-button"></div>
+      </div>
+    </section>
+
+    <p class="muted">Tras el pago, refresca la página si no ves todo desbloqueado al instante.</p>
+  </main>
+
+  <script src="/js/payments.js?v=20250822181232"></script>
 </body>
 </html>
