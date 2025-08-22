@@ -1,51 +1,52 @@
 /**
- * IbizaGirl.pics — Ads bootstrap seguro.
- * No lanza excepciones aunque un proveedor falle (CORS, 401, etc.)
+ * ads.js — carga defensiva de proveedores (ExoClick, JuicyAds, EroAdvertising)
+ * Evita tocar window.adsbyjuicy hasta que la librería esté lista.
  */
 (function () {
-  'use strict';
+  const log = (...a) => console.log('[ads]', ...a);
 
-  function safe(fn) { try { fn(); } catch (e) { console.debug('[ads] silenciado:', e && e.message); } }
+  // ExoClick lo estás cargando con el provider (deja igual)
 
-  // ExoClick (ejemplo con zona)
-  safe(() => {
-    if (!window.mgads) {
+  // JuicyAds (zones que uses)
+  const JUICY_ZONES = [2092250, 2092251];
+
+  function loadJuicy() {
+    return new Promise((resolve) => {
+      if (window.juicyads) return resolve();
       const s = document.createElement('script');
-      s.src = 'https://a.magsrv.com/js/ad-provider.js';
+      s.src = 'https://adserver.juicyads.com/js/jads.js';
       s.async = true;
-      s.onload = () => {
-        try {
-          (window.mgads = window.mgads || []).push({ zoneid: 5696328 });
-          console.log('ads: ExoClick ok (zone) 5696328');
-        } catch (_) {}
-      };
+      s.onload = () => resolve();
+      s.onerror = () => resolve(); // no bloqueamos
       document.head.appendChild(s);
-    }
-  });
+    });
+  }
 
-  // EroAdvertising (usa tu snippet tal cual, pero dentro de try)
-  safe(() => {
-    const div = document.getElementById('sp_8177575_node');
-    if (div) {
-      if (typeof window.eaCtrl === 'undefined') {
-        window.eaCtrlRecs = [];
-        window.eaCtrl = { add: ag => window.eaCtrlRecs.push(ag) };
-        const js = document.createElement('script');
-        js.src = '//go.easrv.cl/loadeactrl.go?pid=152716&spaceid=8177575&ctrlid=798544';
-        document.head.appendChild(js);
-      }
-      window.eaCtrl.add({ display: 'sp_8177575_node', sid: 8177575, plugin: 'banner' });
-      console.log('ads: EroAdvertising ok (space) 8177575');
-    }
-  });
+  async function initJuicy() {
+    await loadJuicy();
+    try {
+      window.juicyads = window.juicyads || {};
+      window.juicyads.requestAds = window.juicyads.requestAds || function(){};
+      JUICY_ZONES.forEach((zone) => {
+        try {
+          // Creamos el div si no existe
+          const id = `juicy_${zone}`;
+          if (!document.getElementById(id)) {
+            const d = document.createElement('div');
+            d.id = id;
+            document.body.appendChild(d);
+          }
+          // jads requiere este formato de push
+          (window.adsbyjuicy = window.adsbyjuicy || []).push({ adzone: zone });
+        } catch (_) {}
+      });
+      log('Juicy ok (zones)', JUICY_ZONES.join(', '));
+    } catch (_e) {}
+  }
 
-  // JuicyAds (con guardas para que no falle si bloquea CORS)
-  safe(() => {
-    const s = document.createElement('script');
-    s.src = 'https://adserver.juicyads.com/js/jads.js';
-    s.async = true;
-    s.onload = () => { console.log('ads: Juicy loaded'); };
-    s.onerror = () => { console.log('ads: Juicy bloqueado (CORS)'); };
-    document.head.appendChild(s);
+  // EroAdvertising: pega tu snippet exactamente; se carga solo en donde pongas el <div>
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initJuicy();
   });
 })();

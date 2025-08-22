@@ -1,65 +1,81 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>IbizaGirl.pics — Videos</title>
-  <link rel="stylesheet" href="css/site.css?v=20250822213156">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Videos — IbizaGirl.pics</title>
+  <link rel="stylesheet" href="/css/site.css?v=20250822214334"/>
+  <link rel="stylesheet" href="/css/blur.css?v=20250822214334"/>
+  <style>
+    .grid { display:grid; gap:16px; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); }
+    .card { position:relative; background:#0f1216; border-radius:12px; overflow:hidden; box-shadow:0 0 0 1px #1e2430 inset; }
+    .card video, .card img { width:100%; height:180px; object-fit:cover; display:block; }
+    .meta { display:flex; justify-content:space-between; align-items:center; padding:10px; }
+    .price-badge { position:absolute; top:8px; left:8px; background:#000a; color:#fff; padding:2px 6px; border-radius:999px; font-size:12px; }
+    .mini { padding:8px; }
+    .paid { color:#7CFC9A; font-weight:600; }
+  </style>
+  <script src="/content-data1.js"></script>
+  <script src="/content-data5.js"></script>
+  <script src="/content-data6.js"></script>
+  <script src="/js/payments.js?v=20250822214334"></script>
 </head>
-<body data-page="videos" class="page page-videos">
-  <header class="topbar"><nav><a href="/">Home</a> <a href="/premium">Premium</a> <span class="active">Videos</span> <a href="/subscription">Suscripción</a></nav></header>
+<body>
+  <header class="topbar">
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/premium.html">Premium</a>
+      <a class="active" href="/videos.html">Videos</a>
+      <a href="/subscription.html">Suscripción</a>
+    </nav>
+  </header>
 
   <main class="container">
-    <h1>Vídeos (20 aleatorios)</h1>
-    <div id="grid" class="grid grid-videos"></div>
+    <h1>Videos</h1>
+    <div id="grid" class="grid"></div>
   </main>
 
-  <!-- Contenido -->
-  <script src="content-data1.js"></script>
-  <script src="content-data5.js"></script>
-  <script src="content-data6.js"></script>
-
-  <!-- Helper y pagos -->
-  <script src="js/unified-helpers.js?v=20250822213156"></script>
-  <script src="js/payments.js?v=20250822213156"></script>
-
   <script>
-    (function() {
-      'use strict';
-      const grid = document.getElementById('grid');
-      const pool = Array.isArray(window.PREMIUM_VIDEOS_POOL) ? window.PREMIUM_VIDEOS_POOL.slice() : [];
-      if (!pool.length) { grid.innerHTML = '<p>No hay vídeos disponibles.</p>'; return; }
+    (async function () {
+      try {
+        const api = window.UnifiedContentAPI || window.ContentAPI;
+        const list = (api && api.getVideos ? api.getVideos() : (window.PREMIUM_VIDEOS_POOL || [])) || [];
+        const grid = document.getElementById('grid');
 
-      // 20 aleatorios
-      for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
-      const pick = pool.slice(0, 20);
+        list.slice(0, 1000).forEach(v => {
+          const url = v.url || v.src || v.href || v;
+          const name = v.name || v.title || '';
+          const card = document.createElement('article');
+          card.className = 'card';
+          card.setAttribute('data-video-card','1');
 
-      const frag = document.createDocumentFragment();
-      pick.forEach(name => {
-        const href = `/uncensored-videos/${name}`;
-        const card = document.createElement('article');
-        card.className = 'card video-card';
+          const img = document.createElement('img');
+          // Si tuvieras thumbs, sustitúyelo por el thumb real
+          img.src = '/img/placeholder-video.webp';
+          img.alt = name || 'video';
 
-        card.innerHTML = `
-          <a class="thumb thumb-video" href="${href}" target="_blank" rel="noopener">
-            <div class="play">▶</div>
-            <div class="meta">
-              <span>0:30 – 4K</span>
-            </div>
-          </a>
-          <div class="card-actions">
-            <div class="pp-mini" data-pp-price="0.30" data-pp-desc="Vídeo ${name} (0,30€)"></div>
-          </div>
-        `;
-        frag.appendChild(card);
-      });
-      grid.appendChild(frag);
+          const price = document.createElement('div');
+          price.className = 'price-badge';
+          price.textContent = '0,30 €';
 
-      // Montar mini botones (payments.js)
-      if (window.IBGPayments && typeof window.IBGPayments.mountInlineBuyButtons === 'function') {
-        window.IBGPayments.mountInlineBuyButtons();
+          const meta = document.createElement('div');
+          meta.className = 'meta';
+          meta.innerHTML = `<span>${name || 'Vídeo'}</span><a href="${url}" target="_blank" rel="noopener">Play</a>`;
+
+          const mini = document.createElement('div');
+          mini.className = 'mini';
+          // El contenedor que payments.js detecta
+          mini.setAttribute('data-video-price','0.30');
+          mini.setAttribute('data-label','Comprar');
+
+          card.appendChild(img);
+          card.appendChild(price);
+          card.appendChild(meta);
+          card.appendChild(mini);
+          grid.appendChild(card);
+        });
+      } catch (e) {
+        console.error('videos render error', e);
       }
     })();
   </script>
