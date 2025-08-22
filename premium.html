@@ -5,73 +5,85 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>IbizaGirl.pics — Premium</title>
   <link rel="stylesheet" href="/css/site.css"/>
+  <style>
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
+    .card{background:#111;border-radius:14px;padding:8px;box-shadow:0 0 0 1px #222}
+    .card img{width:100%;height:180px;object-fit:cover;border-radius:10px;display:block}
+    .muted{opacity:.65}
+    .topnav{display:flex;gap:16px;margin:12px 0}
+    .topnav a{color:#86b7ff;text-decoration:none}
+  </style>
+  <script>
+    (function robustLoader(){
+      const ver = Date.now();
+      function add(a,b){const s=document.createElement('script');s.defer=true;s.src=a+'?v='+ver;s.onerror=()=>{const f=document.createElement('script');f.defer=true;f.src=b+'?v='+ver;document.head.appendChild(f)};document.head.appendChild(s);}
+      add('/content-data1.js','/js/content-data1.js');
+      add('/content-data2.js','/js/content-data2.js');
+      add('/content-data3.js','/js/content-data3.js');
+      add('/content-data4.js','/js/content-data4.js');
+      add('/content-data5.js','/js/content-data5.js');
+      add('/content-data6.js','/js/content-data6.js');
+    })();
+  </script>
 </head>
 <body>
-  <header class="topbar">
-    <nav>
-      <a href="/">Home</a>
-      <a class="active" href="/premium">Premium</a>
-      <a href="/videos">Vídeos</a>
-      <a href="/subscription">Suscripción</a>
-    </nav>
-  </header>
+  <div class="topnav">
+    <a href="/">Home</a>
+    <a href="/premium">Premium</a>
+    <a href="/videos">Vídeos</a>
+    <a href="/subscription">Suscripción</a>
+  </div>
 
-  <main class="container">
-    <h1>Imágenes premium (20 aleatorias)</h1>
-    <section id="grid" class="grid"></section>
-  </main>
-
-  <script src="/js/content-data1.js"></script>
-  <script src="/js/content-data2.js"></script>
-  <script src="/js/content-data3.js"></script>
-  <script src="/js/content-data4.js"></script>
-  <script src="/js/content-data5.js"></script>
-  <script src="/js/content-data6.js"></script>
+  <h1>Imágenes premium (20 aleatorias)</h1>
+  <div id="grid" class="grid"></div>
+  <p id="status" class="muted"></p>
 
   <script>
-  (function () {
-    const G = (window.IBG_CONFIG || window.IBG || {});
-    const ASSETS = (G.assets && G.assets.baseUrl) || 'https://ibizagirl-assets.s3.eu-north-1.amazonaws.com';
-    const U = window.UnifiedContentAPI || {};
-    let pool = [];
-    if (U.getUncensoredPool) {
-      try { pool = U.getUncensoredPool(); } catch (_) {}
-    }
-    if (!pool || !pool.length) {
-      const P1 = (window.PREMIUM_IMAGES_PART1 || []).map(fn => ({ filename: fn }));
-      const P2 = (window.PREMIUM_IMAGES_PART2 || []).map(fn => ({ filename: fn }));
-      pool = P1.concat(P2);
-    }
-
-    function sample(arr, n) {
+    function dailyShuffle(arr){
+      const seedStr = new Date().toISOString().slice(0,10);
+      let s = 0; for (let i=0;i<seedStr.length;i++) s = (s*31 + seedStr.charCodeAt(i))>>>0;
       const a = arr.slice();
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
+      for (let i=a.length-1;i>0;i--){
+        s = (s*1664525 + 1013904223)>>>0;
+        const j = s % (i+1);
+        [a[i],a[j]]=[a[j],a[i]];
       }
-      return a.slice(0, n);
+      return a;
     }
+    function norm(p){
+      if (!p) return '';
+      if (p.startsWith('/')) return p;
+      return p.startsWith('uncensored/') ? '/'+p : '/uncensored/'+p;
+    }
+    (function boot(){
+      const triesMax=60;let t=0;
+      const iv=setInterval(()=>{
+        const p1 = window.PREMIUM_IMAGES_PART1||[];
+        const p2 = window.PREMIUM_IMAGES_PART2||[];
+        const pool = [...p1,...p2];
+        if (pool.length){
+          clearInterval(iv); render(pool);
+        } else if (++t>=triesMax){
+          clearInterval(iv);
+          document.getElementById('status').textContent='No hay imágenes premium disponibles.';
+          console.log('Premium: pool = 0 | render = 0');
+        }
+      },100);
+    })();
 
-    const chosen = sample(pool, 20);
-    const grid = document.getElementById('grid');
-    grid.innerHTML = '';
-
-    chosen.forEach((it, idx) => {
-      const file = it.filename || it;
-      const url  = file.startsWith('uncensored/') ? `${ASSETS}/${file}` : `${ASSETS}/uncensored/${file}`;
-      const a = document.createElement('a');
-      a.href = url; a.target = '_blank'; a.rel = 'noopener';
-      a.className = 'card';
-      const isNew = idx < Math.floor(chosen.length * 0.3);
-      a.innerHTML = `
-        <img loading="lazy" src="${url}" alt="premium"/>
-        ${isNew ? '<span class="badge">NEW</span>' : ''}
-      `;
-      grid.appendChild(a);
-    });
-
-    console.log('Premium: pool =', pool.length, '| render =', chosen.length);
-  })();
+    function render(pool){
+      const pick = dailyShuffle(pool).slice(0,20);
+      const grid = document.getElementById('grid');
+      pick.forEach(item=>{
+        const src = typeof item==='string'?item:(item.path||item.src||item.url||'');
+        const href = norm(src);
+        const img=document.createElement('img'); img.loading='lazy'; img.alt='premium'; img.src=href;
+        const a=document.createElement('a'); a.href=href; a.target='_blank';
+        const card=document.createElement('div'); card.className='card';
+        a.appendChild(img); card.appendChild(a); grid.appendChild(card);
+      });
+      document.getElementById('status').textContent=`Render ${pick.length} / pool ${pool.length}`;
+    }
   </script>
 </body>
 </html>

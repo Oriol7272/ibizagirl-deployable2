@@ -6,67 +6,109 @@
   <title>IbizaGirl.pics — Suscripción</title>
   <link rel="stylesheet" href="/css/site.css"/>
   <style>
-    .plans { display:grid; gap:16px; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); }
-    .plan { background:#0b0b0b; border:1px solid #222; border-radius:16px; padding:18px; }
-    .plan h3 { margin:0 0 4px; }
-    .price { font-size:22px; font-weight:800; margin:6px 0 4px; }
-    .small { color:#9aa; font-size:13px; }
-    .btn-slot { margin-top:12px; min-height:46px; display:flex; align-items:center; }
+    .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+    .plan{background:#111;border-radius:16px;padding:18px;box-shadow:0 0 0 1px #222}
+    .muted{opacity:.65}
+    .label{display:inline-block;font-size:12px;background:#0b61ff22;color:#9ec3ff;padding:2px 8px;border-radius:999px;margin-left:8px}
+    #pp-monthly,#pp-yearly,#pp-lifetime{min-height:42px;display:flex;align-items:center}
+    .topnav{display:flex;gap:16px;margin:12px 0}
+    .topnav a{color:#86b7ff;text-decoration:none}
   </style>
+
+  <!-- content-data1 para leer config si la usas; robust loader por si la ruta cambia -->
+  <script>
+    (function robustLoader(){
+      const ver=Date.now();
+      function add(a,b){const s=document.createElement('script');s.defer=true;s.src=a+'?v='+ver;s.onerror=()=>{const f=document.createElement('script');f.defer=true;f.src=b+'?v='+ver;document.head.appendChild(f)};document.head.appendChild(s)}
+      add('/content-data1.js','/js/content-data1.js');
+    })();
+  </script>
 </head>
 <body>
-  <header class="topbar">
-    <nav>
-      <a href="/">Home</a>
-      <a href="/premium">Premium</a>
-      <a href="/videos">Vídeos</a>
-      <a class="active" href="/subscription">Suscripción</a>
-    </nav>
-  </header>
+  <div class="topnav">
+    <a href="/">Home</a>
+    <a href="/premium">Premium</a>
+    <a href="/videos">Vídeos</a>
+    <a href="/subscription">Suscripción</a>
+  </div>
 
-  <main class="container">
-    <h1>Suscripciones</h1>
-    <p>Desbloquea todas las fotos y vídeos sin límites.</p>
+  <h1>Suscripciones</h1>
+  <p class="muted">Desbloquea todas las fotos y vídeos sin límites.</p>
 
-    <section class="plans">
-      <article class="plan">
-        <h3>Mensual <span class="small">14,99 €</span></h3>
-        <div class="price">14,99 € <span class="small">/ mes</span></div>
-        <p class="small">Acceso total recurrente. Cancela cuando quieras.</p>
-        <div id="sub-monthly-btn" class="btn-slot">Cargando…</div>
-      </article>
+  <div class="plans">
+    <div class="plan">
+      <h3>Mensual <span class="label">14,99 €</span></h3>
+      <p class="muted">Acceso total recurrente. Cancela cuando quieras.</p>
+      <div id="pp-monthly">Cargando...</div>
+    </div>
+    <div class="plan">
+      <h3>Anual <span class="label">49,99 €</span></h3>
+      <p class="muted">Mejor precio anual. Renovación automática.</p>
+      <div id="pp-yearly">Cargando...</div>
+    </div>
+    <div class="plan">
+      <h3>Lifetime <span class="label">100 €</span></h3>
+      <p class="muted">Pago único. Acceso permanente.</p>
+      <div id="pp-lifetime">Cargando...</div>
+    </div>
+  </div>
 
-      <article class="plan">
-        <h3>Anual <span class="small">49,99 €</span></h3>
-        <div class="price">49,99 € <span class="small">/ año</span></div>
-        <p class="small">El mejor precio anual. Renovación automática.</p>
-        <div id="sub-annual-btn" class="btn-slot">Cargando…</div>
-      </article>
+  <p class="muted">Tras el pago, refresca la página si no ves todo desbloqueado al instante.</p>
 
-      <article class="plan">
-        <h3>Lifetime <span class="small">100 €</span></h3>
-        <div class="price">100,00 € <span class="small">pago único</span></div>
-        <p class="small">Acceso ilimitado para siempre, sin cuotas.</p>
-        <div id="sub-lifetime-btn" class="btn-slot">Cargando…</div>
-      </article>
-    </section>
-
-    <p class="small" style="margin-top:16px">Tras el pago, refresca la página si no ves todo desbloqueado al instante.</p>
-  </main>
-
-  <script src="/js/content-data1.js"></script>
-  <script src="/js/payments.js"></script>
   <script>
-    // Llama a la API de payments. Si falta clientId, no rompe y deja los "Cargando…"
-    (function(){
-      if (!window.Payments) return;
-      Payments.renderSubscriptions({
-        selMonthly:  '#sub-monthly-btn',
-        selAnnual:   '#sub-annual-btn',
-        selLifetime: '#sub-lifetime-btn',
-        onSubscribed: () => location.reload()
-      });
-    })();
+    // === Config ===
+    const PAYPAL_CLIENT_ID = 'AfQdeilelw5m3wF08p9pcxgR3gpZBVRUNtK'; // tu client-id
+    const PLAN_MONTHLY = 'P-3WE8037612641383DNCUKNJI';
+    const PLAN_YEARLY  = 'P-43K261214Y571983RNCUKN7I';
+
+    // Carga SDK PayPal de forma segura
+    function loadPayPal(params, onload){
+      const s=document.createElement('script');
+      s.src='https://www.paypal.com/sdk/js?' + new URLSearchParams(params).toString();
+      s.onload=onload; s.onerror=()=>console.warn('[paypal] sdk load error');
+      document.head.appendChild(s);
+    }
+
+    // Renderiza SUBS (mensual/anual)
+    function renderSubscriptions(){
+      if (!window.paypal){ console.warn('[payments] PayPal SDK no disponible'); return; }
+      try{
+        paypal.Buttons({
+          style:{shape:'pill',color:'gold',layout:'horizontal',label:'subscribe'},
+          createSubscription: (_, actions) => actions.subscription.create({ plan_id: PLAN_MONTHLY }),
+          onApprove: (data)=>{ console.log('[subs] monthly ok', data); location.href='/' }
+        }).render('#pp-monthly');
+      }catch(e){ console.warn('[payments] monthly btn error', e); }
+
+      try{
+        paypal.Buttons({
+          style:{shape:'pill',color:'gold',layout:'horizontal',label:'subscribe'},
+          createSubscription: (_, actions) => actions.subscription.create({ plan_id: PLAN_YEARLY }),
+          onApprove: (data)=>{ console.log('[subs] yearly ok', data); location.href='/' }
+        }).render('#pp-yearly');
+      }catch(e){ console.warn('[payments] yearly btn error', e); }
+    }
+
+    // Renderiza CHECKOUT (lifetime)
+    function renderLifetime(){
+      if (!window.paypal){ console.warn('[payments] PayPal SDK no disponible'); return; }
+      try{
+        paypal.Buttons({
+          style:{shape:'pill',color:'blue',layout:'horizontal',label:'pay'},
+          createOrder: (_, actions) => actions.order.create({
+            intent:'CAPTURE',
+            purchase_units:[{ amount:{ currency_code:'EUR', value:'100.00' }, description:'IbizaGirl Lifetime' }]
+          }),
+          onApprove: (_, actions) => actions.order.capture().then(c=>{
+            console.log('[checkout] lifetime capture', c); location.href='/';
+          })
+        }).render('#pp-lifetime');
+      }catch(e){ console.warn('[payments] lifetime btn error', e); }
+    }
+
+    // Carga 2 SDKs con parámetros adecuados (vault para subs / capture para lifetime)
+    loadPayPal({ 'client-id':PAYPAL_CLIENT_ID, components:'buttons', currency:'EUR', vault:'true', intent:'subscription' }, renderSubscriptions);
+    loadPayPal({ 'client-id':PAYPAL_CLIENT_ID, components:'buttons', currency:'EUR', intent:'capture' }, renderLifetime);
   </script>
 </body>
 </html>
