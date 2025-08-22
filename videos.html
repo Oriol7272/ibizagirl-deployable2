@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>IbizaGirl.pics — Videos</title>
-  <link rel="stylesheet" href="/css/site.css?v=20250822153546">
-  <link rel="stylesheet" href="/css/blur.css?v=20250822153546">
+  <link rel="stylesheet" href="/css/site.css?v=20250822155733">
+  <link rel="stylesheet" href="/css/blur.css?v=20250822155733">
   <style>
     .container{max-width:1100px;margin:0 auto;padding:16px}
     .vgrid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
@@ -31,12 +31,11 @@
     <footer class="footer">© IbizaGirl.pics</footer>
   </main>
 
-  <!-- datasets -->
   <script src="/content-data1.js" defer></script>
   <script src="/content-data5.js" defer></script>
   <script src="/content-data6.js" defer></script>
 
-  <script src="/js/unified-helpers.js?v=20250822153546" defer></script>
+  <script src="/js/unified-helpers.js?v=20250822155733" defer></script>
   <script>
   (function(){
     function boot(){
@@ -45,17 +44,14 @@
       const pick = UHelpers.sampleDaily(all, 20, 'videos-page');
       UHelpers.renderVideoCards(document.getElementById('grid'), pick, 'uncensored-videos');
     }
-    if (document.readyState==='interactive'||document.readyState==='complete'){ setTimeout(boot,0); }
-    else document.addEventListener('DOMContentLoaded', boot);
+    if (document.readyState!=='loading') setTimeout(boot,0); else document.addEventListener('DOMContentLoaded', boot);
   })();
   </script>
 
-  <!-- Ads + Crisp -->
   <script async src="https://a.magsrv.com/ad-provider.js"></script>
   <script async src="https://adserver.juicyads.com/js/jads.js"></script>
   <script async src="https://www.premiumvertising.com/LmkfhR/tW/ptabletop.min.js"></script>
   <script type="text/javascript" data-cfasync="false">
   (function(){var k=window,g="e494ffb82839a29122608e933394c091",b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=","d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz","d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){e=k.document.createElement("script");e.type="text/javascript";e.async=!0;var p=k.document.getElementsByTagName("script")[0];e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)}};if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()})();</script>
-  <script>window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 </body>
 </html>
