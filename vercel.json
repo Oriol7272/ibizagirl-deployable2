@@ -1,19 +1,35 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false,
+  "version": 2,
+  "routes": [
+    { "src": "^/api/(.*)$", "dest": "/api/$1" },
+
+    { "src": "^/full/(.*)$", "dest": "/api/cdn?path=/full/$1" },
+    { "src": "^/uncensored/(.*)$", "dest": "/api/cdn?path=/uncensored/$1" },
+    { "src": "^/uncensored-videos/(.*)$", "dest": "/api/cdn?path=/uncensored-videos/$1" },
+
+    { "src": "/(index\\.html)?$", "dest": "/index.html" },
+    { "src": "/premium", "dest": "/premium.html" },
+    { "src": "/videos", "dest": "/videos.html" },
+    { "src": "/subscription", "dest": "/subscription.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Referrer-Policy", "value": "no-referrer-when-downgrade" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' https:; connect-src 'self' https: wss:; img-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https: data:; media-src 'self' https: data:; frame-src https:;"
+          "value": "default-src 'self'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https: wss:; img-src 'self' https: data: blob:; media-src 'self' https: data: blob:; style-src 'self' https: 'unsafe-inline'; font-src 'self' https: data:; frame-src https:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self' https:;"
         }
       ]
+    },
+    {
+      "source": "/(.*)\\.(?:webp|jpg|jpeg|png|gif|mp4|webm)$",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
     }
-  ],
-  "rewrites": [
-    { "source": "/(full|uncensored|uncensored-videos)/(.*)", "destination": "/api/cdn?path=/$1/$2" },
-    { "source": "/api/config", "destination": "/api/config.js" }
   ]
 }
