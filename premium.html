@@ -1,65 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>IbizaGirl.pics — Premium</title>
-  <link rel="stylesheet" href="/css/site.css?v=20250822a"/>
-  <link rel="stylesheet" href="/css/blur.css?v=20250822a"/>
-  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){var d=document,s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
-</head>
-<body>
-  <header class="header">
-    <div class="brand">IbizaGirl.pics</div>
-    <nav class="nav">
-      <a href="/">Gallery</a>
-      <a href="/premium.html">Premium</a>
-      <a href="/videos.html">Vídeos</a>
-      <a href="/subscription.html">Suscripción</a>
-    </nav>
-  </header>
-
-  <section class="hero">
-    <h1>Premium (100 fotos / 30% NUEVO)</h1>
-    <p>Previsualización con blur. Quita el blur al pagar (PayPal).</p>
-  </section>
-
-  <main class="grid" id="grid-premium"></main>
-  <footer class="footer">© IbizaGirl.pics</footer>
-
+  <link rel="stylesheet" href="/css/site.css?v=20250822111537">
+  <link rel="stylesheet" href="/css/blur.css?v=20250822111537">
   <script src="/content-data1.js"></script>
   <script src="/content-data3.js"></script>
   <script src="/content-data4.js"></script>
-  <script src="/js/unified-helpers.js?v=20250822a"></script>
+  <script src="/content-data6.js"></script>
+  <script src="/js/unified-helpers.js?v=20250822111537"></script>
+</head>
+<body>
+  <header class="site-header"><h1>Premium</h1><nav><a href="/">Home</a> · <a href="/videos.html">Vídeos</a></nav></header>
+  <main class="container"><div id="grid" class="grid"></div></main>
+  <footer class="site-footer"><small>© IbizaGirl.pics</small></footer>
 
   <script>
-  window.addEventListener('DOMContentLoaded', ()=>{
-    const pool = (window.IBG?.pools?.uncensored)||[];
-    const pick = window.IBG.shufflePick(pool, 100, 'premium-unc');
-    const markNew = Math.floor(pick.length*0.30);
-    const paid = localStorage.getItem('ibg_paid')==='1';
+  (async function(){
+    const SVG_WAIT = 'data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#777" font-size="24">Cargando…</text></svg>');
+    function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]} return a; }
+    function sample(arr, n){ return shuffle(arr.slice()).slice(0, n); }
 
-    const items = pick.map((f,idx)=>({
-      src:`/uncensored/${f}`,
-      href: paid ? `/uncensored/${f}` : '/subscription.html',
-      target: paid ? '_blank' : '_self',
-      badge: idx<markNew ? 'nuevo' : '',
-      blur: !paid,
-      showLock: !paid,
-      price: '€14.99',
-      payIcon: !paid
-    }));
-    window.IBG.renderGrid('#grid-premium', items, { blur: !paid, lockWhenNotPaid: true });
-  });
-  </script>
+    function fromHelpers(count){
+      try{
+        if (window.U){
+          const pools = (U.pools || {});
+          const arr = pools.uncensored || [];
+          if (arr.length) return sample(arr, count);
+        }
+      }catch(e){}
+      return null;
+    }
 
-  <!-- ExoClick -->
-  <ins data-zoneid="5696328"></ins>
-  <script async src="https://a.magsrv.com/ad-provider.js"></script>
+    async function fromCdn(count){
+      try{
+        const u = new URL('/api/cdn', location.origin);
+        u.searchParams.set('prefix','uncensored');
+        u.searchParams.set('limit', String(count));
+        u.searchParams.set('shuffle','1');
+        const res = await fetch(u);
+        if(!res.ok) return null;
+        const j = await res.json();
+        let files = j.files || j.items || [];
+        files = (files||[]).map(x => String(x).replace(/^uncensored\//,''));
+        return files.slice(0, count);
+      }catch(e){ return null; }
+    }
 
-  <!-- PopAds -->
-  <script type="text/javascript" data-cfasync="false">
-  (function(){var k=window,g="e494ffb82839a29122608e933394c091",b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=","d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz","d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){e=k.document.createElement("script");e.type="text/javascript";e.async=!0;var p=k.document.getElementsByTagName("script")[0];e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)}};if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()})();
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    const files = fromHelpers(20) || await fromCdn(20) || [];
+    for (const name of files){
+      const fig = document.createElement('figure'); fig.className='card';
+      const img = document.createElement('img'); img.loading='lazy'; img.decoding='async';
+      img.src = '/uncensored/' + name; img.alt='Premium';
+      img.onerror = () => { img.onerror=null; img.src=SVG_WAIT; };
+      fig.appendChild(img); grid.appendChild(fig);
+    }
+  })();
   </script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-cat > index.html <<'HTML'
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,11 +5,10 @@ cat > index.html <<'HTML'
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>IbizaGirl.pics — Home</title>
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="/css/site.css?v=20250822c">
-  <link rel="stylesheet" href="/css/blur.css?v=20250822c">
+  <link rel="stylesheet" href="/css/site.css?v=20250822111537">
+  <link rel="stylesheet" href="/css/blur.css?v=20250822111537">
 
-  <!-- Datos de contenido -->
+  <!-- Datos (llenan pools) -->
   <script src="/content-data1.js"></script>
   <script src="/content-data2.js"></script>
   <script src="/content-data3.js"></script>
@@ -18,15 +16,15 @@ cat > index.html <<'HTML'
   <script src="/content-data5.js"></script>
   <script src="/content-data6.js"></script>
 
-  <!-- Helpers unificados -->
-  <script src="/js/unified-helpers.js?v=20250822c"></script>
+  <!-- Helpers -->
+  <script src="/js/unified-helpers.js?v=20250822111537"></script>
 
-  <!-- CRISP -->
+  <!-- Crisp -->
   <script type="text/javascript">
     window.$crisp = []; window.CRISP_WEBSITE_ID = "59e184b1-e679-4c93-b3ea-d60b63c1c04c";
     (function(){var d=document;var s=d.createElement("script");
       s.src="https://client.crisp.chat/l.js"; s.async=1;
-      d.getElementsByTagName("head")[0].appendChild(s);
+      d.head.appendChild(s);
     })();
   </script>
 </head>
@@ -49,97 +47,75 @@ cat > index.html <<'HTML'
     <small>© IbizaGirl.pics</small>
   </footer>
 
-  <!-- Render Home robusto: U.pick -> /api/cdn -> fallback local -->
   <script>
   (function(){
-    const DATA_FALLBACK = 'data:image/svg+xml;utf8,' +
+    const SVG_WAIT = 'data:image/svg+xml;utf8,' +
       encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#777" font-size="24">Cargando…</text></svg>');
 
-    const HARDCODE_FALLBACK = ['bikini5.webp','W9CK51Mronx3uf5hfQ3U.webp']; // existen seguro en /full/
+    const HARDCODE_FALLBACK = ['bikini5.webp','W9CK51Mronx3uf5hfQ3U.webp']; // existen en /full/
 
-    function uniqueShuffle(arr){
-      return arr.slice().sort(()=>Math.random()-0.5);
+    function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]} return a; }
+    function sample(arr, n){ return shuffle(arr.slice()).slice(0, n); }
+
+    function fromHelpers(count){
+      try{
+        if (window.U){
+          const pools = (U.pools || U.pool || {});
+          const full = pools.full || U.full || [];
+          if (Array.isArray(full) && full.length){
+            console.log('🖼️ index: U.pools.full →', full.length);
+            return sample(full, count);
+          }
+        }
+      }catch(e){ console.warn('helpers error', e); }
+      return null;
     }
 
-    async function getFullList(count){
-      // 1) Intento con U.pick (si el helper está listo)
-      try{
-        if (window.U && typeof U.pick === 'function') {
-          const list = U.pick('full', count);
-          if (Array.isArray(list) && list.length) {
-            console.log('🖼️ index: U.pick full →', list.length);
-            return list;
-          }
-        }
-      }catch(e){ console.warn('U.pick error:', e); }
-
-      // 2) Intento con API /api/cdn
+    async function fromCdn(count){
       try{
         const u = new URL('/api/cdn', location.origin);
-        u.searchParams.set('prefix','full/');
+        u.searchParams.set('prefix','full');   // sin barra
         u.searchParams.set('limit', String(count));
         u.searchParams.set('shuffle','1');
-        const res = await fetch(u.href, { credentials: 'same-origin' });
-        if(res.ok){
-          const json = await res.json();
-          // aceptar varias formas: {files:[...]}, {keys:[...]}, array directa
-          let files = Array.isArray(json) ? json : (json.files || json.keys || json.items || []);
-          files = Array.isArray(files) ? files : [];
-          files = files.map(x => String(x).replace(/^full\//,''));
-          if(files.length){
-            console.log('🖼️ index: /api/cdn full →', files.length);
-            return files.slice(0, count);
-          }
-        } else {
-          console.warn('cdn api status', res.status);
+        const res = await fetch(u, {credentials:'same-origin'});
+        if(!res.ok){ console.warn('cdn api status', res.status); return null; }
+        const json = await res.json();
+        let files = Array.isArray(json) ? json : (json.files || json.keys || json.items || []);
+        files = Array.isArray(files) ? files : [];
+        files = files.map(x => String(x).replace(/^full\//,''));
+        if (files.length){
+          console.log('🖼️ index: /api/cdn full →', files.length);
+          return files.slice(0, count);
         }
       }catch(e){ console.warn('cdn api error', e); }
+      return null;
+    }
 
-      // 3) Intento con variables públicas del bundle (por si existen)
-      try{
-        const candidates = [];
-        if (window.PublicContent && Array.isArray(window.PublicContent.files)) candidates.push(...window.PublicContent.files);
-        if (window.PUBLIC_CONTENT && Array.isArray(window.PUBLIC_CONTENT.files)) candidates.push(...window.PUBLIC_CONTENT.files);
-        if (window.PublicFiles && Array.isArray(window.PublicFiles)) candidates.push(...window.PublicFiles);
-        const uniq = [...new Set(candidates)];
-        if (uniq.length){
-          console.log('🖼️ index: fallback globals →', uniq.length);
-          return uniqueShuffle(uniq).slice(0, count);
-        }
-      }catch(e){}
-
-      // 4) Último recurso: hardcode
-      console.warn('⚠️ index: usando hardcode fallback');
-      return HARDCODE_FALLBACK.slice(0, count);
+    async function getFull(count){
+      return fromHelpers(count) || await fromCdn(count) || HARDCODE_FALLBACK.slice(0, count);
     }
 
     async function render(){
       const grid = document.getElementById('grid');
       grid.innerHTML = '';
-      const files = await getFullList(20);
+      const files = await getFull(20);
       console.log('🖼️ index: render con', files.length, 'items');
-
-      files.forEach(name=>{
+      for (const name of files){
         const fig = document.createElement('figure');
         fig.className = 'card';
-
         const img = document.createElement('img');
         img.loading = 'lazy';
         img.decoding = 'async';
         img.src = '/full/' + name;
         img.alt = 'IbizaGirl';
-        img.onerror = () => { img.onerror = null; img.src = DATA_FALLBACK; };
-
+        img.onerror = () => { img.onerror = null; img.src = SVG_WAIT; };
         fig.appendChild(img);
         grid.appendChild(fig);
-      });
+      }
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', render);
-    } else {
-      render();
-    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render);
+    else render();
   })();
   </script>
 
@@ -158,4 +134,3 @@ cat > index.html <<'HTML'
   </script>
 </body>
 </html>
-HTML
