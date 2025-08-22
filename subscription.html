@@ -1,71 +1,85 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Suscripción | IbizaGirl.pics</title>
-  <link rel="stylesheet" href="/css/site.css?v=20250822215546"/>
+  <meta charset="utf-8">
+  <title>Suscripción — IbizaGirl.pics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preload" as="style" href="css/site.css?v=20250822221228">
+  <link rel="stylesheet" href="css/site.css?v=20250822221228">
+  <script src="content-data1.js"></script>
+  <script src="js/payments.js?v=20250822221228" defer></script>
 </head>
-<!-- data-page=subscription para que payments.js sepa dónde está -->
-<!-- Pega aquí tus PLAN IDs reales (los que me diste): -->
-<!-- Mensual: P-3WE8037612641383DNCUKNJI | Anual: P-43K261214Y571983RNCUKN7I -->
-<body data-page="subscription"
-      data-plan-monthly="P-3WE8037612641383DNCUKNJI"
-      data-plan-annual="P-43K261214Y571983RNCUKN7I">
-
-  <header class="navbar">
+<body class="dark">
+  <header class="topbar">
     <nav class="nav">
-      <a href="/" class="brand">IbizaGirl.pics</a>
+      <a href="/">Home</a>
       <a href="/premium.html">Premium</a>
-      <a href="/videos.html">Vídeos</a>
-      <a href="/subscription.html" class="active">Suscripción</a>
+      <a href="/videos.html">Videos</a>
+      <a class="active" href="/subscription.html">Suscripción</a>
     </nav>
   </header>
 
-  <main class="container">
+  <main class="container narrow">
     <h1>Suscripciones</h1>
     <p>Desbloquea todas las fotos y vídeos sin límites.</p>
 
-    <section class="plans-grid">
-      <!-- Mensual -->
-      <article class="plan-card">
-        <div class="plan-head">
+    <section class="plans">
+      <article class="plan">
+        <div class="plan-header">
           <h2>Mensual <span class="badge">14,99 €</span></h2>
-          <div class="price"><strong>14,99 €</strong> <small>/ mes</small></div>
+          <div class="price">14,99 € <small>/ mes</small></div>
         </div>
         <p>Acceso total recurrente. Cancela cuando quieras.</p>
-        <div id="pp-monthly" class="pp-btn"></div>
+        <div id="pp-monthly"></div>
       </article>
 
-      <!-- Anual -->
-      <article class="plan-card">
-        <div class="plan-head">
+      <article class="plan">
+        <div class="plan-header">
           <h2>Anual <span class="badge">49,99 €</span></h2>
-          <div class="price"><strong>49,99 €</strong> <small>/ año</small></div>
+          <div class="price">49,99 € <small>/ año</small></div>
         </div>
         <p>El mejor precio anual. Se renueva automáticamente.</p>
-        <div id="pp-annual" class="pp-btn"></div>
+        <div id="pp-annual"></div>
       </article>
 
-      <!-- Lifetime -->
-      <article class="plan-card">
-        <div class="plan-head">
+      <article class="plan">
+        <div class="plan-header">
           <h2>Lifetime <span class="badge">100 €</span></h2>
-          <div class="price"><strong>100,00 €</strong> <small>pago único</small></div>
+          <div class="price">100,00 € <small>pago único</small></div>
         </div>
         <p>Acceso ilimitado para siempre, sin cuotas.</p>
-        <div id="pp-lifetime" class="pp-btn"></div>
+        <div id="pp-lifetime"></div>
       </article>
     </section>
 
-    <p class="note">Tras el pago, refresca la página si no ves todo desbloqueado al instante.</p>
+    <p class="hint">Tras el pago, refresca la página si no ves todo desbloqueado al instante.</p>
   </main>
 
-  <!-- Config básica + APIs unificadas (ya las usas en el resto de páginas) -->
-  <script src="/content-data1.js?v=20250822215546"></script>
-  <script src="/content-data6.js?v=20250822215546"></script>
+  <script>
+    (function(){
+      const cfg = (window.CONFIG && window.CONFIG.payments) || {};
+      // Plan IDs que me diste
+      const PLAN_MONTHLY = cfg.planMonthly || 'P-3WE8037612641383DNCUKNJI';
+      const PLAN_ANNUAL  = cfg.planAnnual  || 'P-43K261214Y571983RNCUKN7I';
 
-  <!-- Pagos (el SDK lo inyecta internamente con los parámetros correctos) -->
-  <script src="/js/payments.js?v=20250822215546"></script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          await Payments.renderSubscriptions({
+            monthlyDivId: 'pp-monthly',
+            annualDivId: 'pp-annual',
+            planMonthly: PLAN_MONTHLY,
+            planAnnual: PLAN_ANNUAL
+          });
+          await Payments.renderLifetime({
+            targetId: 'pp-lifetime',
+            priceEUR: 100.00,
+            description: 'IbizaGirl.pics — Lifetime'
+          });
+        } catch (e) {
+          console.warn('[payments] Init warning', e);
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

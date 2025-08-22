@@ -1,83 +1,78 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Videos — IbizaGirl.pics</title>
-  <link rel="stylesheet" href="/css/site.css?v=20250822214334"/>
-  <link rel="stylesheet" href="/css/blur.css?v=20250822214334"/>
-  <style>
-    .grid { display:grid; gap:16px; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); }
-    .card { position:relative; background:#0f1216; border-radius:12px; overflow:hidden; box-shadow:0 0 0 1px #1e2430 inset; }
-    .card video, .card img { width:100%; height:180px; object-fit:cover; display:block; }
-    .meta { display:flex; justify-content:space-between; align-items:center; padding:10px; }
-    .price-badge { position:absolute; top:8px; left:8px; background:#000a; color:#fff; padding:2px 6px; border-radius:999px; font-size:12px; }
-    .mini { padding:8px; }
-    .paid { color:#7CFC9A; font-weight:600; }
-  </style>
-  <script src="/content-data1.js"></script>
-  <script src="/content-data5.js"></script>
-  <script src="/content-data6.js"></script>
-  <script src="/js/payments.js?v=20250822214334"></script>
+  <meta charset="utf-8">
+  <title>Vídeos — IbizaGirl.pics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preload" as="style" href="css/site.css?v=20250822221228">
+  <link rel="stylesheet" href="css/site.css?v=20250822221228">
+  <script src="content-data1.js"></script>
+  <script src="content-data6.js"></script>
+  <script src="js/payments.js?v=20250822221228" defer></script>
 </head>
-<body>
-  <header class="topbar">
-    <nav class="nav">
-      <a href="/">Home</a>
-      <a href="/premium.html">Premium</a>
-      <a class="active" href="/videos.html">Videos</a>
-      <a href="/subscription.html">Suscripción</a>
-    </nav>
-  </header>
+<body class="dark">
+<header class="topbar">
+  <nav class="nav">
+    <a href="/">Home</a>
+    <a href="/premium.html">Premium</a>
+    <a class="active" href="/videos.html">Videos</a>
+    <a href="/subscription.html">Suscripción</a>
+  </nav>
+</header>
 
-  <main class="container">
-    <h1>Videos</h1>
-    <div id="grid" class="grid"></div>
-  </main>
+<main class="container">
+  <h1>Videos</h1>
+  <section id="grid" class="grid grid-videos"></section>
+</main>
 
-  <script>
-    (async function () {
-      try {
-        const api = window.UnifiedContentAPI || window.ContentAPI;
-        const list = (api && api.getVideos ? api.getVideos() : (window.PREMIUM_VIDEOS_POOL || [])) || [];
-        const grid = document.getElementById('grid');
+<script>
+(function(){
+  const PRICE_VIDEO = 0.30; // €
+  const MAX = 20;
 
-        list.slice(0, 1000).forEach(v => {
-          const url = v.url || v.src || v.href || v;
-          const name = v.name || v.title || '';
-          const card = document.createElement('article');
-          card.className = 'card';
-          card.setAttribute('data-video-card','1');
+  function cardTpl(item){
+    const thumb = item.thumb || 'img/placeholder-video.webp';
+    const id = (item.id || item.file || Math.random().toString(36).slice(2));
+    return `
+      <article class="card video" data-id="${id}">
+        <div class="thumb">
+          <img loading="lazy" src="${thumb}" alt="video">
+        </div>
+        <div class="meta">
+          <span class="title">Vídeo</span>
+          <span class="pill price">0,30 €</span>
+        </div>
+        <div class="actions">
+          <a class="btn link" href="${item.url || item.src || '#'}" target="_blank" rel="noopener">Play</a>
+          <div class="mini-pay" data-type="video" data-id="${id}"></div>
+        </div>
+      </article>`;
+  }
 
-          const img = document.createElement('img');
-          // Si tuvieras thumbs, sustitúyelo por el thumb real
-          img.src = '/img/placeholder-video.webp';
-          img.alt = name || 'video';
+  async function render(){
+    try{
+      // Usa tu UnifiedContentAPI ya inicializada por content-data6.js
+      const pool = (window.UnifiedContentAPI && window.UnifiedContentAPI.videos && window.UnifiedContentAPI.videos.all())
+        || [];
+      const chosen = pool.slice(0, MAX);
+      const html = chosen.map(cardTpl).join('');
+      document.getElementById('grid').innerHTML = html;
 
-          const price = document.createElement('div');
-          price.className = 'price-badge';
-          price.textContent = '0,30 €';
+      // Render mini botones PayPal en todos los .mini-pay
+      await Payments.renderMiniBuyButton({
+        selector: '.mini-pay',
+        priceEUR: PRICE_VIDEO,
+        label: 'Vídeo',
+        meta: { type:'video' }
+      });
+    }catch(e){
+      console.error('videos render error', e);
+    }
+  }
 
-          const meta = document.createElement('div');
-          meta.className = 'meta';
-          meta.innerHTML = `<span>${name || 'Vídeo'}</span><a href="${url}" target="_blank" rel="noopener">Play</a>`;
+  document.addEventListener('DOMContentLoaded', render);
+})();
+</script>
 
-          const mini = document.createElement('div');
-          mini.className = 'mini';
-          // El contenedor que payments.js detecta
-          mini.setAttribute('data-video-price','0.30');
-          mini.setAttribute('data-label','Comprar');
-
-          card.appendChild(img);
-          card.appendChild(price);
-          card.appendChild(meta);
-          card.appendChild(mini);
-          grid.appendChild(card);
-        });
-      } catch (e) {
-        console.error('videos render error', e);
-      }
-    })();
-  </script>
 </body>
 </html>
