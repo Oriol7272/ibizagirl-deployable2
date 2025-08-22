@@ -7,7 +7,6 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="/css/site.css?v=20250822">
   <link rel="stylesheet" href="/css/blur.css?v=20250822">
-  <!-- Crisp -->
   <script>window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 </head>
 <body>
@@ -22,11 +21,10 @@
 
   <main class="container">
     <h1>Uncensored Photos (100 random/day, 30% NEW)</h1>
-    <p class="note">Las miniaturas están suavemente desenfocadas. Desbloquéalas con PayPal.</p>
+    <p class="note">Miniaturas desenfocadas (previews). Desbloquea con PayPal.</p>
     <div id="unc-gallery" class="grid"></div>
   </main>
 
-  <!-- Content modules -->
   <script src="/content-data1.js" defer></script>
   <script src="/content-data2.js" defer></script>
   <script src="/content-data3.js" defer></script>
@@ -37,26 +35,32 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const wait = () => (window.U && typeof U.getUncensored === 'function');
-      const spin = setInterval(() => {
-        if (!wait()) return;
-        clearInterval(spin);
-        const items = U.getUncensored(100, 0.3) || [];
-        const root = document.getElementById('unc-gallery');
-        root.innerHTML = items.map((it,i) => {
-          const src = it.thumb || it.preview || it.src || it.url || it.path || '';
-          const alt = it.title || it.name || `unc-${i+1}`;
-          const isNew = it.isNew ? '<span class="badge new">NEW</span>' : '';
-          return `<figure class="card paywalled">
-            <div class="thumb blurred"><img loading="lazy" src="${src}" alt="${alt}"></div>
-            <figcaption>${alt} ${isNew}</figcaption>
-            <div class="icons">
-              <span class="price">€0.10</span>
-              <svg class="lock" width="18" height="18" viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm0 2a3 3 0 0 1 3 3v3H9V7a3 3 0 0 1 3-3Z"/></svg>
-            </div>
-          </figure>`;
-        }).join('');
-      }, 50);
+      const root = document.getElementById('unc-gallery');
+      let tries = 0;
+      const t = setInterval(() => {
+        tries++;
+        if (window.U && typeof U.getUncensored === 'function') {
+          clearInterval(t);
+          const items = U.getUncensored(100, 0.3);
+          console.log('🖼️ premium render: uncensored items', items.length);
+          root.innerHTML = items.map((it,i) => {
+            const src = it.thumb || it.preview || it.src || '';
+            const alt = it.title || `unc-${i+1}`;
+            const badge = it.isNew ? '<span class="badge new">NEW</span>' : '';
+            return `<figure class="card paywalled">
+              <div class="thumb blurred"><img loading="lazy" src="${src}" alt="${alt}"></div>
+              <figcaption>${alt} ${badge}</figcaption>
+              <div class="icons"><span class="price">€0.10</span>
+                <svg class="lock" width="18" height="18" viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm0 2a3 3 0 0 1 3 3v3H9V7a3 3 0 0 1 3-3Z"/></svg>
+              </div>
+            </figure>`;
+          }).join('');
+        } else if (tries > 120) {
+          clearInterval(t);
+          console.error('❌ U.getUncensored() no disponible tras espera');
+          root.innerHTML = '<p>Error cargando galería.</p>';
+        }
+      }, 100);
     });
   </script>
 

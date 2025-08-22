@@ -5,21 +5,15 @@
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-        { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=(), interest-cohort=()" },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; base-uri 'self'; form-action 'self' https:; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' data: https:; connect-src 'self' https: wss:; worker-src 'self' blob:; frame-src https:;"
+          "value": "default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' https:; connect-src 'self' https: wss:; img-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https: data:; media-src 'self' https: data:; frame-src https:;"
         }
       ]
-    },
-    {
-      "source": "/(.*)\\.(css|js)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=3600, stale-while-revalidate=604800" }
-      ]
     }
+  ],
+  "rewrites": [
+    { "source": "/(full|uncensored|uncensored-videos)/(.*)", "destination": "/api/cdn?path=/$1/$2" },
+    { "source": "/api/config", "destination": "/api/config.js" }
   ]
 }
