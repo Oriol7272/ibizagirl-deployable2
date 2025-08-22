@@ -1,115 +1,62 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>IbizaGirl.pics — Home</title>
+  <meta charset="utf-8" />
+  <title>IbizaGirl.pics — Free Gallery</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="icon" href="/favicon.ico">
-  <link rel="stylesheet" href="css/site.css?v=20250821e">
-  <link rel="stylesheet" href="css/blur.css?v=20250821e">
-  <script defer src="js/chatbot.js?v=20250821e"></script>
-  <script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
+  <link rel="stylesheet" href="/css/site.css?v=20250822">
+  <link rel="stylesheet" href="/css/blur.css?v=20250822">
+  <!-- Crisp -->
+  <script>window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 </head>
 <body>
-  <header>
-    <nav>
-      <div class="brand">🌴 IbizaGirl.pics</div>
-      <a href="index.html">Home</a>
-      <a href="premium.html">Uncensored</a>
-      <a href="videos.html">Videos</a>
-      <a href="subscription.html">Subscribe</a>
+  <header class="topbar">
+    <nav class="nav">
+      <a href="/" class="logo">IbizaGirl.pics</a>
+      <a href="/premium.html">Uncensored</a>
+      <a href="/videos.html">Videos</a>
+      <a href="/subscription.html">VIP</a>
     </nav>
   </header>
 
-  <main>
-    <section class="section">
-      <div class="ad-row">
-        <ins class="eas6a97888e2" data-zoneid="5696328" style="display:block;width:100%;min-height:90px"></ins>
-        <script>(AdProvider=window.AdProvider||[]).push({"serve":{}});</script>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>Gallery (20 daily random)</h2>
-      <div id="gallery-grid" class="grid"></div>
-    </section>
-
-    <section class="section">
-      <h2>Uncensored (100 random, 30% NEW)</h2>
-      <div id="uncensored-grid" class="grid"></div>
-    </section>
-
-    <section class="section">
-      <h2>Videos (20 random)</h2>
-      <div id="videos-grid" class="grid"></div>
-    </section>
-
-    <footer>© IbizaGirl.pics</footer>
+  <main class="container">
+    <h1>Free Gallery (20 random/day)</h1>
+    <div id="full-gallery" class="grid"></div>
   </main>
 
-  <svg width="0" height="0" style="position:absolute">
-    <symbol id="icon-lock" viewBox="0 0 24 24">
-      <path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm0 2a3 3 0 0 1 3 3v3H9V7a3 3 0 0 1 3-3Z"/>
-    </symbol>
-  </svg>
+  <!-- Ads (Juicy/Exo/Ero): ya están integrados por tus scripts externos; añadimos PopAds abajo -->
 
-  <!-- Tus módulos de datos -->
-  <script src="content-data1.js"></script>
-  <script src="content-data2.js"></script>
-  <script src="content-data3.js"></script>
-  <script src="content-data4.js"></script>
-  <script src="content-data5.js"></script>
-  <script src="content-data6.js"></script>
+  <!-- Content modules -->
+  <script src="/content-data1.js" defer></script>
+  <script src="/content-data2.js" defer></script>
+  <script src="/content-data3.js" defer></script>
+  <script src="/content-data4.js" defer></script>
+  <script src="/content-data5.js" defer></script>
+  <script src="/content-data6.js" defer></script>
+  <script src="/js/unified-helpers.js?v=20250822" defer></script>
 
-  <script src="js/payments.js?v=20250821e"></script>
   <script>
-  // ======= render usando UnifiedContentAPI =======
-  const U = window.UnifiedContentAPI;
-  function todaySeed(){ const d=new Date(); const k=`${d.getUTCFullYear()}-${d.getUTCMonth()+1}-${d.getUTCDate()}`; let s=0; for(const ch of k) s=(s*31+ch.charCodeAt(0))>>>0; return s; }
-  function prng(seed){ let a=seed>>>0; return ()=>{ a+=0x6D2B79F5; let t=Math.imul(a^(a>>>15),1|a); t^=t+Math.imul(t^(t>>>7),61|t); return ((t^(t>>>14))>>>0)/4294967296; }; }
-  function shuffleTake(arr,n,seed){ const a=arr.slice(0); const rnd=prng(seed); for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]]} return a.slice(0,n); }
-  function srcOf(x){ return x.src || x.url || x.image || x.path || x; }
+    document.addEventListener('DOMContentLoaded', () => {
+      // Espera a que carguen los módulos
+      const wait = () => (window.U && typeof U.getFull === 'function');
+      const spin = setInterval(() => {
+        if (!wait()) return;
+        clearInterval(spin);
+        const items = U.getFull(20) || [];
+        const root = document.getElementById('full-gallery');
+        root.innerHTML = items.map((it,i) => {
+          const src = it.thumb || it.src || it.url || it.path || it.file || '';
+          const alt = it.title || it.name || `img-${i+1}`;
+          return `<figure class="card"><img loading="lazy" src="${src}" alt="${alt}"><figcaption>${alt}</figcaption></figure>`;
+        }).join('');
+      }, 50);
+    });
+  </script>
 
-  function cardImage(item, {censored=false, price="€0.10"}={}){
-    const wrap = document.createElement('div'); wrap.className='card thumb-wrap';
-    const img = document.createElement('img'); img.className='thumb' + (censored?' censored':''); img.loading='lazy'; img.decoding='async'; img.src=srcOf(item); wrap.appendChild(img);
-    const meta=document.createElement('div'); meta.className='meta'; meta.textContent=item.title||item.caption||''; wrap.appendChild(meta);
-    if (item.isNew){ const b=document.createElement('div'); b.className='badge badge-new'; b.textContent='NEW'; wrap.appendChild(b); }
-    if (censored){ const btn=document.createElement('button'); btn.className='unlock-btn'; btn.innerHTML=`<svg class="i"><use href="#icon-lock"></use></svg><span class="price">${price}</span>`; btn.addEventListener('click',()=>window.IBG_PAY?.buyItem?.({src:img.src,amount:0.10,currency:'EUR'})); wrap.appendChild(btn); }
-    return wrap;
-  }
-  function cardVideo(item, {price="€0.30"}={}){
-    const wrap=document.createElement('div'); wrap.className='card thumb-wrap';
-    const v=document.createElement('video'); v.className='thumb censored'; v.poster='img/video-poster-blur.svg'; v.muted=true; v.loop=true; v.playsInline=true;
-    const s=document.createElement('source'); s.type='video/mp4'; s.src=srcOf(item); v.appendChild(s); wrap.appendChild(v);
-    const meta=document.createElement('div'); meta.className='meta'; meta.textContent=item.title||'video'; wrap.appendChild(meta);
-    const btn=document.createElement('button'); btn.className='unlock-btn'; btn.innerHTML=`<svg class="i"><use href="#icon-lock"></use></svg><span class="price">${price}</span>`; btn.addEventListener('click',()=>window.IBG_PAY?.buyItem?.({src:s.src,amount:0.30,currency:'EUR',kind:'video'})); wrap.appendChild(btn);
-    return wrap;
-  }
-
-  (function render(){
-    if (!U){ console.error('UnifiedContentAPI no disponible'); return; }
-    const seed=todaySeed();
-
-    // 20 de full
-    const full = U.getFull();                      // <- usa tus nuevos content-data
-    const g20 = shuffleTake(full, 20, seed);
-    const gEl = document.getElementById('gallery-grid');
-    g20.forEach(it=>gEl.appendChild(cardImage(it,{censored:false})));
-
-    // 100 premium con 30% NEW
-    const prem = U.getPremiumPhotos();
-    const u100 = shuffleTake(prem, 100, seed^0x9e3779);
-    const n = Math.floor(u100.length*0.3); for(let i=0;i<n;i++) u100[i].isNew=true;
-    const uEl = document.getElementById('uncensored-grid');
-    u100.forEach(it=>uEl.appendChild(cardImage(it,{censored:true,price:'€0.10'})));
-
-    // 20 videos
-    const vids = U.getPremiumVideos();
-    const v20 = shuffleTake(vids, 20, seed^0xC001C0DE);
-    const vEl = document.getElementById('videos-grid');
-    v20.forEach(it=>vEl.appendChild(cardVideo(it,{price:'€0.30'})));
-  })();
+  <!-- PopAds (real script) -->
+  <script type="text/javascript" data-cfasync="false">
+  (function(){var k=window,g="e494ffb82839a29122608e933394c091",b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=","d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz","d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){e=k.document.createElement("script");e.type="text/javascript";e.async=!0;var p=k.document.getElementsByTagName("script")[0];e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)}};if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()}})();
   </script>
 </body>
 </html>

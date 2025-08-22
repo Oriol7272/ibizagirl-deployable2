@@ -1,58 +1,68 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Uncensored — IbizaGirl.pics</title>
+  <meta charset="utf-8" />
+  <title>IbizaGirl.pics — Uncensored Photos</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="icon" href="/favicon.ico">
-  <link rel="stylesheet" href="css/site.css?v=20250821e">
-  <link rel="stylesheet" href="css/blur.css?v=20250821e">
-  <script defer src="js/chatbot.js?v=20250821e"></script>
+  <link rel="stylesheet" href="/css/site.css?v=20250822">
+  <link rel="stylesheet" href="/css/blur.css?v=20250822">
+  <!-- Crisp -->
+  <script>window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 </head>
 <body>
-  <header>
-    <nav>
-      <div class="brand">🌴 IbizaGirl.pics</div>
-      <a href="index.html">Home</a>
-      <a href="premium.html">Uncensored</a>
-      <a href="videos.html">Videos</a>
-      <a href="subscription.html">Subscribe</a>
+  <header class="topbar">
+    <nav class="nav">
+      <a href="/" class="logo">IbizaGirl.pics</a>
+      <a href="/premium.html" class="active">Uncensored</a>
+      <a href="/videos.html">Videos</a>
+      <a href="/subscription.html">VIP</a>
     </nav>
   </header>
-  <main>
-    <section class="section"><h2>All Uncensored</h2><div id="uncensored-grid" class="grid"></div></section>
+
+  <main class="container">
+    <h1>Uncensored Photos (100 random/day, 30% NEW)</h1>
+    <p class="note">Las miniaturas están suavemente desenfocadas. Desbloquéalas con PayPal.</p>
+    <div id="unc-gallery" class="grid"></div>
   </main>
 
-  <svg width="0" height="0" style="position:absolute">
-    <symbol id="icon-lock" viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm0 2a3 3 0 0 1 3 3v3H9V7a3 3 0 0 1 3-3Z"/></symbol>
-  </svg>
-
-  <script src="content-data1.js"></script>
-  <script src="content-data2.js"></script>
-  <script src="content-data3.js"></script>
-  <script src="content-data4.js"></script>
-  <script src="content-data5.js"></script>
-  <script src="content-data6.js"></script>
-  <script src="js/payments.js?v=20250821e"></script>
+  <!-- Content modules -->
+  <script src="/content-data1.js" defer></script>
+  <script src="/content-data2.js" defer></script>
+  <script src="/content-data3.js" defer></script>
+  <script src="/content-data4.js" defer></script>
+  <script src="/content-data5.js" defer></script>
+  <script src="/content-data6.js" defer></script>
+  <script src="/js/unified-helpers.js?v=20250822" defer></script>
 
   <script>
-    const U = window.UnifiedContentAPI;
-    function srcOf(x){ return x.src||x.url||x.image||x.path||x; }
-    function card(item){
-      const wrap=document.createElement('div'); wrap.className='card thumb-wrap';
-      const img=document.createElement('img'); img.className='thumb censored'; img.loading='lazy'; img.decoding='async'; img.src=srcOf(item); wrap.appendChild(img);
-      const meta=document.createElement('div'); meta.className='meta'; meta.textContent=item.title||''; wrap.appendChild(meta);
-      const btn=document.createElement('button'); btn.className='unlock-btn'; btn.innerHTML=`<svg class="i"><use href="#icon-lock"></use></svg><span class="price">€0.10</span>`;
-      btn.addEventListener('click',()=>window.IBG_PAY?.buyItem?.({src:img.src,amount:0.10,currency:'EUR'}));
-      wrap.appendChild(btn);
-      return wrap;
-    }
-    (function(){
-      if(!U){ console.error('UnifiedContentAPI no disponible'); return; }
-      const list = U.getPremiumPhotos();
-      const root = document.getElementById('uncensored-grid');
-      list.forEach(i=>root.appendChild(card(i)));
-    })();
+    document.addEventListener('DOMContentLoaded', () => {
+      const wait = () => (window.U && typeof U.getUncensored === 'function');
+      const spin = setInterval(() => {
+        if (!wait()) return;
+        clearInterval(spin);
+        const items = U.getUncensored(100, 0.3) || [];
+        const root = document.getElementById('unc-gallery');
+        root.innerHTML = items.map((it,i) => {
+          const src = it.thumb || it.preview || it.src || it.url || it.path || '';
+          const alt = it.title || it.name || `unc-${i+1}`;
+          const isNew = it.isNew ? '<span class="badge new">NEW</span>' : '';
+          return `<figure class="card paywalled">
+            <div class="thumb blurred"><img loading="lazy" src="${src}" alt="${alt}"></div>
+            <figcaption>${alt} ${isNew}</figcaption>
+            <div class="icons">
+              <span class="price">€0.10</span>
+              <svg class="lock" width="18" height="18" viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm0 2a3 3 0 0 1 3 3v3H9V7a3 3 0 0 1 3-3Z"/></svg>
+            </div>
+          </figure>`;
+        }).join('');
+      }, 50);
+    });
+  </script>
+
+  <!-- PopAds -->
+  <script type="text/javascript" data-cfasync="false">
+  (function(){var k=window,g="e494ffb82839a29122608e933394c091",b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=","d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz","d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){e=k.document.createElement("script");e.type="text/javascript";e.async=!0;var p=k.document.getElementsByTagName("script")[0];e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)}};if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()}})();
   </script>
 </body>
 </html>
