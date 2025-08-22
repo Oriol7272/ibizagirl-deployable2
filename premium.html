@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Uncensored — IbizaGirl.pics</title>
   <link rel="icon" href="/favicon.ico">
-  <link rel="stylesheet" href="css/site.css?v=20250821c">
-  <link rel="stylesheet" href="css/blur.css?v=20250821c">
-  <script defer src="js/chatbot.js?v=20250821c"></script>
-  <script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
+  <link rel="stylesheet" href="css/site.css?v=20250821e">
+  <link rel="stylesheet" href="css/blur.css?v=20250821e">
+  <script defer src="js/chatbot.js?v=20250821e"></script>
 </head>
 <body>
   <header>
@@ -34,28 +33,25 @@
   <script src="content-data4.js"></script>
   <script src="content-data5.js"></script>
   <script src="content-data6.js"></script>
+  <script src="js/payments.js?v=20250821e"></script>
 
-  <script src="js/payments.js?v=20250821b"></script>
   <script>
-    function pickAPI(){
-      const U = window.UnifiedContentAPI || {};
-      const C = window.ContentAPI || {};
-      return (U.getPremiumPhotos?.() || C.getPremiumPhotos?.() || U.premiumPhotos || C.premiumPhotos || window.PREMIUM_PHOTOS || []);
-    }
-    function euro(n){ return n.toLocaleString('es-ES',{style:'currency',currency:'EUR',minimumFractionDigits:2}); }
+    const U = window.UnifiedContentAPI;
+    function srcOf(x){ return x.src||x.url||x.image||x.path||x; }
     function card(item){
-      const wrap = document.createElement('div'); wrap.className='card thumb-wrap';
-      const img = document.createElement('img'); img.src=item.src||item.url||item; img.className='thumb censored'; img.loading='lazy'; img.decoding='async'; wrap.appendChild(img);
-      const meta = document.createElement('div'); meta.className='meta'; meta.textContent=item.title||''; wrap.appendChild(meta);
-      const btn = document.createElement('button'); btn.className='unlock-btn'; btn.innerHTML=`<svg class="i"><use href="#icon-lock"></use></svg><span class="price">€0.10</span>`;
-      btn.addEventListener('click', ()=> window.IBG_PAY?.buyItem?.({src: img.src, amount:0.10, currency:'EUR'}));
+      const wrap=document.createElement('div'); wrap.className='card thumb-wrap';
+      const img=document.createElement('img'); img.className='thumb censored'; img.loading='lazy'; img.decoding='async'; img.src=srcOf(item); wrap.appendChild(img);
+      const meta=document.createElement('div'); meta.className='meta'; meta.textContent=item.title||''; wrap.appendChild(meta);
+      const btn=document.createElement('button'); btn.className='unlock-btn'; btn.innerHTML=`<svg class="i"><use href="#icon-lock"></use></svg><span class="price">€0.10</span>`;
+      btn.addEventListener('click',()=>window.IBG_PAY?.buyItem?.({src:img.src,amount:0.10,currency:'EUR'}));
       wrap.appendChild(btn);
       return wrap;
     }
     (function(){
-      const list = pickAPI();
+      if(!U){ console.error('UnifiedContentAPI no disponible'); return; }
+      const list = U.getPremiumPhotos();
       const root = document.getElementById('uncensored-grid');
-      list.forEach(i => root.appendChild(card(i)));
+      list.forEach(i=>root.appendChild(card(i)));
     })();
   </script>
 </body>
