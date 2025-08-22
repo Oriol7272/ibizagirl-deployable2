@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>IbizaGirl.pics — Home</title>
 
-  <link rel="stylesheet" href="/css/site.css?v=20250822111537">
-  <link rel="stylesheet" href="/css/blur.css?v=20250822111537">
+  <link rel="stylesheet" href="/css/site.css?v=20250822124703">
+  <link rel="stylesheet" href="/css/blur.css?v=20250822124703">
 
-  <!-- Datos (llenan pools) -->
+  <!-- Pools (contenido) -->
   <script src="/content-data1.js"></script>
   <script src="/content-data2.js"></script>
   <script src="/content-data3.js"></script>
@@ -16,16 +16,13 @@
   <script src="/content-data5.js"></script>
   <script src="/content-data6.js"></script>
 
-  <!-- Helpers -->
-  <script src="/js/unified-helpers.js?v=20250822111537"></script>
+  <!-- Helpers unificados -->
+  <script src="/js/unified-helpers.js?v=20250822124703"></script>
 
   <!-- Crisp -->
-  <script type="text/javascript">
-    window.$crisp = []; window.CRISP_WEBSITE_ID = "59e184b1-e679-4c93-b3ea-d60b63c1c04c";
-    (function(){var d=document;var s=d.createElement("script");
-      s.src="https://client.crisp.chat/l.js"; s.async=1;
-      d.head.appendChild(s);
-    })();
+  <script>
+  window.$crisp=[]; window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";
+  (function(){var d=document,s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.head.appendChild(s)})();
   </script>
 </head>
 <body>
@@ -49,73 +46,78 @@
 
   <script>
   (function(){
-    const SVG_WAIT = 'data:image/svg+xml;utf8,' +
-      encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#777" font-size="24">Cargando…</text></svg>');
+    const FALLBACK = ['bikini5.webp','W9CK51Mronx3uf5hfQ3U.webp'];
 
-    const HARDCODE_FALLBACK = ['bikini5.webp','W9CK51Mronx3uf5hfQ3U.webp']; // existen en /full/
+    const pick = (arr, n) => {
+      arr = arr.slice();
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr.slice(0, n);
+    };
 
-    function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]} return a; }
-    function sample(arr, n){ return shuffle(arr.slice()).slice(0, n); }
+    const normalize = (name, prefix) => String(name).replace(new RegExp('^'+prefix+'/?'), '');
 
-    function fromHelpers(count){
+    function fromHelpers(n){
       try{
-        if (window.U){
-          const pools = (U.pools || U.pool || {});
-          const full = pools.full || U.full || [];
-          if (Array.isArray(full) && full.length){
-            console.log('🖼️ index: U.pools.full →', full.length);
-            return sample(full, count);
+        if (window.U && (U.pools?.full || U.full)) {
+          const raw = U.pools?.full || U.full || [];
+          const files = raw.map(x => normalize(x,'full'));
+          if (files.length) {
+            console.log('🖼️ index: U.pools.full →', files.length);
+            return pick(files, n);
           }
         }
       }catch(e){ console.warn('helpers error', e); }
       return null;
     }
 
-    async function fromCdn(count){
+    async function fromCdn(n){
       try{
-        const u = new URL('/api/cdn', location.origin);
-        u.searchParams.set('prefix','full');   // sin barra
-        u.searchParams.set('limit', String(count));
-        u.searchParams.set('shuffle','1');
-        const res = await fetch(u, {credentials:'same-origin'});
-        if(!res.ok){ console.warn('cdn api status', res.status); return null; }
+        const url = new URL('/api/cdn', location.origin);
+        url.searchParams.set('prefix','full');
+        url.searchParams.set('limit', String(n));
+        url.searchParams.set('shuffle','1');
+        const res = await fetch(url, { credentials:'same-origin' });
+        if (!res.ok) { console.warn('cdn api status', res.status); return null; }
         const json = await res.json();
-        let files = Array.isArray(json) ? json : (json.files || json.keys || json.items || []);
-        files = Array.isArray(files) ? files : [];
-        files = files.map(x => String(x).replace(/^full\//,''));
-        if (files.length){
+        let files = Array.isArray(json) ? json : (json.files || json.items || json.keys || []);
+        files = (files || []).map(x => normalize(x,'full'));
+        if (files.length) {
           console.log('🖼️ index: /api/cdn full →', files.length);
-          return files.slice(0, count);
+          return files.slice(0, n);
         }
-      }catch(e){ console.warn('cdn api error', e); }
+      } catch(e){ console.warn('cdn api error', e); }
       return null;
     }
 
-    async function getFull(count){
-      return fromHelpers(count) || await fromCdn(count) || HARDCODE_FALLBACK.slice(0, count);
+    async function loadFull(n){
+      return fromHelpers(n) || await fromCdn(n) || FALLBACK.slice(0, n);
     }
 
     async function render(){
+      const files = await loadFull(20);
+      console.log('🖼️ index: render con', files.length, 'items');
       const grid = document.getElementById('grid');
       grid.innerHTML = '';
-      const files = await getFull(20);
-      console.log('🖼️ index: render con', files.length, 'items');
-      for (const name of files){
-        const fig = document.createElement('figure');
-        fig.className = 'card';
+      for (const name of files) {
+        const fig = document.createElement('figure'); fig.className='card';
         const img = document.createElement('img');
-        img.loading = 'lazy';
-        img.decoding = 'async';
+        img.loading='lazy'; img.decoding='async'; img.alt='IbizaGirl';
         img.src = '/full/' + name;
-        img.alt = 'IbizaGirl';
-        img.onerror = () => { img.onerror = null; img.src = SVG_WAIT; };
+        img.onerror = () => { img.onerror=null; img.src='/full/bikini5.webp'; img.classList.add('loaded'); };
+        img.onload = () => { img.classList.add('loaded'); };
         fig.appendChild(img);
         grid.appendChild(fig);
       }
     }
 
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render);
-    else render();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', render);
+    } else {
+      render();
+    }
   })();
   </script>
 
