@@ -1,91 +1,110 @@
-(function () {
-  const w = window;
-
-  function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
-
-  function getAPI(){
-    if (w.UnifiedContentAPI) return w.UnifiedContentAPI;
-    if (w.ContentAPI) return w.ContentAPI;
-    return null;
-  }
-
-  function norm(item, folder){
-    if (!item) return null;
-    if (typeof item === 'string') {
-      const name = item.replace(/^\/+/, '');
-      const abs = /^https?:\/\//i.test(name);
-      return { url: abs ? name : `/${folder}/${name}` };
-    }
-    if (typeof item === 'object') {
-      const cand = item.url || item.src || item.file || item.filename || item.name;
-      if (!cand) return null;
-      const name = String(cand).replace(/^\/+/, '');
-      const abs = /^https?:\/\//i.test(name);
-      return { url: abs ? name : `/${folder}/${name}`, ...item };
-    }
-    return null;
-  }
-
-  function readPool(kind){
-    const api = getAPI();
-    let arr = [];
-    try {
-      const meth = api && api[`get${cap(kind)}`];
-      if (typeof meth === 'function') {
-        arr = meth(); // puede devolver strings u objetos (archivo real)
-      } else if (w[`CONTENT_${kind.toUpperCase()}`]) {
-        arr = w[`CONTENT_${kind.toUpperCase()}`];
-      }
-    } catch(e){}
-    const folder =
-      kind === 'videos' ? 'uncensored-videos' :
-      (kind === 'full' ? 'full' : 'uncensored');
-    return (arr || []).map(x => norm(x, folder)).filter(Boolean);
-  }
-
-  function daySeed(){
+(function(){
+  const IBG = window.IBG = window.IBG || {};
+  // ---------- utils ----------
+  IBG.seedFor = (salt='')=>{
+    // fija por día para rotación diaria
     const d = new Date();
-    return `${d.getUTCFullYear()}-${d.getUTCMonth()+1}-${d.getUTCDate()}`;
-  }
-  function mulberry32(a){ return function(){ let t = a += 0x6D2B79F5; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-  function hash(s){ let h=2166136261>>>0; for(let i=0;i<s.length;i++){h^=s.charCodeAt(i); h = Math.imul(h,16777619);} return h>>>0; }
-
-  function pickStable(arr, count, mode){
-    if (!Array.isArray(arr) || !arr.length) return [];
-    const seedStr = mode==="daily" ? daySeed() : (mode==="reload" ? Math.random().toString() : (mode || daySeed()));
-    const rnd = mulberry32(hash(seedStr));
-    const idx = arr.map((_,i)=>i);
-    for (let i = idx.length-1; i>0; i--) {
-      const j = Math.floor(rnd()*(i+1));
-      [idx[i], idx[j]] = [idx[j], idx[i]];
-    }
-    return idx.slice(0, Math.min(count, arr.length)).map(i => arr[i]);
-  }
-
-  const U = {
-    mode: 'daily',
-    pools: { full: null, uncensored: null, videos: null },
-    setMode(m){ this.mode = m; },
-    loadPools(){
-      this.pools.full = readPool('full');
-      this.pools.uncensored = readPool('uncensored');
-      this.pools.videos = readPool('videos');
-      console.log('🔎 unified-helpers: pools', {
-        full: this.pools.full.length,
-        uncensored: this.pools.uncensored.length,
-        videos: this.pools.videos.length,
-        mode: this.mode
-      });
-    },
-    getFull(n=20){ if (!this.pools.full) this.loadPools(); return pickStable(this.pools.full, n, this.mode); },
-    getUncensored(n=100){ if (!this.pools.uncensored) this.loadPools(); return pickStable(this.pools.uncensored, n, this.mode); },
-    getVideos(n=20){ if (!this.pools.videos) this.loadPools(); return pickStable(this.pools.videos, n, this.mode); }
+    const key = `${d.getUTCFullYear()}-${d.getUTCMonth()+1}-${d.getUTCDate()}|${salt}`;
+    let h=0; for(let i=0;i<key.length;i++) h = Math.imul(31,h) + key.charCodeAt(i) | 0;
+    let s = (h>>>0) / 4294967295;
+    return ()=> (s = (1103515245*s + 12345) % 2147483647) / 2147483647;
   };
+  IBG.shufflePick = (arr, n, salt='')=>{
+    const rnd = IBG.seedFor(salt);
+    const a = [...new Set(arr)];
+    for (let i=a.length-1; i>0; i--) { const j = Math.floor(rnd()* (i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+    return a.slice(0, Math.min(n, a.length));
+  };
+  const isImg = f=>/\.(webp|jpe?g|png)$/i.test(f);
+  const isVid = f=>/\.(mp4|webm)$/i.test(f);
 
-  w.U = U;
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', ()=> { if (!U.pools.full) U.loadPools(); });
-  } else {
-    if (!U.pools.full) U.loadPools();
+  // ---------- descubrimiento de pools ----------
+  function fromCatalog(obj){
+    if (!obj) return null;
+    const cat = obj.catalog || obj.pools || obj.data || obj;
+    const full = [...new Set((cat.full||cat.public||cat.fullImages||[]).filter(isImg))];
+    const unc  = [...new Set((cat.uncensored||cat.premium||cat.uncensoredImages||[]).filter(isImg))];
+    const vids = [...new Set((cat.videos||cat.premiumVideos||[]).filter(isVid))];
+    return (full.length+unc.length+vids.length)>0 ? {full,uncensored:unc,videos:vids} : null;
   }
+  function scanGlobals(){
+    // intenta APIs conocidas
+    const candidates = [
+      fromCatalog(window.UnifiedContentAPI),
+      fromCatalog(window.ContentSystemManager),
+      fromCatalog(window.ContentAPI)
+    ].filter(Boolean);
+    if (candidates[0]) return candidates[0];
+
+    // fallback: buscar arrays grandes de strings por toda la ventana
+    const pools = {full:[], uncensored:[], videos:[]};
+    for (const [k,v] of Object.entries(window)) {
+      if (!v) continue;
+      if (Array.isArray(v) && v.length>10 && typeof v[0]==='string') {
+        if (isVid(v[0])) {
+          pools.videos.push(...v.filter(isVid));
+        } else if (isImg(v[0])) {
+          const key = k.toLowerCase();
+          if (key.includes('uncensored') || key.includes('premium')) pools.uncensored.push(...v.filter(isImg));
+          else if (key.includes('full') || key.includes('public')) pools.full.push(...v.filter(isImg));
+        }
+      } else if (typeof v==='object' && Array.isArray(v.list) && v.list.length>10 && typeof v.list[0]==='string') {
+        const guess = (v.kind||v.type||'').toLowerCase();
+        if (isVid(v.list[0])) pools.videos.push(...v.list.filter(isVid));
+        else if (guess.includes('uncensored') || guess.includes('premium')) pools.uncensored.push(...v.list.filter(isImg));
+        else pools.full.push(...v.list.filter(isImg));
+      }
+    }
+    pools.full      = [...new Set(pools.full)].filter(isImg);
+    pools.uncensored= [...new Set(pools.uncensored)].filter(isImg);
+    pools.videos    = [...new Set(pools.videos)].filter(isVid);
+    return pools;
+  }
+
+  IBG.pools = scanGlobals();
+  console.log('🔎 unified-helpers: pools', { ...IBG.pools, mode:'daily' });
+
+  // ---------- render ----------
+  IBG.renderGrid = (sel, items, opts={})=>{
+    const wrap = document.querySelector(sel);
+    if (!wrap){ console.warn('container not found', sel); return; }
+    wrap.innerHTML = '';
+    const paid = localStorage.getItem('ibg_paid')==='1';
+    const lockedClass = (opts.lockWhenNotPaid && !paid) ? 'locked' : '';
+    for (const it of items) {
+      const card = document.createElement('a');
+      card.href = it.href || '#';
+      card.target = it.target || '_self';
+      card.className = `card ${lockedClass}`;
+      if (it.type==='video') {
+        const v = document.createElement('video');
+        v.muted = true; v.loop = true; v.autoplay = false; v.playsInline = true;
+        if (it.poster) v.poster = it.poster;
+        const src = document.createElement('source');
+        src.src = it.src; src.type = it.mime || 'video/mp4';
+        v.appendChild(src);
+        card.appendChild(v);
+      } else {
+        const img = document.createElement('img');
+        img.src = it.src;
+        if (opts.blur || it.blur) img.classList.add('blur');
+        card.appendChild(img);
+      }
+      if (it.badge){
+        const b = document.createElement('div'); b.className='badge'; b.textContent=it.badge; card.appendChild(b);
+      }
+      if (it.showLock && (!paid)){
+        const l = document.createElement('div'); l.className='lock'; l.textContent='Premium'; card.appendChild(l);
+      }
+      if (it.price){
+        const p = document.createElement('div'); p.className='price'; p.textContent=it.price; card.appendChild(p);
+      }
+      if (it.payIcon){
+        const i = document.createElement('div'); i.className='pay-icon';
+        i.innerHTML = '<img alt="PayPal" src="https://www.paypalobjects.com/webstatic/icon/pp258.png"/>';
+        card.appendChild(i);
+      }
+      wrap.appendChild(card);
+    }
+  };
 })();
