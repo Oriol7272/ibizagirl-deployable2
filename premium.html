@@ -1,58 +1,151 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>IbizaGirl.pics — Premium</title>
-  <link rel="stylesheet" href="/css/site.css?v=20250822155733">
-  <link rel="stylesheet" href="/css/blur.css?v=20250822155733">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>IbizaGirl — Premium</title>
+
+  <link rel="stylesheet" href="/css/site.css?v=20250822174842">
+  <link rel="stylesheet" href="/css/blur.css?v=20250822174842">
   <style>
-    .container{max-width:1100px;margin:0 auto;padding:16px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:16px}
-    .card{display:block;background:#111;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.35)}
-    .topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px}
-    .nav a{margin-left:14px;opacity:.85}
-    .footer{opacity:.6;font-size:.9rem;margin-top:24px}
+    .grid-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+    .tile{position:relative;overflow:hidden;border-radius:10px;background:#111}
+    .tile img{width:100%;height:190px;object-fit:cover;display:block}
+    .over{position:absolute;inset:auto 6px 6px 6px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+    .badge{background:#ff3264;color:#fff;font-size:11px;padding:3px 6px;border-radius:999px}
+    .badge.new{background:#2ecc71}
+    .price{background:#222;color:#eee;border:1px solid #444}
+    .pp-btn{border:none;background:#ffc439;border-radius:6px;font-size:10px;padding:3px 6px;cursor:pointer}
+    .pp-btn svg{vertical-align:-1px}
+    .muted{opacity:.7}
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">IbizaGirl.pics</div>
-    <nav class="nav">
-      <a href="/index.html">Home</a>
-      <a href="/videos.html">Videos</a>
-      <a href="/subscription.html">Suscripción</a>
-    </nav>
-  </header>
+<header class="site-header">
+  <h1>Premium</h1>
+  <nav class="nav">
+    <a href="/">Home</a>
+    <a href="/premium.html" aria-current="page">Premium</a>
+    <a href="/videos.html">Videos</a>
+    <a href="/subscription.html">Suscripción</a>
+  </nav>
+</header>
 
-  <main class="container">
-    <h2>Premium — 100 fotos (rotación diaria, 30% NUEVO)</h2>
-    <div id="grid" class="grid"></div>
-    <footer class="footer">© IbizaGirl.pics</footer>
-  </main>
+<main class="container">
+  <h2>💎 100 fotos premium (30% NEW)</h2>
+  <div id="grid" class="grid-tiles"></div>
+  <p id="diag" class="muted"></p>
+</main>
 
-  <script src="/content-data1.js" defer></script>
-  <script src="/content-data3.js" defer></script>
-  <script src="/content-data4.js" defer></script>
-  <script src="/content-data6.js" defer></script>
+<footer class="site-footer"><small>© IbizaGirl.pics</small></footer>
 
-  <script src="/js/unified-helpers.js?v=20250822155733" defer></script>
-  <script>
-  (function(){
-    function boot(){
-      const all = UHelpers.detectPool('uncensored');
-      console.log('Premium: UNCENSORED total =', all.length);
-      const pick = UHelpers.sampleDaily(all, 100, 'uncensored-premium');
-      UHelpers.renderImageCards(document.getElementById('grid'), pick, 'uncensored', 0.30);
+<!-- DATA -->
+<script src="/content-data1.js"></script>
+<script src="/content-data2.js"></script>
+<script src="/content-data3.js"></script>
+<script src="/content-data4.js"></script>
+<script src="/content-data5.js"></script>
+<script src="/content-data6.js"></script>
+
+<!-- Helpers -->
+<script src="/js/payments.js?v=20250822174842"></script>
+<script src="/js/ads-safe.js?v=20250822174842"></script>
+
+<script>
+(function(){
+  const $grid = document.getElementById('grid');
+  const $diag = document.getElementById('diag');
+
+  const IMG_EXT = /\.(webp|jpg|jpeg|png)$/i;
+
+  function collectUncensoredPool() {
+    // 1) Preferir UnifiedContentAPI si expone algo útil
+    if (window.UnifiedContentAPI && typeof UnifiedContentAPI.getPremiumImages === 'function') {
+      try {
+        const all = UnifiedContentAPI.getPremiumImages(); // si acepta count, genial; si no, devuelve todas
+        if (Array.isArray(all) && all.length) return all;
+      } catch(e){}
     }
-    if (document.readyState!=='loading') setTimeout(boot,0); else document.addEventListener('DOMContentLoaded', boot);
-  })();
-  </script>
+    // 2) Si unified no ofrece método, recolectar por prefijo desde cualquier array global
+    const out = new Set();
+    for (const k in window) {
+      try {
+        const v = window[k];
+        if (Array.isArray(v)) {
+          v.forEach(s=>{
+            if (typeof s==='string' && s.startsWith('uncensored/') && IMG_EXT.test(s)) out.add(s);
+          });
+        }
+      } catch(_) {}
+    }
+    return Array.from(out);
+  }
 
-  <script async src="https://a.magsrv.com/ad-provider.js"></script>
-  <script async src="https://adserver.juicyads.com/js/jads.js"></script>
-  <script async src="https://www.premiumvertising.com/LmkfhR/tW/ptabletop.min.js"></script>
-  <script type="text/javascript" data-cfasync="false">
-  (function(){var k=window,g="e494ffb82839a29122608e933394c091",b=[["siteId",603*110+885*526-923+4695841],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],t=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL0xta2ZoUi90Vy9wdGFibGV0b3AubWluLmpz","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvZ21kYi5taW4uanM=","d3d3Lmd5dHphYnpmbGpnY3kuY29tL1RsTUd5di9JcC9vdGFibGV0b3AubWluLmpz","d3d3LmRiaHFyYWlocHltLmNvbS91bWRiLm1pbi5qcw=="],r=-1,e,a,x=function(){clearTimeout(a);r++;if(t[r]&&!(1781762654000<(new Date).getTime()&&1<r)){e=k.document.createElement("script");e.type="text/javascript";e.async=!0;var p=k.document.getElementsByTagName("script")[0];e.src="https://"+atob(t[r]);e.crossOrigin="anonymous";e.onerror=x;e.onload=function(){clearTimeout(a);k[g.slice(0,16)+g.slice(0,16)]||x()};a=setTimeout(x,5E3);p.parentNode.insertBefore(e,p)}};if(!k[g]){try{Object.freeze(k[g]=b)}catch(e){}x()})();</script>
+  function shuffle(arr){
+    for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}
+    return arr;
+  }
+
+  function pickNewFlags(list, ratio=0.3){
+    const total = list.length;
+    const n = Math.max(1, Math.round(total*ratio));
+    const idx = Array.from({length:total},(_,i)=>i);
+    shuffle(idx);
+    const chosen = new Set(idx.slice(0,n));
+    return list.map((s,i)=>({src:s,isNew:chosen.has(i)}));
+  }
+
+  function render(items){
+    $grid.innerHTML='';
+    let shown=0;
+    items.forEach(it=>{
+      const fig = document.createElement('figure');
+      fig.className='tile';
+
+      const a = document.createElement('a');
+      a.href = '/'+it.src;
+      a.target='_blank';
+      a.rel='noopener';
+
+      const img = document.createElement('img');
+      img.loading='lazy'; img.decoding='async'; img.alt='Premium';
+      img.src = '/'+it.src;
+      img.onerror = ()=>{ fig.style.display='none'; };
+
+      const over = document.createElement('div'); over.className='over';
+      const left = document.createElement('div');
+      if (it.isNew){ const b=document.createElement('span'); b.className='badge new'; b.textContent='NEW'; left.appendChild(b); }
+
+      const price = document.createElement('span'); price.className='badge price'; price.textContent='€14.99';
+      left.appendChild(price);
+
+      const btn = document.createElement('button');
+      btn.className='pp-btn'; btn.title='Unlock (Monthly)';
+      btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 21h-2l2-14h9a4 4 0 0 1 0 8h-6l-.5 3H15v3H7z"/></svg>';
+      btn.addEventListener('click', (ev)=>{ ev.preventDefault(); window.IBG_Pay && window.IBG_Pay.open('monthly','Premium Photo'); });
+
+      over.appendChild(left);
+      over.appendChild(btn);
+
+      fig.appendChild(img);
+      a.appendChild(fig);
+      fig.appendChild(over);
+      $grid.appendChild(a);
+      shown++;
+    });
+    $diag.textContent = `UNCENSORED total pool: ${window.__UNC_TOTAL__||items.length} | Mostrando: ${shown}`;
+  }
+
+  // pipeline
+  const poolRaw = collectUncensoredPool().filter(Boolean);
+  window.__UNC_TOTAL__ = poolRaw.length;
+  const selection = shuffle(poolRaw.slice()).slice(0,100);
+  const withFlags = pickNewFlags(selection, 0.3);
+  render(withFlags);
+
+  // Ads (no bloquea)
+  window.IBG_ADS && window.IBG_ADS.loadAll();
+})();
+</script>
 </body>
 </html>
