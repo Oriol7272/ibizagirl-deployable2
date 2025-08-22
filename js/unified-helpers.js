@@ -1,186 +1,121 @@
 /**
  * unified-helpers.js
- * Descubre listas (imagenes/videos) mirando todas las propiedades globales.
- * Soporta cualquier "shape" si contiene rutas /full/, /uncensored/, /uncensored-videos/.
- * Ofrece U.getFull(n), U.getUncensored(n, ratioNew), U.getVideos(n, ratioNew).
- * Rotación: modo 'daily' (fijo por día) o 'reload' (aleatorio cada carga).
+ * Descubre pools mirando window y garantiza URLs con los prefijos exactos:
+ *  - Home: /full/
+ *  - Premium fotos: /uncensored/
+ *  - Premium vídeos: /uncensored-videos/
+ * Devuelve SOLO items válidos por prefijo.
  */
 (function () {
   const MODE = 'daily'; // 'daily' | 'reload'
   const todayKey = (() => {
     const d = new Date();
-    // YYYY-MM-DD → semilla reproducible por día
     return `${d.getUTCFullYear()}-${d.getUTCMonth()+1}-${d.getUTCDate()}`;
   })();
 
-  function hash32(str) {
-    let h = 2166136261 >>> 0;
-    for (let i = 0; i < str.length; i++) {
-      h ^= str.charCodeAt(i);
-      h = Math.imul(h, 16777619);
+  function hash32(str){let h=2166136261>>>0;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+  function rng(seed){let s=seed>>>0; if(!s) s=0x9e3779b9; return ()=>{s^=s<<13; s>>>=0; s^=s>>>17; s>>>=0; s^=s<<5; s>>>=0; return (s>>>0)/4294967296}}
+  function makeRngFor(key){return MODE==='daily' ? rng(hash32(key)) : rng((Math.random()*2**32)>>>0)}
+  function shuffleStable(arr,key){const R=makeRngFor(key);const a=arr.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]} return a}
+
+  const keysPref = ['src','url','path','file','thumb','preview','poster','image'];
+  function asURL(x){ if(typeof x==='string') return x; if(x && typeof x==='object'){ for(const k of keysPref){ if(typeof x[k]==='string') return x[k]; } } return '' }
+
+  function urlsFromObj(x){
+    const out=[];
+    if(typeof x==='string'){ out.push(x); }
+    else if(x && typeof x==='object'){
+      for(const k of keysPref){ const v=x[k]; if(typeof v==='string') out.push(v); }
     }
-    return h >>> 0;
+    return out;
   }
 
-  function rng(seed) {
-    // xorshift32 simple
-    let s = seed >>> 0;
-    if (!s) s = 0x9e3779b9;
-    return () => {
-      s ^= s << 13; s >>>= 0;
-      s ^= s >>> 17; s >>>= 0;
-      s ^= s << 5;  s >>>= 0;
-      // [0,1)
-      return (s >>> 0) / 4294967296;
-    };
-  }
-
-  function makeRngFor(key) {
-    if (MODE === 'daily') return rng(hash32(`${todayKey}:${key}`));
-    return rng((Math.random() * 2**32) >>> 0);
-  }
-
-  function shuffleStable(arr, key) {
-    const rand = makeRngFor(key);
-    const a = arr.slice();
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(rand() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
-  const IMG_EXT = /\.(jpe?g|png|webp|gif|avif)$/i;
-  const VID_EXT = /\.(mp4|m3u8|webm|mov)$/i;
-
-  function asURL(x) {
-    if (typeof x === 'string') return x;
-    if (x && typeof x === 'object') {
-      for (const k of ['src','url','path','file','thumb','preview','poster','image']) {
-        if (typeof x[k] === 'string') return x[k];
+  function flatten(value, out){
+    if(!value) return;
+    if(Array.isArray(value)){ for(const v of value) flatten(v,out); return; }
+    if(typeof value==='string'){ out.push(value); return; }
+    if(typeof value==='object'){
+      if(value.constructor===Object){
+        const urls=urlsFromObj(value); if(urls.length) out.push(value);
+        for(const k in value){ try{ flatten(value[k],out); }catch{} }
       }
     }
-    return '';
   }
 
-  function isImageLike(x) {
-    const u = asURL(x);
-    return !!u && (IMG_EXT.test(u) || u.includes('/full/') || u.includes('/uncensored/'));
-  }
-
-  function isVideoLike(x) {
-    const u = asURL(x);
-    return !!u && (VID_EXT.test(u) || u.includes('/uncensored-videos/'));
-  }
-
-  function flattenArrayish(value, out) {
-    if (!value) return;
-    if (Array.isArray(value)) {
-      for (const v of value) flattenArrayish(v, out);
-    } else if (typeof value === 'object') {
-      // evita objetos DOM, funciones, etc.
-      if (value && value.constructor === Object) {
-        // si el objeto en sí parece item multimedia, empuja
-        const u = asURL(value);
-        if (u) { out.push(value); return; }
-        // si no, escanea campos que sean arrays o items
-        for (const k in value) {
-          try { flattenArrayish(value[k], out); } catch {}
-        }
-      }
-    } else if (typeof value === 'string') {
-      out.push(value);
+  function collectAll(){
+    const out=[]; const seen=new WeakSet();
+    for(const k of Object.getOwnPropertyNames(window)){
+      if(k==='window' || k==='document') continue;
+      let v; try{ v=window[k]; }catch{ continue; }
+      if(!v) continue;
+      if(typeof v==='object'){ if(seen.has(v)) continue; seen.add(v); }
+      try{ flatten(v,out); }catch{}
     }
+    return out;
   }
 
-  function collectByPath(prefixFilter) {
-    // Busca en window y recoge cualquier item cuyo URL contenga el prefijo.
-    const pool = [];
-    const visited = new WeakSet();
-    const keys = Object.getOwnPropertyNames(window);
+  // Rutas objetivo
+  const P_FULL = '/full/';
+  const P_UNC  = '/uncensored/';
+  const P_VID  = '/uncensored-videos/';
 
-    for (const key of keys) {
-      if (key === 'document' || key === 'window') continue;
-      let val;
-      try { val = window[key]; } catch { continue; }
-      if (!val) continue;
-
-      const tmp = [];
-      // Evita recorrer enormes estructuras repetidas través de referencias
-      if (typeof val === 'object') {
-        if (visited.has(val)) continue;
-        visited.add(val);
-      }
-      try { flattenArrayish(val, tmp); } catch {}
-
-      for (const item of tmp) {
-        const u = asURL(item);
-        if (u && u.includes(prefixFilter)) pool.push(item);
+  function pickUrlForPrefix(item, prefix){
+    // Busca dentro del item UNA URL que contenga el prefijo requerido
+    if(typeof item==='string') return item.includes(prefix) ? item : '';
+    if(item && typeof item==='object'){
+      for(const k of keysPref){
+        const v=item[k];
+        if(typeof v==='string' && v.includes(prefix)) return v;
       }
     }
-    // Dedup por URL
-    const seen = new Set();
-    const dedup = [];
-    for (const it of pool) {
-      const u = asURL(it);
-      if (!u || seen.has(u)) continue;
-      seen.add(u);
-      dedup.push(it);
+    // fallback: si la principal coincide, bien; si no, vacío
+    const base = asURL(item);
+    return base.includes(prefix) ? base : '';
+  }
+
+  function normalizeForPrefix(item, prefix){
+    const url = pickUrlForPrefix(item, prefix);
+    if(!url) return null;
+    const title = (item && item.title) || (item && item.name) || '';
+    const poster = (item && (item.poster||item.thumb||item.preview)) || '';
+    return { src:url, title, poster };
+  }
+
+  function markNew(arr, ratio, key){
+    const total = Math.max(0, Math.round(arr.length * ratio));
+    const idxs = shuffleStable([...arr.keys()], `flag:${key}`).slice(0,total);
+    const set = new Set(idxs);
+    return arr.map((it,i)=> ({...it, isNew: set.has(i) || !!it.isNew}));
+  }
+
+  // Recolecta TODO y luego filtra por prefijos
+  const universe = collectAll();
+
+  function selectByPrefix(prefix, n, key, ratioNew){
+    // filtra items que realmente tienen una URL con ese prefijo
+    const filtered = [];
+    for(const it of universe){
+      const norm = normalizeForPrefix(it, prefix);
+      if(norm) filtered.push(norm);
     }
-    return dedup;
-  }
-
-  // Pools por descubrimiento
-  let fullPool = collectByPath('/full/');
-  let uncPool  = collectByPath('/uncensored/');
-  let vidPool  = collectByPath('/uncensored-videos/');
-
-  // Como fallback adicional, si no encontramos nada por path, intenta heurística por extensión
-  if (fullPool.length === 0 || uncPool.length === 0 || vidPool.length === 0) {
-    const all = [];
-    const keys = Object.getOwnPropertyNames(window);
-    for (const k of keys) {
-      try { flattenArrayish(window[k], all); } catch {}
-    }
-    if (fullPool.length === 0) fullPool = all.filter(isImageLike);
-    if (uncPool.length === 0)  uncPool  = all.filter(isImageLike);
-    if (vidPool.length === 0)  vidPool  = all.filter(isVideoLike);
-  }
-
-  function pickN(arr, n, key) {
-    if (!Array.isArray(arr) || arr.length === 0) return [];
-    return shuffleStable(arr, key).slice(0, n);
-  }
-
-  function markNew(arr, ratio = 0.3, key = 'new') {
-    const a = arr.slice();
-    const total = Math.max(0, Math.round(a.length * ratio));
-    const order = shuffleStable([...a.keys()], `flag:${key}`);
-    const set = new Set(order.slice(0, total));
-    return a.map((it, i) => {
-      if (typeof it === 'string') return { src: it, isNew: set.has(i) };
-      return { ...it, isNew: (it.isNew || set.has(i)) };
-    });
-  }
-
-  function normalizeItem(it) {
-    if (typeof it === 'string') return { src: it, title: '' };
-    const src = asURL(it);
-    const title = it.title || it.name || '';
-    const poster = it.poster || it.thumb || it.preview || '';
-    return { ...it, src, title, poster };
+    // dedup por src
+    const seen=new Set(); const dedup=[];
+    for(const it of filtered){ if(!seen.has(it.src)){ seen.add(it.src); dedup.push(it); } }
+    const picked = shuffleStable(dedup, key).slice(0, n);
+    if(typeof ratioNew==='number') return markNew(picked, ratioNew, key);
+    return picked;
   }
 
   window.U = {
-    getFull: (n = 20) => pickN(fullPool, n, 'full').map(normalizeItem),
-    getUncensored: (n = 100, ratioNew = 0.3) =>
-      markNew(pickN(uncPool, n, 'unc'), ratioNew, 'unc').map(normalizeItem),
-    getVideos: (n = 20, ratioNew = 0.3) =>
-      markNew(pickN(vidPool, n, 'vid'), ratioNew, 'vid').map(normalizeItem)
+    getFull:      (n=20)           => selectByPrefix(P_FULL, n, 'full'),
+    getUncensored:(n=100, r=0.30)  => selectByPrefix(P_UNC,  n, 'unc', r),
+    getVideos:    (n=20,  r=0.30)  => selectByPrefix(P_VID,  n, 'vid', r),
   };
 
-  // DEBUG útil
-  console.log('🔎 unified-helpers: pools', {
-    full: fullPool.length, uncensored: uncPool.length, videos: vidPool.length, mode: MODE
+  console.log('🔎 unified-helpers pools (after filter by prefix):', {
+    full: U.getFull(9999).length,
+    uncensored: U.getUncensored(9999).length,
+    videos: U.getVideos(9999).length,
+    mode: MODE
   });
 })();
