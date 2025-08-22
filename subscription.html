@@ -1,58 +1,68 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Suscripciones — IbizaGirl.pics</title>
-  <link rel="stylesheet" href="/css/site.css?v=20250822184904"/>
+  <meta charset="utf-8">
+  <title>Suscripción · IbizaGirl.pics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="/css/site.css?v=20250822190641" rel="stylesheet">
+  <style>
+    body { color:#e7eef7; background:#0b0f14; }
+    header.nav { display:flex; gap:1rem; padding:.75rem 1rem; align-items:center; }
+    header.nav a { color:#8ecbff; text-decoration:none; }
+    header.nav a:hover { text-decoration:underline; }
+    main.container { padding: 1rem clamp(1rem,4vw,2rem); max-width: 1100px; margin: 0 auto; }
+    h1 { margin: .2rem 0 1rem; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 1.2rem; }
+
+    /* Caja de plan sin overlay de la galería */
+    .planbox {
+      background:#11161d;
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:14px; padding:16px;
+      box-shadow:0 2px 12px rgba(0,0,0,.25);
+    }
+    .planbox h3{ margin:.25rem 0 .4rem; color:#cfe3ff; }
+    .planbox .price{ margin:0 0 .6rem; opacity:.9 }
+    .pp-wrap{ max-width:260px; }
+  </style>
 </head>
-<body class="dark">
-  <header class="topbar">
-    <nav class="nav">
-      <a href="/" class="brand">IbizaGirl.pics</a>
-      <div class="spacer"></div>
-      <a href="/">Home</a>
-      <a href="/premium.html">Premium</a>
-      <a href="/videos.html">Vídeos</a>
-      <a class="active" href="/subscription.html">Suscripción</a>
-    </nav>
+<body>
+  <header class="nav">
+    <a href="/">Home</a>
+    <a href="/premium.html">Premium</a>
+    <a href="/videos.html">Vídeos</a>
+    <a href="/subscription.html">Suscripción</a>
   </header>
 
   <main class="container">
     <h1>Suscripciones</h1>
     <p>Desbloquea todas las fotos y vídeos sin límites.</p>
 
-    <section class="pricing-grid">
-      <article class="card">
-        <h2>Mensual</h2>
-        <p class="price"><strong>3,99 €</strong> / mes</p>
-        <div id="pp-monthly" class="pp-slot"></div>
-        <p class="note">Cancela cuando quieras.</p>
-      </article>
+    <div class="grid">
+      <section class="planbox">
+        <h3>Mensual</h3>
+        <p class="price">14,99 € / mes</p>
+        <div id="pp-monthly1499" class="pp-wrap"></div>
+      </section>
 
-      <article class="card">
-        <h2>Anual</h2>
-        <p class="price"><strong>24,99 €</strong> / año</p>
-        <div id="pp-annual" class="pp-slot"></div>
-        <p class="note">12 meses, mejor precio.</p>
-      </article>
+      <section class="planbox">
+        <h3>Anual</h3>
+        <p class="price">49,99 € / año</p>
+        <div id="pp-annual4999" class="pp-wrap"></div>
+      </section>
 
-      <article class="card">
-        <h2>Lifetime</h2>
-        <p class="price"><strong>49,99 €</strong> pago único</p>
-        <div id="pp-lifetime" class="pp-slot"></div>
-        <p class="note">Acceso permanente.</p>
-      </article>
-    </section>
+      <section class="planbox">
+        <h3>Lifetime</h3>
+        <p class="price">100,00 € pago único</p>
+        <div id="pp-lifetime100" class="pp-wrap"></div>
+      </section>
+    </div>
 
-    <p class="tiny">Tras el pago, refresca la página si no ves todo desbloqueado al instante.</p>
+    <p style="opacity:.75; margin-top:1rem">
+      Tras el pago, refresca la página si no ves todo desbloqueado al instante.
+    </p>
   </main>
 
-  <footer class="footer">
-    <span>© IbizaGirl.pics</span>
-  </footer>
-
-  <!-- Loader pagos -->
-  <script src="/js/payments.js?v=20250822184904"></script>
+  <script src="/js/payments.js?v=20250822190641" defer></script>
 </body>
 </html>

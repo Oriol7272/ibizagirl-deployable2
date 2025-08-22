@@ -1,7 +1,7 @@
 (function () {
-  const log = (...a) => console.log("💳 paypal:", ...a);
+  const log  = (...a) => console.log("💳 paypal:", ...a);
   const warn = (...a) => console.warn("⚠️ paypal:", ...a);
-  const err = (...a) => console.error("❌ paypal:", ...a);
+  const err  = (...a) => console.error("❌ paypal:", ...a);
 
   async function fetchConfig() {
     try {
@@ -33,9 +33,9 @@
 
   function renderButtons(paypal, cfg) {
     const map = [
-      { sel: "#pp-monthly",  price: "3.99",  type: "subscription", plan: cfg.planMonthly },
-      { sel: "#pp-annual",   price: "24.99", type: "subscription", plan: cfg.planAnnual  },
-      { sel: "#pp-lifetime", price: "49.99", type: "one-time" }
+      { sel: "#pp-monthly1499", kind: "sub",  price: "14.99", planId: cfg.planMonthly1499, label: "Mensual 14,99" },
+      { sel: "#pp-annual4999",  kind: "sub",  price: "49.99", planId: cfg.planAnnual4999,  label: "Anual 49,99"   },
+      { sel: "#pp-lifetime100", kind: "once", price: "100.00",                              label: "Lifetime 100" },
     ];
 
     map.forEach((m) => {
@@ -47,56 +47,50 @@
         onError: (e) => err("render error", m.sel, e),
       };
 
-      // Suscripción real si hay plan_id, si no pago único fallback
-      if (m.type === "subscription" && m.plan) {
-        opts.createSubscription = function (data, actions) {
-          return actions.subscription.create({ plan_id: m.plan });
-        };
-        opts.onApprove = function (data, actions) {
-          log("subscription approved", data);
-          try { localStorage.setItem("ibg_sub_active", "1"); } catch (e) {}
+      if (m.kind === "sub" && m.planId) {
+        // Suscripción real con plan_id
+        opts.createSubscription = (data, actions) =>
+          actions.subscription.create({ plan_id: m.planId });
+        opts.onApprove = (data) => {
+          log("subscription approved", m.label, data);
           alert("¡Gracias! Suscripción activada.");
         };
       } else {
-        // Pago único (abre PayPal siempre)
-        opts.createOrder = function (data, actions) {
-          return actions.order.create({
+        // Pago único (fallback si falta planId o lifetime)
+        const value = m.price;
+        opts.createOrder = (data, actions) =>
+          actions.order.create({
             purchase_units: [
-              {
-                amount: { value: m.price, currency_code: cfg.currency || "EUR" },
-                description: `IbizaGirl ${m.sel.replace("#pp-","")}`,
-              },
+              { amount: { value, currency_code: cfg.currency || "EUR" },
+                description: `IbizaGirl ${m.label}` }
             ],
             application_context: { shipping_preference: "NO_SHIPPING" },
           });
-        };
-        opts.onApprove = function (data, actions) {
-          return actions.order.capture().then(function (details) {
-            log("order captured", details);
-            try { localStorage.setItem("ibg_unlock_all", "1"); } catch (e) {}
+        opts.onApprove = (data, actions) =>
+          actions.order.capture().then((details) => {
+            log("order captured", m.label, details);
             alert("¡Gracias! Pago completado.");
           });
-        };
+        if (m.kind === "sub" && !m.planId) {
+          warn(`Falta plan_id para ${m.label}. Mostrando pago único temporalmente.`);
+        }
       }
-      try {
-        paypal.Buttons(opts).render(el);
-      } catch (e) {
-        err("buttons render fail", m.sel, e);
-      }
+
+      try { paypal.Buttons(opts).render(el); } catch (e) { err("buttons fail", m.sel, e); }
     });
   }
 
   (async function start() {
-    const cfg = await fetchConfig();
-    if (!cfg || !cfg.clientId) {
-      warn("clientId no disponible. Revisa /api/paypal y las env vars en Vercel.");
-      return;
-    }
     try {
+      const cfg = await fetchConfig();
+      if (!cfg || !cfg.clientId) {
+        warn("Sin PAYPAL_CLIENT_ID configurado");
+        return;
+      }
       const paypal = await loadSdk(cfg.clientId, cfg.currency || "EUR");
       renderButtons(paypal, cfg);
     } catch (e) {
-      err("sdk fail", e);
+      err("init fail", e);
     }
   })();
 })();

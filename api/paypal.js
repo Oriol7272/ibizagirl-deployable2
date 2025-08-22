@@ -1,19 +1,21 @@
-export default function handler(req, res) {
-  // Variables de entorno en Vercel:
-  // PAYPAL_CLIENT_ID (OBLIGATORIA)
-  // PAYPAL_PLAN_MONTHLY (OPCIONAL - plan_id real de PayPal)
-  // PAYPAL_PLAN_ANNUAL  (OPCIONAL - plan_id real de PayPal)
-  const clientId    = process.env.PAYPAL_CLIENT_ID || "";
-  const planMonthly = process.env.PAYPAL_PLAN_MONTHLY || "";
-  const planAnnual  = process.env.PAYPAL_PLAN_ANNUAL  || "";
-  const currency    = "EUR";
+export default async function handler(req, res) {
+  try {
+    if (req.method !== "GET") return res.status(405).end();
 
-  // No exponemos secretos, sólo el clientId público y los plan_id si existen.
-  res.setHeader("Cache-Control", "public, max-age=300, s-maxage=300");
-  res.status(200).json({
-    clientId,
-    currency,
-    planMonthly: planMonthly || null,
-    planAnnual:  planAnnual  || null,
-  });
+    res.setHeader("Cache-Control","public, max-age=60");
+    res.status(200).json({
+      clientId: process.env.PAYPAL_CLIENT_ID || "",
+      currency: "EUR",
+      // nuevos planes
+      planMonthly1499: process.env.PAYPAL_PLAN_MONTHLY_1499 || "",
+      planAnnual4999:  process.env.PAYPAL_PLAN_ANNUAL_4999  || "",
+    });
+  } catch (e) {
+    res.status(200).json({
+      clientId: "",
+      currency: "EUR",
+      planMonthly1499: "",
+      planAnnual4999:  "",
+    });
+  }
 }
