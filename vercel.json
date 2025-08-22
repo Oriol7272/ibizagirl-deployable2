@@ -1,16 +1,9 @@
 {
   "version": 2,
-  "routes": [
-    { "src": "^/api/(.*)$", "dest": "/api/$1" },
-
-    { "src": "^/full/(.*)$", "dest": "/api/cdn?path=/full/$1" },
-    { "src": "^/uncensored/(.*)$", "dest": "/api/cdn?path=/uncensored/$1" },
-    { "src": "^/uncensored-videos/(.*)$", "dest": "/api/cdn?path=/uncensored-videos/$1" },
-
-    { "src": "/(index\\.html)?$", "dest": "/index.html" },
-    { "src": "/premium", "dest": "/premium.html" },
-    { "src": "/videos", "dest": "/videos.html" },
-    { "src": "/subscription", "dest": "/subscription.html" }
+  "rewrites": [
+    { "source": "/full/:path*", "destination": "/api/cdn?path=/full/:path*" },
+    { "source": "/uncensored/:path*", "destination": "/api/cdn?path=/uncensored/:path*" },
+    { "source": "/uncensored-videos/:path*", "destination": "/api/cdn?path=/uncensored-videos/:path*" }
   ],
   "headers": [
     {
@@ -26,7 +19,7 @@
       ]
     },
     {
-      "source": "/(.*)\\.(?:webp|jpg|jpeg|png|gif|mp4|webm)$",
+      "source": "/(.*)\\.(?:webp|jpg|jpeg|png|mp4|webm)$",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
