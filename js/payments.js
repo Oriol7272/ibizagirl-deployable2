@@ -1,108 +1,116 @@
-(function (w, d) {
+(function (global) {
   'use strict';
-  const CFG = w.PAYMENTS_CONFIG || {};
-  let sdkPromise = null;
-  function log(){ try{ console.debug('[payments]', ...arguments) }catch(e){} }
+  var cfg = global.PAYMENTS_CONFIG || {};
+  var CLIENT_ID = cfg.CLIENT_ID;
+  var CURRENCY  = cfg.CURRENCY || 'EUR';
+  var _sdkPromise = null;
+  var _loadedIntent = null;
 
-  function ensureSdk() {
-    if (w.paypal) return Promise.resolve(w.paypal);
-    if (sdkPromise) return sdkPromise;
-
-    const params = new URLSearchParams({
-      'client-id': CFG.clientId,
-      components: 'buttons',
-      currency: CFG.currency || 'EUR',
-      intent: 'capture',
-      vault: 'true',
-      commit: 'true',
-      'enable-funding': 'card'
-    });
-    const src = `https://www.paypal.com/sdk/js?${params.toString()}`;
-
-    sdkPromise = new Promise((resolve, reject) => {
-      const existing = d.getElementById('paypal-sdk');
-      if (existing) {
-        const tick = () => w.paypal ? resolve(w.paypal) : setTimeout(tick, 40);
-        return tick();
-      }
-      const s = d.createElement('script');
-      s.id = 'paypal-sdk';
-      s.src = src;
+  function loadSdk(intent) {
+    if (!CLIENT_ID) throw new Error('[payments] Falta CLIENT_ID');
+    if (_sdkPromise && _loadedIntent === intent) return _sdkPromise;
+    var url = new URL('https://www.paypal.com/sdk/js');
+    url.searchParams.set('client-id', CLIENT_ID);
+    url.searchParams.set('currency', CURRENCY);
+    url.searchParams.set('components', 'buttons');
+    if (intent === 'subscription') {
+      url.searchParams.set('intent', 'subscription');
+      url.searchParams.set('vault', 'true');
+      url.searchParams.set('commit', 'true');
+    } else {
+      url.searchParams.set('intent', 'capture');
+      url.searchParams.set('commit', 'true');
+    }
+    _loadedIntent = intent;
+    _sdkPromise = new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = url.toString();
       s.async = true;
-      s.onload = () => w.paypal ? resolve(w.paypal) : reject(new Error('paypal sdk loaded but window.paypal undefined'));
-      s.onerror = (e) => reject(e);
-      d.head.appendChild(s);
+      s.onload = function () { resolve(global.paypal); };
+      s.onerror = function () { reject(new Error('[payments] SDK load error')); };
+      document.head.appendChild(s);
     });
-    return sdkPromise;
+    return _sdkPromise;
   }
 
-  function renderSubscriptions(opts){
-    const o = Object.assign({
-      monthly: CFG.planMonthly,
-      annual:  CFG.planAnnual,
-      monthlyContainer: '#paypal-monthly',
-      annualContainer:  '#paypal-annual'
-    }, opts || {});
-    return ensureSdk().then(paypal => {
-      const mk = (planId) => ({
-        style: { layout:'vertical', height:45, color:'gold', label:'subscribe' },
-        createSubscription: (_data, actions) => actions.subscription.create({ plan_id: planId }),
-        onApprove: (data) => log('subscribe ok', data),
-        onError: (err) => console.warn('[payments] subscribe error', err)
-      });
-      if (o.monthly && d.querySelector(o.monthlyContainer)) paypal.Buttons(mk(o.monthly)).render(o.monthlyContainer);
-      if (o.annual  && d.querySelector(o.annualContainer))   paypal.Buttons(mk(o.annual)).render(o.annualContainer);
-    });
-  }
+  function renderSubscriptions(opts) {
+    opts = opts || {};
+    var monthlyId = opts.monthly || cfg.MONTHLY_PLAN_ID;
+    var annualId  = opts.annual  || cfg.ANNUAL_PLAN_ID;
+    var mSel = opts.monthlyContainer || '#paypal-monthly';
+    var aSel = opts.annualContainer  || '#paypal-annual';
 
-  function renderLifetime(opts){
-    const o = Object.assign({
-      container: '#paypal-lifetime',
-      price: 100.00,
-      description: 'Acceso lifetime a IbizaGirl.pics'
-    }, opts || {});
-    return ensureSdk().then(paypal => {
-      const el = d.querySelector(o.container);
-      if (!el) return;
-      paypal.Buttons({
-        style: { layout:'vertical', height:45, color:'gold', label:'pay' },
-        createOrder: (_d, actions) => actions.order.create({
-          purchase_units: [{
-            description: o.description,
-            amount: { currency_code: CFG.currency || 'EUR', value: Number(o.price).toFixed(2) }
-          }]
-        }),
-        onApprove: (_d, actions) => actions.order.capture().then(order => log('lifetime ok', order)),
-        onError: (err) => console.warn('[payments] lifetime error', err)
-      }).render(el);
-    });
-  }
-
-  function renderMiniBuy(opts){
-    const o = Object.assign({
-      selector: '.mini-buy',
-      price: 0.30,
-      description: 'Compra vídeo IbizaGirl'
-    }, opts || {});
-    return ensureSdk().then(paypal => {
-      d.querySelectorAll(o.selector).forEach(node => {
+    return loadSdk('subscription').then(function (paypal) {
+      if (monthlyId && document.querySelector(mSel)) {
         paypal.Buttons({
-          style: { label:'pay', layout:'horizontal', height:38, tagline:false },
-          createOrder: (_d, actions) => actions.order.create({
-            purchase_units: [{
-              description: o.description,
-              amount: { currency_code: CFG.currency || 'EUR', value: Number(o.price).toFixed(2) }
-            }]
-          }),
-          onApprove: (_d, actions) => actions.order.capture().then(order => {
-            log('mini-buy ok', order);
-            node.closest('[data-item-id]')?.classList.add('unlocked');
-          }),
-          onError: (err) => console.warn('[payments] mini-buy error', err)
+          style: { label: 'subscribe', layout: 'horizontal', tagline: false },
+          createSubscription: function (_d, actions) {
+            return actions.subscription.create({ plan_id: monthlyId });
+          },
+          onApprove: function (data) {
+            console.log('[payments] monthly ok', data);
+            localStorage.setItem('subscribed', '1');
+            location.reload();
+          }
+        }).render(mSel);
+      }
+      if (annualId && document.querySelector(aSel)) {
+        paypal.Buttons({
+          style: { label: 'subscribe', layout: 'horizontal', tagline: false },
+          createSubscription: function (_d, actions) {
+            return actions.subscription.create({ plan_id: annualId });
+          },
+          onApprove: function (data) {
+            console.log('[payments] annual ok', data);
+            localStorage.setItem('subscribed', '1');
+            location.reload();
+          }
+        }).render(aSel);
+      }
+    });
+  }
+
+  function renderMiniBuy(opts) {
+    opts = opts || {};
+    var selector = opts.selector || '[data-item-id] .mini-buy';
+    var price = Number(opts.price || 0.30);
+    var description = opts.description || 'Compra de vídeo';
+
+    return loadSdk('capture').then(function (paypal) {
+      document.querySelectorAll(selector).forEach(function (node) {
+        if (node.__ppRendered) return;
+        node.__ppRendered = true;
+        paypal.Buttons({
+          style: { layout: 'horizontal', height: 35, label: 'pay', tagline: false },
+          createOrder: function (_d, actions) {
+            return actions.order.create({
+              purchase_units: [{
+                description: description,
+                amount: { currency_code: CURRENCY, value: price.toFixed(2) }
+              }],
+              application_context: { shipping_preference: 'NO_SHIPPING' }
+            });
+          },
+          onApprove: function (data, actions) {
+            return actions.order.capture().then(function (order) {
+              console.log('[payments] mini-buy ok', order);
+              node.closest('[data-item-id]')?.classList.add('unlocked');
+            });
+          }
         }).render(node);
       });
     });
   }
 
-  w.Payments = { ensureSdk, renderSubscriptions, renderLifetime, renderMiniBuy };
-})(window, document);
+  function init(kind) {
+    if (kind === 'subscription') return renderSubscriptions({});
+    if (kind === 'capture')       return renderMiniBuy({});
+    return Promise.resolve();
+  }
+
+  global.Payments = {
+    init: init,
+    renderSubscriptions: renderSubscriptions,
+    renderMiniBuy: renderMiniBuy
+  };
+})(window);
