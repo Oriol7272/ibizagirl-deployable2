@@ -1,10 +1,11 @@
-(function(){
-  // Inserta botón PayPal bajo cada tarjeta de vídeo
-  document.querySelectorAll('.video-card, .card, .item').forEach(card=>{
-    if (card.querySelector('.mini-buy')) return;
-    const holder = document.createElement('div');
-    holder.className = 'mini-buy';
-    card.appendChild(holder);
-  });
-  window.Payments.renderMiniBuy('.mini-buy', { price: 0.30, description: 'Vídeo IbizaGirl' });
-})();
+/* Vídeos: hidratar thumbs + botón PayPal por tarjeta */
+document.addEventListener('DOMContentLoaded', async () => {
+  try { AppUtils.hydrateAnchorsToImgs(); } catch(e){ console.warn(e); }
+
+  // Monta botón PayPal (capture) por cada .video-card .paypal-slot
+  const slots = Array.from(document.querySelectorAll('.video-card .paypal-slot'));
+  const conf = slots.map((el, i) => ({ container: el, amount: el.dataset.amount || '0.30', description: el.dataset.desc || ('Vídeo #'+(i+1)) }));
+  if (conf.length) {
+    try { await Payments.renderCaptures(conf); } catch(e){ console.error(e); }
+  }
+});

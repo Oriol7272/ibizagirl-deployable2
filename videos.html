@@ -1,97 +1,35 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="utf-8">
   <title>IbizaGirl.pics — Vídeos</title>
-  <link rel="stylesheet" href="/css/site.css"/>
-  <style>
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-    .card{background:#111;border-radius:14px;padding:8px;box-shadow:0 0 0 1px #222}
-    video{width:100%;height:180px;border-radius:10px;background:#000}
-    .muted{opacity:.65}
-    .topnav{display:flex;gap:16px;margin:12px 0}
-    .topnav a{color:#86b7ff;text-decoration:none}
-    .price{font-size:12px;opacity:.8;margin-top:6px}
-  </style>
-  <script>
-    (function robustLoader(){
-      const ver = Date.now();
-      function add(a,b){const s=document.createElement('script');s.defer=true;s.src=a+'?v='+ver;s.onerror=()=>{const f=document.createElement('script');f.defer=true;f.src=b+'?v='+ver;document.head.appendChild(f)};document.head.appendChild(s);}
-      add('/content-data1.js','/js/content-data1.js');
-      add('/content-data2.js','/js/content-data2.js');
-      add('/content-data3.js','/js/content-data3.js');
-      add('/content-data4.js','/js/content-data4.js');
-      add('/content-data5.js','/js/content-data5.js'); // vídeos
-      add('/content-data6.js','/js/content-data6.js');
-    })();
-  </script>
-  <meta name="juicyads-site-verification" content="d9a76b9c250ba1823d821e651e04497c">
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link href="styles.css" rel="stylesheet">
+  <script src="js/utils.js" defer></script>
+  <script src="js/i18n.js" defer></script>
+  <script src="js/payments.config.js" defer></script>
+  <script src="js/payments.js" defer></script>
+  <script src="js/init-videos.js" defer></script>
 </head>
 <body>
-  <div class="topnav">
-    <a href="/">Home</a>
-    <a href="/premium">Premium</a>
-    <a href="/videos">Vídeos</a>
-    <a href="/subscription">Suscripción</a>
-  </div>
+  <nav class="topnav">
+    <a href="/" data-i18n="home">Home</a>
+    <a href="/premium" data-i18n="premium">Premium</a>
+    <a href="/videos" data-i18n="videos">Vídeos</a>
+    <a href="/subscription" data-i18n="subscription">Suscripción</a>
+  </nav>
 
-  <h1>Vídeos (20 aleatorios)</h1>
-  <div id="grid" class="grid"></div>
-  <p id="status" class="muted"></p>
+  <main class="container">
+    <h1 data-i18n="videos">Vídeos (20 aleatorios)</h1>
+    <section id="videos-grid" class="grid">
+      <!-- Cada .video-card debe tener .paypal-slot. Si lo genera tu contenido, solo añadimos el slot por CSS/JS -->
+    </section>
+  </main>
 
-  <script>
-    function dailyShuffle(arr){
-      const seedStr=new Date().toISOString().slice(0,10);
-      let s=0;for(let i=0;i<seedStr.length;i++)s=(s*31+seedStr.charCodeAt(i))>>>0;
-      const a=arr.slice();for(let i=a.length-1;i>0;i--){s=(s*1664525+1013904223)>>>0;const j=s%(i+1);[a[i],a[j]]=[a[j],a[i]]}return a;
-    }
-    function norm(p){if(!p)return'';if(p.startsWith('/'))return p;return p.startsWith('uncensored-videos/')?'/'+p:'/uncensored-videos/'+p;}
-    (function boot(){
-      const triesMax=60;let t=0;
-      const iv=setInterval(()=>{
-        const pool = window.PREMIUM_VIDEOS_POOL || [];
-        if (pool.length){ clearInterval(iv); render(pool); }
-        else if(++t>=triesMax){
-          clearInterval(iv);
-          document.getElementById('status').textContent='No hay vídeos disponibles.';
-          console.log('Videos: pool = 0 | render = 0');
-        }
-      },100);
-    })();
+  <script src="https://s.magsrv.com/ad-provider.js" async></script>
+  <script type="text/javascript">var juicy_site_verification = "YOUR-JUICYADS-SITE-ID";</script>
 
-    function render(pool){
-      const pick=dailyShuffle(pool).slice(0,20);
-      const grid=document.getElementById('grid');
-      pick.forEach(item=>{
-        const path=typeof item==='string'?item:(item.path||item.src||item.url||'');
-        const src=norm(path);
-        const v=document.createElement('video'); v.controls=true; v.preload='metadata'; v.src=src;
-        const card=document.createElement('div'); card.className='card';
-        const price=document.createElement('div'); price.className='price'; price.textContent='0,30 €';
-        card.appendChild(v); card.appendChild(price); grid.appendChild(card);
-      });
-      document.getElementById('status').textContent=`Render ${pick.length} / pool ${pool.length}`;
-    }
-  </script>
-
-  <div id="mini-buy-test" style="margin:24px 0"></div>
-  
-  <script src="/js/payments.config.js?v=live1755948989"></script>
-  <script src="/js/payments.js?v=live1755948989" defer></script>
-  <script src="/js/init-videos.js?v=live1755948989" defer></script>
-  <script src="/js/site.config.js?v=live"></script>
-  <script src="/js/payments.js?v=live"></script>
-  <script src="/js/init-videos.js?v=live"></script>
-  <script src="/js/i18n.js?v=live"></script>
-  <script src="/js/ads-and-chat.js?v=live"></script>
-  <script src="/js/payments.config.js?v=live3"></script>
-  <script src="/js/payments.js?v=live3"></script>
-  <script src="/js/i18n.js?v=1"></script>
-  <script src="/js/ui-fixes.js?v=1"></script>
-  <!-- ads + crisp -->
-  <!-- JuicyAds meta --><meta name="juicyads-site-verification" content="d9a76b9c250ba1823d821e651e04497c"><!-- ExoClick --><script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script><ins class="eas6a97888e2" data-zoneid="5696328"></ins><script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script><!-- EroAdvertising --><div id="sp_8177575_node">&nbsp;</div><script type="text/javascript" charset="utf-8">if (typeof eaCtrl =="undefined"){var eaCtrlRecs=[];var eaCtrl={add:function(ag){eaCtrlRecs.push(ag)}};var js=document.createElement("script");js.setAttribute("src","//go.easrv.cl/loadeactrl.go?pid=152716&spaceid=8177575&ctrlid=798544");document.head.appendChild(js);} eaCtrl.add({"display":"sp_8177575_node","sid":8177575,"plugin":"banner"});</script><!-- PopAds --><script type="text/javascript" data-cfasync="false">(function(){var p=window,j="e494ffb82839a29122608e933394c091",d=[["siteId",595+467*6*350+302+4245161],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],v=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL3pTL2J3ZHZmL3R0YWJsZXRvcC5taW4uanM=","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvaG1kYi5taW4uanM=","d3d3Lmh6Z2Vua3ZkLmNvbS9ObmtBaC9mQy96dGFibGV0b3AubWluLmpz","d3d3LmpzZ2Zyend0eWdmLmNvbS9qbWRiLm1pbi5qcw=="],e=-1,a,y,m=function(){clearTimeout(y);e++;if(v[e]&&!(1781539757000<(new Date).getTime()&&1<e)){a=p.document.createElement("script");a.type="text/javascript";a.async=!0;var s=p.document.getElementsByTagName("script")[0];a.src="https://"+atob(v[e]);a.crossOrigin="anonymous";a.onerror=m;a.onload=function(){clearTimeout(y);p[j.slice(0,16)+j.slice(0,16)]||m()};y=setTimeout(m,5E3);s.parentNode.insertBefore(a,s)}};if(!p[j]){try{Object.freeze(p[j]=d)}catch(e){}m()})();</script><!-- Crisp chat --><script type="text/javascript">window.=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){var d=document,s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+  <!-- Crisp -->
+  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 </body>
-  <script src="/js/payments.config.js?v=live4"></script>
-  <script src="/js/payments.js?v=live4"></script>
-  <script src="/js/init-videos.js?v=live4"></script>
+</html>

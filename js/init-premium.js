@@ -1,40 +1,16 @@
-(function(){
-  function pickRandom(arr, n){
-    const a=[...arr]; const out=[];
-    while (a.length && out.length<n){ out.push(a.splice(Math.floor(Math.random()*a.length),1)[0]); }
-    return out;
-  }
-  function premiumPool(){
-    const p1 = window.PREMIUM_IMAGES_PART1 || [];
-    const p2 = window.PREMIUM_IMAGES_PART2 || [];
-    return [...p1, ...p2];
-  }
-  function renderPremium(selector, items){
-    const grid = document.querySelector(selector);
-    if(!grid) return;
-    grid.innerHTML = '';
-    const nNew = Math.floor(items.length * 0.30);
-    const newIdx = new Set(pickRandom(items.map((_,i)=>i), nNew));
-    items.forEach((src, i)=>{
-      const card = document.createElement('div');
-      card.className = 'card premium';
-      const a = document.createElement('a');
-      a.href = src; a.target='_blank'; a.rel='noopener';
-      const img = document.createElement('img'); img.loading='lazy'; img.src=src; img.alt='img';
-      a.appendChild(img);
-      if(newIdx.has(i)){
-        const badge=document.createElement('span');
-        badge.className='badge-new'; badge.textContent='Nuevo';
-        a.appendChild(badge);
-      }
-      card.appendChild(a);
-      grid.appendChild(card);
-    });
-  }
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const pool = premiumPool();
-    if (pool.length) {
-      renderPremium('.gallery, .grid, .premium-grid', pickRandom(pool, 100));
-    }
+/* Premium: 100 imágenes aleatorias, 30% con badge "Nuevo"; hidratar imágenes */
+document.addEventListener('DOMContentLoaded', () => {
+  try { AppUtils.hydrateAnchorsToImgs(); } catch(e){ console.warn(e); }
+
+  // Añadir badges "Nuevo" a ~30% de las tarjetas ya renderizadas
+  const cards = Array.from(document.querySelectorAll('.card'));
+  const nNew = Math.ceil(cards.length * 0.30);
+  const picks = AppUtils.pickN(cards, nNew, AppUtils.todaySeed() + '-premium-new');
+  picks.forEach(card => {
+    if (card.querySelector('.badge-new')) return;
+    const b = document.createElement('div');
+    b.className = 'badge-new';
+    b.textContent = 'Nuevo';
+    card.appendChild(b);
   });
-})();
+});

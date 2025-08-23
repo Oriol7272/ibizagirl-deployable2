@@ -1,29 +1,21 @@
+/* i18n.js: ES/EN/FR/DE/IT */
 (function(){
-  const T = {
-    es: { home:'Home', premium:'Premium', videos:'Vídeos', subscription:'Suscripción',
-          gallery:'Galería (20 aleatorias de FULL)', premium_gallery:'Imágenes premium (20 aleatorias)', subs:'Suscripciones' },
-    en: { home:'Home', premium:'Premium', videos:'Videos', subscription:'Subscription',
-          gallery:'Gallery (20 random from FULL)', premium_gallery:'Premium images (20 random)', subs:'Subscriptions' },
-    fr: { home:'Accueil', premium:'Premium', videos:'Vidéos', subscription:'Abonnement',
-          gallery:'Galerie (20 aléatoires de FULL)', premium_gallery:'Images premium (20 aléatoires)', subs:'Abonnements' },
-    de: { home:'Start', premium:'Premium', videos:'Videos', subscription:'Abo',
-          gallery:'Galerie (20 zufällig aus FULL)', premium_gallery:'Premium-Bilder (20 zufällig)', subs:'Abonnements' },
-    it: { home:'Home', premium:'Premium', videos:'Video', subscription:'Abbonamento',
-          gallery:'Galleria (20 casuali da FULL)', premium_gallery:'Immagini premium (20 casuali)', subs:'Abbonamenti' },
+  const dict = {
+    es: { home:"Home", premium:"Premium", videos:"Vídeos", subscription:"Suscripción", gallery:"Galería (20 aleatorias de FULL)", premiumGallery:"Imágenes premium (20 aleatorias)" },
+    en: { home:"Home", premium:"Premium", videos:"Videos", subscription:"Subscription", gallery:"Gallery (20 random from FULL)", premiumGallery:"Premium images (20 random)" },
+    fr: { home:"Accueil", premium:"Premium", videos:"Vidéos", subscription:"Abonnement", gallery:"Galerie (20 aléatoires de FULL)", premiumGallery:"Images premium (20 aléatoires)" },
+    de: { home:"Start", premium:"Premium", videos:"Videos", subscription:"Abo", gallery:"Galerie (20 zufällig aus FULL)", premiumGallery:"Premium-Bilder (20 zufällig)" },
+    it: { home:"Home", premium:"Premium", videos:"Video", subscription:"Abbonamento", gallery:"Galleria (20 casuali da FULL)", premiumGallery:"Immagini premium (20 casuali)" },
   };
-  const pick = (navLang) => (T[navLang] ? navLang : (T[navLang?.slice(0,2)]?navLang.slice(0,2):'es'));
-  const lang = pick((new URL(location.href)).searchParams.get('lang') || navigator.language || 'es');
-  const t = T[lang];
-
-  const setText = (sel, text) => { const el=document.querySelector(sel); if(el) el.textContent=text; };
-  setText('nav a[href="/"]', t.home);
-  setText('nav a[href="/premium"]', t.premium);
-  setText('nav a[href="/videos"]', t.videos);
-  setText('nav a[href="/subscription"]', t.subscription);
-  const h1 = document.querySelector('h1');
-  if (h1) {
-    if (/Suscrip/i.test(h1.textContent||'')) h1.textContent = t.subs;
-    else if (/Premium/i.test(document.title)) h1.textContent = t.premium_gallery;
-    else if (/Home|Galería/i.test(document.title)) h1.textContent = t.gallery;
+  function apply(lang){
+    const t = dict[lang] || dict.es;
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const key = el.getAttribute('data-i18n'); if(t[key]) el.textContent=t[key];
+    });
   }
+  // Detecta por URL ?lang=xx o por navigator
+  const urlLang = new URLSearchParams(location.search).get('lang');
+  const navLang = (navigator.language||'es').slice(0,2);
+  apply(urlLang || navLang);
+  window.setLang = apply;
 })();
