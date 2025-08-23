@@ -1,26 +1,33 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>IbizaGirl.pics — Lifetime</title>
   <link rel="stylesheet" href="/styles.css">
-  <!-- SDK SOLO para CAPTURE -->
+  <!-- SDK SOLO capture -->
   <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&components=buttons&intent=capture&currency=EUR"></script>
+  <script src="/js/i18n.js" defer></script>
+  <script src="/js/paywall.js" defer></script>
 </head>
 <body>
+  <nav class="wrap">
+    <a href="/" data-i18n="home"></a>
+    <a href="/premium" data-i18n="premium"></a>
+    <a href="/videos" data-i18n="videos"></a>
+    <a href="/subscription" data-i18n="subscription"></a>
+    <select id="lang-picker">
+      <option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option>
+    </select>
+  </nav>
   <main class="wrap">
-    <h1>Lifetime 100 €</h1>
+    <h1 data-i18n="lifetime"></h1>
     <div id="btn-lifetime"></div>
   </main>
   <script>
     paypal.Buttons({
       style:{shape:'rect',color:'gold',layout:'vertical',label:'pay'},
-      createOrder: (_,actions)=>actions.order.create({purchase_units:[{amount:{value:'100.00',currency_code:'EUR'}}]}),
-      onApprove: async (data,actions)=>{
-        await actions.order.capture();
-        alert("Pago lifetime completado");
-      }
+      createOrder:(_,actions)=>actions.order.create({purchase_units:[{amount:{value:'100.00',currency_code:'EUR'}}]}),
+      onApprove:async (data,actions)=>{ await actions.order.capture(); Paywall.setAccess({lifetime:true}); alert("Lifetime OK"); }
     }).render('#btn-lifetime');
   </script>
 </body>

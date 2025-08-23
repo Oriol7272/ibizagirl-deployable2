@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>IbizaGirl.pics — Suscripción</title>
   <link rel="stylesheet" href="/styles.css">
-  <script src="/js/i18n.js" defer></script>
-  <!-- PayPal SDK: solo SUBSCRIPTION (una sola vez) -->
+  <!-- SDK SOLO subscription -->
   <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&components=buttons&vault=true&intent=subscription&currency=EUR"></script>
+  <script src="/js/i18n.js" defer></script>
+  <script src="/js/paywall.js" defer></script>
 </head>
 <body>
   <nav class="wrap">
@@ -15,6 +15,9 @@
     <a href="/premium" data-i18n="premium"></a>
     <a href="/videos" data-i18n="videos"></a>
     <a href="/subscription" data-i18n="subscription"></a>
+    <select id="lang-picker">
+      <option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option>
+    </select>
   </nav>
 
   <main class="wrap">
@@ -32,19 +35,21 @@
       <article class="card" style="padding:16px">
         <h3 data-i18n="lifetime"></h3>
         <p><a class="paypal-badge" href="/lifetime.html">PayPal</a></p>
-        <small>(Compra única en página separada para evitar conflicto del SDK)</small>
+        <small data-i18n="lifetime_note"></small>
       </article>
     </section>
   </main>
 
   <script>
-  // Render de botones de suscripción; NO cargar el SDK otra vez.
-  function renderSub(elId, planId){
+  function renderSub(el, planId) {
     paypal.Buttons({
       style:{shape:'rect',color:'gold',layout:'vertical',label:'subscribe'},
-      createSubscription: (_, actions)=>actions.subscription.create({plan_id:planId}),
-      onApprove: (data)=>{ alert("Suscripción OK: "+data.subscriptionID); }
-    }).render(elId);
+      createSubscription:(_,actions)=>actions.subscription.create({plan_id:planId}),
+      onApprove:(data)=>{
+        Paywall.setAccess({subscription:true});
+        alert("OK: "+data.subscriptionID);
+      }
+    }).render(el);
   }
   renderSub('#btn-monthly','P-3WE8037612641383DNCUKNJI');
   renderSub('#btn-annual','P-43K261214Y571983RNCUKN7I');
