@@ -11,3 +11,19 @@
 .pp-btn { min-width:140px; }
 nav a { margin-right:10px; }
 
+
+/* ====== ui mini ====== */
+.card{ position:relative; overflow:hidden; }
+.card img{ width:100%; height:100%; object-fit:cover; display:block; }
+.price-badge{ position:absolute; left:.5rem; bottom:.5rem; font-size:.75rem; padding:.15rem .35rem; background:#111a; color:#fff; border-radius:.35rem; backdrop-filter:blur(2px)}
+.badge-new{ position:absolute; right:.5rem; top:.5rem; font-size:.7rem; padding:.15rem .35rem; background:#22c55e; color:#000; border-radius:.35rem; }
+.mini-pp{ position:absolute; right:.4rem; bottom:.4rem; width:120px; }
+.mini-pp iframe{ transform:scale(.85); transform-origin:bottom right; }
+
+/* --- FIXES placehoders e iconos/precio --- */
+.thumb-ready .placeholder, .thumb-ready .loading-text { display:none !important; opacity:0; }
+.price-badge { font-size: 12px; opacity: .85; }
+.mini-buy { margin-top: 6px; }
+
+/* “Nuevo” badge (verde) */
+.badge-new { position:absolute; top:8px; left:8px; background:#22c55e; color:#06110a; font-weight:700; font-size:12px; padding:2px 8px; border-radius:999px; }

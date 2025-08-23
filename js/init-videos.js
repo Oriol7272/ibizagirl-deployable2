@@ -1,14 +1,10 @@
-(function () {
-  function injectPlaceholders() {
-    document.querySelectorAll('[data-item-id]').forEach(function (card) {
-      if (card.querySelector('.mini-buy')) return;
-      var box = document.createElement('div');
-      box.className = 'mini-buy';
-      card.appendChild(box);
-    });
-  }
-  document.addEventListener('DOMContentLoaded', function () {
-    injectPlaceholders();
-    Payments.init('capture');
+(function(){
+  // Inserta botón PayPal bajo cada tarjeta de vídeo
+  document.querySelectorAll('.video-card, .card, .item').forEach(card=>{
+    if (card.querySelector('.mini-buy')) return;
+    const holder = document.createElement('div');
+    holder.className = 'mini-buy';
+    card.appendChild(holder);
   });
+  window.Payments.renderMiniBuy('.mini-buy', { price: 0.30, description: 'Vídeo IbizaGirl' });
 })();
