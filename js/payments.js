@@ -1,183 +1,135 @@
-/* ibizagirl.pics — payments.js (estable)
-   - Soporta: Suscripciones (mensual/anual) y Lifetime (pago único)
-   - Carga segura del SDK (una sola vez), logs claros y fallbacks
-*/
-(function (w, d) {
-  const STATE = {
-    clientId: null,
-    currency: 'EUR',
-    monthlyPlanId: null,
-    annualPlanId: null,
-    lifetimePrice: '100.00',
-    sdkLoading: null,
-    sdkLoaded: false,
-    sdkScriptId: 'paypal-sdk',
-  };
+(function (global) {
+  const cfg = global.PaymentsConfig || {};
+  const CURRENCY = cfg.CURRENCY || 'EUR';
+  const CLIENT_ID = cfg.LIVE_CLIENT_ID;
+  const BUYER_COUNTRY = 'ES';
 
-  function log(...args){ console.log('[payments]', ...args); }
-  function warn(...args){ console.warn('[payments]', ...args); }
-  function error(...args){ console.error('[payments]', ...args); }
-
-  function buildSdkUrl(opts){
-    const p = new URLSearchParams();
-    p.set('client-id', opts.clientId);
-    p.set('components', 'buttons');
-    p.set('currency', opts.currency || 'EUR');
-    // Para suscripciones
-    if (opts.vault) p.set('vault', 'true');
-    if (opts.intent) p.set('intent', opts.intent); // 'subscription' o 'capture'
-    // Evita funding que no queremos
-    p.set('disable-funding', 'card,credit,paylater');
-    return 'https://www.paypal.com/sdk/js?' + p.toString();
+  if (!CLIENT_ID) {
+    console.warn('[payments] Falta LIVE_CLIENT_ID en PaymentsConfig. No se renderizan botones.');
+    return;
   }
 
-  function loadSdkOnce(config){
-    if (STATE.sdkLoaded) return Promise.resolve(true);
-    if (STATE.sdkLoading) return STATE.sdkLoading;
-
-    if (!STATE.clientId || STATE.clientId.length < 50) {
-      warn('CLIENT_ID ausente o inválido. No se pueden renderizar botones.');
-      return Promise.resolve(false);
-    }
-
-    // Por defecto cargamos con intent=capture; para suscripción volvemos a cargar con vault más abajo si hace falta
-    const url = buildSdkUrl({ clientId: STATE.clientId, currency: STATE.currency, intent: 'capture' });
-
-    STATE.sdkLoading = new Promise((resolve) => {
-      // Si ya existe el script, resolvemos
-      if (d.getElementById(STATE.sdkScriptId)) {
-        STATE.sdkLoaded = !!w.paypal;
-        return resolve(STATE.sdkLoaded);
-      }
-      const s = d.createElement('script');
-      s.id = STATE.sdkScriptId;
-      s.src = url;
-      s.onload = () => { STATE.sdkLoaded = !!w.paypal; resolve(STATE.sdkLoaded); };
-      s.onerror = () => { error('SDK load error'); resolve(false); };
-      d.head.appendChild(s);
-    });
-
-    return STATE.sdkLoading;
-  }
-
-  function loadSdkForSubscriptions(){
-    // Si ya hay paypal cargado sirve igual, pero garantizamos parámetros de subs si aún no cargó
-    if (STATE.sdkLoaded) return Promise.resolve(true);
-
-    const url = buildSdkUrl({ clientId: STATE.clientId, currency: STATE.currency, vault: true, intent: 'subscription' });
-
-    return new Promise((resolve) => {
-      if (d.getElementById(STATE.sdkScriptId)) {
-        // ya hay script (otra carga en progreso). Espera a que termine.
-        const wait = () => {
-          if (STATE.sdkLoaded || w.paypal) return resolve(true);
-          setTimeout(wait, 50);
-        };
-        return wait();
-      }
-      const s = d.createElement('script');
-      s.id = STATE.sdkScriptId;
-      s.src = url;
-      s.onload = () => { STATE.sdkLoaded = !!w.paypal; resolve(STATE.sdkLoaded); };
-      s.onerror = () => { error('SDK load error'); resolve(false); };
-      d.head.appendChild(s);
+  function loadSdk(params, namespace) {
+    return new Promise(function (resolve, reject) {
+      if (global[namespace]) return resolve(global[namespace]);
+      const base = 'https://www.paypal.com/sdk/js';
+      const usp = new URLSearchParams(params);
+      const s = document.createElement('script');
+      s.src = base + '?' + usp.toString();
+      s.async = true;
+      s.setAttribute('data-namespace', namespace);
+      s.onload = function () { resolve(global[namespace] || global.paypal); };
+      s.onerror = function () { reject(new Error('PayPal SDK load failed: ' + s.src)); };
+      document.head.appendChild(s);
     });
   }
 
-  // ---------- RENDERIZADORES ----------
-  function renderSubscriptionButton(selector, planId){
-    if (!w.paypal) return warn('paypal no disponible todavía');
-    try{
-      w.paypal.Buttons({
-        style: { layout: 'vertical', color: 'gold', shape: 'pill', label: 'subscribe' },
-        createSubscription: function(data, actions){
-          return actions.subscription.create({ plan_id: planId });
-        },
-        onApprove: function(data, actions){
-          log('Suscripción aprobada', data);
-          alert('¡Suscripción activada! ID: ' + (data.subscriptionID || data.orderID));
-          try { localStorage.setItem('premium_full_access', '1'); } catch(e){}
-        },
-        onError: function(err){ error('PayPal onError', err); alert('Error con PayPal. Inténtalo de nuevo.'); }
-      }).render(selector);
-      return true;
-    } catch(e){ error('renderSubscriptionButton', e); return false; }
+  function ensureSubsSdk() {
+    return loadSdk({
+      'client-id': CLIENT_ID,
+      components: 'buttons',
+      currency: CURRENCY,
+      intent: 'subscription',
+      vault: 'true',
+      'buyer-country': BUYER_COUNTRY,
+      'disable-funding': 'paylater,card'
+    }, 'paypal_subs');
   }
 
-  function renderLifetimeButton(selector){
-    if (!w.paypal) return warn('paypal no disponible todavía');
-    try{
-      w.paypal.Buttons({
-        style: { layout: 'vertical', color: 'blue', shape: 'pill', label: 'checkout' },
-        createOrder: function(data, actions){
-          return actions.order.create({
-            purchase_units: [{
-              amount: { currency_code: STATE.currency, value: STATE.lifetimePrice },
-              description: 'Acceso Lifetime a ibizagirl.pics'
-            }]
-          });
-        },
-        onApprove: function(data, actions){
-          return actions.order.capture().then(function(details){
-            log('Pago lifetime capturado', details);
-            alert('¡Compra completada! Disfruta del acceso ilimitado.');
-            try { localStorage.setItem('premium_full_access', '1'); } catch(e){}
-          });
-        },
-        onError: function(err){ error('PayPal onError', err); alert('Error con PayPal. Inténtalo de nuevo.'); }
-      }).render(selector);
-      return true;
-    } catch(e){ error('renderLifetimeButton', e); return false; }
+  function ensureCheckoutSdk() {
+    return loadSdk({
+      'client-id': CLIENT_ID,
+      components: 'buttons',
+      currency: CURRENCY,
+      intent: 'capture',
+      'buyer-country': BUYER_COUNTRY,
+      'disable-funding': 'paylater,card'
+    }, 'paypal_chk');
   }
 
-  // ---------- API PÚBLICA ----------
   const Payments = {
-    init: function(cfg){
-      STATE.clientId = (cfg && cfg.clientId) || STATE.clientId;
-      STATE.currency = (cfg && cfg.currency) || 'EUR';
-      STATE.monthlyPlanId = (cfg && cfg.monthlyPlanId) || null;
-      STATE.annualPlanId  = (cfg && cfg.annualPlanId) || null;
-      STATE.lifetimePrice = (cfg && cfg.lifetimePrice) || '100.00';
-      log('config', { clientId: !!STATE.clientId, currency: STATE.currency, monthly: STATE.monthlyPlanId, annual: STATE.annualPlanId, lifetime: STATE.lifetimePrice });
-      return this;
-    },
-
-    // Página /subscription
-    async renderSubscriptions(opts){
+    async renderSubscriptions(opts) {
       const o = Object.assign({
-        monthlySel: '#paypal-monthly',
-        annualSel:  '#paypal-annual',
-        lifetimeSel:'#paypal-lifetime'
-      }, opts||{});
+        monthly: null,
+        annual: null,
+        monthlyContainer: '#paypal-monthly',
+        annualContainer: '#paypal-annual',
+        style: { label: 'subscribe', layout: 'vertical', height: 40 }
+      }, opts || {});
+      const pp = await ensureSubsSdk();
 
-      // 1) SDK para suscripciones
-      const okSub = await loadSdkForSubscriptions();
-      if (!okSub){ warn('No se pudo cargar PayPal SDK para suscripciones'); return; }
-
-      // 2) Render mensual / anual
-      if (STATE.monthlyPlanId) renderSubscriptionButton(o.monthlySel, STATE.monthlyPlanId);
-      if (STATE.annualPlanId)  renderSubscriptionButton(o.annualSel,  STATE.annualPlanId);
-
-      // 3) Lifetime usa intent=capture; si el SDK ya está cargado sirve igual
-      if (!STATE.sdkLoaded || !w.paypal){
-        const ok = await loadSdkOnce({});
-        if (!ok) warn('No se pudo cargar PayPal SDK (lifetime).');
+      function subBtn(planId, container) {
+        if (!planId || !container) return;
+        pp.Buttons({
+          style: o.style,
+          createSubscription: (_d, actions) => actions.subscription.create({ plan_id: planId }),
+          onApprove: (data) => { console.log('[payments] sub ok', data); location.href = cfg.SUBS_RETURN_URL || '/premium'; },
+          onError: (err) => { console.warn('[payments] sub error', err); }
+        }).render(container);
       }
-      renderLifetimeButton(o.lifetimeSel);
+
+      subBtn(o.monthly, o.monthlyContainer);
+      subBtn(o.annual,  o.annualContainer);
     },
 
-    // Mini botón para compras sueltas (si lo necesitáis más adelante)
-    async renderMiniBuyButton(selector, priceStr){
-      if (!STATE.sdkLoaded || !w.paypal){
-        const ok = await loadSdkOnce({});
-        if (!ok) return warn('No se pudo cargar PayPal SDK (mini).');
-      }
-      const saved = STATE.lifetimePrice;
-      STATE.lifetimePrice = priceStr || '0.30';
-      renderLifetimeButton(selector);
-      STATE.lifetimePrice = saved;
+    async renderLifetime(opts) {
+      const o = Object.assign({
+        price: 100.00,
+        description: 'Acceso de por vida a IbizaGirl.pics',
+        container: '#paypal-lifetime',
+        style: { label: 'pay', layout: 'vertical', height: 40 }
+      }, opts || {});
+      const pp = await ensureCheckoutSdk();
+
+      pp.Buttons({
+        style: o.style,
+        createOrder: (_d, actions) => actions.order.create({
+          intent: 'CAPTURE',
+          purchase_units: [{
+            description: o.description,
+            amount: { currency_code: CURRENCY, value: Number(o.price).toFixed(2) }
+          }],
+          application_context: { shipping_preference: 'NO_SHIPPING' }
+        }),
+        onApprove: (data, actions) =>
+          actions.order.capture().then(order => {
+            console.log('[payments] lifetime ok', order);
+            location.href = cfg.CHECKOUT_RETURN_URL || '/premium';
+          }),
+        onError: (err) => { console.warn('[payments] lifetime error', err); }
+      }).render(o.container);
+    },
+
+    async renderMiniBuy(opts) {
+      const o = Object.assign({
+        selector: '.mini-buy',
+        price: 0.30,
+        description: 'Compra vídeo IbizaGirl'
+      }, opts || {});
+      const nodes = Array.from(document.querySelectorAll(o.selector));
+      if (!nodes.length) return;
+
+      const pp = await ensureCheckoutSdk();
+      nodes.forEach((node) => {
+        pp.Buttons({
+          style: { label: 'pay', layout: 'horizontal', height: 25 },
+          createOrder: (_d, actions) => actions.order.create({
+            purchase_units: [{
+              description: o.description,
+              amount: { currency_code: CURRENCY, value: Number(o.price).toFixed(2) }
+            }],
+            application_context: { shipping_preference: 'NO_SHIPPING' }
+          }),
+          onApprove: (data, actions) =>
+            actions.order.capture().then(order => {
+              console.log('[payments] video ok', order);
+              node.closest('[data-item-id]')?.classList.add('unlocked');
+            }),
+          onError: (err) => { console.warn('[payments] video error', err); }
+        }).render(node);
+      });
     }
   };
 
-  w.Payments = Payments;
-})(window, document);
+  global.Payments = Payments;
+})(window);

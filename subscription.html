@@ -62,5 +62,23 @@
         });
     });
   </script>
+<!-- PAYMENTS-INJECT SUBS BEGIN -->
+<div id="paypal-injected-area" style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;margin:16px 0;">
+  <div id="paypal-monthly"></div>
+  <div id="paypal-annual"></div>
+  <div id="paypal-lifetime"></div>
+</div>
+<script src="/js/payments.config.js?v=live3"></script>
+<script src="/js/payments.js?v=live3"></script>
+<script>(function(){try{
+  Payments.renderSubscriptions({
+    monthly:'P-3WE8037612641383DNCUKNJI',
+    annual:'P-43K261214Y571983RNCUKN7I',
+    monthlyContainer:'#paypal-monthly',
+    annualContainer:'#paypal-annual'
+  });
+  Payments.renderLifetime({container:'#paypal-lifetime', price:100.00, description:Îso lifetime a IbizaGirl.pics'});
+}catch(e){console.warn(e)}})();</script>
+<!-- PAYMENTS-INJECT SUBS END -->
 </body>
 </html>
