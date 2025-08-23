@@ -1,13 +1,19 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>IbizaGirl.pics — Premium</title>
   <link rel="stylesheet" href="/styles.css">
   <meta name="juicyads-site-verification" content="d9a76b9c250ba1823d821e651e04497c">
   <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
   <script src="/js/i18n.js" defer></script>
+  <script src="/js/paywall.js" defer></script>
+  <script src="/content-data1.js" defer></script>
+  <script src="/content-data2.js" defer></script>
+  <script src="/content-data3.js" defer></script>
+  <script src="/content-data4.js" defer></script>
+  <script src="/content-data5.js" defer></script>
+  <script src="/content-data6.js" defer></script>
   <script src="/js/unified-content.js" defer></script>
   <script src="/js/init-premium.js" defer></script>
 </head>
@@ -17,11 +23,17 @@
     <a href="/premium" data-i18n="premium"></a>
     <a href="/videos" data-i18n="videos"></a>
     <a href="/subscription" data-i18n="subscription"></a>
+    <select id="lang-picker">
+      <option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option>
+    </select>
   </nav>
-
   <main class="wrap">
     <h1 data-i18n="premium_images"></h1>
+    <div class="notice" data-i18n="lifetime_note"></div>
     <section id="grid-premium" class="grid"></section>
   </main>
+  <!-- Modal de pago -->
+  <div id="pay-modal" class="modal hidden"><div class="modal-backdrop"></div><div class="modal-card"><h3 id="pm-title">PayPal</h3><div id="paypal-mini"></div><button id="pm-close" class="btn-close">×</button></div></div>
+  <script>document.getElementById("pm-close").onclick=()=>document.getElementById("pay-modal").classList.add("hidden");document.querySelector("#pay-modal .modal-backdrop").onclick=()=>document.getElementById("pay-modal").classList.add("hidden");</script>
 </body>
 </html>

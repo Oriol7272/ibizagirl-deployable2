@@ -1,15 +1,20 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <!-- include head common -->
-  <!--#include file="/_head_common.html" -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- common head -->
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>IbizaGirl.pics — Home</title>
   <link rel="stylesheet" href="/styles.css">
   <meta name="juicyads-site-verification" content="d9a76b9c250ba1823d821e651e04497c">
   <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
   <script src="/js/i18n.js" defer></script>
+  <script src="/js/paywall.js" defer></script>
+  <script src="/content-data1.js" defer></script>
+  <script src="/content-data2.js" defer></script>
+  <script src="/content-data3.js" defer></script>
+  <script src="/content-data4.js" defer></script>
+  <script src="/content-data5.js" defer></script>
+  <script src="/content-data6.js" defer></script>
   <script src="/js/unified-content.js" defer></script>
   <script src="/js/init-home.js" defer></script>
 </head>
@@ -19,12 +24,17 @@
     <a href="/premium" data-i18n="premium"></a>
     <a href="/videos" data-i18n="videos"></a>
     <a href="/subscription" data-i18n="subscription"></a>
+    <select id="lang-picker">
+      <option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option>
+    </select>
   </nav>
 
   <main class="wrap">
+    <div class="notice" data-i18n="lifetime_note"></div>
+
     <h1 data-i18n="gallery_full"></h1>
 
-    <div class="ads-row">
+    <div class="ads-row" id="ads-home">
       <div class="ad-box">
         <!-- ExoClick -->
         <script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
@@ -34,15 +44,18 @@
       <div class="ad-box" id="sp_8177575_node">&nbsp;</div>
     </div>
 
-    <section id="grid-home" class="grid"></section>
+    <section class="carousel">
+      <button class="carousel-btn left" onclick="document.getElementById('carousel-track').scrollBy({left:-600,behavior:'smooth'})">&#10094;</button>
+      <div id="carousel-track" class="carousel-track"></div>
+      <button class="carousel-btn right" onclick="document.getElementById('carousel-track').scrollBy({left:600,behavior:'smooth'})">&#10095;</button>
+    </section>
   </main>
 
   <!-- EroAdvertising -->
   <script type="text/javascript" charset="utf-8">
   if (typeof eaCtrl =="undefined"){
     var eaCtrlRecs=[]; var eaCtrl = {add:function(ag){eaCtrlRecs.push(ag)}};
-    var js = document.createElement('script');
-    js.setAttribute("src","//go.easrv.cl/loadeactrl.go?pid=152716&spaceid=8177575&ctrlid=798544");
+    var js = document.createElement('script'); js.setAttribute("src","//go.easrv.cl/loadeactrl.go?pid=152716&spaceid=8177575&ctrlid=798544");
     document.head.appendChild(js);
   }
   eaCtrl.add({"display":"sp_8177575_node","sid":8177575,"plugin":"banner"});
@@ -52,6 +65,11 @@
   <script type="text/javascript" data-cfasync="false">
   (function(){var p=window,j="e494ffb82839a29122608e933394c091",d=[["siteId",595+467*6*350+302+4245161],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],
   v=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL3pTL2J3ZHZmL3R0YWJsZXRvcC5taW4uanM=","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvaG1kYi5taW4uanM=","d3d3Lmh6Z2Vua3ZkLmNvbS9ObmtBaC9mQy96dGFibGV0b3AubWluLmpz","d3d3LmpzZ2Zyend0eWdmLmNvbS9qbWRiLm1pbi5qcw=="],e=-1,a,y,m=function(){clearTimeout(y);e++;if(v[e]&&!(1781539757000<(new Date).getTime()&&1<e)){a=p.document.createElement("script");a.type="text/javascript";a.async=!0;var s=p.document.getElementsByTagName("script")[0];a.src="https://"+atob(v[e]);a.crossOrigin="anonymous";a.onerror=m;a.onload=function(){clearTimeout(y);p[j.slice(0,16)+j.slice(0,16)]||m()};y=setTimeout(m,5E3);s.parentNode.insertBefore(a,s)}};if(!p[j]){try{Object.freeze(p[j]=d)}catch(e){}m()}})();
+  </script>
+
+  <script>
+  // Oculta anuncios si lifetime
+  document.addEventListener("DOMContentLoaded",()=>{ if(Paywall.isLifetime()) document.getElementById("ads-home").style.display="none"; });
   </script>
 </body>
 </html>

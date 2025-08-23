@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded",()=>{
-  const pool=UCAPI.getPremiumVideosPool();
-  const shuffled=UCAPI.dailyShuffle(pool,"videos");
-  const items=UCAPI.pickN(shuffled,20);
-  UCAPI.renderCards({container:"#grid-videos",items, type="video", markNew:0.15, price:"0,30 €", paypalBadge:true});
-  console.log("Videos:", "pool", pool.length, "| render", items.length);
+  const pool=UCAPI.getPremiumVideosPool().map(x=>({ ...x, type:"video" }));
+  const items=UCAPI.pickN(UCAPI.dailyShuffle(pool,"videos"),20);
+  const grid=document.getElementById("grid-videos"); grid.innerHTML="";
+  items.forEach(it=>{
+    const card=UCAPI.createCard({item:it,kind:"video",price:"0,30 €",showPaypalBtn:true});
+    grid.appendChild(card);
+  });
 });
