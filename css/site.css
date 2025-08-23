@@ -1,33 +1,80 @@
-:root{--sidebar-w:300px;--gap:14px}
+:root{
+  --ocean-900:#06223b;
+  --ocean-800:#0a304f;
+  --ocean-700:#0e3d63;
+  --ocean-600:#124a77;
+  --ocean-500:#16578b;
+  --ocean-400:#1c70b6;
+  --text:#ffffff;
+  --sidebar-w:300px; --gap:14px;
+}
+@font-face{
+  font-family:"Allura";
+  src:url("/fonts/Allura-Regular.woff2") format("woff2");
+  font-weight:400; font-style:normal; font-display:swap;
+}
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;background:#0b0b0b;color:#fff}
+body{
+  margin:0; color:var(--text);
+  background:radial-gradient(1200px 800px at 50% -10%,rgba(28,112,182,.35),transparent), linear-gradient(180deg, var(--ocean-900), var(--ocean-700));
+  background-attachment:fixed;
+}
 a{text-decoration:none;color:inherit}
-.hbar{display:flex;align-items:center;gap:.5rem}
+header.site{
+  position:relative; padding:28px 16px 18px; text-align:center;
+  background:linear-gradient(180deg, rgba(10,48,79,.7), rgba(14,61,99,.4));
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+header .brand{font-family:"Allura",system-ui; font-weight:400; letter-spacing:.5px}
+header .brand h1{margin:0; font-size:52px; line-height:1}
+header .brand p{margin:6px 0 0; font-size:22px; opacity:.95}
+.navbar{
+  display:flex; gap:10px; justify-content:center; align-items:center; flex-wrap:wrap;
+  margin:14px auto 6px;
+}
+.navbar .btn{
+  padding:8px 14px; border-radius:999px; border:1px solid rgba(255,255,255,.15);
+  background:linear-gradient(180deg, rgba(22,87,139,.9), rgba(6,34,59,.9));
+  font-weight:600;
+}
+.langbox{
+  position:absolute; top:14px; right:14px; display:flex; gap:8px; align-items:center;
+}
+.langbox select{background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.2); border-radius:6px; padding:4px 8px}
+#banner-rotator{width:100%; height:220px; position:relative; overflow:hidden; border-radius:12px; margin:12px auto; max-width:1200px;
+  background:#0b1f33 center/cover no-repeat; box-shadow:0 10px 40px rgba(0,0,0,.25)}
+/* layout secciones */
+.section{max-width:1200px; margin:16px auto; padding:0 12px}
+.hbar{display:flex; align-items:center; gap:.5rem}
 .hbar h2{margin:.5rem 0}
-.counter{opacity:.85;font-size:.95rem}
-#banner-rotator{width:100%;height:220px;position:relative;overflow:hidden;border-radius:12px;margin:12px 0;background:#111 center/cover no-repeat}
+.counter{opacity:.9; font-size:.95rem}
 .carousel{position:relative;width:100%;overflow:hidden}
 .carousel-track{display:flex;gap:.5rem;transition:transform .5s ease}
 .carousel-item{min-width:260px;height:160px;border-radius:.6rem;overflow:hidden}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem}
-.card{position:relative;border-radius:.6rem;background:#111;overflow:hidden}
+.card{position:relative;border-radius:.6rem;background:#0c2137;overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,.25)}
 .card img,.card video{width:100%;height:220px;object-fit:cover;display:block}
 .locked{filter:blur(10px);transform:scale(1.03)}
 .badge-price{position:absolute;right:.4rem;bottom:.4rem;font-size:.7rem;padding:.2rem .4rem;background:#000a;border-radius:.4rem}
-.badge-new{position:absolute;left:.4rem;top:.4rem;font-size:.65rem;padding:.15rem .35rem;background:#ff0066;border-radius:.4rem}
-.buy-btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:.4rem;align-items:center;background:#00457C;color:#fff;border:none;border-radius:.5rem;padding:.35rem .55rem;font-weight:600;cursor:pointer;box-shadow:0 6px 20px #0006}
-.buy-btn .pp-icon{display:inline-block;width:16px;height:16px;filter:invert(1);background:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M8.4 3.1h8.2c2.9 0 4.3 1.8 3.8 4.4-.5 2.6-2.6 4.4-5.5 4.4H12l-.6 3.7H7.7L8.4 3.1z'/%3E%3C/svg%3E") center/contain no-repeat}
-.top-strip{background:#081f2f;color:#fff;padding:.6rem 1rem;display:flex;gap:.7rem;justify-content:center;align-items:center;flex-wrap:wrap}
-.plan-pill{background:#0e3a5a;padding:.35rem .6rem;border-radius:999px;border:1px solid #1a5c8a}
-.sidebar-fixed{position:fixed;top:90px;width:var(--sidebar-w);display:flex;flex-direction:column;gap:var(--gap);z-index:20}
+.badge-new{position:absolute;left:.4rem;top:.4rem;font-size:.65rem;padding:.15rem .35rem;background:#ff2a6d;border-radius:.4rem}
+.buy-btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:.4rem;align-items:center;background:#003087;color:#fff;border:none;border-radius:.5rem;padding:.38rem .62rem;font-weight:700;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.buy-btn .pp-icon{display:inline-block;width:18px;height:18px;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23fff' d='M8.3 3.2h8.3c3 0 4.5 1.9 4 4.6-.5 2.7-2.7 4.5-5.6 4.5H12l-.6 3.8H7.6L8.3 3.2z'/%3E%3C/svg%3E") center/contain no-repeat}
+.top-strip{display:none} /* dejamos la franja antigua oculta, ya hay cabecera nueva */
+
+/* sidebars de anuncios */
+.sidebar-fixed{position:fixed;top:120px;width:var(--sidebar-w);display:flex;flex-direction:column;gap:var(--gap);z-index:20}
 .sidebar-left{left:10px}
 .sidebar-right{right:10px}
-.ad-slot{width:300px;min-height:250px;background:#0b0b0b;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ad-slot{width:300px;min-height:250px;background:#0b1f33;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .hide-ads .ad-slot{display:none!important}
+
+/* modal paypal */
 #paypal-modal.hidden{display:none}
 #paypal-modal{position:fixed;inset:0;z-index:9999}
 #paypal-modal-bg{position:absolute;inset:0;background:#0008;display:flex;align-items:center;justify-content:center}
 #paypal-modal-card{background:#fff;min-width:320px;max-width:90vw;border-radius:.8rem;padding:1rem;position:relative;color:#111}
 #paypal-modal-close{position:absolute;top:.6rem;right:.8rem;background:none;border:none;font-size:1.2rem;cursor:pointer}
+
+/* responsive */
 @media (max-width:1300px){.sidebar-fixed{display:none}}

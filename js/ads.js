@@ -24,7 +24,7 @@ function mountPopAds(siteId){
   s.innerHTML="var _pop=_pop||[];_pop.push(['siteId',"+JSON.stringify(siteId)+"]);_pop.push(['minBid',0]);_pop.push(['default',false]);(function(){var pa=document.createElement('script');pa.type='text/javascript';pa.async=true;pa.src='//c1.popads.net/pop.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(pa,s);})();";
   document.head.appendChild(s);
 }
-export function mountSideAds(){
+function mountSideAds(){
   if(window.__ENV?.ADS_ENABLED==='false' || document.documentElement.classList.contains('hide-ads')) return;
   const left=document.getElementById('side-ads-left'), right=document.getElementById('side-ads-right');
   [left,right].forEach((el)=>{ if(!el) return;
@@ -38,3 +38,6 @@ export function mountSideAds(){
   });
   if(window.__ENV?.POPADS_SITE_ID) mountPopAds(window.__ENV.POPADS_SITE_ID);
 }
+function mountAds(){ mountSideAds(); }
+window.ADS={ mountAds, mountSideAds };
+export { mountAds, mountSideAds };
