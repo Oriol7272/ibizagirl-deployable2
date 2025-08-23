@@ -3,8 +3,6 @@ import {getDailySets} from './daily-picks.js';
 import {renderCarousel, renderGrid, setCounter} from './ui-render.js';
 import {mountAds} from './ads.js';
 import {wirePurchases} from './purchase-ui.js';
-import './background.js';
-import {startBannerRotation} from './banner-rotator.js';
 
 (function bootstrap(){
   const p = localStorage.getItem('plan')||'none';
@@ -19,8 +17,8 @@ function initHome(){
   if(elP){ renderGrid(elP, premium100, {withPrice:true, lock:true, kind:'photo'}); setCounter('#home-premium-counter', premium100.length, premium100.filter(x=>x.isNew).length); }
   const elV=document.getElementById('home-videos-grid');
   if(elV){ renderGrid(elV, vids20, {withPrice:true, lock:true, kind:'video'}); setCounter('#home-videos-counter', vids20.length); }
-  startBannerRotation();
 }
+
 function initOthers(){
   const P=document.getElementById('premium-grid'), V=document.getElementById('videos-grid');
   if(P||V){
@@ -29,6 +27,7 @@ function initOthers(){
     if(V){ renderGrid(V, vids20, {withPrice:true, lock:true, kind:'video'}); setCounter('#videos-counter', vids20.length); }
   }
 }
+
 window.addEventListener('DOMContentLoaded', ()=>{
   if(document.getElementById('home-carousel')) initHome(); else initOthers();
   window.I18N && window.I18N.translate();
