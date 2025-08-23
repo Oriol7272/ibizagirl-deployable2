@@ -1,7 +1,7 @@
 {
-  "name": "ibizagirl-deployable2",
+  "name": "ibizagirl-static",
   "private": true,
   "scripts": {
-    "build": "node tools/inject_env.mjs"
+    "vercel-build": "bash tools/build_env_js.sh"
   }
 }

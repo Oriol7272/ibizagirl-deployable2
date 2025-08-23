@@ -1,24 +1,25 @@
-import {abLabel} from './ab.js';
-
-function zone(network){ 
+function zone(network){
   const E=window.__ENV||{};
-  const map={ exo:E.EXO_ZONE_ID, juicy:E.JUICY_ZONE_ID, ero:E.EROA_ZONE_ID };
+  const map={ exo:E.EXOCLICK_ZONE, juicy:E.JUICYADS_ZONE, ero:E.EROADVERTISING_ZONE, pop:E.POPADS_SITE_ID };
   return map[network];
 }
-
+function injectIframe(slot, src){
+  const ifr=document.createElement('iframe');
+  ifr.loading='lazy'; ifr.referrerPolicy='no-referrer-when-downgrade';
+  ifr.style.cssText='border:0;width:300px;height:250px;display:block';
+  ifr.src=src;
+  ifr.onerror=()=>{ slot.style.display='none'; };
+  slot.appendChild(ifr);
+}
 export function mountSideAds(){
-  const v=abLabel(); // A o B
-  const left = document.getElementById('sb-left');
-  const right= document.getElementById('sb-right');
-  if(!left||!right) return;
-  const order = (v==='A')? ['juicy','exo','ero'] : ['exo','juicy','ero'];
-  [left,right].forEach((col)=>{
-    col.querySelectorAll('.ad-slot').forEach((slot,i)=>{
-      const net = order[i % order.length];
-      slot.setAttribute('data-network', net);
-      slot.setAttribute('data-zone', zone(net)||'');
-    });
+  document.querySelectorAll('.ad-slot').forEach((slot,i)=>{
+    const pref = ['juicy','exo','ero','pop'][i%4];
+    const net = slot.dataset.network || pref;
+    const z = slot.dataset.zone || zone(net) || '';
+    // Ejemplos de endpoints (usa tus scripts oficiales aquí):
+    if(net==='juicy' && z) injectIframe(slot, `https://js.juicyads.com/adshow.php?adzone=${encodeURIComponent(z)}`);
+    else if(net==='exo' && z) injectIframe(slot, `https://a.exoclick.com/iframe.php?zoneid=${encodeURIComponent(z)}`);
+    else if(net==='ero' && z) injectIframe(slot, `https://www.ero-advertising.com/banner.php?zoneid=${encodeURIComponent(z)}`);
+    else slot.style.display='none';
   });
-  // si usas un provider global, lo llamas aquí
-  if(window.mountAdProvider) window.mountAdProvider();
 }

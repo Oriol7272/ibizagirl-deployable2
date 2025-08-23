@@ -2,13 +2,17 @@ export const PRICES={ photo:10, video:30, monthly:1499, yearly:4999, lifetime:10
 
 function pickPlanId(kind){
   const E = window.__ENV || {};
-  const rMonthly = [/^PAYPAL_(PLAN_)?(MONTHLY|MENSUAL|MES)\b/i];
-  const rYearly  = [/^PAYPAL_(PLAN_)?(YEARLY|ANNUAL|ANUAL)\b/i];
-  const tests = (kind==='monthly') ? rMonthly : rYearly;
+  // Acepta cualquier PAYPAL_PLAN_* que contenga monthly/mensual/mes o yearly/annual/anual
+  const tests = (kind==='monthly')
+    ? [/^PAYPAL_PLAN_.*(MONTHLY|MENSUAL|MES)/i]
+    : [/^PAYPAL_PLAN_.*(YEARLY|ANNUAL|ANUAL)/i];
+  let found=null;
   for(const [k,v] of Object.entries(E)){
-    if(v && tests.some(rx=>rx.test(k))) return v;
+    if(typeof v==='string' && v.startsWith('P-') && tests.some(rx=>rx.test(k))){ found=v; break; }
   }
-  return null;
+  console.debug('[PayPal] ENV keys:', Object.keys(E));
+  console.debug('[PayPal] kind=',kind,'pid=',found);
+  return found;
 }
 
 function loadSDK({subs=false}={}){
@@ -20,7 +24,7 @@ function loadSDK({subs=false}={}){
       else return resolve();
     }
     const cid = (window.__ENV && window.__ENV.PAYPAL_CLIENT_ID) || '';
-    if(!cid){ alert('PAYPAL_CLIENT_ID vacío. Revisa ENV en Vercel.'); return reject(new Error('no cid')); }
+    if(!cid){ alert('PAYPAL_CLIENT_ID vacío en ENV.'); return reject(new Error('no cid')); }
     const comps  = subs ? 'buttons,subscriptions,marks' : 'buttons,marks';
     const intent = subs ? 'subscription' : 'capture';
     const vault  = subs ? '&vault=true' : '';
@@ -28,7 +32,7 @@ function loadSDK({subs=false}={}){
     s.id='pp-sdk'; s.dataset.subs=subs?'1':'0';
     s.src='https://www.paypal.com/sdk/js?client-id='+encodeURIComponent(cid)+'&currency=EUR&intent='+intent+vault+'&components='+comps;
     s.onload=()=>resolve();
-    s.onerror=()=>{ alert('No se pudo cargar PayPal (400/401). Si es suscripción, revisa que Subscriptions esté activo en LIVE y que los Plan IDs sean válidos.'); reject(new Error('sdk')); };
+    s.onerror=()=>{ alert('No se pudo cargar PayPal (400/401). Revisa que los planes sean LIVE y pertenezcan al mismo cliente.'); reject(new Error('sdk')); };
     document.head.appendChild(s);
   });
 }
@@ -43,7 +47,7 @@ export async function buyItem(itemId, kind='photo'){
 
 export async function subscribe(kind='monthly'){
   const pid = pickPlanId(kind);
-  if(!pid){ alert('No encuentro el Plan ID de '+kind+' en ENV. Revisa nombres en Vercel.'); return; }
+  if(!pid){ alert('No encuentro el Plan ID de '+kind+' en ENV (mira consola).'); return; }
   await loadSDK({subs:true});
   window.paypal.Buttons({
     createSubscription:(_d,a)=>a.subscription.create({ plan_id:pid }),
