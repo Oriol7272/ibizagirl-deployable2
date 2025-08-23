@@ -2,36 +2,52 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>IbizaGirl.pics — Suscripción</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <link href="styles.css" rel="stylesheet">
-  <script src="js/payments.config.js" defer></script>
-  <script src="js/payments.js" defer></script>
-  <script src="js/init-subscription.js" defer></script>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/js/i18n.js" defer></script>
+  <!-- PayPal SDK: solo SUBSCRIPTION (una sola vez) -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&components=buttons&vault=true&intent=subscription&currency=EUR"></script>
 </head>
 <body>
-  <nav class="topnav">
-    <a href="/">Home</a>
-    <a href="/premium">Premium</a>
-    <a href="/videos">Vídeos</a>
-    <a href="/subscription">Suscripción</a>
+  <nav class="wrap">
+    <a href="/" data-i18n="home"></a>
+    <a href="/premium" data-i18n="premium"></a>
+    <a href="/videos" data-i18n="videos"></a>
+    <a href="/subscription" data-i18n="subscription"></a>
   </nav>
 
-  <main class="container">
-    <h1>Suscripciones</h1>
-    <section>
-      <h2>Mensual 14,99 €</h2>
-      <div id="sub-monthly" class="paypal-primary"></div>
+  <main class="wrap">
+    <h1 data-i18n="subscriptions_title"></h1>
+
+    <section style="max-width:720px;margin:0 auto;display:grid;gap:28px">
+      <article class="card" style="padding:16px">
+        <h3 data-i18n="monthly"></h3>
+        <div id="btn-monthly"></div>
+      </article>
+      <article class="card" style="padding:16px">
+        <h3 data-i18n="annual"></h3>
+        <div id="btn-annual"></div>
+      </article>
+      <article class="card" style="padding:16px">
+        <h3 data-i18n="lifetime"></h3>
+        <p><a class="paypal-badge" href="/lifetime.html">PayPal</a></p>
+        <small>(Compra única en página separada para evitar conflicto del SDK)</small>
+      </article>
     </section>
-    <section>
-      <h2>Anual 49,99 €</h2>
-      <div id="sub-yearly" class="paypal-primary"></div>
-    </section>
-    <hr/>
-    <p>¿Prefieres pago único? <a href="/lifetime">Compra el acceso <strong>Lifetime</strong> (100&nbsp;€)</a></p>
   </main>
 
-  <!-- Crisp -->
-  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+  <script>
+  // Render de botones de suscripción; NO cargar el SDK otra vez.
+  function renderSub(elId, planId){
+    paypal.Buttons({
+      style:{shape:'rect',color:'gold',layout:'vertical',label:'subscribe'},
+      createSubscription: (_, actions)=>actions.subscription.create({plan_id:planId}),
+      onApprove: (data)=>{ alert("Suscripción OK: "+data.subscriptionID); }
+    }).render(elId);
+  }
+  renderSub('#btn-monthly','P-3WE8037612641383DNCUKNJI');
+  renderSub('#btn-annual','P-43K261214Y571983RNCUKN7I');
+  </script>
 </body>
 </html>
