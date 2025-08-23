@@ -17,9 +17,17 @@ header .brand{font-family:"Allura",system-ui}
 header .brand h1{margin:0;font-size:56px;line-height:1}
 header .brand p{margin:6px 0 0;font-size:24px;opacity:.98}
 .navbar{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin:14px auto 4px}
-.navbar .btn{padding:9px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:linear-gradient(180deg,rgba(22,87,139,.95),rgba(6,34,59,.95));font-weight:700}
+.navbar .btn{padding:9px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:linear-gradient(180deg,rgba(22,87,139,.95),rgba(6,34,59,.95));font-weight:700;display:inline-flex;align-items:center;gap:.45rem}
 .langbox{position:absolute;top:14px;right:14px;display:flex;gap:8px;align-items:center}
 .langbox select{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:4px 8px}
+
+/* Nav icons (SVG embebidos) */
+.ico{width:16px;height:16px;display:inline-block;background-size:contain;background-repeat:no-repeat}
+.ico-home{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M12 3l9 8h-3v10h-5V14H11v7H6V11H3z'/%3E%3C/svg%3E")}
+.ico-prem{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M12 17.3 5.8 21l1.2-7.1L2 8.9l7.2-1L12 1.5l2.8 6.4 7.2 1-5 4.9 1.2 7.2z'/%3E%3C/svg%3E")}
+.ico-vid{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M4 5h11a2 2 0 012 2v2l3-2v10l-3-2v2a2 2 0 01-2 2H4a2 2 0 01-2-2V7a2 2 0 012-2z'/%3E%3C/svg%3E")}
+.ico-sub{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M4 6h16v4H4zm0 6h10v6H4z'/%3E%3C/svg%3E")}
+.ico-life{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='9' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath fill='white' d='M11 6h2v6h-2zM11 14h2v4h-2z'/%3E%3C/svg%3E")}
 
 /* Sections */
 .section{max-width:1200px;margin:16px auto;padding:0 12px}
@@ -40,10 +48,12 @@ header .brand p{margin:6px 0 0;font-size:24px;opacity:.98}
 .badge-price{position:absolute;right:.4rem;bottom:.4rem;font-size:.75rem;padding:.22rem .44rem;background:#000a;border-radius:.45rem}
 .badge-new{position:absolute;left:.4rem;top:.4rem;font-size:.7rem;padding:.18rem .42rem;background:#ff2a6d;border-radius:.45rem}
 
-/* PayPal button and icon */
+/* PayPal buttons */
 .buy-btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:.45rem;align-items:center;background:#003087;color:#fff;border:none;border-radius:.55rem;padding:.42rem .68rem;font-weight:800;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.35)}
 .buy-btn .pp-icon{display:inline-block;width:18px;height:18px;background:url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 48 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23fff' d='M17 7h16c6 0 9 3.8 8 9.4S34 26 28 26h-5l-2 12h-8L17 7z'/%3E%3C/svg%3E") center/contain no-repeat}
-.top-strip{display:none} /* ocultamos la franja antigua */
+
+/* Oculta vieja franja si existiera */
+.top-strip{display:none}
 
 /* Side ads */
 .sidebar-fixed{position:fixed;top:120px;width:var(--sidebar-w);display:flex;flex-direction:column;gap:var(--gap);z-index:20}
@@ -52,7 +62,7 @@ header .brand p{margin:6px 0 0;font-size:24px;opacity:.98}
 .ad-slot{width:300px;min-height:250px;background:#0b1f33;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .hide-ads .ad-slot{display:none!important}
 
-/* PayPal modal */
+/* Modal PayPal */
 #paypal-modal.hidden{display:none}
 #paypal-modal{position:fixed;inset:0;z-index:9999}
 #paypal-modal-bg{position:absolute;inset:0;background:#0008;display:flex;align-items:center;justify-content:center}
