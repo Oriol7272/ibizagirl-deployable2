@@ -1,101 +1,90 @@
-(function(g){
-  var C = g.PAYPAL_CONFIG || {};
-  var LOADED = false, Q = null;
+(function (w, d) {
+  'use strict';
+  const CFG = w.IBZ_PAYPAL || {};
+  const log = (...a) => console.log('[payments]', ...a);
 
-  function loadSdk(params){
-    if (LOADED && g.paypal) return Promise.resolve(g.paypal);
-    if (Q) return Q;
+  function loadSdk(kind) {
+    return new Promise((resolve, reject) => {
+      const id = kind === 'subs' ? 'pp-sdk-subs' : 'pp-sdk-order';
+      const ns = kind === 'subs' ? 'paypal_subs' : 'paypal_order';
+      if (w[ns]) return resolve(w[ns]);
+      const existing = d.getElementById(id);
+      if (existing && w[ns]) return resolve(w[ns]);
 
-    var clientId = C.clientIdLive || 'sb';
-    var comps  = (params && params.components) || 'buttons';
-    var intent = (params && params.intent)     || 'capture';
-    var vault  = (params && params.vault) ? '&vault=true' : '';
-
-    var s = document.createElement('script');
-    s.src = 'https://www.paypal.com/sdk/js?client-id=' + encodeURIComponent(clientId)
-          + '&components=' + encodeURIComponent(comps)
-          + '&intent=' + encodeURIComponent(intent)
-          + '&currency=' + (C.currency || 'EUR') + vault;
-    s.async = true;
-
-    Q = new Promise(function(res, rej){
-      s.onload  = function(){ LOADED = true; res(g.paypal); };
-      s.onerror = function(){ rej(new Error('PayPal SDK load error')); };
-    });
-    document.head.appendChild(s);
-    return Q;
-  }
-
-  function renderSubscriptions(opts){
-    var monthlyId = (opts && opts.monthly) || (C.plans && C.plans.monthly);
-    var annualId  = (opts && opts.annual)  || (C.plans && C.plans.annual);
-    var mSel = (opts && opts.monthlyContainer) || '#paypal-monthly';
-    var aSel = (opts && opts.annualContainer)  || '#paypal-annual';
-    if (!monthlyId || !annualId) return console.warn('[payments] faltan plan IDs');
-
-    return loadSdk({components:'buttons', intent:'subscription', vault:true}).then(function(pp){
-      var mEl = document.querySelector(mSel);
-      var aEl = document.querySelector(aSel);
-      if (mEl) pp.Buttons({
-        style:{layout:'vertical',color:'gold',label:'subscribe'},
-        createSubscription: function(_, actions){ return actions.subscription.create({ plan_id: monthlyId }); },
-        onApprove: function(data){ console.log('[payments] monthly ok', data); }
-      }).render(mEl);
-      if (aEl) pp.Buttons({
-        style:{layout:'vertical',color:'gold',label:'subscribe'},
-        createSubscription: function(_, actions){ return actions.subscription.create({ plan_id: annualId }); },
-        onApprove: function(data){ console.log('[payments] annual ok', data); }
-      }).render(aEl);
-    });
-  }
-
-  function renderLifetime(opts){
-    var price = (opts && opts.price) || (C.lifetime && C.lifetime.price) || 100.00;
-    var desc  = (opts && opts.description) || (C.lifetime && C.lifetime.description) || 'Acceso lifetime';
-    var sel   = (opts && opts.container) || '#paypal-lifetime';
-
-    return loadSdk({components:'buttons', intent:'capture'}).then(function(pp){
-      var el = document.querySelector(sel); if(!el) return;
-      pp.Buttons({
-        style:{layout:'vertical',label:'buynow'},
-        createOrder: function(_, actions){
-          return actions.order.create({
-            purchase_units:[{ description: desc, amount:{ currency_code:(C.currency||'EUR'), value: price.toFixed(2) } }]
-          });
-        },
-        onApprove: function(data, actions){
-          return actions.order.capture().then(function(order){ console.log('[payments] lifetime ok', order); });
-        },
-        onError: function(err){ console.warn('[payments] lifetime error', err); }
-      }).render(el);
-    });
-  }
-
-  function renderMiniBuy(o){
-    var price = (o && o.price) || (C.itemPrices && C.itemPrices.video) || 0.30;
-    var sel   = (o && o.selector) || '.mini-buy';
-
-    return loadSdk({components:'buttons', intent:'capture'}).then(function(pp){
-      document.querySelectorAll(sel).forEach(function(node){
-        if (node._ppRendered) return; node._ppRendered = true;
-        pp.Buttons({
-          style:{layout:'horizontal',tagline:false,label:'pay'},
-          createOrder: function(_, actions){
-            return actions.order.create({
-              purchase_units:[{ amount:{ currency_code:(C.currency||'EUR'), value: price.toFixed(2) } }]
-            });
-          },
-          onApprove: function(_, actions){
-            return actions.order.capture().then(function(order){
-              console.log('[payments] item ok', order);
-              var host = node.closest('[data-item-id]'); if (host) host.classList.add('unlocked');
-            });
-          },
-          onError: function(err){ console.warn('[payments] item error', err); }
-        }).render(node);
+      const qs = new URLSearchParams({
+        'client-id': CFG.clientId,
+        components: 'buttons',
+        currency: CFG.currency || 'EUR',
+        'data-namespace': ns
       });
+      if (kind === 'subs') { qs.set('intent', 'subscription'); qs.set('vault','true'); }
+      else { qs.set('intent', 'capture'); }
+
+      const s = d.createElement('script');
+      s.id = id;
+      s.src = 'https://www.paypal.com/sdk/js?' + qs.toString();
+      s.onload = () => resolve(w[ns]);
+      s.onerror = (e) => { console.warn('[payments] sdk load error', e); reject(e); };
+      d.head.appendChild(s);
     });
   }
 
-  g.Payments = { loadSdk, renderSubscriptions, renderLifetime, renderMiniBuy };
-})(window);
+  async function renderSubscriptions(opts) {
+    const paypal = await loadSdk('subs');
+    const mc = d.querySelector(opts.monthlyContainer || '#paypal-monthly');
+    const ac = d.querySelector(opts.annualContainer  || '#paypal-annual');
+    if (mc && opts.monthly) {
+      paypal.Buttons({
+        style: { label: 'subscribe', layout: 'horizontal', tagline: false, height: 40 },
+        createSubscription: (_d, a) => a.subscription.create({ plan_id: opts.monthly }),
+        onApprove: (data) => log('monthly approved', data),
+        onError: (err) => console.warn('[payments] monthly error', err)
+      }).render(mc);
+    }
+    if (ac && opts.annual) {
+      paypal.Buttons({
+        style: { label: 'subscribe', layout: 'horizontal', tagline: false, height: 40 },
+        createSubscription: (_d, a) => a.subscription.create({ plan_id: opts.annual }),
+        onApprove: (data) => log('annual approved', data),
+        onError: (err) => console.warn('[payments] annual error', err)
+      }).render(ac);
+    }
+  }
+
+  async function renderLifetime(opts) {
+    const el = d.querySelector(opts.container || '#paypal-lifetime');
+    if (!el) return;
+    const paypal = await loadSdk('order');
+    const price = Number(opts.price || 0).toFixed(2);
+    const currency = CFG.currency || 'EUR';
+    paypal.Buttons({
+      style: { layout: 'horizontal', tagline: false, label: 'pay' },
+      createOrder: (_d, a) => a.order.create({
+        intent: 'CAPTURE',
+        purchase_units: [{ amount: { currency_code: currency, value: price }, description: opts.description || 'Lifetime access' }],
+        application_context: { shipping_preference: 'NO_SHIPPING' }
+      }),
+      onApprove: (_d, a) => a.order.capture().then(o => log('lifetime ok', o)),
+      onError: (err) => console.warn('[payments] lifetime error', err)
+    }).render(el);
+  }
+
+  async function renderMiniBuyButton(opts) {
+    const el = typeof opts.selector === 'string' ? d.querySelector(opts.selector) : opts.el;
+    if (!el) return;
+    const paypal = await loadSdk('order');
+    const price = Number(opts.price || 0).toFixed(2);
+    const currency = CFG.currency || 'EUR';
+    paypal.Buttons({
+      style: { layout: 'horizontal', tagline: false, label: opts.label || 'pay' },
+      createOrder: (_d, a) => a.order.create({
+        intent: 'CAPTURE',
+        purchase_units: [{ amount: { currency_code: currency, value: price }, description: opts.description || 'Buy video' }]
+      }),
+      onApprove: (_d, a) => a.order.capture().then(o => { log('mini-buy ok', o); if (typeof opts.onApprove==='function') opts.onApprove(o); }),
+      onError: (err) => console.warn('[payments] mini-buy error', err)
+    }).render(el);
+  }
+
+  w.Payments = { renderSubscriptions, renderLifetime, renderMiniBuyButton };
+})(window, document);
