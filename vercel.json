@@ -1,24 +1,7 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "rewrites": [
-    { "source": "/uncensored/:path*", "destination": "https://ibizagirl-assets.s3.eu-north-1.amazonaws.com/uncensored/:path*" },
-    { "source": "/uncensored-videos/:path*", "destination": "https://ibizagirl-assets.s3.eu-north-1.amazonaws.com/uncensored-videos/:path*" }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https: wss:; img-src 'self' https: data: blob:; media-src 'self' https: data: blob:; style-src 'self' https: 'unsafe-inline'; font-src 'self' https: data:; frame-src https:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self' https:" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
-      ]
-    },
-    {
-      "source": "/full/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    }
-  ]
+  "functions": {
+    "api/**/*.js": { "runtime": "nodejs20.x" },
+    "webhook.js":  { "runtime": "nodejs20.x" },
+    "cdn.js":      { "runtime": "nodejs20.x" }
+  }
 }

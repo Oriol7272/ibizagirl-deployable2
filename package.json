@@ -7,7 +7,7 @@
     "start": "vercel dev --listen 3000"
   },
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   },
   "type": "module"
 }
