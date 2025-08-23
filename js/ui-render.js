@@ -14,12 +14,12 @@ export function renderCarousel(el, items){
   }
 }
 
-export function renderGrid(el, items, {withPrice=false, lock=true, kind='photo'}={}){
+export function renderGrid(el, items, {publicGrid=false, withPrice=false, kind='photo'}={}){
   if(!el) return; el.classList.add('grid'); el.innerHTML='';
-  const p = plan(); const hasPlan = (p==='lifetime'||p==='monthly'||p==='yearly');
+  const userPlan = plan(); const hasPlan = (userPlan==='lifetime'||userPlan==='monthly'||userPlan==='yearly');
   items.forEach(it=>{
     const card=document.createElement('div'); card.className='card';
-    const unlocked = hasPlan || hasUnlock(it.id);
+    const unlocked = publicGrid || hasPlan || hasUnlock(it.id);
     if(it.type==='video'){
       const v=document.createElement('video'); v.preload='none'; v.poster=it.thumb||'';
       if(unlocked && it.src){ const s=document.createElement('source'); s.src=it.src; s.type='video/mp4'; v.appendChild(s); v.controls=true; }
@@ -29,7 +29,7 @@ export function renderGrid(el, items, {withPrice=false, lock=true, kind='photo'}
       const img=document.createElement('img'); img.loading='lazy'; img.src=it.thumb||it.src; if(!unlocked) img.classList.add('locked'); card.appendChild(img);
     }
     if(!unlocked){
-      const buy=document.createElement('button'); buy.className='buy-btn'; buy.dataset.id=it.id; buy.dataset.kind=(it.type==='video'?'video':'photo'); buy.innerHTML='<span class="pp-icon"></span><span class="buy-label">PayPal</span>'; card.appendChild(buy);
+      const buy=document.createElement('button'); buy.className='buy-btn'; buy.dataset.id=it.id; buy.dataset.kind=(it.type==='video'?'video':'photo'); buy.innerHTML='<span class="pp-icon"></span><span class="buy-label">Comprar</span>'; card.appendChild(buy);
     }
     if(withPrice){ const price=document.createElement('div'); price.className='badge-price'; price.textContent=(it.type==='video'?'€0,30':'€0,10'); card.appendChild(price); }
     if(it.isNew){ const bn=document.createElement('div'); bn.className='badge-new'; bn.textContent='NEW'; card.appendChild(bn); }

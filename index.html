@@ -4,15 +4,7 @@
 <script src="/content-data.js"></script>
 
 <script src="/js/env.js"></script>
-<script>
-  (function(){
-    if(window.__ENV && window.__ENV.PAYPAL_CLIENT_ID){
-      var s=document.createElement('script');
-      s.src='https://www.paypal.com/sdk/js?client-id='+window.__ENV.PAYPAL_CLIENT_ID+'&currency=EUR&components=buttons,subscriptions,marks';
-      s.defer=true; document.head.appendChild(s);
-    }
-  })();
-</script>
+
 <script>
   window.$crisp=[]; window.CRISP_WEBSITE_ID=(window.__ENV&&window.__ENV.CRISP_WEBSITE_ID)||'';
   (function(){var d=document;var s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
@@ -32,7 +24,7 @@
   <script src="/content-data5.js" defer></script>
   <script src="/content-data6.js" defer></script>
   <script src="/js/unified-content.js" defer></script>
-  <script src="/js/init-home.js" defer></script>
+  
   <link rel="stylesheet" href="/css/paywall.css">
 </head>
   <script src="/js/decorative-list.js"></script>
@@ -53,6 +45,14 @@
 <div class="section"><section class="hbar"><h2 data-i18n="videos">Videos</h2><span class="counter" id="home-videos-counter"></span></section><div id="home-videos-grid"></div></div>
 <div class="section"><section class="hbar"><h2 data-i18n="premium">Premium</h2><span class="counter" id="home-premium-counter"></span></section><div id="home-premium-grid"></div></div>
 <div class="section"><section class="hbar"><h2 data-i18n="videos">Videos</h2><span class="counter" id="home-videos-counter"></span></section><div id="home-videos-grid"></div></div>
+
+
+
+<div class="section"><section class="hbar"><h2>Fotos</h2><span class="counter" id="home-public-counter"></span></section><div id="home-public-grid"></div></div>
+
+
+
+
 
 
 

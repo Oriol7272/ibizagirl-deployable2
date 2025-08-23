@@ -36,13 +36,7 @@
     <h1 data-i18n="lifetime"></h1>
     <div id="btn-lifetime"></div>
   </main>
-  <script>
-    paypal.Buttons({
-      style:{shape:'rect',color:'gold',layout:'vertical',label:'pay'},
-      createOrder:(_,actions)=>actions.order.create({purchase_units:[{amount:{value:'100.00',currency_code:'EUR'}}]}),
-      onApprove:async (data,actions)=>{ await actions.order.capture(); Paywall.setAccess({lifetime:true}); alert("Lifetime OK"); }
-    }).render('#btn-lifetime');
-  </script>
+  
 </body>
   <script type="module" src="/js/page-init.js"></script>
 <div id="paypal-modal" class="hidden"><div id="paypal-modal-bg"><div id="paypal-modal-card"><button id="paypal-modal-close" aria-label="close">x</button><div id="paypal-modal-target"></div></div></div></div>
