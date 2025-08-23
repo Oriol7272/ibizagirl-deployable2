@@ -1,9 +1,21 @@
 {
   "version": 2,
   "functions": {
-    "api/**/*.js": { "runtime": "nodejs20.x" }
+    "api/**/*.js": { "runtime": "nodejs22.x" }
   },
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" }
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self' https: data: blob:; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https: wss:; img-src 'self' https: data: blob:; media-src 'self' https: data: blob:; style-src 'self' https: 'unsafe-inline'; font-src 'self' https: data:; frame-src https:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self' https:;"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/uncensored/(.*)", "destination": "https://ibizagirl-assets.s3.eu-north-1.amazonaws.com/uncensored/$1" },
+    { "source": "/uncensored-videos/(.*)", "destination": "https://ibizagirl-assets.s3.eu-north-1.amazonaws.com/uncensored-videos/$1" }
   ]
 }

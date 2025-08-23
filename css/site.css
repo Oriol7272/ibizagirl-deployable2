@@ -64,3 +64,8 @@ img{max-width:100%;display:block}
 /* Titles */
 h2{font-size:18px;margin:10px 0 16px 0}
 small{color:var(--muted)}
+img.loaded{opacity:1!important;filter:none!important}
+.thumb:not(.loaded) img{opacity:.2;filter:blur(8px)}
+img.loaded{opacity:1!important;filter:none!important}
+.thumb:not(.loaded) img{opacity:.2;filter:blur(8px)}
+.mini-buy{margin-top:.5rem}
