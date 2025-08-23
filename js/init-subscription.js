@@ -1,5 +1,10 @@
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', () => {
   if (!window.Payments) return;
-  Payments.renderSubscriptions({});
-  Payments.renderLifetime({});
+  window.Payments.renderSubscriptions({
+    monthlyContainer: '#paypal-monthly',
+    annualContainer:  '#paypal-annual',
+    lifetimeContainer:'#paypal-lifetime',
+    lifetimePrice: 100.00,
+    lifetimeDescription: 'Acceso lifetime a IbizaGirl.pics'
+  });
 });
