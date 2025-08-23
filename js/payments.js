@@ -1,67 +1,45 @@
-(function(w,d){
-  var SDK_ID="paypal-sdk", sdkPromise=null;
-  function loadSDK(){
-    if(w.paypal && w.paypal.Buttons) return Promise.resolve(w.paypal);
-    if(!sdkPromise){
-      var s=d.getElementById(SDK_ID);
-      if(!s){
-        var q=new URLSearchParams();
-        q.set("client-id", w.PAYPAL_CLIENT_ID||"");
-        q.set("components","buttons");
-        q.set("currency","EUR");
-        q.set("vault","true");
-        s=d.createElement("script");
-        s.id=SDK_ID;
-        s.src="https://www.paypal.com/sdk/js?"+q.toString();
-        s.async=true;
-        sdkPromise=new Promise(function(res,rej){
-          s.onload=function(){ if(w.paypal && w.paypal.Buttons){ res(w.paypal); } else { rej(new Error("paypal sdk loaded without Buttons")); } };
-          s.onerror=function(){ rej(new Error("paypal sdk load failed")); };
-        });
-        d.head.appendChild(s);
-      }else{
-        sdkPromise=new Promise(function(res,rej){
-          if(w.paypal && w.paypal.Buttons){ res(w.paypal); return; }
-          s.addEventListener("load",function(){ res(w.paypal); });
-          s.addEventListener("error",function(){ rej(new Error("paypal sdk load failed (existing)")); });
-        });
-      }
+import {plan, unlocks} from './lock-guard.js';
+export const PRICES={ photo:10, video:30, monthly:1499, yearly:4999, lifetime:10000 };
+export function ensurePayPalLoaded(){
+  return new Promise((res,rej)=>{
+    if(window.paypal) return res();
+    const cid=window.__ENV?.PAYPAL_CLIENT_ID;
+    if(!cid) return rej('PAYPAL_CLIENT_ID vacío');
+    const s=document.createElement('script');
+    s.src=`https://www.paypal.com/sdk/js?client-id=${cid}&currency=EUR&components=buttons,subscriptions,marks`;
+    s.onload=()=>res(); s.onerror=()=>rej('Fallo PayPal SDK'); document.head.appendChild(s);
+  });
+}
+export async function buyItem(itemId, kind='photo'){
+  await ensurePayPalLoaded();
+  const cents=PRICES[kind];
+  window.paypal.Buttons({
+    style:{layout:'vertical',shape:'rect'},
+    createOrder:(_d,a)=>a.order.create({ purchase_units:[{ amount:{ currency_code:'EUR', value:(cents/100).toFixed(2) }, description:`${kind}:${itemId}` }] }),
+    onApprove:async(_d,a)=>{
+      const det=await a.order.capture();
+      if(det.status==='COMPLETED'){ unlocks.add(itemId); alert('✔ Desbloqueado'); location.reload(); }
     }
-    return sdkPromise;
-  }
-
-  function renderSubscription(el, planId, onApprove){
-    return loadSDK().then(function(paypal){
-      return paypal.Buttons({
-        style:{layout:"horizontal",tagline:false},
-        createSubscription:function(_d,actions){ return actions.subscription.create({plan_id:planId}); },
-        onApprove:function(data){ try{ if(typeof onApprove==="function") onApprove(data); }catch(e){} },
-        onError:function(err){ console.warn("[paypal] sub error", err); }
-      }).render(el);
-    });
-  }
-
-  function renderOrder(el, opts){
-    var v=Number(opts&&opts.value||0);
-    var desc=(opts&&opts.description)||"";
-    return loadSDK().then(function(paypal){
-      return paypal.Buttons({
-        style:{layout:"horizontal",tagline:false,label:"pay"},
-        createOrder:function(_d,actions){
-          return actions.order.create({
-            purchase_units:[{ amount:{ currency_code:"EUR", value:v.toFixed(2) }, description:desc }]
-          });
-        },
-        onApprove:function(_d,actions){
-          return actions.order.capture().then(function(order){
-            try{ el.closest("[data-item-id]") && el.closest("[data-item-id]").classList.add("unlocked"); }catch(e){}
-            console.log("[paypal] order ok", order);
-          });
-        },
-        onError:function(err){ console.warn("[paypal] order error", err); }
-      }).render(el);
-    });
-  }
-
-  w.Payments={ renderSubscription:renderSubscription, renderOrder:renderOrder };
-})(window,document);
+  }).render('#paypal-modal-target');
+}
+export async function subscribe(planKey='monthly'){
+  await ensurePayPalLoaded();
+  const MAP={ monthly:window.__ENV?.PAYPAL_PLAN_MONTHLY, yearly:window.__ENV?.PAYPAL_PLAN_YEARLY };
+  const pid=MAP[planKey]; if(!pid){ alert('Plan no disponible'); return; }
+  window.paypal.Buttons({
+    createSubscription:(_d,a)=>a.subscription.create({ plan_id:pid }),
+    onApprove:()=>{ plan.set(planKey); alert('✔ Suscripción activa'); location.reload(); }
+  }).render('#paypal-modal-target');
+}
+export async function buyLifetime(){
+  await ensurePayPalLoaded();
+  const cents=PRICES.lifetime;
+  window.paypal.Buttons({
+    style:{layout:'vertical',shape:'rect'},
+    createOrder:(_d,a)=>a.order.create({ purchase_units:[{ amount:{ currency_code:'EUR', value:(cents/100).toFixed(2) }, description:'lifetime:all' }] }),
+    onApprove:async(_d,a)=>{
+      const det=await a.order.capture();
+      if(det.status==='COMPLETED'){ plan.set('lifetime'); alert('✔ Lifetime activo: todo desbloqueado y sin anuncios'); location.reload(); }
+    }
+  }).render('#paypal-modal-target');
+}

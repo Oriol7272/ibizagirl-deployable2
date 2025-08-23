@@ -1,0 +1,15 @@
+<nav class="nav" style="display:flex;gap:1rem;align-items:center;padding:.6rem 1rem;background:#0b0b0b;color:#fff">
+  <a href="/index.html" data-i18n="gallery" style="color:#fff">Galería</a>
+  <a href="/premium.html" data-i18n="premium" style="color:#fff">Premium</a>
+  <a href="/videos.html" data-i18n="videos" style="color:#fff">Vídeos</a>
+  <a href="/subscription.html" data-i18n="subscribe" style="color:#fff">Suscripción</a>
+  <span style="flex:1 1 auto"></span>
+  <select id="lang-select" class="lang-switch">
+    <option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option>
+  </select>
+</nav>
+<script type="module">
+  import {setLang,currentLang,translate} from '/js/i18n.js';
+  const sel=document.getElementById('lang-select'); sel.value=currentLang();
+  sel.addEventListener('change',(e)=>setLang(e.target.value)); translate();
+</script>
