@@ -1,45 +1,57 @@
 <!doctype html>
 <html lang="es">
 <head>
+  <!-- include head common -->
+  <!--#include file="/_head_common.html" -->
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>IbizaGirl.pics — Home</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <link href="styles.css" rel="stylesheet">
-  <script src="js/utils.js" defer></script>
-  <script src="js/i18n.js" defer></script>
-  <script src="js/init-home.js" defer></script>
+  <link rel="stylesheet" href="/styles.css">
+  <meta name="juicyads-site-verification" content="d9a76b9c250ba1823d821e651e04497c">
+  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+  <script src="/js/i18n.js" defer></script>
+  <script src="/js/unified-content.js" defer></script>
+  <script src="/js/init-home.js" defer></script>
 </head>
 <body>
-  <nav class="topnav">
-    <a href="/" data-i18n="home">Home</a>
-    <a href="/premium" data-i18n="premium">Premium</a>
-    <a href="/videos" data-i18n="videos">Vídeos</a>
-    <a href="/subscription" data-i18n="subscription">Suscripción</a>
+  <nav class="wrap">
+    <a href="/" data-i18n="home"></a>
+    <a href="/premium" data-i18n="premium"></a>
+    <a href="/videos" data-i18n="videos"></a>
+    <a href="/subscription" data-i18n="subscription"></a>
   </nav>
 
-  <main class="container">
-    <h1 data-i18n="gallery">Galería (20 aleatorias de FULL)</h1>
-    <!-- Tu grid existente con tarjetas .card + <a href="..."> -->
-    <section id="home-grid" class="grid">
-      <!-- Las content-data*.js siguen generando el html; nosotros lo hidratamos -->
-    </section>
+  <main class="wrap">
+    <h1 data-i18n="gallery_full"></h1>
 
-    <!-- JuicyAds verificación (pon tu SITE ID aquí) -->
-    <script type="text/javascript">var juicy_site_verification = "YOUR-JUICYADS-SITE-ID";</script>
+    <div class="ads-row">
+      <div class="ad-box">
+        <!-- ExoClick -->
+        <script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
+        <ins class="eas6a97888e2" data-zoneid="5696328"></ins>
+        <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
+      </div>
+      <div class="ad-box" id="sp_8177575_node">&nbsp;</div>
+    </div>
+
+    <section id="grid-home" class="grid"></section>
   </main>
 
-  <!-- EroAdvertising / ExoClick-like (ya veías logs de magsrv) -->
-  <script src="https://s.magsrv.com/ad-provider.js" async></script>
-
-  <!-- PopAds -->
-  <script type="text/javascript">
-  var popns = document.createElement('script'); popns.async = true;
-  popns.src = '//popads.net/pop.js';
-  popns.onerror = function(){/* ignorar */};
-  document.head.appendChild(popns);
+  <!-- EroAdvertising -->
+  <script type="text/javascript" charset="utf-8">
+  if (typeof eaCtrl =="undefined"){
+    var eaCtrlRecs=[]; var eaCtrl = {add:function(ag){eaCtrlRecs.push(ag)}};
+    var js = document.createElement('script');
+    js.setAttribute("src","//go.easrv.cl/loadeactrl.go?pid=152716&spaceid=8177575&ctrlid=798544");
+    document.head.appendChild(js);
+  }
+  eaCtrl.add({"display":"sp_8177575_node","sid":8177575,"plugin":"banner"});
   </script>
 
-  <!-- Crisp -->
-  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+  <!-- PopAds -->
+  <script type="text/javascript" data-cfasync="false">
+  (function(){var p=window,j="e494ffb82839a29122608e933394c091",d=[["siteId",595+467*6*350+302+4245161],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],
+  v=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL3pTL2J3ZHZmL3R0YWJsZXRvcC5taW4uanM=","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvaG1kYi5taW4uanM=","d3d3Lmh6Z2Vua3ZkLmNvbS9ObmtBaC9mQy96dGFibGV0b3AubWluLmpz","d3d3LmpzZ2Zyend0eWdmLmNvbS9qbWRiLm1pbi5qcw=="],e=-1,a,y,m=function(){clearTimeout(y);e++;if(v[e]&&!(1781539757000<(new Date).getTime()&&1<e)){a=p.document.createElement("script");a.type="text/javascript";a.async=!0;var s=p.document.getElementsByTagName("script")[0];a.src="https://"+atob(v[e]);a.crossOrigin="anonymous";a.onerror=m;a.onload=function(){clearTimeout(y);p[j.slice(0,16)+j.slice(0,16)]||m()};y=setTimeout(m,5E3);s.parentNode.insertBefore(a,s)}};if(!p[j]){try{Object.freeze(p[j]=d)}catch(e){}m()}})();
+  </script>
 </body>
 </html>
