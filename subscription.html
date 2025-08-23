@@ -1,53 +1,66 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Suscripción — IbizaGirl.pics</title>
-  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="js/content-data1.js"></script>
+  <script src="js/payments.js" defer></script>
 </head>
-<body class="bg-black text-white">
-  <header class="max-w-5xl mx-auto px-4 py-6 flex gap-6">
-    <a href="/" class="text-sky-400">Home</a>
-    <a href="/premium" class="text-sky-400">Premium</a>
-    <a href="/videos" class="text-sky-400">Videos</a>
-    <span class="text-neutral-500">Suscripción</span>
+<body>
+  <header>
+    <nav><a href="/">Home</a> <a href="/premium">Premium</a> <a href="/videos">Videos</a> <strong>Suscripción</strong></nav>
   </header>
 
-  <main class="max-w-5xl mx-auto px-4 pb-24">
-    <h1 class="text-3xl font-bold mb-6">Suscripciones</h1>
-    <p class="text-neutral-300 mb-8">Desbloquea todas las fotos y vídeos sin límites.</p>
+  <main class="container">
+    <h1>Suscripciones</h1>
+    <p>Desbloquea todas las fotos y vídeos sin límites.</p>
 
-    <section class="grid md:grid-cols-3 gap-6">
-      <article class="rounded-2xl bg-neutral-900 p-6 shadow">
-        <h2 class="text-xl font-semibold mb-2">Mensual <span class="ml-2 text-xs bg-sky-700/40 px-2 py-0.5 rounded">14,99 €</span></h2>
-        <p class="text-3xl font-bold">14,99 € <span class="text-base font-normal text-neutral-400">/ mes</span></p>
-        <p class="text-neutral-400 mt-3 mb-6">Acceso total recurrente. Cancela cuando quieras.</p>
-        <div id="pp-monthly" class="h-10 flex items-center"></div>
+    <section class="plans">
+      <article class="plan">
+        <h2>Mensual <small>14,99 €</small></h2>
+        <p>Acceso total recurrente. Cancela cuando quieras.</p>
+        <div id="paypal-monthly" class="pp-slot">Cargando…</div>
       </article>
 
-      <article class="rounded-2xl bg-neutral-900 p-6 shadow">
-        <h2 class="text-xl font-semibold mb-2">Anual <span class="ml-2 text-xs bg-sky-700/40 px-2 py-0.5 rounded">49,99 €</span></h2>
-        <p class="text-3xl font-bold">49,99 € <span class="text-base font-normal text-neutral-400">/ año</span></p>
-        <p class="text-neutral-400 mt-3 mb-6">El mejor precio anual. Renovación automática.</p>
-        <div id="pp-annual" class="h-10 flex items-center"></div>
+      <article class="plan">
+        <h2>Anual <small>49,99 €</small></h2>
+        <p>Mejor precio anual. Renovación automática.</p>
+        <div id="paypal-annual" class="pp-slot">Cargando…</div>
       </article>
 
-      <article class="rounded-2xl bg-neutral-900 p-6 shadow">
-        <h2 class="text-xl font-semibold mb-2">Lifetime <span class="ml-2 text-xs bg-sky-700/40 px-2 py-0.5 rounded">100 €</span></h2>
-        <p class="text-3xl font-bold">100,00 € <span class="text-base font-normal text-neutral-400">pago único</span></p>
-        <p class="text-neutral-400 mt-3 mb-6">Acceso ilimitado para siempre, sin cuotas.</p>
-        <div id="pp-lifetime" class="h-10 flex items-center"></div>
+      <article class="plan">
+        <h2>Lifetime <small>100 €</small></h2>
+        <p>Pago único. Acceso permanente.</p>
+        <div id="paypal-lifetime" class="pp-slot">Cargando…</div>
       </article>
     </section>
+
+    <p class="note">Tras el pago, refresca la página si no ves todo desbloqueado al instante.</p>
   </main>
 
-  <script src="/js/payments.js"></script>
   <script>
-    // Render con UN SOLO SDK (parámetros ya definidos en Payments.config)
-    Payments.renderSubscriptions();
-    Payments.renderLifetime();
+    // === CONFIGURA AQUÍ TU CLIENT_ID LIVE Y PLANES ===
+    const PAYPAL_CLIENT_ID = 'Pega_AQUI_TU_CLIENT_ID_LIVE_COMPLETO';
+    const PLAN_MONTHLY     = 'P-3WE8037612641383DNCUKNJI';
+    const PLAN_ANNUAL      = 'P-43K261214Y571983RNCUKN7I';
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      Payments
+        .init({
+          clientId: PAYPAL_CLIENT_ID,
+          currency: 'EUR',
+          monthlyPlanId: PLAN_MONTHLY,
+          annualPlanId: PLAN_ANNUAL,
+          lifetimePrice: '100.00'
+        })
+        .renderSubscriptions({
+          monthlySel:  '#paypal-monthly',
+          annualSel:   '#paypal-annual',
+          lifetimeSel: '#paypal-lifetime'
+        });
+    });
   </script>
 </body>
 </html>
-
