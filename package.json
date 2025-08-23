@@ -2,6 +2,7 @@
   "name": "ibizagirl-static",
   "private": true,
   "scripts": {
+    "build": "bash tools/build_env_js.sh",
     "vercel-build": "bash tools/build_env_js.sh"
   }
 }
