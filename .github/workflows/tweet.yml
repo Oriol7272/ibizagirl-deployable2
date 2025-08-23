@@ -1,0 +1,23 @@
+name: Daily Tweet
+on:
+  schedule:
+    - cron: "8 9 * * *"   # 09:08 UTC todos los días
+  workflow_dispatch: {}   # manual
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: bots/twitter
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm ci || npm i
+      - run: npm run tweet
+        env:
+          TW_API_KEY:        ${{ secrets.TW_API_KEY }}
+          TW_API_SECRET:     ${{ secrets.TW_API_SECRET }}
+          TW_ACCESS_TOKEN:   ${{ secrets.TW_ACCESS_TOKEN }}
+          TW_ACCESS_SECRET:  ${{ secrets.TW_ACCESS_SECRET }}

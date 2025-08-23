@@ -37,3 +37,5 @@ window.addEventListener('DOMContentLoaded', ()=>{
   const ls=document.getElementById('lang-select'); if(ls){ ls.addEventListener('change', e=>{ window.I18N.setLang(e.target.value); }); }
   const bl=document.getElementById('buy-lifetime'); if(bl){ bl.addEventListener('click', ()=>{ const m=document.getElementById('paypal-modal'); if(m) m.classList.remove('hidden'); import('./payments.js').then(p=>p.buyLifetime()); }); }
 });
+import './crisp-extras.js';
+import './email-promo.js';

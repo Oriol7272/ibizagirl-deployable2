@@ -1,0 +1,11 @@
+{
+  "name": "IBIZAGIRL.PICS",
+  "short_name": "Ibizagirl",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#06223b",
+  "theme_color": "#0a304f",
+  "icons": [
+    { "src": "/decorative-images/paradise-beach.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
