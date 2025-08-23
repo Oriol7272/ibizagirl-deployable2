@@ -20,7 +20,6 @@ ensure_home_sections(){ f="index.html"; [ -f "$f" ] || return 0
 }
 
 clean_legacy(){ f="$1"
-  # Borra scripts de modulo inlines que referencian nombres antiguos
   perl -0777 -pe 's#<script type="module">.*?(wireCardPurchases|mountAds|currentLang).*?</script>##gs' -i "$f" 2>/dev/null || true
   sed -i '' '/<script src="\/js\/i18n\.js"><\/script>/d' "$f" 2>/dev/null || true
   sed -i '' '/<script src="\/js\/ads\.js"><\/script>/d' "$f" 2>/dev/null || true

@@ -36,6 +36,8 @@
   <script src="/js/decorative-list.js"></script>
   <link rel="stylesheet" href="/css/site.css">
 <body>
+<header class="site"><div class="brand"><h1>IBIZAGIRL.PICS</h1><p data-i18n="welcome">Bienvenido al paraiso para tu disfrute</p></div><nav class="navbar"><a class="btn" href="/index.html">Home</a><a class="btn" href="/premium.html">Premium</a><a class="btn" href="/videos.html">Videos</a><a class="btn" href="/subscription.html" data-i18n="subscribe">Suscripciones</a><button id="buy-lifetime" class="btn" style="display:inline-flex;align-items:center;gap:.4rem"><span class="pp-icon"></span><span>Lifetime 100€</span></button></nav></header>
+<div class="langbox"><select id="lang-select"><option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option></select></div>
 <aside class="sidebar-fixed sidebar-left" id="side-ads-left"><div class="ad-slot" data-net="juicy"></div><div class="ad-slot" data-net="exo"></div><div class="ad-slot" data-net="ero"></div></aside><aside class="sidebar-fixed sidebar-right" id="side-ads-right"><div class="ad-slot" data-net="juicy"></div><div class="ad-slot" data-net="exo"></div><div class="ad-slot" data-net="ero"></div></aside>
 <div class="top-strip"><span class="plan-pill">Lifetime 100€</span><span class="plan-pill">Anual 49,99€</span><span class="plan-pill">Mensual 14,99€</span><span>Todo el contenido visible mientras esté activo.</span></div><div class="main-wrap"><aside class="sidebar" id="sb-left"><div class="ad-slot" data-network="juicy"></div><div class="ad-slot" data-network="exo"></div><div class="ad-slot" data-network="ero"></div></aside><main class="content" id="page-main">
 <div id="main-section"></div></main><aside class="sidebar" id="sb-right"><div class="ad-slot" data-network="juicy"></div><div class="ad-slot" data-network="exo"></div><div class="ad-slot" data-network="ero"></div></aside></div>
@@ -54,11 +56,7 @@
     <option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option>
   </select>
 </nav>
-<script type="module">
-  import {setLang,currentLang,translate} from '/js/i18n.js';
-  const sel=document.getElementById('lang-select'); sel.value=currentLang();
-  sel.addEventListener('change',(e)=>setLang(e.target.value)); translate();
-</script>
+
   <nav class="wrap">
     <a href="/" data-i18n="home"></a>
     <a href="/premium" data-i18n="premium"></a>
@@ -88,8 +86,6 @@
 </html>
 <script type="module">
 import {buyLifetime} from '/js/payments.js';
-import {mountAds} from '/js/ads.js';
-import {wireCardPurchases, wireSubs} from '/js/purchase-ui.js';
 import {translate} from '/js/i18n.js';
 window.addEventListener('DOMContentLoaded', ()=>{
   const btn=document.getElementById('buy-lifetime'); if(btn){ btn.addEventListener('click', ()=>{ const m=document.getElementById('paypal-modal'); if(m) m.classList.remove('hidden'); buyLifetime(); }); }

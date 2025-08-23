@@ -2,7 +2,7 @@
   --ocean-900:#06223b; --ocean-800:#0a304f; --ocean-700:#0e3d63; --ocean-600:#124a77; --ocean-500:#16578b;
   --text:#ffffff; --sidebar-w:300px; --gap:14px;
 }
-@font-face{font-family:"Allura";src:url("/fonts/Allura-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Allura";src:url("/fonts/Allura-Regular.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
