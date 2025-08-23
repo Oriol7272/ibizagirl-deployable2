@@ -73,5 +73,18 @@
       document.getElementById('status').textContent=`Render ${pick.length} / pool ${pool.length}`;
     }
   </script>
+<!-- PAYMENTS-INJECT VIDEOS BEGIN -->
+<script src="/js/payments.config.js?v=20250823084148"></script>
+<script src="/js/payments.js?v=20250823084148"></script>
+<script>(function(){
+  document.addEventListener(}OMContentLoaded',function(){
+    var cards = document.querySelectorAll('.card,.video-card,[data-video],[data-item-id]');
+    cards.forEach(function(c){
+      if(!c.querySelector('.mini-buy')){var d=document.createElement(}iv');d.className='mini-buy';c.appendChild(d);}
+    });
+    try{Payments.renderMiniBuy({selector:'.mini-buy',price:0.30,description:|ompra vídeo IbizaGirl'});}catch(e){console.warn(e)}
+  });
+})();</script>
+<!-- PAYMENTS-INJECT VIDEOS END -->
 </body>
 </html>
