@@ -34,9 +34,14 @@
   <script src="/js/init-premium.js" defer></script>
   <link rel="stylesheet" href="/css/paywall.css">
 </head>
+  <script src="/js/decorative-list.js"></script>
+  <link rel="stylesheet" href="/css/site.css">
 <body>
+<aside class="sidebar-fixed sidebar-left" id="side-ads-left"><div class="ad-slot" data-net="juicy"></div><div class="ad-slot" data-net="exo"></div><div class="ad-slot" data-net="ero"></div></aside><aside class="sidebar-fixed sidebar-right" id="side-ads-right"><div class="ad-slot" data-net="juicy"></div><div class="ad-slot" data-net="exo"></div><div class="ad-slot" data-net="ero"></div></aside>
+<div class="top-strip"><span class="plan-pill">Lifetime 100€</span><span class="plan-pill">Anual 49,99€</span><span class="plan-pill">Mensual 14,99€</span><span>Todo el contenido visible mientras esté activo.</span></div><div class="main-wrap"><aside class="sidebar" id="sb-left"><div class="ad-slot" data-network="juicy"></div><div class="ad-slot" data-network="exo"></div><div class="ad-slot" data-network="ero"></div></aside><main class="content" id="page-main">
+<div id="main-section"></div></main><aside class="sidebar" id="sb-right"><div class="ad-slot" data-network="juicy"></div><div class="ad-slot" data-network="exo"></div><div class="ad-slot" data-network="ero"></div></aside></div>
 <div id="lifetime-strip" style="background:#00457C;color:#fff;padding:.5rem 1rem;display:flex;gap:.75rem;align-items:center;justify-content:center;flex-wrap:wrap"><strong>Lifetime</strong> — desbloquea todo y sin anuncios por <strong>100,00€</strong> <button id="buy-lifetime" class="buy-btn" style="position:static;transform:none"><span class="pp-icon"></span><span class="buy-label">Comprar</span></button></div>
-<section style="padding:1rem"><h2 data-i18n="premium">Premium</h2><div id="premium-grid"></div></section>
+<div id="main-section" style="padding:1rem"  id="main-section" style="padding:1rem"><h2 data-i18n="premium">Premium</h2><div id="premium-grid"></div></div>
 <div class="ad-slot" data-network="juicy"></div>
 <div class="ad-slot" data-network="exo"></div>
 
@@ -67,7 +72,7 @@
   <main class="wrap">
     <h1 data-i18n="premium_images"></h1>
     <div class="notice" data-i18n="lifetime_note"></div>
-    <section id="grid-premium" class="grid"></section>
+    <div id="main-section" style="padding:1rem"  id="main-section" id="grid-premium" class="grid"></div>
   </main>
   <!-- Modal de pago -->
   <div id="pay-modal" class="modal hidden"><div class="modal-backdrop"></div><div class="modal-card"><h3 id="pm-title">PayPal</h3><div id="paypal-mini"></div><button id="pm-close" class="btn-close">×</button></div></div>
@@ -80,6 +85,7 @@
   <script src="/js/init-mini-buy.js?v=20250823173941"></script>
 <div id="paypal-modal" class="hidden"><div id="paypal-modal-bg"><div id="paypal-modal-card"><button id="paypal-modal-close" aria-label="Close">✕</button><div id="paypal-modal-target"></div></div></div></div>
 </body>
+  <script type="module" src="/js/page-init.js"></script>
 </html>
 <script type="module">
 import {buyLifetime} from '/js/payments.js';
