@@ -104,14 +104,5 @@
 </body>
   <script type="module" src="/js/page-init.js"></script>
 </html>
-<script type="module">
-import {wireSubs} from '/js/purchase-ui.js';
-import {translate} from '/js/i18n.js';
-</script>
-<script type="module">
-import {buyLifetime} from '/js/payments.js';
-import {translate} from '/js/i18n.js';
-window.addEventListener('DOMContentLoaded', ()=>{
-  const btn=document.getElementById('buy-lifetime'); if(btn){ btn.addEventListener('click', ()=>{ const m=document.getElementById('paypal-modal'); if(m) m.classList.remove('hidden'); buyLifetime(); }); }
-});
-</script>
+
+

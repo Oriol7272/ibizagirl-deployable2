@@ -10,7 +10,6 @@ export function renderCarousel(el, items){
   });
   el.innerHTML=''; el.appendChild(track);
   let i=0; const N=items.length; if(N>1){
-    // ancho item 340 + gap 6 = ~346
     setInterval(()=>{ i=(i+1)%N; track.style.transform='translateX(' + (-i*346) + 'px)'; }, 1000);
   }
 }
@@ -40,7 +39,5 @@ export function renderGrid(el, items, {withPrice=false, lock=true, kind='photo'}
 
 export function setCounter(sel, total, news){
   const c=qs(sel); if(!c) return;
-  c.textContent = (typeof news==='number')
-    ? ('Novedades de hoy: '+news+' - Total: '+total)
-    : ('Total: '+total);
+  c.textContent = (typeof news==='number') ? ('Novedades de hoy: '+news+' - Total: '+total) : ('Total: '+total);
 }

@@ -118,19 +118,5 @@
 </body>
   <script type="module" src="/js/page-init.js"></script>
 </html>
-<script type="module">
-import {getDailySets} from '/js/daily-picks.js';
-import {renderCarousel} from '/js/ui-render.js';
-import {translate} from '/js/i18n.js';
-window.addEventListener('DOMContentLoaded', ()=>{
-  const {full20}=getDailySets({forceRefresh:new URLSearchParams(location.search).has('refresh')});
-  renderCarousel(document.getElementById('home-carousel'), full20);
-});
-</script>
-<script type="module">
-import {buyLifetime} from '/js/payments.js';
-import {translate} from '/js/i18n.js';
-window.addEventListener('DOMContentLoaded', ()=>{
-  const btn=document.getElementById('buy-lifetime'); if(btn){ btn.addEventListener('click', ()=>{ const m=document.getElementById('paypal-modal'); if(m) m.classList.remove('hidden'); buyLifetime(); }); }
-});
-</script>
+
+
