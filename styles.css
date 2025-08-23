@@ -27,3 +27,5 @@ nav a { margin-right:10px; }
 
 /* “Nuevo” badge (verde) */
 .badge-new { position:absolute; top:8px; left:8px; background:#22c55e; color:#06110a; font-weight:700; font-size:12px; padding:2px 8px; border-radius:999px; }
+.card:has([style*="background-image"]) .loading-text,
+.item:has([style*="background-image"]) .loading-text { display:none!important; }
