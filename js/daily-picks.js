@@ -3,25 +3,25 @@ const pick=(arr,n,seed)=>{ if(!arr||!arr.length) return []; const s=[...arr]; fo
 
 export function getDailySets(){
   const seed = seedToday();
-  // HOME: solo contenido público FULL
+  // Pools
   const fullPool = (window.FULL_IMAGES_POOL||[]).map((src,i)=>({id:'full-'+i, src, thumb:src, type:'photo'}));
+  const premPool = [ ...(window.PREMIUM_IMAGES_PART1||[]), ...(window.PREMIUM_IMAGES_PART2||[]) ].map((src,i)=>({id:'p-'+i, src, type:'photo'}));
+  const vidsPool = (window.PREMIUM_VIDEOS_POOL||[]).map((src,i)=>({id:'v-'+i, src, type:'video'}));
+
+  // HOME
   const full20_carousel = pick(fullPool, 20, seed+1);
   const full20_grid     = pick(fullPool.filter(x=>!full20_carousel.includes(x)), 20, seed+2);
 
-  // PREMIUM/VÍDEOS para sus páginas
-  const premPool = [ ...(window.PREMIUM_IMAGES_PART1||[]), ...(window.PREMIUM_IMAGES_PART2||[]) ]
-      .map((src,i)=>({id:'p-'+i, src, type:'photo'}));
-  const vidsPool = (window.PREMIUM_VIDEOS_POOL||[]).map((src,i)=>({id:'v-'+i, src, type:'video'}));
-
+  // PREMIUM & VIDEOS
   const premium100 = pick(premPool, 100, seed+3);
   const vids20     = pick(vidsPool, 20, seed+4);
 
-  // Asigna thumbs seguros
-  const safeThumb = (arr,i)=> fullPool.length ? fullPool[(i)%fullPool.length].src : (window.DECOR_IMAGES||[])[i%(window.DECOR_IMAGES||['']).length];
-  premium100.forEach((x,i)=> x.thumb = safeThumb(premium100,i));
-  vids20.forEach((x,i)=> x.thumb = safeThumb(vids20,i+123));
+  // Thumbs: intenta poster de vídeo (sin 404 visible) y fallback a FULL
+  const tFull = (i)=> fullPool.length ? fullPool[i % fullPool.length].src : (window.DECOR_IMAGES||[])[i % (window.DECOR_IMAGES||['']).length];
+  premium100.forEach((x,i)=> x.thumb = tFull(i));
+  vids20.forEach((x,i)=> x.thumb = tFull(i+123));
 
-  // Marca NEW 30% en premium
+  // 30% NEW en premium
   const newN = Math.floor(premium100.length*0.3);
   const idxs = pick(premium100.map((_,i)=>i), newN, seed+5);
   const set = new Set(idxs);
