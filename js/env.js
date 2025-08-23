@@ -1,13 +1,1 @@
-window.__ENV={
-  PAYPAL_CLIENT_ID:"",
-  PAYPAL_PLAN_MONTHLY:"",
-  PAYPAL_PLAN_YEARLY:"",
-  CRISP_WEBSITE_ID:"",
-  JUICYADS_ZONE:"",
-  EXOCLICK_ZONE:"",
-  EROADVERTISING_ZONE:"",
-  ERO_PID:"",
-  ERO_CTRLID:"",
-  POPADS_SITE_ID:"",
-  ADS_ENABLED:"true"
-};
+window.__ENV = {};
