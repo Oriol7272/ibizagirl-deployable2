@@ -1,13 +1,14 @@
-document.addEventListener('DOMContentLoaded', function () {
-  var cards = document.querySelectorAll('.card');
-  cards.forEach(function (c) {
-    if (!c.querySelector('.mini-buy')) {
-      var d = document.createElement('div');
-      d.className = 'mini-buy';
-      c.appendChild(d);
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.video-card,.card,.item').forEach(card => {
+    if (!card.querySelector('.mini-buy')) {
+      const d = document.createElement('div');
+      d.className = 'mini-buy'; d.style.margin = '8px 0';
+      card.appendChild(d);
     }
   });
-  if (window.Payments && typeof window.Payments.renderMiniBuy === 'function') {
-    window.Payments.renderMiniBuy({ selector: '.mini-buy', price: 0.30, description: 'Compra vídeo IbizaGirl' });
+  if (window.Payments) {
+    Payments.renderMiniBuy({ selector: '.mini-buy', price: 0.30 });
+  } else {
+    console.warn('[init-videos] Payments no está disponible');
   }
 });
