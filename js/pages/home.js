@@ -10,9 +10,17 @@ const DECOS = [
   '/decorative-images/f062cb22-c99b-4dfa-9a79-572e98c6e75e.jpg'
 ];
 
+const toArr = v => {
+  if (!v) return [];
+  if (Array.isArray(v)) return v;
+  if (typeof v === 'object' && Number.isFinite(v.length)) {
+    try { return Array.from(v); } catch { /* fall-through */ }
+  }
+  return [];
+};
+
 function setHeroImage(url){ const img=document.getElementById('heroImg'); img.src=url; }
 
-/* Heurísticas para encontrar arrays de imágenes públicas (/full) en window */
 function isImgItem(x){
   if(!x) return false;
   if(typeof x==='string') return /\/full\//.test(x)||/\.(jpe?g|png|webp)$/i.test(x);
@@ -22,49 +30,63 @@ function isImgItem(x){
   }
   return false;
 }
-function pickArray(arrays){
-  // Prioriza arrays cuyos items contienen /full/
-  const scored = arrays.map(a=>{
-    const sample = a.slice(0,10);
-    const score = sample.reduce((s,el)=>s + (isImgItem(el)&&typeof(el)==='object'&&/(^|\/)full(\/|$)/.test((el.file||el.src||el.url||''))?3:isImgItem(el)?1:0),0);
-    return {a,score,len:a.length};
-  }).sort((x,y)=>y.score-x.score || y.len-x.len);
-  return (scored[0] && scored[0].a) || [];
+
+function normalizeItems(arr){
+  // Convierte strings en objetos homogéneos {file:...} para que imgURL funcione.
+  return toArr(arr).map(it => (typeof it === 'string' ? { file: it } : it));
 }
-function scanWindowForFull(){
+
+function scanWindowForFullOnce(){
   const candidates=[];
+
+  // 1) UnifiedContentAPI
   try{
     const U = window.UnifiedContentAPI;
     if(U){
-      let p;
-      try{ p = U.getPublicImages && U.getPublicImages(); }catch(_){}
-      if(Array.isArray(p)&&p.length) candidates.push(p);
-      ['publicImages','images','full'].forEach(k=>{ if(Array.isArray(U[k])&&U[k].length) candidates.push(U[k]); });
+      try{
+        const p = U.getPublicImages && U.getPublicImages();
+        const a = normalizeItems(p);
+        if(a.length) candidates.push(a);
+      }catch(_){}
+      ['publicImages','images','full'].forEach(k=>{
+        const a = normalizeItems(U[k]);
+        if(a.length) candidates.push(a);
+      });
     }
   }catch(_){}
+
+  // 2) ContentData2.*
   try{
     const C = window.ContentData2;
     if(C){
-      ['publicImages','images','full'].forEach(k=>{ if(Array.isArray(C[k])&&C[k].length) candidates.push(C[k]); });
+      ['publicImages','images','full'].forEach(k=>{
+        const a = normalizeItems(C[k]);
+        if(a.length) candidates.push(a);
+      });
     }
   }catch(_){}
-  // escaneo general (último recurso)
+
+  // 3) Escaneo genérico del window (array o array-like con contenido de imagen)
   const keys = Object.getOwnPropertyNames(window);
   for(const k of keys){
     const v = window[k];
-    if(Array.isArray(v) && v.length>=20){
-      const sample=v.slice(0,6);
-      if(sample.some(isImgItem)) candidates.push(v);
+    const a = normalizeItems(v);
+    if(a.length >= 20){
+      const sample=a.slice(0,10);
+      if(sample.some(isImgItem)) candidates.push(a);
     }
   }
-  return pickArray(candidates);
+
+  // Escoge el mejor candidato (más elementos)
+  candidates.sort((a,b)=>b.length - a.length);
+  return candidates[0] || [];
 }
 
-function waitForFull(timeoutMs=7000, interval=100){
+function waitForFull(timeoutMs=8000, interval=120){
   return new Promise(resolve=>{
     const t0=Date.now();
     const tick=()=>{
-      const arr=scanWindowForFull();
+      const arr=scanWindowForFullOnce();
       if(arr && arr.length) return resolve(arr);
       if(Date.now()-t0>=timeoutMs) return resolve(arr||[]);
       setTimeout(tick, interval);
@@ -92,22 +114,20 @@ export async function initHome(){
     <section class="grid" id="homeGrid"></section>
   `;
 
-  // Banner diario
+  // Banner decorativo diario
   setHeroImage(seededPick(DECOS,1,'banner')[0] || DECOS[0]);
 
-  // Espera y busca el pool /full en window
+  // Pool /full robusto
   const full = await waitForFull();
-  console.info('[IBG] /full encontrados:', full.length);
+  console.info('[IBG] /full disponibles (post-scan):', full.length);
 
-  // Carrusel (20) semilla A
+  // Carrusel 20 (seed 'carousel')
   const car=document.getElementById('homeCarousel');
   const c20 = seededPick(full,20,'carousel');
   c20.forEach(it=>{ const u=imgURL(it); const s=document.createElement('div'); s.className='slide'; s.innerHTML=`<img src="${u}" alt="">`; car.appendChild(s); });
 
-  // Grid (20) semilla B
+  // Grid 20 (seed 'grid')
   const grid=document.getElementById('homeGrid');
   const g20 = seededPick(full,20,'grid');
-  g20.forEach((it,i)=>{ const u=imgURL(it); const id=it.id||it.file||('full-'+i);
-    const c=document.createElement('div'); c.className='card'; c.dataset.id=id; c.innerHTML=`<img loading="lazy" src="${u}" alt="">`; grid.appendChild(c);
-  });
+  g20.forEach((it,i)=>{ const u=imgURL(it); const id=it.id||it.file||('full-'+i); const c=document.createElement('div'); c.className='card'; c.dataset.id=id; c.innerHTML=`<img loading="lazy" src="${u}" alt="">`; grid.appendChild(c); });
 }
