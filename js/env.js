@@ -1,5 +1,5 @@
-// AUTO-GENERATED AT BUILD
-export const ENV = {
+// UMD env: NO modules. Disponible como window.ENV
+window.ENV = {
   PAYPAL_CLIENT_ID: "",
   PAYPAL_SECRET: "",
   PAYPAL_PLAN_MONTHLY_1499: "",
