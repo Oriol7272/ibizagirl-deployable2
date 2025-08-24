@@ -1,11 +1,6 @@
-export const qs = (sel, root=document)=>root.querySelector(sel);
-export const qsa = (sel, root=document)=>Array.from(root.querySelectorAll(sel));
-export const seedToday = ()=>{ const d=new Date(); return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate(); };
-export function shuffleSeeded(arr, seed){
-  const a=[...arr]; let m=a.length,i,t;
-  const rand=()=>{ seed=(seed*9301+49297)%233280; return seed/233280; };
-  while(m){ i=Math.floor(rand()*m--); t=a[m]; a[m]=a[i]; a[i]=t; }
-  return a;
-}
-export const hasUnlock = (id)=> !!localStorage.getItem('unlocks_'+id);
-export const plan = ()=> localStorage.getItem('plan') || 'none';
+export const $=(s,r=document)=>r.querySelector(s);
+export const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+export const money=(n,c='EUR')=>new Intl.NumberFormat(undefined,{style:'currency',currency:c}).format(n);
+export const ls={get:(k,d=null)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(_){return d}},set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
+export const vip={is:()=>!!(ls.get('ibg.vip')||ls.get('ibg.sub')==='active'),markLifetime:()=>ls.set('ibg.vip',true),markSub:()=>ls.set('ibg.sub','active')};
+export const unlock={set:()=>new Set(ls.get('ibg.unlocked',[])),has:(id)=>new Set(ls.get('ibg.unlocked',[])).has(id)||vip.is(),add:(id)=>{const s=new Set(ls.get('ibg.unlocked',[]));s.add(id);ls.set('ibg.unlocked',[...s])}};
