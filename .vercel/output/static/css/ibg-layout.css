@@ -1,0 +1,5 @@
+.container{max-width:1200px;margin:0 auto;padding:12px}
+.row{display:flex;gap:12px}
+.space-between{justify-content:space-between}
+.center{align-items:center}
+.logo{font-weight:700;font-size:1.25rem;text-decoration:none}

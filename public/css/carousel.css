@@ -1,0 +1,31 @@
+.carousel{ position:relative; overflow:hidden; border-radius:12px; }
+.carousel-track{ display:flex; transition:transform .6s ease; width:100%; }
+.carousel-slide{ min-width:100%; }
+.carousel-slide img{ width:100%; display:block; height:auto; }
+.grid{ display:grid; gap:12px; margin-top:12px; }
+.grid-5{ grid-template-columns: repeat(5, minmax(0,1fr)); }
+.grid-4{ grid-template-columns: repeat(4, minmax(0,1fr)); }
+@media (max-width: 1200px){ .grid-5{ grid-template-columns: repeat(4,1fr); } }
+@media (max-width: 900px){ .grid-5{ grid-template-columns: repeat(3,1fr); } .grid-4{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 600px){ .grid-5{ grid-template-columns: repeat(2,1fr); } .grid-4{ grid-template-columns: repeat(2,1fr); } }
+.badge{ position:absolute; top:8px; left:8px; padding:2px 6px; border-radius:9999px; font-size:.75rem; background:#111; color:#fff; opacity:.9; }
+.badge.new{ background:#e91e63; }
+.badge.locked{ background:#333; }
+.badge.unlocked{ background:#2e7d32; }
+.badge.lifetime{ background:#2962ff; }
+.card .thumb{ position:relative; }
+.mt-4{ margin-top:1.5rem; }
+.layout-with-aside{ display:grid; grid-template-columns: 240px 1fr 240px; gap:16px; align-items:start; }
+.aside-ads .ad-box{ width:100%; min-height:250px; border:1px dashed #999; margin-bottom:16px; display:flex; align-items:center; justify-content:center; font-size:.85rem; color:#777; }
+@media (max-width: 1000px){ .layout-with-aside{ grid-template-columns: 1fr; } .aside-ads{ display:none; } }
+
+/* --- Price mini badge --- */
+.price-badge{
+  position:absolute; right:8px; bottom:8px;
+  padding:2px 6px; border-radius:9999px;
+  font-size:.70rem; line-height:1; background:#111; color:#fff; opacity:.92
+}
+.card .thumb{ position:relative }
+/* Botones/elementos grandes del paywall más finos */
+.buy-btn .buy-label{ font-size:.80rem }
+.price{ font-size:.75rem; padding:2px 6px; }

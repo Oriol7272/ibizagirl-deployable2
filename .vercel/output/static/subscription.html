@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IbizaGirl.pics — Suscripción</title>
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/css/paywall.css">
+<script src="/js/env.js"></script>
+<script src="/js/i18n.js" defer></script>
+<script src="/js/paywall.js" defer></script>
+<script>
+(function(){window.$crisp=[];window.CRISP_WEBSITE_ID=(window.__ENV&&window.__ENV.CRISP_WEBSITE_ID)||'';if(window.CRISP_WEBSITE_ID){var d=document;var s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);}})();
+</script>
+<style>
+.plan{border:1px solid #ddd;border-radius:12px;padding:16px;margin:10px 0}
+.plan h3{margin:0 0 8px}
+.small{font-size:.9rem;color:#666}
+</style>
+</head>
+<body>
+<main class="container">
+  <h1 data-i18n="subscribe">Suscripción</h1>
+  <p class="small">Mensual 14,99€ • Anual 49,99€ • Lifetime 100€ (sin anuncios)</p>
+
+  <div class="plan" id="p-monthly">
+    <h3>Mensual 14,99€</h3>
+    <div id="btn-monthly"></div>
+  </div>
+
+  <div class="plan" id="p-annual">
+    <h3>Anual 49,99€</h3>
+    <div id="btn-annual"></div>
+  </div>
+
+  <div class="plan" id="p-lifetime">
+    <h3>Lifetime 100€</h3>
+    <div id="btn-lifetime"></div>
+  </div>
+</main>
+
+<script>
+function loadPayPal(){
+  return new Promise(function(res,rej){
+    if(window.paypal) return res();
+    var cid=(window.__ENV&&window.__ENV.PAYPAL_CLIENT_ID)||"";
+    var s=document.createElement("script");
+    s.src="https://www.paypal.com/sdk/js?client-id="+encodeURIComponent(cid)+"&components=buttons,subscriptions&vault=true&intent=capture&currency=EUR";
+    s.onload=res; s.onerror=function(){rej(new Error("paypal sdk"))};
+    document.head.appendChild(s);
+  });
+}
+function renderSubs(){
+  var planM=window.__ENV && window.__ENV.PAYPAL_PLAN_MONTHLY_1499;
+  var planA=window.__ENV && window.__ENV.PAYPAL_PLAN_ANNUAL_4999;
+
+  if(planM){
+    paypal.Buttons({
+      style:{shape:'rect',color:'gold',layout:'vertical',label:'subscribe'},
+      createSubscription:function(data,actions){ return actions.subscription.create({plan_id: String(planM)}); },
+      onApprove:function(){ try{ Paywall.setAccess({subscription:true}); alert('Suscripción activa'); }catch(e){} }
+    }).render('#btn-monthly');
+  }
+  if(planA){
+    paypal.Buttons({
+      style:{shape:'rect',color:'gold',layout:'vertical',label:'subscribe'},
+      createSubscription:function(data,actions){ return actions.subscription.create({plan_id: String(planA)}); },
+      onApprove:function(){ try{ Paywall.setAccess({subscription:true}); alert('Suscripción activa'); }catch(e){} }
+    }).render('#btn-annual');
+  }
+  paypal.Buttons({
+    style:{shape:'rect',color:'gold',layout:'vertical',label:'pay'},
+    createOrder:function(data,actions){
+      return actions.order.create({ purchase_units:[{ amount:{ currency_code:'EUR', value:'100.00' }, description:'IbizaGirl.pics Lifetime' }] });
+    },
+    onApprove:function(data,actions){
+      return actions.order.capture().then(function(){
+        try{ Paywall.setAccess({lifetime:true}); alert('Lifetime activado'); }catch(e){}
+      });
+    }
+  }).render('#btn-lifetime');
+}
+loadPayPal().then(renderSubs);
+</script>
+</body>
+</html>
