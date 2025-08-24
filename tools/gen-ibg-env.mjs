@@ -16,7 +16,7 @@ const IBG = {
   POPADS_SITE_ID: v.POPADS_SITE_ID || '',
   POPADS_ENABLE: v.POPADS_ENABLE || '',
   IBG_ASSETS_BASE_URL: v.IBG_ASSETS_BASE_URL || '',
-  CURRENCY: 'EUR',
+  CURRENCY: 'EUR'
 };
 writeFileSync('ibg-env.js', 'window.IBG = ' + JSON.stringify(IBG, null, 2) + ';');
-console.log('[IBG] ibg-env.js escrito');
+console.log('[IBG] ibg-env.js generado');

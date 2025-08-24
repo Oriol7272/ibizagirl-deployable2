@@ -1,3 +1,45 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "[IBG] Fix framework + ads + deploy"
+
+# 1) Generador de ibg-env.js (si no existe o por si hay cambios)
+mkdir -p tools
+cat > tools/gen-ibg-env.mjs <<'EON'
+import { writeFileSync } from 'fs';
+const v = process.env;
+const IBG = {
+  PAYPAL_CLIENT_ID: v.PAYPAL_CLIENT_ID || '',
+  PAYPAL_SECRET: v.PAYPAL_SECRET || '',
+  PAYPAL_PLAN_MONTHLY_1499: v.PAYPAL_PLAN_MONTHLY_1499 || '',
+  PAYPAL_PLAN_ANNUAL_4999: v.PAYPAL_PLAN_ANNUAL_4999 || '',
+  PAYPAL_WEBHOOK_ID: v.PAYPAL_WEBHOOK_ID || '',
+  CRISP_WEBSITE_ID: v.CRISP_WEBSITE_ID || '',
+  EXOCLICK_ZONE: v.EXOCLICK_ZONE || '',
+  JUICYADS_ZONE: v.JUICYADS_ZONE || '',
+  EROADVERTISING_ZONE: v.EROADVERTISING_ZONE || '',
+  EXOCLICK_SNIPPET_B64: v.EXOCLICK_SNIPPET_B64 || '',
+  JUICYADS_SNIPPET_B64: v.JUICYADS_SNIPPET_B64 || '',
+  EROADVERTISING_SNIPPET_B64: v.EROADVERTISING_SNIPPET_B64 || '',
+  POPADS_SITE_ID: v.POPADS_SITE_ID || '',
+  POPADS_ENABLE: v.POPADS_ENABLE || '',
+  IBG_ASSETS_BASE_URL: v.IBG_ASSETS_BASE_URL || '',
+  CURRENCY: 'EUR'
+};
+writeFileSync('ibg-env.js', 'window.IBG = ' + JSON.stringify(IBG, null, 2) + ';');
+console.log('[IBG] ibg-env.js generado');
+EON
+node tools/gen-ibg-env.mjs || true
+[ -f env.js ] && mv -f env.js env.js.bak || true
+
+# 2) Asegura que TODAS las páginas usan /ibg-env.js
+for f in index.html premium.html videos.html subscription.html; do
+  [ -f "$f" ] && sed -i "" -e 's#/env\.js#/ibg-env.js#g' "$f" || true
+done
+
+# 3) Parche JuicyAds para evitar "Cannot set properties of undefined (setting 'adsbyjuicy')"
+mkdir -p js
+cat > js/ad-loader.js <<'EON'
 import { b64Decode, isSubscribed } from './utils.js';
 export function initAds(targets={}){
   if(isSubscribed()){ console.info('Ads disabled for subscriber/lifetime'); return; }
@@ -49,3 +91,21 @@ export function initAds(targets={}){
     }
   }catch(e){ console.warn('PopAds error:', e); }
 }
+EON
+
+# 4) vercel.json con framework permitido y build de ibg-env.js
+cat > vercel.json <<'EON'
+{
+  "framework": "vite",
+  "buildCommand": "node tools/gen-ibg-env.mjs",
+  "outputDirectory": "."
+}
+EON
+
+# 5) Commit + push + deploy
+git add -A
+git commit -m "IBG: vercel.json (framework=vite) + ads loader fix (JuicyAds) + ibg-env.js use on all pages" || true
+git push origin main || true
+
+# Deploy (sin CLI global)
+npx -y vercel --prod --yes
