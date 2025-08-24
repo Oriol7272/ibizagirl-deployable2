@@ -1,41 +1,17 @@
-import './i18n.js';
-import {getDailySets} from './daily-picks.js';
-import {renderCarousel, renderGrid, setCounter} from './ui-render.js';
-import {mountSideAds} from './ads.js';
-import {wirePurchases} from './purchase-ui.js';
-import {startBannerRotation} from './banner-rotator.js';
+(function(){
+  function onReady(fn){ document.readyState==='loading' ? document.addEventListener('DOMContentLoaded', fn) : fn(); }
+  onReady(()=>{
+    if(document.getElementById('home-carousel') || /index\.html?$/.test(location.pathname)){
+      window.IBGStore && window.IBGStore.renderHome();
+    }
+    if(document.getElementById('premium-grid')) window.IBGStore && window.IBGStore.renderPremium();
+    if(document.getElementById('videos-grid'))  window.IBGStore && window.IBGStore.renderVideos();
 
-(function bootstrap(){
-  const p = localStorage.getItem('plan')||'none';
-  if(p==='lifetime') document.documentElement.classList.add('hide-ads');
+    const btnM = document.getElementById('pp-monthly');
+    const btnA = document.getElementById('pp-annual');
+    const btnL = document.getElementById('pp-lifetime');
+    if(btnM) btnM.addEventListener('click', ()=> window.IBGPay && window.IBGPay.subscribeMonthly());
+    if(btnA) btnA.addEventListener('click', ()=> window.IBGPay && window.IBGPay.subscribeAnnual());
+    if(btnL) btnL.addEventListener('click', ()=> window.IBGPay && window.IBGPay.buyLifetime());
+  });
 })();
-
-function initHome(){
-  const {full20_carousel, full20_grid} = getDailySets();
-  const banner=document.getElementById('banner-rotator'); if(banner) startBannerRotation();
-  const elC=document.getElementById('home-carousel'); if(elC) renderCarousel(elC, full20_carousel);
-  const elG=document.getElementById('home-public-grid'); if(elG){ renderGrid(elG, full20_grid, {publicGrid:true}); setCounter('#home-public-counter', full20_grid.length); }
-}
-
-function initPremium(){
-  const {premium100}=getDailySets();
-  const P=document.getElementById('premium-grid'); if(P){ renderGrid(P, premium100, {withPrice:true, kind:'photo'}); setCounter('#premium-counter', premium100.length, premium100.filter(x=>x.isNew).length); }
-}
-
-function initVideos(){
-  const {vids20}=getDailySets();
-  const V=document.getElementById('videos-grid'); if(V){ renderGrid(V, vids20, {withPrice:true, kind:'video'}); setCounter('#videos-counter', vids20.length); }
-}
-
-window.addEventListener('DOMContentLoaded', ()=>{
-  if(document.getElementById('home-carousel')) initHome();
-  if(document.getElementById('premium-grid')) initPremium();
-  if(document.getElementById('videos-grid')) initVideos();
-  window.I18N && window.I18N.translate();
-  mountSideAds();
-  wirePurchases();
-  const ls=document.getElementById('lang-select'); if(ls){ ls.addEventListener('change', e=>{ window.I18N.setLang(e.target.value); }); }
-  const bl=document.getElementById('buy-lifetime'); if(bl){ bl.addEventListener('click', ()=>{ const m=document.getElementById('paypal-modal'); if(m) m.classList.remove('hidden'); import('./payments.js').then(p=>p.buyLifetime()); }); }
-});
-import './crisp-extras.js';
-import './email-promo.js';

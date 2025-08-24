@@ -1,34 +1,40 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -Eeuo pipefail
 
-inject_once() {
-  local file="$1"
-  local needle="$2"
-  local payload="$3"
-  if ! grep -q "$needle" "$file"; then
-    awk -v P="$payload" '1; /<\/body>/{print P}' "$file" > "$file.tmp"
-    mv "$file.tmp" "$file"
-  fi
+files=(index.html premium.html videos.html subscription.html)
+
+append_before_body() {
+  local f="$1" payload="$2"
+  # si ya existe el payload, no tocamos el archivo
+  if grep -Fq "$payload" "$f"; then return 0; fi
+  awk -v P="$payload" '{
+    if(!ins && /<\/body>/){ print P; ins=1 }
+    print
+  }' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
 }
 
-# Inyecta ads y cta en todas las páginas
-for f in index.html premium.html videos.html subscription.html; do
-  [ -f "$f" ] || continue
-  inject_once "$f" '/js/ads.js' '  <script type="module" src="/js/ads.js"></script>'
-  inject_once "$f" '/js/cta.js'  '  <script type="module" src="/js/cta.js"></script>'
+insert_home_carousel() {
+  local f="index.html"
+  [[ -f "$f" ]] || return 0
+  if grep -q 'id="home-carousel"' "$f"; then return 0; fi
+  awk '{
+    print
+    if(!ins && /<div class="page">/){
+      print "<section class=\"carousel\"><div id=\"home-carousel\"></div></section>"
+      ins=1
+    }
+  }' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+}
+
+# 1) Inyecta ads.js y cta.js en todas las pginas (una sola vez)
+for f in "${files[@]}"; do
+  [[ -f "$f" ]] || continue
+  append_before_body "$f" '  <script type="module" src="/js/ads.js"></script>'
+  append_before_body "$f" '  <script type="module" src="/js/cta.js"></script>'
 done
 
-# Carrusel solo en home (después de <div class="page">)
-f="index.html"
-if [ -f "$f" ] && ! grep -q 'id="home-carousel"' "$f"; then
-  awk '1; /<div class="page">/{print "<section class=\\"carousel\\"><div id=\\"home-carousel\\"></div></section>"}' "$f" > "$f.tmp"
-  mv "$f.tmp" "$f"
-fi
-
-# Asegura el import del carrusel en home
-if [ -f "$f" ] && ! grep -q '/js/carousel.js' "$f"; then
-  awk '1; /<\/body>/{print "  <script type=\\"module\\" src=\\"/js/carousel.js\\"></script>"}' "$f" > "$f.tmp"
-  mv "$f.tmp" "$f"
-fi
+# 2) Carrusel SOLO en home (y su import)
+insert_home_carousel
+append_before_body index.html '  <script type="module" src="/js/carousel.js"></script>'
 
 echo "OK"

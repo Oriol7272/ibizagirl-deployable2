@@ -1,13 +1,8 @@
-import {subscribe,buyLifetime} from './payments.js';
-document.addEventListener('DOMContentLoaded',()=>{
-  const h=document.querySelector('header.site');if(!h)return;
-  const bar=document.createElement('div');bar.className='cta-fixed';
-  bar.innerHTML=`<strong>Lifetime</strong> — desbloquea todo y sin anuncios por <strong>100€</strong>
-    <button id="cta-month" class="btn">Mensual 14,99€</button>
-    <button id="cta-year" class="btn">Anual 49,99€</button>
-    <button id="cta-life" class="btn">Comprar</button>`;
-  h.after(bar);
-  document.getElementById('cta-month').onclick=()=>subscribe('monthly');
-  document.getElementById('cta-year').onclick=()=>subscribe('yearly');
-  document.getElementById('cta-life').onclick=()=>buyLifetime();
-})
+(function(){
+  if(document.querySelector('#ibg-cta')) return;
+  const bar = document.createElement('div');
+  bar.id='ibg-cta';
+  bar.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:6;background:#0b5ed7;color:#fff;padding:10px 14px;border-radius:999px;box-shadow:0 8px 22px rgba(0,0,0,.25);font-weight:600;display:flex;gap:10px;align-items:center';
+  document.body.appendChild(bar);  bar.innerHTML = '<span>
+  document.getElementById('ibg-cta-btn')?.addEventListener('click',()=>location.href='/subscription.html');
+})();

@@ -1,48 +1,43 @@
-import {abLabel} from './ab.js';
+/* Anuncios laterales con fallback. No bloquea UI. */
+(function(){
+  const ENV = (window.__ENV || {});
+  const exoZone  = ENV.EXOCLICK_ZONE;
+  const juicyZone= ENV.JUICYADS_ZONE;
+  const eroZone  = ENV.EROADVERTISING_ZONE;
 
-function env(k){const E=window.__ENV||{};return E[k]||''}
-function zone(network){
-  const map={ exo:env('EXOCLICK_ZONE'), juicy:env('JUICYADS_ZONE'), ero:env('EROADVERTISING_ZONE') };
-  return (map[network]||'').trim();
-}
-function b64(key){ const v=env(key); if(!v) return ''; try{ return atob(v); }catch(e){ return ''; } }
-function mountSnippet(slot, html){
-  if(!html) return false;
-  slot.innerHTML = html;
-  return true;
-}
-function injectIframe(slot, src){
-  const ifr=document.createElement('iframe');
-  ifr.loading='lazy'; ifr.referrerPolicy='no-referrer';
-  ifr.style.cssText='border:0;width:300px;height:250px;display:block';
-  ifr.src=src;
-  ifr.onerror=()=>{ slot.style.display='none'; };
-  slot.appendChild(ifr);
-  return true;
-}
-export function mountSideAds(){
-  const v=abLabel();
-  const order=(v==='A')?['juicy','exo','ero']:['exo','juicy','ero'];
-  document.querySelectorAll('.ad-slot').forEach((slot,i)=>{
-    const net=(slot.dataset.network||order[i%order.length]||'').toLowerCase();
-    if(!net){ slot.style.display='none'; return; }
+  const left = document.getElementById('ads-left')  || Object.assign(document.body.appendChild(document.createElement('aside')), {id:'ads-left'});
+  const right= document.getElementById('ads-right') || Object.assign(document.body.appendChild(document.createElement('aside')), {id:'ads-right'});
 
-    const key = (net==='juicy'?'JUICYADS_SNIPPET_B64': net==='exo'?'EXOCLICK_SNIPPET_B64': 'EROADVERTISING_SNIPPET_B64');
-    const html = b64(key);
-    if(html && mountSnippet(slot, html)) return;
+  const inject = (el, html) => { el.innerHTML = html; };
 
-    const z = slot.dataset.zone || zone(net);
-    if(!z || z==='0'){ slot.style.display='none'; return; }
+  const ifr = (src,w=160,h=600) => `<iframe src="${src}" width="${w}" height="${h}" scrolling="no" frameborder="0"></iframe>`;
 
-    if(net==='juicy'){
-      injectIframe(slot, `https://js.juicyads.com/adshow.php?adzone=${encodeURIComponent(z)}`);
-    }else if(net==='exo'){
-      injectIframe(slot, `https://a.exoclick.com/iframe.php?zoneid=${encodeURIComponent(z)}`);
-    }else if(net==='ero'){
-      injectIframe(slot, `https://www.ero-advertising.com/banner.php?zoneid=${encodeURIComponent(z)}`);
-    }else{
-      slot.style.display='none';
+  // ExoClick (banner zone)
+  try{
+    if(exoZone){
+      // formato estndar 160x600 / 300x600 segn tu zona
+      const url = `https://syndication.exoclick.com/ads-iframe-display.php?idzone=${encodeURIComponent(exoZone)}&output=iframe&width=160&height=600`;
+      inject(left, ifr(url));
     }
-  });
-}
-document.addEventListener('DOMContentLoaded',()=>mountSideAds());
+  }catch(e){console.warn('ExoClick error', e)}
+
+  // JuicyAds (skyscraper)
+  try{
+    if(juicyZone){
+      const url = `https://js.juicyads.com/adshow.php?adzone=${encodeURIComponent(juicyZone)}`;
+      inject(right, ifr(url));
+    }
+  }catch(e){console.warn('JuicyAds error', e)}
+
+  // EroAdvertising (corrige dominio "go.eroadvertising.com")
+  try{
+    if(eroZone){
+      const url = `https://go.eroadvertising.com/loadeactrl.go?pid=152716&spaceid=${encodeURIComponent(eroZone)}&ctrlid=798544`;
+      // Si su endpoint requiere script, la mayor soporta iframe tambin:
+      inject(left.innerHTML ? right : left, ifr(url));
+    }
+  }catch(e){console.warn('EroAdvertising error', e)}
+
+  // Si nada carg,,, no dejamos huecos vacs
+  [left, right].forEach(c => { if(!c.innerHTML) c.style.display='none'; });
+})();
