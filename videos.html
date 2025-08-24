@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IbizaGirl.pics — Vídeos</title>
+<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/css/paywall.css">
+<link rel="stylesheet" href="/css/blur.css">
+<script src="/js/env.js"></script>
+<script src="/js/assets-rewrite.js" defer></script>
+<script src="/js/i18n.js" defer></script>
+<script src="/js/paywall.js" defer></script>
+<script src="/js/ads.config.js" defer></script>
+<script src="/js/ads.js" defer></script>
+<script src="/js/content-data1.js" defer></script>
+<script src="/js/content-data2.js" defer></script>
+<script src="/js/content-data3.js" defer></script>
+<script src="/js/content-data4.js" defer></script>
+<script src="/js/content-data5.js" defer></script>
+<script src="/js/content-data6.js" defer></script>
+<script src="/js/unified-content.js" defer></script>
+<style>
+.container{max-width:1200px;margin:0 auto;padding:12px}
+.grid{display:grid;gap:12px}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1000px){.grid-4{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.grid-4{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header class="container">
+  <h1>Vídeos</h1>
+</header>
+<main class="container">
+  <div id="videos-grid" class="grid grid-4"></div>
+</main>
+<script>
+(function(g){
+  function seedShuffle(arr, salt){
+    if(g.UCAPI && UCAPI.dailyShuffle) return UCAPI.dailyShuffle(arr, salt);
+    return [...(arr||[])].sort(()=>Math.random()-0.5);
+  }
+  function render(){
+    var grid=document.getElementById('videos-grid'); if(!grid) return;
+    var pool=(g.UCAPI && UCAPI.getPremiumVideosPool)? UCAPI.getPremiumVideosPool(): (g.PREMIUM_VIDEOS||[]);
+    var pick=seedShuffle(pool,'videos:page').slice(0,20);
+    grid.innerHTML='';
+    var frag=document.createDocumentFragment();
+    pick.forEach(function(raw){
+      var item=(typeof raw==='string')?{url:raw,thumb:raw,type:'video'}:{...raw,type:'video'};
+      var card=(g.UCAPI && UCAPI.createCard)? UCAPI.createCard(item,{type:'video'}): (function(){
+        var c=document.createElement('div'); c.className='card is-locked';
+        var a=document.createElement('a'); a.href='#';
+        var th=document.createElement('div'); th.className='thumb';
+        var v=document.createElement('video'); v.muted=true; v.playsInline=true; v.src=item.thumb||item.url||''; v.className='blur';
+        th.appendChild(v); a.appendChild(th); c.appendChild(a); return c;
+      })();
+      frag.appendChild(card);
+    });
+    grid.appendChild(frag);
+  }
+  document.addEventListener('DOMContentLoaded', render);
+})(window);
+</script>
+</body>
+</html>

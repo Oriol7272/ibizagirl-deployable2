@@ -4,6 +4,7 @@
 <script src="/content-data.js"></script>
 
 <script src="/js/env.js"></script>
+<script src="/js/assets-rewrite.js" defer></script>
 
 <script>
   window.$crisp=[]; window.CRISP_WEBSITE_ID=(window.__ENV&&window.__ENV.CRISP_WEBSITE_ID)||'';
@@ -18,6 +19,13 @@
   <link rel="stylesheet" href="/css/paywall.css">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-DBXYNPBSPY"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-DBXYNPBSPY");</script>
+<script src="/js/content-data1.js" defer></script>
+<script src="/js/content-data2.js" defer></script>
+<script src="/js/content-data3.js" defer></script>
+<script src="/js/content-data4.js" defer></script>
+<script src="/js/content-data5.js" defer></script>
+<script src="/js/content-data6.js" defer></script>
+<script src="/js/unified-content.js" defer></script>
 </head>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,6 +107,55 @@
   <script src="/js/payments.config.js?v=20250823173337"></script>
 <div id="paypal-modal" class="hidden"><div id="paypal-modal-bg"><div id="paypal-modal-card"><button id="paypal-modal-close" aria-label="Close">✕</button><div id="paypal-modal-target"></div></div></div></div>
 </div>
+
+  <section class="container"><h2>Precios</h2>
+    <ul>
+      <li>€14,99 / mes <span id="btn-monthly"></span></li>
+      <li>€49,99 / año <span id="btn-annual"></span></li>
+      <li>Lifetime — desbloquea todo y sin anuncios por 100,00€ <span id="btn-lifetime"></span></li>
+    </ul>
+  </section>
+  
+
+<script>
+(function(){
+  var cid=(window.__ENV&&window.__ENV.PAYPAL_CLIENT_ID)||"";
+  if(!cid){ console.warn("PAYPAL_CLIENT_ID vacío"); return;}
+  var s=document.createElement("script");
+  s.src="https://www.paypal.com/sdk/js?client-id="+encodeURIComponent(cid)+"&components=buttons,subscriptions&vault=true&intent=subscription&currency=EUR";
+  s.async=true;
+  s.onload=function(){
+    try{
+      var planM=window.__ENV && window.__ENV.PAYPAL_PLAN_MONTHLY_1499;
+      var planA=window.__ENV && window.__ENV.PAYPAL_PLAN_ANNUAL_4999;
+
+      if(planM && document.getElementById("btn-monthly")){
+        paypal.Buttons({
+          style:{layout:"vertical",label:"subscribe"},
+          createSubscription:function(d,a){return a.subscription.create({plan_id:String(planM)})},
+          onApprove:function(){ try{ Paywall.setAccess({subscription:true}); }catch(e){} }
+        }).render("#btn-monthly");
+      }
+      if(planA && document.getElementById("btn-annual")){
+        paypal.Buttons({
+          style:{layout:"vertical",label:"subscribe"},
+          createSubscription:function(d,a){return a.subscription.create({plan_id:String(planA)})},
+          onApprove:function(){ try{ Paywall.setAccess({subscription:true}); }catch(e){} }
+        }).render("#btn-annual");
+      }
+      if(document.getElementById("btn-lifetime")){
+        paypal.Buttons({
+          style:{layout:"vertical",label:"pay"},
+          createOrder:function(d,a){ return a.order.create({ purchase_units:[{ amount:{currency_code:"EUR", value:"100.00"}, description:"IbizaGirl.pics Lifetime"} ]}); },
+          onApprove:function(d,a){ return a.order.capture().then(function(){ try{ Paywall.setAccess({lifetime:true}); }catch(e){} }); }
+        }).render("#btn-lifetime");
+      }
+    }catch(e){ console.error("paypal init error", e); }
+  };
+  document.head.appendChild(s);
+})();
+</script>
+
 </body>
   <script type="module" src="/js/page-init.js"></script>
 </html>
