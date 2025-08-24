@@ -1,7 +1,0 @@
-{
-  "name": "ibizagirl-tweeter",
-  "private": true,
-  "type": "module",
-  "dependencies": { "twitter-api-v2": "^1.16.0" },
-  "scripts": { "tweet": "node tweet.js" }
-}
