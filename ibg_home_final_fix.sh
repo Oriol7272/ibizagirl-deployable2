@@ -1,3 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "[IBG] Home: texto centrado gigante + espera pool /full + ads ≥1280 + deploy"
+
+# 1) CSS: texto del banner siempre centrado y más grande; ads desde 1280px
+cat > css/ibg-home.css <<'CSS'
+/* ----- Banner ----- */
+.hero{position:relative;overflow:hidden}
+.hero-bg{width:100%;height:calc(100vh - 64px);min-height:420px;max-height:78vh;object-fit:cover;display:block}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,16,25,.15),rgba(7,16,25,.85))}
+.hero-content{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+.hero-panel{background:rgba(0,0,0,.35);padding:22px 28px;border-radius:22px;max-width:min(1000px,92vw)}
+.hero-title{font-family:'Sexy Beachy',system-ui;font-weight:900;line-height:1;letter-spacing:.5px;
+  font-size:clamp(52px,9vw,120px);text-shadow:0 2px 18px rgba(0,0,0,.65)}
+.hero-sub{margin-top:10px;font-size:clamp(18px,2.6vw,30px);opacity:.98}
+
+/* ----- Carrusel + Grid ----- */
+.section-title{padding:16px 12px 6px 12px;font-weight:800}
+.carousel{position:relative;overflow:hidden;margin:12px}
+.carousel-track{display:flex;gap:10px;scroll-snap-type:x mandatory;overflow-x:auto;padding-bottom:8px}
+.carousel .slide{min-width:320px;max-width:70vw;height:230px;scroll-snap-align:start;border-radius:18px;overflow:hidden;background:#0a1320}
+.carousel .slide img{width:100%;height:100%;object-fit:cover;display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:0 12px 18px}
+.card{position:relative;border-radius:18px;overflow:hidden;background:#0a1320}
+.card img{width:100%;height:220px;object-fit:cover;display:block}
+
+/* ----- Ads laterales (no solapan contenido) ----- */
+.side-ad{position:fixed;top:0;bottom:0;width:160px;z-index:1;display:none;align-items:center;justify-content:center}
+.side-ad.left{left:0}.side-ad.right{right:0}
+@media (min-width:1280px){.side-ad{display:flex}.page-shell{margin-left:160px;margin-right:160px}}
+CSS
+
+# 2) HOME JS: espera a que /full esté listo; banner decorativo diario; carrusel+grid 20+20
+cat > js/pages/home.js <<'JS'
 import { seededPick, imgURL } from '../utils-home.js';
 
 const DECOS = [
@@ -82,3 +117,10 @@ export async function initHome(){
     grid.appendChild(c);
   });
 }
+JS
+
+# 3) Commit + push + deploy
+git add -A
+git commit -m "HOME: texto centrado gigante, espera pool /full (poll), carrusel+grid 20+20, ads ≥1280px" || true
+git push origin main || true
+npx -y vercel --prod --yes

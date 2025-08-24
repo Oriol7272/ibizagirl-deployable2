@@ -3,11 +3,10 @@
 .hero-bg{width:100%;height:calc(100vh - 64px);min-height:420px;max-height:78vh;object-fit:cover;display:block}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,16,25,.15),rgba(7,16,25,.85))}
 .hero-content{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
-.hero.vertical .hero-content{justify-content:flex-end;text-align:left}
-.hero-panel{background:rgba(0,0,0,.35);padding:18px 24px;border-radius:20px;max-width:min(900px,90vw)}
+.hero-panel{background:rgba(0,0,0,.35);padding:22px 28px;border-radius:22px;max-width:min(1000px,92vw)}
 .hero-title{font-family:'Sexy Beachy',system-ui;font-weight:900;line-height:1;letter-spacing:.5px;
-  font-size:clamp(42px,8vw,110px);text-shadow:0 2px 18px rgba(0,0,0,.65)}
-.hero-sub{margin-top:8px;font-size:clamp(16px,2.4vw,28px);opacity:.98}
+  font-size:clamp(52px,9vw,120px);text-shadow:0 2px 18px rgba(0,0,0,.65)}
+.hero-sub{margin-top:10px;font-size:clamp(18px,2.6vw,30px);opacity:.98}
 
 /* ----- Carrusel + Grid ----- */
 .section-title{padding:16px 12px 6px 12px;font-weight:800}
@@ -22,4 +21,4 @@
 /* ----- Ads laterales (no solapan contenido) ----- */
 .side-ad{position:fixed;top:0;bottom:0;width:160px;z-index:1;display:none;align-items:center;justify-content:center}
 .side-ad.left{left:0}.side-ad.right{right:0}
-@media (min-width:1460px){.side-ad{display:flex}.page-shell{margin-left:160px;margin-right:160px}}
+@media (min-width:1280px){.side-ad{display:flex}.page-shell{margin-left:160px;margin-right:160px}}
