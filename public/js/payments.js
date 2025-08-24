@@ -1,31 +1,61 @@
-(function(g){
-  const ENV = g.ENV || {};
-  function loadSDK(){
-    return new Promise((res,rej)=>{
-      if(g.paypal) return res(g.paypal);
-      if(!ENV.PAYPAL_CLIENT_ID){ console.warn('PAYPAL_CLIENT_ID vacío'); return rej(new Error('PAYPAL_CLIENT_ID vacío')); }
-      const s=document.createElement('script');
-      const q=new URLSearchParams({ 'client-id': ENV.PAYPAL_CLIENT_ID, currency:'EUR', components:'buttons', intent:'subscription', vault:'true' }).toString();
-      s.src = 'https://www.paypal.com/sdk/js?'+q; s.onload=()=>res(g.paypal); s.onerror=()=>rej(new Error('SDK error'));
+(function (g) {
+  const ENV = (g && g.ENV) ? g.ENV : {};
+  const CLIENT_ID   = (ENV.PAYPAL_CLIENT_ID || '').trim();
+  const PLAN_MONTH  = (ENV.PAYPAL_PLAN_MONTHLY_1499 || ENV.PAYPAL_PLAN_MONTHLY || '').trim();
+  const PLAN_YEAR   = (ENV.PAYPAL_PLAN_ANNUAL_4999  || ENV.PAYPAL_PLAN_ANNUAL  || '').trim();
+
+  function loadPayPalSDK(currency) {
+    return new Promise((resolve, reject) => {
+      if (!CLIENT_ID) {
+        console.warn('PAYPAL_CLIENT_ID vacío');
+        return reject(new Error('PAYPAL_CLIENT_ID vacío'));
+      }
+      if (g.paypal) return resolve(g.paypal);
+
+      const s = document.createElement('script');
+      s.src = 'https://www.paypal.com/sdk/js'
+            + '?client-id=' + encodeURIComponent(CLIENT_ID)
+            + '&intent=subscription&vault=true&components=buttons'
+            + '&currency=' + encodeURIComponent(currency || 'EUR');
+      s.onload  = () => resolve(g.paypal);
+      s.onerror = () => reject(new Error('No se pudo cargar el SDK de PayPal'));
       document.head.appendChild(s);
     });
   }
-  function mountSubs(){
-    loadSDK().then((paypal)=>{
-      const mount=(id,planId)=>{ const el=document.getElementById(id); if(!el||!planId) return;
-        paypal.Buttons({
-          style:{layout:'vertical',color:'gold',label:'subscribe',shape:'pill'},
-          createSubscription:(_,actions)=>actions.subscription.create({plan_id:planId}),
-          onApprove:(data)=>alert('¡Suscripción activa! ID: '+data.subscriptionID)
-        }).render('#'+id);
-      };
-      mount('paypal-monthly', ENV.PAYPAL_PLAN_MONTHLY_1499);
-      mount('paypal-annual', ENV.PAYPAL_PLAN_ANNUAL_4999);
-    }).catch((e)=>{ console.error(e); alert('No se pudo cargar PayPal (¿IDs/Live?).'); });
+
+  async function mountButtonsMonthly(selector, opts={}) {
+    const el = typeof selector === 'string' ? document.querySelector(selector) : selector;
+    if (!el) throw new Error('No existe contenedor de PayPal mensual');
+    const paypal = await loadPayPalSDK(opts.currency || 'EUR');
+    return paypal.Buttons({
+      style: { layout:'vertical', color:'gold', shape:'rect', label:'paypal' },
+      createSubscription: (data, actions) => {
+        if (!PLAN_MONTH) throw new Error('PLAN mensual no configurado');
+        return actions.subscription.create({ plan_id: PLAN_MONTH });
+      },
+      onApprove: (data) => {
+        console.log('Sub MONTH aprobada:', data);
+        if (g.Paywall && g.Paywall.setAccess) g.Paywall.setAccess({ subscription: true });
+      }
+    }).render(el);
   }
-  function mountLifetime(){
-    const btn=document.getElementById('lifetime-buy'); if(!btn) return;
-    btn.addEventListener('click', ()=>alert('Lifetime 100€ — flujo de pago se añade en el siguiente paso.'));
+
+  async function mountButtonsAnnual(selector, opts={}) {
+    const el = typeof selector === 'string' ? document.querySelector(selector) : selector;
+    if (!el) throw new Error('No existe contenedor de PayPal anual');
+    const paypal = await loadPayPalSDK(opts.currency || 'EUR');
+    return paypal.Buttons({
+      style: { layout:'vertical', color:'gold', shape:'rect', label:'paypal' },
+      createSubscription: (data, actions) => {
+        if (!PLAN_YEAR) throw new Error('PLAN anual no configurado');
+        return actions.subscription.create({ plan_id: PLAN_YEAR });
+      },
+      onApprove: (data) => {
+        console.log('Sub YEAR aprobada:', data);
+        if (g.Paywall && g.Paywall.setAccess) g.Paywall.setAccess({ subscription: true });
+      }
+    }).render(el);
   }
-  document.addEventListener('DOMContentLoaded', ()=>{ mountSubs(); mountLifetime(); });
+
+  g.Payments = { mountButtonsMonthly, mountButtonsAnnual };
 })(window);
