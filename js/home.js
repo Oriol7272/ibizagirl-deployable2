@@ -9,6 +9,7 @@
   }
 
   function mountCarousel(el, items){
+    if(!el){ return; }
     el.innerHTML = '';
     if(!items || !items.length) return;
     const track = document.createElement('div');
@@ -18,36 +19,46 @@
       slide.className = 'carousel-slide';
       const img = document.createElement('img');
       img.loading = 'lazy';
-      img.src = (typeof it === 'string') ? it : (it.thumb || it.url || it.src);
+      img.src = (typeof it === 'string') ? it : (it.thumb || it.url || it.src || '');
       img.alt = 'IbizaGirl';
       slide.appendChild(img);
       track.appendChild(slide);
     });
     el.appendChild(track);
     let idx = 0;
-    setInterval(()=>{ idx = (idx + 1) % items.length; track.style.transform = 'translateX(-'+(idx*100)+'%)'; }, 4000);
+    setInterval(()=>{ idx = (idx + 1) % items.length; track.style.transform = 'translateX('+(idx*-100)+'%)'; }, 4000);
   }
 
   function markNewBadges(cardElems, ratio){
-    const total = cardElems.length;
+    const total = (cardElems && cardElems.length) ? cardElems.length : 0;
+    if(!total) return;
     const count = Math.max(1, Math.floor(total*ratio));
     const picked = new Set();
     while(picked.size < count){ picked.add(Math.floor(Math.random()*total)); }
     [...picked].forEach(i=>{
-      const el = cardElems[i];
+      const el = cardElems[i]; if(!el) return;
+      const host = el.querySelector('.thumb') || el;   // <-- blindado
       const b = document.createElement('span');
       b.className = 'badge new';
-      b.textContent = I18N.t('new') || 'NEW';
-      el.querySelector('.thumb')?.appendChild(b);
+      b.textContent = (I18N && I18N.t) ? I18N.t('new') : 'NEW';
+      host.appendChild(b);
     });
   }
 
   function renderCards(gridEl, items, type){
+    if(!gridEl){ return []; }
     gridEl.innerHTML='';
     const frag = document.createDocumentFragment();
     (items||[]).forEach((raw)=>{
       const item = (typeof raw==='string') ? {url:raw, thumb:raw, type} : {...raw, type};
-      const card = (UCAPI.createCard) ? UCAPI.createCard(item, {type}) : document.createElement('div');
+      const card = (UCAPI.createCard) ? UCAPI.createCard(item, {type}) : (function(){
+        // Fallback: card mínima con .thumb para evitar null
+        const c=document.createElement('div'); c.className='card is-locked';
+        const a=document.createElement('a'); a.href='#';
+        const th=document.createElement('div'); th.className='thumb';
+        const img=document.createElement('img'); img.loading='lazy'; img.src=item.thumb||item.url||''; img.className='blur';
+        th.appendChild(img); a.appendChild(th); c.appendChild(a); return c;
+      })();
       if(!card.classList.contains('card')) card.classList.add('card');
       try{
         const locked = card.classList.contains('is-locked') || !(g.Paywall && (Paywall.hasSub && Paywall.hasSub()));
