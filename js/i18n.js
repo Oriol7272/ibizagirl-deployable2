@@ -1,17 +1,10 @@
-(function(){
-  var KEY='lang_v1';
-  var D={
-    es:{gallery:'Galeria',premium:'Premium',videos:'Videos',subscribe:'Suscripciones',lifetime:'Lifetime',prices:'Precios',noads:'Sin anuncios con Lifetime',buy:'Comprar',allvisible:'Todo el contenido visible mientras este activo.',welcome:'Bienvenido al paraiso para tu disfrute'},
-    en:{gallery:'Gallery',premium:'Premium',videos:'Videos',subscribe:'Subscriptions',lifetime:'Lifetime',prices:'Prices',noads:'No ads with Lifetime',buy:'Buy',allvisible:'All content visible while active.',welcome:'Welcome to paradise for your pleasure'}
-  };
-  function get(){ try{return localStorage.getItem(KEY)||'es';}catch(e){return 'es';} }
-  function set(l){ try{localStorage.setItem(KEY,l);}catch(e){} tr(); }
-  function t(k){ var d=D[get()]||D.es; return d[k]||k; }
-  function tr(){
-    Array.from(document.querySelectorAll('[data-i18n]')).forEach(function(el){ var k=el.getAttribute('data-i18n'); var v=t(k); if(v) el.textContent=v; });
-    Array.from(document.querySelectorAll('.buy-btn .buy-label')).forEach(function(el){ el.textContent=t('buy'); });
-    var sel=document.getElementById('lang-select'); if(sel) sel.value=get();
-  }
-  window.I18N={ currentLang:get, setLang:set, t:t, translate:tr };
-  document.addEventListener('DOMContentLoaded', tr);
-})();
+export const T={
+  ES:{home:'Home',premium:'Premium',videos:'Vídeos',subs:'Suscripciones',lifetime:'Lifetime 100€ (sin anuncios)',welcome:'Bienvenido al paraíso para tu disfrute',new:'NUEVO',buy:'Comprar',unlock:'Desbloquear'},
+  EN:{home:'Home',premium:'Premium',videos:'Videos',subs:'Subscriptions',lifetime:'Lifetime €100 (no ads)',welcome:'Welcome to your paradise',new:'NEW',buy:'Buy',unlock:'Unlock'},
+  FR:{home:'Accueil',premium:'Premium',videos:'Vidéos',subs:'Abonnements',lifetime:'À vie 100€ (sans pubs)',welcome:'Bienvenue au paradis',new:'NOUVEAU',buy:'Acheter',unlock:'Débloquer'},
+  DE:{home:'Start',premium:'Premium',videos:'Videos',subs:'Abos',lifetime:'Lifetime 100€ (ohne Werbung)',welcome:'Willkommen im Paradies',new:'NEU',buy:'Kaufen',unlock:'Freischalten'},
+  IT:{home:'Home',premium:'Premium',videos:'Video',subs:'Abbonamenti',lifetime:'Per sempre 100€ (senza ads)',welcome:'Benvenuto in paradiso',new:'NUOVO',buy:'Compra',unlock:'Sblocca'},
+};
+export function lang(){return (localStorage.getItem('ibg_lang')||'ES')}
+export function setLang(l){localStorage.setItem('ibg_lang',l);location.reload()}
+export function t(k){return (T[lang()]||T.ES)[k]||k}

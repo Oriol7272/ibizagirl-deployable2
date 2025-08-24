@@ -1,31 +1,20 @@
-import {seedToday, shuffleSeeded} from './utils.js';
-const pick=(arr,n,seed)=>{ if(!arr||!arr.length) return []; const s=[...arr]; for(let i=s.length-1;i>0;i--){ const r=(seed*9301+49297)%233280; seed=r; const j=Math.floor(r/233280*(i+1)); [s[i],s[j]]=[s[j],s[i]]; } return s.slice(0,Math.min(n,s.length)); };
-
-export function getDailySets(){
-  const seed = seedToday();
-  // Pools
-  const fullPool = (window.FULL_IMAGES_POOL||[]).map((src,i)=>({id:'full-'+i, src, thumb:src, type:'photo'}));
-  const premPool = [ ...(window.PREMIUM_IMAGES_PART1||[]), ...(window.PREMIUM_IMAGES_PART2||[]) ].map((src,i)=>({id:'p-'+i, src, type:'photo'}));
-  const vidsPool = (window.PREMIUM_VIDEOS_POOL||[]).map((src,i)=>({id:'v-'+i, src, type:'video'}));
-
-  // HOME
-  const full20_carousel = pick(fullPool, 20, seed+1);
-  const full20_grid     = pick(fullPool.filter(x=>!full20_carousel.includes(x)), 20, seed+2);
-
-  // PREMIUM & VIDEOS
-  const premium100 = pick(premPool, 100, seed+3);
-  const vids20     = pick(vidsPool, 20, seed+4);
-
-  // Thumbs: intenta poster de vídeo (sin 404 visible) y fallback a FULL
-  const tFull = (i)=> fullPool.length ? fullPool[i % fullPool.length].src : (window.DECOR_IMAGES||[])[i % (window.DECOR_IMAGES||['']).length];
-  premium100.forEach((x,i)=> x.thumb = tFull(i));
-  vids20.forEach((x,i)=> x.thumb = tFull(i+123));
-
-  // 30% NEW en premium
-  const newN = Math.floor(premium100.length*0.3);
-  const idxs = pick(premium100.map((_,i)=>i), newN, seed+5);
-  const set = new Set(idxs);
-  premium100.forEach((x,i)=>{ if(set.has(i)) x.isNew = true; });
-
-  return { full20_carousel, full20_grid, premium100, vids20 };
+import { getDailySeed, sampleSeeded } from './utils.js';
+function poolFromAPI(){
+  // Usa la API unificada si existe (content-data6.js la expone) y, por si acaso, cae a los módulos directos
+  const U = window.UnifiedContentAPI || {};
+  const full = (U.getPublicImages && U.getPublicImages()) || (window.ContentData2?.publicImages || []);
+  const prem1 = (U.getPremiumImages && U.getPremiumImages()) || [].concat(window.ContentData3?.premiumImages||[], window.ContentData4?.premiumImages||[]);
+  const vids = (U.getPremiumVideos && U.getPremiumVideos()) || (window.ContentData5?.premiumVideos || []);
+  return { full, premiumImages: prem1, premiumVideos: vids };
+}
+export function getDaily(){
+  const seed = getDailySeed();
+  const {full, premiumImages, premiumVideos} = poolFromAPI();
+  const home20 = sampleSeeded(full, 20, seed);
+  const premPool = sampleSeeded(premiumImages, 100, seed ^ 0x9e3779b1);
+  const n = Math.floor(premPool.length*0.30);
+  const marks = new Set(sampleSeeded(premPool.map((_,i)=>i), n, seed ^ 0xdeadbabe));
+  const prem100 = premPool.map((x,i)=>({...x, isNew: marks.has(i)}));
+  const vids20 = sampleSeeded(premiumVideos, 20, seed ^ 0x1337c0de);
+  return {home20, prem100, vids20};
 }
