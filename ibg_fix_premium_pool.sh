@@ -1,3 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+echo "[IBG] Premium: escaneo robusto del pool 'uncensored' (CD3/CD4/UnifiedContentAPI)"
+
+cat > js/pages/premium.js <<'JS'
 import { seededPick } from '../utils-home.js';
 
 /* ---------- helpers comunes ---------- */
@@ -221,3 +226,9 @@ export async function initPremium(){
     window.IBGPay.subscribe(plan, ()=>{ markSubscribed(); document.querySelectorAll('.p-card.locked').forEach(el=>el.classList.remove('locked')); renderCredits(); });
   });
 }
+JS
+
+git add -A
+git commit -m "premium: robust scan for uncensored pool (UnifiedContentAPI/CD3/CD4 + globals) with FULL fallback" || true
+git push origin main || true
+npx -y vercel --prod --yes || { npx -y vercel build && npx -y vercel deploy --prebuilt --prod --yes; }
