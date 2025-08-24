@@ -1,31 +1,24 @@
 #!/usr/bin/env bash
 set -euo pipefail
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 PAYPAL_CLIENT_ID="${PAYPAL_CLIENT_ID:-}"
 PAYPAL_SECRET="${PAYPAL_SECRET:-}"
 PAYPAL_PLAN_MONTHLY_1499="${PAYPAL_PLAN_MONTHLY_1499:-}"
 PAYPAL_PLAN_ANNUAL_4999="${PAYPAL_PLAN_ANNUAL_4999:-}"
 PAYPAL_WEBHOOK_ID="${PAYPAL_WEBHOOK_ID:-}"
-
 CRISP_WEBSITE_ID="${CRISP_WEBSITE_ID:-}"
-
 EXOCLICK_ZONE="${EXOCLICK_ZONE:-}"
 JUICYADS_ZONE="${JUICYADS_ZONE:-}"
 EROADVERTISING_ZONE="${EROADVERTISING_ZONE:-}"
-
 EXOCLICK_SNIPPET_B64="${EXOCLICK_SNIPPET_B64:-}"
 JUICYADS_SNIPPET_B64="${JUICYADS_SNIPPET_B64:-}"
 EROADVERTISING_SNIPPET_B64="${EROADVERTISING_SNIPPET_B64:-}"
-
 POPADS_SITE_ID="${POPADS_SITE_ID:-}"
 POPADS_ENABLE="${POPADS_ENABLE:-0}"
-
 IBG_ASSETS_BASE_URL="${IBG_ASSETS_BASE_URL:-}"
 CURRENCY="EUR"
 
-# Escribe env.js en la RAÍZ (no en tools/)
 cat > "$ROOT_DIR/env.js" <<JS
 window.IBG = {
   PAYPAL_CLIENT_ID: "${PAYPAL_CLIENT_ID}",
@@ -47,7 +40,7 @@ window.IBG = {
 };
 JS
 
-# Por si quedó un env.js antiguo dentro de tools, elimínalo
-rm -f "$SCRIPT_DIR/env.js"
+# Por si existe el antiguo env en tools, elimínalo
+rm -f "$ROOT_DIR/tools/env.js"
 
 echo "✅ Generado $ROOT_DIR/env.js"
