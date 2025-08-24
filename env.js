@@ -11,3 +11,4 @@ export const ENV = {
   ENVIRONMENT: "production",
   CURRENCY: "EUR"
 };
+if (typeof window !== "undefined") { window.ENV = ENV; }

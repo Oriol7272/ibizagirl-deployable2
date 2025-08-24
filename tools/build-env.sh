@@ -32,6 +32,7 @@ export const ENV = {
   ENVIRONMENT: "${ENVIRONMENT}",
   CURRENCY: "${CURRENCY}"
 };
+if (typeof window !== "undefined") { window.ENV = ENV; }
 EOT
 }
 

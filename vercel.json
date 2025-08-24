@@ -1,0 +1,4 @@
+{
+  "buildCommand": "bash tools/build-env.sh",
+  "cleanUrls": true
+}
