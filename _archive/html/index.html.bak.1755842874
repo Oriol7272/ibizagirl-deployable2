@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>IbizaGirl.pics — Home</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="css/site.css?v=20250822">
+  <link rel="stylesheet" href="css/blur.css?v=20250822">
+
+  <!-- Crisp -->
+  <script defer src="js/chatbot.js?v=20250822"></script>
+
+  <!-- ExoClick -->
+  <script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
+
+  <!-- JuicyAds (usa tu adspot id) -->
+  <script type="text/javascript">var juicy_adspot_id = 2092250;</script>
+  <script type="text/javascript" src="https://adserver.juicyads.com/js/jads.js"></script>
+
+  <!-- EroAdvertising (código que ya usabas) -->
+  <script src="https://www.premiumvertising.com/zS/bwdvf/ttabletop.min.js" async></script>
+
+  <!-- PopAds (si tienes siteId, reemplaza 0000000) -->
+  <script data-cfasync="false" type="text/javascript">
+    var _pop = _pop || [];
+    _pop.push(['siteId', 0000000]);          // <-- tu siteId aquí si lo tienes
+    _pop.push(['minBid', 0]);
+  </script>
+  <script async src="//c1.popads.net/pop.js"></script>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">🌴 IbizaGirl.pics</div>
+      <a href="index.html">Home</a>
+      <a href="premium.html">Uncensored</a>
+      <a href="videos.html">Videos</a>
+      <a href="subscription.html">Subscribe</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="ad-row">
+        <!-- ExoClick banner -->
+        <ins class="eas6a97888e2" data-zoneid="5696328" style="display:block;width:100%;min-height:90px"></ins>
+        <script>(AdProvider=window.AdProvider||[]).push({"serve":{}});</script>
+        <!-- JuicyAds banner (el script de arriba se encarga) -->
+        <div id="juicy-spot" style="min-height:90px"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Gallery (20 daily random)</h2>
+      <div id="gallery-grid" class="grid"></div>
+    </section>
+
+    <section class="section">
+      <h2>Uncensored (100 random, 30% NEW)</h2>
+      <div id="uncensored-grid" class="grid"></div>
+    </section>
+
+    <section class="section">
+      <h2>Videos (20 random)</h2>
+      <div id="videos-grid" class="grid"></div>
+    </section>
+
+    <footer>© IbizaGirl.pics</footer>
+  </main>
+
+  <!-- Sprite iconos -->
+  <svg width="0" height="0" style="position:absolute">
+    <symbol id="icon-lock" viewBox="0 0 24 24">
+      <path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm0 2a3 3 0 0 1 3 3v3H9V7a3 3 0 0 1 3-3Z"/>
+    </symbol>
+  </svg>
+
+  <!-- Datos -->
+  <script src="content-data1.js"></script>
+  <script src="content-data2.js"></script>
+  <script src="content-data3.js"></script>
+  <script src="content-data4.js"></script>
+  <script src="content-data5.js"></script>
+  <script src="content-data6.js"></script>
+
+  <!-- Helpers + pagos -->
+  <script src="js/unified-helpers.js?v=20250822"></script>
+  <script src="js/payments.js?v=20250822"></script>
+
+  <script>
+  (function(){
+    const U = window.IBG?.unified;
+    if(!U){ console.error('Unified helper no disponible'); return; }
+
+    function cardImage(item, {censored=false, price="€0.10"}={}){
+      const wrap = document.createElement('div'); wrap.className='card thumb-wrap';
+      const img = document.createElement('img'); img.className='thumb' + (censored?' censored':''); img.loading='lazy'; img.decoding='async'; img.src=item.src; wrap.appendChild(img);
+      const meta=document.createElement('div'); meta.className='meta'; meta.textContent=item.title||''; wrap.appendChild(meta);
+      if (item.isNew){ const b=document.createElement('div'); b.className='badge badge-new'; b.textContent='NEW'; wrap.appendChild(b); }
+      if (censored){
+        const btn=document.createElement('button'); btn.className='unlock-btn';
+        btn.innerHTML=`<svg class="i"><use href="#icon-lock"></use></svg><span class="price">${price}</span>`;
+        btn.addEventListener('click',()=>window.IBG_PAY?.buyItem?.({src:img.src,amount:0.10,currency:'EUR'}));
+        wrap.appendChild(btn);
+      }
+      return wrap;
+    }
+    function cardVideo(item, {price="€0.30"}={}){
+      const wrap=document.createElement('div'); wrap.className='card thumb-wrap';
+      const v=document.createElement('video'); v.className='thumb censored'; v.poster='img/video-poster-blur.svg'; v.muted=true; v.loop=true; v.playsInline=true;
+      const s=document.createElement('source'); s.type='video/mp4'; s.src=item.src; v.appendChild(s); wrap.appendChild(v);
+      const meta=document.createElement('div'); meta.className='meta'; meta.textContent=item.title||'video'; wrap.appendChild(meta);
+      const btn=document.createElement('button'); btn.className='unlock-btn';
+      btn.innerHTML=`<svg class="i"><use href="#icon-lock"></use></svg><span class="price">${price}</span>`;
+      btn.addEventListener('click',()=>window.IBG_PAY?.buyItem?.({src:s.src,amount:0.30,currency:'EUR',kind:'video'}));
+      wrap.appendChild(btn);
+      return wrap;
+    }
+
+    const seed = U.todaySeed();
+
+    // 20 del pool full
+    const g20 = U.shuffleTake(U.getFull(), 20, seed);
+    g20.forEach(it=>document.getElementById('gallery-grid').appendChild(cardImage(it,{censored:false})));
+
+    // 100 premium 30% NEW
+    const u100 = U.shuffleTake(U.getPhotos(), 100, seed^0x9e3779);
+    const n = Math.floor(u100.length*0.3); for(let i=0;i<n;i++) u100[i].isNew = true;
+    u100.forEach(it=>document.getElementById('uncensored-grid').appendChild(cardImage(it,{censored:true,price:'€0.10'})));
+
+    // 20 videos
+    const v20 = U.shuffleTake(U.getVideos(), 20, seed^0xC001C0DE);
+    v20.forEach(it=>document.getElementById('videos-grid').appendChild(cardVideo(it,{price:'€0.30'})));
+  })();
+  </script>
+</body>
+</html>

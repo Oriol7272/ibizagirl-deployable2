@@ -1,0 +1,14 @@
+ATTENTION - SECRETS INCLUDED
+
+This archive has been prepared including sensitive credentials and ad tokens you provided in uploads.
+Files to review immediately:
+ - .env  (contains PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET etc.)
+ - public/snippets/ads-body.html (contains ad scripts and tokens)
+
+**Security actions you MUST do before committing or pushing to any remote:**
+1) Remove .env from repository and add its keys as environment variables in Vercel (Project Settings -> Environment Variables).
+2) Rotate your PayPal secret and any ad tokens if they have been exposed publicly previously.
+3) Use git history rewrite (BFG or git filter-repo) to remove any sensitive file from previous commits if necessary.
+4) Use secure storage for keys (Vercel env, AWS Secrets Manager, Vault).
+
+If you want, I can prepare the exact `git filter-repo` / `bfg` commands to sanitize your git history.

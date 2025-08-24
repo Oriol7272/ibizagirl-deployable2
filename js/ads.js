@@ -1,56 +1,43 @@
-(function(g){
-  function appendHTMLWithScripts(container, html){
-    var tmp=document.createElement('div'); tmp.innerHTML=html;
-    Array.from(tmp.querySelectorAll('script')).forEach(function(sc){
-      var s=document.createElement('script');
-      if(sc.src){ s.src=sc.src; s.async=true; }
-      else { s.textContent=sc.textContent; }
-      sc.replaceWith(s);
-    });
-    container.appendChild(tmp);
-  }
-  function mountJuicyZone(el, zone){
-    var s1=document.createElement('script'); s1.setAttribute('data-cfasync','false'); s1.async=true; s1.src='https://poweredby.jads.co/js/jads.js';
-    var ins=document.createElement('ins'); ins.id=String(zone); ins.setAttribute('data-width','300'); ins.setAttribute('data-height','250');
-    var s2=document.createElement('script'); s2.setAttribute('data-cfasync','false'); s2.async=true;
-    s2.text = "(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':"+JSON.stringify(Number(zone))+ "});";
-    el.appendChild(s1); el.appendChild(ins); el.appendChild(s2);
-  }
-  function mountExoZone(el, zone){
-    var s1=document.createElement('script'); s1.async=true; s1.src='https://a.magsrv.com/ad-provider.js';
-    var ins=document.createElement('ins'); ins.className='eas6a97888e2'; ins.setAttribute('data-zoneid', String(zone));
-    var s2=document.createElement('script'); s2.text='(AdProvider = window.AdProvider || []).push({"serve": {}});';
-    el.appendChild(s1); el.appendChild(ins); el.appendChild(s2);
-  }
-  function mountEroZone(el, zone){
-    if(!(g.__ENV && g.__ENV.ERO_PID && g.__ENV.ERO_CTRLID && zone)) return;
-    var div=document.createElement('div'); div.id='sp_'+zone+'_node'; el.appendChild(div);
-    var s=document.createElement('script'); s.charset='utf-8';
-    // Fuerza dominio correcto y usa tus variables REALES
-    var pid=String(g.__ENV.ERO_PID), ctrl=String(g.__ENV.ERO_CTRLID);
-    s.text='if(typeof eaCtrl=="undefined"){var eaCtrlRecs=[];var eaCtrl={add:function(ag){eaCtrlRecs.push(ag)}};var js=document.createElement("script");js.setAttribute("src","https://go.easrv.cl/loadeactrl.go?pid='+pid+'&spaceid='+String(zone)+'&ctrlid='+ctrl+'");document.head.appendChild(js);} eaCtrl.add({"display":"sp_'+String(zone)+'_node","sid":'+String(zone)+',"plugin":"banner"});';
-    el.appendChild(s);
-  }
-  // PopAds: desactivado por defecto a menos que POPADS_ENABLE === "true" y haya siteId
-  function mountPopAds(siteId){
-    if(!(g.__ENV && String(g.__ENV.POPADS_ENABLE)==="true" && siteId)) return;
-    var s=document.createElement('script'); s.async=true; s.src='https://serve.popads.net/pop.js';
-    document.head.appendChild(s);
-  }
-  function mountSideAds(){
-    if(!(g.__ENV && String(g.__ENV.ADS_ENABLED)!=='false')) return;
-    var env=g.__ENV||{};
-    var rails=document.querySelectorAll('.aside-ads .ad-rail');
-    rails.forEach(function(container){
-      var j=container.querySelector('[data-net="juicy"]');
-      var e=container.querySelector('[data-net="exo"]');
-      var r=container.querySelector('[data-net="ero"]');
-      if(env.JUICYADS_ZONE && j){ mountJuicyZone(j, env.JUICYADS_ZONE); }
-      if(env.EXOCLICK_ZONE && e){ mountExoZone(e, env.EXOCLICK_ZONE); }
-      if(env.EROADVERTISING_ZONE && r){ mountEroZone(r, env.EROADVERTISING_ZONE); }
-    });
-    if(env.POPADS_SITE_ID){ mountPopAds(env.POPADS_SITE_ID); }
-  }
-  function mountAds(){ mountSideAds(); }
-  g.ADS={ mountAds, mountSideAds };
-})(window);
+function mountJuicy(el, zone){
+  const s1=document.createElement('script'); s1.setAttribute('data-cfasync','false'); s1.async=true; s1.src='https://poweredby.jads.co/js/jads.js';
+  const ins=document.createElement('ins'); ins.id=String(zone); ins.setAttribute('data-width','300'); ins.setAttribute('data-height','250');
+  const s2=document.createElement('script'); s2.setAttribute('data-cfasync','false'); s2.async=true; s2.innerHTML="(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':"+JSON.stringify(Number(zone))+ "});";
+  el.appendChild(s1); el.appendChild(ins); el.appendChild(s2);
+}
+function mountExo(el, zone){
+  const s=document.createElement('script'); s.async=true; s.type='application/javascript'; s.src='https://a.magsrv.com/ad-provider.js';
+  const ins=document.createElement('ins'); ins.setAttribute('data-zoneid', String(zone)); ins.className='eas'+String(zone);
+  const push=document.createElement('script'); push.innerHTML='(AdProvider = window.AdProvider || []).push({"serve": {}});';
+  el.appendChild(s); el.appendChild(ins); el.appendChild(push);
+}
+function mountEro(el, spaceId, pid, ctrlid){
+  const divId='sp_'+spaceId+'_node'; const div=document.createElement('div'); div.id=divId; div.innerHTML='&nbsp;'; el.appendChild(div);
+  const boot=()=>{ window.eaCtrl=window.eaCtrl || {add:(ag)=>{(window.eaCtrlRecs=window.eaCtrlRecs||[]).push(ag)}}; window.eaCtrl.add({"display":divId,"sid":Number(spaceId),"plugin":"banner"}); };
+  if(!document.getElementById('ea-loader')){
+    const js=document.createElement('script'); js.id='ea-loader';
+    js.src='//go.easrv.cl/loadeactrl.go?pid='+(window.__ENV?.ERO_PID||'')+'&spaceid='+spaceId+'&ctrlid='+(window.__ENV?.ERO_CTRLID||'');
+    document.head.appendChild(js); js.onload=boot; js.onerror=boot;
+  } else boot();
+}
+function mountPopAds(siteId){
+  const s=document.createElement('script'); s.type='text/javascript';
+  s.innerHTML="var _pop=_pop||[];_pop.push(['siteId',"+JSON.stringify(siteId)+"]);_pop.push(['minBid',0]);_pop.push(['default',false]);(function(){var pa=document.createElement('script');pa.type='text/javascript';pa.async=true;pa.src='//c1.popads.net/pop.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(pa,s);})();";
+  document.head.appendChild(s);
+}
+function mountSideAds(){
+  if(window.__ENV?.ADS_ENABLED==='false' || document.documentElement.classList.contains('hide-ads')) return;
+  const left=document.getElementById('side-ads-left'), right=document.getElementById('side-ads-right');
+  [left,right].forEach((el)=>{ if(!el) return;
+    const env=window.__ENV||{};
+    const juicy = el.querySelector('[data-net="juicy"]');
+    const exo   = el.querySelector('[data-net="exo"]');
+    const ero   = el.querySelector('[data-net="ero"]');
+    if(juicy && env.JUICYADS_ZONE) mountJuicy(juicy, env.JUICYADS_ZONE);
+    if(exo   && env.EXOCLICK_ZONE) mountExo(exo, env.EXOCLICK_ZONE);
+    if(ero   && env.EROADVERTISING_ZONE) mountEro(ero, env.EROADVERTISING_ZONE, env.ERO_PID, env.ERO_CTRLID);
+  });
+  if(window.__ENV?.POPADS_SITE_ID) mountPopAds(window.__ENV.POPADS_SITE_ID);
+}
+function mountAds(){ mountSideAds(); }
+window.ADS={ mountAds, mountSideAds };
+export { mountAds, mountSideAds };

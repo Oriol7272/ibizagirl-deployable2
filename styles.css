@@ -1,0 +1,45 @@
+:root{--bg:#0c0f14;--muted:#9aa3af;--pane:#131a24;--ring:#223046}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#e6e8ea;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
+a{color:inherit;text-decoration:none}
+nav{display:flex;align-items:center;gap:16px;padding:12px 12px;border-bottom:1px solid var(--ring)}
+.wrap{max-width:1200px;margin:0 auto;padding:12px}
+h1{font-size:28px;margin:12px 0 16px}
+
+/* Lang picker */
+#lang-picker{margin-left:auto;background:#0f1520;color:#dfe5ee;border:1px solid #2a374a;border-radius:8px;padding:6px 8px}
+
+/* Grids */
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.card{position:relative;background:var(--pane);border-radius:16px;overflow:hidden;min-height:220px;box-shadow:0 6px 14px rgba(0,0,0,.25)}
+.thumb{position:relative;height:200px;background:#0d1218}
+.thumb img,.thumb video{width:100%;height:100%;object-fit:cover;display:block;transition:filter .2s,opacity .2s}
+.card.is-locked .thumb img,.card.is-locked .thumb video{filter:blur(18px) brightness(.6)}
+.thumb-meta{position:absolute;right:8px;bottom:8px;display:flex;align-items:center;gap:6px}
+.price{font-size:11px;background:#1e2633;color:#d1d7e3;border-radius:6px;padding:2px 6px}
+.paypal-badge{font-size:11px;background:#ffc439;color:#1d1d1d;border-radius:6px;padding:2px 6px;font-weight:700;border:0;cursor:pointer}
+.ribbon{position:absolute;left:12px;top:10px;background:#22c55e;color:#0b2b12;font-weight:700;font-size:12px;border-radius:999px;padding:3px 8px}
+.thumb-title{position:absolute;left:0;right:0;bottom:6px;text-align:center;color:var(--muted);font-size:12px}
+
+/* Carousel */
+.carousel{position:relative;overflow:hidden}
+.carousel-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
+.slide{min-width:280px;scroll-snap-align:start}
+.carousel-btn{position:absolute;top:40%;transform:translateY(-50%);background:#0f1520cc;border:1px solid #2a374a;color:#fff;border-radius:999px;width:42px;height:42px;cursor:pointer}
+.carousel-btn.left{left:6px}.carousel-btn.right{right:6px}
+
+/* Modal de pago por item */
+.modal{position:fixed;inset:0;z-index:999}
+.modal.hidden{display:none}
+.modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6)}
+.modal-card{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#111827;border:1px solid #223046;border-radius:16px;padding:18px;min-width:300px}
+.btn-close{position:absolute;right:8px;top:6px;background:transparent;color:#dbe2ee;border:0;font-size:20px;cursor:pointer}
+
+/* Ads */
+.ads-row{display:grid;grid-template-columns:1fr;gap:12px;margin:16px 0}
+.ad-box{background:#0f131a;border:1px solid #1b2431;border-radius:10px;padding:6px;min-height:60px}
+
+/* Lifetime promo */
+.notice{margin:10px 0;padding:8px 10px;border:1px dashed #34507a;background:#0f1520;border-radius:10px;color:#d2d9e6;font-size:13px}
