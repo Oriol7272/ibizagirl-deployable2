@@ -1,3 +1,4 @@
+(function(window,document){ 
 function mountJuicy(el, zone){
   const s1=document.createElement('script'); s1.setAttribute('data-cfasync','false'); s1.async=true; s1.src='https://poweredby.jads.co/js/jads.js';
   const ins=document.createElement('ins'); ins.id=String(zone); ins.setAttribute('data-width','300'); ins.setAttribute('data-height','250');
@@ -41,3 +42,4 @@ function mountSideAds(){
 function mountAds(){ mountSideAds(); }
 window.ADS={ mountAds, mountSideAds };
 export { mountAds, mountSideAds };
+})(window,document);
