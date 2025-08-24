@@ -1,10 +1,24 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
-# Genera window.__ENV con TODAS las variables del entorno de build de Vercel (tal cual)
-mkdir -p js public/js
-
-node -e 'const fs=require("fs"); fs.writeFileSync("js/env.js", "window.__ENV="+JSON.stringify(process.env)+";");'
-cp -f js/env.js public/js/env.js
-
-echo "✅ Generated js/env.js and public/js/env.js"
+mkdir -p public/js js
+cat > public/js/env.js <<JS
+// AUTO-GENERATED AT BUILD
+export const ENV = {
+  PAYPAL_CLIENT_ID: "${PAYPAL_CLIENT_ID:-}",
+  PAYPAL_SECRET: "${PAYPAL_SECRET:-}",
+  PAYPAL_PLAN_MONTHLY_1499: "${PAYPAL_PLAN_MONTHLY_1499:-}",
+  PAYPAL_PLAN_ANNUAL_4999: "${PAYPAL_PLAN_ANNUAL_4999:-}",
+  PAYPAL_WEBHOOK_ID: "${PAYPAL_WEBHOOK_ID:-}",
+  CRISP_WEBSITE_ID: "${CRISP_WEBSITE_ID:-}",
+  JUICYADS_ZONE: "${JUICYADS_ZONE:-}",
+  EXOCLICK_ZONE: "${EXOCLICK_ZONE:-}",
+  EROADVERTISING_ZONE: "${EROADVERTISING_ZONE:-}",
+  POPADS_SITE_ID: "${POPADS_SITE_ID:-}",
+  EXOCLICK_SNIPPET_B64: "${EXOCLICK_SNIPPET_B64:-}",
+  JUICYADS_SNIPPET_B64: "${JUICYADS_SNIPPET_B64:-}",
+  EROADVERTISING_SNIPPET_B64: "${EROADVERTISING_SNIPPET_B64:-}",
+  IBG_ASSETS_BASE_URL: "${IBG_ASSETS_BASE_URL:-}"
+};
+JS
+# Copia de cortesía para /js/env.js por si se importa desde ahí
+cp public/js/env.js js/env.js
