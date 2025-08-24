@@ -20,25 +20,26 @@ export async function initHome(){
     <section class="hero" id="hero">
       <img class="hero-bg" id="heroImg" src="/decorative-images/paradise-beach.png" alt="">
       <div class="hero-overlay"></div>
-      <div class="hero-title">ibizagirl.pics</div>
+      <div class="hero-title" style="font-family:'Sexy Beachy',system-ui">ibizagirl.pics</div>
       <div class="hero-sub">${t('welcome')}</div>
     </section>
-    <h2 style="padding:10px 12px">${t('home')}</h2>
+    <h2 class="section-title">${t('home')}</h2>
     <section class="carousel"><div class="carousel-track" id="homeCarousel"></div></section>
     <section class="grid" id="homeGrid"></section>`;
 
-  // banner real del pool si existe
-  const b=pickBannerFromPool(); const url = b && imgUrl(b); if(url){ document.getElementById('heroImg').src=url; }
+  // banner del pool
+  const b=pickBannerFromPool(); const url=b && imgUrl(b); if(url){ document.getElementById('heroImg').src=url; }
 
   const {home20}=getDaily();
-
   // carrusel
   const car=document.getElementById('homeCarousel');
-  home20.forEach(it=>{ const u=imgUrl(it); const s=document.createElement('div'); s.className='slide'; s.innerHTML=`<img src="${u}" alt="">`; car.appendChild(s); });
-
+  home20.forEach(it=>{
+    const u=imgUrl(it); const s=document.createElement('div'); s.className='slide'; s.innerHTML=`<img src="${u}" alt="">`; car.appendChild(s);
+  });
   // grid
   const grid=document.getElementById('homeGrid');
-  home20.forEach((it,i)=>{ const id=it.id||it.file||`full-${i}`; const u=imgUrl(it);
+  home20.forEach((it,i)=>{
+    const u=imgUrl(it); const id=it.id||it.file||('full-'+i);
     const c=document.createElement('div'); c.className='card'; c.dataset.id=id; c.innerHTML=`<img loading="lazy" src="${u}" alt="">`;
     grid.appendChild(c);
   });

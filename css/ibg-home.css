@@ -1,13 +1,21 @@
 .hero{position:relative;overflow:hidden}
-.hero-bg{width:100%;height:46vh;min-height:280px;max-height:520px;object-fit:cover;display:block}
+.hero-bg{width:100%;height:calc(100vh - 64px);min-height:380px;max-height:72vh;object-fit:cover;display:block}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,16,25,.10),rgba(7,16,25,.85))}
-.hero-title{position:absolute;left:12px;bottom:56px;font-size:clamp(28px,7vw,64px);font-weight:900}
-.hero-sub{position:absolute;left:12px;bottom:18px;font-size:clamp(14px,2.2vw,20px);opacity:.95}
+.hero-title{position:absolute;left:12px;bottom:64px;font-size:clamp(32px,7vw,68px);font-weight:900}
+.hero-sub{position:absolute;left:12px;bottom:22px;font-size:clamp(14px,2.2vw,20px);opacity:.95}
+.section-title{padding:12px 12px 0 12px;font-weight:800}
 .carousel{position:relative;overflow:hidden;margin:12px}
 .carousel-track{display:flex;gap:10px;scroll-snap-type:x mandatory;overflow-x:auto;padding-bottom:8px}
-.carousel .slide{min-width:320px;max-width:70vw;height:220px;scroll-snap-align:start;border-radius:18px;overflow:hidden}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:12px}
+.carousel .slide{min-width:320px;max-width:70vw;height:220px;scroll-snap-align:start;border-radius:18px;overflow:hidden;background:#0a1320}
+.carousel .slide img{width:100%;height:100%;object-fit:cover;display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:0 12px 12px}
 .card{position:relative;border-radius:18px;overflow:hidden;background:#0a1320}
 .card img{width:100%;height:220px;object-fit:cover;display:block}
-.badge{position:absolute;top:8px;left:8px;background:#ff3366;color:#fff;font-weight:700;padding:4px 8px;border-radius:999px;font-size:12px}
-.small{font-size:12px;opacity:.85}
+
+/* columnas de anuncios a los lados sin tapar contenido */
+.side-ad{position:fixed;top:0;bottom:0;width:160px;z-index:1;display:none;align-items:center;justify-content:center}
+.side-ad.left{left:0}.side-ad.right{right:0}
+@media (min-width:1460px){
+  .side-ad{display:flex}
+  .page-shell{margin-left:160px;margin-right:160px}
+}
