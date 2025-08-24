@@ -1,7 +1,8 @@
+import { ENV } from './env.js';
 import './i18n.js';
 import {getDailySets} from './daily-picks.js';
 import {renderCarousel, renderGrid, setCounter} from './ui-render.js';
-import {mountSideAds} from './ads.js';
+import * as Ads from "./ads.js";
 import {wirePurchases} from './purchase-ui.js';
 import {startBannerRotation} from './banner-rotator.js';
 
@@ -32,8 +33,17 @@ window.addEventListener('DOMContentLoaded', ()=>{
   if(document.getElementById('premium-grid')) initPremium();
   if(document.getElementById('videos-grid')) initVideos();
   window.I18N && window.I18N.translate();
-  mountSideAds();
+  Ads.mountSideAds();
   wirePurchases();
   const ls=document.getElementById('lang-select'); if(ls){ ls.addEventListener('change', e=>{ window.I18N.setLang(e.target.value); }); }
   const bl=document.getElementById('buy-lifetime'); if(bl){ bl.addEventListener('click', ()=>{ const m=document.getElementById('paypal-modal'); if(m) m.classList.remove('hidden'); import('./payments.js').then(p=>p.buyLifetime()); }); }
 });
+
+      try{
+        if(ENV.CRISP_WEBSITE_ID){
+          window.$crisp=[];window.CRISP_WEBSITE_ID=ENV.CRISP_WEBSITE_ID;
+          (function(){var d=document,s=d.createElement("script");
+          s.src="https://client.crisp.chat/l.js";s.async=1;d.head.appendChild(s)})();
+        }
+      }catch(e){}
+    

@@ -1,0 +1,6 @@
+main { max-width: 1280px; margin: 0 auto; padding: 8px 12px; }
+#home-banner { margin: 0 0 8px 0; }
+#home-carousel { position: relative; overflow: hidden; width: 100%; height: auto; margin: 0 0 8px 0; }
+#home-carousel .carousel-track { display: flex; transition: transform .6s ease; will-change: transform; }
+#home-carousel .carousel-slide { min-width: 100%; }
+#home-gallery-grid { margin-top: 4px; }
