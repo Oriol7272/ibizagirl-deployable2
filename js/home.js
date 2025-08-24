@@ -49,6 +49,15 @@
       const item = (typeof raw==='string') ? {url:raw, thumb:raw, type} : {...raw, type};
       const card = (UCAPI.createCard) ? UCAPI.createCard(item, {type}) : document.createElement('div');
       if(!card.classList.contains('card')) card.classList.add('card');
+      try{
+        const locked = card.classList.contains('is-locked') || !(g.Paywall && (Paywall.hasSub && Paywall.hasSub()));
+        if(locked){
+          const price=document.createElement('span');
+          price.className='price-badge';
+          price.textContent = (type==='video') ? '€0.30' : '€0.10';
+          (card.querySelector('.thumb')||card).appendChild(price);
+        }
+      }catch(e){}
       frag.appendChild(card);
     });
     gridEl.appendChild(frag);
