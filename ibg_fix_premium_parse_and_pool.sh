@@ -1,3 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+echo "[IBG] Reescribiendo premium.js (DOM seguro + crawler /uncensored/)"
+
+cat > js/pages/premium.js <<'JS'
 import { seededPick } from '../utils-home.js';
 
 /* -------------------- CSS y helpers -------------------- */
@@ -274,3 +279,10 @@ export async function initPremium(){
     window.IBGPay.subscribe(plan, ()=>{ markSubscribed(); document.querySelectorAll('.p-card.locked').forEach(unlock); renderCredits(); });
   });
 }
+JS
+
+# Commit + push + deploy
+git add -A
+git commit -m "premium: DOM sin innerHTML, crawler /uncensored/ robusto; evita parse error '<'" || true
+git push origin main || true
+npx -y vercel --prod --yes || { npx -y vercel build && npx -y vercel deploy --prebuilt --prod --yes; }
