@@ -1,3 +1,58 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "[IBG] Ajuste: ensanchar layout + laterales 170px + hero con fallback si una decorativa falla"
+
+# 1) CSS — web más ancha, laterales casi pegados, sin cortes
+cat > css/ibg-home.css <<'CSS'
+/* ---------- HERO (sin overlay) ---------- */
+.hero{position:relative;height:min(64vh,calc(100vh - 88px));min-height:360px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.1s ease;opacity:1}
+.hero-bg.is-hidden{opacity:0}
+.hero-content{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+.hero-title{font-family:'Sexy Beachy',system-ui;font-weight:900;line-height:1;letter-spacing:.5px;
+  font-size:clamp(72px,11vw,160px);text-shadow:0 3px 22px rgba(0,0,0,.7)}
+.hero-sub{margin-top:12px;font-size:clamp(18px,3vw,34px);opacity:.98}
+
+/* ---------- Contenido centrado y un poco más ancho ---------- */
+.page-shell,#app{max-width:1200px;margin-left:auto;margin-right:auto}
+body{margin:0}
+
+/* ---------- Carrusel grande ---------- */
+.section-title{padding:16px 12px 6px 12px;font-weight:800}
+.carousel{position:relative;overflow:hidden;margin:12px}
+.carousel-track{display:flex;gap:12px;scroll-snap-type:x mandatory;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.carousel-track::-webkit-scrollbar{display:none}
+.carousel .slide{min-width:520px;max-width:85vw;height:340px;scroll-snap-align:start;border-radius:18px;overflow:hidden;background:#0a1320;flex:0 0 auto}
+.carousel .slide img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* ---------- Grid (galería) ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:0 12px 18px}
+.card{position:relative;border-radius:18px;overflow:hidden;background:#0a1320}
+.card img{width:100%;height:220px;object-fit:cover;display:block}
+
+/* ---------- Ads laterales + inline ---------- */
+.side-ad{position:fixed;top:0;bottom:0;width:170px;z-index:50;display:none;align-items:center;justify-content:center}
+.side-ad.left{left:0}
+.side-ad.right{right:0}
+.ad-box{width:160px;height:600px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ad-inline{display:block;margin:12px auto;min-height:90px;max-width:728px}
+.ad-inline .ad-box{width:728px;height:90px;margin:0 auto}
+.ad-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;border:1px dashed rgba(255,255,255,.18);border-radius:10px;font-size:14px;color:rgba(255,255,255,.6)}
+/* Evitar “caracteres raros” si una red escribe texto suelto */
+.side-ad,.ad-inline{font-size:0;line-height:0;color:transparent}
+
+@media (min-width:1200px){
+  /* padding del body igual que el ancho de la columna lateral para que no quede hueco */
+  body{padding-left:170px;padding-right:170px}
+  .side-ad{display:flex}
+  /* en este ancho el inline no molesta, pero si prefieres ocultarlo, descomenta la siguiente línea */
+  /* .ad-inline{display:none} */
+}
+CSS
+
+# 2) JS — Hero rotador con fallback si una imagen 404
+cat > js/pages/home.js <<'JS'
 import { seededPick } from '../utils-home.js';
 
 var DECOS = [
@@ -86,3 +141,9 @@ export async function initHome(){
   pickRandom(pool,20).forEach(function(it,idx){ var u=urlFrom(it); if(!u||!/\.(jpe?g|png|webp)$/i.test(u)) return;
     var c=document.createElement('div'); c.className='card'; c.dataset.id=String(idx); c.innerHTML='<img loading="lazy" src="'+u+'" alt="">'; grid.appendChild(c); });
 }
+JS
+
+git add -A
+git commit -m "home: widen content + 170px side columns; reduce gap; hero image fallback on 404"
+git push origin main || true
+npx -y vercel --prod --yes || { npx -y vercel build && npx -y vercel deploy --prebuilt --prod --yes; }
