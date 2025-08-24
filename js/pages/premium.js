@@ -1,276 +1,239 @@
-import { seededPick } from '../utils-home.js';
+console.log('[IBG] premium page init');
 
-/* -------------------- CSS y helpers -------------------- */
-function ensurePremiumCss(){
-  if(!document.getElementById('css-ibg-premium')){
-    const l=document.createElement('link');
-    l.id='css-ibg-premium'; l.rel='stylesheet'; l.href='/css/ibg-premium.css';
-    document.head.appendChild(l);
+(function(){
+  const IMG_EXT = /\.(webp|jpe?g|png|gif)$/i;
+
+  function daySeed(){const d=new Date();return `${d.getUTCFullYear()}-${d.getUTCMonth()+1}-${d.getUTCDate()}`;}
+  function seededShuffle(a,seed){let s=0;for(let i=0;i<seed.length;i++)s=(s*31+seed.charCodeAt(i))>>>0;const r=a.slice();for(let i=r.length-1;i>0;i--){s=(1103515245*s+12345)%0x80000000;const j=s%(i+1);[r[i],r[j]]=[r[j],r[i]]}return r;}
+  function uniq(arr){return Array.from(new Set(arr));}
+
+  function normBase(b){
+    if(!b) return '';
+    let x=String(b).replace(/\\/g,'/').trim();
+    if(!/uncensored/i.test(x)) return '';
+    if(!/^https?:\/\//i.test(x) && x[0] !== '/') x='/'+x;
+    if(!x.endsWith('/')) x+='/';
+    return x;
   }
-}
-const IMG_RE = /\.(jpe?g|png|webp|gif)$/i;
-const BASE_KEYS = ['base','path','dir','folder','root'];
-const LIST_KEYS = ['images','files','items','list','gallery','pool','data','array'];
+  function joinUrl(base,name){
+    if(!name) return '';
+    const s=String(name).trim();
+    if(/^https?:\/\//i.test(s) || s.startsWith('/')) return s;
+    const b=normBase(base)||'/uncensored/';
+    return b + s.replace(/^\.?\/*/,'');
+  }
 
-function normBase(b){
-  if(!b) return '';
-  let x=String(b).replace(/\\/g,'/').trim();
-  if(!/uncensored/i.test(x)) return '';
-  if(!/^https?:\/\//i.test(x) && x[0] !== '/') x = '/'+x;
-  if(!x.endsWith('/')) x += '/';
-  return x;
-}
-function toUrl(base, p){
-  if(!p) return '';
-  const s=String(p).trim();
-  if(/^https?:\/\//i.test(s) || s.startsWith('/')) return s;
-  const b=normBase(base);
-  if(!b) return '';
-  return b + s.replace(/^\.?\/*/,'');
-}
-function collectNames(v){
-  const out=[];
-  if(typeof v==='string' && IMG_RE.test(v)) out.push(v);
-  else if(Array.isArray(v)){
-    v.forEach(x=>{
-      if(typeof x==='string' && IMG_RE.test(x)) out.push(x);
-      else if(x && typeof x==='object'){
-        const p = x.src||x.file||x.name||x.image||x.url||x.path||x.thumb||x.cover||x.banner;
-        if(typeof p==='string' && IMG_RE.test(p)) out.push(p);
-      }
+  // Saca un array de nombres de archivo desde un valor arbitrario
+  function collectNames(v){
+    const out=[];
+    if(typeof v==='string' && IMG_EXT.test(v)) out.push(v);
+    else if(Array.isArray(v)){
+      v.forEach(x=>{
+        if(typeof x==='string' && IMG_EXT.test(x)) out.push(x);
+        else if(x && typeof x==='object'){
+          const p = x.src||x.file||x.name||x.image||x.url||x.path||x.thumb||x.cover||x.banner;
+          if(typeof p==='string' && IMG_EXT.test(p)) out.push(p);
+        }
+      });
+    }
+    return out;
+  }
+
+  // Recolector directo por claves comunes dentro de un objeto "de datos" (rápido)
+  function quickCollectFrom(obj, preferBase){
+    if(!obj || typeof obj!=='object') return [];
+    const bases = [];
+    ['base','path','dir','folder','root'].forEach(k=>{
+      const v=obj[k];
+      if(typeof v==='string'){ const nb=normBase(v); if(nb) bases.push(nb); }
+    });
+    // nombres en propiedades típicas
+    let names=[];
+    ['images','files','items','list','gallery','pool','data','array'].forEach(k=>{
+      const v=obj[k];
+      names.push(...collectNames(v));
+    });
+    names = uniq(names);
+    if(!names.length) return [];
+
+    const base = bases.find(b=>/\/uncensored\/$/i.test(b)) || bases[0] || preferBase || '/uncensored/';
+    return names.map(n=>{
+      // si ya viene con /uncensored/ o /, respetar
+      if(typeof n==='string' && (n.includes('/uncensored/') || n.startsWith('/') || /^https?:\/\//i.test(n))) return n;
+      return joinUrl(base, n);
     });
   }
-  return out;
-}
 
-/* -------------------- Crawler /uncensored/ -------------------- */
-function crawlUncensored(limitNodes=10000, limitHits=4000){
-  const q=[]; const seen=new WeakSet(); const hits=new Set();
-
-  function enqueue(v){
-    if(!v) return;
-    const t=typeof v; if(t!=='object' && t!=='function') return;
-    try{ if(seen.has(v)) return; seen.add(v); q.push(v); }catch(_){}
-  }
-
-  enqueue(window.UnifiedContentAPI);
-  enqueue(window.ContentData3);
-  enqueue(window.ContentData4);
-  enqueue(window);
-
-  let processed=0;
-  while(q.length && processed<limitNodes && hits.size<limitHits){
-    const cur=q.shift(); processed++;
-
-    // 1) cadenas con /uncensored/
-    try{
-      if(typeof cur === 'string' && cur.includes('/uncensored/') && IMG_RE.test(cur)){
-        hits.add(cur);
-      }
-    }catch(_){}
-
-    // 2) detectar bases y combinar con listas
-    let bases=[];
-    try{
-      for(const k of BASE_KEYS){
-        const v = cur && cur[k];
-        if(typeof v==='string' && /uncensored/i.test(v)){
-          const nb=normBase(v); if(nb) bases.push(nb);
-        }
-      }
-      if(bases.length===0 && cur && typeof cur==='object'){
-        for(const k in cur){
-          const v=cur[k];
-          if(v && typeof v==='object'){
-            for(const kk of BASE_KEYS){
-              const vv=v[kk];
-              if(typeof vv==='string' && /uncensored/i.test(vv)){
-                const nb=normBase(vv); if(nb) bases.push(nb);
-              }
-            }
-          }
-        }
-      }
-    }catch(_){}
-
-    if(bases.length){
+  // Rastreo profundo de un objeto (sin bucles) combinando base detectada + nombres
+  function deepCollect(obj, hardLimit=50000){
+    const out=new Set(); const q=[]; const seen=new WeakSet();
+    const baseCandidates=new Set();
+    function enqueue(v){ if(!v) return; const t=typeof v; if(t!=='object'&&t!=='function') return;
+      try{ if(seen.has(v)) return; seen.add(v); q.push(v);}catch(_){}
+    }
+    enqueue(obj);
+    let steps=0;
+    while(q.length && steps<hardLimit && out.size<6000){
+      const cur=q.shift(); steps++;
       try{
-        for(const key of LIST_KEYS){
-          const lst = cur && cur[key];
-          const names = collectNames(lst);
-          if(names.length){
-            const base = bases.find(b=>/\/uncensored\/$/i.test(b)) || bases[0];
-            names.forEach(n=>{
-              const u=toUrl(base,n);
-              if(u && IMG_RE.test(u) && u.includes('/uncensored/')) hits.add(u);
-            });
-          }
-        }
-        for(const k in cur){
-          const v=cur[k];
-          if(v && typeof v==='object'){
-            let subBase='';
-            for(const bk of BASE_KEYS){
-              const vb=v[bk];
-              if(typeof vb==='string' && /uncensored/i.test(vb)){ subBase=normBase(vb); break; }
-            }
-            if(subBase){
-              for(const lk of LIST_KEYS){
-                const lst=v[lk];
-                const names=collectNames(lst);
-                names.forEach(n=>{
-                  const u=toUrl(subBase,n);
-                  if(u && IMG_RE.test(u) && u.includes('/uncensored/')) hits.add(u);
-                });
-              }
-            }
-          }
-        }
+        // bases
+        ['base','path','dir','folder','root'].forEach(k=>{
+          const v=cur && cur[k];
+          if(typeof v==='string'){ const nb=normBase(v); if(nb) baseCandidates.add(nb); }
+        });
+        // colecciones rápidas
+        const quick=quickCollectFrom(cur);
+        quick.forEach(u=>out.add(u));
+        // explorar
+        if(Array.isArray(cur)){ cur.forEach(enqueue); }
+        else if(cur && typeof cur==='object'){ for(const k in cur){ enqueue(cur[k]); } }
       }catch(_){}
     }
+    // Si hay nombres sueltos (sin /uncensored/), combinarlos con la mejor base
+    const bestBase = Array.from(baseCandidates).find(b=>/\/uncensored\/$/i.test(b)) || Array.from(baseCandidates)[0] || '/uncensored/';
+    const final=Array.from(out).map(u=>{
+      if(typeof u!=='string') return '';
+      if(u.includes('/uncensored/') || u.startsWith('/') || /^https?:\/\//i.test(u)) return u;
+      return joinUrl(bestBase, u);
+    }).filter(Boolean);
+    return uniq(final);
+  }
 
-    // 3) seguir recorriendo
+  function collectPremiumPool(){
+    const results=[];
+
+    // 1) UnifiedContentAPI (si expone métodos)
     try{
-      if(Array.isArray(cur)){ cur.forEach(enqueue); }
-      else if(cur && typeof cur==='object'){ for(const k in cur){ enqueue(cur[k]); } }
+      const U=window.UnifiedContentAPI;
+      if(U){
+        if(typeof U.getPremiumImages==='function'){
+          const a=U.getPremiumImages()||[];
+          a.forEach(x=>{
+            const u=(typeof x==='string')?x:(x.url||x.src||x.path||x.image);
+            if(u) results.push(u);
+          });
+        }else if(typeof U.getAll==='function'){
+          const a=U.getAll('uncensored')||U.getAll('premium')||[];
+          a.forEach(x=>{
+            const u=(typeof x==='string')?x:(x.url||x.src||x.path||x.image);
+            if(u) results.push(u);
+          });
+        }
+      }
     }catch(_){}
-  }
-  return Array.from(hits);
-}
 
-/* -------------------- Paywall utils -------------------- */
-function pickRandom(arr,n){
-  const a=arr.slice();
-  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
-  return a.slice(0, Math.min(n,a.length));
-}
-function getUnlocked(){ try{ return JSON.parse(localStorage.getItem('ibg_unlocked')||'[]'); }catch(_){return[]} }
-function setUnlocked(list){ try{ localStorage.setItem('ibg_unlocked', JSON.stringify(list)); }catch(_){} }
-function addUnlocked(url){ const u=getUnlocked(); if(!u.includes(url)){ u.push(url); setUnlocked(u);} }
-function getCredits(){ return parseInt(localStorage.getItem('ibg_credits')||'0',10)||0; }
-function addCredits(n){ localStorage.setItem('ibg_credits', String(getCredits()+n)); }
-function useCredit(){ const c=getCredits(); if(c>0){ localStorage.setItem('ibg_credits', String(c-1)); return true; } return false; }
-function markSubscribed(){ localStorage.setItem('ibg_subscribed','1'); }
-function isSub(){ return localStorage.getItem('ibg_subscribed')==='1'; }
-function dailySeed(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+    // 2) ContentData3 / ContentData4 (directo por claves típicas)
+    try{
+      if(window.ContentData3){ results.push(...quickCollectFrom(window.ContentData3)); }
+      if(window.ContentData4){ results.push(...quickCollectFrom(window.ContentData4)); }
+    }catch(_){}
 
-/* -------------------- UI sin innerHTML gigantes -------------------- */
-export async function initPremium(){
-  ensurePremiumCss();
+    // 3) Rastreo profundo de C3/C4 (por si usan estructuras anidadas)
+    try{
+      if(window.ContentData3){ results.push(...deepCollect(window.ContentData3)); }
+      if(window.ContentData4){ results.push(...deepCollect(window.ContentData4)); }
+    }catch(_){}
 
-  // Ads laterales
-  function ensure(id,cls,host){
-    let el=document.getElementById(id);
-    if(!el){ el=document.createElement('div'); el.id=id; el.className=cls; (host||document.body).appendChild(el); }
-    return el;
-  }
-  ensure('ad-left','side-ad left',document.body).appendChild(document.createElement('div')).className='ad-box';
-  ensure('ad-right','side-ad right',document.body).appendChild(document.createElement('div')).className='ad-box';
+    // 4) Último recurso: rastrear el window completo (caro, pero acotado)
+    if(results.length===0){
+      try{ results.push(...deepCollect(window, 30000)); }catch(_){}
+    }
 
-  const app=document.getElementById('app');
-  app.textContent='';
-
-  const h1=document.createElement('h1');
-  h1.className='premium-title';
-  h1.textContent='Premium';
-  app.appendChild(h1);
-
-  const cta=document.createElement('div'); cta.className='premium-cta';
-  function pill(id, labelLeft, labelRight){
-    const d=document.createElement('div'); d.className='pill'; d.id=id;
-    const pp=document.createElement('span'); pp.className='pp';
-    const txt=document.createElement('span'); txt.textContent=labelLeft;
-    const price=document.createElement('span'); price.className='price'; price.textContent=labelRight;
-    d.append(pp, txt, price); return d;
-  }
-  cta.append(
-    pill('buy-pack','Paquete 10','0,80€'),
-    pill('sub-month','Mensual','14,99€'),
-    pill('sub-year','Anual','49,99€'),
-  );
-  app.appendChild(cta);
-
-  const credit=document.createElement('div'); credit.id='credit-note'; credit.className='credit-note';
-  app.appendChild(credit);
-  function renderCredits(){
-    const c=getCredits(); const sub=isSub();
-    credit.textContent = sub ? 'Suscripción activa: acceso a todo el contenido.' :
-      (c>0 ? ('Créditos disponibles: '+c+' (1 crédito = 1 imagen)') : 'Sin créditos. Compra una imagen (0,10 €) o un paquete de 10 (0,80 €).');
-  }
-  renderCredits();
-
-  const grid=document.createElement('section'); grid.id='premiumGrid'; grid.className='premium-grid';
-  app.appendChild(grid);
-
-  // CRAWL pool premium
-  const pool=crawlUncensored(10000,4000);
-  console.info('[IBG] premium pool size:', pool.length);
-
-  if(pool.length===0){
-    const info=document.createElement('div');
-    info.style.opacity='.8'; info.textContent='No se pudo localizar el pool premium (uncensored). Revisa content-data3/4.';
-    grid.appendChild(info);
-    return;
+    // Filtrar a /uncensored/*.webp (u otras extensiones válidas)
+    const filtered = results.filter(u => typeof u==='string' && /\/uncensored\//i.test(u) && IMG_EXT.test(u));
+    return uniq(filtered);
   }
 
-  const picks = pickRandom(pool, 100);
-  const newSeed = dailySeed();
-  const newCount = Math.max(1, Math.floor(picks.length * 0.30));
-  const newSet = new Set(seededPick(picks, newCount, 'premium-new-'+newSeed));
-  const unlockedSet = new Set(getUnlocked());
+  function ensureStructure(){
+    if(!document.getElementById('premiumGrid')){
+      const main=document.querySelector('main')||document.body;
+      const wrap=document.createElement('section'); wrap.id='premiumSection';
+      const h=document.createElement('h1'); h.textContent='Premium';
+      const grid=document.createElement('div'); grid.id='premiumGrid'; grid.className='premium-grid';
+      wrap.append(h,grid); main.appendChild(wrap);
+    }
+    // laterales para anuncios (si tu loader los necesita)
+    function ensure(id,cls){ let el=document.getElementById(id); if(!el){ el=document.createElement('div'); el.id=id; el.className=cls; document.body.appendChild(el);} return el; }
+    ensure('ad-left','side-ad left'); ensure('ad-right','side-ad right');
+    if(!document.getElementById('css-ibg-premium')){
+      const l=document.createElement('link'); l.id='css-ibg-premium'; l.rel='stylesheet'; l.href='/css/premium.css'; document.head.appendChild(l);
+    }
+  }
 
-  picks.forEach((u)=>{
-    const isUnlocked = isSub() || unlockedSet.has(u);
-    const isNew = newSet.has(u);
+  function renderGrid(urls){
+    const grid=document.getElementById('premiumGrid'); if(!grid) return;
+    grid.innerHTML='';
+    const total=Math.min(urls.length,100);
+    const picks=seededShuffle(urls, daySeed()).slice(0,total);
+    const markNew=Math.max(1, Math.floor(total*0.30));
+    const newSet=new Set(picks.slice(0,markNew));
 
-    const card=document.createElement('div'); card.className='p-card'+(isUnlocked?' unlocked':' locked'); card.dataset.url=u;
+    const frag=document.createDocumentFragment();
+    picks.forEach((u,i)=>{
+      const card=document.createElement('div'); card.className='p-card locked'; card.dataset.url=u;
 
-    if(isNew){ const b=document.createElement('div'); b.className='badge-new'; b.textContent='Nuevo'; card.appendChild(b); }
+      const img=document.createElement('img'); img.loading='lazy'; img.decoding='async'; img.src=u; img.alt=`Premium ${i+1}`;
+      card.appendChild(img);
 
-    const img=document.createElement('img'); img.loading='lazy'; img.src=u; img.alt='';
-    card.appendChild(img);
+      if(newSet.has(u)){ const badge=document.createElement('div'); badge.className='badge-new'; badge.textContent='Nuevo'; card.appendChild(badge); }
 
-    const overlay=document.createElement('div'); overlay.className='overlay';
-    const buttons=document.createElement('div'); buttons.className='buttons';
-    const btn=document.createElement('button'); btn.className='btn-buy buy-one'; btn.title='Comprar 0,10€';
-    const pp=document.createElement('span'); pp.className='pp';
-    const t=document.createElement('span'); t.textContent='Comprar';
-    const pr=document.createElement('span'); pr.className='price'; pr.textContent='0,10€';
-    btn.append(pp,t,pr); buttons.appendChild(btn);
-    overlay.appendChild(buttons);
+      const overlay=document.createElement('div'); overlay.className='overlay';
+      const prices=document.createElement('div'); prices.className='prices';
+      const tag1=document.createElement('span'); tag1.className='tag'; tag1.textContent='€0.10';
+      const tag2=document.createElement('span'); tag2.className='tag bundle'; tag2.textContent='10 por €0.80';
+      prices.append(tag1,tag2);
 
-    const note=document.createElement('div'); note.className='locked-note';
-    note.style.cssText='font-size:12px;opacity:.75';
-    note.textContent='Contenido difuminado. Desbloquéalo para verlo.';
-    overlay.appendChild(note);
+      const btns=document.createElement('div'); btns.className='btns';
+      const buy=document.createElement('button'); buy.className='buy'; buy.type='button'; buy.textContent='Comprar';
+      btns.appendChild(buy);
 
-    card.appendChild(overlay);
-    grid.appendChild(card);
-  });
+      const tiny=document.createElement('div'); tiny.className='tiny'; tiny.textContent='o suscríbete: 14,99€/mes · 49,99€/año';
 
-  function unlock(card){ if(card){ card.classList.remove('locked'); card.classList.add('unlocked'); card.querySelector('.locked-note')?.remove(); } }
+      overlay.append(prices, btns, tiny);
+      card.appendChild(overlay);
 
-  grid.addEventListener('click', (e)=>{
-    const btn=e.target.closest('.buy-one'); if(!btn) return;
-    const card=e.target.closest('.p-card'); const url=card?.dataset?.url; if(!url) return;
+      frag.appendChild(card);
+    });
+    grid.appendChild(frag);
 
-    if(isSub()){ unlock(card); return; }
-    if(useCredit()){ unlock(card); renderCredits(); return; }
+    grid.addEventListener('click', async (e)=>{
+      const btn=e.target.closest('button.buy'); if(!btn) return;
+      const card=e.target.closest('.p-card'); const url=card?.dataset?.url; if(!url) return;
 
-    if(!window.IBGPay){ console.warn('IBGPay no disponible'); return; }
-    window.IBGPay.pay(0.10, ()=>{ addUnlocked(url); unlock(card); renderCredits(); });
-  });
+      // Si hay suscripción activa, desbloquea
+      if(localStorage.getItem('ibg_subscribed')==='1'){ card.classList.remove('locked'); card.classList.add('unlocked'); return; }
 
-  document.getElementById('buy-pack').addEventListener('click', ()=>{
-    if(!window.IBGPay) return;
-    window.IBGPay.pay(0.80, ()=>{ addCredits(10); renderCredits(); });
-  });
-  document.getElementById('sub-month').addEventListener('click', ()=>{
-    const plan=(window.IBG||{}).PAYPAL_PLAN_MONTHLY_1499; if(!plan || !window.IBGPay) return;
-    window.IBGPay.subscribe(plan, ()=>{ markSubscribed(); document.querySelectorAll('.p-card.locked').forEach(unlock); renderCredits(); });
-  });
-  document.getElementById('sub-year').addEventListener('click', ()=>{
-    const plan=(window.IBG||{}).PAYPAL_PLAN_ANNUAL_4999; if(!plan || !window.IBGPay) return;
-    window.IBGPay.subscribe(plan, ()=>{ markSubscribed(); document.querySelectorAll('.p-card.locked').forEach(unlock); renderCredits(); });
-  });
-}
+      // Si tienes créditos, gástalo
+      const credits = parseInt(localStorage.getItem('ibg_credits')||'0',10)||0;
+      if(credits>0){ localStorage.setItem('ibg_credits', String(credits-1)); card.classList.remove('locked'); card.classList.add('unlocked'); return; }
+
+      // PayPal (usa ventana modal global si la tienes configurada como IBGPay)
+      if(window.IBGPay && typeof window.IBGPay.pay==='function'){
+        window.IBGPay.pay(0.10, ()=>{ card.classList.remove('locked'); card.classList.add('unlocked'); });
+      }else if(window.IBGPayPal && typeof window.IBGPayPal.mountPayPerItem==='function'){
+        // Montar un botón inline
+        const holder=document.createElement('div'); holder.className='pp-holder'; btn.replaceWith(holder);
+        window.IBGPayPal.mountPayPerItem(holder, {
+          description:'Foto premium', value:'0.10', sku:`photo:${url}`,
+          onApprove:()=>{ card.classList.remove('locked'); card.classList.add('unlocked'); }
+        });
+      }else{
+        alert('PayPal no disponible ahora mismo.');
+      }
+    }, {once:false});
+  }
+
+  function boot(){
+    ensureStructure();
+    const pool = collectPremiumPool();
+    console.log('[IBG] premium pool size:', pool.length);
+    if(!pool.length){
+      const grid=document.getElementById('premiumGrid'); if(grid){ grid.innerHTML='<div style="opacity:.8">No se pudo localizar el pool premium (uncensored). Revisa content-data3/4.</div>'; }
+      return;
+    }
+    renderGrid(pool);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
