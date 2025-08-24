@@ -67,22 +67,13 @@ function waitPool(timeout=9000, step=120){
 function setHeroRotator(){
   const a=document.getElementById('heroA');
   const b=document.getElementById('heroB');
-  const order = DECOS.slice(); // rotación continua
-  let idx = seededPick(DECOS,1,'hero-start').length ? DECOS.indexOf(seededPick(DECOS,1,'hero-start')[0]) : 0;
-  if (idx<0) idx=0;
-  a.src = DECOS[idx];
-  b.src = DECOS[(idx+1)%DECOS.length];
-  b.classList.add('is-hidden');
+  let idx = Math.max(0, DECOS.indexOf(seededPick(DECOS,1,'hero-start')[0]||DECOS[0]));
+  a.src = DECOS[idx]; b.src = DECOS[(idx+1)%DECOS.length]; b.classList.add('is-hidden');
   setInterval(()=>{
-    // crossfade
     b.src = DECOS[(idx+1)%DECOS.length];
     a.classList.add('is-hidden'); b.classList.remove('is-hidden');
-    setTimeout(()=>{ // swap refs
-      const tmp = a.src; a.src = b.src; b.src = tmp;
-      a.classList.remove('is-hidden'); b.classList.add('is-hidden');
-      idx = (idx+1)%DECOS.length;
-    }, 1100);
-  }, 7000); // cada 7s
+    setTimeout(()=>{ const tmp=a.src; a.src=b.src; b.src=tmp; a.classList.remove('is-hidden'); b.classList.add('is-hidden'); idx=(idx+1)%DECOS.length; }, 1100);
+  }, 7000);
 }
 
 function autoplayCarousel(track, delay=1000){
@@ -96,15 +87,16 @@ function autoplayCarousel(track, delay=1000){
 }
 
 export async function initHome(){
-  // Asegurar que NO hay ad-inline bajo el hero (lo movemos al final)
-  const oldInline = document.getElementById('ad-inline'); if (oldInline) oldInline.remove();
+  // aseguramos contenedores de anuncios (se crean si no existen)
+  const ensure = (id,cls,host)=>{ let el=document.getElementById(id); if(!el){el=document.createElement('div'); el.id=id; el.className=cls; (host||document.body).appendChild(el);} return el; };
+  ensure('ad-left','side-ad left', document.body).innerHTML = '<div class="ad-box" id="ad-left-box"></div>';
+  ensure('ad-right','side-ad right', document.body).innerHTML = '<div class="ad-box" id="ad-right-box"></div>';
 
   const root=document.getElementById('app');
   root.innerHTML=`
     <section class="hero" id="hero">
       <img class="hero-bg" id="heroA" alt="">
       <img class="hero-bg is-hidden" id="heroB" alt="">
-      <div class="hero-overlay"></div>
       <div class="hero-content">
         <div>
           <div class="hero-title">Ibizagirl.pics</div>
@@ -115,13 +107,13 @@ export async function initHome(){
     <h2 class="section-title">Home</h2>
     <section class="carousel"><div class="carousel-track" id="homeCarousel"></div></section>
     <section class="grid" id="homeGrid"></section>
-    <div id="ad-inline" class="ad-inline"></div>
+    <div id="ad-inline" class="ad-inline"><div class="ad-box" id="ad-inline-box"></div></div>
   `;
 
-  // HERO: rotación de decorativas detrás del texto
+  // HERO rotando decorativas
   setHeroRotator();
 
-  // Pool /full y logs
+  // Pool /full
   const pool = await waitPool();
   console.info('[IBG] /full pool size:', pool.length);
 
@@ -129,7 +121,7 @@ export async function initHome(){
   const car=document.getElementById('homeCarousel');
   seededPick(pool, 20, 'carousel').forEach(it=>{
     const u=urlFrom(it); if (!u || !/\.(jpe?g|png|webp)$/i.test(u)) return;
-    const s=document.createElement('div'); s.className='slide'; s.innerHTML=`<img src="${u}" alt="">`; car.appendChild(s);
+    const s=document.createElement('div'); s.className='slide'; s.innerHTML=`<img src="\${u}" alt="">`; car.appendChild(s);
   });
   autoplayCarousel(car, 1000);
 
@@ -138,7 +130,7 @@ export async function initHome(){
   seededPick(pool, 20, 'grid').forEach((it,i)=>{
     const u=urlFrom(it); if (!u || !/\.(jpe?g|png|webp)$/i.test(u)) return;
     const c=document.createElement('div'); c.className='card'; c.dataset.id=String(i);
-    c.innerHTML=`<img loading="lazy" src="${u}" alt="">`;
+    c.innerHTML=\`<img loading="lazy" src="\${u}" alt="">\`;
     grid.appendChild(c);
   });
 }
