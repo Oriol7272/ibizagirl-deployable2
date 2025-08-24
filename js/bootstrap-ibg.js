@@ -1,6 +1,6 @@
 import { mountHeader } from './pages-common.js';
 import { initHome } from './pages/home.js';
-import { initPremium } from './pages/premium.js?v=1756068416';
+import { initPremium } from './pages/premium.js?v=1756068653';
 import { initVideos } from './pages/videos.js';
 import { initSubscription } from './pages/subscription.js';
 import { initAds } from './ad-loader.js';
