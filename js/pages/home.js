@@ -1,9 +1,17 @@
 import { t } from '../i18n.js';
 import { getDaily } from '../daily-picks.js';
 
-function pickHeroImage(){
-  const c=['/decorative-images/paradise-beach.webp','/decorative-images/paradise-beach.jpg','/decorative-images/paradise-beach.png'];
-  return new Promise((resolve)=>{let i=0;const probe=new Image();const next=()=>{if(i>=c.length){resolve(null);return}probe.onload=()=>resolve(c[i]);probe.onerror=()=>{i++;next()};probe.src=c[i]};next()});
+function pickBannerFromPool(){
+  try{
+    const U = window.UnifiedContentAPI;
+    if (U && U.getPublicImages) {
+      const all = U.getPublicImages();
+      const banners = all.filter(x => x.isBanner || /banner/i.test(x?.tag||'') || /banner/i.test(x?.type||''));
+      if (banners.length) return banners[Math.floor(Math.random()*banners.length)];
+      return all[0] || null;
+    }
+  }catch(_){}
+  return null;
 }
 
 export async function initHome(){
@@ -12,7 +20,7 @@ export async function initHome(){
     <section class="hero" id="hero">
       <img class="hero-bg" id="heroImg" alt="">
       <div class="hero-overlay"></div>
-      <div class="hero-title use-ibiza-font">IbizaGirl.pics</div>
+      <div class="hero-title">IbizaGirl.pics</div>
       <div class="hero-sub">Exclusive mediterranean vibes</div>
     </section>
     <div id="menuMount"></div>
@@ -21,16 +29,22 @@ export async function initHome(){
     <section class="grid" id="homeGrid"></section>
   `;
 
-  const heroSrc = await pickHeroImage();
+  // Banner sin 404: usa contenido real
+  const b = pickBannerFromPool();
   const heroImg = document.getElementById('heroImg');
-  if(heroSrc){ heroImg.src = heroSrc; } else {
-    try{ const {home20}=getDaily(); const f=home20[0]; const u=f?.banner||f?.cover||f?.thumb||f?.src||f?.file||f?.url||f?.path; if(u) heroImg.src=u;}catch(_){}
-  }
+  const bUrl = b?.banner || b?.cover || b?.thumb || b?.src || b?.file || b?.url || b?.path;
+  if (bUrl) heroImg.src = bUrl;
 
-  const {home20}=getDaily();
+  // Carrusel + 20 imágenes de /full
+  const {home20} = getDaily();
   const car=document.getElementById('homeCarousel');
-  home20.forEach(it=>{ const u=it.banner||it.cover||it.thumb||it.src||it.file||it.url||it.path; const s=document.createElement('div'); s.className='slide'; s.innerHTML=`<img src="${u}" alt="">`; car.appendChild(s); });
-
+  home20.forEach(it=>{
+    const u=it.banner||it.cover||it.thumb||it.src||it.file||it.url||it.path;
+    const s=document.createElement('div'); s.className='slide'; s.innerHTML=`<img src="${u}" alt="">`; car.appendChild(s);
+  });
   const grid=document.getElementById('homeGrid');
-  home20.forEach((it,i)=>{ const id=it.id||it.file||`full-${i}`; const u=it.thumb||it.src||it.file||it.url||it.path; const c=document.createElement('div'); c.className='card'; c.dataset.id=id; c.innerHTML=`<img loading="lazy" src="${u}" alt="">`; grid.appendChild(c); });
+  home20.forEach((it,i)=>{
+    const id=it.id||it.file||`full-${i}`; const u=it.thumb||it.src||it.file||it.url||it.path;
+    const c=document.createElement('div'); c.className='card'; c.dataset.id=id; c.innerHTML=`<img loading="lazy" src="${u}" alt="">`; grid.appendChild(c);
+  });
 }
