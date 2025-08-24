@@ -5,9 +5,19 @@ import { initVideos } from './pages/videos.js';
 import { initSubscription } from './pages/subscription.js';
 import { initAds } from './ad-loader.js';
 import { initCrisp } from './integrations.js';
-mountHeader(); initCrisp(); initAds();
-const path=location.pathname.replace(/\/+$/,'')||'/index.html';
-if(path.endsWith('/index.html')){initHome()}
-else if(path.endsWith('/premium.html')){initPremium()}
-else if(path.endsWith('/videos.html')){initVideos()}
-else if(path.endsWith('/subscription.html')){initSubscription()}
+
+const ensureApp = () => document.getElementById('app') || (()=>{const d=document.createElement('div');d.id='app';document.body.appendChild(d);return d})();
+const path = (location.pathname.replace(/\/+$/,'') || '/index.html');
+
+if(path.endsWith('/index.html')){
+  await initHome();
+  mountHeader();
+} else {
+  mountHeader();
+  if(path.endsWith('/premium.html')){ await initPremium(); }
+  else if(path.endsWith('/videos.html')){ await initVideos(); }
+  else if(path.endsWith('/subscription.html')){ await initSubscription(); }
+}
+
+initCrisp();
+initAds({ left: document.getElementById('ad-left'), right: document.getElementById('ad-right') });
