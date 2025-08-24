@@ -1,4 +1,5 @@
 {
-  "buildCommand": "bash tools/build-env-safe.sh",
-  "cleanUrls": true
+  "framework": "other",
+  "buildCommand": "node tools/gen-ibg-env.mjs",
+  "outputDirectory": "."
 }

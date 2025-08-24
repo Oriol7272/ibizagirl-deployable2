@@ -1,4 +1,4 @@
-import { t } from './i18n.js';
+import { t, lang, setLang } from './i18n.js';
 export function header(){
   return `
   <div class="header">
@@ -14,6 +14,5 @@ export function header(){
 }
 export function mountHeader(){
   document.body.insertAdjacentHTML('afterbegin', header());
-  const sel=document.querySelector('.lang'); sel.value=(localStorage.getItem('ibg_lang')||'ES');
-  sel.addEventListener('change',e=>{ localStorage.setItem('ibg_lang', e.target.value); location.reload(); });
+  const sel=document.querySelector('.lang'); sel.value=lang(); sel.addEventListener('change',e=>setLang(e.target.value));
 }
