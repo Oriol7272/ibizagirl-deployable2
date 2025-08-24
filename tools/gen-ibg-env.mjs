@@ -19,3 +19,4 @@ const IBG = {
   CURRENCY: 'EUR'
 };
 writeFileSync('ibg-env.js', 'window.IBG = ' + JSON.stringify(IBG, null, 2) + ';');
+console.log('[IBG] ibg-env.js generado');

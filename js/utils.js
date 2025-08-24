@@ -5,3 +5,4 @@ export function shuffleSeeded(arr,seed){const a=arr.slice();const rnd=mulberry32
 export const sampleSeeded=(arr,n,seed)=>shuffleSeeded(arr,seed).slice(0,Math.min(n,arr.length));
 export const isSubscribed=()=>{try{return localStorage.getItem('ibg_sub_active')==='1'||localStorage.getItem('ibg_lifetime')==='1'}catch{return false}};
 export const b64Decode=t=>{try{return atob(t||'')}catch{return ''}};
+export function imgUrl(it){return it.banner||it.cover||it.thumb||it.src||it.file||it.url||it.path}
