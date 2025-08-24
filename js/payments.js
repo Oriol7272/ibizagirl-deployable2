@@ -1,105 +1,58 @@
-(function(){
-  const ENV = (window.__ENV||{});
-  const CLIENT_ID = ENV.PAYPAL_CLIENT_ID;
-  const CURRENCY = 'EUR';
-  const PLAN_MONTHLY = ENV.PAYPAL_PLAN_MONTHLY_1499;
-  const PLAN_ANNUAL  = ENV.PAYPAL_PLAN_ANNUAL_4999;
-
-  let loadedMode = null;
-  function loadSDK(mode){
-    if(!CLIENT_ID) { console.error('PAYPAL_CLIENT_ID faltante'); return Promise.reject('NO_CLIENT'); }
-    if(loadedMode === mode && window.paypal) return Promise.resolve();
-    [...document.querySelectorAll('script[src*="paypal.com/sdk/js"]')].forEach(s=>s.remove());
-    delete window.paypal;
-
-    const base = 'https://www.paypal.com/sdk/js';
-    const common = `client-id=${encodeURIComponent(CLIENT_ID)}&currency=${CURRENCY}&components=buttons,marks`;
-    const extra = (mode==='subscription') ? '&intent=subscription&vault=true' : '&intent=capture';
-    const src = `${base}?${common}${extra}`;
-
-    return new Promise((resolve,reject)=>{
-      const s=document.createElement('script');
-      s.src=src; s.async=true; s.onload=()=>{ loadedMode=mode; resolve(); };
-      s.onerror=()=>reject(new Error('PayPal SDK load error'));
-      document.head.appendChild(s);
-    });
-  }
-
-  function ensureModal(){
-    if(document.getElementById('pp-modal')) return;
-    const html = `
-      <div id="pp-modal"><div id="pp-bg"><div id="pp-card">
-        <button id="pp-close"></button>
-        <div id="pp-container"></div>
-      </div></div></div>`;
-    document.body.insertAdjacentHTML('beforeend', html);
-    document.getElementById('pp-close').onclick = ()=> document.getElementById('pp-modal').classList.remove('show');
-  }
-  function openModal(){ ensureModal(); const m=document.getElementById('pp-modal'); m.classList.add('show'); return m; }
-
-  function markAccess(type){
-    if(type==='lifetime'){ localStorage.setItem('IBG_LIFETIME','1'); document.documentElement.classList.add('hide-ads'); }
-    if(type==='monthly'){ localStorage.setItem('IBG_SUB_MONTHLY','1'); }
-    if(type==='annual'){  localStorage.setItem('IBG_SUB_ANNUAL','1'); }
-    document.dispatchEvent(new CustomEvent('ibg:access-granted'));
-  }
-
-  function buySingle(kind, ref){
-    const amount = (kind==='video') ? '0.30' : '0.10';
-    loadSDK('order').then(()=>{
-      openModal();
-      window.paypal.Buttons({
-        style:{layout:'vertical',color:'blue',shape:'pill'},
-        createOrder: (_,actions)=>actions.order.create({
-          purchase_units:[{description:`${kind}:${ref}`, amount:{value:amount,currency_code:CURRENCY}}]
-        }),
-        onApprove: async (_,actions)=>{
-          await actions.order.capture();
-          const key = `IBG_UNLOCK_${kind}_${btoa(unescape(encodeURIComponent(ref))).replace(/=+$/,'')}`;
-          localStorage.setItem(key, '1');
-          Contenido desbloqueado!');alert('
-          document.getElementById('pp-modal').classList.remove('show');
-          document.dispatchEvent(new CustomEvent('ibg:item-unlocked', {detail:{kind,ref}}));
-        }
-      }).render('#pp-container');
-    }).catch(console.error);
-  }
-
-  function subscribe(plan, label){
-    loadSDK('subscription').then(()=>{
-      openModal();
-      const planId = plan==='monthly' ? PLAN_MONTHLY : PLAN_ANNUAL;
-      if(!planId){ alert('Falta planId en ENV'); return; }
-      window.paypal.Buttons({
-        style:{layout:'vertical',color:'blue',shape:'pill'},
-        createSubscription: (_,actions)=> actions.subscription.create({ plan_id: planId }),
-        onApprove: async ()=>{
-          markAccess(plan);
-          SuscripciAlertnnn ${label} activada!`);(`
-          document.getElementById('pp-modal').classList.remove('show');
-        }
-      }).render('#pp-container');
-    }).catch(console.error);
-  }
-
-  function buyLifetime(){
-    loadSDK('order').then(()=>{
-      openModal();
-      window.paypal.Buttons({
-        style:{layout:'vertical',color:'blue',shape:'pill'},
-        createOrder: (_,actions)=>actions.order.create({
-          purchase_units:[{description:'lifetime', amount:{value:'100.00',currency_code:'EUR'}}]
-        }),
-        onApprove: async (_,actions)=>{
-          await actions.order.capture();
-          markAccess('lifetime');
-          Acceso de por vida activado y sin anuncios!');alert('
-          document.getElementById('pp-modal').classList.remove('show');
-          location.reload();
-        }
-      }).render('#pp-container');
-    }).catch(console.error);
-  }
-
-  window.IBGPay = { buySingle, subscribeMonthly:()=>subscribe('monthly','mensual'), subscribeAnnual:()=>subscribe('annual','anual'), buyLifetime };
-})();
+const ENV=window.__ENV||{};
+const CURRENCY=(ENV.PP_CURRENCY||ENV.PAYPAL_CURRENCY||'EUR');
+function getClientId(){return ENV.PP_CLIENT_LIVE||ENV.PAYPAL_CLIENT_ID||ENV.PP_CLIENT_ID||''}
+function planId(k){
+  if(k==='monthly') return ENV.PP_PLAN_MONTHLY||ENV.PAYPAL_PLAN_MONTHLY||ENV.SUB_MONTHLY_ID||'';
+  if(k==='annual')  return ENV.PP_PLAN_ANNUAL ||ENV.PAYPAL_PLAN_ANNUAL ||ENV.SUB_ANNUAL_ID ||'';
+  return '';
+}
+export function ensureSDK(){
+  if(window.paypal) return Promise.resolve(window.paypal);
+  const cid=getClientId(); if(!cid){console.error('NO PayPal CLIENT_ID'); return Promise.reject(new Error('NO_CLIENT'))}
+  return new Promise((res,rej)=>{
+    const src=`https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(cid)}&currency=${encodeURIComponent(CURRENCY)}&vault=true&intent=subscription&components=buttons,marks`;
+    const s=document.createElement('script'); s.src=src; s.async=true;
+    s.onload=()=>res(window.paypal); s.onerror=()=>rej(new Error('SDK_LOAD_FAIL'));
+    document.head.appendChild(s);
+  });
+}
+function ensureModal(){
+  let m=document.getElementById('paypal-modal'); if(m) return m;
+  m=document.createElement('div'); m.id='paypal-modal';
+  m.innerHTML=`<div style="position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:9999">
+    <div style="background:#fff;min-width:320px;max-width:90vw;border-radius:.8rem;padding:1rem;position:relative;color:#111">
+      <button id="paypal-modal-close" style="position:absolute;top:.6rem;right:.8rem;background:none;border:none;font-size:1.2rem;cursor:pointer"></button>
+      <div id="pp-container"></div>
+    </div></div>`;
+  document.body.appendChild(m);
+  m.querySelector('#paypal-modal-close')?.addEventListener('click',()=>m.remove());
+  return m;
+}
+export async function buyLifetime(){
+  const price=(ENV.PP_LIFETIME_PRICE||'100.00');
+  try{
+    await ensureSDK(); const m=ensureModal();
+    window.paypal.Buttons({
+      style:{layout:'vertical',color:'blue',shape:'pill'},
+      createOrder:(_d,a)=>a.order.create({purchase_units:[{amount:{value:String(price),currency_code:CURRENCY}}]}),
+      onApprove:async(_d,a)=>{await a.order.capture(); localStorage.setItem('IBG_LIFETIME','1'); document.documentElement.classList.add('hide-ads'); alert('Acceso de por vida activado'); m.remove(); location.reload();}
+    }).render('#pp-container');
+  }catch(e){console.error('lifetime',e); alert('No se pudo iniciar PayPal');}
+}
+export async function buySubscription(kind){
+  const pid=planId(kind); if(!pid){alert('Plan PayPal no configurado'); return;}
+  try{
+    await ensureSDK(); const m=ensureModal();
+    window.paypal.Buttons({
+      style:{layout:'vertical',color:'blue',shape:'pill'},
+      createSubscription:(_d,a)=>a.subscription.create({plan_id:pid}),
+      onApprove:async()=>{alert('Suscripcinnn activa'); m.remove(); location.reload();}
+    }).render('#pp-container');
+  }catch(e){console.error('sub',e); alert('No se pudo iniciar PayPal');}
+}
+export function wirePurchaseButtons(){
+  document.querySelectorAll('[data-pp="lifetime"]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault(); buyLifetime();}));
+  document.querySelectorAll('[data-pp-sub="monthly"]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault(); buySubscription('monthly');}));
+  document.querySelectorAll('[data-pp-sub="annual"]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault(); buySubscription('annual');}));
+}
+document.addEventListener('DOMContentLoaded',()=>{try{wirePurchaseButtons();}catch(e){}});
