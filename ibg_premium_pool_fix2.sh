@@ -1,3 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "[IBG] premium.js: crawler que combina base '/uncensored/' + nombres de archivo"
+
+cat > js/pages/premium.js <<'JS'
 import { seededPick } from '../utils-home.js';
 
 function ensurePremiumCss(){
@@ -250,3 +256,9 @@ export async function initPremium(){
     window.IBGPay.subscribe(plan, ()=>{ markSubscribed(); document.querySelectorAll('.p-card.locked').forEach(el=>el.classList.remove('locked')); renderCredits(); });
   });
 }
+JS
+
+git add -A
+git commit -m "premium: detecta base '/uncensored' + nombres (CD3/CD4); muestra 100 imgs con blur y 30% 'Nuevo'" || true
+git push origin main || true
+npx -y vercel --prod --yes || { npx -y vercel build && npx -y vercel deploy --prebuilt --prod --yes; }
