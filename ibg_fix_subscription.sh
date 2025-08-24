@@ -1,3 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "[IBG] Patch subscription.js para usar { pay, subscribe } y dejar subscripción con anuncios; lifetime quita anuncios."
+
+# CSS simple para la página de suscripción (reutiliza laterales)
+mkdir -p css
+cat > css/ibg-subscription.css <<'CSS'
+:root{ --side:164px }
+.side-ad{position:fixed;top:0;bottom:0;width:var(--side);z-index:50;display:none;align-items:center;justify-content:center}
+.side-ad.left{left:0}.side-ad.right{right:0}
+.ad-box{width:160px;height:600px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+@media (min-width:1200px){ body{padding-left:var(--side);padding-right:var(--side)} .side-ad{display:flex} }
+.page-shell,#app{width:100%;max-width:calc(100vw - (var(--side) * 2));margin:0 auto}
+
+.sub-hero{padding:18px 12px 8px}
+.sub-hero h1{font-family:'Sexy Beachy',system-ui;font-size:clamp(36px,4vw,54px);margin:0 0 8px}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;padding:0 12px 28px}
+.plan{background:#0b1422;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px}
+.plan h3{margin:0 0 4px}
+.plan .price{font-weight:900;font-size:22px;margin:6px 0 10px}
+.plan .desc{opacity:.85;font-size:14px;margin-bottom:12px}
+.plan button{display:inline-flex;align-items:center;gap:8px;background:#111827;border:1px solid rgba(255,255,255,.18);
+  padding:9px 12px;border-radius:10px;font-size:14px;cursor:pointer}
+.plan button .pp{width:20px;height:20px;background:url('/assets/paypal-mark.svg') no-repeat center/contain;display:inline-block}
+.note{opacity:.75;font-size:13px;margin:0 12px 16px}
+CSS
+
+# JS de la página de suscripción
+mkdir -p js/pages
+cat > js/pages/subscription.js <<'JS'
 import { pay, subscribe } from '../paypal.js';
 
 function ensureCss(){
@@ -74,3 +105,10 @@ export async function initSubscription(){
     });
   });
 }
+JS
+
+# Commit + push + deploy
+git add -A
+git commit -m "subscription: usar {pay,subscribe} (sin anuncios solo en lifetime); estilos + laterales" || true
+git push origin main || true
+npx -y vercel --prod --yes || { npx -y vercel build && npx -y vercel deploy --prebuilt --prod --yes; }
