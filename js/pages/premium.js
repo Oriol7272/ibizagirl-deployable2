@@ -1,7 +1,9 @@
-/* Premium: exporta initPremium; une base '/uncensored/' + nombres .webp y acepta URLs completas. */
-const IMG_EXT = /\.(webp|jpe?g|png|gif)(\?.*)?$/i;
+/* Premium: exporta initPremium. Rastrea el árbol (window, ContentData3/4, UnifiedContentAPI…)
+   heredando la base '/uncensored/' cuando la detecta y componiendo automáticamente base+nombre.webp.
+   Además, codifica los segmentos del path para soportar tildes/espacios. */
+const IMG_NAME = /^[^\/"'`]+?\.(webp|jpe?g|png|gif)(\?.*)?$/i;
+const IMG_URL  = /\/uncensored\/[^"'`]+?\.(webp|jpe?g|png|gif)(\?.*)?$/i;
 const BASE_KEYS = ['base','path','dir','folder','root'];
-const LIST_KEYS = ['images','files','items','list','gallery','pool','data','array','uncensored','premium'];
 
 function daySeed(){const d=new Date();return `${d.getUTCFullYear()}-${d.getUTCMonth()+1}-${d.getUTCDate()}`;}
 function seededShuffle(a,seed){let s=0;for(let i=0;i<seed.length;i++)s=(s*31+seed.charCodeAt(i))>>>0;const r=a.slice();for(let i=r.length-1;i>0;i--){s=(1103515245*s+12345)%0x80000000;const j=s%(i+1);[r[i],r[j]]=[r[j],r[i]]}return r;}
@@ -15,142 +17,104 @@ function normBase(b){
   if(!x.endsWith('/')) x+='/';
   return x;
 }
-function toUrl(base, name){
+function encodePath(p){
+  // Codifica cada segmento para soportar espacios/tildes, sin tocar '/' ni 'http(s)'
+  if(/^https?:\/\//i.test(p)) return p;
+  const parts=p.split('/').map(seg => seg ? encodeURIComponent(seg) : seg);
+  return parts.join('/');
+}
+function joinBaseName(base, name){
   if(!name) return '';
   const s=String(name).trim();
   if(/^https?:\/\//i.test(s) || s.startsWith('/')) return s;
   const b=normBase(base)||'/uncensored/';
-  return b + s.replace(/^\.?\/*/,'');
+  return encodePath(b + s.replace(/^\.?\/*/,''));
 }
-function collectNames(v){
-  const out=[];
-  if(typeof v==='string' && IMG_EXT.test(v)) out.push(v);
-  else if(Array.isArray(v)){
-    v.forEach(x=>{
-      if(typeof x==='string' && IMG_EXT.test(x)) out.push(x);
-      else if(x && typeof x==='object'){
+
+function collectFromValue(v, out, currentBase){
+  // Strings completas ya con /uncensored/
+  if(typeof v==='string'){
+    if(IMG_URL.test(v)) out.push(v);
+    else if(IMG_NAME.test(v)){ out.push(joinBaseName(currentBase, v)); }
+    return;
+  }
+  // Arrays: nombres o URLs
+  if(Array.isArray(v)){
+    let hasAny=false;
+    for(const x of v){
+      if(typeof x==='string'){
+        if(IMG_URL.test(x)){ out.push(x); hasAny=true; }
+        else if(IMG_NAME.test(x)){ out.push(joinBaseName(currentBase, x)); hasAny=true; }
+      }else if(x && typeof x==='object'){
+        // Objetos con campo src/file/name/…
         const p = x.src||x.file||x.name||x.image||x.url||x.path||x.thumb||x.cover||x.banner;
-        if(typeof p==='string' && IMG_EXT.test(p)) out.push(p);
-      }
-    });
-  }
-  return out;
-}
-
-/* ——— recolector por objeto: detecta bases + listas y compone URLs ——— */
-function harvestFromObject(obj){
-  if(!obj || typeof obj!=='object') return [];
-  const hits = new Set();
-
-  // 1) strings sueltas con /uncensored/
-  try{
-    for(const k in obj){
-      const v=obj[k];
-      if(typeof v==='string' && v.includes('/uncensored/') && IMG_EXT.test(v)) hits.add(v);
-    }
-  }catch(_){}
-
-  // 2) detectar bases en este objeto y sub-objetos inmediatos
-  const bases = [];
-  try{
-    for(const k of BASE_KEYS){
-      const v=obj[k];
-      if(typeof v==='string'){ const nb=normBase(v); if(nb) bases.push(nb); }
-    }
-    if(!bases.length){
-      for(const k in obj){
-        const v=obj[k];
-        if(v && typeof v==='object'){
-          for(const kk of BASE_KEYS){
-            const vv=v[kk];
-            if(typeof vv==='string'){ const nb=normBase(vv); if(nb) bases.push(nb); }
-          }
+        if(typeof p==='string'){
+          if(IMG_URL.test(p)) { out.push(p); hasAny=true; }
+          else if(IMG_NAME.test(p)) { out.push(joinBaseName(currentBase, p)); hasAny=true; }
         }
       }
     }
-  }catch(_){}
-
-  // 3) nombres de imagen en listas típicas en este objeto
-  try{
-    for(const key of LIST_KEYS){
-      const lst=obj[key];
-      const names=collectNames(lst);
-      if(names.length){
-        const base = bases.find(b=>/\/uncensored\/$/i.test(b)) || bases[0] || '/uncensored/';
-        names.forEach(n=>{
-          const u = (typeof n==='string' && (n.includes('/uncensored/')||n.startsWith('/')||/^https?:\/\//i.test(n))) ? n : toUrl(base, n);
-          if(IMG_EXT.test(u) && /\/uncensored\//i.test(u)) hits.add(u);
-        });
-      }
-    }
-  }catch(_){}
-
-  // 4) sub-objeto clásico { base:'/uncensored/', images:[...] }
-  try{
-    for(const k in obj){
-      const v=obj[k];
-      if(v && typeof v==='object'){
-        let subBase='';
-        for(const bk of BASE_KEYS){ const vb=v[bk]; if(typeof vb==='string'){ const nb=normBase(vb); if(nb){ subBase=nb; break; } } }
-        if(subBase){
-          for(const lk of LIST_KEYS){
-            const lst=v[lk];
-            const names=collectNames(lst);
-            names.forEach(n=>{
-              const u = (typeof n==='string' && (n.includes('/uncensored/')||n.startsWith('/')||/^https?:\/\//i.test(n))) ? n : toUrl(subBase, n);
-              if(IMG_EXT.test(u) && /\/uncensored\//i.test(u)) hits.add(u);
-            });
-          }
-        }
-      }
-    }
-  }catch(_){}
-
-  return Array.from(hits);
+    // si es array pero no tenía nombres/urls, no hacemos nada
+    return;
+  }
+  // Otros tipos: nada
 }
 
-/* ——— CRAWL amplio: window + semillas conocidas (limitado) ——— */
-function collectPremiumPool(limitNodes=60000, limitHits=8000){
-  const q=[]; const seen=new WeakSet(); const out=new Set();
+function walk(obj, inheritedBase, out, seen, budget){
+  if(!obj || typeof obj!=='object' && typeof obj!=='function') return;
+  if(seen.has(obj)) return; seen.add(obj);
+  if(budget.count++ > budget.max) return;
 
-  function enqueue(v){ if(!v) return; const t=typeof v; if(t!=='object'&&t!=='function') return; try{ if(seen.has(v)) return; seen.add(v); q.push(v);}catch(_){ } }
-
-  // semillas obvias
-  enqueue(window.UnifiedContentAPI);
-  enqueue(window.ContentAPI);
-  enqueue(window.ContentSystemManager);
-  enqueue(window.ContentData3);
-  enqueue(window.ContentData4);
-  enqueue(window);
-
-  let steps=0;
-  while(q.length && steps<limitNodes && out.size<limitHits){
-    const cur=q.shift(); steps++;
-
-    // cosecha directa del nodo
+  // Detecta base local
+  let localBase = inheritedBase;
+  for(const k of BASE_KEYS){
     try{
-      // strings directas en cur
-      if(typeof cur==='string'){
-        if(cur.includes('/uncensored/') && IMG_EXT.test(cur)) out.add(cur);
-      } else {
-        harvestFromObject(cur).forEach(u=>out.add(u));
+      const val = obj[k];
+      if(typeof val==='string'){
+        const nb=normBase(val);
+        if(nb){ localBase = nb; break; }
       }
-    }catch(_){}
-
-    // expandir
-    try{
-      if(Array.isArray(cur)){ cur.forEach(enqueue); }
-      else if(cur && typeof cur==='object'){ for(const k in cur){ enqueue(cur[k]); } }
     }catch(_){}
   }
 
-  const arr = Array.from(out).filter(Boolean);
-  console.log('[IBG] premium pool size:', arr.length);
-  if(arr.length) console.log('[IBG] sample premium URLs:', arr.slice(0,5));
-  return arr;
+  // Cosecha valores “hoja” comunes
+  try{
+    for(const k in obj){
+      const v = obj[k];
+      // Primero intenta recoger desde el valor actual con la base heredada/local
+      collectFromValue(v, out, localBase);
+
+      // Y si es navegable, sigue caminando heredando la base
+      if(v && (typeof v==='object' || typeof v==='function')){
+        walk(v, localBase, out, seen, budget);
+      }
+    }
+  }catch(_){}
 }
 
-/* ——— UI ——— */
+function collectPremiumPool(){
+  const out=[]; const seen=new WeakSet();
+  const budget={max:60000, count:0};
+
+  // Semillas principales
+  walk(window.ContentData3, null, out, seen, budget);
+  walk(window.ContentData4, null, out, seen, budget);
+  walk(window.UnifiedContentAPI, null, out, seen, budget);
+  walk(window.ContentAPI, null, out, seen, budget);
+  walk(window.ContentSystemManager, null, out, seen, budget);
+
+  // Último recurso: ventana completa (limitado)
+  if(out.length < 20){
+    walk(window, null, out, seen, budget);
+  }
+
+  const pooled = uniq(out.filter(u=>typeof u==='string' && IMG_URL.test(u)));
+  console.log('[IBG] premium pool size:', pooled.length);
+  if(pooled.length) console.log('[IBG] sample premium URLs:', pooled.slice(0,5));
+  return pooled;
+}
+
+/* ===== UI ===== */
 function ensureCss(){
   if(!document.getElementById('css-premium')){
     const l=document.createElement('link'); l.id='css-premium'; l.rel='stylesheet'; l.href='/css/premium.css';
@@ -161,7 +125,6 @@ function ensureAds(){
   function ensure(id,cls){ let el=document.getElementById(id); if(!el){ el=document.createElement('div'); el.id=id; el.className=cls; document.body.appendChild(el);} return el; }
   ensure('ad-left','side-ad left'); ensure('ad-right','side-ad right');
 }
-
 function renderGrid(urls){
   const app=document.getElementById('app')||document.body;
   let sec=document.getElementById('premiumSection'); if(!sec){ sec=document.createElement('section'); sec.id='premiumSection'; app.appendChild(sec); }
@@ -178,14 +141,13 @@ function renderGrid(urls){
   picks.forEach((u,i)=>{
     const card=document.createElement('div'); card.className='p-card locked'; card.dataset.url=u;
 
-    const img=document.createElement('img'); img.loading='lazy'; img.decoding='async'; img.src=u; img.alt=`Premium ${i+1}`;
+    const img=document.createElement('img'); img.loading='lazy'; img.decoding='async'; img.src=u; img.alt=\`Premium \${i+1}\`;
     img.addEventListener('error', ()=>{ 
-      console.error('[IBG] IMG ERROR', u); 
+      console.error('[IBG] IMG ERROR', u);
       card.classList.add('img-error'); 
       const badge=document.createElement('div'); badge.className='badge-err'; badge.textContent='ERROR';
       card.appendChild(badge);
     });
-    card.addEventListener('load', ()=>{ /* opcional: medir tiempo de carga */ });
     card.appendChild(img);
 
     if(newSet.has(u)){ const badge=document.createElement('div'); badge.className='badge-new'; badge.textContent='Nuevo'; card.appendChild(badge); }
@@ -214,6 +176,7 @@ function renderGrid(urls){
     const card=e.target.closest('.p-card'); if(!card) return;
 
     if(localStorage.getItem('ibg_subscribed')==='1'){ card.classList.remove('locked'); card.classList.add('unlocked'); return; }
+
     const credits=parseInt(localStorage.getItem('ibg_credits')||'0',10)||0;
     if(credits>0){ localStorage.setItem('ibg_credits', String(credits-1)); card.classList.remove('locked'); card.classList.add('unlocked'); return; }
 
@@ -222,7 +185,7 @@ function renderGrid(urls){
     }else if(window.IBGPayPal && typeof window.IBGPayPal.mountPayPerItem==='function'){
       const holder=document.createElement('div'); holder.className='pp-holder'; btn.replaceWith(holder);
       window.IBGPayPal.mountPayPerItem(holder, {
-        description:'Foto premium', value:'0.10', sku:`photo:${card.dataset.url}`,
+        description:'Foto premium', value:'0.10', sku:\`photo:\${card.dataset.url}\`,
         onApprove:()=>{ card.classList.remove('locked'); card.classList.add('unlocked'); }
       });
     }else{
@@ -238,8 +201,13 @@ export async function initPremium(){
   if(!pool.length){
     const app=document.getElementById('app')||document.body;
     let sec=document.getElementById('premiumSection'); if(!sec){ sec=document.createElement('section'); sec.id='premiumSection'; app.appendChild(sec); }
-    sec.innerHTML='<h1>Premium</h1><div style="opacity:.8">No pude construir rutas desde ContentData3/4. Revisa que haya base "/uncensored/" y nombres .webp.</div>';
+    sec.innerHTML='<h1>Premium</h1><div style="opacity:.8">No pude construir rutas /uncensored/*.webp. Revisa content-data3/4 o permisos de estáticos.</div>';
     return;
   }
   renderGrid(pool);
+}
+
+// Autorrun de cortesía si se carga directo
+if (document.currentScript && document.currentScript.dataset.autorun === '1') {
+  document.addEventListener('DOMContentLoaded', ()=>initPremium());
 }
