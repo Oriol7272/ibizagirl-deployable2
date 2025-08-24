@@ -1,42 +1,26 @@
 @font-face{font-family:"Sexy Beachy";src:url("/decorative-images/Sexy Beachy.ttf") format("truetype");font-display:swap}
 :root{ --side:164px }
-
-/* Reutiliza laterales del home */
 .side-ad{position:fixed;top:0;bottom:0;width:var(--side);z-index:50;display:none;align-items:center;justify-content:center}
 .side-ad.left{left:0}.side-ad.right{right:0}
 .ad-box{width:160px;height:600px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 @media (min-width:1200px){ body{padding-left:var(--side);padding-right:var(--side)} .side-ad{display:flex} }
-
-/* Shell centrado como home (usa todo el ancho libre) */
 .page-shell,#app{width:100%;max-width:calc(100vw - (var(--side) * 2));margin:0 auto}
 h1.premium-title{font-family:'Sexy Beachy',system-ui;font-size:clamp(38px,4vw,56px);margin:14px 12px 6px}
-
-/* CTA barra superior */
 .premium-cta{display:flex;flex-wrap:wrap;gap:10px;margin:4px 12px 12px}
 .pill{display:inline-flex;align-items:center;gap:8px;background:#0b2140;border:1px solid rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:999px;cursor:pointer;user-select:none}
-.pill .sub{opacity:.8;font-size:13px}
-.pill .price{font-weight:800}
-.pill .pp{display:inline-block;width:22px;height:22px;background:url('/assets/paypal-mark.svg') no-repeat center/contain}
-
-/* Grid premium */
+.pill .sub{opacity:.8;font-size:13px}.pill .price{font-weight:800}.pill .pp{display:inline-block;width:22px;height:22px;background:url('/assets/paypal-mark.svg') no-repeat center/contain}
 .premium-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding:0 12px 40px}
 .p-card{position:relative;border-radius:16px;overflow:hidden;background:#0a1320}
 .p-card img{width:100%;height:240px;object-fit:cover;display:block;transform:scale(1.06)}
 .p-card.locked img{filter:blur(12px) saturate(1.05) contrast(1.05)}
 .p-card .badge-new{position:absolute;top:8px;left:8px;background:#22c55e;color:#031a0b;font-weight:800;border-radius:999px;padding:4px 10px;font-size:12px}
-.p-card .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
-  background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.55) 100%);gap:8px;padding:10px 10px 12px}
+.p-card .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.55) 100%);gap:8px;padding:10px 10px 12px}
 .p-card .buttons{display:flex;gap:8px;align-items:center}
-.btn-buy{display:inline-flex;align-items:center;gap:6px;background:#111827;border:1px solid rgba(255,255,255,.18);
-  padding:7px 10px;border-radius:10px;font-size:13px;cursor:pointer}
+.btn-buy{display:inline-flex;align-items:center;gap:6px;background:#111827;border:1px solid rgba(255,255,255,.18);padding:7px 10px;border-radius:10px;font-size:13px;cursor:pointer}
 .btn-buy .pp{width:18px;height:18px;background:url('/assets/paypal-mark.svg') no-repeat center/contain}
 .btn-buy .price{opacity:.85;font-weight:700;font-size:12px}
 .p-card.unlocked .locked-note{display:none}
-
-/* Modal PayPal */
 #pp-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:1000}
 #pp-modal .box{background:#0b1422;border:1px solid rgba(255,255,255,.1);padding:18px;border-radius:14px;min-width:320px}
 #paypal-container{min-height:120px}
-
-/* Nota de créditos y estado */
 .credit-note{margin:0 12px 14px;font-size:13px;opacity:.8}
