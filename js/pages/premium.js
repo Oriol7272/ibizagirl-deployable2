@@ -1,8 +1,9 @@
-/* Premium: exporta initPremium.
-   1) Intenta recolectar rutas desde objetos globales.
-   2) Si el pool es 0, hace fallback: fetch('/content-data3.js' y '/content-data4.js'),
-      extrae con regex todos los nombres *.webp y compone /uncensored/<nombre> con encoding.
-   Sin backticks para evitar problemas en prod. */
+/* Premium: exporta initPremium. 
+   - Recolecta posibles URLs (como antes).
+   - Valida por HEAD (concurrencia limitada) y sólo usa las que existen (200 OK).
+   - Pinta 100 thumbs blurred con 30% "Nuevo".
+   - Sin backticks para evitar errores en prod.
+*/
 var IMG_NAME = /(^|[^\w\/-])([^\/"'`]+?\.(webp|jpe?g|png|gif))(\\?.*)?$/i;
 var IMG_URL  = /\/uncensored\/[^"'`]+?\.(webp|jpe?g|png|gif)(\?.*)?$/i;
 var BASE_KEYS = ['base','path','dir','folder','root'];
@@ -35,12 +36,11 @@ function joinBaseName(base, name){
   return encodePath(b + s.replace(/^\.?\/*/,''));
 }
 
-/* ===== Escaneo global (lo de antes) ===== */
+/* ===== Recolector (global + scraping de content-data3/4) ===== */
 function collectFromValue(v, out, currentBase){
   if(typeof v==='string'){
     if(IMG_URL.test(v)) out.push(v);
     else {
-      // ¿parece un nombre de archivo?
       var m = v.match(/([^\/"'`]+?\.(webp|jpe?g|png|gif))(\\?.*)?$/i);
       if(m) out.push(joinBaseName(currentBase, m[1]));
     }
@@ -84,7 +84,6 @@ function walk(obj, inheritedBase, out, seen, budget){
       }
     }catch(e){}
   }
-
   try{
     for(var k in obj){
       var v = obj[k];
@@ -103,21 +102,15 @@ function collectPremiumPoolGlobal(){
   walk(window.ContentAPI, null, out, seen, budget);
   walk(window.ContentSystemManager, null, out, seen, budget);
   if(out.length < 20){ walk(window, null, out, seen, budget); }
-  var pooled = uniq(out.filter(function(u){ return typeof u==='string' && IMG_URL.test(u); }));
-  return pooled;
+  return uniq(out.filter(function(u){ return typeof u==='string' && IMG_URL.test(u); }));
 }
-
-/* ===== Fallback: rascar nombres directamente de los ficheros JS ===== */
 function parseNamesFromJsText(txt){
-  // Captura "algo.webp" entre comillas simples o dobles
   var rx = /["']([^"']+?\.webp)["']/gi, m, names=[];
-  while((m = rx.exec(txt))){ 
+  while((m = rx.exec(txt))){
     var s = m[1];
-    // Excluir vídeos/carpeta full/decoratives
     if(/uncensored-videos/i.test(s)) continue;
     if(/\/full\//i.test(s)) continue;
     if(/decorative-images/i.test(s)) continue;
-    // Si ya viene con /uncensored/ lo guardamos tal cual; si es solo nombre, lo guardaremos para join.
     names.push(s);
   }
   return uniq(names);
@@ -125,7 +118,6 @@ function parseNamesFromJsText(txt){
 function toUncensoredUrl(name){
   if(!name) return '';
   if(/^https?:\/\//i.test(name) || name.startsWith('/')) return name;
-  // sólo nombre: forzamos /uncensored/
   return encodePath('/uncensored/' + name.replace(/^\.?\/*/,''));
 }
 async function scrapeFromSources(){
@@ -136,7 +128,6 @@ async function scrapeFromSources(){
     var n1 = parseNamesFromJsText(a);
     var n2 = parseNamesFromJsText(b);
     var all = uniq(n1.concat(n2));
-    // Normaliza: si alguno ya incluye /uncensored/ lo dejamos; si es nombre suelto -> join.
     for(var i=0;i<all.length;i++){
       var s = all[i];
       if(IMG_URL.test(s)) urls.push(s);
@@ -149,6 +140,31 @@ async function scrapeFromSources(){
   console.log('[IBG] premium SCRAPE size:', urls.length);
   if(urls.length) console.log('[IBG] premium SCRAPE sample:', urls.slice(0,5));
   return urls;
+}
+
+/* ===== Validación HEAD (concurrencia) ===== */
+async function filterExisting(urls, need, concurrency){
+  var ok=[], i=0;
+  urls = urls.slice(0, Math.max(need*8, 400)); // no revisar los 600+, con 400-800 sobra
+  concurrency = concurrency||12;
+  async function probe(u){
+    try{
+      var res = await fetch(u, { method:'HEAD', cache:'no-store' });
+      if(res && (res.status===200 || res.ok)) ok.push(u);
+    }catch(e){ /* ignore */ }
+  }
+  var running=[];
+  while(i<urls.length && ok.length<need){
+    while(running.length<concurrency && i<urls.length){
+      var p = probe(urls[i++]); 
+      running.push(p);
+    }
+    await Promise.race(running).catch(function(){});
+    running = running.filter(function(pr){ return pr && pr.pending; });
+  }
+  // Espera a todo lo lanzado
+  await Promise.allSettled(running);
+  return ok.slice(0, need);
 }
 
 /* ===== UI ===== */
@@ -234,32 +250,47 @@ function renderGrid(urls){
   }, false);
 }
 
+async function buildPool(){
+  // 1) candidatos desde objetos globales
+  var fromGlobal = collectPremiumPoolGlobal();
+  console.log('[IBG] premium candidates (global):', fromGlobal.length);
+
+  // 2) si pocos, añade scraping
+  var candidates = fromGlobal.slice(0);
+  if(candidates.length < 200){
+    try{
+      var scraped = await scrapeFromSources();
+      candidates = uniq(candidates.concat(scraped));
+    }catch(e){ console.error('[IBG] scraping fallback err', e); }
+  }
+  // Limpia duplicados y cosas raras
+  candidates = uniq(candidates.filter(function(u){ return IMG_URL.test(u); }));
+
+  // 3) valida por HEAD hasta obtener >=120 (usaremos 100)
+  var existing = await filterExisting(candidates, 120, 12);
+  console.log('[IBG] premium existing (HEAD 200):', existing.length);
+  return existing;
+}
+
 export async function initPremium(){
   ensureCss();
   ensureAds();
 
-  // 1) Intento normal (objetos globales)
-  var pool = collectPremiumPoolGlobal();
-  console.log('[IBG] premium pool size (global):', pool.length);
-
-  // 2) Fallback: scrape si 0
-  if(!pool.length){
-    try{
-      var scraped = await scrapeFromSources();
-      if(scraped && scraped.length) pool = scraped;
-    }catch(e){ console.error('[IBG] fallback scrape failed', e); }
+  try{
+    var pool = await buildPool();
+    if(!pool || !pool.length){
+      var app=document.getElementById('app')||document.body;
+      var sec=document.getElementById('premiumSection'); if(!sec){ sec=document.createElement('section'); sec.id='premiumSection'; app.appendChild(sec); }
+      sec.innerHTML='<h1>Premium</h1><div style="opacity:.8">No he localizado thumbs existentes en /uncensored/. Comprueba que los .webp estén subidos al hosting.</div>';
+      return;
+    }
+    renderGrid(pool);
+  }catch(e){
+    console.error('[IBG] initPremium error', e);
   }
-
-  if(!pool.length){
-    var app=document.getElementById('app')||document.body;
-    var sec=document.getElementById('premiumSection'); if(!sec){ sec=document.createElement('section'); sec.id='premiumSection'; app.appendChild(sec); }
-    sec.innerHTML='<h1>Premium</h1><div style="opacity:.8">No pude construir rutas /uncensored/*.webp. Revisa que existan ficheros en /uncensored/ o el contenido de content-data3/4.</div>';
-    return;
-  }
-  renderGrid(pool);
 }
 
-// Autorrun si viene con data-autorun
+// Autorrun opcional
 if (document.currentScript && document.currentScript.dataset.autorun === '1') {
   document.addEventListener('DOMContentLoaded', function(){ initPremium(); });
 }
