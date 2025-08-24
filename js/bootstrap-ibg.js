@@ -15,5 +15,9 @@ import { initCrisp } from './integrations.js';
   else if(path.endsWith('/subscription.html')) await initSubscription();
 
   initCrisp();
-  initAds({left:document.getElementById('ad-left'),right:document.getElementById('ad-right')});
+  initAds({
+    left: document.getElementById('ad-left'),
+    right: document.getElementById('ad-right'),
+    inline: document.getElementById('ad-inline')
+  });
 })();
