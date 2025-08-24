@@ -2,8 +2,8 @@
 set -euo pipefail
 mkdir -p public/js js
 cat > public/js/env.js <<JS
-// AUTO-GENERATED AT BUILD
-export const ENV = {
+// UMD env: NO modules. Disponible como window.ENV
+window.ENV = {
   PAYPAL_CLIENT_ID: "${PAYPAL_CLIENT_ID:-}",
   PAYPAL_SECRET: "${PAYPAL_SECRET:-}",
   PAYPAL_PLAN_MONTHLY_1499: "${PAYPAL_PLAN_MONTHLY_1499:-}",
@@ -20,5 +20,5 @@ export const ENV = {
   IBG_ASSETS_BASE_URL: "${IBG_ASSETS_BASE_URL:-}"
 };
 JS
-# Copia de cortesía para /js/env.js por si se importa desde ahí
+# Copia espejo (por si alguna página apunta a /js/env.js)
 cp public/js/env.js js/env.js

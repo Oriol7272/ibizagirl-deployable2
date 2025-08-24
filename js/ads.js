@@ -1,52 +1,23 @@
-/** Ads glue — tolerante a variables vacías, usando tus ENV reales */
-import { ENV } from './env.js';
-
-const injectHTML = (html, where = document.body) => {
-  const c = document.createElement('div');
-  c.className = 'ads-frag';
-  c.innerHTML = html;
-  where.appendChild(c);
-  return c;
-};
-
-const decode = (b64) => {
-  if (!b64) return '';
-  try { return atob(b64); } catch { return ''; }
-};
-
-/** Redes (inserta snippet B64 si existe; si no, no rompe) */
-export function mountJuicy(where) {
-  const html = decode(ENV.JUICYADS_SNIPPET_B64);
-  if (html) injectHTML(html, where);
-}
-export function mountExo(where) {
-  const html = decode(ENV.EXOCLICK_SNIPPET_B64);
-  if (html) injectHTML(html, where);
-}
-export function mountEroad(where) {
-  const html = decode(ENV.EROADVERTISING_SNIPPET_B64);
-  if (html) injectHTML(html, where);
-}
-/** PopAds solo si existe site id, pero nunca rompe si no está */
-export function mountPopAds() {
-  if (!ENV.POPADS_SITE_ID) return;
-  try {
-    (function(p,u,s,h){p._pop=p._pop||[];p._pop.push({sId:ENV.POPADS_SITE_ID});
-      var x=u.createElement('script'); x.src=h; x.async=true;
-      u.body.appendChild(x);
-    })(window, document, null, 'https://c1.popads.net/pop.js');
-  } catch(e){ console.warn('PopAds error', e); }
-}
-
-/** Para páginas con laterales: mete todas de forma segura */
-export function mountSideAds(container) {
-  const where = container || document.body;
-  try { mountJuicy(where); } catch(e){}
-  try { mountExo(where); } catch(e){}
-  try { mountEroad(where); } catch(e){}
-  try { mountPopAds(); } catch(e){}
-}
-
-/** Alias general para no romper imports existentes */
-export const mountAds = mountSideAds;
-export default { mountSideAds, mountAds, mountJuicy, mountExo, mountEroad, mountPopAds };
+(function(g){
+  const ENV = g.ENV || {};
+  const decode = (b64)=>{ try{return b64?atob(b64):''}catch(_){return ''} };
+  const inject = (html, into) => { if(!html) return;
+    const c=document.createElement('div'); c.className='ads-frag';
+    c.innerHTML=html; (into||document.body).appendChild(c);
+  };
+  function mountJuicy(where){ inject(decode(ENV.JUICYADS_SNIPPET_B64), where); }
+  function mountExo(where){ inject(decode(ENV.EXOCLICK_SNIPPET_B64), where); }
+  function mountEroad(where){ inject(decode(ENV.EROADVERTISING_SNIPPET_B64), where); }
+  function mountPopAds(){
+    if(!ENV.POPADS_SITE_ID) return;
+    try{var s=document.createElement('script'); s.async=1; s.src='https://c1.popads.net/pop.js';
+      document.body.appendChild(s);}catch(e){console.warn('PopAds',e)}
+  }
+  function mountSideAds(where){ where=where||document.body;
+    try{mountJuicy(where)}catch(e){}
+    try{mountExo(where)}catch(e){}
+    try{mountEroad(where)}catch(e){}
+    try{mountPopAds()}catch(e){}
+  }
+  g.Ads = { mountJuicy, mountExo, mountEroad, mountPopAds, mountSideAds, mountAds: mountSideAds };
+})(window);
