@@ -1,6 +1,6 @@
-window.AdsConfig = window.AdsConfig || {
-  exoclick: { zoneId: (window.__ENV && window.__ENV.EXOCLICK_ZONE) || "" },
-  juicyads: { adzone: (window.__ENV && window.__ENV.JUICYADS_ZONE) || "" },
-  eroad:    { zoneId: (window.__ENV && window.__ENV.EROADVERTISING_ZONE) || "" },
-  popads:   { siteId: (window.__ENV && window.__ENV.POPADS_SITE_ID) || "" }
+window.AdsConfig = {
+  exoclick: { zoneId: "" },         // p.ej. "1234567"
+  juicyads: { adzone: "" },         // p.ej. "1234567"
+  eroad:    { zoneId: "" },         // p.ej. "1234567"
+  popads:   { code: "" }            // p.ej. "YOUR_POPADS_CODE"
 };

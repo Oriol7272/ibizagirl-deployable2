@@ -1,86 +1,106 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IbizaGirl.pics — Suscripción</title>
-<link rel="stylesheet" href="/styles.css">
-<link rel="stylesheet" href="/css/paywall.css">
+<script src="/content-data.js"></script>
+
 <script src="/js/env.js"></script>
-<script src="/js/i18n.js" defer></script>
-<script src="/js/paywall.js" defer></script>
+
 <script>
-(function(){window.$crisp=[];window.CRISP_WEBSITE_ID=(window.__ENV&&window.__ENV.CRISP_WEBSITE_ID)||'';if(window.CRISP_WEBSITE_ID){var d=document;var s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);}})();
+  window.$crisp=[]; window.CRISP_WEBSITE_ID=(window.__ENV&&window.__ENV.CRISP_WEBSITE_ID)||'';
+  (function(){var d=document;var s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
 </script>
-<style>
-.plan{border:1px solid #ddd;border-radius:12px;padding:16px;margin:10px 0}
-.plan h3{margin:0 0 8px}
-.small{font-size:.9rem;color:#666}
-</style>
-<script src="/js/ads.config.js" defer></script>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>IbizaGirl.pics — Suscripción</title>
+  <link rel="stylesheet" href="/styles.css">
+  <!-- SDK SOLO subscription -->
+  <script src="/js/i18n.js" defer></script>
+  <script src="/js/paywall.js" defer></script>
+  <link rel="stylesheet" href="/css/paywall.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DBXYNPBSPY"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-DBXYNPBSPY");</script>
 </head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Alex+Brush&display=swap" rel="stylesheet">
+  <script src="/content-data6.js"></script>
+  <script src="/content-data5.js"></script>
+  <script src="/content-data4.js"></script>
+  <script src="/content-data3.js"></script>
+  <script src="/content-data2.js"></script>
+  <script src="/content-data1.js"></script>
+  <script src="/js/decorative-list.js"></script>
+  <link rel="stylesheet" href="/css/site.css">
 <body>
-<main class="container">
-  <h1 data-i18n="subscribe">Suscripción</h1>
-  <p class="small">Mensual 14,99€ • Anual 49,99€ • Lifetime 100€ (sin anuncios)</p>
+<header class="site"><div class="brand"><h1>IBIZAGIRL.PICS</h1><p data-i18n="welcome">Bienvenido al paraiso para tu disfrute</p></div><nav class="navbar"><a class="btn" href="/index.html">Home</a><a class="btn" href="/premium.html">Premium</a><a class="btn" href="/videos.html">Videos</a><a class="btn" href="/subscription.html" data-i18n="subscribe">Suscripciones</a><button id="buy-lifetime" class="btn" style="display:inline-flex;align-items:center;gap:.4rem"><span class="pp-icon"></span><span>Lifetime 100€</span></button></nav></header>
+<div class="page">
 
-  <div class="plan" id="p-monthly">
-    <h3>Mensual 14,99€</h3>
-    <div id="btn-monthly"></div>
-  </div>
 
-  <div class="plan" id="p-annual">
-    <h3>Anual 49,99€</h3>
-    <div id="btn-annual"></div>
-  </div>
+  <section class="section">
+    <h2>Precios</h2>
+    <ul>
+      <li>€14,99 /mes <button id="buy-monthly" class="btn"><span class="pp-icon"></span> PayPal</button></li>
+      <li>€49,99 /año <button id="buy-yearly" class="btn"><span class="pp-icon"></span> PayPal</button></li>
+      <li style="margin-top:8px">Lifetime — desbloquea todo y sin anuncios por 100,00€ <button id="buy-lifetime" class="btn"><span class="pp-icon"></span> Comprar</button></li>
+    </ul>
+  </section>
 
-  <div class="plan" id="p-lifetime">
-    <h3>Lifetime 100€</h3>
-    <div id="btn-lifetime"></div>
-  </div>
-</main>
 
-<script>
-function loadPayPal(){
-  return new Promise(function(res,rej){
-    if(window.paypal) return res();
-    var cid=(window.__ENV&&window.__ENV.PAYPAL_CLIENT_ID)||"";
-    var s=document.createElement("script");
-    s.src="https://www.paypal.com/sdk/js?client-id="+encodeURIComponent(cid)+"&components=buttons,subscriptions&vault=true&intent=capture&currency=EUR";
-    s.onload=res; s.onerror=function(){rej(new Error("paypal sdk"))};
-    document.head.appendChild(s);
-  });
-}
-function renderSubs(){
-  var planM=window.__ENV && window.__ENV.PAYPAL_PLAN_MONTHLY_1499;
-  var planA=window.__ENV && window.__ENV.PAYPAL_PLAN_ANNUAL_4999;
+<div class="langbox"><select id="lang-select"><option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option></select></div>
+<aside class="sidebar-fixed sidebar-left" id="side-ads-left"><div class="ad-slot" data-net="juicy"></div><div class="ad-slot" data-net="exo"></div><div class="ad-slot" data-net="ero"></div></aside><aside class="sidebar-fixed sidebar-right" id="side-ads-right"><div class="ad-slot" data-net="juicy"></div><div class="ad-slot" data-net="exo"></div><div class="ad-slot" data-net="ero"></div></aside>
+<div class="top-strip"><span class="plan-pill">Lifetime 100€</span><span class="plan-pill">Anual 49,99€</span><span class="plan-pill">Mensual 14,99€</span><span>Todo el contenido visible mientras esté activo.</span></div><div class="main-wrap"><aside class="sidebar" id="sb-left"><div class="ad-slot" data-network="juicy"></div><div class="ad-slot" data-network="exo"></div><div class="ad-slot" data-network="ero"></div></aside><main class="content" id="page-main">
+<div id="main-section"></div></main><aside class="sidebar" id="sb-right"><div class="ad-slot" data-network="juicy"></div><div class="ad-slot" data-network="exo"></div><div class="ad-slot" data-network="ero"></div></aside></div>
+<div id="lifetime-strip" style="background:#00457C;color:#fff;padding:.5rem 1rem;display:flex;gap:.75rem;align-items:center;justify-content:center;flex-wrap:wrap"><strong>Lifetime</strong> — desbloquea todo y sin anuncios por <strong>100,00€</strong> <button id="buy-lifetime" class="buy-btn" style="position:static;transform:none"><span class="pp-icon"></span><span class="buy-label">Comprar</span></button></div>
+<div id="main-section" style="padding:1rem"  id="main-section" id="plans" style="padding:1rem"><h2 data-i18n="prices">Precios</h2><ul><li>€14,99 / mes <button data-sub="monthly">PayPal</button></li><li>€49,99 / año <button data-sub="yearly">PayPal</button></li></ul></div>
+<div class="ad-slot" data-network="juicy"></div>
+<div class="ad-slot" data-network="exo"></div>
 
-  if(planM){
-    paypal.Buttons({
-      style:{shape:'rect',color:'gold',layout:'vertical',label:'subscribe'},
-      createSubscription:function(data,actions){ return actions.subscription.create({plan_id: String(planM)}); },
-      onApprove:function(){ try{ Paywall.setAccess({subscription:true}); alert('Suscripción activa'); }catch(e){} }
-    }).render('#btn-monthly');
-  }
-  if(planA){
-    paypal.Buttons({
-      style:{shape:'rect',color:'gold',layout:'vertical',label:'subscribe'},
-      createSubscription:function(data,actions){ return actions.subscription.create({plan_id: String(planA)}); },
-      onApprove:function(){ try{ Paywall.setAccess({subscription:true}); alert('Suscripción activa'); }catch(e){} }
-    }).render('#btn-annual');
-  }
-  paypal.Buttons({
-    style:{shape:'rect',color:'gold',layout:'vertical',label:'pay'},
-    createOrder:function(data,actions){
-      return actions.order.create({ purchase_units:[{ amount:{ currency_code:'EUR', value:'100.00' }, description:'IbizaGirl.pics Lifetime' }] });
-    },
-    onApprove:function(data,actions){
-      return actions.order.capture().then(function(){
-        try{ Paywall.setAccess({lifetime:true}); alert('Lifetime activado'); }catch(e){}
-      });
-    }
-  }).render('#btn-lifetime');
-}
-loadPayPal().then(renderSubs);
-</script>
+<nav class="nav" style="display:flex;gap:1rem;align-items:center;padding:.6rem 1rem;background:#0b0b0b;color:#fff">
+  <a href="/index.html" data-i18n="gallery" style="color:#fff">Galería</a>
+  <a href="/premium.html" data-i18n="premium" style="color:#fff">Premium</a>
+  <a href="/videos.html" data-i18n="videos" style="color:#fff">Vídeos</a>
+  <a href="/subscription.html" data-i18n="subscribe" style="color:#fff">Suscripción</a>
+  <span style="flex:1 1 auto"></span>
+  <select id="lang-select" class="lang-switch">
+    <option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option>
+  </select>
+</nav>
+
+  <nav class="wrap">
+    <a href="/" data-i18n="home"></a>
+    <a href="/premium" data-i18n="premium"></a>
+    <a href="/videos" data-i18n="videos"></a>
+    <a href="/subscription" data-i18n="subscription"></a>
+    <select id="lang-picker">
+      <option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option>
+    </select>
+  </nav>
+
+  <main class="wrap">
+    <h1 data-i18n="subscriptions_title"></h1>
+
+    <div id="main-section" style="padding:1rem"  id="main-section" style="max-width:720px;margin:0 auto;display:grid;gap:28px">
+      <article class="card" style="padding:16px">
+        <h3 data-i18n="monthly"></h3>
+        <div id="btn-monthly"></div>
+      </article>
+      <article class="card" style="padding:16px">
+        <h3 data-i18n="annual"></h3>
+        <div id="btn-annual"></div>
+      </article>
+      <article class="card" style="padding:16px">
+        <h3 data-i18n="lifetime"></h3>
+        <p><a class="paypal-badge" href="/lifetime.html">PayPal</a></p>
+        <small data-i18n="lifetime_note"></small>
+      </article>
+    </div>
+  </main>
+
+  
+  <script src="/js/payments.config.js?v=20250823173337"></script>
+<div id="paypal-modal" class="hidden"><div id="paypal-modal-bg"><div id="paypal-modal-card"><button id="paypal-modal-close" aria-label="Close">✕</button><div id="paypal-modal-target"></div></div></div></div>
+</div>
 </body>
+  <script type="module" src="/js/page-init.js"></script>
 </html>
+
+

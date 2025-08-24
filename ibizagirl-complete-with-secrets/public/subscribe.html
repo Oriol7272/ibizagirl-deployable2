@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suscripción Premium</title>
+<script>
+function afterPaymentMock(){
+  fetch('/api/issue-token', {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({userId: 'demo', status:'active'})})
+  .then(()=>{
+    const params = new URLSearchParams(location.search);
+    const next = params.get('next') || '/';
+    location.href = next;
+  })
+}
+</script>
+</head>
+<body>
+<h1>Suscripción Premium</h1>
+<p>Integra aquí tu botón de PayPal o tu proveedor de pago.</p>
+<button onclick="afterPaymentMock()">Simular pago y entrar</button>
+</body></html>

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Verification - IbizaGirl.pics</title>
+    
+    <!-- Google Fonts - Fuente Allura -->
+    
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #0ea5e9 25%, #0284c7 75%, #ffffff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Oceanic Wave Animation */
+        .waves {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,60C40,30 80,90 120,60C160,30 200,90 240,60C280,30 320,90 360,60C400,30 440,90 480,60C520,30 560,90 600,60C640,30 680,90 720,60C760,30 800,90 840,60C880,30 920,90 960,60C1000,30 1040,90 1080,60C1120,30 1160,90 1200,60L1200,120L0,120Z" fill="%231e3a8a" fill-opacity="0.3"></path></svg>') repeat-x;
+            animation: wave 8s ease-in-out infinite;
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: translateX(0px); }
+            50% { transform: translateX(-25px); }
+        }
+        
+        .sun {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #0ea5e9 0%, #0284c7 100%);
+            border-radius: 50%;
+            animation: glow 4s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            0% { box-shadow: 0 0 20px rgba(14, 165, 233, 0.5); }
+            100% { box-shadow: 0 0 40px rgba(14, 165, 233, 0.8); }
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(30, 58, 138, 0.2);
+            border: 2px solid rgba(30, 58, 138, 0.1);
+            z-index: 10;
+            position: relative;
+        }
+        
+        .logo {
+            font-family: 'Allura', cursive;
+            font-size: 3em;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-family: 'Allura', cursive;
+            color: #1e3a8a;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+        
+        .warning {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid #ef4444;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #dc2626;
+        }
+        
+        .warning h3 {
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .question {
+            font-size: 1.3em;
+            color: #1e3a8a;
+            margin: 30px 0;
+            font-weight: 500;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            min-width: 150px;
+        }
+        
+        .btn-yes {
+            background: linear-gradient(45deg, #0ea5e9, #0284c7);
+            color: white;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+        
+        .btn-yes:hover {
+            background: linear-gradient(45deg, #0284c7, #1e3a8a);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+        }
+        
+        .btn-no {
+            background: linear-gradient(45deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-no:hover {
+            background: linear-gradient(45deg, #dc2626, #b91c1c);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+        
+        .disclaimer {
+            font-size: 0.9em;
+            color: #64748b;
+            margin-top: 20px;
+            line-height: 1.4;
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            .logo {
+                font-size: 2.5em;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+    </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DBXYNPBSPY"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-DBXYNPBSPY");</script>
+</head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Alex+Brush&display=swap" rel="stylesheet">
+  <script src="/content-data.js"></script>
+  <script>window.$crisp=[];window.CRISP_WEBSITE_ID=(window.__ENV&&window.__ENV.CRISP_WEBSITE_ID)||"";(function(){var d=document;var s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+  <script src="/content-data6.js"></script>
+  <script src="/content-data5.js"></script>
+  <script src="/content-data4.js"></script>
+  <script src="/content-data3.js"></script>
+  <script src="/content-data2.js"></script>
+  <script src="/content-data1.js"></script>
+  <script src="/js/decorative-list.js"></script>
+  <script src="/js/env.js"></script>
+  <link rel="stylesheet" href="/css/site.css">
+<body>
+<aside class="sidebar-fixed sidebar-left" id="side-ads-left"><div class="ad-slot" data-net="juicy"></div><div class="ad-slot" data-net="exo"></div><div class="ad-slot" data-net="ero"></div></aside><aside class="sidebar-fixed sidebar-right" id="side-ads-right"><div class="ad-slot" data-net="juicy"></div><div class="ad-slot" data-net="exo"></div><div class="ad-slot" data-net="ero"></div></aside>
+<div class="top-strip"><span class="plan-pill">Lifetime 100 EUR</span><span class="plan-pill">Anual 49.99 EUR</span><span class="plan-pill">Mensual 14.99 EUR</span><span>Todo el contenido visible mientras este activo. Lifetime ademas elimina anuncios.</span><button id="buy-lifetime" class="buy-btn" style="position:static;transform:none"><span class="pp-icon"></span><span>PayPal</span></button></div>
+    <div class="waves"></div>
+    <div class="sun"></div>
+    
+    <div class="container">
+        <div class="logo">IbizaGirl.pics</div>
+        
+        <h1>Verificación de Edad</h1>
+        
+        <div class="warning">
+            <h3>⚠️ AVISO IMPORTANTE</h3>
+            <p>Este sitio contiene contenido para adultos. Debes ser mayor de 18 años para continuar. Al acceder, confirmas que tienes la edad legal en tu jurisdicción.</p>
+        </div>
+        
+        <div class="question">¿Eres mayor de 18 años?</div>
+        
+        <div class="buttons">
+            <button class="btn btn-yes" onclick="verifyAge(true)">✓ Sí, soy mayor de 18</button>
+            <button class="btn btn-no" onclick="verifyAge(false)">✗ No, soy menor de 18</button>
+        </div>
+        
+        <div class="disclaimer">
+            Al hacer clic en "Sí", confirmas que cumples con los requisitos de edad y aceptas ver contenido para adultos.
+        </div>
+    </div>
+
+    <script>
+        function verifyAge(isAdult) {
+            if (isAdult) {
+                // Store verification in localStorage
+                localStorage.setItem('ageVerified', 'true');
+                localStorage.setItem('ageVerificationDate', new Date().toISOString());
+                
+                // Redirect to main site
+                window.location.href = '/';
+            } else {
+                // Redirect away or show message
+                alert('Debes ser mayor de 18 años para acceder a este contenido.');
+                window.history.back();
+            }
+        }
+        
+        // Check if already verified (within 24 hours)
+        const verified = localStorage.getItem('ageVerified');
+        const verificationDate = localStorage.getItem('ageVerificationDate');
+        
+        if (verified === 'true' && verificationDate) {
+            const verifyTime = new Date(verificationDate);
+            const now = new Date();
+            const hoursDiff = (now - verifyTime) / (1000 * 60 * 60);
+            
+            // Auto-redirect if verified within last 24 hours
+            if (hoursDiff < 24) {
+                window.location.href = '/';
+            }
+        }
+    </script>
+</body>
+  <script type="module" src="/js/page-init.js"></script>
+<div id="paypal-modal" class="hidden"><div id="paypal-modal-bg"><div id="paypal-modal-card"><button id="paypal-modal-close" aria-label="close">x</button><div id="paypal-modal-target"></div></div></div></div>
+</html>
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 20px #ffd700; }
+            to { box-shadow: 0 0 40px #ffd700, 0 0 60px #ffa500; }
+        }
+        
+        .palm-trees {
+            position: absolute;
+            bottom: 180px;
+            left: 10px;
+            font-size: 60px;
+            opacity: 0.7;
+            animation: sway 4s ease-in-out infinite;
+        }
+        
+        .palm-trees:nth-child(2) {
+            right: 10px;
+            left: auto;
+            animation-delay: -2s;
+        }
+        
+        @keyframes sway {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .logo {
+            font-size: 3em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .warning {
+            background: #ffe6e6;
+            border-left: 4px solid #ff6b6b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            text-align: left;
+        }
+        
+        .age-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 120px;
+        }
+        
+        .btn-enter {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: white;
+        }
+        
+        .btn-enter:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+        }
+        
+        .btn-exit {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .btn-exit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+        }
+        
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 120px;
+        }
+        
+        .language-selector select {
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.9);
+            font-size: 14px;
+        }
+        
+        .disclaimer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Alex+Brush&display=swap" rel="stylesheet">
+  <script src="/content-data.js"></script>
+  <script>window.$crisp=[];window.CRISP_WEBSITE_ID=(window.__ENV&&window.__ENV.CRISP_WEBSITE_ID)||"";(function(){var d=document;var s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+  <script src="/content-data6.js"></script>
+  <script src="/content-data5.js"></script>
+  <script src="/content-data4.js"></script>
+  <script src="/content-data3.js"></script>
+  <script src="/content-data2.js"></script>
+  <script src="/content-data1.js"></script>
+  <script src="/js/decorative-list.js"></script>
+  <script src="/js/env.js"></script>
+  <link rel="stylesheet" href="/css/site.css">
+<body>
+<aside class="sidebar-fixed sidebar-left" id="side-ads-left"><div class="ad-slot" data-net="juicy"></div><div class="ad-slot" data-net="exo"></div><div class="ad-slot" data-net="ero"></div></aside><aside class="sidebar-fixed sidebar-right" id="side-ads-right"><div class="ad-slot" data-net="juicy"></div><div class="ad-slot" data-net="exo"></div><div class="ad-slot" data-net="ero"></div></aside>
+<div class="top-strip"><span class="plan-pill">Lifetime 100 EUR</span><span class="plan-pill">Anual 49.99 EUR</span><span class="plan-pill">Mensual 14.99 EUR</span><span>Todo el contenido visible mientras este activo. Lifetime ademas elimina anuncios.</span><button id="buy-lifetime" class="buy-btn" style="position:static;transform:none"><span class="pp-icon"></span><span>PayPal</span></button></div>
+    <!-- Tropical Elements -->
+    <div class="sun"></div>
+    <div class="palm-trees">🌴</div>
+    <div class="palm-trees">🌴</div>
+    <div class="waves"></div>
+
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <select id="languageSelect">
+            <option value="es">🇪🇸 Español</option>
+            <option value="en">🇺🇸 English</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="it">🇮🇹 Italiano</option>
+            <option value="fr">🇫🇷 Français</option>
+        </select>
+    </div>
+
+    <div class="container">
+        <div class="logo">🌴 IbizaGirl.pics 🌴</div>
+        
+        <h1 id="title">Verificación de Edad</h1>
+        
+        <div class="warning">
+            <strong id="warningTitle">⚠️ AVISO IMPORTANTE</strong>
+            <p id="warningText">
+                Este sitio contiene contenido para adultos. 
+                Debes ser mayor de 18 años para continuar.
+                Al acceder, confirmas que tienes la edad legal en tu jurisdicción.
+            </p>
+        </div>
+        
+        <p id="questionText">¿Eres mayor de 18 años?</p>
+        
+        <div class="age-buttons">
+            <button class="btn btn-enter" onclick="enterSite()" id="enterBtn">
+                ✓ Sí, soy mayor de 18
+            </button>
+            <button class="btn btn-exit" onclick="exitSite()" id="exitBtn">
+                ✗ No, soy menor de 18
+            </button>
+        </div>
+        
+        <div class="disclaimer">
+            <p id="disclaimerText">
+                Al hacer clic en "Sí", confirmas que cumples con los requisitos de edad 
+                y aceptas ver contenido para adultos.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            es: {
+                title: "Verificación de Edad",
+                warningTitle: "⚠️ AVISO IMPORTANTE",
+                warningText: "Este sitio contiene contenido para adultos. Debes ser mayor de 18 años para continuar. Al acceder, confirmas que tienes la edad legal en tu jurisdicción.",
+                questionText: "¿Eres mayor de 18 años?",
+                enterBtn: "✓ Sí, soy mayor de 18",
+                exitBtn: "✗ No, soy menor de 18",
+                disclaimerText: "Al hacer clic en \"Sí\", confirmas que cumples con los requisitos de edad y aceptas ver contenido para adultos."
+            },
+            en: {
+                title: "Age Verification",
+                warningTitle: "⚠️ IMPORTANT NOTICE",
+                warningText: "This site contains adult content. You must be over 18 years old to continue. By accessing, you confirm that you are of legal age in your jurisdiction.",
+                questionText: "Are you over 18 years old?",
+                enterBtn: "✓ Yes, I'm over 18",
+                exitBtn: "✗ No, I'm under 18",
+                disclaimerText: "By clicking \"Yes\", you confirm that you meet the age requirements and agree to view adult content."
+            },
+            de: {
+                title: "Altersverifikation",
+                warningTitle: "⚠️ WICHTIGER HINWEIS",
+                warningText: "Diese Seite enthält Inhalte für Erwachsene. Sie müssen über 18 Jahre alt sein, um fortzufahren. Durch den Zugriff bestätigen Sie, dass Sie in Ihrer Gerichtsbarkeit volljährig sind.",
+                questionText: "Sind Sie über 18 Jahre alt?",
+                enterBtn: "✓ Ja, ich bin über 18",
+                exitBtn: "✗ Nein, ich bin unter 18",
+                disclaimerText: "Mit dem Klick auf \"Ja\" bestätigen Sie, dass Sie die Altersanforderungen erfüllen und damit einverstanden sind, Inhalte für Erwachsene zu sehen."
+            },
+            it: {
+                title: "Verifica dell'Età",
+                warningTitle: "⚠️ AVVISO IMPORTANTE",
+                warningText: "Questo sito contiene contenuti per adulti. Devi avere più di 18 anni per continuare. Accedendo, confermi di avere l'età legale nella tua giurisdizione.",
+                questionText: "Hai più di 18 anni?",
+                enterBtn: "✓ Sì, ho più di 18 anni",
+                exitBtn: "✗ No, ho meno di 18 anni",
+                disclaimerText: "Cliccando \"Sì\", confermi di soddisfare i requisiti di età e accetti di visualizzare contenuti per adulti."
+            },
+            fr: {
+                title: "Vérification d'Âge",
+                warningTitle: "⚠️ AVIS IMPORTANT",
+                warningText: "Ce site contient du contenu pour adultes. Vous devez avoir plus de 18 ans pour continuer. En accédant, vous confirmez que vous avez l'âge légal dans votre juridiction.",
+                questionText: "Avez-vous plus de 18 ans?",
+                enterBtn: "✓ Oui, j'ai plus de 18 ans",
+                exitBtn: "✗ Non, j'ai moins de 18 ans",
+                disclaimerText: "En cliquant sur \"Oui\", vous confirmez que vous remplissez les conditions d'âge et acceptez de voir du contenu pour adultes."
+            }
+        };
+
+        function changeLanguage() {
+            const lang = document.getElementById('languageSelect').value;
+            const t = translations[lang] || translations.en;
+            
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('warningTitle').innerHTML = t.warningTitle;
+            document.getElementById('warningText').textContent = t.warningText;
+            document.getElementById('questionText').textContent = t.questionText;
+            document.getElementById('enterBtn').textContent = t.enterBtn;
+            document.getElementById('exitBtn').textContent = t.exitBtn;
+            document.getElementById('disclaimerText').textContent = t.disclaimerText;
+            
+            localStorage.setItem('preferred-language', lang);
+        }
+
+        function enterSite() {
+            // Set age verification flag
+            localStorage.setItem('ageVerified', 'true');
+            localStorage.setItem('ageVerificationDate', new Date().toISOString());
+            
+            // Redirect to main site
+            window.location.href = '/index.html';
+        }
+
+        function exitSite() {
+            alert('Gracias por tu honestidad. Te recomendamos visitar sitios apropiados para tu edad.');
+            window.location.href = 'https://www.google.com';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('preferred-language') || 'es';
+            document.getElementById('languageSelect').value = savedLang;
+            changeLanguage();
+            
+            document.getElementById('languageSelect').addEventListener('change', changeLanguage);
+            
+            // Check if already verified (within last 24 hours)
+            const verified = localStorage.getItem('ageVerified');
+            const verificationDate = localStorage.getItem('ageVerificationDate');
+            
+            if (verified === 'true' && verificationDate) {
+                const verifyTime = new Date(verificationDate);
+                const now = new Date();
+                const hoursDiff = (now - verifyTime) / (1000 * 60 * 60);
+                
+                // Auto-redirect if verified within last 24 hours
+                if (hoursDiff < 24) {
+                    window.location.href = '/index.html';
+                }
+            }
+            
+            console.log('🛡️ Age verification loaded');
+        });
+    </script>
+</body>
+  <script type="module" src="/js/page-init.js"></script>
+<div id="paypal-modal" class="hidden"><div id="paypal-modal-bg"><div id="paypal-modal-card"><button id="paypal-modal-close" aria-label="close">x</button><div id="paypal-modal-target"></div></div></div></div>
+</html>

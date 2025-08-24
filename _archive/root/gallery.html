@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - IbizaGirl.pics</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(0,0,0,0.3);
+            padding: 20px 0;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .nav {
+            margin-top: 15px;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.2);
+            transition: background 0.3s;
+        }
+        
+        .nav a:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .gallery-info {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .photo-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .photo-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .photo-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .photo-info {
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .language-selector select {
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+        }
+        
+        .ad-banner {
+            text-align: center;
+            margin: 20px 0;
+            min-height: 90px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <select id="languageSelect">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+            <option value="de">Deutsch</option>
+            <option value="it">Italiano</option>
+            <option value="fr">Français</option>
+        </select>
+    </div>
+
+    <div class="header">
+        <div class="logo">🌴 IbizaGirl.pics 🌴</div>
+        <div class="nav">
+            <a href="/">Home</a>
+            <a href="/gallery.html">Gallery</a>
+            <a href="/premium.html">Premium</a>
+            <a href="/videos.html">Videos</a>
+            <a href="/subscription.html">Subscribe</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="gallery-info">
+            <h1 id="galleryTitle">📸 Free Gallery</h1>
+            <p id="galleryDesc">Beautiful photos from Ibiza - Updated daily</p>
+            <p id="totalPhotos">Total photos: <span id="photoCount">Loading...</span></p>
+        </div>
+
+        <!-- Ad Banner -->
+        <div class="ad-banner" id="adBanner">
+            <p>Advertisement Space</p>
+        </div>
+
+        <div id="loadingSection" class="loading">
+            <div class="spinner"></div>
+            <p id="loadingText">Loading gallery...</p>
+        </div>
+
+        <div class="gallery-grid" id="galleryGrid" style="display: none;"></div>
+    </div>
+
+    <!-- Content Data -->
+    <script src="content-data2.js"></script>
+
+    <script>
+        // Translations
+        const translations = {
+            es: {
+                galleryTitle: "📸 Galería Gratuita",
+                galleryDesc: "Hermosas fotos desde Ibiza - Actualizadas diariamente",
+                totalPhotos: "Total de fotos:",
+                loadingText: "Cargando galería...",
+                newLabel: "¡NUEVO!"
+            },
+            en: {
+                galleryTitle: "📸 Free Gallery",
+                galleryDesc: "Beautiful photos from Ibiza - Updated daily",
+                totalPhotos: "Total photos:",
+                loadingText: "Loading gallery...",
+                newLabel: "NEW!"
+            }
+        };
+
+        let currentLanguage = 'es';
+        let allPhotos = [];
+
+        // Language functions
+        function changeLanguage() {
+            currentLanguage = document.getElementById('languageSelect').value;
+            const t = translations[currentLanguage] || translations.en;
+            
+            document.getElementById('galleryTitle').textContent = t.galleryTitle;
+            document.getElementById('galleryDesc').textContent = t.galleryDesc;
+            document.getElementById('loadingText').textContent = t.loadingText;
+            
+            // Update photo count
+            const photoCountElement = document.getElementById('photoCount');
+            if (photoCountElement && allPhotos.length > 0) {
+                photoCountElement.textContent = allPhotos.length;
+            }
+            
+            localStorage.setItem('preferred-language', currentLanguage);
+        }
+
+        // Load and display photos
+        function loadGallery() {
+            try {
+                // Get photos from content-data2.js
+                if (typeof FULL_IMAGES_POOL !== 'undefined') {
+                    allPhotos = FULL_IMAGES_POOL;
+                    console.log(`📸 Loaded ${allPhotos.length} photos from FULL_IMAGES_POOL`);
+                    
+                    // Randomize photos daily
+                    const today = new Date().toDateString();
+                    const savedDate = localStorage.getItem('gallery-date');
+                    
+                    if (savedDate !== today) {
+                        shuffleArray(allPhotos);
+                        localStorage.setItem('gallery-date', today);
+                        console.log('🔄 Daily shuffle applied');
+                    }
+                    
+                    displayPhotos();
+                } else {
+                    throw new Error('FULL_IMAGES_POOL not found');
+                }
+            } catch (error) {
+                console.error('Error loading gallery:', error);
+                document.getElementById('loadingText').textContent = 'Error loading gallery';
+            }
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function displayPhotos() {
+            const galleryGrid = document.getElementById('galleryGrid');
+            const photoCountElement = document.getElementById('photoCount');
+            
+            // Update photo count
+            photoCountElement.textContent = allPhotos.length;
+            
+            // Display photos (first 50 for performance)
+            const photosToShow = allPhotos.slice(0, 50);
+            
+            galleryGrid.innerHTML = '';
+            
+            photosToShow.forEach((photo, index) => {
+                const photoCard = document.createElement('div');
+                photoCard.className = 'photo-card';
+                
+                const img = document.createElement('img');
+                img.src = photo;
+                img.alt = `Ibiza Photo ${index + 1}`;
+                img.loading = 'lazy';
+                
+                const photoInfo = document.createElement('div');
+                photoInfo.className = 'photo-info';
+                
+                // Mark first 15 as NEW
+                if (index < 15) {
+                    const newLabel = document.createElement('span');
+                    newLabel.textContent = translations[currentLanguage].newLabel || 'NEW!';
+                    newLabel.style.background = '#ff4757';
+                    newLabel.style.color = 'white';
+                    newLabel.style.padding = '2px 8px';
+                    newLabel.style.borderRadius = '10px';
+                    newLabel.style.fontSize = '0.8em';
+                    photoInfo.appendChild(newLabel);
+                }
+                
+                photoCard.appendChild(img);
+                photoCard.appendChild(photoInfo);
+                galleryGrid.appendChild(photoCard);
+            });
+            
+            // Hide loading, show gallery
+            document.getElementById('loadingSection').style.display = 'none';
+            galleryGrid.style.display = 'grid';
+            
+            console.log(`✅ Displayed ${photosToShow.length} photos`);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('preferred-language') || 'es';
+            document.getElementById('languageSelect').value = savedLang;
+            changeLanguage();
+            
+            document.getElementById('languageSelect').addEventListener('change', changeLanguage);
+            
+            // Load gallery after a short delay
+            setTimeout(loadGallery, 1000);
+            
+            console.log('🌴 Gallery page loaded');
+        });
+    </script>
+</body>
+</html>
