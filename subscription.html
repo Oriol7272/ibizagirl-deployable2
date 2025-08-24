@@ -154,6 +154,41 @@
 })();
 </script>
 
+
+<script>
+(function(){
+  var env=window.__ENV||{};
+  var cid=env.PAYPAL_CLIENT_ID||"";
+  if(!cid){ console.warn("PAYPAL_CLIENT_ID vacío; no cargo SDK"); return; }
+  var u="https://www.paypal.com/sdk/js?client-id="+encodeURIComponent(cid)+"&components=buttons,subscriptions&vault=true&intent=subscription&currency=EUR";
+  var s=document.createElement("script"); s.src=u; s.async=true;
+  s.onload=function(){
+    try{
+      var planM=env.PAYPAL_PLAN_MONTHLY_1499, planA=env.PAYPAL_PLAN_ANNUAL_4999;
+      if(planM && document.getElementById("btn-monthly")){
+        paypal.Buttons({style:{layout:"vertical",label:"subscribe"},
+          createSubscription:(d,a)=>a.subscription.create({plan_id:String(planM)}),
+          onApprove:()=>{ try{ Paywall.setAccess({subscription:true}); }catch(e){} }
+        }).render("#btn-monthly");
+      }
+      if(planA && document.getElementById("btn-annual")){
+        paypal.Buttons({style:{layout:"vertical",label:"subscribe"},
+          createSubscription:(d,a)=>a.subscription.create({plan_id:String(planA)}),
+          onApprove:()=>{ try{ Paywall.setAccess({subscription:true}); }catch(e){} }
+        }).render("#btn-annual");
+      }
+      if(document.getElementById("btn-lifetime")){
+        paypal.Buttons({style:{layout:"vertical",label:"pay"},
+          createOrder:(d,a)=>a.order.create({ purchase_units:[{ amount:{currency_code:"EUR", value:"100.00"}, description:"IbizaGirl.pics Lifetime"} ]}),
+          onApprove:(d,a)=>a.order.capture().then(()=>{ try{ Paywall.setAccess({lifetime:true}); }catch(e){} })
+        }).render("#btn-lifetime");
+      }
+    }catch(e){ console.error("paypal init error",e); }
+  };
+  document.head.appendChild(s);
+})();
+</script>
+
 </body>
   <script type="module" src="/js/page-init.js"></script>
 </html>
