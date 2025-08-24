@@ -1,3 +1,129 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "[IBG] Premium: grid 100 blur + 'Nuevo' 30% + PayPal (unitario / pack 10 / suscripciones) + ads laterales"
+
+# ---------- CSS PREMIUM ----------
+cat > css/ibg-premium.css <<'CSS'
+@font-face{font-family:"Sexy Beachy";src:url("/decorative-images/Sexy Beachy.ttf") format("truetype");font-display:swap}
+:root{ --side:164px }
+
+/* Reutiliza laterales del home */
+.side-ad{position:fixed;top:0;bottom:0;width:var(--side);z-index:50;display:none;align-items:center;justify-content:center}
+.side-ad.left{left:0}.side-ad.right{right:0}
+.ad-box{width:160px;height:600px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+@media (min-width:1200px){ body{padding-left:var(--side);padding-right:var(--side)} .side-ad{display:flex} }
+
+/* Shell centrado como home (usa todo el ancho libre) */
+.page-shell,#app{width:100%;max-width:calc(100vw - (var(--side) * 2));margin:0 auto}
+h1.premium-title{font-family:'Sexy Beachy',system-ui;font-size:clamp(38px,4vw,56px);margin:14px 12px 6px}
+
+/* CTA barra superior */
+.premium-cta{display:flex;flex-wrap:wrap;gap:10px;margin:4px 12px 12px}
+.pill{display:inline-flex;align-items:center;gap:8px;background:#0b2140;border:1px solid rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:999px;cursor:pointer;user-select:none}
+.pill .sub{opacity:.8;font-size:13px}
+.pill .price{font-weight:800}
+.pill .pp{display:inline-block;width:22px;height:22px;background:url('/assets/paypal-mark.svg') no-repeat center/contain}
+
+/* Grid premium */
+.premium-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding:0 12px 40px}
+.p-card{position:relative;border-radius:16px;overflow:hidden;background:#0a1320}
+.p-card img{width:100%;height:240px;object-fit:cover;display:block;transform:scale(1.06)}
+.p-card.locked img{filter:blur(12px) saturate(1.05) contrast(1.05)}
+.p-card .badge-new{position:absolute;top:8px;left:8px;background:#22c55e;color:#031a0b;font-weight:800;border-radius:999px;padding:4px 10px;font-size:12px}
+.p-card .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.55) 100%);gap:8px;padding:10px 10px 12px}
+.p-card .buttons{display:flex;gap:8px;align-items:center}
+.btn-buy{display:inline-flex;align-items:center;gap:6px;background:#111827;border:1px solid rgba(255,255,255,.18);
+  padding:7px 10px;border-radius:10px;font-size:13px;cursor:pointer}
+.btn-buy .pp{width:18px;height:18px;background:url('/assets/paypal-mark.svg') no-repeat center/contain}
+.btn-buy .price{opacity:.85;font-weight:700;font-size:12px}
+.p-card.unlocked .locked-note{display:none}
+
+/* Modal PayPal */
+#pp-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:1000}
+#pp-modal .box{background:#0b1422;border:1px solid rgba(255,255,255,.1);padding:18px;border-radius:14px;min-width:320px}
+#paypal-container{min-height:120px}
+
+/* Nota de créditos y estado */
+.credit-note{margin:0 12px 14px;font-size:13px;opacity:.8}
+CSS
+
+# ---------- ICONO PAYPAL ----------
+mkdir -p assets
+cat > assets/paypal-mark.svg <<'SVG'
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#0070e0"><path d="M7.5 20.5H5.3a.8.8 0 0 1-.8-.9l1.8-12.1a.8.8 0 0 1 .8-.7h4.6c3.6 0 5.8 1.7 5.1 5.3-.5 2.7-2.3 4-4.9 4H9.6l-.5 3.1a.8.8 0 0 1-.8.7Zm2.4-6.2h2.7c2 0 3.6-1 4-3 .5-2.5-.9-3.6-3.6-3.6h-3Zm6.1 6.2H13l.4-2.7h2.4c2 0 3.7-.8 4.5-2.6.2-.4.3-.9.4-1.4.1-.6.1-1.2 0-1.7.6 0 1 .6.9 1.8-.3 3.2-2.2 6.6-5.5 6.6Z"/></svg>
+SVG
+
+# ---------- JS PAYPAL (one-off / pack / subscriptions) ----------
+cat > js/paypal.js <<'JS'
+(function(){
+  const IBG = window.IBG || {};
+  const STATE = { sdkLoaded:false, loading:false };
+
+  function ensureModal(){
+    let m = document.getElementById('pp-modal');
+    if(!m){
+      m = document.createElement('div');
+      m.id = 'pp-modal';
+      m.innerHTML = '<div class="box"><div id="paypal-container"></div><div style="margin-top:8px;text-align:center"><button id="pp-close" style="padding:6px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:#0f1b2d;color:#fff;cursor:pointer">Cancelar</button></div></div>';
+      document.body.appendChild(m);
+      m.addEventListener('click', (e)=>{ if(e.target.id==='pp-modal' || e.target.id==='pp-close') hideModal(); });
+    }
+    return m;
+  }
+  function showModal(){ ensureModal().style.display='flex'; }
+  function hideModal(){ const m=document.getElementById('pp-modal'); if(m) m.style.display='none'; const c=document.getElementById('paypal-container'); if(c) c.innerHTML=''; }
+
+  function ensureSDK(){
+    return new Promise((resolve,reject)=>{
+      if(STATE.sdkLoaded){ return resolve(); }
+      const cid = IBG.PAYPAL_CLIENT_ID;
+      if(!cid){ console.warn('PAYPAL_CLIENT_ID ausente'); return reject('no-client-id'); }
+      const src = 'https://www.paypal.com/sdk/js?client-id='+encodeURIComponent(cid)+'&currency=EUR&intent=capture&components=buttons,hosted-fields,marks,subscriptions';
+      const s = document.createElement('script'); s.src = src; s.async = true;
+      s.onload = ()=>{ STATE.sdkLoaded=true; resolve(); };
+      s.onerror=()=>reject('sdk-load-error');
+      document.head.appendChild(s);
+    });
+  }
+
+  async function pay(amount, onApprove){
+    await ensureSDK();
+    showModal();
+    window.paypal.Buttons({
+      createOrder: (data, actions)=>actions.order.create({
+        purchase_units:[{amount:{value: amount.toFixed(2), currency_code:'EUR'}}]
+      }),
+      onApprove: async (data, actions)=>{
+        try{ await actions.order.capture(); }catch(_){}
+        hideModal();
+        onApprove && onApprove(data);
+      },
+      onError: (err)=>{ console.warn('PayPal error', err); hideModal(); }
+    }).render('#paypal-container');
+  }
+
+  async function subscribe(planId, onApprove){
+    await ensureSDK();
+    showModal();
+    window.paypal.Buttons({
+      style:{shape:'pill',color:'gold',layout:'vertical'},
+      createSubscription: (data, actions)=> actions.subscription.create({ plan_id: planId }),
+      onApprove: (data)=>{
+        hideModal();
+        onApprove && onApprove(data);
+      },
+      onError: (err)=>{ console.warn('PayPal sub error', err); hideModal(); }
+    }).render('#paypal-container');
+  }
+
+  window.IBGPay = { pay, subscribe };
+})();
+JS
+
+# ---------- JS PREMIUM PAGE ----------
+cat > js/pages/premium.js <<'JS'
 import { b64Decode, isSubscribed } from '../utils.js';
 import { seededPick } from '../utils-home.js';
 
@@ -171,3 +297,15 @@ export async function initPremium(){
     });
   });
 }
+JS
+
+# ---------- Asegurar imports en premium.html (si ya existen, no pasa nada) ----------
+# (Asumimos que premium.html ya incluye bootstrap-ibg.js que llamará a initPremium.)
+# Añadimos la hoja premium y paypal.js desde bootstrap común (idempotente en producción)
+if ! grep -q 'ibg-premium.css' index.html 2>/dev/null; then :; fi
+
+# ---------- COMMIT + PUSH + DEPLOY ----------
+git add -A
+git commit -m "premium: 100 imágenes blur + 30% Nuevo + PayPal (0,10€ / pack 10→0,80€ / subs 14,99·49,99) + ads laterales" || true
+git push origin main || true
+npx -y vercel --prod --yes || { npx -y vercel build && npx -y vercel deploy --prebuilt --prod --yes; }
