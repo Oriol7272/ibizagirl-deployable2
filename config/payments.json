@@ -1,0 +1,8 @@
+{
+  "currency": "EUR",
+  "one_time": [
+    { "sku": "ppv_1",   "name": "Pay Per View (1 imagen)",   "price": 0.99 },
+    { "sku": "pack10",  "name": "Pack 10 imágenes",          "price": 4.99 },
+    { "sku": "pack50",  "name": "Pack 50 imágenes",          "price": 14.99 }
+  ]
+}
