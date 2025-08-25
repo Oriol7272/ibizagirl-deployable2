@@ -4,11 +4,7 @@
 *.tar.gz
 *.psd
 *.mov
-
-# Ignora cualquier resto fuera de public
 _archive/**
 **/*.php
 **/*.bak
-
-# Asegura que servimos estos estáticos
 !public/**
