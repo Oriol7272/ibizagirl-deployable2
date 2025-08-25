@@ -1,98 +1,112 @@
-(async function(){
-  const keys = await fetch("/api/paypal/public-keys").then(r=>r.json());
-  if (!keys.clientId) { console.warn("[IBG] PayPal clientId missing"); return; }
+// ====== IBG_Payments (PPV mínimo) ======
+(()=>{ if (window.IBG_Payments) return; // evita doble-carga
+  const log = (...a)=>console.log('[IBG][Pay]', ...a);
 
-  let root = document.getElementById("ibg-payments");
-  if (!root) {
-    root = document.createElement("div");
-    root.id = "ibg-payments";
-    root.style.cssText = "position:fixed;right:16px;bottom:16px;z-index:9999;background:#111;color:#fff;padding:12px;border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.25);max-width:320px";
-    root.innerHTML = `
-      <div style="font-weight:700;margin-bottom:8px">Acceso Premium</div>
-      <div id="ibg-ppv" style="margin:8px 0"></div>
-      <div id="ibg-pack10" style="margin:8px 0"></div>
-      <div id="ibg-pack50" style="margin:8px 0"></div>
-      <hr style="border:none;border-top:1px solid #333;margin:10px 0">
-      <div id="ibg-sub-monthly" style="margin:8px 0"></div>
-      <div id="ibg-sub-annual" style="margin:8px 0"></div>
-    `;
-    document.body.appendChild(root);
-  }
+  const GrantStore = {
+    key: 'IBG_GRANTS',
+    list() { try { return JSON.parse(localStorage.getItem(this.key) || '[]'); } catch { return []; } },
+    add(token) { const arr = this.list(); arr.push(token); localStorage.setItem(this.key, JSON.stringify(arr));
+      window.dispatchEvent(new CustomEvent('ibg:grant:new', { detail:{ token } })); },
+    hasValidForItem(item) {
+      const arr = this.list(); const now = Math.floor(Date.now()/1000);
+      const b64uToStr = s => atob(s.replace(/-/g,'+').replace(/_/g,'/'));
+      for (const tok of arr) {
+        const p = String(tok).split('.'); if (p.length!==3) continue;
+        try { const payload = JSON.parse(b64uToStr(p[1]));
+          if (payload.typ==='grant' && payload.exp>now) {
+            if (payload.scope==='all') return true;
+            if (payload.scope==='item' && payload.item===item) return true;
+          }
+        } catch {}
+      }
+      return false;
+    }
+  };
 
-  function loadSDK(params){
-    return new Promise((resolve, reject)=>{
-      const s = document.createElement("script");
-      s.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(keys.clientId)}&${params}`;
-      s.onload = resolve; s.onerror = reject;
-      document.head.appendChild(s);
-    });
-  }
+  const IBG_Payments = {
+    _sdkLoaded:false, _currency:'EUR',
+    async loadSdk() {
+      if (this._sdkLoaded && window.paypal) return window.paypal;
+      const cfg = await fetch('/api/paypal/config').then(r=>r.json());
+      if (!cfg.ok || !cfg.clientId) throw new Error('paypal config');
+      this._currency = cfg.currency || 'EUR';
+      await new Promise((resolve,reject)=>{
+        const s=document.createElement('script');
+        s.src=`https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(cfg.clientId)}&currency=${this._currency}&intent=capture&components=buttons`;
+        s.onload=resolve; s.onerror=reject; document.head.appendChild(s);
+      });
+      this._sdkLoaded=true; return window.paypal;
+    },
 
-  await loadSDK("components=buttons&intent=capture&currency=EUR&data-namespace=paypalOrders");
-  await loadSDK("components=buttons&vault=true&intent=subscription&currency=EUR&data-namespace=paypalSubs");
+    async checkoutPpv(itemName) {
+      const paypal = await this.loadSdk();
+      let modal=document.getElementById('ibg-pay-modal');
+      if(!modal){
+        modal=document.createElement('div'); modal.id='ibg-pay-modal';
+        modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:99999;';
+        modal.innerHTML='<div style="background:#111;padding:16px;border-radius:12px;max-width:420px;width:100%"><div id="ibg-paypal-buttons"></div><button id="ibg-pay-close" style="margin-top:12px;width:100%;padding:10px;border-radius:8px;background:#333;color:#fff;border:0">Cancelar</button></div>';
+        document.body.appendChild(modal);
+        modal.querySelector('#ibg-pay-close').onclick=()=>modal.remove();
+      } else {
+        modal.style.display='flex';
+        modal.querySelector('#ibg-paypal-buttons').innerHTML='';
+      }
 
-  async function createOrder(sku, qty=1){
-    const r = await fetch("/api/paypal/create-order", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ sku, quantity: qty, currency:"EUR", brand:"IBIZA GIRL" })
-    }).then(r=>r.json());
-    if (!r.ok) throw new Error(r.error||"create-order failed");
-    return r.id;
-  }
-  async function capture(orderID){
-    const r = await fetch("/api/paypal/capture-order", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ orderID })
-    }).then(r=>r.json());
-    if (!r.ok) throw new Error(r.error||"capture failed");
-    return r.result;
-  }
-  function afterGrant(type, payload){
-    try {
-      const grants = JSON.parse(localStorage.getItem("ibg_grants")||"{}");
-      grants[type] = { at: Date.now(), payload };
-      localStorage.setItem("ibg_grants", JSON.stringify(grants));
-    } catch {}
-    alert("✅ Pago correcto. ¡Disfruta del contenido!");
-  }
+      paypal.Buttons({
+        style:{ layout:'horizontal', color:'black', shape:'rect', label:'pay' },
+        createOrder: async ()=>{
+          const r=await fetch('/api/paypal/create-order',{ method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({sku:'ppv_1'})});
+          const j=await r.json(); if(!j.ok) throw new Error('create-order failed');
+          log('order CREATED', j.id); return j.id;
+        },
+        onApprove: async (data)=>{
+          try{
+            const r=await fetch('/api/paypal/capture',{ method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({orderId:data.orderID, sku:'ppv_1', item:itemName})});
+            const j=await r.json(); if(!j.ok){ console.error('capture error', j); alert('No se pudo capturar el pago.'); return; }
+            log('capture COMPLETED', j); GrantStore.add(j.grant);
+            const el=document.querySelector(`[data-ibg-name="${CSS.escape(itemName)}"]`); if(el) el.classList.remove('ibg-locked');
+            document.getElementById('ibg-pay-modal')?.remove();
+            alert('¡Pago completado! Acceso concedido durante 24h.');
+          }catch(e){ console.error('onApprove error', e); alert('Error durante la confirmación.'); }
+        },
+        onError: (err)=>{ console.error('PayPal Buttons error', err); alert('Error con PayPal.'); }
+      }).render('#ibg-paypal-buttons');
+    },
 
-  paypalOrders.Buttons({
-    style: { layout:"horizontal", shape:"pill", label:"pay" },
-    createOrder: () => createOrder("ppv_1"),
-    onApprove: async (data) => { const r = await capture(data.orderID); afterGrant("ppv_1", r); },
-    onError: (err) => alert("Error: "+err.message)
-  }).render("#ibg-ppv");
+    enableThumbHandlers() {
+      document.addEventListener('click', (ev)=>{
+        // 1) Botón con data-ibg-ppv="NOMBRE.webp"
+        let btn = ev.target.closest('[data-ibg-ppv]');
+        let item = btn?.getAttribute('data-ibg-ppv') || null;
 
-  paypalOrders.Buttons({
-    style: { layout:"horizontal", shape:"pill", label:"pay" },
-    createOrder: () => createOrder("pack10"),
-    onApprove: async (data) => { const r = await capture(data.orderID); afterGrant("pack10", r); },
-    onError: (err) => alert("Error: "+err.message)
-  }).render("#ibg-pack10");
+        // 2) Fallback: botón .ibg-ppv-btn dentro de un contenedor con data-ibg-name
+        if (!item) {
+          const fallbackBtn = ev.target.closest('.ibg-ppv-btn,[data-ppv="1"]');
+          if (fallbackBtn) {
+            const wrap = fallbackBtn.closest('[data-ibg-name]');
+            item = wrap?.getAttribute('data-ibg-name') || null;
+            btn = fallbackBtn;
+          }
+        }
+        if (!item) return;
 
-  paypalOrders.Buttons({
-    style: { layout:"horizontal", shape:"pill", label:"pay" },
-    createOrder: () => createOrder("pack50"),
-    onApprove: async (data) => { const r = await capture(data.orderID); afterGrant("pack50", r); },
-    onError: (err) => alert("Error: "+err.message)
-  }).render("#ibg-pack50");
+        ev.preventDefault();
+        this.checkoutPpv(item);
+      });
+    },
 
-  if (keys.plans?.monthly) {
-    paypalSubs.Buttons({
-      style: { layout:"horizontal", shape:"pill", label:"subscribe" },
-      createSubscription: (data, actions) => actions.subscription.create({ plan_id: keys.plans.monthly }),
-      onApprove: (data) => { afterGrant("sub_monthly", { subscriptionID: data.subscriptionID }); },
-      onError: (err) => alert("Error: "+err.message)
-    }).render("#ibg-sub-monthly");
-  }
-  if (keys.plans?.annual) {
-    paypalSubs.Buttons({
-      style: { layout:"horizontal", shape:"pill", label:"subscribe" },
-      createSubscription: (data, actions) => actions.subscription.create({ plan_id: keys.plans.annual }),
-      onApprove: (data) => { afterGrant("sub_annual", { subscriptionID: data.subscriptionID }); },
-      onError: (err) => alert("Error: "+err.message)
-    }).render("#ibg-sub-annual");
-  }
+    markLockedThumbs() {
+      document.querySelectorAll('[data-ibg-name]').forEach(el=>{
+        const name=el.getAttribute('data-ibg-name');
+        if (!GrantStore.hasValidForItem(name)) el.classList.add('ibg-locked');
+      });
+    }
+  };
+
+  window.addEventListener('DOMContentLoaded', ()=>{
+    IBG_Payments.enableThumbHandlers();
+    IBG_Payments.markLockedThumbs();
+  });
+
+  window.IBG_Payments = IBG_Payments;
 })();
