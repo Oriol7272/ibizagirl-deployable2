@@ -1,5 +1,6 @@
 {
-  "framework": "vite",
+  "version": 2,
+  "framework": null,
   "buildCommand": "node tools/gen-ibg-env.mjs",
   "outputDirectory": ".",
   "functions": {
