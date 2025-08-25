@@ -121,16 +121,8 @@
     <div style="border:1px solid #ddd;border-radius:12px;padding:16px;"><div style="font-weight:600;margin-bottom:4px;">Lifetime</div><div id="paypal-lifetime"></div></div>
   </div><div id="paypal-status" style="margin-top:10px;font:12px system-ui,Arial;opacity:.8;"></div>
 </section>
-
-
-
-
-
-
-
-
 <script src="env.js"></script>
-<script src="/js/ibg-payments.js" defer></script>
+<script src="ibg-payments.js" defer></script>
 </body></html>
 
-  
+  <script defer src="/js/ibg-payments.js"></script>

@@ -123,14 +123,8 @@
 </section>
 
 
-
-
-
-
-
-
 <script src="env.js"></script>
-<script src="/js/ibg-payments.js" defer></script>
+<script src="ibg-payments.js" defer></script>
 </body></html>
 
-  
+  <script defer src="/js/ibg-payments.js"></script>

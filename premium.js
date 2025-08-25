@@ -1,3 +1,4 @@
+console.log("[premium.js] cargando…");
 
 // ====== IBG_Payments (PPV mínimo) ======
 (() => {

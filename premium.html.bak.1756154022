@@ -110,27 +110,9 @@
 <div id="premium-root" style="padding:16px;font:14px/1.4 system-ui,Arial;">
   <div id="premium-status">🔎 Cargando premium…</div>
 </div>
-
+<script src="env.js"></script>
 <script src="premium.js" defer></script>
 <script>(function(){var el=document.getElementById("premium-status");if(!el)return;try{var cid=(window.__ENV&&window.__ENV.PAYPAL_CLIENT_ID)||"(vacío)";console.log("[premium] ready, PAYPAL_CLIENT_ID len:", (cid||"").length);el.textContent="✅ premium listo • PAYPAL_CLIENT_ID: "+(cid?"•••"+cid.slice(-6):"(vacío)");}catch(e){console.error("[premium] post-load error",e);el.textContent="⚠️ premium error: "+e;}})();</script>
-<section id="premium-plans" style="padding:16px;max-width:1100px;margin:0 auto;">
-  <h2 style="font:600 24px system-ui,Arial;margin:0 0 12px;">Suscripciones Premium</h2>
-  <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
-    <div style="border:1px solid #ddd;border-radius:12px;padding:16px;"><div style="font-weight:600;margin-bottom:4px;">Mensual</div><div id="paypal-monthly"></div></div>
-    <div style="border:1px solid #ddd;border-radius:12px;padding:16px;"><div style="font-weight:600;margin-bottom:4px;">Anual</div><div id="paypal-yearly"></div></div>
-    <div style="border:1px solid #ddd;border-radius:12px;padding:16px;"><div style="font-weight:600;margin-bottom:4px;">Lifetime</div><div id="paypal-lifetime"></div></div>
-  </div><div id="paypal-status" style="margin-top:10px;font:12px system-ui,Arial;opacity:.8;"></div>
-</section>
-
-
-
-
-
-
-
-
-<script src="env.js"></script>
-<script src="/js/ibg-payments.js" defer></script>
 </body></html>
 
-  
+  <script defer src="/js/ibg-payments.js"></script>
