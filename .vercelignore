@@ -4,14 +4,11 @@
 *.tar.gz
 *.psd
 *.mov
-uncensored/**
-uncensored-videos/**
-!public/uncensored/**
-!uncensored/**
-!uncensored-videos/**
 
-!public/js/**
-!js/**
+# Ignora cualquier resto fuera de public
 _archive/**
-**/*.bak
 **/*.php
+**/*.bak
+
+# Asegura que servimos estos estáticos
+!public/**

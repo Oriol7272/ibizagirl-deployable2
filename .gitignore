@@ -11,3 +11,4 @@ ibizagirl-deployable2-main.zip
 # evitar archivos gigantes
 ibizagirl-deployable2-main.zip
 *.zip
+.vercel/
