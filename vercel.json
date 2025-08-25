@@ -2,5 +2,8 @@
   "version": 2,
   "framework": null,
   "buildCommand": "",
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "functions": {
+    "api/**/*": { "runtime": "nodejs20.x" }
+  }
 }
