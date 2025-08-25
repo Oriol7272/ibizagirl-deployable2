@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "functions": {
-    "api/**/*": { "runtime": "nodejs20.x" }
-  }
+  "framework": null,
+  "outputDirectory": ".", 
+  "functions": { "api/**/*": { "runtime": "nodejs20.x" } }
 }

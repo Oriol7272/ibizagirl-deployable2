@@ -1,7 +1,13 @@
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.psd
+*.mov
 _archive/**
 **/*.php
 **/*.bak
-# Permitimos estáticos y API:
+**/*.old
+**/*.now.json
+.vercel/**
 !public/**
-!api/**
-!*.html
