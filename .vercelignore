@@ -12,3 +12,6 @@ uncensored-videos/**
 
 !public/js/**
 !js/**
+_archive/**
+**/*.bak
+**/*.php
