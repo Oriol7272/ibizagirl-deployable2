@@ -1,13 +1,9 @@
-*.zip
-*.7z
-*.tar
-*.tar.gz
-*.psd
-*.mov
 _archive/**
 **/*.php
 **/*.bak
-**/*.old
 **/*.now.json
+now.json
 .vercel/**
 !public/**
+!api/**
+!*.html
