@@ -6,3 +6,4 @@
 *.mov
 uncensored/**
 uncensored-videos/**
+!public/uncensored/**
