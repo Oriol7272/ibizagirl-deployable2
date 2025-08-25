@@ -1,9 +1,8 @@
 _archive/**
-**/*.php
 **/*.bak
+**/*.old
 **/*.now.json
-now.json
-.vercel/**
+# Permitimos todo lo útil:
 !public/**
 !api/**
 !*.html
