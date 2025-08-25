@@ -1,16 +1,3 @@
-<!doctype html><html lang="es"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IBIZAGIRL.PICS — Premium</title>
-<link rel="stylesheet" href="/css/ibg.css">
-<script src="/ibg-env.js"></script>
-<script src="/content-data1.js"></script>
-<script src="/content-data2.js"></script>
-<script src="/content-data3.js"></script>
-<script src="/content-data4.js"></script>
-<script src="/content-data5.js"></script>
-<script src="/content-data6.js"></script>
-  <link rel="stylesheet" href="css/premium.css"/>
-  <script>
 (() => {
   const log=(...a)=>console.log('[IBG-Pay]',...a);
   const GrantStore={
@@ -99,13 +86,3 @@
   window.addEventListener('DOMContentLoaded',()=>{ IBG_Payments.enableThumbHandlers(); IBG_Payments.markLockedThumbs(); });
   window.IBG_Payments=IBG_Payments;
 })();
-  </script>
-</head><body>
-<aside id="ad-left" class="side-ad left"></aside>
-<aside id="ad-right" class="side-ad right"></aside>
-<div class="page-shell"><div id="app"></div></div>
-<script type="module" src="/js/i18n.js"></script>
-<script type="module" src="/js/bootstrap-ibg.js?v=1756068653"></script>
-</body></html>
-
-  <script defer src="/js/ibg-payments.js"></script>
