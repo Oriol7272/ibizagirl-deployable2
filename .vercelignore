@@ -9,3 +9,5 @@ uncensored-videos/**
 !public/uncensored/**
 !uncensored/**
 !uncensored-videos/**
+
+!public/js/**
