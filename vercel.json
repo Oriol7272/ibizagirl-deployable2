@@ -1,10 +1,5 @@
 {
   "framework": "vite",
   "buildCommand": "node tools/gen-ibg-env.mjs",
-  "outputDirectory": ".",
-  "functions": {
-    "api/**/*": {
-      "runtime": "nodejs20.x"
-    }
-  }
+  "outputDirectory": "."
 }
