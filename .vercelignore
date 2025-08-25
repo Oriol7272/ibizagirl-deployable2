@@ -1,12 +1,7 @@
-
 _archive/**
-!public/**
-*.7z
-*.mov
-*.php
-*.psd
-*.tar
-*.tar.gz
-*.zip
-**/*.bak
 **/*.php
+**/*.bak
+# Permitimos estáticos y API:
+!public/**
+!api/**
+!*.html
