@@ -7,3 +7,5 @@
 uncensored/**
 uncensored-videos/**
 !public/uncensored/**
+!uncensored/**
+!uncensored-videos/**
