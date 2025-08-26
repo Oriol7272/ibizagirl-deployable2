@@ -1,5 +1,11 @@
 {
   "version": 2,
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "^/premium/?$", "dest": "/premium.html" },
+    { "src": "^/subscription/?$", "dest": "/subscription.html" },
+    { "src": "^/videos/?$", "dest": "/videos.html" }
+  ]
 }
