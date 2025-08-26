@@ -1,9 +1,7 @@
 {
-  "version": 2,
-  "rewrites": [
-    { "source": "/",              "destination": "/index.html" },
-    { "source": "/premium",       "destination": "/premium.html" },
-    { "source": "/subscription",  "destination": "/subscription.html" },
-    { "source": "/videos",        "destination": "/videos.html" }
-  ]
+  "buildCommand": "bash tools/build.sh",
+  "outputDirectory": ".vercel/output/static",
+  "framework": null,
+  "cleanUrls": true,
+  "trailingSlash": false
 }
