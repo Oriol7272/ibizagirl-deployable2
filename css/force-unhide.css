@@ -1,0 +1,5 @@
+html, body { opacity:1 !important; visibility:visible !important; }
+#paywall, .paywall, [id*="paywall"], .modal, .modal-backdrop, .overlay, .backdrop { display:none !important; }
+.premium-locked, .hidden-premium, .paywall-locked, .blur, .blurred { filter:none !important; -webkit-filter:none !important; backdrop-filter:none !important; }
+[data-premium], .grid, .gallery, #grid, #gallery, #content, #premium, #public, .thumbs, .cards, .masonry { display:grid !important; opacity:1 !important; visibility:visible !important; }
+img, video { opacity:1 !important; visibility:visible !important; filter:none !important; }
