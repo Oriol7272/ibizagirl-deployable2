@@ -1,7 +1,5 @@
 {
-  "buildCommand": "bash tools/build.sh",
-  "outputDirectory": ".vercel/output/static",
-  "framework": null,
+  "buildCommand": "bash tools/build_env.sh",
   "cleanUrls": true,
   "trailingSlash": false
 }
