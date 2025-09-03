@@ -1,7 +1,6 @@
 {
-  "buildCommand": "bash tools/build.sh",
+  "buildCommand": "node tools/inject_env.mjs && node tools/copy_static.mjs",
   "outputDirectory": ".vercel/output/static",
-  "framework": null,
   "cleanUrls": true,
   "trailingSlash": false
 }
