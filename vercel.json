@@ -1,7 +1,11 @@
 {
-  "buildCommand": "bash tools/build.sh",
-  "outputDirectory": ".vercel/output/static",
   "framework": null,
+  "installCommand": "true",
+  "buildCommand": "true",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "headers": [
+    { "source": "/(full|uncensored)/(.*)", "headers": [{ "key":"Cache-Control","value":"public, max-age=31536000, immutable" }] },
+    { "source": "/uncensored-videos/(.*)", "headers": [{ "key":"Cache-Control","value":"public, max-age=31536000" }] }
+  ]
 }

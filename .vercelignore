@@ -1,10 +1,4 @@
-.vercel
-.git
-node_modules
-ibg_audit
-_backup_*
-scripts
-tools
+.git/
+node_modules/
 *.log
-*.md
-*.sh
+.DS_Store
