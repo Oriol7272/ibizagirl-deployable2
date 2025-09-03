@@ -1,10 +1,10 @@
+# .vercelignore — versión corregida
 .vercel
 .git
 node_modules
 ibg_audit
 _backup_*
-scripts
-tools
 *.log
-*.md
-*.sh
+
+# ¡NO ignores tools/ ni *.sh!
+# (eran la causa de que Vercel no encontrara el build script)
