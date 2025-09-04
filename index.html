@@ -1,64 +1,69 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html><html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>IBIZAGIRL.PICS — Home</title>
-  <!-- IBG-FP: vZERO -->
-  <link rel="stylesheet" href="css/ibg.css">
-  <script src="env.js"></script>
-  <link rel="stylesheet" href="css/home.v1.css">
-  <link rel="stylesheet" href="css/home.v6.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IbizaGirl · Home</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/css/ibg.css">
+<script defer src="/js/env-inline.js"></script>
+<script defer src="/js/decorative-manifest.js"></script>
+<script defer src="/js/utils.js"></script>
+<script defer src="/js/content-loader.js"></script>
+<script defer src="/js/carousel.js"></script>
+<script defer src="/js/gallery.js"></script>
+<script defer src="/js/ads.js"></script>
+<script defer src="/js/chatbot.js"></script>
 </head>
 <body>
-  <div id="app-home"></div>
-  <div class="nav"><div class="row container">
-    <a href="index.html" class="active">Home</a>
-    <a href="premium.html">Premium</a>
-    <a href="videos.html">Vídeos</a>
-    <a href="subscription.html">Subscriptions</a>
+  <div class="nav"><div class="nav-inner">
+    <div class="brand">ibizagirl.pics</div>
+    <div class="menu">
+      <a href="/index.html">Home</a>
+      <a href="/premium.html">Premium</a>
+      <a href="/videos.html">Videos</a>
+      <a href="/subscription.html">Suscripciones</a>
+    </div>
   </div></div>
 
-  <section id="banner" class="banner">
-    <div class="img"></div>
-    <div class="title">
+  <section class="banner" id="banner">
+    <div id="decorative-rotator"></div>
+    <div class="banner-inner">
       <h1>ibizagirl.pics</h1>
-      <p>bienvenidos al paraíso</p>
+      <p>Bienvenido al paraíso</p>
     </div>
   </section>
 
-  <div class="container">
-    <div class="section">
-      <h3>Destacadas (30 aleatorias)</h3>
-      <div id="carousel30" class="carousel"></div>
-    </div>
-    <div class="section">
-      <h3>Galería (40 aleatorias)</h3>
-      <div id="grid40" class="grid"></div>
-    </div>
+  <div class="section">
+    <h2 class="h2">Selección del día</h2>
+    <div class="carousel" id="home-carousel"><div class="carousel-track"></div></div>
   </div>
 
-  <div class="ad left"></div>
-  <div class="ad right"></div>
+  <div class="section">
+    <h2 class="h2">Galería (40 aleatorias / día)</h2>
+    <div id="home-gallery"></div>
+    <div class="ad">Espacio publicitario</div>
+  </div>
 
-  <div class="footer container">© IbizaGirl.pics</div>
+  <script src="/content-data1.js"></script>
+  <script src="/content-data2.js"></script>
+  <script src="/content-data3.js"></script>
+  <script src="/content-data4.js"></script>
+  <script src="/content-data5.js"></script>
+  <script src="/content-data6.js"></script>
 
-  <!-- SW killer 1 sola vez (si existe el archivo) -->
-
-  <!-- ORDEN CORRECTO: config -> públicas -> utilidades (opcional) -> home -->
-
-    <!-- SCRIPTS CANÓNICOS -->
-
-
-    <!-- SCRIPTS CANÓNICOS -->
-    <script src="js/sw-kill-once.js"></script>
-    <script src="content-data1.js"></script>
-    <script src="content-data2.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/ads.min.js"></script>
-
-<script type="module" src="js/bridge.content-public.mjs"></script>
-<script src="js/home.v6.js"></script>
-<script src="js/public-scan.from-source.js"></script>
+  <script>
+    (function(){
+      // Fondo banner: usa la primera imagen que contenga "paradise-beach" si existe
+      var deco = (window.DECORATIVE_IMAGES||[]);
+      var bg = deco.find(function(p){ return /paradise-beach/i.test(p); }) || deco[0];
+      if(bg){ document.getElementById('banner').style.backgroundImage = 'url('+bg+')'; }
+      // Rotador tenue
+      var el=document.getElementById('decorative-rotator'); if(el && deco.length){
+        var i=0; (function tick(){ el.style.backgroundImage='url('+deco[i%deco.length]+')'; i++; setTimeout(tick,3500); })();
+      }
+    })();
+    IBG_CAROUSEL.mountCarousel('home-carousel');
+    IBG_GALLERY.renderPublic('home-gallery',40);
+    IBG_ADS.initAds(); IBG_CHAT.initCrisp();
+  </script>
 </body>
 </html>

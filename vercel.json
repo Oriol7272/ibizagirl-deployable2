@@ -1,7 +1,13 @@
 {
+  "buildCommand": "bash ./vercel-build.sh",
+  "cleanUrls": true,
   "trailingSlash": false,
-  "cleanUrls": false,
   "headers": [
-    { "source": "/(.*)", "headers": [ { "key": "Cache-Control", "value": "public, max-age=300" } ] }
+    { "source": "/(.*)", "headers": [ { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" } ] }
+  ],
+  "redirects": [
+    { "source": "/premium", "destination": "/premium.html", "permanent": false },
+    { "source": "/videos", "destination": "/videos.html", "permanent": false },
+    { "source": "/suscripciones", "destination": "/subscription.html", "permanent": false }
   ]
 }

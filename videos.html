@@ -1,37 +1,53 @@
-<!doctype html><html lang="es"><head>
-<meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-store, must-revalidate">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IbizaGirl.pics – Vídeos</title>
-<link rel="stylesheet" href="css/ibg.css">
+<!doctype html><html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IbizaGirl · Videos</title>
+<link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/ibg.css">
+<script defer src="/js/env-inline.js"></script>
+<script defer src="/js/utils.js"></script>
+<script defer src="/js/content-loader.js"></script>
+<script defer src="/js/gallery.js"></script>
+<script defer src="/js/payments.js"></script>
+<script defer src="/js/ads.js"></script>
+<script defer src="/js/chatbot.js"></script>
+</head>
+<body>
+  <div class="nav"><div class="nav-inner">
+    <div class="brand">ibizagirl.pics</div>
+    <div class="menu"><a href="/index.html">Home</a><a href="/premium.html">Premium</a><a href="/videos.html">Videos</a><a href="/subscription.html">Suscripciones</a></div>
+  </div></div>
 
+  <div class="section">
+    <h2 class="h2">Videos (20 al día)</h2>
+    <p class="small">Previsualización pixelada/blur. Desbloquea con micropago o suscripción.</p>
+    <div id="videos-grid"></div>
+    <div class="ad">Espacio publicitario</div>
+  </div>
 
+  <div class="modal" id="paywall-modal">
+    <div class="box">
+      <h3>Desbloquear video</h3>
+      <div class="preview" style="margin-bottom:10px;"></div>
+      <div class="actions">
+        <button class="btn" id="unlock-now">Micropago video</button>
+        <a class="btn" href="/subscription.html">Suscripción</a>
+      </div>
+      <div style="margin-top:10px;text-align:right"><button class="btn" id="modal-close">Cerrar</button></div>
+    </div>
+  </div>
 
+  <script src="/content-data1.js"></script>
+  <script src="/content-data2.js"></script>
+  <script src="/content-data3.js"></script>
+  <script src="/content-data4.js"></script>
+  <script src="/content-data5.js"></script>
+  <script src="/content-data6.js"></script>
 
-</head><body>
-<div class="nav"><div class="row container">
-  <a href="index.html">Home</a>
-  <a href="premium.html">Premium</a>
-  <a href="videos.html" class="active">Vídeos</a>
-  <a href="subscription.html">Subscriptions</a>
-</div></div>
-<div class="banner"><div class="img"></div><div class="title"><h1>Vídeos</h1><p>40 vídeos · €0.30</p></div></div>
-<div class="container layout">
-  <div class="ad" id="ad-left">AD</div>
-  <div class="card section"><div id="grid40v" class="grid"></div></div>
-  <div class="ad" id="ad-right">AD</div>
-</div>
-<div id="pp-modal" class="modal"><div class="box"><div id="pp-widget"></div><div style="margin-top:8px;text-align:right"><a href="#" class="btn" id="pp-close">Cerrar</a></div></div></div>
-<div class="footer container">© IbizaGirl.pics</div>
-
-    <!-- SCRIPTS CANÓNICOS -->
-
-
-    <!-- SCRIPTS CANÓNICOS -->
-    <script src="js/sw-kill-once.js"></script>
-    <script src="content-data1.js"></script>
-    <script src="content-data2.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/ads.min.js"></script>
-    <script src="js/home.v4.js" defer></script>
-
-</body></html>
+  <script>
+    IBG_GALLERY.renderVideos('videos-grid',20,(window.__ENV&&__ENV.PRICE_VIDEO_EUR)||"0.30€");
+    IBG_GALLERY.wirePaywall('paywall-modal');
+    IBG_PAYMENTS.loadPayPal(); IBG_PAYMENTS.initPaywallUnlockButton();
+    IBG_ADS.initAds(); IBG_CHAT.initCrisp();
+  </script>
+</body>
+</html>
