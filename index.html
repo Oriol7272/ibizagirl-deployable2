@@ -6,15 +6,14 @@
   <link rel="stylesheet" href="/css/ibg.css">
   <script defer src="/js/env-inline.js"></script>
   <script defer src="/js/decorative-manifest.js"></script>
-  <script defer src="/js/carousel.js"></script>
   <script defer src="/js/utils.js"></script>
   <script defer src="/js/content-loader.js"></script>
   <script defer src="/js/gallery.js"></script>
-  <script defer src="/js/payments.js"></script>
   <script defer src="/js/ads.js"></script>
   <script defer src="/js/chatbot.js"></script>
   <script defer src="/js/fs-pools.js"></script>
   <script defer src="/js/bootstrap.js"></script>
+  <!-- content-data* por compatibilidad con tu repo -->
   <script defer src="/content-data1.js"></script>
   <script defer src="/content-data2.js"></script>
   <script defer src="/content-data3.js"></script>
@@ -25,23 +24,32 @@
 <body>
   <div class="nav"><div class="container nav-inner">
     <div class="brand">ibizagirl.pics</div>
-    <div class="menu"><a href="/index.html">Home</a><a href="/premium.html">Premium</a><a href="/videos.html">Videos</a><a href="/subscription.html">Suscripciones</a></div>
+    <div class="menu">
+      <a href="/index.html">Home</a>
+      <a href="/premium.html">Premium</a>
+      <a href="/videos.html">Videos</a>
+      <a href="/subscription.html">Subscriptions</a>
+      <a href="/subscription.html#lifetime">Lifetime</a>
+    </div>
   </div></div>
 
   <section class="banner" id="banner">
     <div id="decorative-rotator"></div>
-    <div class="banner-inner"><h1>ibizagirl.pics</h1><p>Bienvenido al paraíso</p></div>
+    <div class="banner-inner">
+      <h1>ibizagirl.pics</h1>
+      <p>bienvenidos al paraiso</p>
+    </div>
   </section>
 
   <div class="container">
     <div class="section">
-      <h2 class="h2">Selección del día</h2>
-      <div class="carousel" id="home-carousel"><div class="carousel-track"></div></div>
+      <h2 class="h2">Galería Rotativa (40 del pool Full)</h2>
+      <div id="home-rotating"></div>
     </div>
 
     <div class="section">
-      <h2 class="h2">Galería (40 aleatorias / día)</h2>
-      <div id="home-gallery"></div>
+      <h2 class="h2">Galería Aleatoria (40 del pool Full)</h2>
+      <div id="home-random"></div>
       <div class="ad">Espacio publicitario</div>
     </div>
   </div>

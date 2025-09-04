@@ -1,5 +1,5 @@
 (function(W){
-  // PRNG determinista por día
+  // PRNG determinista por día (para reparto estable)
   function daySeed(){ var d=new Date(); return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate(); }
   function mulberry32(a){ return function(){ var t=a+=0x6D2B79F5; t=Math.imul(t^t>>>15,t|1); t^=t+Math.imul(t^t>>>7,t|61); return ((t^t>>>14)>>>0)/4294967296; } }
   function seededShuffle(arr, seed){
@@ -26,39 +26,42 @@
           (opts.locked?'<span class="lock-icon">🔒 Bloqueado</span>':''),
           (opts.video?'<video preload="metadata" muted playsinline src="'+item.src+'#t=0.1"></video>':'<img loading="lazy" src="'+item.src+'" alt="'+title+'">'),
         '</div>',
-        '<div class="title">'+title+'</div>',
+        (opts.showTitle?('<div class="title">'+title+'</div>'):''),
       '</div>'
     ].join('');
   }
   function clampN(list, n){ return list.slice(0, Math.min(n, list.length)); }
 
+  // Galería aleatoria de N (estable por día)
   function renderPublic(containerId,count){
     var src = coerce(W.IBG_POOLS && W.IBG_POOLS.full);
     var shuffled = seededShuffle(src, daySeed());
     var pick = clampN(shuffled, count||40);
     var box=document.getElementById(containerId); if(!box) return;
-    box.innerHTML='<div class="grid">'+ pick.map(function(it){return cardHTML(it,{locked:false,price:'',isNew:false,video:false})}).join('') +'</div>';
+    box.innerHTML='<div class="grid">'+ pick.map(function(it){return cardHTML(it,{locked:false,price:'',isNew:false,video:false,showTitle:false})}).join('') +'</div>';
     try{ console.log('🖼️ Render public', pick.length, 'of', src.length);}catch(_){}
   }
-  function renderPremium(containerId,count,newRate,price){
-    var src = coerce(W.IBG_POOLS && W.IBG_POOLS.uncensored);
-    var shuffled = seededShuffle(src, daySeed()+13);
-    var n = Math.min(count||100, shuffled.length);
-    var newN = Math.floor(n*(newRate||0.30));
-    var pick = shuffled.slice(0,n);
+
+  // Galería rotativa de N: recorre el pool completo en ventanas de N cada X ms
+  function renderPublicRotating(containerId, count, intervalMs){
+    var src = coerce(W.IBG_POOLS && W.IBG_POOLS.full);
+    var cycle = seededShuffle(src, daySeed()+77); // orden diario distinto al de la fija
+    var N = Math.min(count||40, cycle.length);
     var box=document.getElementById(containerId); if(!box) return;
-    box.innerHTML='<div class="grid">'+ pick.map(function(it,idx){return cardHTML(it,{locked:true,price:price||'0,10€',isNew:(idx<newN),video:false})}).join('') +'</div>';
-    try{ console.log('💎 Render premium', n, 'of', src.length, 'new=', newN);}catch(_){}
+    var idx = 0;
+    function paint(){
+      var slice = [];
+      for(var i=0;i<N;i++){ slice.push(cycle[(idx+i) % cycle.length]); }
+      box.innerHTML='<div class="grid">'+ slice.map(function(it){return cardHTML(it,{locked:false,showTitle:false})}).join('') +'</div>';
+      idx = (idx + N) % cycle.length;
+    }
+    paint();
+    var ms = Math.max(1500, intervalMs||4000);
+    setInterval(paint, ms);
+    try{ console.log('🔁 Render public ROTATING', N, 'every', ms,'ms over', cycle.length);}catch(_){}
   }
-  function renderVideos(containerId,count,price){
-    var src = coerce(W.IBG_POOLS && W.IBG_POOLS.videos);
-    var shuffled = seededShuffle(src, daySeed()+29);
-    var n = Math.min(count||20, shuffled.length);
-    var pick = shuffled.slice(0,n);
-    var box=document.getElementById(containerId); if(!box) return;
-    box.innerHTML='<div class="grid">'+ pick.map(function(it){return cardHTML(it,{locked:true,price:price||'0,30€',isNew:false,video:true})}).join('') +'</div>';
-    try{ console.log('🎬 Render videos', n, 'of', src.length);}catch(_){}
-  }
+
+  // Paywall helper (por si después lo usas en premium/videos)
   function wirePaywall(modalId){
     var modal=document.getElementById(modalId); if(!modal) return;
     function openModal(src,type){
@@ -73,14 +76,7 @@
       openModal(el.getAttribute('data-src'), el.querySelector('video')?'video':'img');
     });
     var x=document.getElementById('modal-close'); if(x) x.onclick=close;
-    W.IBG_UNLOCK=function(){
-      var src=modal.dataset.src; if(!src) return;
-      localStorage.setItem('ibg_unlock_'+src,'1');
-      document.querySelectorAll('.card.locked').forEach(function(card){
-        if(card.getAttribute('data-src')===src){ card.classList.remove('locked'); var lk=card.querySelector('.lock-icon'); if(lk) lk.remove(); }
-      });
-      close();
-    }
   }
-  W.IBG_GALLERY={renderPublic,renderPremium,renderVideos,wirePaywall};
+
+  W.IBG_GALLERY={renderPublic,renderPublicRotating,wirePaywall};
 })(window);
