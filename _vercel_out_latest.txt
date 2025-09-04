@@ -1,0 +1,5 @@
+Vercel CLI 47.0.3
+Retrieving project…
+Deploying oriols-projects-ed6b9b04/ibizagirl-deployable2
+Error: If `rewrites`, `redirects`, `headers`, `cleanUrls` or `trailingSlash` are used, then `routes` cannot be present.
+Learn More: https://vercel.link/mix-routing-props
