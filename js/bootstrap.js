@@ -20,15 +20,8 @@
     if (W.IBG_ADS) W.IBG_ADS.initAds();
   }
 
-  function onReady(){
-    domReady=true;
-    if(W.IBG_ADS) W.IBG_ADS.initAds();   // refuerzo
-    if(decorReady) rotateBanner();
-  }
-
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', onReady);
-  } else { onReady(); }
+  function onReady(){ domReady=true; if(decorReady) rotateBanner(); if(W.IBG_ADS) W.IBG_ADS.initAds(); }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', onReady); } else { onReady(); }
 
   W.addEventListener('IBG_DECOR_READY', function(){ decorReady=true; if(domReady) rotateBanner(); });
   W.addEventListener('IBG_POOLS_READY', function(){ if(domReady && !started){ started=true; paintHome(); } });
