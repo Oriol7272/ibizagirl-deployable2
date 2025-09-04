@@ -1,13 +1,11 @@
 Vercel CLI 47.0.3
 Retrieving project…
 Deploying oriols-projects-ed6b9b04/ibizagirl-deployable2
-Uploading [--------------------] (0.0B/5.4KB)
-Uploading [==============------] (3.9KB/5.4KB)
-Uploading [===================-] (5.2KB/5.4KB)
-Uploading [===================-] (5.3KB/5.4KB)
-Uploading [====================] (5.4KB/5.4KB)
-Inspect: https://vercel.com/oriols-projects-ed6b9b04/ibizagirl-deployable2/6Q8ySV2WxUX8nRLQ2YXqd64V8N6Z [4s]
-Production: https://ibizagirl-deployable2-c0bls3lpx-oriols-projects-ed6b9b04.vercel.app [4s]
-https://ibizagirl-deployable2-c0bls3lpx-oriols-projects-ed6b9b04.vercel.appQueued
+Uploading [--------------------] (0.0B/4.1KB)
+Uploading [======--------------] (1.4KB/4.1KB)
+Uploading [====================] (4.1KB/4.1KB)
+Inspect: https://vercel.com/oriols-projects-ed6b9b04/ibizagirl-deployable2/7ndiniKoeDR3qw2hNnqgQo9BXio3 [4s]
+Production: https://ibizagirl-deployable2-f6qgfqgdh-oriols-projects-ed6b9b04.vercel.app [4s]
+https://ibizagirl-deployable2-f6qgfqgdh-oriols-projects-ed6b9b04.vercel.appQueued
 Building
 Completing

@@ -27,3 +27,15 @@ a{color:inherit;text-decoration:none}
 .pay{position:absolute;left:8px;bottom:8px;background:var(--acc);color:#100;padding:6px 10px;border-radius:999px;font-weight:700;font-size:12px}
 .ad{position:sticky;top:68px;height:600px;background:#0f0f15;border:1px dashed #2a2a3a;border-radius:12px;display:grid;place-items:center;color:#6b7080}
 .footer{color:#8b90a0;padding:20px 0}
+
+/* === Fuente decorativa del banner, si existe === */
+@font-face{
+  font-family: 'Sexy Beachy';
+  src: url('/decorative-images/Sexy Beachy.ttf') format('truetype'),
+       url('/decorative-images/Sexy Beachy.otf') format('opentype');
+  font-weight: normal; font-style: normal; font-display: swap;
+}
+.banner h1{ font-family:'Sexy Beachy', system-ui, sans-serif; letter-spacing:.5px; }
+.banner p{ font-style: italic; opacity:.9 }
+#carousel img{height:140px;width:auto;border-radius:12px;background:#000;display:block}
+#grid40 .thumb{aspect-ratio:1/1}
