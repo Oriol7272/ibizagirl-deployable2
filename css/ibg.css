@@ -4,3 +4,50 @@
       url("/decorative-images/Sexy Beachy.ttf") format("truetype");
   font-display:swap;
 }
+:root{--ink:#0b0b0f;--ink2:#121219;--line:#1f1f26;--txt:#fff;--accent:#ff5ea8;--price:#ffe66e}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--ink);color:var(--txt);font-family:"Sexy Beachy",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+a{color:inherit;text-decoration:none}
+.container{max-width:1200px;margin:0 auto;padding:0 16px}
+.nav{position:sticky;top:0;z-index:30;background:rgba(10,10,14,.8);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;align-items:center;gap:20px;padding:12px 16px}
+.nav .brand{font-weight:800;letter-spacing:.6px}
+.nav .menu{margin-left:auto;display:flex.nav .men}
+.banner{position:relative;display:grid;place-items:center;min-height:44vh;background-size:cover;background-position:center}
+.banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.6))}
+.banner-inner{position:relative;text-align:center;padding:48px 16px}
+.banner h1{font-size:56px;margin:0 0 8px;text-shadow:0 2px 22px rgba(0,0,0,.4)}
+.banner p{margin:0;opacity:.95}
+#decorative-rotator{position:absolute;inset:0;z-index:-1;opacity:.18;filter:blur(2px)}
+
+.section{padding:18px 0}
+.h2{font-size:28px;margin:0 0 12px 4px;opacity:.92}
+
+.carousel{position:relative;overflow:hidden;border-radius:18px}
+.carousel-track{display:flex;transition:transform .6s ease}
+.carousel img{width:100%;height:360px;object-fit:cover;flex:0 0 100%}
+
+.grid{display:grid;gap:10px}
+@media(min-width:520px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:820px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:1120px){.grid{grid-template-columns:repeat(5,1fr)}}
+
+.card{position:relative;border-radius:14px;overflow:hidden;background:var(--ink2);border:1px solid var(--line)}
+.card .thumb{width:100%;aspect-ratio:3/4;position:relative;overflow:hidden}
+.card img,.card video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.03)}
+.card.locked img,.card.locked video{filter:blur(4px);transform:scale(1.05)}
+.badge{position:absolute;top:8px;left:8px;background:var(--accent);color:#000;padding:4px 8px;border-radius:20px;font-weight:700;font-size:12px}
+.badge.price{right:8px;left:auto;background:var(--price);display:flex;align-items:center;gap:6px}
+.badge.price svg{width:12px;height:12px}
+.badge.new{background:#9dff9b}
+.lock-icon{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.55);border:1px solid #333;color:#fff;padding:3px 8px;border-radius:12px;font-size:12px}
+.card .title{padding:10px 10px 12px;font-size:13px;opacity:.88;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100}
+.modal.show{display:flex}
+.modal .box{background:#111117;border:1px solid #23232b;border-radius:16px;max-width:520px;width:92%;padding:18px}
+.modal .actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{background:#1e1e29;border:1px solid #32323c;border-radius:10px;padding:10px 14px;cursor:pointer}
+.btn:hover{filter:brightness(1.07)}
+.ad{display:grid;place-items:center;min-height:70px;border:1px dashed #31313a;border-radius:12px;margin:10px 0;opacity:.8}
+.small{font-size:12px;opacity:.75}

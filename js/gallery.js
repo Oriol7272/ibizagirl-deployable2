@@ -1,9 +1,12 @@
 (function(W){
-  var U=W.IBG_UTILS||{
-    daySeed:function(){var d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate()},
-    seededShuffle:function(a){return a.slice()},
-    pickN:function(a,n){return a.slice(0,n)}
-  };
+  // PRNG determinista por día
+  function daySeed(){ var d=new Date(); return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate(); }
+  function mulberry32(a){ return function(){ var t=a+=0x6D2B79F5; t=Math.imul(t^t>>>15,t|1); t^=t+Math.imul(t^t>>>7,t|61); return ((t^t>>>14)>>>0)/4294967296; } }
+  function seededShuffle(arr, seed){
+    var a=arr.slice(); var rnd=mulberry32(seed|0);
+    for(var i=a.length-1;i>0;i--){ var j=Math.floor(rnd()*(i+1)); var tmp=a[i]; a[i]=a[j]; a[j]=tmp; }
+    return a;
+  }
   function coerce(items){
     return (items||[]).map(function(it){
       if(typeof it==='string'){ return {src:it,title:(it.split('/').pop()||'')} }
@@ -27,43 +30,47 @@
       '</div>'
     ].join('');
   }
-  function clamp(n,max){ return Math.min(n, max||n); }
+  function clampN(list, n){ return list.slice(0, Math.min(n, list.length)); }
+
   function renderPublic(containerId,count){
-    var pool = coerce(W.IBG_POOLS && W.IBG_POOLS.full);
-    var n = clamp(count, pool.length);
-    var pick = (U.pickN||function(a,n){return a.slice(0,n)})(pool, n, U.daySeed?U.daySeed():undefined);
-    var html = pick.map(function(it){return cardHTML(it,{locked:false,price:'',isNew:false,video:false})}).join('');
-    var box=document.getElementById(containerId); if(box) box.innerHTML='<div class="grid">'+html+'</div>';
-    try{ console.log('🖼️ Render public', n, 'of', pool.length);}catch(_){}
+    var src = coerce(W.IBG_POOLS && W.IBG_POOLS.full);
+    var shuffled = seededShuffle(src, daySeed());
+    var pick = clampN(shuffled, count||40);
+    var box=document.getElementById(containerId); if(!box) return;
+    box.innerHTML='<div class="grid">'+ pick.map(function(it){return cardHTML(it,{locked:false,price:'',isNew:false,video:false})}).join('') +'</div>';
+    try{ console.log('🖼️ Render public', pick.length, 'of', src.length);}catch(_){}
   }
   function renderPremium(containerId,count,newRate,price){
-    var pool = coerce(W.IBG_POOLS && W.IBG_POOLS.uncensored);
-    var n = clamp(count, pool.length);
-    var pick = (U.pickN||function(a,n){return a.slice(0,n)})(pool, n, U.daySeed?U.daySeed():undefined);
-    var html  = pick.map(function(it,idx){return cardHTML(it,{locked:true,price:price,isNew:(idx<Math.floor(n*(newRate||0.3))),video:false})}).join('');
-    var box=document.getElementById(containerId); if(box) box.innerHTML='<div class="grid">'+html+'</div>';
-    try{ console.log('💎 Render premium', n, 'of', pool.length);}catch(_){}
+    var src = coerce(W.IBG_POOLS && W.IBG_POOLS.uncensored);
+    var shuffled = seededShuffle(src, daySeed()+13);
+    var n = Math.min(count||100, shuffled.length);
+    var newN = Math.floor(n*(newRate||0.30));
+    var pick = shuffled.slice(0,n);
+    var box=document.getElementById(containerId); if(!box) return;
+    box.innerHTML='<div class="grid">'+ pick.map(function(it,idx){return cardHTML(it,{locked:true,price:price||'0,10€',isNew:(idx<newN),video:false})}).join('') +'</div>';
+    try{ console.log('💎 Render premium', n, 'of', src.length, 'new=', newN);}catch(_){}
   }
   function renderVideos(containerId,count,price){
-    var pool = coerce(W.IBG_POOLS && W.IBG_POOLS.videos);
-    var n = clamp(count, pool.length);
-    var pick = (U.pickN||function(a,n){return a.slice(0,n)})(pool, n, U.daySeed?U.daySeed():undefined);
-    var html  = pick.map(function(it){return cardHTML(it,{locked:true,price:price,isNew:false,video:true})}).join('');
-    var box=document.getElementById(containerId); if(box) box.innerHTML='<div class="grid">'+html+'</div>';
-    try{ console.log('🎬 Render videos', n, 'of', pool.length);}catch(_){}
+    var src = coerce(W.IBG_POOLS && W.IBG_POOLS.videos);
+    var shuffled = seededShuffle(src, daySeed()+29);
+    var n = Math.min(count||20, shuffled.length);
+    var pick = shuffled.slice(0,n);
+    var box=document.getElementById(containerId); if(!box) return;
+    box.innerHTML='<div class="grid">'+ pick.map(function(it){return cardHTML(it,{locked:true,price:price||'0,30€',isNew:false,video:true})}).join('') +'</div>';
+    try{ console.log('🎬 Render videos', n, 'of', src.length);}catch(_){}
   }
   function wirePaywall(modalId){
     var modal=document.getElementById(modalId); if(!modal) return;
     function openModal(src,type){
       modal.classList.add('show');
-      modal.querySelector('.preview').innerHTML=type==='video'?('<video controls playsinline src="'+src+'"></video>'):('<img src="'+src+'"/>');
+      modal.querySelector('.preview').innerHTML=(type==='video')?('<video controls playsinline src="'+src+'"></video>'):('<img src="'+src+'"/>');
       modal.dataset.src=src;
     }
     function close(){modal.classList.remove('show')}
     modal.addEventListener('click',function(e){if(e.target===modal) close()});
     document.addEventListener('click',function(e){
       var el=e.target.closest('.card.locked'); if(!el) return;
-      openModal(el.getAttribute('data-src'), !!el.querySelector('video')?'video':'img');
+      openModal(el.getAttribute('data-src'), el.querySelector('video')?'video':'img');
     });
     var x=document.getElementById('modal-close'); if(x) x.onclick=close;
     W.IBG_UNLOCK=function(){
