@@ -9,11 +9,12 @@
   <script defer src="/js/utils.js"></script>
   <script defer src="/js/content-loader.js"></script>
   <script defer src="/js/gallery.js"></script>
+  <script defer src="/js/carousel.js"></script>
   <script defer src="/js/ads.js"></script>
   <script defer src="/js/chatbot.js"></script>
   <script defer src="/js/fs-pools.js"></script>
   <script defer src="/js/bootstrap.js"></script>
-  <!-- content-data* por compatibilidad con tu repo -->
+  <!-- content-data* de tu repo -->
   <script defer src="/content-data1.js"></script>
   <script defer src="/content-data2.js"></script>
   <script defer src="/content-data3.js"></script>
@@ -22,6 +23,11 @@
   <script defer src="/content-data6.js"></script>
 </head>
 <body>
+  <!-- Ads laterales -->
+  <div class="ad-lateral left" id="ad-left"></div>
+  <div class="ad-lateral right" id="ad-right"></div>
+
+  <!-- Nav -->
   <div class="nav"><div class="container nav-inner">
     <div class="brand">ibizagirl.pics</div>
     <div class="menu">
@@ -33,6 +39,7 @@
     </div>
   </div></div>
 
+  <!-- Banner -->
   <section class="banner" id="banner">
     <div id="decorative-rotator"></div>
     <div class="banner-inner">
@@ -41,17 +48,22 @@
     </div>
   </section>
 
-  <div class="container">
-    <div class="section">
-      <h2 class="h2">Galería Rotativa (40 del pool Full)</h2>
-      <div id="home-rotating"></div>
-    </div>
-
-    <div class="section">
-      <h2 class="h2">Galería Aleatoria (40 del pool Full)</h2>
-      <div id="home-random"></div>
-      <div class="ad">Espacio publicitario</div>
+  <!-- Carrusel (decorative-images) -->
+  <div class="section">
+    <div class="container">
+      <div class="carousel" id="hero-carousel"><div class="carousel-track"></div></div>
     </div>
   </div>
+
+  <!-- Gallery 40 (pool full) -->
+  <div class="container">
+    <div class="section">
+      <h2 class="h2">Galería</h2>
+      <div id="home-gallery"></div>
+    </div>
+  </div>
+
+  <!-- Ad inferior -->
+  <div class="container" id="ad-bottom"></div>
 </body>
 </html>

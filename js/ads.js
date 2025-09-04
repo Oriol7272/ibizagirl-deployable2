@@ -1,10 +1,15 @@
 (function(W){
-  function truthy(x){ x=String(x||'').toLowerCase(); return x==='1'||x==='true'||x==='yes'; }
-  function load(src){ try{ var s=document.createElement('script'); s.src=src; s.async=true; s.onerror=function(){}; document.head.appendChild(s);}catch(_){ } }
+  function fill(id, label){
+    var el=document.getElementById(id); if(!el) return;
+    var box=document.createElement('div'); box.className='box';
+    box.innerHTML='<div style="text-align:center"><div style="font-weight:800;margin-bottom:6px">'+label+'</div><div style="font-size:12px;opacity:.8">Desactiva AdBlock para ver anuncios</div></div>';
+    el.innerHTML=''; el.appendChild(box);
+  }
   function initAds(){
-    var E=W.__ENV||{};
-    if(truthy(E.POPADS_ENABLE) && E.POPADS_SITE_ID){ load('https://cdn.popads.net/pop.js'); }
-    // Aquí puedes añadir ExoClick/JuicyAds/EroAdvertising si has puesto sus zonas/snippets reales en __ENV
+    fill('ad-left','Publicidad');
+    fill('ad-right','Publicidad');
+    var b=document.getElementById('ad-bottom');
+    if(b){ b.innerHTML='<div class="ad-bottom">Espacio publicitario</div>'; }
   }
   W.IBG_ADS={initAds};
 })(window);
