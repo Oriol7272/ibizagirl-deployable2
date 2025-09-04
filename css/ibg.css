@@ -66,3 +66,11 @@ html,body{
 .slot-lateral.left{left:14px}
 .slot-lateral.right{right:14px}
 @media(min-width:1024px){ .slot-lateral{display:block} }
+
+/* --- Slots publicitarios robustos --- */
+.slot-bottom{display:grid;place-items:center;min-height:90px;border:1px dashed #31313a;border-radius:12px;margin:14px 0;opacity:.95}
+.slot-lateral{position:fixed;top:86px;bottom:20px;width:160px;display:none;z-index:20}
+.slot-lateral .box{height:100%;border:1px dashed #31313a;border-radius:12px;display:grid;place-items:center;padding:10px;background:rgba(0,0,0,.2)}
+.slot-lateral.left{left:14px}
+.slot-lateral.right{right:14px}
+@media(min-width:1024px){ .slot-lateral{display:block} }

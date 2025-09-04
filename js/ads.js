@@ -8,29 +8,33 @@
     document.head.appendChild(s);
   }
   function clear(el){ if(el){ el.innerHTML=''; } return el; }
-  function hasContent(el){ return !!(el && (el.children.length || el.querySelector('iframe, ins, script'))); }
+  function ensureMin(el, h){ if(!el) return; el.style.minHeight = (h||90)+'px'; el.style.display='block'; }
+  function visiblePixels(el){ try{ return el ? el.getBoundingClientRect().height|0 : 0; }catch(_){ return 0; } }
   function fallback(el,label){
     if(!el) return;
-    el.style.display = 'block'; // por si alguna hoja externa lo oculta
+    ensureMin(el, label==='lateral'? 600 : 90);
     el.innerHTML = '<div class="box" style="height:100%;display:grid;place-items:center;text-align:center"><div style="font-weight:800;margin-bottom:6px">Patrocinado</div><div style="font-size:12px;opacity:.8">Desactiva el bloqueador para ver anuncios ('+label+')</div></div>';
   }
 
-  // ===== JuicyAds (laterales)
+  // ===== JuicyAds laterales
   function mountJuicy(el, zone){
     if(!el || !zone) return false;
+    ensureMin(el, 600);
     if(!W.__JUICY_LOADED__){
       load('https://adserver.juicyads.com/js/jads.js', function(){ W.__JUICY_LOADED__=true; });
     }
     var ph = document.createElement('ins');
     ph.id = 'jadsPlaceHolder' + Math.random().toString(36).slice(2);
+    ph.style.width='160px'; ph.style.height='100%'; // columna
     clear(el).appendChild(ph);
     (W.adsbyjuicy = W.adsbyjuicy || []).push({ adzone: String(zone) });
     return true;
   }
 
-  // ===== ExoClick (inferior) por splash.php?idzone= (sin CORS)
+  // ===== ExoClick bottom (splash.php?idzone=) — anti-CORS
   function mountExo(el, zone){
     if(!el || !zone) return false;
+    ensureMin(el, 90);
     var s = document.createElement('script');
     s.async = true; s.defer = true;
     s.src = 'https://syndication.exdynsrv.com/splash.php?idzone=' + encodeURIComponent(zone);
@@ -38,9 +42,10 @@
     return true;
   }
 
-  // ===== EroAdvertising (fallback inferior si no hay Exo)
+  // ===== EroAdvertising bottom (fallback si no hay Exo)
   function mountEro(el, zone){
     if(!el || !zone) return false;
+    ensureMin(el, 90);
     var s = document.createElement('script');
     s.async = true; s.defer = true;
     s.src = 'https://syndication.ero-advertising.com/splash.php?idzone=' + encodeURIComponent(zone);
@@ -52,7 +57,6 @@
     var E = W.__ENV || {};
     log('IBG_ADS ZONES ->', {JUICYADS_ZONE:E.JUICYADS_ZONE, EXOCLICK_ZONE:E.EXOCLICK_ZONE, EROADVERTISING_ZONE:E.EROADVERTISING_ZONE});
 
-    // IDs neutros (no contienen 'ad')
     var L = document.getElementById('slot-left');
     var R = document.getElementById('slot-right');
     var B = document.getElementById('slot-bottom');
@@ -64,12 +68,14 @@
     if (E.EXOCLICK_ZONE) okB = mountExo(B, E.EXOCLICK_ZONE);
     if (!okB && E.EROADVERTISING_ZONE) okB = mountEro(B, E.EROADVERTISING_ZONE);
 
-    // Si hay bloqueador: muestra fallback tras 2.5s si no hay nada renderizado
+    // Fallback duro por altura: si en 2800 ms el slot no muestra nada, pintamos caja
     setTimeout(function(){
-      if(!hasContent(L)) fallback(L,'lateral');
-      if(!hasContent(R)) fallback(R,'lateral');
-      if(!hasContent(B)) fallback(B,'inferior');
-    }, 2500);
+      var hL = visiblePixels(L), hR = visiblePixels(R), hB = visiblePixels(B);
+      log('IBG_ADS heights(px)', {left:hL, right:hR, bottom:hB});
+      if(hL < 40) fallback(L,'lateral');
+      if(hR < 40) fallback(R,'lateral');
+      if(hB < 40) fallback(B,'inferior');
+    }, 2800);
   }
 
   W.IBG_ADS = { initAds };
