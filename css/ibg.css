@@ -9,9 +9,7 @@ html,body{
   background:#0b0b0f url("/decorative-images/paradise-beach.png") center/cover fixed no-repeat;
   font-family:"Sexy Beachy", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
-@media(min-width:1024px){
-  body{padding-left:190px;padding-right:190px;}
-}
+@media(min-width:1024px){ body{padding-left:190px;padding-right:190px;} }
 .container{max-width:1200px;margin:0 auto;padding:0 16px}
 
 /* Nav */
@@ -19,10 +17,10 @@ html,body{
 .nav-inner{display:flex;align-items:center;gap:20px;padding:16px}
 .nav .brand{font-weight:900;letter-spacing:.8px;font-size:24px}
 .nav .menu{margin-left:auto;display:flex;gap:18px}
-.nav .menu a{font-size:18px;padding:6px 8px;border-radius:8px;text-decoration:none;color:#fff;opacity:.95}
+.nav .menu a{font-size:18px;padding:6px 8px;border-radius:8px;color:#fff;opacity:.95;text-decoration:none}
 .nav .menu a:hover{background:rgba(255,255,255,.08)}
 
-/* Banner muy grande + rotación decorativas */
+/* Banner enorme y rotativo (decoratives) */
 .banner{position:relative;display:grid;place-items:center;min-height:54vh;background-size:cover;background-position:center}
 .banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.55))}
 .banner-inner{position:relative;text-align:center;padding:64px 16px}
@@ -32,18 +30,18 @@ html,body{
 .banner h1{font-size:72px}
 .banner p{font-size:24px}
 @media(min-width:768px){ .banner h1{font-size:108px} .banner p{font-size:30px} }
-@media(min-width:1200px){ .banner h1{font-size:128px} .banner p{font-size:36px} }
+@media(min-width:1200px){ .banner h1{font-size:132px} .banner p{font-size:38px} }
 
 /* Secciones */
 .section{padding:24px 0}
 .h2{font-size:32px;margin:0 0 12px 6px;opacity:.95}
 
-/* Carrusel desde FULL */
+/* Carrusel (desde FULL) */
 .carousel{position:relative;overflow:hidden;border-radius:18px}
 .carousel-track{display:flex;transition:transform .6s ease}
 .carousel img{width:100%;height:360px;object-fit:cover;flex:0 0 100%}
 
-/* Gallery 40 */
+/* Gallery 40 (full) */
 .grid{display:grid;gap:10px}
 @media(min-width:520px){.grid{grid-template-columns:repeat(3,1fr)}}
 @media(min-width:820px){.grid{grid-template-columns:repeat(4,1fr)}}
@@ -53,7 +51,7 @@ html,body{
 .card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.03)}
 .card .title{display:none}
 
-/* Ads laterales + inferior */
+/* Ads */
 .ad-bottom{display:grid;place-items:center;min-height:90px;border:1px dashed #31313a;border-radius:12px;margin:14px 0;opacity:.85}
 .ad-lateral{position:fixed;top:86px;bottom:20px;width:160px;display:none;z-index:20}
 .ad-lateral .box{height:100%;border:1px dashed #31313a;border-radius:12px;display:grid;place-items:center;padding:10px;background:rgba(0,0,0,.2)}
