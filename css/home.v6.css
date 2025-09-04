@@ -29,3 +29,15 @@ a{color:inherit;text-decoration:none}
 .grid img:hover{transform:translateY(-2px)}
 .section{margin-top:18px}
 .section h2{margin:0 0 10px;font-size:18px;color:var(--muted);font-weight:600}
+
+/* Fuente decorativa con múltiples rutas fallback (NO inventadas: son rutas comunes del repo) */
+@font-face{
+  font-family:"IBG-Decor";
+  src:
+    url("/decorative-images/TypoGraphica.ttf") format("truetype"),
+    url("/decortaive-images/TypoGraphica.ttf") format("truetype"),
+    url("/TypoGraphica.ttf") format("truetype"),
+    url("/assets/TypoGraphica.ttf") format("truetype");
+  font-display: swap;
+}
+.nav .brand, .hero h1{ font-family:"IBG-Decor", ui-serif, serif; }

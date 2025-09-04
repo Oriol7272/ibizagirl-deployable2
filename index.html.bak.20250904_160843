@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>IBIZAGIRL.PICS — Home</title>
+  <!-- IBG-FP: vZERO -->
+  <link rel="stylesheet" href="css/ibg.css">
+  <script src="env.js"></script>
+  <link rel="stylesheet" href="css/home.v1.css">
+  <link rel="stylesheet" href="css/home.v6.css">
+</head>
+<body>
+  <div id="app-home"></div>
+  <div class="nav"><div class="row container">
+    <a href="index.html" class="active">Home</a>
+    <a href="premium.html">Premium</a>
+    <a href="videos.html">Vídeos</a>
+    <a href="subscription.html">Subscriptions</a>
+  </div></div>
+
+  <section id="banner" class="banner">
+    <div class="img"></div>
+    <div class="title">
+      <h1>ibizagirl.pics</h1>
+      <p>bienvenidos al paraíso</p>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="section">
+      <h3>Destacadas (30 aleatorias)</h3>
+      <div id="carousel30" class="carousel"></div>
+    </div>
+    <div class="section">
+      <h3>Galería (40 aleatorias)</h3>
+      <div id="grid40" class="grid"></div>
+    </div>
+  </div>
+
+  <div class="ad left"></div>
+  <div class="ad right"></div>
+
+  <div class="footer container">© IbizaGirl.pics</div>
+
+  <!-- SW killer 1 sola vez (si existe el archivo) -->
+
+  <!-- ORDEN CORRECTO: config -> públicas -> utilidades (opcional) -> home -->
+
+    <!-- SCRIPTS CANÓNICOS -->
+
+
+    <!-- SCRIPTS CANÓNICOS -->
+    <script src="js/sw-kill-once.js"></script>
+    <script src="content-data1.js"></script>
+    <script src="content-data2.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/ads.min.js"></script>
+
+<script type="module" src="js/bridge.content-public.mjs"></script>
+<script src="js/home.v6.js"></script>
+</body>
+</html>
