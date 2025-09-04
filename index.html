@@ -44,7 +44,6 @@
     <div class="ad">Espacio publicitario</div>
   </div>
 
-  <!-- Tus content-data originales -->
   <script src="/content-data1.js"></script>
   <script src="/content-data2.js"></script>
   <script src="/content-data3.js"></script>
@@ -54,12 +53,9 @@
 
   <script>
     (function(){
-      // Fondo con paradise-beach.png
       var deco = (window.DECORATIVE_IMAGES||[]);
       var bg = deco.find(p=>/paradise-beach/i.test(p)) || deco[0];
-      if(bg){ document.getElementById('banner').style.backgroundImage = 'url('+bg+')'; }
-
-      // Rotador tenue de fondo
+      if(bg) document.getElementById('banner').style.backgroundImage = 'url('+bg+')';
       var el=document.getElementById('decorative-rotator'); 
       if(el && deco.length){
         var i=0; (function tick(){
@@ -68,14 +64,9 @@
         })();
       }
     })();
-
-    // Carrusel y galería
-    if(window.IBG_CAROUSEL) IBG_CAROUSEL.mountCarousel('home-carousel');
-    if(window.IBG_GALLERY) IBG_GALLERY.renderPublic('home-gallery',40);
-
-    // Ads y chat
-    if(window.IBG_ADS) IBG_ADS.initAds();
-    if(window.IBG_CHAT) IBG_CHAT.initCrisp();
+    IBG_CAROUSEL.mountCarousel('home-carousel');
+    IBG_GALLERY.renderPublic('home-gallery',40);
+    IBG_ADS.initAds(); IBG_CHAT.initCrisp();
   </script>
 </body>
 </html>
