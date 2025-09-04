@@ -8,12 +8,14 @@
     document.head.appendChild(s);
   }
   function clear(el){ if(el){ el.innerHTML=''; } return el; }
+  function hasContent(el){ return !!(el && (el.children.length || el.querySelector('iframe, ins, script'))); }
   function fallback(el,label){
     if(!el) return;
-    el.innerHTML = '<div class="ad-bottom" style="min-height:90px">Publicidad ('+label+')</div>';
+    el.style.display = 'block'; // por si alguna hoja externa lo oculta
+    el.innerHTML = '<div class="box" style="height:100%;display:grid;place-items:center;text-align:center"><div style="font-weight:800;margin-bottom:6px">Patrocinado</div><div style="font-size:12px;opacity:.8">Desactiva el bloqueador para ver anuncios ('+label+')</div></div>';
   }
 
-  // JUICYADS (laterales): jads.js + push
+  // ===== JuicyAds (laterales)
   function mountJuicy(el, zone){
     if(!el || !zone) return false;
     if(!W.__JUICY_LOADED__){
@@ -26,7 +28,7 @@
     return true;
   }
 
-  // EXOCLICK (bloque inferior): usar splash.php?idzone= (evita CORS y “idzone=null”)
+  // ===== ExoClick (inferior) por splash.php?idzone= (sin CORS)
   function mountExo(el, zone){
     if(!el || !zone) return false;
     var s = document.createElement('script');
@@ -36,7 +38,7 @@
     return true;
   }
 
-  // EROADVERTISING (fallback inferior si no hay Exo)
+  // ===== EroAdvertising (fallback inferior si no hay Exo)
   function mountEro(el, zone){
     if(!el || !zone) return false;
     var s = document.createElement('script');
@@ -48,26 +50,26 @@
 
   function initAds(){
     var E = W.__ENV || {};
-    log('IBG_ADS ZONES ->', {
-      JUICYADS_ZONE: E.JUICYADS_ZONE,
-      EXOCLICK_ZONE: E.EXOCLICK_ZONE,
-      EROADVERTISING_ZONE: E.EROADVERTISING_ZONE
-    });
+    log('IBG_ADS ZONES ->', {JUICYADS_ZONE:E.JUICYADS_ZONE, EXOCLICK_ZONE:E.EXOCLICK_ZONE, EROADVERTISING_ZONE:E.EROADVERTISING_ZONE});
 
-    var L = document.getElementById('ad-left');
-    var R = document.getElementById('ad-right');
-    var B = document.getElementById('ad-bottom');
+    // IDs neutros (no contienen 'ad')
+    var L = document.getElementById('slot-left');
+    var R = document.getElementById('slot-right');
+    var B = document.getElementById('slot-bottom');
 
     var okL = mountJuicy(L, E.JUICYADS_ZONE);
     var okR = mountJuicy(R, E.JUICYADS_ZONE);
 
-    var okBottom = false;
-    if (E.EXOCLICK_ZONE) okBottom = mountExo(B, E.EXOCLICK_ZONE);
-    if (!okBottom && E.EROADVERTISING_ZONE) okBottom = mountEro(B, E.EROADVERTISING_ZONE);
+    var okB=false;
+    if (E.EXOCLICK_ZONE) okB = mountExo(B, E.EXOCLICK_ZONE);
+    if (!okB && E.EROADVERTISING_ZONE) okB = mountEro(B, E.EROADVERTISING_ZONE);
 
-    if (!okL) fallback(L, 'lateral');
-    if (!okR) fallback(R, 'lateral');
-    if (!okBottom) fallback(B, 'inferior');
+    // Si hay bloqueador: muestra fallback tras 2.5s si no hay nada renderizado
+    setTimeout(function(){
+      if(!hasContent(L)) fallback(L,'lateral');
+      if(!hasContent(R)) fallback(R,'lateral');
+      if(!hasContent(B)) fallback(B,'inferior');
+    }, 2500);
   }
 
   W.IBG_ADS = { initAds };
