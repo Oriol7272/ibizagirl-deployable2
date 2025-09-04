@@ -1,28 +1,40 @@
-:root{--gap:12px;--radius:18px;--badge:#ff3366;--shellMax:1280px;--sideAdW:160px}
-*{box-sizing:border-box}
-body{margin:0;background:#0e1b26 url('../decorative-images/paradise-beach.png') center/cover fixed no-repeat;color:#fff;font-family:'Sexy Beachy',-apple-system,Segoe UI,Roboto,Inter,system-ui,sans-serif}
-@font-face{
-  font-family:'Sexy Beachy';
-  src:url('../decorative-images/Sexy%20Beachy.otf') format('opentype'),
-      url('../decorative-images/Sexy%20Beachy.ttf') format('truetype');
-  font-display:swap;
-}
-.page-shell{position:relative;max-width:var(--shellMax);margin:0 auto;z-index:2;background:rgba(10,18,30,.72);backdrop-filter:blur(2px)}
-.header{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 12px;background:rgba(0,0,0,.45);backdrop-filter:saturate(140%) blur(8px)}
-.header .brand{font-weight:900;font-size:20px;margin-right:10px}
-.header nav a{color:#fff;text-decoration:none;padding:.45rem .7rem;border-radius:999px;background:#16344a;white-space:nowrap;margin-right:6px}
-.header .lang{margin-left:auto}
-.btn{cursor:pointer;border:0;border-radius:999px;background:#1b87f3;color:#fff;padding:.5rem .8rem;font-weight:700}
-.side-ad{position:fixed;top:0;bottom:0;width:var(--sideAdW);z-index:1;display:none;align-items:center;justify-content:center}
-.side-ad.left{left:0}.side-ad.right{right:0}
-@media (min-width:1460px){.side-ad{display:flex}.page-shell{margin-left:var(--sideAdW);margin-right:var(--sideAdW)}}
-
-/* IBG: Fuente del título de banner */
 @font-face{
   font-family:"SexyBeachy";
   src: url("../decorative-images/Sexy Beachy.otf") format("opentype"),
        url("../decorative-images/Sexy Beachy.ttf") format("truetype");
   font-display:swap;
 }
-.banner .title h1{font-family:"SexyBeachy", system-ui, sans-serif;font-weight:400}
-.banner .title p{letter-spacing:.5px}
+:root{--bg:#0b0b0f;--panel:#12121a;--txt:#f3f3f6;--muted:#9aa0a6;--acc:#ff4ec6}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--txt);font:16px/1.45 system-ui,Roboto,Segoe UI,Arial}
+a{color:inherit;text-decoration:none}
+.container{max-width:1200px;margin:0 auto;padding:16px}
+.nav{position:sticky;top:0;z-index:5;background:rgba(11,11,15,.85);backdrop-filter:saturate(1.1) blur(6px);border-bottom:1px solid #222}
+.nav .row{display:flex;align-items:center;gap:16px;padding:10px 16px}
+.nav a{padding:8px 10px;border-radius:10px}
+.nav a.active,.nav a:hover{background:#1b1b24}
+.banner{position:relative;height:260px;display:grid;place-items:center;background:#111;border-bottom:1px solid #222;overflow:hidden}
+.banner:before{content:"";position:absolute;inset:0;background:url("../decorative-images/paradise-beach.png") center/cover no-repeat;opacity:.45}
+.banner .img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.28;transition:opacity .45s}
+.banner .title{position:relative;text-align:center}
+.banner h1{font-family:"SexyBeachy",system-ui,sans-serif;font-size:54px;margin:0 0 6px;letter-spacing:.5px}
+.banner p{margin:0;color:var(--muted);letter-spacing:.5px}
+.layout{display:grid;grid-template-columns:220px 1fr 220px;gap:12px}
+@media (max-width:1100px){.layout{grid-template-columns:1fr}.ad{display:none}}
+.card{background:var(--panel);border:1px solid #1f1f2b;border-radius:16px;overflow:hidden}
+.section{padding:16px}
+.carousel{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px}
+.carousel img{height:140px;width:auto;border-radius:12px;scroll-snap-align:start;background:#000;display:block}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media (max-width:900px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:600px){.grid{grid-template-columns:repeat(2,1fr)}}
+.thumb{position:relative;background:#000;border-radius:14px;overflow:hidden;aspect-ratio:1/1}
+.thumb img,.thumb video{width:100%;height:100%;object-fit:cover;display:block;filter:none;transition:filter .25s ease}
+.blur-locked{filter:blur(14px) saturate(.9) brightness(.8)}
+.badge{position:absolute;right:8px;top:8px;background:rgba(0,0,0,.75);color:#fff;padding:4px 8px;border-radius:999px;font-size:12px}
+.pay{position:absolute;left:8px;bottom:8px;background:var(--acc);color:#100;padding:6px 10px;border-radius:999px;font-weight:700;font-size:12px}
+.ad{position:sticky;top:68px;min-height:600px;background:#0f0f15;border:1px dashed #2a2a3a;border-radius:12px;display:grid;place-items:center;color:#6b7080}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:50}
+.modal .box{background:#0e0e13;border:1px solid #2a2a3a;border-radius:16px;min-width:320px;max-width:90vw;padding:16px}
+.modal.show{display:flex}
+.btn{display:inline-block;padding:8px 12px;border-radius:10px;background:#1c1c26}
+.footer{color:#8b90a0;padding:20px 0}
