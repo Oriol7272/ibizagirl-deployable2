@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="css/ibg.css">
   <script src="env.js"></script>
   <link rel="stylesheet" href="css/home.v1.css">
-  <link rel="stylesheet" href="css/home.v6.css">
 </head>
 <body>
   <div id="app-home"></div>
@@ -56,8 +55,8 @@
     <script src="content-data2.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/ads.min.js"></script>
+    <script src="js/home.v4.js" defer></script>
 
-<script type="module" src="js/bridge.content-public.mjs"></script>
-<script src="js/home.v6.js"></script>
+  <script src="js/home.v5.js"></script>
 </body>
 </html>
