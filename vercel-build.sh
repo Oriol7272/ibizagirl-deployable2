@@ -1,8 +1,5 @@
 #!/usr/bin/env sh
-# Build ultratolerante para Vercel: sin -e/-u/pipefail y sin salidas no cero.
 echo "== IBG build (safe) =="
-
-# 1) Inyectar variables REALES en js/env-inline.js (con defaults vacíos)
 mkdir -p js
 cat > js/env-inline.js <<JS
 window.__ENV = {
@@ -24,31 +21,10 @@ window.__ENV = {
 };
 JS
 echo "[build] env-inline listo"
-
-# 2) Crear artefacto en ./public copiando SOLO lo necesario (sin romper si algo falta)
-rm -rf public 2>/dev/null || true
-mkdir -p public || true
-
+rm -rf public 2>/dev/null || true; mkdir -p public || true
 cp_if(){ [ -e "$1" ] && { mkdir -p "public/$(dirname "$1")" 2>/dev/null || true; cp -R "$1" "public/$1" 2>/dev/null || true; echo "[copy] $1"; } || true; }
 cp_dir(){ [ -d "$1" ] && { mkdir -p "public/$1" 2>/dev/null || true; cp -R "$1"/. "public/$1/" 2>/dev/null || true; echo "[copy] $1/"; } || true; }
-
-# HTML base
-cp_if index.html
-cp_if premium.html
-cp_if videos.html
-cp_if subscription.html
-
-# JS/CSS y assets
-cp_dir js
-cp_dir css
-cp_dir decorative-images
-cp_dir full
-cp_dir uncensored
-cp_dir uncensored-videos
-
-# Data
+cp_if index.html; cp_if premium.html; cp_if videos.html; cp_if subscription.html
+cp_dir js; cp_dir css; cp_dir decorative-images; cp_dir full; cp_dir uncensored; cp_dir uncensored-videos
 for f in content-data*.js favicon.ico robots.txt; do cp_if "$f"; done
-
-# 3) Mensaje final y exit 0 sí o sí
-echo "[build] listo en ./public"
-exit 0
+echo "[build] listo en ./public"; exit 0

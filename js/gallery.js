@@ -43,7 +43,7 @@
       var el=e.target.closest('.card.locked'); if(!el) return;
       openModal(el.getAttribute('data-src'), !!el.querySelector('video')?'video':'img');
     });
-    document.getElementById('modal-close').onclick=close;
+    var x=document.getElementById('modal-close'); if(x) x.onclick=close;
     W.IBG_UNLOCK=function(){
       var src=modal.dataset.src; if(!src) return;
       localStorage.setItem('ibg_unlock_'+src,'1');

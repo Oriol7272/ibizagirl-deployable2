@@ -10,6 +10,13 @@
   <script defer src="/js/payments.js"></script>
   <script defer src="/js/ads.js"></script>
   <script defer src="/js/chatbot.js"></script>
+  <script defer src="/js/font-setup.js"></script>
+  <script defer src="/content-data1.js"></script>
+  <script defer src="/content-data2.js"></script>
+  <script defer src="/content-data3.js"></script>
+  <script defer src="/content-data4.js"></script>
+  <script defer src="/content-data5.js"></script>
+  <script defer src="/content-data6.js"></script>
 </head>
 <body>
   <div class="nav"><div class="nav-inner">
@@ -36,18 +43,16 @@
     </div>
   </div>
 
-  <script src="/content-data1.js"></script>
-  <script src="/content-data2.js"></script>
-  <script src="/content-data3.js"></script>
-  <script src="/content-data4.js"></script>
-  <script src="/content-data5.js"></script>
-  <script src="/content-data6.js"></script>
-
   <script>
-    IBG_GALLERY.renderPremium('premium-gallery',100,0.30,(window.__ENV&&__ENV.PRICE_IMAGE_EUR)||"0.10€");
-    IBG_GALLERY.wirePaywall('paywall-modal');
-    IBG_PAYMENTS.loadPayPal(); IBG_PAYMENTS.initPaywallUnlockButton();
-    IBG_ADS.initAds(); IBG_CHAT.initCrisp();
+    document.addEventListener('DOMContentLoaded', function(){
+      if(window.IBG_GALLERY){
+        IBG_GALLERY.renderPremium('premium-gallery',100,0.30,(window.__ENV&&__ENV.PRICE_IMAGE_EUR)||"0.10€");
+        IBG_GALLERY.wirePaywall('paywall-modal');
+      }
+      if(window.IBG_PAYMENTS){ IBG_PAYMENTS.loadPayPal(); IBG_PAYMENTS.initPaywallUnlockButton(); }
+      if(window.IBG_ADS)  IBG_ADS.initAds();
+      if(window.IBG_CHAT) IBG_CHAT.initCrisp();
+    });
   </script>
 </body>
 </html>

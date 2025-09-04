@@ -1,10 +1,8 @@
 (function(W){
   function planIdFromEnv(prefix){
     var E=W.__ENV||{}; 
-    // Usamos EXACTAMENTE los nombres que tienes:
     if(prefix==='monthly' && E.PAYPAL_PLAN_MONTHLY_1499) return E.PAYPAL_PLAN_MONTHLY_1499;
     if(prefix==='annual'  && E.PAYPAL_PLAN_ANNUAL_4999)  return E.PAYPAL_PLAN_ANNUAL_4999;
-    // Fallback genérico por si cambias los sufijos:
     var k=Object.keys(E).find(function(x){return x.startsWith('PAYPAL_PLAN_'+(prefix==='monthly'?'MONTHLY':'ANNUAL'))});
     return k?E[k]:'';
   }
@@ -24,15 +22,24 @@
     var l=document.getElementById('paypal-lifetime');
     if(m){
       var pm=planIdFromEnv('monthly');
-      if(pm){ paypal.Buttons({style:{shape:'pill',layout:'vertical'},createSubscription:function(_,a){return a.subscription.create({plan_id:pm})},onApprove:function(){localStorage.setItem('ibg_subscribed','1');alert("¡Mensual activada!")}}).render('#paypal-monthly'); }
+      if(pm){ paypal.Buttons({style:{shape:'pill',layout:'vertical'},
+        createSubscription:(_,a)=>a.subscription.create({plan_id:pm}),
+        onApprove:()=>{localStorage.setItem('ibg_subscribed','1');alert("¡Mensual activada!")}
+      }).render('#paypal-monthly'); }
     }
     if(y){
       var py=planIdFromEnv('annual');
-      if(py){ paypal.Buttons({style:{shape:'pill',layout:'vertical'},createSubscription:function(_,a){return a.subscription.create({plan_id:py})},onApprove:function(){localStorage.setItem('ibg_subscribed','1');alert("¡Anual activada!")}}).render('#paypal-yearly'); }
+      if(py){ paypal.Buttons({style:{shape:'pill',layout:'vertical'},
+        createSubscription:(_,a)=>a.subscription.create({plan_id:py}),
+        onApprove:()=>{localStorage.setItem('ibg_subscribed','1');alert("¡Anual activada!")}
+      }).render('#paypal-yearly'); }
     }
     if(l && (W.__ENV||{}).LIFETIME_PRICE_EUR){
       var price=(W.__ENV||{}).LIFETIME_PRICE_EUR;
-      paypal.Buttons({style:{shape:'pill',layout:'vertical'},createOrder:function(_,a){return a.order.create({purchase_units:[{amount:{currency_code:'EUR',value:price}}]})},onApprove:function(_,a){return a.order.capture().then(function(){localStorage.setItem('ibg_lifetime','1');alert("¡Lifetime activado!")})}}).render('#paypal-lifetime');
+      paypal.Buttons({style:{shape:'pill',layout:'vertical'},
+        createOrder:(_,a)=>a.order.create({purchase_units:[{amount:{currency_code:'EUR',value:price}}]}),
+        onApprove:(_,a)=>a.order.capture().then(()=>{localStorage.setItem('ibg_lifetime','1');alert("¡Lifetime activado!")})
+      }).render('#paypal-lifetime');
     }
   }
   function initPaywallUnlockButton(){
