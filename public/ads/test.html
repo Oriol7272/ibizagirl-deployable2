@@ -1,0 +1,22 @@
+<!doctype html><meta charset="utf-8">
+<title>IBG Ads Test</title>
+<style>body{background:#0b0b0f;color:#fff;font-family:system-ui;padding:20px} .slot{border:1px dashed #666;min-height:120px;margin:10px 0;padding:8px}</style>
+<div>IBG Ads Test (usa __ENV)</div>
+<div class="slot" id="L"></div>
+<div class="slot" id="R"></div>
+<div class="slot" id="B"></div>
+<script src="/js/env-inline.js"></script>
+<script>
+  (function(E){
+    function s(id){return document.getElementById(id)}
+    function add(src, into){var t=document.createElement('script');t.src=src;t.async=true;t.defer=true;s(into).appendChild(t);}
+    // Juicy (via proxy)
+    add('/api/ads/juicy','L'); var i=document.createElement('ins'); i.id='jadsPlaceHolderTestL'; s('L').appendChild(i);
+    (window.adsbyjuicy=window.adsbyjuicy||[]).push({adzone:String(E.JUICYADS_ZONE||'')});
+    add('/api/ads/juicy','R'); var j=document.createElement('ins'); j.id='jadsPlaceHolderTestR'; s('R').appendChild(j);
+    (window.adsbyjuicy=window.adsbyjuicy||[]).push({adzone:String(E.JUICYADS_ZONE||'')});
+    // Exo/Ero bottom (via proxy)
+    if(E.EXOCLICK_ZONE) add('/api/ads/exo?zone='+encodeURIComponent(E.EXOCLICK_ZONE),'B');
+    else if(E.EROADVERTISING_ZONE) add('/api/ads/ero?zone='+encodeURIComponent(E.EROADVERTISING_ZONE),'B');
+  })(window.__ENV||{});
+</script>
