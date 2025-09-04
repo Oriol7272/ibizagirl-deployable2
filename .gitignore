@@ -1,3 +1,7 @@
 _keep_*
 _download_*
 .vercel
+.env*
+_vercel_*
+*.tmp
+_snips/
