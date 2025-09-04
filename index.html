@@ -14,7 +14,7 @@
   <script defer src="/js/ads.js"></script>
   <script defer src="/js/chatbot.js"></script>
 </head>
-<body>
+<body style="background-image: url(/decorative-images/paradise-beach.png); background-size: cover; background-attachment: fixed;">
   <div class="nav"><div class="nav-inner">
     <div class="brand">ibizagirl.pics</div>
     <div class="menu">
@@ -69,4 +69,42 @@
     IBG_ADS.initAds(); IBG_CHAT.initCrisp();
   </script>
 </body>
+
+<!-- Fallback para cuando los anuncios están bloqueados -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Verificar si los anuncios están bloqueados
+    setTimeout(function() {
+        var adContainers = document.querySelectorAll('.ad-lateral, [id*="ad-"]');
+        adContainers.forEach(function(container) {
+            if (container && container.children.length < 2) {
+                // Anuncio bloqueado, mostrar mensaje
+                container.innerHTML = '<div style="background: linear-gradient(45deg, #ff6b6b, #4ecdc4); color: white; padding: 20px; text-align: center; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column;"><h3>💖 Apoya el sitio</h3><p>Desactiva AdBlock para ver ofertas especiales</p></div>';
+            }
+        });
+    }, 3000);
+});
+</script>
+
+<!-- Mejorar el carousel con las imágenes que SÍ cargan -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.PUBLIC_IMAGES_POOL && window.PUBLIC_IMAGES_POOL.length > 0) {
+        console.log('✨ Activando carousel con ' + window.PUBLIC_IMAGES_POOL.length + ' imágenes');
+        
+        // Carousel automático
+        var currentImage = 0;
+        var banner = document.querySelector('.rotating-images');
+        if (banner) {
+            setInterval(function() {
+                currentImage = (currentImage + 1) % Math.min(10, window.PUBLIC_IMAGES_POOL.length);
+                var img = banner.querySelector('img');
+                if (img) {
+                    img.src = '/full/' + window.PUBLIC_IMAGES_POOL[currentImage];
+                }
+            }, 3000);
+        }
+    }
+});
+</script>
 </html>
