@@ -1,10 +1,9 @@
 (function(W){
-  var domReady=false, decorReady=false, poolsReady=false, started=false;
+  var domReady=false, decorReady=false, started=false;
 
-  function mountBanner(){
+  function rotateBanner(){
     var deco=(W.DECORATIVE_IMAGES||[]);
     if(!deco.length) return;
-    // Fondo actual
     var banner = document.getElementById('banner');
     var rot = document.getElementById('decorative-rotator');
     var idx=0;
@@ -14,23 +13,21 @@
       if(rot) rot.style.backgroundImage='url('+src+')';
     }
     apply(0);
-    // Rotación periódica
     setInterval(function(){ idx=(idx+1)%deco.length; apply(idx); }, 4000);
-
-    // Carrusel bajo el banner
-    if (W.IBG_CAROUSEL && document.getElementById('hero-carousel')){
-      W.IBG_CAROUSEL.mountCarousel('hero-carousel');
-    }
   }
 
   function paintHome(){
+    if (document.getElementById('hero-carousel') && W.IBG_CAROUSEL && W.IBG_POOLS){
+      W.IBG_CAROUSEL.mountFromPool('hero-carousel', 'full', 10);
+    }
     if (document.getElementById('home-gallery') && W.IBG_GALLERY && W.IBG_POOLS){
-      W.IBG_GALLERY.renderPublic('home-gallery', 40); // 40 del pool full
+      W.IBG_GALLERY.renderPublic('home-gallery', 40);
     }
   }
 
-  // Eventos
-  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', function(){ domReady=true; if(decorReady) mountBanner(); }); } else { domReady=true; }
-  W.addEventListener('IBG_DECOR_READY', function(){ decorReady=true; if(domReady) mountBanner(); });
-  W.addEventListener('IBG_POOLS_READY', function(){ poolsReady=true; if(domReady && !started){ started=true; paintHome(); } });
+  function initAdsIfAny(){ if(W.IBG_ADS) W.IBG_ADS.initAds(); }
+
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', function(){ domReady=true; initAdsIfAny(); if(decorReady) rotateBanner(); }); } else { domReady=true; initAdsIfAny(); }
+  W.addEventListener('IBG_DECOR_READY', function(){ decorReady=true; if(domReady) rotateBanner(); });
+  W.addEventListener('IBG_POOLS_READY', function(){ if(domReady && !started){ started=true; paintHome(); } });
 })(window);
