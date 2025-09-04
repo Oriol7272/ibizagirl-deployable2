@@ -59,6 +59,5 @@
 
 <script type="module" src="js/bridge.content-public.mjs"></script>
 <script src="js/home.v6.js"></script>
-<script src="js/public-scan.from-source.js"></script>
 </body>
 </html>
