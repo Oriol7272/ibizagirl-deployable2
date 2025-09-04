@@ -1,47 +1,74 @@
 (function(W){
-  function injectScript(el, src){
-    if(!el) return;
+  function load(src, cb){
     var s=document.createElement('script');
-    s.src=src; s.async=true; s.setAttribute('data-cfasync','false');
-    el.innerHTML=''; el.appendChild(s);
+    s.async = true; s.src = src; s.onerror=function(){console.warn('ads load error', src)};
+    if(cb) s.onload = cb; document.head.appendChild(s);
   }
-  function fallback(el,label){
+  function clear(el){ if(el){ el.innerHTML=''; } return el; }
+  function fallbackBox(el,label){
     if(!el) return;
-    var box=document.createElement('div'); box.className='box';
-    box.innerHTML='<div style="text-align:center"><div style="font-weight:800;margin-bottom:6px">'+label+'</div><div style="font-size:12px;opacity:.8">Desactiva AdBlock para ver anuncios</div></div>';
-    el.innerHTML=''; el.appendChild(box);
+    el.innerHTML = '<div class="ad-bottom" style="min-height:90px">Publicidad ('+label+')</div>';
   }
+
+  // ---- JUICYADS (laterales)
+  function mountJuicy(el, zone){
+    if(!el || !zone) return false;
+    // Carga jads.js una sola vez
+    if(!W.__JUICY_LOADED__){
+      load('https://adserver.juicyads.com/js/jads.js', function(){ W.__JUICY_LOADED__=true; });
+    }
+    var ph = document.createElement('ins');
+    // cualquier id que empiece por jadsPlaceHolder funciona
+    ph.id = 'jadsPlaceHolder' + Math.random().toString(36).slice(2);
+    clear(el).appendChild(ph);
+    (W.adsbyjuicy = W.adsbyjuicy || []).push({ adzone: String(zone) });
+    return true;
+  }
+
+  // ---- EXOCLICK (bloque inferior preferente)
+  function mountExo(el, zone){
+    if(!el || !zone) return false;
+    if(!W.__EXO_LOADED__){
+      load('https://a.exdynsrv.com/nativeads.js', function(){ W.__EXO_LOADED__=true; });
+    }
+    var ins = document.createElement('ins');
+    ins.className = 'adsbyexoclick';
+    ins.setAttribute('data-zoneid', String(zone));
+    clear(el).appendChild(ins);
+    (W.AdProvider = W.AdProvider || []).push({ serve: {} });
+    return true;
+  }
+
+  // ---- EROADVERTISING (si no hay Exo)
+  function mountEro(el, zone){
+    if(!el || !zone) return false;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://syndication.ero-advertising.com/script.js?idzone=' + encodeURIComponent(zone);
+    clear(el).appendChild(s);
+    return true;
+  }
+
   function initAds(){
-    var E=W.__ENV||{};
-    var L=document.getElementById('ad-left');
-    var R=document.getElementById('ad-right');
-    var B=document.getElementById('ad-bottom');
+    var E = W.__ENV || {};
+    // Debug rápido
+    try{ console.log('IBG_ADS ZONES', {juicy:E.JUICYADS_ZONE, exo:E.EXOCLICK_ZONE, ero:E.EROADVERTISING_ZONE}); }catch(_){}
 
-    var any=false;
+    var L = document.getElementById('ad-left');
+    var R = document.getElementById('ad-right');
+    var B = document.getElementById('ad-bottom');
 
-    // JUICYADS laterales (usa tu JUICYADS_ZONE real)
-    if (E.JUICYADS_ZONE){
-      injectScript(L, 'https://js.juicyads.com/jp.php?zone='+encodeURIComponent(E.JUICYADS_ZONE));
-      injectScript(R, 'https://js.juicyads.com/jp.php?zone='+encodeURIComponent(E.JUICYADS_ZONE));
-      any=true;
-    }
+    var anyL = mountJuicy(L, E.JUICYADS_ZONE);
+    var anyR = mountJuicy(R, E.JUICYADS_ZONE);
 
-    // EXOCLICK o EROADVERTISING para el bloque inferior si están configurados
-    if (E.EXOCLICK_ZONE){
-      // formato común de ExoClick zone
-      var d=document.createElement('div'); d.id='exoclick-'+E.EXOCLICK_ZONE; B.innerHTML=''; B.appendChild(d);
-      injectScript(B, 'https://a.exdynsrv.com/nativeads.js');
-      any=true;
-    } else if (E.EROADVERTISING_ZONE){
-      // algunos publishers usan esta ruta con ?zone=ID; si tu snippet oficial es distinto, pégalo como HTML en EROADVERTISING_SNIPPET_B64
-      injectScript(B, 'https://syndication.ero-advertising.com/script.php?zone='+encodeURIComponent(E.EROADVERTISING_ZONE));
-      any=true;
-    }
+    var bottomOK = false;
+    if (E.EXOCLICK_ZONE) bottomOK = mountExo(B, E.EXOCLICK_ZONE);
+    if (!bottomOK && E.EROADVERTISING_ZONE) bottomOK = mountEro(B, E.EROADVERTISING_ZONE);
 
-    if(!any){
-      fallback(L,'Publicidad'); fallback(R,'Publicidad');
-      if(B){ B.innerHTML='<div class="ad-bottom">Espacio publicitario</div>'; }
-    }
+    if (!anyL) fallbackBox(L, 'lateral');
+    if (!anyR) fallbackBox(R, 'lateral');
+    if (!bottomOK) fallbackBox(B, 'inferior');
   }
-  W.IBG_ADS={initAds};
+
+  W.IBG_ADS = { initAds };
 })(window);
