@@ -12,15 +12,16 @@
   <script defer src="/js/payments.js"></script>
   <script defer src="/js/ads.js"></script>
   <script defer src="/js/chatbot.js"></script>
-  <script defer src="/js/font-setup.js"></script>
+  <!-- pools REALES -->
+  <script defer src="/js/fs-pools.js"></script>
+
+  <!-- tus content-data (no se usan para pintar; solo como fallback) -->
   <script defer src="/content-data1.js"></script>
   <script defer src="/content-data2.js"></script>
   <script defer src="/content-data3.js"></script>
   <script defer src="/content-data4.js"></script>
   <script defer src="/content-data5.js"></script>
   <script defer src="/content-data6.js"></script>
-  <script defer src="/js/bridge-auto-pools.js"></script>
-  <script defer src="/js/content-map.generated.js"></script>
 </head>
 <body>
   <div class="nav"><div class="nav-inner">
@@ -48,18 +49,21 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function(){
-      // Banner con paradise-beach si existe
+      // Banner decorativo
       var deco = (window.DECORATIVE_IMAGES||[]);
       var bg = deco.find(function(p){ return /paradise-beach/i.test(p); }) || deco[0];
       var banner = document.getElementById('banner'); if(bg && banner) banner.style.backgroundImage='url('+bg+')';
-      // Rotador tenue
       var el=document.getElementById('decorative-rotator'); if(el && deco.length){var i=0;(function tick(){el.style.backgroundImage='url('+deco[i%deco.length]+')';i++;setTimeout(tick,3500);})();}
-      // Carrusel + galería
-      if(window.IBG_CAROUSEL) IBG_CAROUSEL.mountCarousel('home-carousel');
-      if(window.IBG_GALLERY)  IBG_GALLERY.renderPublic('home-gallery',40);
-      // Ads + Chat
-      if(window.IBG_ADS) IBG_ADS.initAds();
-      if(window.IBG_CHAT) IBG_CHAT.initCrisp();
+
+      // Esperar a pools reales
+      function paint(){
+        if(window.IBG_CAROUSEL) IBG_CAROUSEL.mountCarousel('home-carousel');
+        if(window.IBG_GALLERY)  IBG_GALLERY.renderPublic('home-gallery',40);
+        if(window.IBG_ADS)  IBG_ADS.initAds();
+        if(window.IBG_CHAT) IBG_CHAT.initCrisp();
+      }
+      if(window.IBG_POOLS){ paint(); }
+      else{ window.addEventListener('IBG_POOLS_READY', paint, {once:true}); }
     });
   </script>
 </body>
