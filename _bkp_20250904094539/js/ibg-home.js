@@ -12,7 +12,6 @@
       var arr=j&&Array.isArray(j.images)?j.images:[]; var list=arr.map(function(n){return 'decorative-images/'+n});
       if(list.length===0){list=['decorative-images/paradise-beach.png']} startRotation(list);
     }).catch(function(){startRotation(['decorative-images/paradise-beach.png'])});
-
     var pub=window.CONTENT_PUBLIC||[];
     var c30=U.sample(pub,30).map(function(x){return U.norm(x,'full')});
     var car=$('#carousel'); if(car){c30.forEach(function(src){var img=new Image(); img.src=src; car.appendChild(img);});}
