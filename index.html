@@ -1,7 +1,10 @@
-<!doctype html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>ibizagirl.pics — Home</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>IBIZAGIRL.PICS — Home</title>
+  <!-- IBG-FP: vZERO -->
   <link rel="stylesheet" href="css/ibg.css">
 </head>
 <body>
@@ -12,22 +15,38 @@
     <a href="subscription.html">Subscriptions</a>
   </div></div>
 
-  <div class="banner">
+  <section id="banner" class="banner">
     <div class="img"></div>
-    <div class="title"><h1>ibizagirl.pics</h1><p>bienvenidos al paraiso</p></div>
-  </div>
+    <div class="title">
+      <h1>ibizagirl.pics</h1>
+      <p>bienvenidos al paraíso</p>
+    </div>
+  </section>
 
   <div class="container">
-    <div id="carousel" class="carousel"></div>
-    <div id="grid40" class="grid grid-5"></div>
+    <div class="section">
+      <h3>Destacadas (30 aleatorias)</h3>
+      <div id="carousel30" class="carousel"></div>
+    </div>
+    <div class="section">
+      <h3>Galería (40 aleatorias)</h3>
+      <div id="grid40" class="grid"></div>
+    </div>
   </div>
+
+  <div class="ad left"></div>
+  <div class="ad right"></div>
 
   <div class="footer container">© IbizaGirl.pics</div>
 
-  <!-- ORDEN: base -> públicos -> utils -> home -> killer SW -->
-  
-  
-  
-  
-  <script defer src="js/sw-kill-once.js"></script>
-</body></html>
+  <!-- SW killer 1 sola vez (si existe el archivo) -->
+  <script src="js/sw-kill-once.js"></script>
+
+  <!-- ORDEN CORRECTO: config -> públicas -> utilidades (opcional) -> home -->
+  <script src="content-data1.js"></script>
+  <script src="content-data2.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/ads.min.js"></script>
+  <script src="js/home.v4.js" defer></script>
+</body>
+</html>

@@ -1,32 +1,111 @@
 (function(){
   console.log("🏠 home.v4.js cargado");
-  var U=window.IBG_UTIL||{}, $=U.$;
-  function startRotation(list){
-    var el=document.querySelector('.banner .img'); if(!el) return;
-    if(!list||!list.length){ el.style.backgroundImage='url("decorative-images/paradise-beach.png")'; el.style.opacity=.28; return; }
-    var i=0; function rot(){ el.style.opacity=0; var src=list[i%list.length]; setTimeout(function(){ el.style.backgroundImage='url("'+src+'")'; el.style.opacity=.28; },220); i++; }
-    rot(); setInterval(rot,4000);
+
+  function pickSrc(item){
+    if(!item) return null;
+    if (typeof item === 'string') return item.startsWith('/')?item:('/'+item);
+    if (typeof item === 'object') {
+      const cands = [item.url, item.src, item.path, item.file, item.href];
+      for (const c of cands) if (c) return c.startsWith('/')?c:('/'+c);
+    }
+    return null;
   }
-  function build(){
-    var pub=window.CONTENT_PUBLIC||[]; if(!Array.isArray(pub)||pub.length===0){ return false; }
-    var c30=(U.sample(pub,30)).map(function(x){return U.norm(x,'full')});
-    var car=$("#carousel"); if(car){ car.innerHTML=""; c30.forEach(function(src){ var img=new Image(); img.loading="lazy"; img.decoding="async"; img.src=src; car.appendChild(img); }); console.log("🎠 Carrusel con",c30.length); }
-    var used=new Set(c30.map(String)), rest=pub.map(function(x){return U.norm(x,'full')}).filter(function(x){return !used.has(String(x))});
-    var g40=U.sample(rest,40);
-    var grid=$("#grid40"); if(grid){ grid.innerHTML=""; g40.forEach(function(src){ var d=document.createElement('div'); d.className='thumb'; var img=new Image(); img.loading="lazy"; img.decoding="async"; img.src=src; d.appendChild(img); grid.appendChild(d);}); console.log("🖼️ Galería con",g40.length); }
-    return true;
+
+  function getPublicImages(){
+    // Intenta múltiples nombres por si el dataset usa otro key
+    const pools = [
+      (typeof CONTENT_PUBLIC!=='undefined' && CONTENT_PUBLIC),
+      (window.IBG && (IBG.public || IBG.PUBLIC)),
+      (window.CONTENT && (CONTENT.public || CONTENT.PUBLIC)),
+      (window.__IBG && (__IBG.PUBLIC || __IBG.public)),
+      (window.PUBLIC_CONTENT)
+    ].filter(Boolean);
+
+    const first = pools[0] || [];
+    const srcs = [];
+    for (const it of first){
+      const s = pickSrc(it);
+      if (s && /\/full\//i.test(s)) srcs.push(s);
+    }
+    return srcs;
   }
-  document.addEventListener('DOMContentLoaded',function(){
+
+  function sampleUnique(arr, n){
+    const a = arr.slice();
+    for (let i=a.length-1; i>0; i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a.slice(0, Math.min(n, a.length));
+  }
+
+  function el(tag, cls){ const e=document.createElement(tag); if(cls) e.className=cls; return e; }
+
+  function buildBanner(){
+    const ban = document.getElementById('banner');
+    if(!ban) return;
+    const imgBox = ban.querySelector('.img');
+    // Rotación del fondo a partir de manifest.json (si existe)
+    fetch('decorative-images/manifest.json', {cache:'no-store'})
+      .then(r=>r.ok?r.json():{images:[]})
+      .then(j=>{
+        const imgs = (j && j.images && j.images.length? j.images: []).map(x=>'decorative-images/'+x);
+        let idx = 0;
+        function setBg(){
+          const src = imgs.length ? imgs[idx % imgs.length] : 'decorative-images/paradise-beach.jpg';
+          imgBox.style.backgroundImage = 'url("'+src+'")';
+          idx++;
+        }
+        setBg();
+        if (imgs.length>1) setInterval(setBg, 4000);
+      })
+      .catch(()=>{ imgBox.style.backgroundImage='url("decorative-images/paradise-beach.jpg")'; });
+  }
+
+  function buildCarouselAndGrid(){
+    const all = getPublicImages();
+    if(!all.length){
+      console.warn("⚠️ No hay CONTENT_PUBLIC visible para Home");
+      return;
+    }
+    const car = document.getElementById('carousel30');
+    const grid = document.getElementById('grid40');
+
+    const thirty = sampleUnique(all, 30);
+    const forty  = sampleUnique(all.filter(x=>!thirty.includes(x)), 40);
+
+    // carrusel
+    const track = el('div','track');
+    for (const src of thirty){
+      const img = el('img'); img.loading='lazy'; img.src = src; img.alt='photo';
+      track.appendChild(img);
+    }
+    car.appendChild(track);
+    // auto-scroll simple
+    let scrollX = 0;
+    setInterval(()=>{
+      scrollX = (scrollX + 1) % (track.scrollWidth - car.clientWidth + 1 || 1);
+      car.scrollTo(scrollX,0);
+    }, 30);
+
+    // grid
+    for (const src of forty){
+      const a = el('a','grid-item'); a.href=src; a.target='_blank';
+      const img = el('img'); img.loading='lazy'; img.src=src; img.alt='photo';
+      a.appendChild(img);
+      grid.appendChild(a);
+    }
+  }
+
+  function ready(fn){ document.readyState!=='loading'?fn():document.addEventListener('DOMContentLoaded',fn); }
+
+  ready(function(){
     console.log("🌅 DOM listo; Home v4");
-    fetch('decorative-images/manifest.json').then(function(r){return r.ok?r.json():null}).then(function(j){
-      var a=j&&Array.isArray(j.images)?j.images:[]; var list=a.map(function(n){return 'decorative-images/'+n});
-      startRotation(list.length?list:['decorative-images/paradise-beach.png']);
-    }).catch(function(){ startRotation(['decorative-images/paradise-beach.png']); });
-    var tries=0; (function loop(){
-      if((!Array.isArray(window.CONTENT_PUBLIC)||!window.CONTENT_PUBLIC.length) && U.autodetectPublicDeep){ U.autodetectPublicDeep(); }
-      if (build()) return;
-      if (++tries < 80) return setTimeout(loop,100);
-      console.warn("⏱️ Timeout esperando CONTENT_PUBLIC");
-    })();
+    buildBanner();
+    buildCarouselAndGrid();
+    // anuncios laterales si existe ads.min.js
+    if (window.IBG_ADS && typeof IBG_ADS.init==='function') {
+      IBG_ADS.init();
+    }
   });
 })();
