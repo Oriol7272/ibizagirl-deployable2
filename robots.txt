@@ -1,0 +1,152 @@
+# IbizaGirl.pics - Robots.txt Optimizado SEO
+# Última actualización: 2025-01-15
+
+# ============================
+# REGLAS GENERALES
+# ============================
+
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /main.html
+Allow: /full/
+Allow: /manifest.json
+Allow: /sw.js
+Allow: /sitemap.xml
+Allow: /styles.css
+Allow: /*.js$
+Allow: /*.css$
+
+# Contenido premium protegido
+Disallow: /uncensored/
+Disallow: /uncensored-videos/
+
+# Archivos del sistema
+Disallow: /admin/
+Disallow: /private/
+Disallow: /cgi-bin/
+Disallow: /tmp/
+Disallow: /.git/
+Disallow: /node_modules/
+Disallow: /*.json$ 
+Disallow: /*.config$
+Disallow: /*.lock$
+Disallow: /*.log$
+Disallow: /*.sql$
+Disallow: /*.sh$
+
+# Parámetros de URL
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+Disallow: /*?*session=
+Disallow: /*?*token=
+
+# ============================
+# BOTS ESPECÍFICOS
+# ============================
+
+# Googlebot
+User-agent: Googlebot
+Allow: /
+Allow: /full/
+Crawl-delay: 1
+
+# Googlebot Images
+User-agent: Googlebot-Image
+Allow: /
+Allow: /full/
+Disallow: /uncensored/
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
+
+# Slurp (Yahoo)
+User-agent: Slurp
+Allow: /
+Crawl-delay: 2
+
+# Yandex
+User-agent: Yandex
+Allow: /
+Crawl-delay: 2
+
+# DuckDuckBot
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+
+# Baiduspider
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 3
+
+# ============================
+# BLOQUEAR BOTS MALICIOSOS
+# ============================
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+# ============================
+# ARCHIVOS DE VERIFICACIÓN
+# ============================
+
+# Google Search Console
+Allow: /google*.html
+
+# Bing Webmaster Tools
+Allow: /BingSiteAuth.xml
+
+# Yandex Webmaster
+Allow: /yandex_*.html
+
+# Ad networks verification
+Allow: /ads.txt
+Allow: /*_verification.html
+
+# ============================
+# SITEMAP
+# ============================
+
+Sitemap: https://ibizagirl.pics/sitemap.xml
+
+# ============================
+# HOST PREFERIDO
+# ============================
+
+Host: ibizagirl.pics

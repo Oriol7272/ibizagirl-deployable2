@@ -1,0 +1,45 @@
+:root{ --side:164px }
+
+/* HERO */
+.hero{position:relative;height:min(64vh,calc(100vh - 88px));min-height:360px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.1s ease;opacity:1}
+.hero-bg.is-hidden{opacity:0}
+.hero-content{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+.hero-title{font-family:'Sexy Beachy',system-ui;font-weight:900;line-height:1;letter-spacing:.5px;
+  font-size:clamp(72px,11vw,160px);text-shadow:0 3px 22px rgba(0,0,0,.7)}
+.hero-sub{margin-top:12px;font-size:clamp(18px,3vw,34px);opacity:.98}
+
+/* Contenedor principal: ocupa todo el ancho libre entre anuncios */
+.page-shell,#app{width:100%;max-width:calc(100vw - (var(--side) * 2));margin-left:auto;margin-right:auto}
+body{margin:0}
+
+/* Carrusel */
+.section-title{padding:16px 12px 6px 12px;font-weight:800}
+.carousel{position:relative;overflow:hidden;margin:12px}
+.carousel-track{display:flex;gap:12px;scroll-snap-type:x mandatory;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.carousel-track::-webkit-scrollbar{display:none}
+.carousel .slide{min-width:520px;max-width:85vw;height:340px;scroll-snap-align:start;border-radius:18px;overflow:hidden;background:#0a1320;flex:0 0 auto}
+.carousel .slide img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* Grid (galería) */
+.grid{display:grid;gap:12px;padding:0 12px 18px}
+.grid.cols-6{grid-template-columns:repeat(6,1fr)}
+.grid.cols-7{grid-template-columns:repeat(7,1fr)}
+.card{position:relative;border-radius:18px;overflow:hidden;background:#0a1320}
+.card img{width:100%;height:220px;object-fit:cover;display:block}
+
+/* Anuncios laterales + inline */
+.side-ad{position:fixed;top:0;bottom:0;width:var(--side);z-index:50;display:none;align-items:center;justify-content:center}
+.side-ad.left{left:0}
+.side-ad.right{right:0}
+.ad-box{width:160px;height:600px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ad-inline{display:block;margin:12px auto;min-height:90px;max-width:728px}
+.ad-inline .ad-box{width:728px;height:90px;margin:0 auto}
+.ad-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;border:1px dashed rgba(255,255,255,.18);border-radius:10px;font-size:14px;color:rgba(255,255,255,.6)}
+.side-ad,.ad-inline{font-size:0;line-height:0;color:transparent}
+
+/* Mostrar laterales y reservar exactamente su ancho en el body */
+@media (min-width:1200px){
+  body{padding-left:var(--side);padding-right:var(--side)}
+  .side-ad{display:flex}
+}
