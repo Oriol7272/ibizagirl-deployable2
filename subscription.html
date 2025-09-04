@@ -1,11 +1,9 @@
 <!doctype html><html lang="es"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-store, must-revalidate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>IbizaGirl.pics – Subscriptions</title>
-<link rel="icon" href="favicon.ico"><link rel="stylesheet" href="css/ibg.css">
-<script defer src="ibg-env.js"></script>
-<script defer src="js/ibg-ads.js"></script>
-<script defer src="js/ibg-crisp.js"></script>
-<script defer src="js/ibg-payments.js"></script>
+<link rel="stylesheet" href="css/ibg.css">
+<script defer src="js/payments.min.js"></script>
 <script>document.addEventListener('DOMContentLoaded',function(){ if(window.IBG_PAY) IBG_PAY.mountSubs();});</script>
 </head><body>
 <div class="nav"><div class="row container">
@@ -23,8 +21,8 @@
   </div>
   <div class="card section" style="margin-top:12px">
     <h3>Packs</h3>
-    <p><a class="btn" href="#" onclick="IBG_PAY.openPurchase('pack_photos','pack10',0.80,function(){alert('Pack fotos activado');});return false;">10 fotos · €0.80</a></p>
-    <p><a class="btn" href="#" onclick="IBG_PAY.openPurchase('pack_videos','pack5',1.00,function(){alert('Pack vídeos activado');});return false;">5 vídeos · €1.00</a></p>
+    <p><a class="btn" href="#" onclick="IBG_PAY && IBG_PAY.openPurchase('pack_photos','pack10',0.80,function(){alert('Pack fotos activado');});return false;">10 fotos · €0.80</a></p>
+    <p><a class="btn" href="#" onclick="IBG_PAY && IBG_PAY.openPurchase('pack_videos','pack5',1.00,function(){alert('Pack vídeos activado');});return false;">5 vídeos · €1.00</a></p>
   </div>
 </div>
 <div id="pp-modal" class="modal"><div class="box"><div id="pp-widget"></div><div style="margin-top:8px;text-align:right"><a href="#" class="btn" id="pp-close">Cerrar</a></div></div></div>
