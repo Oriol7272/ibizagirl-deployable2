@@ -16,3 +16,13 @@ body{margin:0;background:#0e1b26 url('../decorative-images/paradise-beach.png') 
 .side-ad{position:fixed;top:0;bottom:0;width:var(--sideAdW);z-index:1;display:none;align-items:center;justify-content:center}
 .side-ad.left{left:0}.side-ad.right{right:0}
 @media (min-width:1460px){.side-ad{display:flex}.page-shell{margin-left:var(--sideAdW);margin-right:var(--sideAdW)}}
+
+/* IBG: Fuente del título de banner */
+@font-face{
+  font-family:"SexyBeachy";
+  src: url("../decorative-images/Sexy Beachy.otf") format("opentype"),
+       url("../decorative-images/Sexy Beachy.ttf") format("truetype");
+  font-display:swap;
+}
+.banner .title h1{font-family:"SexyBeachy", system-ui, sans-serif;font-weight:400}
+.banner .title p{letter-spacing:.5px}
