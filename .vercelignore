@@ -1,0 +1,9 @@
+.git/
+node_modules/
+*.log
+.DS_Store
+.vscode/
+ibg_audit/
+_backup_*/
+scripts/
+tools/

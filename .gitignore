@@ -18,3 +18,4 @@ index.html.__tmp__
 # Sistema / dependencias
 .DS_Store
 node_modules/
+.vercel
