@@ -1,5 +1,16 @@
 (function(W){
-  var U=W.IBG_UTILS;
+  var U=W.IBG_UTILS||{
+    daySeed:function(){var d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate()},
+    seededShuffle:function(a){return a.slice()},
+    pickN:function(a,n){return a.slice(0,n)}
+  };
+  function coerce(items){
+    return (items||[]).map(function(it){
+      if(typeof it==='string'){ return {src:it,title:(it.split('/').pop()||'')} }
+      if(it && typeof it==='object'){ return {src: it.src || it.url || it.path, title: it.title || it.name || (it.src||'').split('/').pop()} }
+      return null;
+    }).filter(function(x){return x && x.src});
+  }
   function cardHTML(item,opts){
     var classes=['card']; if(opts.locked) classes.push('locked');
     var price=opts.price||'', isNew=!!opts.isNew, title=item.title||'';
@@ -16,18 +27,21 @@
     ].join('');
   }
   function renderPublic(containerId,count){
-    var pick=U.pickN(W.IBG_POOLS.full||[],count,U.daySeed());
-    var html=pick.map(function(it){return cardHTML(it,{locked:false,price:'',isNew:false,video:false})}).join('');
+    var pool = coerce(W.IBG_POOLS && W.IBG_POOLS.full);
+    var pick = (U.pickN||function(a,n){return a.slice(0,n)})(pool, count, U.daySeed?U.daySeed():undefined);
+    var html = pick.map(function(it){return cardHTML(it,{locked:false,price:'',isNew:false,video:false})}).join('');
     var box=document.getElementById(containerId); if(box) box.innerHTML='<div class="grid">'+html+'</div>';
   }
   function renderPremium(containerId,count,newRate,price){
-    var pick=U.pickN(W.IBG_POOLS.uncensored||[],count,U.daySeed());
-    var html=pick.map(function(it,idx){return cardHTML(it,{locked:true,price:price,isNew:(idx<Math.floor(count*(newRate||0.3))),video:false})}).join('');
+    var pool = coerce(W.IBG_POOLS && W.IBG_POOLS.uncensored);
+    var pick = (U.pickN||function(a,n){return a.slice(0,n)})(pool, count, U.daySeed?U.daySeed():undefined);
+    var html  = pick.map(function(it,idx){return cardHTML(it,{locked:true,price:price,isNew:(idx<Math.floor(count*(newRate||0.3))),video:false})}).join('');
     var box=document.getElementById(containerId); if(box) box.innerHTML='<div class="grid">'+html+'</div>';
   }
   function renderVideos(containerId,count,price){
-    var pick=U.pickN(W.IBG_POOLS.videos||[],count,U.daySeed());
-    var html=pick.map(function(it){return cardHTML(it,{locked:true,price:price,isNew:false,video:true})}).join('');
+    var pool = coerce(W.IBG_POOLS && W.IBG_POOLS.videos);
+    var pick = (U.pickN||function(a,n){return a.slice(0,n)})(pool, count, U.daySeed?U.daySeed():undefined);
+    var html  = pick.map(function(it){return cardHTML(it,{locked:true,price:price,isNew:false,video:true})}).join('');
     var box=document.getElementById(containerId); if(box) box.innerHTML='<div class="grid">'+html+'</div>';
   }
   function wirePaywall(modalId){
