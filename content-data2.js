@@ -151,3 +151,6 @@ console.log('📊 Estadísticas de contenido público:', {
     banners: window.BANNER_IMAGES.length,
     teasers: window.TEASER_IMAGES.length
 });
+
+/* == IBG bridge: exponer CONTENT_PUBLIC == */
+try{ if(typeof window!=="undefined" && typeof CONTENT_PUBLIC!=="undefined"){ window.CONTENT_PUBLIC = CONTENT_PUBLIC; console.log("🔗 CONTENT_PUBLIC expuesto en window"); } }catch(_e){}
