@@ -17,6 +17,7 @@
   <script defer src="/content-data4.js"></script>
   <script defer src="/content-data5.js"></script>
   <script defer src="/content-data6.js"></script>
+  <script defer src="/js/bootstrap.js"></script>
 </head>
 <body>
   <div class="nav"><div class="nav-inner">
@@ -43,20 +44,6 @@
     </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function(){
-      function paint(){
-        if(window.IBG_GALLERY){
-          IBG_GALLERY.renderVideos('videos-grid',20,(window.__ENV&&__ENV.PRICE_VIDEO_EUR)||"0.30€");
-          IBG_GALLERY.wirePaywall('paywall-modal');
-        }
-        if(window.IBG_PAYMENTS){ IBG_PAYMENTS.loadPayPal(); IBG_PAYMENTS.initPaywallUnlockButton(); }
-        if(window.IBG_ADS)  IBG_ADS.initAds();
-        if(window.IBG_CHAT) IBG_CHAT.initCrisp();
-      }
-      if(window.IBG_POOLS){ paint(); }
-      else{ window.addEventListener('IBG_POOLS_READY', paint, {once:true}); }
-    });
-  </script>
+  
 </body>
 </html>

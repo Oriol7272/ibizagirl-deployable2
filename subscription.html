@@ -8,6 +8,7 @@
   <script defer src="/js/ads.js"></script>
   <script defer src="/js/chatbot.js"></script>
   <script defer src="/js/font-setup.js"></script>
+  <script defer src="/js/bootstrap.js"></script>
 </head>
 <body>
   <div class="nav"><div class="nav-inner">
@@ -25,15 +26,6 @@
     <div class="ad">Espacio publicitario</div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function(){
-      if(window.IBG_PAYMENTS){
-        IBG_PAYMENTS.loadPayPal();
-        var t=setInterval(function(){ if(window.paypal){ clearInterval(t); IBG_PAYMENTS.mountSubButtons(); }},300);
-      }
-      if(window.IBG_ADS)  IBG_ADS.initAds();
-      if(window.IBG_CHAT) IBG_CHAT.initCrisp();
-    });
-  </script>
+  
 </body>
 </html>
