@@ -16,7 +16,7 @@
     iframe.src = "/ads/eroframe_ctrl.html?space="+encodeURIComponent(SPACE)+"&pid="+encodeURIComponent(PID)+"&ctrl="+encodeURIComponent(CTRL);
     iframe.loading = "lazy";
     iframe.referrerPolicy = "unsafe-url";
-    iframe.setAttribute("sandbox","allow-scripts allow-popups");
+    iframe.setAttribute("sandbox","allow-scripts allow-same-origin allow-popups");
     iframe.className = "adframe";
     host.appendChild(iframe);
     console.log("[ads-ero-ctrl] mounted →", iframe.src);
