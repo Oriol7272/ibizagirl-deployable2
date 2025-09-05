@@ -103,3 +103,5 @@ html,body{
 #ad-right{ right:8px; }
 .ad-bottom{ position:fixed; left:0; right:0; bottom:0; min-height:90px; display:flex; justify-content:center; z-index:30; }
 @media (max-width:1024px){ .ad-lateral{ display:none; } }
+/* #ad-bottom-test: quitar al finalizar debug */
+#ad-bottom{ outline:1px dashed rgba(255,255,255,.35); min-height:250px; }
