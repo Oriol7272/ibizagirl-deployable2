@@ -1,16 +1,19 @@
 <!doctype html><meta charset="utf-8">
-<style>html,body{margin:0;background:transparent}#slot{width:300px;height:250px;display:block}</style>
+<title>ero frame</title>
+<style>html,body{margin:0;background:#000}</style>
 <div id="slot"></div>
 <script>
-(function(){
+(function () {
   const p = new URLSearchParams(location.search);
-  const zone = p.get('zone'); if(!zone){ console.log('ero frame: missing zone'); return; }
-  const mode = p.get('mode') || 'proxy';
-  const src = mode==='direct'
-    ? `https://syndication.ero-advertising.com/splash.php?idzone=${encodeURIComponent(zone)}`
-    : `/api/ads/ero?zone=${encodeURIComponent(zone)}`;
-  const s=document.createElement('script'); s.src=src; s.async=true;
-  s.onerror=()=>console.log('ero frame: load error', src);
-  document.currentScript.parentNode.appendChild(s);
+  const zone = p.get('zone');
+  const mode = (p.get('mode') || 'proxy').toLowerCase(); // proxy | direct
+  if (!zone) { document.body.textContent = 'missing zone'; return; }
+  const s = document.createElement('script');
+  s.async = true;
+  s.referrerPolicy = 'unsafe-url'; // por si el upstream lo usa
+  s.src = (mode === 'direct')
+    ? 'https://syndication.ero-advertising.com/splash.php?idzone=' + encodeURIComponent(zone)
+    : '/api/ads/ero?zone=' + encodeURIComponent(zone);
+  document.body.appendChild(s);
 })();
 </script>
