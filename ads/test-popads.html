@@ -7,10 +7,11 @@ document.write('<pre>siteId = '+SID+'\nloader = '+location.origin+'/api/ads/popa
 </script>
 <script>
 (function(){
-  var SID=new URLSearchParams(location.search).get('site');
+  var SID=new URLSearchParams(location.search).get('site')||'';
   var s=document.createElement('script'); s.async=true;
-  s.src='/api/ads/popads?site='+encodeURIComponent(SID||'');
+  s.src='/api/ads/popads?site='+encodeURIComponent(SID);
   document.body.appendChild(s);
 })();
 </script>
+<p>Recuerda: PopAds es popunder (no dibuja bloque). Puede requerir clic del usuario y no abrirse si el navegador lo bloquea.</p>
 </body></html>
