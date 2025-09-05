@@ -15,12 +15,13 @@
     var queue=[], eaCtrl={add:function(x){queue.push(x)}};
     window.eaCtrl = eaCtrl;
     var js = document.createElement("script");
-    js.src = "//go.easrv.cl/loadeactrl.go?pid="+encodeURIComponent(pid)
+    js.src = "https://go.easrv.cl/loadeactrl.go?pid="+encodeURIComponent(pid)
            + "&spaceid="+encodeURIComponent(space)
            + "&ctrlid="+encodeURIComponent(ctrl);
     js.async = true;
     document.head.appendChild(js);
   }
+  // Monta el banner en el div
   window.eaCtrl.add({"display":"sp","sid":Number(space),"plugin":"banner"});
 })();
 </script>
