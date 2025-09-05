@@ -1,79 +1,39 @@
-// Carga simple y robusta de anuncios.
-// Requiere __ENV con: EXOCLICK_ZONE, EROADVERTISING_ZONE, JUICYADS_ZONE, POPADS_ENABLE, POPADS_SITE_ID
-(function(W,D){
-  const E=W.__ENV||{};
-  const Z={
-    JUICYADS_ZONE: E.JUICYADS_ZONE,
-    EXOCLICK_ZONE: E.EXOCLICK_ZONE,
-    EROADVERTISING_ZONE: E.EROADVERTISING_ZONE,
-    POPADS: (E.POPADS_ENABLE===true || E.POPADS_ENABLE==='true') && E.POPADS_SITE_ID
+(function (w, d) {
+  const E = (w.__ENV || {});
+  const Z = {
+    EROADVERTISING_ZONE: E.EROADVERTISING_ZONE || null,
+    EXOCLICK_ZONE: E.EXOCLICK_ZONE || null,
+    JUICYADS_ZONE: E.JUICYADS_ZONE || null,
+    POPADS_SITE_ID: E.POPADS_SITE_ID || null,
+    POPADS_ENABLE: (E.POPADS_ENABLE || '').toString().toLowerCase() === 'true'
   };
-  console.log("IBG_ADS ZONES ->", Z);
+  console.log('IBG_ADS ZONES ->', Z);
 
-  const slots={
-    L: D.getElementById('ad-left'),
-    R: D.getElementById('ad-right'),
-    B: D.getElementById('ad-bottom')
-  };
-
-  function inject(slot, html){
-    const c = slots[slot] || D.body;
-    const d = D.createElement('div');
-    d.className='ibg-ad';
-    d.innerHTML = html;
-    c.appendChild(d);
-  }
-  function addScript(slot, src, attrs={}){
-    const c = slots[slot] || D.body;
-    const s = D.createElement('script');
-    s.async = true;
-    s.src = src;
-    for (const k in attrs) s.setAttribute(k, attrs[k]);
-    s.onerror = ()=>console.warn('ad load error', src);
-    c.appendChild(s);
+  function ensureSlots() {
+    if (d.getElementById('ad-right')) return;
+    const left = d.createElement('div'); left.id = 'ad-left'; left.className = 'ad ad-lateral';
+    const right = d.createElement('div'); right.id = 'ad-right'; right.className = 'ad ad-lateral';
+    const bottom = d.createElement('div'); bottom.id = 'ad-bottom'; bottom.className = 'ad ad-bottom';
+    d.body.append(left, right, bottom);
   }
 
-  // LATERALES 300x250: izquierda Ero, derecha Exo (si hay zonas)
-  if (Z.EROADVERTISING_ZONE) {
-    // EroAdvertising: banner / splash.php?idzone=...
-    addScript('L', `https://syndication.ero-advertising.com/splash.php?idzone=${encodeURIComponent(Z.EROADVERTISING_ZONE)}`);
-  }
-  if (Z.EXOCLICK_ZONE) {
-    // ExoClick: banner / splash.php?idzone=...
-    addScript('R', `https://syndication.exdynsrv.com/splash.php?idzone=${encodeURIComponent(Z.EXOCLICK_ZONE)}`);
+  function addScript(targetId, src) {
+    const t = d.getElementById(targetId) || d.body;
+    const s = d.createElement('script');
+    s.src = src; s.async = true; s.referrerPolicy = 'no-referrer';
+    s.onerror = () => console.warn('ad load error', src);
+    t.appendChild(s);
   }
 
-  // JUICY (solo si no está suspendido). Si tu sitio está “SUSPENDED” no verás nada aunque cargue.
-  if (Z.JUICYADS_ZONE) {
-    // Colócalo en el bottom como tercer intento
-    // Nota: muchas integraciones de Juicy usan <script src="https://juicyads.in/js/jads.js"></script> + unit;
-    // este loader básico sirve para zonas "js" modernas (si tu zona requiere unit HTML, pégalo en ads/test).
-    addScript('B', `https://juicyads.in/js/jads.js?zone=${encodeURIComponent(Z.JUICYADS_ZONE)}`);
+  function initAds() {
+    ensureSlots();
+    // === EroAdvertising: lo mostramos a la derecha con PROXY (evita CORS/SSL) ===
+    if (Z.EROADVERTISING_ZONE) {
+      addScript('ad-right', '/api/ads/ero?zone=' + encodeURIComponent(Z.EROADVERTISING_ZONE));
+    }
+    // (ExoClick y Juicy los activaremos en los siguientes pasos)
   }
 
-  // POPADS (opcional; overlay)
-  if (Z.POPADS) {
-    // Snippet PopAds mínimo; usa el SITE_ID desde env
-    (function(){
-      var _pop = window._pop || {};
-      _pop.siteId = E.POPADS_SITE_ID;
-      _pop.popundersPerIP = 0; _pop.default = false; _pop.topmostLayer="auto";
-      window._pop = _pop;
-      var s = D.createElement('script');
-      s.async = true;
-      s.src = 'https://cdn.popads.net/pop.js';
-      s.onerror = ()=>console.warn('PopAds bloqueado por navegador/ETP');
-      (D.head||D.documentElement).appendChild(s);
-    })();
-  }
-
-  // Fallback “Patrocinado” si en 3s no hay nada dentro de cada contenedor
-  setTimeout(()=>{
-    ['L','R','B'].forEach(k=>{
-      const c=slots[k];
-      if(!c) return;
-      const hasContent = c.querySelector('iframe, ins, script, img, a');
-      if(!hasContent) c.innerHTML = '<div class="ad-fallback">Patrocinado</div>';
-    });
-  }, 3000);
-})(window,document);
+  // EXPONE API GLOBAL
+  w.IBG_ADS = { initAds, _ZONES: Z };
+})(window, document);
