@@ -5,8 +5,6 @@ export default async function handler(){
   try{
     const r=await fetch(up,{headers:{'user-agent':'Mozilla/5.0'}});
     if(r.ok){ return send(200, await r.text()); }
-    return send(200, `(function(){var s=document.createElement('script');s.src=${JSON.stringify(up)};s.async=true;document.head.appendChild(s);})();`);
-  }catch(e){
-    return send(200, `(function(){var s=document.createElement('script');s.src=${JSON.stringify(up)};s.async=true;document.head.appendChild(s);})();`);
-  }
+  }catch(e){}
+  return send(200, `(function(){var s=document.createElement('script');s.src=${JSON.stringify('https://a.magsrv.com/ad-provider.js')};s.async=true;document.head.appendChild(s);})();`);
 }
