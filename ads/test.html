@@ -1,10 +1,16 @@
 <!doctype html><meta charset="utf-8">
 <title>ads/test</title>
-<style>body{font:14px/1.35 system-ui,sans-serif;max-width:1160px;margin:24px auto} .slot{border:1px dashed #bbb;padding:8px;margin:10px 0}</style>
+<style>
+  body{font:14px/1.4 system-ui,sans-serif;max-width:1200px;margin:24px auto}
+  .row{display:flex;gap:16px}
+  .slot{flex:1;border:1px dashed #bbb;padding:8px;min-height:280px}
+</style>
 <h1>ads/test</h1>
-<p>Debe cargar 2 iframes (Juicy) y 1 (Exo/Ero). Si quedan vacíos: bloqueador o dominio no autorizado en la red de ads.</p>
-<div id="L" class="slot" style="max-width:320px"></div>
-<div id="R" class="slot" style="max-width:320px"></div>
-<div id="B" class="slot" style="max-width:1140px"></div>
+<p>Debes ver dos bloques Juicy (izq/der) y uno Exo/Ero (abajo). Si salen vacíos: bloqueador o dominio no aprobado.</p>
+<div class="row">
+  <div id="ad-left"  class="slot"></div>
+  <div id="ad-right" class="slot"></div>
+</div>
+<div id="ad-bottom" class="slot" style="margin-top:16px"></div>
 <script src="/js/ads.js"></script>
 <script>document.addEventListener('DOMContentLoaded',()=> (window.IBG_ADS.initAds||window.IBG_ADS.init)());</script>

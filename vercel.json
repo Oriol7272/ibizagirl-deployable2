@@ -1,12 +1,7 @@
 {
   "buildCommand": "bash ./vercel-build.sh",
+  "outputDirectory": "public",
   "cleanUrls": true,
   "trailingSlash": false,
-  "functions": {
-    "api/ads/*.js": { "runtime": "edge" }
-  },
-  "routes": [
-    { "src": "/ads/test", "dest": "/public/ads/test.html" },
-    { "src": "/(.*)", "dest": "/public/$1" }
-  ]
+  "functions": { "api/ads/*.js": { "runtime": "edge" } }
 }
