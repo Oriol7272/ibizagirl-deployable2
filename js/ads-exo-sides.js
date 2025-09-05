@@ -1,43 +1,39 @@
 (function(){
   var E = (window.__ENV||{});
-  var Z = E.EXOCLICK_ZONE;
-  if(!Z){ return; }
-  if(window.__IBG_EXO_SIDES_MOUNTED){ return; }
+  var Z = E.EXOCLICK_ZONE;            // usa tu zona de DISPLAY si tienes; si es sticky, quedará contenido en el iframe
+  if(!Z) return;
+  if(window.__IBG_EXO_SIDES_MOUNTED) return;
   window.__IBG_EXO_SIDES_MOUNTED = true;
 
-  function loadProv(cb){
-    if(window.AdProvider){ cb&&cb(); return; }
-    var s = document.createElement('script');
-    s.src = 'https://a.magsrv.com/ad-provider.js';
-    s.async = true;
-    s.onload = function(){ cb&&cb(); };
-    (document.head||document.documentElement).appendChild(s);
-  }
-
-  function place(hostId){
+  function makeFrame(hostId){
     var host = document.getElementById(hostId);
     if(!host) return;
     host.innerHTML='';
-    var ins = document.createElement('ins');
-    ins.className = 'eas6a97888e17';
-    ins.setAttribute('data-zoneid', String(Z));
-    ins.setAttribute('data-block-ad-types', '0');
-    ins.style.display='block';
-    ins.style.minHeight='250px';
-    ins.style.width='300px';
-    host.appendChild(ins);
+    var html = '<!doctype html><html><head><meta charset="utf-8"><meta name="referrer" content="unsafe-url"></head>'
+             + '<body style="margin:0;padding:0;overflow:hidden">'
+             + '<ins class="eas6a97888e17" data-zoneid="'+String(Z)+'" data-block-ad-types="0" style="display:block;width:300px;min-height:250px"></ins>'
+             + '<script async src="https://a.magsrv.com/ad-provider.js"><\/script>'
+             + '<script>(AdProvider=window.AdProvider||[]).push({serve:{}});<\/script>'
+             + '</body></html>';
+    var f = document.createElement('iframe');
+    f.className = 'adframe';
+    f.sandbox = 'allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation';
+    f.referrerPolicy = 'unsafe-url';
+    f.loading = 'lazy';
+    // srcdoc confina el sticky al interior del iframe, no a la página
+    f.srcdoc = html;
+    host.appendChild(f);
   }
 
   function mount(){
-    place('ad-left');
-    place('ad-right');
-    (window.AdProvider = window.AdProvider || []).push({serve:{}});
-    console.log('IBG_ADS: EXO/AP mounted ->', Z, 'on ad-left & ad-right');
+    makeFrame('ad-left');
+    makeFrame('ad-right');
+    console.log('IBG_ADS: EXO/AP mounted (iframes) ->', Z, 'on ad-left & ad-right');
   }
 
   if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', function(){ loadProv(mount); });
+    document.addEventListener('DOMContentLoaded', mount);
   } else {
-    loadProv(mount);
+    mount();
   }
 })();
