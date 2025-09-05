@@ -9,6 +9,5 @@
     Object.assign(ifr,{width:'300',height:'250',frameBorder:'0',scrolling:'no',loading:'lazy',referrerPolicy:'unsafe-url'});
     ifr.style='border:0;display:block;margin:0 auto';
     host.appendChild(ifr);
-    console.log('IBG_ADS: EXO mounted ->', Z);
-  }catch(e){ console.warn('[ads-exo] error', e); }
+    (window.__ENV&&__ENV.DEBUG_ADS)&&console.log('IBG_ADS: EXO mounted ->', Z);}catch(e){ console.warn('[ads-exo] error', e); }
 })();
