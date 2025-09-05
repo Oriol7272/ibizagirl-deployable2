@@ -2,6 +2,5 @@
   "buildCommand": "bash ./vercel-build.sh",
   "outputDirectory": "public",
   "cleanUrls": true,
-  "trailingSlash": false,
-  "functions": { "api/ads/*.js": { "runtime": "edge" } }
+  "trailingSlash": false
 }
