@@ -1,6 +1,6 @@
 (function(){
   var E = (window.__ENV||{});
-  var Z = E.EXOCLICK_BOTTOM_ZONE || E.EXOCLICK_ZONE; // fallback si no hay var específica
+  var Z = E.EXOCLICK_BOTTOM_ZONE || E.EXOCLICK_ZONE;
   if(!Z){ console.log('[ads-exo-bottom] no zone id (EXOCLICK_BOTTOM_ZONE ni EXOCLICK_ZONE)'); return; }
 
   if(window.__IBG_EXO_BOTTOM_MOUNTED){ return; }
