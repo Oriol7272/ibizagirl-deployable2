@@ -1,13 +1,26 @@
 (function(){
-  try{
-    var SID = (window.__ENV && __ENV.POPADS_SITE_ID) || '';
-    if(!SID){ console.warn('[ads-popads] no POPADS_SITE_ID en __ENV'); return; }
-    if(window.__IBG_POPADS_LOADED){ return; }
-    window.__IBG_POPADS_LOADED = true;
-    var s=document.createElement('script');
-    s.src='/api/ads/popads?site='+encodeURIComponent(SID);
-    s.async=true; s.referrerPolicy='unsafe-url';
-    document.head.appendChild(s);
-    console.log('IBG_ADS: POPADS loader injected ->', SID);
-  }catch(e){ console.warn('[ads-popads] error', e); }
+  // PopAds: carga bajo interacción o al cabo de unos segundos
+  var E = (window.__ENV||{});
+  var SITE = E.POPADS_SITE_ID; // e.g. 5226758
+  if(!SITE){ console.log('[ads-popads] no POPADS_SITE_ID en __ENV'); return; }
+
+  function inject(){
+    if(document.querySelector('script[data-popads="1"]')) return;
+    var s = document.createElement('script');
+    // Proxy propio que te entregamos para evitar CORS/UA issues
+    s.src = '/api/ads/popjs?site='+encodeURIComponent(SITE);
+    s.async = true;
+    s.dataset.popads = '1';
+    (document.head||document.documentElement).appendChild(s);
+    console.log('IBG_ADS: POPADS injected ->', SITE);
+  }
+
+  // Primer clic del usuario
+  window.addEventListener('click', function once(){
+    inject(); window.removeEventListener('click', once);
+  }, {once:true});
+
+  // O a los 7–10s aleatorios
+  var delay = 7000 + Math.floor(Math.random()*3000);
+  setTimeout(inject, delay);
 })();
