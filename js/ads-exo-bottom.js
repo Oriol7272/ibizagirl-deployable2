@@ -1,39 +1,59 @@
 (function(){
-  var E = window.__ENV || {};
-  function log(){ if(E.DEBUG_ADS) try{ console.log.apply(console, arguments); }catch(_){ } }
+  try{
+    var E = window.__ENV||{};
+    var Z = E.EXOCLICK_BOTTOM_ZONE || E.EXOCLICK_ZONE;
+    if(!Z){ if(window.__IBG_DEBUG_ADS) console.warn('[ads-exo-bottom] sin zone id'); return; }
+    if(window.__IBG_EXO_BOTTOM_MOUNTED) return;
+    window.__IBG_EXO_BOTTOM_MOUNTED = true;
 
-  var host = document.getElementById('ad-bottom');
-  if(!host){ return; }
+    // Asegura CSS por si falta
+    if(!document.getElementById('ads-bottom-css')){
+      var st=document.createElement('style'); st.id='ads-bottom-css';
+      st.textContent='#ad-bottom{position:fixed;left:0;right:0;bottom:0;z-index:99999;display:flex;justify-content:center;pointer-events:auto;background:rgba(0,0,0,.02);backdrop-filter:blur(2px)}#ad-bottom ins{display:block;min-height:90px;width:min(100%,980px)}@media(max-width:768px){#ad-bottom ins{min-height:60px}}';
+      document.head.appendChild(st);
+      document.body.style.paddingBottom='90px';
+    }
 
-  var zone = host.getAttribute('data-zone') || E.EXOCLICK_BOTTOM_ZONE || E.EXOCLICK_ZONE || '5717078';
+    function load(cb){
+      if(window.AdProvider) return cb();
+      var s=document.createElement('script');
+      s.src='https://a.magsrv.com/ad-provider.js';
+      s.async=true;
+      s.onload=function(){ cb(); };
+      (document.head||document.documentElement).appendChild(s);
+    }
 
-  host.innerHTML = '';
-  var ifr = document.createElement('iframe');
-  ifr.setAttribute('sandbox','allow-scripts allow-popups');
-  ifr.setAttribute('referrerpolicy','unsafe-url');
-  ifr.style.cssText = 'border:0;width:100%;display:block;height:'+(window.innerWidth<=768?'60px;':'90px;');
-  host.appendChild(ifr);
+    function mount(){
+      var host=document.getElementById('ad-bottom');
+      if(!host){ if(window.__IBG_DEBUG_ADS) console.warn('[ads-exo-bottom] no #ad-bottom'); return; }
+      host.innerHTML='';
+      var ins=document.createElement('ins');
+      ins.className='eas6a97888e17';
+      ins.setAttribute('data-zoneid', String(Z));
+      ins.setAttribute('data-block-ad-types','0');
+      ins.style.display='block';
+      ins.style.minHeight=(window.innerWidth<=768?'60px':'90px');
+      ins.style.width='min(100%,980px)';
+      host.appendChild(ins);
 
-  var h = '<!doctype html><html><head><meta charset="utf-8">'
-        + '<style>html,body{margin:0;padding:0}ins{display:block;min-height:'+(window.innerWidth<=768?'60px':'90px')+';width:100%}</style>'
-        + '</head><body>'
-        + '<ins class="eas6a97888e17" data-zoneid="'+ zone +'" data-block-ad-types="0"></ins>'
-        + '<script>!function(){var ok=false;try{var mo=new MutationObserver(function(m){for(var i=0;i<m.length;i++){var a=m[i].addedNodes||[];for(var j=0;j<a.length;j++){var n=a[j];if(n&&((n.tagName&&(n.tagName.toLowerCase()==="iframe"||n.tagName.toLowerCase()==="img"))||(n.querySelector&&n.querySelector("iframe,img")))){ok=true;try{parent.postMessage({type:"IBG_EXO_OK"},"*");}catch(e){}try{mo.disconnect();}catch(e){}return;}}}});mo.observe(document.body,{childList:true,subtree:true});setTimeout(function(){if(!ok){try{parent.postMessage({type:"IBG_EXO_NOAD"},"*");}catch(e){}} ,3500);}catch(e){}}();<\/script>'
-        + '<script src="https://a.magsrv.com/ad-provider.js" async></'+'script>'
-        + '<script>(window.AdProvider=window.AdProvider||[]).push({serve:{}});<\/script>'
-        + '</body></html>';
+      (window.AdProvider = window.AdProvider || []).push({serve:{}});
+      if(window.__IBG_DEBUG_ADS) console.log('IBG_ADS: EXO bottom mounted ->', Z);
 
-  if('srcdoc' in ifr){ ifr.srcdoc = h; }
-  else {
-    var d = ifr.contentWindow && ifr.contentWindow.document;
-    if(d){ d.open(); d.write(h); d.close(); }
+      // Reintento único si no aparece iframe
+      setTimeout(function(){
+        if(!host.querySelector('iframe')){
+          if(window.__IBG_DEBUG_ADS) console.log('[ads-exo-bottom] reintento (no iframe tras 4s)');
+          (window.AdProvider = window.AdProvider || []).push({serve:{}});
+        }
+      }, 4000);
+    }
+
+    if(document.readyState==='loading'){
+      document.addEventListener('DOMContentLoaded', function(){ load(mount); });
+    } else {
+      load(mount);
+    }
+  }catch(e){
+    console && console.warn && console.warn('[ads-exo-bottom] error:', e);
   }
-
-  window.addEventListener('message', function(ev){
-    var d = ev && ev.data;
-    if(d && d.type==='IBG_EXO_OK'){ log('IBG_ADS: EXO bottom OK ->', zone); }
-    if(d && d.type==='IBG_EXO_NOAD'){ log('IBG_ADS: EXO bottom NOAD ->', zone); }
-  });
-
-  log('IBG_ADS: EXO bottom mounted ->', zone);
 })();
