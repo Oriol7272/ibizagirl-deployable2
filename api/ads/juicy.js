@@ -1,7 +1,6 @@
 export const config = { runtime: 'edge' };
 export default async function handler() {
-  const up = 'https://js.juicyads.com/jp.js';
-  const r = await fetch(up, { headers: { 'user-agent':'Mozilla/5.0' } });
+  const r = await fetch('https://js.juicyads.com/jp.js', { headers: { 'user-agent':'Mozilla/5.0' }});
   const txt = await r.text();
   return new Response(txt, {
     headers: {

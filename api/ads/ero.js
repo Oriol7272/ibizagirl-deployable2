@@ -3,8 +3,7 @@ export default async function handler(req) {
   const { searchParams } = new URL(req.url);
   const zone = searchParams.get('zone');
   if(!zone) return new Response('missing zone', {status:400});
-  const up = `https://syndication.ero-advertising.com/splash.php?idzone=${encodeURIComponent(zone)}`;
-  const r = await fetch(up, { headers: { 'user-agent':'Mozilla/5.0' } });
+  const r = await fetch(`https://syndication.ero-advertising.com/splash.php?idzone=${encodeURIComponent(zone)}`, { headers: { 'user-agent':'Mozilla/5.0' }});
   const txt = await r.text();
   return new Response(txt, {
     headers: {
