@@ -1,6 +1,6 @@
 (function(){
   var E = (window.__ENV||{});
-  var Z = E.EXOCLICK_BOTTOM_ZONE || E.EXOCLICK_ZONE; console.log("[ads-exo-bottom] zone chosen ->", Z);
+  var Z = (window.__ENV||{}).EXOCLICK_BOTTOM_ZONE; console.log("[ads-exo-bottom] zone chosen ->", Z);
   if(!Z){ console.log('[ads-exo-bottom] no zone id (EXOCLICK_BOTTOM_ZONE/EXOCLICK_ZONE)'); return; }
 
   if(window.__IBG_EXO_BOTTOM_MOUNTED){ return; }
