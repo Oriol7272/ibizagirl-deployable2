@@ -12,7 +12,7 @@
   iframe.src="/ads/eroframe_ctrl.html?space="+encodeURIComponent(SPACE)+"&pid="+encodeURIComponent(PID)+"&ctrl="+encodeURIComponent(CTRL);
   iframe.loading="lazy";
   iframe.referrerPolicy="unsafe-url";
-  iframe.setAttribute("sandbox","allow-scripts allow-popups allow-same-origin"); // quita SecurityError
+  iframe.setAttribute("sandbox","allow-scripts allow-popups allow-same-origin");
   iframe.style.cssText="border:0;width:300px;height:250px;display:block;margin:16px auto;";
   host.innerHTML='';
   host.appendChild(iframe);
