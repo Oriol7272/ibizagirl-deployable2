@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 echo "== IBG build =="
-# 1) env inline
+
+# 1) env inline (variables reales de Vercel)
 mkdir -p js
 cat > js/env-inline.js <<JS
 window.__ENV = {
@@ -24,11 +25,11 @@ window.__ENV = {
 JS
 echo "[env] js/env-inline.js"
 
-# 2) helpers
+# 2) helpers de copia
 copy_dir(){ d="$1"; if [ -d "$d" ]; then mkdir -p "public/$d"; cp -R "$d"/. "public/$d/"; echo "[copy] $d/"; fi; }
 copy_file(){ f="$1"; if [ -f "$f" ]; then mkdir -p "public/$(dirname "$f")" 2>/dev/null || true; cp "$f" "public/$f"; echo "[copy] $f"; fi; }
 
-# 3) assemble
+# 3) ensamblado
 rm -rf public && mkdir -p public
 copy_file index.html
 copy_file premium.html
@@ -40,10 +41,32 @@ copy_dir  decorative-images
 copy_dir  full
 copy_dir  uncensored
 copy_dir  uncensored-videos
-copy_dir  ads                # 👈 AQUI copiamos /ads
+copy_dir  ads
 for f in content-data*.js favicon.ico robots.txt; do copy_file "$f"; done
 
-# 4) index de pools (debug)
+# 4) generar índices JSON que espera el frontend
+node <<'NODE'
+const fs=require('fs'), path=require('path');
+function listFiles(dir){
+  const p = path.join('public',dir);
+  if(!fs.existsSync(p)) return [];
+  return fs.readdirSync(p).filter(f=>{
+    try{ return fs.statSync(path.join(p,f)).isFile(); }catch{ return false; }
+  }).sort();
+}
+const content = {
+  full: listFiles('full'),
+  uncensored: listFiles('uncensored'),
+  videos: listFiles('uncensored-videos')
+};
+fs.writeFileSync('public/content-index.json', JSON.stringify(content));
+const decorative = { images: listFiles('decorative-images') };
+fs.writeFileSync('public/decorative-index.json', JSON.stringify(decorative));
+console.log('[index] content-index.json:', content.full.length,'/ uncensored:',content.uncensored.length,'/ videos:',content.videos.length);
+console.log('[index] decorative-index.json:', decorative.images.length);
+NODE
+
+# 5) log de sanity
 full_n=$( [ -d public/full ] && find public/full -type f | wc -l || echo 0 )
 unc_n=$( [ -d public/uncensored ] && find public/uncensored -type f | wc -l || echo 0 )
 vid_n=$( [ -d public/uncensored-videos ] && find public/uncensored-videos -type f | wc -l || echo 0 )
