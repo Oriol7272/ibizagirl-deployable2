@@ -1,12 +1,29 @@
 <!doctype html><meta charset="utf-8">
-<title>Ads Test</title>
-<div id="ad-right" class="ad ad-lateral" style="right:8px;top:40px"></div>
+<title>Ads Test (Ero)</title>
+<style>
+  body{font:14px system-ui;background:#111;color:#eee;margin:0;padding:24px}
+  .row{display:flex;gap:16px;align-items:flex-start}
+  .box{background:#222;border:1px solid #333;border-radius:8px;padding:12px;min-height:260px}
+  #slotB{width:320px;min-height:260px}
+  #log{white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace}
+</style>
+<h1>Ads Test – EroAdvertising</h1>
+<p>Deberías ver un banner cargado vía <code>/api/ads/ero?zone=…</code>.</p>
+<div class="row">
+  <div class="box"><strong>Log</strong><div id="log"></div></div>
+  <div class="box" id="slotB"><strong>Slot Bottom</strong></div>
+</div>
 <script>
-  (function(){
-    var z = (window.__ENV||{}).EROADVERTISING_ZONE || '8177575';
-    var s = document.createElement('script');
-    s.src = '/api/ads/ero?zone=' + encodeURIComponent(z);
-    s.async = true;
-    document.getElementById('ad-right').appendChild(s);
-  })();
+  const ZONE = (window.__ENV && __ENV.EROADVERTISING_ZONE) || "8177575";
+  const log = (...a)=>{ const el=document.getElementById('log'); el.textContent += a.join(' ') + "\n"; console.log(...a); };
+
+  function addScript(targetId, src){
+    const s = document.createElement('script');
+    s.src = src; s.async = true; s.onerror = ()=>log('❌ error', src);
+    s.onload  = ()=>log('✅ loaded', src);
+    document.getElementById(targetId).appendChild(s);
+  }
+
+  log('ZONE=', ZONE);
+  addScript('slotB', '/api/ads/ero?zone='+encodeURIComponent(ZONE));
 </script>
