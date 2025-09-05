@@ -1,35 +1,22 @@
-/* Mount EroAdvertising eaCtrl into #ad-bottom (300x250) */
 (function(){
-  function ready(fn){document.readyState!=='loading'?fn():document.addEventListener('DOMContentLoaded',fn);}
-  ready(function(){
-    var ENV = window._ENV || {};
-    var space = String(ENV.EROADVERTISING_SPACE || '8182057');
-    var pid   = String(ENV.EROADVERTISING_PID   || '152716');
-    var ctrl  = String(ENV.EROADVERTISING_CTRL  || '798544');
+  var E = window.__ENV || {};
+  // bandera global (0 = off)
+  if (E.EROADVERTISING_ENABLE === "0") { return; }
+  // no cargar en Home
+  var p = location.pathname.replace(/\/+$/,'');
+  if (p === '' || p === '/' || p === '/index' || p === '/index.html') { return; }
 
-    var url = '/ads/eroframe_ctrl.html'
-            + '?space='+encodeURIComponent(space)
-            + '&pid='+encodeURIComponent(pid)
-            + '&ctrl='+encodeURIComponent(ctrl);
+  var SPACE = E.EROADVERTISING_SPACEID || E.EROADVERTISING_ZONE || "8182057";
+  var PID   = E.EROADVERTISING_PID     || "152716";
+  var CTRL  = E.EROADVERTISING_CTRLID  || "798544";
 
-    var slotId = 'ad-bottom';
-    var host = document.getElementById(slotId);
-    if(!host){ console.warn('[ads-ero-ctrl] slot not found:', slotId); return; }
-
-    host.innerHTML='';
-    host.style.width  = '300px';
-    host.style.height = '250px';
-
-    var ifr = document.createElement('iframe');
-    ifr.src = url;
-    ifr.width = '300';
-    ifr.height = '250';
-    ifr.setAttribute('frameborder','0');
-    ifr.setAttribute('scrolling','no');
-    ifr.style.border = '0';
-    ifr.style.display = 'block';
-    host.appendChild(ifr);
-
-    console.log('[ads-ero-ctrl] mounted →', url);
-  });
+  var host = document.getElementById('ad-right') || document.body;
+  var iframe = document.createElement('iframe');
+  iframe.src = "/ads/eroframe_ctrl.html?space="+encodeURIComponent(SPACE)+"&pid="+encodeURIComponent(PID)+"&ctrl="+encodeURIComponent(CTRL);
+  iframe.loading = "lazy";
+  iframe.referrerPolicy = "unsafe-url";
+  // sandbox sin same-origin para evitar warnings/errores
+  iframe.setAttribute("sandbox","allow-scripts allow-popups");
+  iframe.style.cssText = "border:0;width:300px;height:250px;display:block;margin:16px auto;";
+  host.appendChild(iframe);
 })();

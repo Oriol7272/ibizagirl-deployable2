@@ -1,4 +1,4 @@
-window.__ENV = {
+window.__ENV = { EROADVERTISING_ENABLE:"0", 
   IBG_ASSETS_BASE_URL: "",
   PAYPAL_CLIENT_ID: "",
   PAYPAL_PLAN_MONTHLY_1499: "",
