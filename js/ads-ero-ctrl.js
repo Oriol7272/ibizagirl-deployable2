@@ -12,7 +12,7 @@
             + '&ctrl='+encodeURIComponent(CTRL);
   iframe.loading='lazy';
   iframe.referrerPolicy='unsafe-url';
-  iframe.setAttribute('sandbox','allow-scripts allow-popups');
+  iframe.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups');
   iframe.style.cssText='border:0;width:300px;height:250px;display:block;margin:16px auto;';
   host.appendChild(iframe);
   console.log('[ads-ero-ctrl] mounted →', iframe.src);
