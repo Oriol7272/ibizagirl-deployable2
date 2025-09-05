@@ -1,0 +1,16 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<title>Ads Test — PopAds</title></head><body>
+<h1>Ads Test — PopAds</h1>
+<script>
+const SID=new URLSearchParams(location.search).get('site')||'';
+document.write('<pre>siteId = '+SID+'\nloader = '+location.origin+'/api/ads/popads?site='+SID+'</pre>');
+</script>
+<script>
+(function(){
+  var SID=new URLSearchParams(location.search).get('site');
+  var s=document.createElement('script'); s.async=true;
+  s.src='/api/ads/popads?site='+encodeURIComponent(SID||'');
+  document.body.appendChild(s);
+})();
+</script>
+</body></html>

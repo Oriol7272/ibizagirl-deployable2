@@ -1,0 +1,22 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<title>Ads Test — ExoClick</title>
+<style>body{background:#0b0f14;color:#dbe6ff;font:14px/1.5 ui-sans-serif,system-ui;padding:24px}
+.box{display:grid;grid-template-columns:320px 1fr;gap:24px}.log{background:#0d1520;padding:12px;border-radius:8px;white-space:pre-wrap}
+.slot{background:#0d1520;padding:12px;border-radius:8px}</style></head><body>
+<h1>Ads Test — ExoClick</h1>
+<div class="box">
+  <div class="log" id="log"></div>
+  <div class="slot"><iframe id="f" width="300" height="250" style="border:0" loading="lazy"></iframe></div>
+</div>
+<script>
+const Z=new URLSearchParams(location.search).get('zone')||'';
+const log = s => document.getElementById('log').textContent += s + "\n";
+if(!Z){ log('❌ Falta ?zone='); } else {
+  log('ZONE= '+Z);
+  const u='/ads/exoframe.html?zone='+encodeURIComponent(Z);
+  log('✓ iframe '+u);
+  document.getElementById('f').src=u;
+  log('→ endpoint '+location.origin+'/api/ads/exo?zone='+Z);
+}
+</script>
+</body></html>

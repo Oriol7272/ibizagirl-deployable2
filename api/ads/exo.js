@@ -1,9 +1,29 @@
-export const config = { runtime: 'edge' };
-export default async function handler(req) {
-  const { searchParams } = new URL(req.url);
-  const zone = searchParams.get('zone');
-  if(!zone) return new Response('missing zone',{status:400});
-  const r = await fetch(`https://syndication.exdynsrv.com/splash.php?idzone=${encodeURIComponent(zone)}`,{headers:{'user-agent':'Mozilla/5.0'}});
-  const txt = await r.text();
-  return new Response(txt,{headers:{'content-type':'application/javascript; charset=utf-8','cache-control':'public, max-age=300'}});
+export const config = { runtime: 'nodejs' };
+
+export default async function handler(req, res) {
+  const { zone } = req.query;
+  const z = String(zone || process.env.EXOCLICK_ZONE || '').trim();
+  const upstream = 'https://a.exosrv.com/serve/v3.js'; // dominio habitual de ExoClick
+
+  if (!z) {
+    res.status(400).setHeader('content-type','application/javascript; charset=utf-8')
+      .send('// exo: missing zone\n');
+    return;
+  }
+
+  const js = `// exo loader
+(function(){
+  try{
+    var s=document.createElement('script');
+    s.src=${JSON.stringify(upstream)};
+    s.async=true;
+    s.setAttribute('data-idzone', ${JSON.stringify(z)});
+    s.referrerPolicy='unsafe-url';
+    var p=(document.currentScript||document.scripts[document.scripts.length-1]);
+    (p.parentNode||document.head).insertBefore(s,p);
+  }catch(e){}
+})();`;
+
+  res.setHeader('content-type','application/javascript; charset=utf-8');
+  res.status(200).send(js);
 }
