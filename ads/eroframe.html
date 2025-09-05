@@ -1,24 +1,16 @@
-<!doctype html>
-<meta charset="utf-8">
-<style>
-  html,body{margin:0;background:transparent}
-  /* ajusta tamaño si tu zona no es 300x250 */
-  #slot{width:300px;height:250px;display:block}
-</style>
+<!doctype html><meta charset="utf-8">
+<style>html,body{margin:0;background:transparent}#slot{width:300px;height:250px;display:block}</style>
 <div id="slot"></div>
 <script>
 (function(){
   const p = new URLSearchParams(location.search);
-  const zone = p.get('zone');
-  if(!zone){ console.log('ero frame: missing zone'); return; }
+  const zone = p.get('zone'); if(!zone){ console.log('ero frame: missing zone'); return; }
   const mode = p.get('mode') || 'proxy';
-  const src = mode === 'direct'
-      ? `https://syndication.ero-advertising.com/splash.php?idzone=${encodeURIComponent(zone)}`
-      : `/api/ads/ero?zone=${encodeURIComponent(zone)}`;
-
-  const s = document.createElement('script');
-  s.src = src; s.async = true;
-  s.onerror = () => console.log('ero frame: load error', src);
+  const src = mode==='direct'
+    ? `https://syndication.ero-advertising.com/splash.php?idzone=${encodeURIComponent(zone)}`
+    : `/api/ads/ero?zone=${encodeURIComponent(zone)}`;
+  const s=document.createElement('script'); s.src=src; s.async=true;
+  s.onerror=()=>console.log('ero frame: load error', src);
   document.currentScript.parentNode.appendChild(s);
 })();
 </script>
