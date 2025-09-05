@@ -1,42 +1,47 @@
-<!doctype html>
-<html lang="es"><head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Ads Test — EroAdvertising</title>
-  <style>
-    body{margin:0;background:#0b0e13;color:#e7e9ee;font-family:system-ui,Arial}
-    .wrap{padding:28px}
-    .grid{display:grid;grid-template-columns:320px 340px;gap:24px;align-items:start}
-    .card{background:#141821;border-radius:12px;padding:16px}
-    .title{font-weight:700;margin:0 0 12px}
-    .log{font-family:ui-monospace,Menlo,Consolas;white-space:pre-wrap}
-    iframe{border:0;border-radius:10px;background:#0b0e13}
-  </style>
-</head><body>
-  <div class="wrap">
-    <h1>Ads Test — EroAdvertising</h1>
-    <p>Deberías ver un banner cargado vía <code>/api/ads/ero?zone=…</code></p>
-    <div class="grid">
-      <div class="card">
-        <div class="title">Log</div>
-        <div class="log" id="log"></div>
-      </div>
-      <div class="card">
-        <div class="title">Slot Bottom</div>
-        <iframe id="slot" width="300" height="250"
-          sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
-          referrerpolicy="no-referrer-when-downgrade" loading="lazy"></iframe>
-      </div>
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ads Test — EroAdvertising</title>
+<style>
+body{margin:0;background:#0b0e13;color:#e7e9ee;font-family:system-ui,Arial}
+.wrap{padding:28px}
+.grid{display:grid;grid-template-columns:320px 340px;gap:24px}
+.card{background:#141821;border-radius:12px;padding:16px}
+.title{font-weight:700;margin:0 0 12px}
+.log{font-family:ui-monospace,Menlo,Consolas;white-space:pre-wrap}
+.btn{display:inline-block;margin-top:8px;padding:6px 10px;border-radius:8px;background:#223047;color:#fff;cursor:pointer}
+iframe{border:0;border-radius:10px;background:#0b0e13}
+</style></head><body>
+<div class="wrap">
+  <h1>Ads Test — EroAdvertising</h1>
+  <p>Banner cargado vía <code>/api/ads/ero?zone=…</code> (proxy). También puedes probar “direct”.</p>
+  <div class="grid">
+    <div class="card">
+      <div class="title">Log</div>
+      <div id="log" class="log"></div>
+      <a id="dbg" class="btn">Ver /api/ads/ero?debug=1</a>
+      <div style="height:8px"></div>
+      <a id="direct" class="btn">Probar modo direct en el iframe</a>
+    </div>
+    <div class="card">
+      <div class="title">Slot Bottom</div>
+      <iframe id="slot" width="300" height="250"
+        sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+        referrerpolicy="no-referrer-when-downgrade" loading="lazy"></iframe>
     </div>
   </div>
+</div>
 <script>
-  (function(){
-    var Z = (window.__ENV && __ENV.EROADVERTISING_ZONE) || '8177575'; // tu zone
-    function log(t){ document.getElementById('log').textContent += t + '\n'; }
-    log('ZONE= ' + Z);
-    var f=document.getElementById('slot');
-    f.src = '/ads/ero-frame.html?zone=' + encodeURIComponent(Z);
-    f.onload = function(){ log('✓ iframe loaded ' + f.src); };
-    f.onerror = function(){ log('✗ iframe error ' + f.src); };
-  })();
+(function(){
+  var Z = (window.__ENV && __ENV.EROADVERTISING_ZONE) || '8177575';
+  function log(t){ document.getElementById('log').textContent += t + '\n'; }
+  log('ZONE= ' + Z);
+  var f=document.getElementById('slot');
+  function load(mode){ f.src='/ads/ero-frame.html?zone='+encodeURIComponent(Z)+'&mode='+(mode||'proxy'); }
+  load('proxy');
+  f.onload = function(){ log('✓ iframe loaded ' + f.src); };
+  f.onerror = function(){ log('✗ iframe error ' + f.src); };
+  document.getElementById('dbg').href = '/api/ads/ero?zone='+encodeURIComponent(Z)+'&debug=1';
+  document.getElementById('direct').onclick = function(){ load('direct'); };
+})();
 </script>
 </body></html>
