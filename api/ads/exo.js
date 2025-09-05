@@ -1,27 +1,30 @@
-export const config = { runtime: 'nodejs' };
-export default async function handler(req, res) {
-  const { zone } = req.query;
-  const z = String(zone || process.env.EXOCLICK_ZONE || '').trim();
-  const upstream = 'https://a.exosrv.com/serve/v3.js'; // variante habitual; si tu cuenta usa a.exoclick.com, cámbialo
+export const config = { runtime: 'edge' };
 
-  if (!z) {
-    res.status(200).setHeader('content-type','application/javascript; charset=utf-8')
-      .send('// exo: missing zone (no __ENV.EXOCLICK_ZONE)\n');
-    return;
+function sendJS(code, body) {
+  return new Response(body, {
+    status: code,
+    headers: { 'content-type': 'application/javascript; charset=utf-8', 'cache-control': 'public, max-age=300' }
+  });
+}
+
+export default async function handler(req) {
+  const { searchParams } = new URL(req.url);
+  const zone = searchParams.get('zone');
+  if (!zone) return sendJS(400, '/* missing zone */');
+  const upstream = `https://syndication.exdynsrv.com/splash.php?idzone=${encodeURIComponent(zone)}`;
+
+  // Intento proxy del JS (algunos entornos devuelven 403/5xx por TLS/CORS)
+  try {
+    const r = await fetch(upstream, { headers: { 'user-agent':'Mozilla/5.0' } });
+    if (r.ok) {
+      const txt = await r.text();
+      return sendJS(200, txt);
+    }
+    // fallback: inyectar loader directo en el navegador
+    const fb = `/* exo fallback (${r.status}) */(function(){try{var s=document.createElement('script');s.src=${JSON.stringify(upstream)};s.async=true;(document.currentScript||document.scripts[document.scripts.length-1]).parentNode.insertBefore(s,document.currentScript);}catch(e){}})();`;
+    return sendJS(200, fb);
+  } catch (e) {
+    const fb = `/* exo proxy error: ${String(e&&e.message||e)} */(function(){try{var s=document.createElement('script');s.src=${JSON.stringify(upstream)};s.async=true;(document.currentScript||document.scripts[document.scripts.length-1]).parentNode.insertBefore(s,document.currentScript);}catch(e){}})();`;
+    return sendJS(200, fb);
   }
-  const js = `// exo loader
-(function(){
-  try{
-    var s=document.createElement('script');
-    s.src=${JSON.stringify(upstream)};
-    s.async=true;
-    s.setAttribute('data-idzone', ${JSON.stringify(z)});
-    s.referrerPolicy='unsafe-url';
-    var p=(document.currentScript||document.scripts[document.scripts.length-1]);
-    (p.parentNode||document.head).insertBefore(s,p);
-    console.log && console.log('IBG_ADS: EXO loader injected ->', ${JSON.stringify(z)});
-  }catch(e){ console && console.warn('EXO error', e); }
-})();`;
-  res.setHeader('content-type','application/javascript; charset=utf-8');
-  res.status(200).send(js);
 }
