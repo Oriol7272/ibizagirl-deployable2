@@ -1,41 +1,40 @@
 <!doctype html>
-<meta charset="utf-8">
-<title>Ero (eaCtrl) Frame</title>
-<style>
-  html,body{margin:0;background:#0b0f14;color:#cfe}
-  .wrap{display:flex;gap:28px;align-items:flex-start;padding:24px;font:14px/1.4 ui-sans-serif,system-ui}
-  pre{background:#0f1b2a;border:1px solid #203346;border-radius:12px;padding:14px;min-width:320px;max-width:480px;white-space:pre-wrap}
-  .slot{width:300px;height:250px;background:#000;border:1px solid #203346;border-radius:12px;display:flex;align-items:center;justify-content:center}
-</style>
-<div class="wrap">
-  <pre id="log"></pre>
-  <div class="slot"><div id="ad"></div></div>
-</div>
-<script>
-(function(){
-  const usp = new URLSearchParams(location.search);
-  const space = usp.get('space') || '';
-  const pid   = usp.get('pid')   || '';
-  const ctrl  = usp.get('ctrl')  || '';
-  const display = usp.get('display') || (space?`sp_${space}_node`:'sp__node');
-  const log = (...a)=>{ const p=document.getElementById('log'); p.textContent += a.join(' ') + "\n"; };
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>eaCtrl Frame</title>
+  <style>
+    html,body{margin:0;padding:0;background:transparent}
+    /* Tamaño mínimo típico 300x250; el proveedor puede reescalar si procede */
+    #frame-root{display:grid;place-items:center;min-width:300px;min-height:250px}
+    #frame-root > div{width:300px;height:250px}
+  </style>
+</head>
+<body>
+  <div id="frame-root">
+    <div id="ad-slot"></div>
+  </div>
+  <script>
+    (function(){
+      const q = new URLSearchParams(location.search);
+      const space = q.get('space');       // 8182057
+      const pid   = q.get('pid');         // 152716
+      const ctrl  = q.get('ctrl');        // 798544
+      if(!space || !pid || !ctrl){ console.warn('eaCtrl: parámetros incompletos'); return; }
 
-  if(!space||!pid||!ctrl){ 
-    log('Faltan params: ?space=...&pid=...&ctrl=...');
-  } else {
-    log('space=',space,' pid=',pid,' ctrl=',ctrl);
-  }
+      // El contenedor que espera el script de Ero: sp_<space>_node
+      const display = `sp_${space}_node`;
+      const slot = document.getElementById('ad-slot');
+      slot.id = display;
 
-  // coloca el id exacto que espera eaCtrl
-  const ad = document.getElementById('ad');
-  ad.id = display;
-  log('display id ->', display);
-
-  // inyecta loader desde TU dominio
-  const s = document.createElement('script');
-  const src = `/api/ads/eroctrl?space=${encodeURIComponent(space)}&pid=${encodeURIComponent(pid)}&ctrl=${encodeURIComponent(ctrl)}&display=${encodeURIComponent(display)}`;
-  s.src = src; s.async = true;
-  document.currentScript.parentNode.insertBefore(s, document.currentScript);
-  log('loader ->', location.origin + src);
-})();
-</script>
+      // Cargar nuestro loader (que a su vez llama a go.easrv.cl con esos IDs)
+      const s = document.createElement('script');
+      s.src = `/api/ads/eroctrl?space=${encodeURIComponent(space)}&pid=${encodeURIComponent(pid)}&ctrl=${encodeURIComponent(ctrl)}&display=${encodeURIComponent(display)}`;
+      s.async = true;
+      s.referrerPolicy = 'unsafe-url';
+      document.body.appendChild(s);
+    })();
+  </script>
+</body>
+</html>
