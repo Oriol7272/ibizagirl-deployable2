@@ -2,7 +2,7 @@
   var E=(window.__ENV||{});
   if(String(E.POPADS_ENABLE)!=='1'){ return; }
   var SID=E.POPADS_SITE_ID;
-  if(!SID){ console.log('[ads-popads] no POPADS_SITE_ID en __ENV'); return; }
+  if(!SID){ (window.__ENV&&__ENV.DEBUG_ADS)&&console.log('[ads-popads] no POPADS_SITE_ID en __ENV');return; }
 
   if(window.__IBG_POPADS_MOUNTED){ return; }
   window.__IBG_POPADS_MOUNTED = true;
@@ -14,5 +14,4 @@
   s.async=true;
   s.text = code;
   (document.head||document.documentElement).appendChild(s);
-  console.log('IBG_ADS: POP mounted ->', SID);
-})();
+  (window.__ENV&&__ENV.DEBUG_ADS)&&console.log('IBG_ADS: POP mounted ->', SID);})();

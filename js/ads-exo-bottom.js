@@ -2,37 +2,40 @@
   if(window.__IBG_EXO_BOTTOM_IFRAME_MOUNTED) return;
   window.__IBG_EXO_BOTTOM_IFRAME_MOUNTED = true;
 
-  // <- ajusta si cambian tus IDs de ERO fallback:
-  var ERO_SPACE = '8182057', ERO_PID='152716', ERO_CTRL='798544';
+  // Fallback ERO (ajusta si cambian)
+  var ERO = {space:'8182057', pid:'152716', ctrl:'798544'};
+
+  function log(){ if(window.__ENV && __ENV.DEBUG_ADS) try{ console.log.apply(console, arguments);}catch(_){} }
 
   function pickZone(){
     var host = document.getElementById('ad-bottom');
-    var dz = host && host.getAttribute('data-zone');
-    var E  = window.__ENV||{};
+    var dz   = host && host.getAttribute('data-zone');
+    var E    = window.__ENV||{};
     return dz || E.EXOCLICK_BOTTOM_ZONE || E.EXOCLICK_ZONE || null;
   }
 
   function fallbackERO(host){
+    if(!host) return;
     host.innerHTML = '';
     var ifr = document.createElement('iframe');
-    ifr.src = '/ads/eroframe_ctrl.html?space='+encodeURIComponent(ERO_SPACE)
-            +'&pid='+encodeURIComponent(ERO_PID)
-            +'&ctrl='+encodeURIComponent(ERO_CTRL);
+    ifr.src = '/ads/eroframe_ctrl.html?space='+encodeURIComponent(ERO.space)
+             +'&pid='+encodeURIComponent(ERO.pid)
+             +'&ctrl='+encodeURIComponent(ERO.ctrl);
     ifr.referrerPolicy = 'unsafe-url';
     ifr.sandbox = 'allow-scripts allow-popups';
-    ifr.style.cssText = 'border:0;width:100%;height:'+ (window.innerWidth<=768?'60px':'90px') + 'px;display:block';
+    ifr.style.cssText = 'border:0;width:100%;height:'+(window.innerWidth<=768?'60px':'90px')+'px;display:block';
     host.appendChild(ifr);
-    console.log('IBG_ADS: ERO bottom fallback mounted ->', ERO_SPACE);
+    log('IBG_ADS: ERO bottom fallback mounted ->', ERO.space);
   }
 
   function mountEXO(zone){
     var host = document.getElementById('ad-bottom');
-    if(!host){ console.log('[exo-bottom-iframe] no #ad-bottom'); return; }
+    if(!host){ log('[exo-bottom] no #ad-bottom'); return; }
 
     host.innerHTML = '';
     var ifr = document.createElement('iframe');
     ifr.referrerPolicy='unsafe-url';
-    // quitamos same-origin para evitar el warning del navegador
+    // sin allow-same-origin para evitar cualquier acceso cross-origin
     ifr.sandbox='allow-scripts allow-popups';
     ifr.style.border='0';
     ifr.style.width='100%';
@@ -42,46 +45,64 @@
 
     var html = '<!doctype html><html><head><meta charset="utf-8">\
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">\
-<style>html,body{margin:0;padding:0} ins{display:block;min-height:'+ (window.innerWidth<=768?'60px':'90px') +';width:100%}</style>\
-<link rel="preload" as="script" href="https://a.magsrv.com/ad-provider.js">\
+<style>html,body{margin:0;padding:0} ins{display:block;min-height:'+(window.innerWidth<=768?'60px':'90px')+';width:100%}</style>\
+<script>('+function(){
+  // Avisamos al parent cuando aparezca contenido publicitario
+  var ok=false;
+  try{
+    var mo=new MutationObserver(function(m){
+      for(var i=0;i<m.length;i++){
+        var a=m[i].addedNodes||[];
+        for(var j=0;j<a.length;j++){
+          var n=a[j];
+          if(n && ( (n.tagName && (n.tagName.toLowerCase()==='iframe' || n.tagName.toLowerCase()==='img'))
+                    || (n.querySelector && n.querySelector('iframe,img')) )){
+            ok=true;
+            try{ parent.postMessage({type:"IBG_EXO_OK"}, "*"); }catch(e){}
+            try{ mo.disconnect(); }catch(e){}
+            return;
+          }
+        }
+      }
+    });
+    mo.observe(document.body,{childList:true,subtree:true});
+    setTimeout(function(){ if(!ok){ try{ parent.postMessage({type:"IBG_EXO_NOAD"}, "*"); }catch(e){} }, 3500);
+  }catch(e){}
+}.toString()+')();<\/script>\
 <script async src="https://a.magsrv.com/ad-provider.js"><\/script>\
 </head><body>\
 <ins class="eas6a97888e17" data-zoneid="'+ String(zone) +'" data-block-ad-types="0"></ins>\
 <script>(window.AdProvider=window.AdProvider||[]).push({serve:{}});<\/script>\
 </body></html>';
 
-    var doc = ifr.contentDocument || ifr.contentWindow.document;
-    doc.open(); doc.write(html); doc.close();
+    // Escribimos contenido con srcdoc (no tocamos .document para evitar SecurityError)
+    ifr.srcdoc = html;
 
-    console.log('IBG_ADS: EXO bottom (iframe) mounted ->', zone);
-
-    // Si en ~5s no hay nada visible, hacemos fallback a ERO
-    setTimeout(function(){
-      try{
-        var h = doc.documentElement.scrollHeight || doc.body.scrollHeight || 0;
-        var hasFrame = doc.querySelector('iframe');
-        var hasImg   = doc.querySelector('img');
-        if(!hasFrame && !hasImg && (!h || h < 40)){
-          console.log('[exo-bottom-iframe] sin render tras 5s -> fallback ERO');
-          fallbackERO(host);
-        }
-      }catch(_){
-        // Si no podemos leer doc (por sandbox), asumimos fallo y hacemos fallback
-        console.log('[exo-bottom-iframe] acceso doc fallido -> fallback ERO');
-        fallbackERO(host);
+    // Escuchamos confirmación desde el iframe
+    var confirmed=false, timed=false;
+    function onMsg(ev){
+      var d = ev && ev.data;
+      if(d && d.type==='IBG_EXO_OK'){ confirmed=true; window.removeEventListener('message', onMsg); }
+      if(d && d.type==='IBG_EXO_NOAD' && !confirmed && !timed){
+        timed=true; fallbackERO(host);
       }
+    }
+    window.addEventListener('message', onMsg);
+
+    // Salvaguarda: si en 5s nadie confirmó, hacemos fallback
+    setTimeout(function(){
+      if(!confirmed && !timed){ timed=true; fallbackERO(host); }
     }, 5000);
+
+    log('IBG_ADS: EXO bottom (iframe) mounted ->', zone);
   }
 
   function go(){
     var z = pickZone();
-    if(!z){ console.log('[exo-bottom-iframe] sin zone -> fallback ERO'); return fallbackERO(document.getElementById('ad-bottom')||document.body); }
+    if(!z){ log('[exo-bottom] sin zone -> fallback ERO'); return fallbackERO(document.getElementById('ad-bottom')); }
     mountEXO(z);
   }
 
-  if(document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', go);
-  } else {
-    go();
-  }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', go); }
+  else { go(); }
 })();
