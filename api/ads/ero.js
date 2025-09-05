@@ -1,34 +1,38 @@
-export default async function handler(req, res) {
+export const config = { runtime: 'edge' };
+
+export default async function handler(req) {
   try {
-    const url = new URL(req.url || req.headers['x-forwarded-url'] || 'http://x');
-    const zone = url.searchParams.get('zone') || (req.query && req.query.zone);
+    const { searchParams } = new URL(req.url);
+    const zone = searchParams.get('zone');
     if (!zone) {
-      res.status(400).setHeader('content-type','text/plain; charset=utf-8');
-      return res.end('// missing ?zone');
+      return new Response('// proxy error: missing ?zone', {
+        status: 400,
+        headers: { 'content-type': 'application/javascript; charset=utf-8' }
+      });
+    }
+    // ✅ dominio correcto SIN guion
+    const upstream = `https://syndication.eroadvertising.com/splash.php?idzone=${encodeURIComponent(zone)}`;
+
+    const r = await fetch(upstream, { headers: { 'user-agent': 'Mozilla/5.0' } });
+    if (!r.ok) {
+      const body = await r.text().catch(() => '');
+      return new Response(`// proxy error: ${r.status} ${r.statusText}\n${body.slice(0,512)}`, {
+        status: 502,
+        headers: { 'content-type': 'application/javascript; charset=utf-8' }
+      });
     }
 
-    const upstream = `https://syndication.ero-advertising.com/splash.php?idzone=${encodeURIComponent(zone)}`;
-
-    const r = await fetch(upstream, {
-      // Pedimos como si fuéramos un navegador real
+    const js = await r.text();
+    return new Response(js, {
       headers: {
-        'user-agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122 Safari/537.36',
-        'accept': 'application/javascript,text/javascript,*/*;q=0.1',
-        'referer': 'https://ibizagirl.pics/',
-        'accept-language': 'en-US,en;q=0.9,es;q=0.8'
-      },
-      // Evita compresión rara que a veces rompe en algunos proxys
-      redirect: 'follow',
+        'content-type': 'application/javascript; charset=utf-8',
+        'cache-control': 'public, max-age=120'
+      }
     });
-
-    const body = await r.text();
-    res.status(200);
-    res.setHeader('content-type', 'application/javascript; charset=utf-8');
-    res.setHeader('cache-control', 'public, max-age=180');
-    return res.end(body);
-  } catch (err) {
-    res.status(502).setHeader('content-type','text/plain; charset=utf-8');
-    return res.end(`// proxy error: ${err.message}`);
+  } catch (e) {
+    return new Response(`// proxy error: ${e?.message || e}`, {
+      status: 500,
+      headers: { 'content-type': 'application/javascript; charset=utf-8' }
+    });
   }
 }

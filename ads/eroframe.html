@@ -1,0 +1,30 @@
+<!doctype html><html><head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+  html,body{margin:0;padding:0;background:transparent}
+</style>
+<script>
+(function(){
+  const q = new URLSearchParams(location.search);
+  const zone = q.get('zone');
+  const mode = (q.get('mode')||'proxy').toLowerCase(); // proxy | direct
+  if(!zone){ document.write('<!-- missing zone -->'); return; }
+
+  function inject(src){
+    var s=document.createElement('script');
+    s.type='text/javascript';
+    s.src=src;
+    document.currentScript ? document.currentScript.after(s) : document.body.appendChild(s);
+  }
+
+  if(mode==='direct'){
+    // ✅ directo al host correcto
+    inject('https://syndication.eroadvertising.com/splash.php?idzone='+encodeURIComponent(zone));
+  }else{
+    // por defecto: proxy
+    inject('/api/ads/ero?zone='+encodeURIComponent(zone));
+  }
+})();
+</script>
+</head><body></body></html>
