@@ -58,3 +58,14 @@ html,body{
 .slot-lateral.left{left:14px}
 .slot-lateral.right{right:14px}
 @media(min-width:1024px){ .slot-lateral{display:block} }
+
+/* === IBG Ads (laterales + inferior) === */
+.ad-lateral{position:fixed;top:90px;width:300px;z-index:50}
+.ad-lateral.left{left:10px}
+.ad-lateral.right{right:10px}
+.ad-lateral iframe{display:block;width:100%;min-height:260px;border:0}
+@media(max-width: 1200px){
+  .ad-lateral{display:none} /* oculta laterales en pantallas pequeñas */
+}
+.ad-bottom{position:relative;max-width:1140px;margin:24px auto;padding:0 12px}
+.ad-bottom iframe{display:block;width:100%;min-height:260px;border:0}

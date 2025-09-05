@@ -1,117 +1,54 @@
-(function(W){
-  function log(){ try{ console.log.apply(console, arguments); }catch(_){ } }
-  function load(src, cb){
-    var s=document.createElement('script');
-    s.async = true; s.defer = true; s.src = src;
-    s.onerror=function(){ console.warn('ads load error', src); };
-    if(cb) s.onload = cb;
-    document.head.appendChild(s);
+(function(w,d){
+  const E = w.__ENV || {};
+  function ensure(id, cls){
+    let el = d.getElementById(id);
+    if(!el){ el=d.createElement('div'); el.id=id; if(cls) el.className=cls; d.body.appendChild(el); }
+    return el;
   }
-  function showFallback(el,label){
-    if(!el) return;
-    if(!el.querySelector('[data-role="fallback"]')){
-      el.innerHTML = '<div data-role="fallback" class="box" style="height:100%;display:grid;place-items:center;text-align:center">'
-        + '<div style="font-weight:800;margin-bottom:6px">Patrocinado</div>'
-        + '<div style="font-size:12px;opacity:.8">Desactiva el bloqueador para ver anuncios ('+label+')</div>'
-        + '</div>';
+  function writeIntoIframe(slot, html, h=260){
+    const ifr = d.createElement('iframe');
+    ifr.width = '100%'; ifr.height = String(h); ifr.style.border='0'; ifr.loading='lazy';
+    slot.innerHTML = ''; slot.appendChild(ifr);
+    const doc = ifr.contentDocument || ifr.contentWindow.document;
+    doc.open();
+    doc.write('<!doctype html><html><head><base target="_top"><meta charset="utf-8"></head><body style="margin:0">');
+    doc.write(html);
+    doc.write('</body></html>');
+    doc.close();
+  }
+  // Para scripts que hacen document.write (Exo/Ero/Juicy) los metemos dentro del iframe
+  function loadScriptInIframe(slot, src, h){
+    writeIntoIframe(slot, '<scr'+'ipt src="'+src+'"></scr'+'ipt>', h);
+  }
+  function loadJuicy(slot, zone){
+    const html = [
+      '<ins id="jadsPlaceHolder"></ins>',
+      '<scr'+'ipt>(adsbyjuicy=window.adsbyjuicy||[]).push({adzone:"'+String(zone)+'"});</scr'+'ipt>',
+      '<scr'+'ipt src="/api/ads/juicy"></scr'+'ipt>'
+    ].join('');
+    writeIntoIframe(slot, html, 270);
+  }
+  function loadExo(slot, zone){ loadScriptInIframe(slot, '/api/ads/exo?zone='+encodeURIComponent(zone), 270); }
+  function loadEro(slot, zone){ loadScriptInIframe(slot, '/api/ads/ero?zone='+encodeURIComponent(zone), 270); }
+
+  const IBG_ADS = {
+    init(){
+      const Z = {
+        JUICYADS_ZONE: E.JUICYADS_ZONE || '',
+        EXOCLICK_ZONE: E.EXOCLICK_ZONE || '',
+        EROADVERTISING_ZONE: E.EROADVERTISING_ZONE || ''
+      };
+      console.log('IBG_ADS ZONES ->', Z);
+      // Asegura contenedores
+      const L = ensure('ad-left', 'ad-lateral left');
+      const R = ensure('ad-right','ad-lateral right');
+      const B = ensure('ad-bottom','ad-bottom');
+
+      // Carga creatividades (desactiva bloqueadores para verlas)
+      if (Z.JUICYADS_ZONE) { loadJuicy(L, Z.JUICYADS_ZONE); loadJuicy(R, Z.JUICYADS_ZONE); }
+      if (Z.EXOCLICK_ZONE)  { loadExo(B, Z.EXOCLICK_ZONE); }
+      else if (Z.EROADVERTISING_ZONE) { loadEro(B, Z.EROADVERTISING_ZONE); }
     }
-  }
-  function removeFallback(el){
-    if(!el) return;
-    var fb = el.querySelector('[data-role="fallback"]');
-    if(fb) fb.remove();
-  }
-  function hasVisibleIframe(el){
-    if(!el) return false;
-    var ifr = el.querySelector('iframe');
-    if(!ifr) return false;
-    var r = ifr.getBoundingClientRect();
-    return (r.width >= 40 && r.height >= 40);
-  }
-  function watchRealAd(el,label,timeoutMs){
-    if(!el) return;
-    var t0 = Date.now();
-    function check(){
-      var ok = hasVisibleIframe(el);
-      if(ok){ removeFallback(el); return true; }
-      if(Date.now() - t0 > (timeoutMs||12000)){ return true; }
-      return false;
-    }
-    var tries = 0;
-    var poll = setInterval(function(){
-      tries++; if(check()){ clearInterval(poll); if(obs) obs.disconnect(); }
-      if(tries > (timeoutMs? timeoutMs/500 : 24)){ clearInterval(poll); if(obs) obs.disconnect(); }
-    }, 500);
-    var obs = new MutationObserver(function(){ check(); });
-    obs.observe(el, {childList:true, subtree:true});
-  }
-
-  // ===== JuicyAds (laterales) por proxy
-  function mountJuicy(el, zone){
-    if(!el || !zone) return false;
-    showFallback(el,'lateral');
-    // Cargar librería proxificada
-    if(!W.__JUICY_LOADED__){ load('/api/ads/juicy'); W.__JUICY_LOADED__=true; }
-    // Placeholder + push
-    var ph = document.createElement('ins');
-    ph.id = 'jadsPlaceHolder' + Math.random().toString(36).slice(2);
-    ph.style.width='160px'; ph.style.height='100%';
-    el.appendChild(ph);
-    (W.adsbyjuicy = W.adsbyjuicy || []).push({ adzone: String(zone) });
-    watchRealAd(el,'lateral',12000);
-    return true;
-  }
-
-  // ===== ExoClick (inferior) por proxy splash
-  function mountExo(el, zone){
-    if(!el || !zone) return false;
-    showFallback(el,'inferior');
-    var s = document.createElement('script');
-    s.async = true; s.defer = true;
-    s.src = '/api/ads/exo?zone=' + encodeURIComponent(zone);
-    el.appendChild(s);
-    watchRealAd(el,'inferior',12000);
-    return true;
-  }
-
-  // ===== EroAdvertising (inferior) por proxy splash
-  function mountEro(el, zone){
-    if(!el || !zone) return false;
-    showFallback(el,'inferior');
-    var s = document.createElement('script');
-    s.async = true; s.defer = true;
-    s.src = '/api/ads/ero?zone=' + encodeURIComponent(zone);
-    el.appendChild(s);
-    watchRealAd(el,'inferior',12000);
-    return true;
-  }
-
-  // ===== PopAds opcional (popunder)
-  function mountPopAds(siteId){
-    if(!siteId) return false;
-    // PopAds usa una config global; la proxificamos también
-    W.PopAdsStart = { siteId: siteId, minBid: 0 };
-    load('/api/ads/popads');
-    return true;
-  }
-
-  function initAds(){
-    var E = W.__ENV || {};
-    log('IBG_ADS ZONES ->', { JUICYADS_ZONE:E.JUICYADS_ZONE, EXOCLICK_ZONE:E.EXOCLICK_ZONE, EROADVERTISING_ZONE:E.EROADVERTISING_ZONE, POPADS: !!E.POPADS_ENABLE });
-
-    var L = document.getElementById('slot-left');
-    var R = document.getElementById('slot-right');
-    var B = document.getElementById('slot-bottom');
-
-    var okL = mountJuicy(L, E.JUICYADS_ZONE);
-    var okR = mountJuicy(R, E.JUICYADS_ZONE);
-
-    var okB=false;
-    if (E.EXOCLICK_ZONE) okB = mountExo(B, E.EXOCLICK_ZONE);
-    if (!okB && E.EROADVERTISING_ZONE) okB = mountEro(B, E.EROADVERTISING_ZONE);
-
-    if (E.POPADS_ENABLE && E.POPADS_SITE_ID) { mountPopAds(E.POPADS_SITE_ID); }
-  }
-
-  W.IBG_ADS = { initAds };
-})(window);
+  };
+  w.IBG_ADS = IBG_ADS;
+})(window, document);
