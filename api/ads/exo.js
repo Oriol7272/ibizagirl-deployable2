@@ -1,30 +1,15 @@
 export const config = { runtime: 'edge' };
-
-function sendJS(code, body) {
-  return new Response(body, {
-    status: code,
-    headers: { 'content-type': 'application/javascript; charset=utf-8', 'cache-control': 'public, max-age=300' }
-  });
-}
-
-export default async function handler(req) {
-  const { searchParams } = new URL(req.url);
-  const zone = searchParams.get('zone');
-  if (!zone) return sendJS(400, '/* missing zone */');
-  const upstream = `https://syndication.exdynsrv.com/splash.php?idzone=${encodeURIComponent(zone)}`;
-
-  // Intento proxy del JS (algunos entornos devuelven 403/5xx por TLS/CORS)
-  try {
-    const r = await fetch(upstream, { headers: { 'user-agent':'Mozilla/5.0' } });
-    if (r.ok) {
-      const txt = await r.text();
-      return sendJS(200, txt);
-    }
-    // fallback: inyectar loader directo en el navegador
-    const fb = `/* exo fallback (${r.status}) */(function(){try{var s=document.createElement('script');s.src=${JSON.stringify(upstream)};s.async=true;(document.currentScript||document.scripts[document.scripts.length-1]).parentNode.insertBefore(s,document.currentScript);}catch(e){}})();`;
-    return sendJS(200, fb);
-  } catch (e) {
-    const fb = `/* exo proxy error: ${String(e&&e.message||e)} */(function(){try{var s=document.createElement('script');s.src=${JSON.stringify(upstream)};s.async=true;(document.currentScript||document.scripts[document.scripts.length-1]).parentNode.insertBefore(s,document.currentScript);}catch(e){}})();`;
-    return sendJS(200, fb);
+const send=(c,b)=>new Response(b,{status:c,headers:{'content-type':'application/javascript; charset=utf-8','cache-control':'public, max-age=300'}});
+export default async function handler(req){
+  const p=new URL(req.url).searchParams; const zone=p.get('zone'); if(!zone) return send(400,'/* missing zone */');
+  const up=`https://syndication.exdynsrv.com/splash.php?idzone=${encodeURIComponent(zone)}`;
+  try{
+    const r=await fetch(up,{headers:{'user-agent':'Mozilla/5.0'}});
+    if(r.ok){ return send(200, await r.text()); }
+    const fb=`/* exo fallback ${r.status} */(function(){try{var s=document.createElement('script');s.src=${JSON.stringify(up)};s.async=true;(document.currentScript||document.scripts[document.scripts.length-1]).parentNode.insertBefore(s,document.currentScript);}catch(e){}})();`;
+    return send(200,fb);
+  }catch(e){
+    const fb=`/* exo error */(function(){try{var s=document.createElement('script');s.src=${JSON.stringify(up)};s.async=true;(document.currentScript||document.scripts[document.scripts.length-1]).parentNode.insertBefore(s,document.currentScript);}catch(e){}})();`;
+    return send(200,fb);
   }
 }
