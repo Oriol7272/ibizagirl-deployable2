@@ -1,38 +1,42 @@
-export const config = { runtime: 'edge' };
+export const config = { runtime: 'nodejs18.x' };
 
-export default async function handler(req) {
+// Vercel API (Node) – proxy de JS para EroAdvertising
+export default async function handler(req, res) {
   try {
-    const { searchParams } = new URL(req.url);
-    const zone = searchParams.get('zone');
+    // construir URL con host para poder leer query en Node
+    const base = `https://${req.headers.host || 'ibizagirl.pics'}`;
+    const url = new URL(req.url, base);
+    const zone = url.searchParams.get('zone');
     if (!zone) {
-      return new Response('// proxy error: missing ?zone', {
-        status: 400,
-        headers: { 'content-type': 'application/javascript; charset=utf-8' }
-      });
-    }
-    // ✅ dominio correcto SIN guion
-    const upstream = `https://syndication.eroadvertising.com/splash.php?idzone=${encodeURIComponent(zone)}`;
-
-    const r = await fetch(upstream, { headers: { 'user-agent': 'Mozilla/5.0' } });
-    if (!r.ok) {
-      const body = await r.text().catch(() => '');
-      return new Response(`// proxy error: ${r.status} ${r.statusText}\n${body.slice(0,512)}`, {
-        status: 502,
-        headers: { 'content-type': 'application/javascript; charset=utf-8' }
-      });
+      res.statusCode = 400;
+      res.setHeader('content-type', 'text/plain; charset=utf-8');
+      res.end('missing zone');
+      return;
     }
 
-    const js = await r.text();
-    return new Response(js, {
+    const upstream = `https://syndication.ero-advertising.com/splash.php?idzone=${encodeURIComponent(zone)}`;
+
+    const r = await fetch(upstream, {
+      // algunos upstreams exigen UA/Referer
       headers: {
-        'content-type': 'application/javascript; charset=utf-8',
-        'cache-control': 'public, max-age=120'
+        'User-Agent': req.headers['user-agent'] || 'Mozilla/5.0',
+        'Accept': '*/*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Referer': 'https://ibizagirl.pics/',
+        'Origin':  'https://ibizagirl.pics'
       }
     });
+
+    const body = await r.text();
+
+    // devolvemos SIEMPRE 200 con el JS del upstream para que el <script> cargue
+    res.statusCode = 200;
+    res.setHeader('content-type', 'application/javascript; charset=utf-8');
+    res.setHeader('cache-control', 'public, max-age=300');
+    res.end(body);
   } catch (e) {
-    return new Response(`// proxy error: ${e?.message || e}`, {
-      status: 500,
-      headers: { 'content-type': 'application/javascript; charset=utf-8' }
-    });
+    res.statusCode = 502;
+    res.setHeader('content-type', 'text/plain; charset=utf-8');
+    res.end(`proxy error: ${e?.message || 'unknown'}`);
   }
 }

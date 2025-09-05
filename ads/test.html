@@ -1,43 +1,39 @@
-<!doctype html><html><head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<!doctype html>
+<meta charset="utf-8">
 <title>Ads Test — EroAdvertising</title>
+<link rel="preconnect" href="https://syndication.ero-advertising.com">
 <style>
-  body{margin:0;background:#0b0e12;color:#cbd5e1;font:16px/1.4 ui-sans-serif,system-ui}
-  .wrap{max-width:980px;margin:32px auto;padding:0 16px}
-  h1{font-size:26px;margin:0 0 6px}
-  small{color:#94a3b8}
-  .grid{display:grid;grid-template-columns:320px 1fr;gap:16px;margin-top:16px}
-  .card{background:#111827;border-radius:12px;padding:12px}
-  .slot{display:grid;place-items:center;min-height:260px;background:#0f172a;border-radius:12px}
-  a.btn{display:inline-block;margin-top:8px;padding:6px 10px;border-radius:8px;background:#1f2937;color:#e5e7eb;text-decoration:none}
-  .log{white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:13px}
-  iframe{width:320px;height:260px;border:0;border-radius:12px;background:#0f172a}
+  body{margin:0;background:#0b0f14;color:#cde;font:14px ui-sans-serif,system-ui}
+  .wrap{max-width:1100px;margin:40px auto;padding:0 16px}
+  h1{font-size:28px;margin:0 0 16px}
+  .cols{display:grid;grid-template-columns:360px 1fr;gap:24px}
+  .box{background:#0f1720;border-radius:12px;padding:16px}
+  #slot{width:300px;height:250px;display:block;background:#0b0d11;border-radius:8px}
+  a.btn{display:inline-block;margin-top:8px;padding:8px 10px;border-radius:8px;background:#152233;color:#9fd;text-decoration:none}
+  .log{white-space:pre-wrap;line-height:1.3}
 </style>
-</head><body>
 <div class="wrap">
   <h1>Ads Test — EroAdvertising</h1>
-  <small>Banner cargado vía <code>/api/ads/ero?zone=…</code> (proxy). También puedes probar “direct”.</small>
-  <div class="grid">
-    <div class="card log" id="log"></div>
-    <div class="slot"><iframe id="adf" loading="eager" referrerpolicy="no-referrer"></iframe></div>
+  <p>Banner cargado vía <code>/api/ads/ero?zone=…</code> (proxy). También puedes probar “direct”.</p>
+  <div class="cols">
+    <div class="box">
+      <div class="log" id="log"></div>
+      <a class="btn" href="/api/ads/ero?zone=8177575&debug=1" target="_blank">Ver /api/ads/ero?debug=1</a><br>
+      <a class="btn" id="btnDirect" href="#">Probar modo direct en el iframe</a>
+    </div>
+    <div class="box">
+      <iframe id="slot" src="/ads/eroframe.html?zone=8177575&mode=proxy" loading="eager" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
   </div>
 </div>
 <script>
-  const ZONE = (new URLSearchParams(location.search)).get('zone') || (window.__ENV && __ENV.EROADVERTISING_ZONE) || '8177575';
-  const log = (m)=>{ document.getElementById('log').textContent += (document.getElementById('log').textContent?'\n':'') + m; };
-  function set(src){ document.getElementById('adf').src = src; log('✓ iframe loaded\\n'+src); }
-  log('ZONE= '+ZONE);
-  set('/ads/eroframe.html?zone='+encodeURIComponent(ZONE)+'&mode=proxy');
+const log = (t)=>document.getElementById('log').textContent += t + '\n';
+log('ZONE= 8177575');
+log('✓ iframe loaded\\n/ads/eroframe.html?zone=8177575&mode=proxy');
 
-  const a=document.createElement('a');
-  a.className='btn'; a.textContent='Ver /api/ads/ero?debug=1';
-  a.href='/api/ads/ero?zone='+encodeURIComponent(ZONE)+'&debug=1';
-  a.target='_blank'; document.querySelector('.log').appendChild(document.createElement('br')); document.querySelector('.log').appendChild(a);
-
-  const b=document.createElement('a');
-  b.className='btn'; b.textContent='Probar modo direct en el iframe';
-  b.href='javascript:void 0'; b.onclick=()=>set('/ads/eroframe.html?zone='+encodeURIComponent(ZONE)+'&mode=direct');
-  document.querySelector('.log').appendChild(document.createElement('br')); document.querySelector('.log').appendChild(b);
+document.getElementById('btnDirect').onclick = (e)=>{
+  e.preventDefault();
+  document.getElementById('slot').src='/ads/eroframe.html?zone=8177575&mode=direct';
+  log('→ iframe direct\\n/ads/eroframe.html?zone=8177575&mode=direct');
+};
 </script>
-</body></html>
