@@ -1,34 +1,79 @@
-(function(w,d){
-  const E=w.__ENV||{};
-  const IDS = { L:'slotL', R:'slotR', B:'slotB' };
-  function ensure(id,cls){let el=d.getElementById(id); if(!el){el=d.createElement('div'); el.id=id; if(cls)el.className=cls; d.body.appendChild(el);} return el;}
-  function writeIframe(slot, html, h){const f=d.createElement('iframe');f.width='100%';f.height=String(h||270);f.style.border='0';f.loading='lazy';slot.innerHTML='';slot.appendChild(f);const x=f.contentDocument||f.contentWindow.document;x.open();x.write('<!doctype html><meta charset=utf-8><base target=_top><body style="margin:0">');x.write(html);x.write('</body>');x.close();}
-  function juicy(slot,zone){
-    writeIframe(slot,`
-      <ins id="jadsPlaceHolder"></ins>
-      <script>(adsbyjuicy=window.adsbyjuicy||[]).push({adzone:"${String(zone)}"});</`+'script>
-      <script>
-        (function(){
-          var s=document.createElement('script');
-          s.src='/api/a/j';
-          s.onerror=function(){ var s2=document.createElement('script'); s2.src='/api/ads/juicy'; document.body.appendChild(s2); };
-          document.body.appendChild(s);
-        })();
-      </`+'script>
-    `, 270);
+// Carga simple y robusta de anuncios.
+// Requiere __ENV con: EXOCLICK_ZONE, EROADVERTISING_ZONE, JUICYADS_ZONE, POPADS_ENABLE, POPADS_SITE_ID
+(function(W,D){
+  const E=W.__ENV||{};
+  const Z={
+    JUICYADS_ZONE: E.JUICYADS_ZONE,
+    EXOCLICK_ZONE: E.EXOCLICK_ZONE,
+    EROADVERTISING_ZONE: E.EROADVERTISING_ZONE,
+    POPADS: (E.POPADS_ENABLE===true || E.POPADS_ENABLE==='true') && E.POPADS_SITE_ID
+  };
+  console.log("IBG_ADS ZONES ->", Z);
+
+  const slots={
+    L: D.getElementById('ad-left'),
+    R: D.getElementById('ad-right'),
+    B: D.getElementById('ad-bottom')
+  };
+
+  function inject(slot, html){
+    const c = slots[slot] || D.body;
+    const d = D.createElement('div');
+    d.className='ibg-ad';
+    d.innerHTML = html;
+    c.appendChild(d);
   }
-  function exo(slot,zone){
-    writeIframe(slot,`<script src="/api/a/x?zone=${encodeURIComponent(zone)}"></`+'script><script>this.onerror=function(){var s2=document.createElement("script");s2.src="/api/ads/exo?zone=${encodeURIComponent(zone)}";document.body.appendChild(s2);};</'+'script>',270);
+  function addScript(slot, src, attrs={}){
+    const c = slots[slot] || D.body;
+    const s = D.createElement('script');
+    s.async = true;
+    s.src = src;
+    for (const k in attrs) s.setAttribute(k, attrs[k]);
+    s.onerror = ()=>console.warn('ad load error', src);
+    c.appendChild(s);
   }
-  function ero(slot,zone){
-    writeIframe(slot,`<script src="/api/a/r?zone=${encodeURIComponent(zone)}"></`+'script><script>this.onerror=function(){var s2=document.createElement("script");s2.src="/api/ads/ero?zone=${encodeURIComponent(zone)}";document.body.appendChild(s2);};</'+'script>',270);
+
+  // LATERALES 300x250: izquierda Ero, derecha Exo (si hay zonas)
+  if (Z.EROADVERTISING_ZONE) {
+    // EroAdvertising: banner / splash.php?idzone=...
+    addScript('L', `https://syndication.ero-advertising.com/splash.php?idzone=${encodeURIComponent(Z.EROADVERTISING_ZONE)}`);
   }
-  function init(){
-    const Z={ JUICYADS_ZONE:E.JUICYADS_ZONE||E.JUICY_ZONE||'', EXOCLICK_ZONE:E.EXOCLICK_ZONE||E.EXO_ZONE||'', EROADVERTISING_ZONE:E.EROADVERTISING_ZONE||E.ERO_ZONE||'' };
-    console.log('IBG_ADS ZONES ->', Z);
-    const L=ensure(IDS.L,'slot-lateral left'), R=ensure(IDS.R,'slot-lateral right'), B=ensure(IDS.B,'slot-bottom');
-    if(Z.JUICYADS_ZONE){ juicy(L,Z.JUICYADS_ZONE); juicy(R,Z.JUICYADS_ZONE); }
-    if(Z.EXOCLICK_ZONE){ exo(B,Z.EXOCLICK_ZONE); } else if(Z.EROADVERTISING_ZONE){ ero(B,Z.EROADVERTISING_ZONE); }
+  if (Z.EXOCLICK_ZONE) {
+    // ExoClick: banner / splash.php?idzone=...
+    addScript('R', `https://syndication.exdynsrv.com/splash.php?idzone=${encodeURIComponent(Z.EXOCLICK_ZONE)}`);
   }
-  w.IBG_ADS={init, initAds:init};
+
+  // JUICY (solo si no está suspendido). Si tu sitio está “SUSPENDED” no verás nada aunque cargue.
+  if (Z.JUICYADS_ZONE) {
+    // Colócalo en el bottom como tercer intento
+    // Nota: muchas integraciones de Juicy usan <script src="https://juicyads.in/js/jads.js"></script> + unit;
+    // este loader básico sirve para zonas "js" modernas (si tu zona requiere unit HTML, pégalo en ads/test).
+    addScript('B', `https://juicyads.in/js/jads.js?zone=${encodeURIComponent(Z.JUICYADS_ZONE)}`);
+  }
+
+  // POPADS (opcional; overlay)
+  if (Z.POPADS) {
+    // Snippet PopAds mínimo; usa el SITE_ID desde env
+    (function(){
+      var _pop = window._pop || {};
+      _pop.siteId = E.POPADS_SITE_ID;
+      _pop.popundersPerIP = 0; _pop.default = false; _pop.topmostLayer="auto";
+      window._pop = _pop;
+      var s = D.createElement('script');
+      s.async = true;
+      s.src = 'https://cdn.popads.net/pop.js';
+      s.onerror = ()=>console.warn('PopAds bloqueado por navegador/ETP');
+      (D.head||D.documentElement).appendChild(s);
+    })();
+  }
+
+  // Fallback “Patrocinado” si en 3s no hay nada dentro de cada contenedor
+  setTimeout(()=>{
+    ['L','R','B'].forEach(k=>{
+      const c=slots[k];
+      if(!c) return;
+      const hasContent = c.querySelector('iframe, ins, script, img, a');
+      if(!hasContent) c.innerHTML = '<div class="ad-fallback">Patrocinado</div>';
+    });
+  }, 3000);
 })(window,document);

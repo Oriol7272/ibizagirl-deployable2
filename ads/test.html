@@ -1,17 +1,17 @@
 <!doctype html><meta charset="utf-8">
-<title>ads/test</title>
+<title>ADS TEST</title>
 <style>
-  body{font:14px/1.5 system-ui,sans-serif;max-width:1200px;margin:24px auto}
-  .row{display:flex;gap:16px}
-  .slot-lateral{flex:1;border:1px dashed #bbb;padding:8px;min-height:280px}
-  .slot-bottom{border:1px dashed #bbb;padding:8px;min-height:280px;margin-top:16px}
+  body{font-family:system-ui,Arial,sans-serif;margin:20px}
+  .row{display:flex;gap:20px}
+  .col{flex:1;border:1px dashed #bbb;padding:12px;min-height:280px}
+  .label{font-weight:600;margin-bottom:8px}
+  .ad-fallback{background:#111;color:#fff;padding:12px;text-align:center}
 </style>
-<h1>ads/test</h1>
-<p>Debes ver 2 bloques (izq/der) y 1 inferior. Si quedan vacíos: bloqueador o dominio no aprobado.</p>
 <div class="row">
-  <div id="slotL" class="slot-lateral"></div>
-  <div id="slotR" class="slot-lateral"></div>
+  <div class="col"><div class="label">LEFT (Ero)</div><div id="ad-left"></div></div>
+  <div class="col"><div class="label">RIGHT (Exo)</div><div id="ad-right"></div></div>
 </div>
-<div id="slotB" class="slot-bottom"></div>
-<script src="/js/ads.js"></script>
-<script>document.addEventListener('DOMContentLoaded',()=> (window.IBG_ADS.initAds||window.IBG_ADS.init)());</script>
+<div style="margin-top:20px" class="col"><div class="label">BOTTOM (Juicy/PopAds)</div><div id="ad-bottom"></div></div>
+
+<script defer src="/js/env-inline.js"></script>
+<script defer src="/js/ads.js"></script>
