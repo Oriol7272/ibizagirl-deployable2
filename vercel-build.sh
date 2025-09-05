@@ -74,3 +74,26 @@ dec_n=$( [ -d public/decorative-images ] && find public/decorative-images -type 
 echo "[fs-index] full=$full_n uncensored=$unc_n videos=$vid_n decorative=$dec_n"
 
 echo "[build] listo en ./public"
+
+### DECORATIVE_MANIFEST ###
+# Genera public/js/decorative-manifest.js con la lista de imágenes del banner
+mkdir -p public/js
+if [ -d "decorative-images" ]; then
+  echo "window.DECORATIVE_IMAGES = [" > public/js/decorative-manifest.js
+  first=1
+  # extensiones típicas
+  for p in $(find decorative-images -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) | sort); do
+    url="/$p"
+    if [ $first -eq 1 ]; then
+      printf "\"%s\"" "$url" >> public/js/decorative-manifest.js; first=0
+    else
+      printf ",\"%s\"" "$url" >> public/js/decorative-manifest.js
+    fi
+  done
+  echo "];" >> public/js/decorative-manifest.js
+  echo "[decorative] manifest listo: $(grep -o '\"/' public/js/decorative-manifest.js | wc -l | awk '{print $1}') imágenes"
+else
+  echo "window.DECORATIVE_IMAGES = [];" > public/js/decorative-manifest.js
+  echo "[decorative] carpeta decorative-images no existe"
+fi
+### /DECORATIVE_MANIFEST ###

@@ -80,3 +80,19 @@ html,body{
 }
 .ad-bottom{position:relative;max-width:1140px;margin:24px auto;padding:0 12px}
 .ad-bottom iframe{display:block;width:100%;min-height:260px;border:0}
+
+/* ===== Banner ===== */
+#banner{
+  min-height: 420px;
+  background-size: cover;
+  background-position: center center;
+  position: relative;
+}
+#banner .banner-inner{
+  position:relative; z-index:1;
+  color:#fff; text-align:center; padding:48px 16px;
+}
+#banner::after{
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.35));
+}
