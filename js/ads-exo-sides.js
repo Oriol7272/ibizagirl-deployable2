@@ -13,9 +13,9 @@
     (document.head||document.documentElement).appendChild(s);
   }
 
-  function mountOne(hostId){
-    var host = document.getElementById(hostId);
-    if(!host){ return; }
+  function mountOne(id){
+    var host=document.getElementById(id);
+    if(!host) return;
     host.innerHTML='';
     var ins=document.createElement('ins');
     ins.className='eas6a97888e17';
@@ -27,14 +27,10 @@
     host.appendChild(ins);
   }
 
-  function serve(){
-    (window.AdProvider = window.AdProvider || []).push({serve:{}});
-  }
-
   function mount(){
     mountOne('ad-left');
     mountOne('ad-right');
-    serve();
+    (window.AdProvider = window.AdProvider || []).push({serve:{}});
     console.log('IBG_ADS: EXO/AP mounted ->', Z, 'on ad-left & ad-right');
   }
 
