@@ -1,29 +1,42 @@
-<!doctype html><meta charset="utf-8">
-<title>Ads Test (Ero)</title>
-<style>
-  body{font:14px system-ui;background:#111;color:#eee;margin:0;padding:24px}
-  .row{display:flex;gap:16px;align-items:flex-start}
-  .box{background:#222;border:1px solid #333;border-radius:8px;padding:12px;min-height:260px}
-  #slotB{width:320px;min-height:260px}
-  #log{white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace}
-</style>
-<h1>Ads Test – EroAdvertising</h1>
-<p>Deberías ver un banner cargado vía <code>/api/ads/ero?zone=…</code>.</p>
-<div class="row">
-  <div class="box"><strong>Log</strong><div id="log"></div></div>
-  <div class="box" id="slotB"><strong>Slot Bottom</strong></div>
-</div>
+<!doctype html>
+<html lang="es"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ads Test — EroAdvertising</title>
+  <style>
+    body{margin:0;background:#0b0e13;color:#e7e9ee;font-family:system-ui,Arial}
+    .wrap{padding:28px}
+    .grid{display:grid;grid-template-columns:320px 340px;gap:24px;align-items:start}
+    .card{background:#141821;border-radius:12px;padding:16px}
+    .title{font-weight:700;margin:0 0 12px}
+    .log{font-family:ui-monospace,Menlo,Consolas;white-space:pre-wrap}
+    iframe{border:0;border-radius:10px;background:#0b0e13}
+  </style>
+</head><body>
+  <div class="wrap">
+    <h1>Ads Test — EroAdvertising</h1>
+    <p>Deberías ver un banner cargado vía <code>/api/ads/ero?zone=…</code></p>
+    <div class="grid">
+      <div class="card">
+        <div class="title">Log</div>
+        <div class="log" id="log"></div>
+      </div>
+      <div class="card">
+        <div class="title">Slot Bottom</div>
+        <iframe id="slot" width="300" height="250"
+          sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+          referrerpolicy="no-referrer-when-downgrade" loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
 <script>
-  const ZONE = (window.__ENV && __ENV.EROADVERTISING_ZONE) || "8177575";
-  const log = (...a)=>{ const el=document.getElementById('log'); el.textContent += a.join(' ') + "\n"; console.log(...a); };
-
-  function addScript(targetId, src){
-    const s = document.createElement('script');
-    s.src = src; s.async = true; s.onerror = ()=>log('❌ error', src);
-    s.onload  = ()=>log('✅ loaded', src);
-    document.getElementById(targetId).appendChild(s);
-  }
-
-  log('ZONE=', ZONE);
-  addScript('slotB', '/api/ads/ero?zone='+encodeURIComponent(ZONE));
+  (function(){
+    var Z = (window.__ENV && __ENV.EROADVERTISING_ZONE) || '8177575'; // tu zone
+    function log(t){ document.getElementById('log').textContent += t + '\n'; }
+    log('ZONE= ' + Z);
+    var f=document.getElementById('slot');
+    f.src = '/ads/ero-frame.html?zone=' + encodeURIComponent(Z);
+    f.onload = function(){ log('✓ iframe loaded ' + f.src); };
+    f.onerror = function(){ log('✗ iframe error ' + f.src); };
+  })();
 </script>
+</body></html>

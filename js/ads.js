@@ -1,39 +1,30 @@
-(function (w, d) {
-  const E = (w.__ENV || {});
-  const Z = {
-    EROADVERTISING_ZONE: E.EROADVERTISING_ZONE || null,
-    EXOCLICK_ZONE: E.EXOCLICK_ZONE || null,
-    JUICYADS_ZONE: E.JUICYADS_ZONE || null,
-    POPADS_SITE_ID: E.POPADS_SITE_ID || null,
-    POPADS_ENABLE: (E.POPADS_ENABLE || '').toString().toLowerCase() === 'true'
-  };
-  console.log('IBG_ADS ZONES ->', Z);
-
-  function ensureSlots() {
-    if (d.getElementById('ad-right')) return;
-    const left = d.createElement('div'); left.id = 'ad-left'; left.className = 'ad ad-lateral';
-    const right = d.createElement('div'); right.id = 'ad-right'; right.className = 'ad ad-lateral';
-    const bottom = d.createElement('div'); bottom.id = 'ad-bottom'; bottom.className = 'ad ad-bottom';
-    d.body.append(left, right, bottom);
+(function(W){
+  var E = (W.__ENV||{});
+  function injectFrame(targetId, zone, w, h){
+    var el = document.getElementById(targetId);
+    if(!el || !zone) return;
+    el.innerHTML = '';
+    var f = document.createElement('iframe');
+    f.src = '/ads/ero-frame.html?zone=' + encodeURIComponent(zone);
+    f.width = w||300; f.height = h||250;
+    f.loading = 'lazy';
+    f.setAttribute('frameborder','0');
+    f.setAttribute('scrolling','no');
+    f.setAttribute('title','ad');
+    f.setAttribute('referrerpolicy','no-referrer-when-downgrade');
+    f.setAttribute('sandbox','allow-scripts allow-popups allow-popups-to-escape-sandbox');
+    el.appendChild(f);
   }
 
-  function addScript(targetId, src) {
-    const t = d.getElementById(targetId) || d.body;
-    const s = d.createElement('script');
-    s.src = src; s.async = true; s.referrerPolicy = 'no-referrer';
-    s.onerror = () => console.warn('ad load error', src);
-    t.appendChild(s);
+  function initEro(){
+    var z = E.EROADVERTISING_ZONE;
+    if(!z) return false;
+    injectFrame('ad-bottom', z, 300, 250);
+    injectFrame('ad-left',   z, 300, 600);
+    injectFrame('ad-right',  z, 300, 600);
+    console.log('IBG_ADS: ERO mounted ->', z);
+    return true;
   }
 
-  function initAds() {
-    ensureSlots();
-    // === EroAdvertising: lo mostramos a la derecha con PROXY (evita CORS/SSL) ===
-    if (Z.EROADVERTISING_ZONE) {
-      addScript('ad-right', '/api/ads/ero?zone=' + encodeURIComponent(Z.EROADVERTISING_ZONE));
-    }
-    // (ExoClick y Juicy los activaremos en los siguientes pasos)
-  }
-
-  // EXPONE API GLOBAL
-  w.IBG_ADS = { initAds, _ZONES: Z };
-})(window, document);
+  W.IBG_ADS = { initAds: function(){ initEro(); } };
+})(window);
