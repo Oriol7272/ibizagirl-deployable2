@@ -16,19 +16,14 @@
 <script src="/js/env-inline.js"></script>
 <script>
   (function(E){
-    function addScript(into, src){
-      var t=document.createElement('script'); t.src=src; t.async=true; t.defer=true;
-      document.getElementById(into).appendChild(t);
-    }
+    function add(into, src){var s=document.createElement('script');s.src=src;s.async=true;s.defer=true;document.getElementById(into).appendChild(s);}
     // Juicy (proxificado)
-    addScript('L','/api/ads/juicy'); var i=document.createElement('ins'); i.id='jadsPlaceHolderTestL'; document.getElementById('L').appendChild(i);
+    add('L','/api/ads/juicy'); var i=document.createElement('ins'); i.id='jadsPlaceHolderTestL'; document.getElementById('L').appendChild(i);
     (window.adsbyjuicy=window.adsbyjuicy||[]).push({adzone:String(E.JUICYADS_ZONE||'')});
-
-    addScript('R','/api/ads/juicy'); var j=document.createElement('ins'); j.id='jadsPlaceHolderTestR'; document.getElementById('R').appendChild(j);
+    add('R','/api/ads/juicy'); var j=document.createElement('ins'); j.id='jadsPlaceHolderTestR'; document.getElementById('R').appendChild(j);
     (window.adsbyjuicy=window.adsbyjuicy||[]).push({adzone:String(E.JUICYADS_ZONE||'')});
-
     // Exo/Ero bottom (proxificados)
-    if(E.EXOCLICK_ZONE){ addScript('B','/api/ads/exo?zone='+encodeURIComponent(E.EXOCLICK_ZONE)); }
-    else if(E.EROADVERTISING_ZONE){ addScript('B','/api/ads/ero?zone='+encodeURIComponent(E.EROADVERTISING_ZONE)); }
+    if(E.EXOCLICK_ZONE){ add('B','/api/ads/exo?zone='+encodeURIComponent(E.EXOCLICK_ZONE)); }
+    else if(E.EROADVERTISING_ZONE){ add('B','/api/ads/ero?zone='+encodeURIComponent(E.EROADVERTISING_ZONE)); }
   })(window.__ENV||{});
 </script>
