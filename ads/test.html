@@ -1,0 +1,34 @@
+<!doctype html><meta charset="utf-8">
+<title>IBG Ads Test</title>
+<style>
+  body{background:#0b0b0f;color:#fff;font-family:system-ui;padding:20px}
+  .slot{border:1px dashed #666;min-height:140px;margin:12px 0;padding:8px}
+  .row{display:flex;gap:14px}
+  .col{flex:1}
+</style>
+<h1>IBG Ads Test</h1>
+<p>Si usas AdBlock/ETP verás poco o nada. Para verificar carga real, desactívalo.</p>
+<div class="row">
+  <div class="slot col" id="L"><strong>Left</strong></div>
+  <div class="slot col" id="R"><strong>Right</strong></div>
+</div>
+<div class="slot" id="B"><strong>Bottom</strong></div>
+<script src="/js/env-inline.js"></script>
+<script>
+  (function(E){
+    function addScript(into, src){
+      var t=document.createElement('script'); t.src=src; t.async=true; t.defer=true;
+      document.getElementById(into).appendChild(t);
+    }
+    // Juicy (proxificado)
+    addScript('L','/api/ads/juicy'); var i=document.createElement('ins'); i.id='jadsPlaceHolderTestL'; document.getElementById('L').appendChild(i);
+    (window.adsbyjuicy=window.adsbyjuicy||[]).push({adzone:String(E.JUICYADS_ZONE||'')});
+
+    addScript('R','/api/ads/juicy'); var j=document.createElement('ins'); j.id='jadsPlaceHolderTestR'; document.getElementById('R').appendChild(j);
+    (window.adsbyjuicy=window.adsbyjuicy||[]).push({adzone:String(E.JUICYADS_ZONE||'')});
+
+    // Exo/Ero bottom (proxificados)
+    if(E.EXOCLICK_ZONE){ addScript('B','/api/ads/exo?zone='+encodeURIComponent(E.EXOCLICK_ZONE)); }
+    else if(E.EROADVERTISING_ZONE){ addScript('B','/api/ads/ero?zone='+encodeURIComponent(E.EROADVERTISING_ZONE)); }
+  })(window.__ENV||{});
+</script>
