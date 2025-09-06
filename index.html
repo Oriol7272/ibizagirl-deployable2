@@ -58,6 +58,31 @@
     /* Mantener BOTTOM visible (no tocar) */
     #ad-bottom, .ad-bottom { display:block !important; }
   </style>
+
+  <style id="ibg-cleanup-css">
+    /* Oculta artefacto fino sobre el menú */
+    header + .artifact, .top-artifact, .menu-artifact { display: none !important; }
+    body > .artifact, body > .decorative-line { display: none !important; }
+    body > div[style*="height:1px"], body > div[style*="height:2px"] { display: none !important; }
+
+    /* Mantener visibles SOLO contenedores de anuncios reales */
+    #ad-left, .ad-left, #ad-right, .ad-right, #ad-sticky-bottom, .ad-sticky-bottom {
+      display:block !important; visibility:visible !important;
+    }
+
+    /* Ocultar placeholders vacíos típicos */
+    .ad-placeholder, .ad-bottom-row, .ad-slot-empty, .ad-empty,
+    .ad-row, .bottom-row-ads, .ads-row, .dummy-ad, .ghost-ad {
+      display:none !important; visibility:hidden !important;
+      height:0 !important; margin:0 !important; padding:0 !important; border:0 !important;
+    }
+
+    /* Evitar huecos de layout */
+    .gallery-section, .carousel-section, main, .content-center {
+      margin-bottom: 0 !important; padding-bottom: 0 !important;
+    }
+  </style>
+  <script src="/fix-ads-noop.js"></script>
 </head>
 <body>
 <div id="ad-left" class="ad-lateral left"></div>
