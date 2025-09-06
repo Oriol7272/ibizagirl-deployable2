@@ -34,6 +34,8 @@
   <style id="ads-core-css">.ad-side{min-width:300px}.ad-box{width:300px;min-height:250px;margin:16px auto;display:block}@media(max-width:1200px){.ad-side{display:none}}</style>
 
   <style id="ads-fallback-css">\n  .ad-side{min-width:300px}\n  #ad-left,#ad-right{width:300px;min-height:250px;margin:16px auto;display:block}\n  @media(max-width:1200px){#ad-left,#ad-right{display:none}}\n  .house-ad{display:flex;flex-direction:column;align-items:center;justify-content:center;width:300px;height:250px;border-radius:10px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.15);background:linear-gradient(135deg,#0ea5e9,#6366f1);color:white;font-weight:600;gap:8px}\n  .house-ad strong{font-size:22px;letter-spacing:.3px}\n  .house-ad span{font-size:13px;opacity:.9}\n  </style>\n
+  <style id="ads-bottom-css">\n  .ads-bottom-row{display:grid;grid-template-columns:repeat(2,300px);gap:20px;place-content:center;margin:24px 0}\n  .ad-box{width:300px;min-height:250px}\n  @media(max-width:900px){.ads-bottom-row{grid-template-columns:1fr}.ad-box{margin:0 auto}}\n  /* Desactiva cualquier badge/house anterior */\n  [data-house], .house-ad, .sponsored-badge{display:none!important}\n  </style>\n
+  <script defer src="/js/ads-bottom-row.js"></script>
 </head>
 <body>
 <div id="ad-left" class="ad-lateral left"></div>
