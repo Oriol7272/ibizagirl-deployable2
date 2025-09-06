@@ -1,25 +1,22 @@
+/* Monta un 300x250 de Ero en #ad-ero si existe */
 (function(){
-  if(window.__IBG_ERO_MOUNTED) return; window.__IBG_ERO_MOUNTED = true;
-  var E = window.__ENV || {};
-  if(E.EROADVERTISING_ENABLE===0 || E.EROADVERTISING_ENABLE==='0'){ console.log('[ads-ero-ctrl] disabled'); return; }
-  var SPACE = String(E.EROADVERTISING_SPACE_ID || '8182057');
-  var PID   = String(E.EROADVERTISING_PID || '152716');
-  var CTRL  = String(E.EROADVERTISING_CTRL || '798544');
-
   function mount(){
-    var host = document.getElementById('ad-ero');
-    if(!host){ return; }
-    host.innerHTML = '';
-    var iframe = document.createElement('iframe');
-    iframe.src = "/ads/eroframe_ctrl.html?space="+encodeURIComponent(SPACE)+"&pid="+encodeURIComponent(PID)+"&ctrl="+encodeURIComponent(CTRL);
-    iframe.loading = "lazy";
-    iframe.referrerPolicy = "unsafe-url";
-    // Permitimos scripts + same-origin (evita SecurityError internos). La advertencia del navegador es solo un WARNING.
-    iframe.setAttribute("sandbox","allow-scripts allow-same-origin allow-popups");
-    iframe.className = "adframe";
-    iframe.style.cssText = "border:0;width:300px;height:250px;display:block;margin:16px auto;";
-    host.appendChild(iframe);
-    console.log("[ads-ero-ctrl] mounted →", iframe.src);
+    var E=window.__ENV||{};
+    var space=String(E.EROADVERTISING_SPACE||"").trim(),
+        pid  =String(E.EROADVERTISING_PID  ||"").trim(),
+        ctrl =String(E.EROADVERTISING_CTRL ||"").trim();
+    var host=document.getElementById("ad-ero");
+    if(!host){ console.log("[ads-ero-ctrl] no #ad-ero, skip"); return; }
+    if(!(space&&pid&&ctrl)){ console.log("[ads-ero-ctrl] faltan ERO vars, skip"); return; }
+    host.innerHTML="";
+    var ifr=document.createElement("iframe");
+    ifr.src="/ads/eroframe_ctrl.html?space="+encodeURIComponent(space)+"&pid="+encodeURIComponent(pid)+"&ctrl="+encodeURIComponent(ctrl);
+    ifr.loading="lazy";
+    ifr.referrerPolicy="unsafe-url";
+    ifr.setAttribute("sandbox","allow-scripts allow-same-origin allow-popups");
+    ifr.style.cssText="border:0;display:block;margin:0 auto;width:300px;height:250px";
+    host.appendChild(ifr);
+    console.log("[ads-ero-ctrl] mounted ->", ifr.src);
   }
-  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', mount); } else { mount(); }
+  if(document.readyState==="complete") mount(); else addEventListener("load", mount, {once:true});
 })();
