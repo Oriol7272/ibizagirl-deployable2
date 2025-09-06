@@ -1,32 +1,28 @@
 (function(){
-  if(window.__IBG_POPADS_MOUNTED) return;
-  window.__IBG_POPADS_MOUNTED = true;
+  var E = window.__ENV || {};
+  if(E.POPADS_ENABLED===0 || E.POPADS_ENABLED==='0'){ console.log('[ads-popads] disabled'); return; }
+  var SITE = Number(E.POPADS_SITE_ID || 5226758);
 
-  function start(siteId){
-    var KEY='e494ffb82839a29122608e933394c091';
-    var cfg=[["siteId",Number(siteId)],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]];
-    try{ Object.freeze(window[KEY]=cfg); }catch(e){ window[KEY]=cfg; }
-
-    var s=document.createElement('script');
-    s.src='/api/ads/popjs'; s.async=true;
-    s.onload=function(){ console.log('IBG_ADS: POP mounted ->', siteId); };
-    s.onerror=function(){
-      var f=document.createElement('script'); f.src='https://cdn.popads.net/pop.js'; f.async=true;
-      (document.head||document.documentElement).appendChild(f);
-    };
-    (document.head||document.documentElement).appendChild(s);
+  function inject(){
+    if(window.__POPADS_DONE) return; window.__POPADS_DONE = true;
+    var code = '/*<![CDATA[/* */\n'
+      + '(function(){var x=window,u="e494ffb82839a29122608e933394c091",a=[["siteId",'+SITE+'],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],d=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL2Vmb3JjZS5taW4uY3Nz","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvcllYUi9sYWZyYW1lLWFyLm1pbi5qcw==","d3d3LmRkc3Z3dnBycXYuY29tL2Zmb3JjZS5taW4uY3Nz","d3d3LmZqdGVkdHhxYWd1YmphLmNvbS9pcFUvYWFmcmFtZS1hci5taW4uanM="],h=-1,w,t,f=function(){clearTimeout(t);h++;if(d[h]&&!(1782994233000<(new Date).getTime()&&1<h)){w=x.document.createElement("script");w.type="text/javascript";w.async=!0;var n=x.document.getElementsByTagName("script")[0];w.src="https://"+atob(d[h]);w.crossOrigin="anonymous";w.onerror=f;w.onload=function(){clearTimeout(t);x[u.slice(0,16)+u.slice(0,16)]||f()};t=setTimeout(f,5E3);n.parentNode.insertBefore(w,n)}};if(!x[u]){try{Object.freeze(x[u]=a)}catch(e){}f()}})();\n'
+      + '/*]]>/* */';
+    var s = document.createElement('script');
+    s.type='text/javascript'; s.setAttribute('data-cfasync','false'); s.text = code;
+    document.documentElement.appendChild(s);
+    console.log('IBG_ADS: POP mounted ->', SITE);
   }
 
-  function waitEnv(maxTries){
-    var c=0; (function tick(){
-      var E=window.__ENV||{};
-      var SID=E.POPADS_SITE_ID;
-      if(SID){ start(SID); }
-      else if(c++<50){ setTimeout(tick,100); }
-      else { console.log('[ads-popads] disabled or no site id'); }
-    })();
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', function(){
+      window.addEventListener('click', inject, {once:true});
+      window.addEventListener('keydown', inject, {once:true});
+      setTimeout(inject, 5000);
+    });
+  } else {
+    window.addEventListener('click', inject, {once:true});
+    window.addEventListener('keydown', inject, {once:true});
+    setTimeout(inject, 5000);
   }
-
-  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', function(){ waitEnv(50); }); }
-  else { waitEnv(50); }
 })();
