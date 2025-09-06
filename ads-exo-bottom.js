@@ -1,40 +1,30 @@
-/* ads-exo-bottom.js - Exo sticky bottom (3ª posición)
-   Requiere: window.__ENV.EXOCLICK_BOTTOM_ZONE (p.ej. 5717078) y https://a.magsrv.com/ad-provider.js
-   Comportamiento:
-   - Si hay zone -> monta <ins> y lanza AdProvider.
-   - Si en ~4s no aparece iframe de la creativa -> oculta el contenedor (nada de "pill" gris).
+/* ads-exo-bottom.js  —  Sticky Exo (3ª posición)
+   Usa: window.__ENV.EXOCLICK_BOTTOM_ZONE (si no, cae a __ENV.EXOCLICK_ZONE).
+   Si no hay fill real en ~4s, elimina el host (nada de "pill" gris).
 */
 (function(){
   try{
-    var Z = (window.__ENV && window.__ENV.EXOCLICK_BOTTOM_ZONE) ? String(window.__ENV.EXOCLICK_BOTTOM_ZONE).trim() : "";
-    var host = document.getElementById("ad-bottom") || (function(){
-      // crea contenedor si no existe
-      var h = document.createElement("div");
-      h.id = "ad-bottom";
-      h.style.cssText = "width:100%;max-width:1200px;margin:16px auto 0 auto;padding:0;";
-      // intenta insertarlo debajo del header si existe, si no al principio del body
-      var hdr = document.querySelector("header") || document.body.firstElementChild;
-      (hdr && hdr.parentNode ? hdr.parentNode.insertBefore(h, hdr.nextSibling) : document.body.insertBefore(h, document.body.firstChild));
-      return h;
-    })();
-
-    // Limpieza de cualquier relleno/house anterior
-    host.innerHTML = "";
-    host.style.display = "block";
-    host.style.minHeight = "0"; // sin pill
-
-    if(!Z){
-      console.log("[exo-bottom] missing EXOCLICK_BOTTOM_ZONE");
-      host.style.display = "none";
-      return;
-    }
+    var E = window.__ENV || {};
+    var Z = (E.EXOCLICK_BOTTOM_ZONE || E.EXOCLICK_ZONE || "").toString().trim();
+    if(!Z){ console.log("[exo-bottom] no zone (need EXOCLICK_BOTTOM_ZONE or EXOCLICK_ZONE)"); return; }
 
     // Carga provider si no está
     if(!document.querySelector('script[src*="a.magsrv.com/ad-provider.js"]')){
-      var p = document.createElement("script");
-      p.async = true;
-      p.src = "https://a.magsrv.com/ad-provider.js";
-      document.head.appendChild(p);
+      var s = document.createElement("script");
+      s.async = true;
+      s.src = "https://a.magsrv.com/ad-provider.js";
+      document.head.appendChild(s);
+    }
+
+    // Contenedor mínimo y sin estilos visibles
+    var host = document.getElementById("exo-bottom");
+    if(!host){
+      host = document.createElement("div");
+      host.id = "exo-bottom";
+      host.style.cssText = "width:0;height:0;overflow:visible";
+      document.body.appendChild(host);
+    } else {
+      host.innerHTML = "";
     }
 
     // Nodo del anuncio
@@ -48,24 +38,19 @@
     (window.AdProvider = window.AdProvider || []).push({serve:{}});
     console.log("IBG_ADS: EXO bottom mounted ->", Z);
 
-    // Supervisa si hubo fill real; si no, oculta
-    var t0 = Date.now();
-    var tries = 0, maxTries = 40; // ~4s @100ms
-    var iv = setInterval(function(){
+    // Si no hay iframe tras ~4s, elimina host
+    var tries = 0, max = 40;
+    var t = setInterval(function(){
       tries++;
-      var iframe = host.querySelector("iframe");
-      if (iframe && iframe.width && iframe.height) {
-        clearInterval(iv);
-      } else if (tries >= maxTries) {
-        clearInterval(iv);
-        console.log("[exo-bottom] no fill → hide (", (Date.now()-t0), "ms )");
-        host.style.display = "none";
+      var ifr = host.querySelector("iframe");
+      if (ifr) { clearInterval(t); }
+      else if (tries >= max) {
+        clearInterval(t);
+        host.remove();
+        console.log("[exo-bottom] no fill -> removed");
       }
     }, 100);
-
   }catch(e){
     console.error("[exo-bottom] error:", e);
-    var h = document.getElementById("ad-bottom");
-    if (h) h.style.display = "none";
   }
 })();

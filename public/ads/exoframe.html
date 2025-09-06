@@ -1,0 +1,17 @@
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Exo Frame</title>
+<style>html,body{margin:0;padding:0;background:transparent}#slot{width:300px;height:250px}</style>
+</head><body>
+<div id="slot"></div>
+<script>
+(function(){
+  var z=new URLSearchParams(location.search).get('zone');
+  if(!z){ console.warn('exo: falta ?zone='); return; }
+  var s=document.createElement('script');
+  s.src='/api/ads/exo?zone='+encodeURIComponent(z);
+  s.async=true; s.referrerPolicy='unsafe-url';
+  document.body.appendChild(s);
+})();
+</script>
+</body></html>

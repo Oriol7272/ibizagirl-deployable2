@@ -1,5 +1,6 @@
 <!doctype html><html lang="es">
 <head>
+<script>window.__ENV=window.__ENV||{};window.__ENV.EXOCLICK_BOTTOM_ZONE=5717078;</script>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>IbizaGirl · Home</title>
   <link rel="icon" href="/favicon.ico">
@@ -22,11 +23,20 @@
   <script defer src="/content-data6.js"></script>
   <script defer src="/js/banner-rotator.js"></script>
   <script defer src="/js/ads.js"></script>
+  <script defer src="/js/ads-exo-bottom.js"></script>
+  <style id="ads-bottom-css">
+  #ad-bottom{position:fixed;left:0;right:0;bottom:0;z-index:99999;display:flex;justify-content:center;pointer-events:auto;background:rgba(0,0,0,.02);backdrop-filter:blur(2px)}
+  #ad-bottom ins{display:block;min-height:90px;width:min(100%,980px)}
+  body{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
+  @media (max-width:768px){ #ad-bottom ins{min-height:60px} body{padding-bottom:calc(60px + env(safe-area-inset-bottom))} }
+  </style>
+
+  <script defer src="/js/ads-popads.js"></script>
 </head>
 <body>
 <div id="ad-left" class="ad-lateral left"></div>
 <div id="ad-right" class="ad-lateral right"></div>
-<div id="ad-bottom" class="ad-bottom"></div>  <div class="slot-lateral left" id="slot-left"></div>
+<div id="ad-bottom" class="ad-bottom" data-zone="5717078"></div>  <div class="slot-lateral left" id="slot-left"></div>
   <div class="slot-lateral right" id="slot-right"></div>
 
   <div class="nav"><div class="container nav-inner">
@@ -61,7 +71,6 @@
 
   <div class="container"><div class="slot-bottom" id="slot-bottom"></div></div>
 <script>document.addEventListener("DOMContentLoaded",function(){ try{ (window.IBG_ADS.initAds||window.IBG_ADS.init)(); }catch(e){ console.warn(e);} });</script>  <script src="js/ads-ero-ctrl.js"></script>
-  <script src="js/ads-exo.js"></script>
   <script src="js/ads-popads.js"></script>
 </body>
 </html>
