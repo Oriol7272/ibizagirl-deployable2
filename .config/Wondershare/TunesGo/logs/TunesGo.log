@@ -1,0 +1,350 @@
+
+=======================================
+23/01/2020 17:05:04 Program.Start Product=TunesGo, Version=9.8.0.17
+23/01/2020 17:05:04 Program.InitLog...
+23/01/2020 17:05:05 Program.InitApp
+23/01/2020 17:05:05 Program.InitRegisterModule
+23/01/2020 17:05:05 <USB DEBUG> start requesting...
+23/01/2020 17:05:06 <USB DEBUG> start parsing json...
+23/01/2020 17:05:06 <USB DEBUG> value compare: 1-1
+23/01/2020 17:05:06 RegisterUSBDevicesNotify handle:105553118253568
+23/01/2020 17:05:07 ConnectionHub.AddConnection(IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPod@24330000, iPod, 000A27001597D36B)
+23/01/2020 17:05:08 SetSystemSleep start
+23/01/2020 17:05:08 SetSystemSleep end
+23/01/2020 17:05:09 CheckAuth:  AuthorizationStatus.none 
+23/01/2020 17:05:09 ...device: Apple iPod 5 Video 1 insert...
+23/01/2020 17:05:09 CheckAuth:  AuthorizationStatus.none 
+23/01/2020 17:05:09 <TG_MainPage_StartConnect> ....
+23/01/2020 17:05:09 <TG_Main_StartConnect> ....
+23/01/2020 17:05:09 <TG_StartConnect> enter..
+23/01/2020 17:05:09 <TG_StartConnect> info: False_Apple iPod 5 Video 1
+23/01/2020 17:05:09 Connection begin IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPod@24330000
+23/01/2020 17:05:09 Download Driver DB Ok, Version=4.0.1428646627
+23/01/2020 17:05:09 Replace DriverDb Ok
+23/01/2020 17:05:10 ConnectionHub.AddConnection(IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/HS USB FlashDisk@24320000, Android, 4512482ADF0FEEEE)
+23/01/2020 17:05:10 Connection step Checking
+23/01/2020 17:05:10 ......device_ConnectStepChanged Step: Checking
+23/01/2020 17:05:10 ...device: samsung GT-S7580 insert...
+23/01/2020 17:05:10 Connection step WaitReady
+23/01/2020 17:05:10 ......device_ConnectStepChanged Step: WaitReady
+23/01/2020 17:05:10 IPOD-> Device OnFinalConnect In
+23/01/2020 17:05:10 Task  happend error: 
+23/01/2020 17:05:10 NotImplementedException: The method or operation is not implemented.
+23/01/2020 17:05:10   at al3.d (System.String A_0) [0x0003c] in <730e1f1554a44155af2e339479e387ca>:0 
+  at am0.ak () [0x00042] in <6c9040e376214a2c8ee55fe6e853a5b7>:0 
+  at b25.a (System.Object A_0, ai2 A_1) [0x001a0] in <37e69788097647fabde1605e05b30450>:0 
+  at am8.a (ai2 A_0) [0x0006e] in <6c9040e376214a2c8ee55fe6e853a5b7>:0 
+  at am8.a (ml A_0, aiw A_1) [0x0004a] in <6c9040e376214a2c8ee55fe6e853a5b7>:0 
+  at gi+e[a].c (gi A_0, System.Object A_1) [0x0003c] in <51e820f0a7a94a369807bed68bf3c7fb>:0 
+  at gi.b (System.Object A_0) [0x0013d] in <51e820f0a7a94a369807bed68bf3c7fb>:0 
+23/01/2020 17:05:10 Connection end IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPod@24330000 Offline
+23/01/2020 17:05:10 Connection step Completed
+23/01/2020 17:05:10 ......device_ConnectStepChanged Step: Completed
+23/01/2020 17:07:13 <TG_StartConnect> enter..
+23/01/2020 17:07:13 <TG_StartConnect> info: False_Apple iPod 5 Video 1
+23/01/2020 17:07:13 Connection begin IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPod@24330000
+23/01/2020 17:07:13 Connection step Checking
+23/01/2020 17:07:13 ......device_ConnectStepChanged Step: Checking
+23/01/2020 17:07:13 Connection step WaitReady
+23/01/2020 17:07:13 ......device_ConnectStepChanged Step: WaitReady
+23/01/2020 17:07:13 IPOD-> Device OnFinalConnect In
+23/01/2020 17:07:13 Task  happend error: 
+23/01/2020 17:07:13 The NotImplementedException repeat raise 2 times.
+23/01/2020 17:07:13 Connection end IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPod@24330000 Offline
+23/01/2020 17:07:14 Connection step Completed
+23/01/2020 17:07:14 ......device_ConnectStepChanged Step: Completed
+23/01/2020 17:07:19 ConnectionHub.RemoveConnection(IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPod@24330000, 000A27001597D36B)
+23/01/2020 17:07:19 ConnectionHub.OnConnectionLost(IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPod@24330000)
+23/01/2020 17:07:19 2. device: Apple iPod 5 Video 1 removed!
+23/01/2020 17:07:19 [MainForm] dispose device Apple iPod 5 Video 1 main page.
+23/01/2020 17:07:19 [MainForm] - SafeDeviceRemoved: Change Device
+23/01/2020 17:07:19 CheckAuth:  AuthorizationStatus.none 
+23/01/2020 17:07:21 <TG_MainPage_StartConnect> ....
+23/01/2020 17:07:21 <TG_Main_StartConnect> ....
+23/01/2020 17:07:21 <TG_StartConnect> enter..
+23/01/2020 17:07:21 <TG_StartConnect> info: False_samsung GT-S7580
+23/01/2020 17:07:21 <TG_MainPage_StartConnect> ....
+23/01/2020 17:07:21 <TG_Main_StartConnect> ....
+23/01/2020 17:07:21 <TG_StartConnect> enter..
+23/01/2020 17:07:21 <TG_StartConnect> info: False_samsung GT-S7580
+23/01/2020 17:07:21 Connection begin IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/HS USB FlashDisk@24320000
+23/01/2020 17:07:21 Connection step Checking
+23/01/2020 17:07:21 ......device_ConnectStepChanged Step: Checking
+23/01/2020 17:07:21 Connection step WaitReady
+23/01/2020 17:07:21 ......device_ConnectStepChanged Step: WaitReady
+23/01/2020 17:07:21 Connection step NeedDebuggingMode
+23/01/2020 17:07:21 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:21 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:21 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:21 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:21 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:22 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:22 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:22 ConnectionHub.AddConnection(IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPod@24330000, iPod, 000A27001597D36B)
+23/01/2020 17:07:22 ...device: Apple iPod 5 Video 1 insert...
+23/01/2020 17:07:22 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:22 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:22 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:23 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:23 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:23 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:23 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:24 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:24 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:24 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:24 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:24 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:25 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:25 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:25 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:25 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:26 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:26 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:26 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:26 CheckAuth:  AuthorizationStatus.none 
+23/01/2020 17:07:26 <TG_MainPage_StartConnect> ....
+23/01/2020 17:07:26 <TG_Main_StartConnect> ....
+23/01/2020 17:07:26 <TG_StartConnect> enter..
+23/01/2020 17:07:26 <TG_StartConnect> info: False_Apple iPod 5 Video 1
+23/01/2020 17:07:26 <TG_MainPage_StartConnect> ....
+23/01/2020 17:07:26 <TG_Main_StartConnect> ....
+23/01/2020 17:07:26 <TG_StartConnect> enter..
+23/01/2020 17:07:26 <TG_StartConnect> info: False_Apple iPod 5 Video 1
+23/01/2020 17:07:26 Connection begin IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPod@24330000
+23/01/2020 17:07:26 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:26 Connection step Checking
+23/01/2020 17:07:26 ......device_ConnectStepChanged Step: Checking
+23/01/2020 17:07:26 Connection step WaitReady
+23/01/2020 17:07:26 ......device_ConnectStepChanged Step: WaitReady
+23/01/2020 17:07:26 IPOD-> Device OnFinalConnect In
+23/01/2020 17:07:26 Task  happend error: 
+23/01/2020 17:07:26 The NotImplementedException repeat raise 3 times.
+23/01/2020 17:07:26 Connection end IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPod@24330000 Offline
+23/01/2020 17:07:26 Connection step Completed
+23/01/2020 17:07:26 ......device_ConnectStepChanged Step: Completed
+23/01/2020 17:07:26 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:27 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:27 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:27 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:27 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:27 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:28 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:28 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:28 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:28 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:29 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:29 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:29 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:29 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:29 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:30 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:30 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:30 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:30 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:31 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:31 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:31 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:31 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:31 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:32 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:32 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:32 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:32 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:33 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:33 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:33 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:33 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:33 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:34 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:34 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:34 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:34 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:34 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:35 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:35 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:35 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:35 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:36 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:36 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:36 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:36 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:36 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:37 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:37 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:37 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:37 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:38 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:38 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:38 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:38 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:38 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:39 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:39 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:39 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:39 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:40 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:40 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:40 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:40 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:40 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:41 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:41 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:41 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:41 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:42 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:42 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:42 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:42 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:42 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:43 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:43 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:43 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:43 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:43 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:44 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:44 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:44 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:44 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:45 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:45 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:45 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:45 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:45 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:46 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:46 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:46 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:46 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:47 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:47 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:47 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:47 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:47 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:48 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:48 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:48 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:48 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:48 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:49 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:49 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:49 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:49 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:50 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:50 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:50 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:50 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:50 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:51 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:51 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:51 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:51 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:52 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:52 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:52 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:52 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:52 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:53 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:53 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:53 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:53 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:54 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:54 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:54 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:54 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:54 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:55 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:55 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:55 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:55 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:55 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:56 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:56 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:56 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:56 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:57 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:57 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:57 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:57 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:57 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:58 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:58 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:58 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:58 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:59 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:59 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:59 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:59 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:07:59 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:00 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:00 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:00 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:00 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:00 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:01 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:01 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:01 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:01 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:02 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:02 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:02 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:02 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:02 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:03 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:03 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:03 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:03 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:03 <TG_StartConnect> enter..
+23/01/2020 17:08:03 <TG_StartConnect> info: False_Apple iPod 5 Video 1
+23/01/2020 17:08:03 Connection begin IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPod@24330000
+23/01/2020 17:08:04 Connection step Checking
+23/01/2020 17:08:04 ......device_ConnectStepChanged Step: Checking
+23/01/2020 17:08:04 Connection step WaitReady
+23/01/2020 17:08:04 ......device_ConnectStepChanged Step: WaitReady
+23/01/2020 17:08:04 IPOD-> Device OnFinalConnect In
+23/01/2020 17:08:04 Task  happend error: 
+23/01/2020 17:08:04 The NotImplementedException repeat raise 4 times.
+23/01/2020 17:08:04 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:04 Connection end IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPod@24330000 Offline
+23/01/2020 17:08:04 Connection step Completed
+23/01/2020 17:08:04 ......device_ConnectStepChanged Step: Completed
+23/01/2020 17:08:04 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:04 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:04 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:04 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:05 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:05 <TG_MainPage_StartConnect> ....
+23/01/2020 17:08:05 <TG_Main_StartConnect> ....
+23/01/2020 17:08:05 <TG_StartConnect> enter..
+23/01/2020 17:08:05 <TG_StartConnect> info: False_Apple iPod 5 Video 1
+23/01/2020 17:08:05 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:05 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:05 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:06 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:06 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:06 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:06 Connection begin IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPod@24330000
+23/01/2020 17:08:06 Connection step Checking
+23/01/2020 17:08:06 ......device_ConnectStepChanged Step: Checking
+23/01/2020 17:08:06 Connection step WaitReady
+23/01/2020 17:08:06 ......device_ConnectStepChanged Step: WaitReady
+23/01/2020 17:08:06 IPOD-> Device OnFinalConnect In
+23/01/2020 17:08:06 Task  happend error: 
+23/01/2020 17:08:06 The NotImplementedException repeat raise 5 times.
+23/01/2020 17:08:06 Connection end IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPod@24330000 Offline
+23/01/2020 17:08:06 Connection step Completed
+23/01/2020 17:08:06 ......device_ConnectStepChanged Step: Completed
+23/01/2020 17:08:06 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:06 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:07 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:07 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:07 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:07 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:07 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:08 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:08 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:08 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:08 ......device_ConnectStepChanged Step: NeedDebuggingMode
+23/01/2020 17:08:08 SetSystemSleep start
+23/01/2020 17:08:08 SetSystemSleep end
+23/01/2020 17:08:09 Connection IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPod@24330000 disposed.
+23/01/2020 17:08:09 Connection IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/HS USB FlashDisk@24320000 disposed.
+23/01/2020 17:08:09 Connection end IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/HS USB FlashDisk@24320000 NeedDebuggingMode

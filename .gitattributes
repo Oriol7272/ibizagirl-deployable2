@@ -10,3 +10,5 @@ assets/videos/* filter=lfs diff=lfs merge=lfs -text
 *.mov filter=lfs diff=lfs merge=lfs -text
 *.mkv filter=lfs diff=lfs merge=lfs -text
 *.tar.gz filter=lfs diff=lfs merge=lfs -text
+uncensored/* filter=lfs diff=lfs merge=lfs -text
+uncensored-videos/* filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,159 @@
+06/20/2020 10:58:43 Program.Start Product=dr.fone, Version=10.0.7.241
+06/20/2020 10:58:43 Operating System: Unix 17.7.0.0
+06/20/2020 10:58:43 Friendly Version: MaxOSX OS64Bits
+06/20/2020 10:58:43 Language: Spanish (Spain)
+06/20/2020 10:58:43 ProcessorCount: 2
+06/20/2020 10:58:43 iTunesVersion:12.8.2
+06/20/2020 10:58:44 <USB DEBUG> start requesting...
+06/20/2020 10:58:45 <USB DEBUG> start parsing json...
+06/20/2020 10:58:46 <USB DEBUG> value compare: 1-0
+06/20/2020 10:58:46 <USB DEBUG> GetJson Error:Object reference not set to an instance of an object
+06/20/2020 10:58:46   at cpz.b (System.Net.HttpWebResponse A_0) [0x0010f] in <eb61c825a4124913bafeadbfbc247033>:0 
+06/20/2020 10:58:46 Program.InitRegisterModule
+06/20/2020 10:58:51 RegisterUSBDevicesNotify handle:105553118337792
+06/20/2020 10:58:51 MacUsbNotifier  StartMonitor start
+06/20/2020 10:58:51 MacUsbNotifier  StopMonitor
+06/20/2020 10:58:51 MacOS  StartMonitorWorker start
+06/20/2020 10:58:51 MacUsbNotifier  DoListen start
+06/20/2020 10:58:51 ConnectionScanTask start
+06/20/2020 10:58:51 ConnectionScanTask End
+06/20/2020 10:58:52 MacUsb DeviceConnectCallback 
+06/20/2020 10:58:54 ConnectionHub.AddConnection(IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000, iOS, ffffffffffffffffffffffffffffffffffffffff)
+06/20/2020 10:58:54 Connection inserter Start
+06/20/2020 10:58:54 Connection inserter create new device
+06/20/2020 10:58:54 Connection inserter device is iOS
+06/20/2020 10:58:54 Connection inserter AddService
+06/20/2020 10:58:54 Device manager add device SerialNumber: ffffffffffffffffffffffffffffffffffffffff
+06/20/2020 10:58:55 Read device database error:System.Data.SQLite.SQLiteException (0x80004005): SQLite error
+no such table: t_deviceinfo
+  at System.Data.SQLite.SQLite3.Prepare (System.Data.SQLite.SQLiteConnection cnn, System.String strSql, System.Data.SQLite.SQLiteStatement previous, System.UInt32 timeoutMS, System.String& strRemain) [0x00236] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.BuildNextCommand () [0x000eb] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.GetStatement (System.Int32 index) [0x0000b] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.SQLite.SQLiteCommand.GetStatement(int)
+  at System.Data.SQLite.SQLiteDataReader.NextResult () [0x000db] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteDataReader..ctor (System.Data.SQLite.SQLiteCommand cmd, System.Data.CommandBehavior behave) [0x00051] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.SQLite.SQLiteDataReader..ctor(System.Data.SQLite.SQLiteCommand,System.Data.CommandBehavior)
+  at System.Data.SQLite.SQLiteCommand.ExecuteReader (System.Data.CommandBehavior behavior) [0x00006] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.ExecuteDbDataReader (System.Data.CommandBehavior behavior) [0x00000] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader (System.Data.CommandBehavior behavior) [0x00000] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.FillInternal (System.Data.DataSet dataset, System.Data.DataTable[] datatables, System.Int32 startRecord, System.Int32 maxRecords, System.String srcTable, System.Data.IDbCommand command, System.Data.CommandBehavior behavior) [0x0003f] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.Fill (System.Data.DataTable[] dataTables, System.Int32 startRecord, System.Int32 maxRecords, System.Data.IDbCommand command, System.Data.CommandBehavior behavior) [0x0007c] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.Fill (System.Data.DataTable dataTable) [0x00034] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.Common.DbDataAdapter.Fill(System.Data.DataTable)
+  at ln+b.e () [0x000a5] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at ln.p (System.String A_0, System.Data.SQLite.SQLiteParameter[] A_1) [0x0001c] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at ln.h (System.String A_0) [0x0003c] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at agc.a (afy A_0) [0x00174] in <0cc771bd405b4eb8871ae99296c4a171>:0 
+06/20/2020 10:58:56 Read device database error:System.Data.SQLite.SQLiteException (0x80004005): SQLite error
+no such table: t_deviceinfo
+  at System.Data.SQLite.SQLite3.Prepare (System.Data.SQLite.SQLiteConnection cnn, System.String strSql, System.Data.SQLite.SQLiteStatement previous, System.UInt32 timeoutMS, System.String& strRemain) [0x00236] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.BuildNextCommand () [0x000eb] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.GetStatement (System.Int32 index) [0x0000b] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.SQLite.SQLiteCommand.GetStatement(int)
+  at System.Data.SQLite.SQLiteDataReader.NextResult () [0x000db] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteDataReader..ctor (System.Data.SQLite.SQLiteCommand cmd, System.Data.CommandBehavior behave) [0x00051] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.SQLite.SQLiteDataReader..ctor(System.Data.SQLite.SQLiteCommand,System.Data.CommandBehavior)
+  at System.Data.SQLite.SQLiteCommand.ExecuteReader (System.Data.CommandBehavior behavior) [0x00006] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.ExecuteDbDataReader (System.Data.CommandBehavior behavior) [0x00000] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader (System.Data.CommandBehavior behavior) [0x00000] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.FillInternal (System.Data.DataSet dataset, System.Data.DataTable[] datatables, System.Int32 startRecord, System.Int32 maxRecords, System.String srcTable, System.Data.IDbCommand command, System.Data.CommandBehavior behavior) [0x0003f] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.Fill (System.Data.DataTable[] dataTables, System.Int32 startRecord, System.Int32 maxRecords, System.Data.IDbCommand command, System.Data.CommandBehavior behavior) [0x0007c] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.Fill (System.Data.DataTable dataTable) [0x00034] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.Common.DbDataAdapter.Fill(System.Data.DataTable)
+  at ln+b.e () [0x000a5] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at ln.p (System.String A_0, System.Data.SQLite.SQLiteParameter[] A_1) [0x0001c] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at ln.h (System.String A_0) [0x0003c] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at agc.a (afy A_0) [0x00174] in <0cc771bd405b4eb8871ae99296c4a171>:0 
+06/20/2020 10:58:56 Connection begin IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000
+06/20/2020 10:58:56 Connection step Checking
+06/20/2020 10:58:56 Read device database error:System.Data.SQLite.SQLiteException (0x80004005): SQLite error
+no such table: t_deviceinfo
+  at System.Data.SQLite.SQLite3.Prepare (System.Data.SQLite.SQLiteConnection cnn, System.String strSql, System.Data.SQLite.SQLiteStatement previous, System.UInt32 timeoutMS, System.String& strRemain) [0x00236] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.BuildNextCommand () [0x000eb] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.GetStatement (System.Int32 index) [0x0000b] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.SQLite.SQLiteCommand.GetStatement(int)
+  at System.Data.SQLite.SQLiteDataReader.NextResult () [0x000db] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteDataReader..ctor (System.Data.SQLite.SQLiteCommand cmd, System.Data.CommandBehavior behave) [0x00051] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.SQLite.SQLiteDataReader..ctor(System.Data.SQLite.SQLiteCommand,System.Data.CommandBehavior)
+  at System.Data.SQLite.SQLiteCommand.ExecuteReader (System.Data.CommandBehavior behavior) [0x00006] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.ExecuteDbDataReader (System.Data.CommandBehavior behavior) [0x00000] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader (System.Data.CommandBehavior behavior) [0x00000] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.FillInternal (System.Data.DataSet dataset, System.Data.DataTable[] datatables, System.Int32 startRecord, System.Int32 maxRecords, System.String srcTable, System.Data.IDbCommand command, System.Data.CommandBehavior behavior) [0x0003f] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.Fill (System.Data.DataTable[] dataTables, System.Int32 startRecord, System.Int32 maxRecords, System.Data.IDbCommand command, System.Data.CommandBehavior behavior) [0x0007c] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.Fill (System.Data.DataTable dataTable) [0x00034] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.Common.DbDataAdapter.Fill(System.Data.DataTable)
+  at ln+b.e () [0x000a5] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at ln.p (System.String A_0, System.Data.SQLite.SQLiteParameter[] A_1) [0x0001c] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at ln.h (System.String A_0) [0x0003c] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at agc.a (afy A_0) [0x00174] in <0cc771bd405b4eb8871ae99296c4a171>:0 
+06/20/2020 10:58:56 Read device database error:System.Data.SQLite.SQLiteException (0x80004005): SQLite error
+no such table: t_deviceinfo
+  at System.Data.SQLite.SQLite3.Prepare (System.Data.SQLite.SQLiteConnection cnn, System.String strSql, System.Data.SQLite.SQLiteStatement previous, System.UInt32 timeoutMS, System.String& strRemain) [0x00236] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.BuildNextCommand () [0x000eb] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.GetStatement (System.Int32 index) [0x0000b] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.SQLite.SQLiteCommand.GetStatement(int)
+  at System.Data.SQLite.SQLiteDataReader.NextResult () [0x000db] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteDataReader..ctor (System.Data.SQLite.SQLiteCommand cmd, System.Data.CommandBehavior behave) [0x00051] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.SQLite.SQLiteDataReader..ctor(System.Data.SQLite.SQLiteCommand,System.Data.CommandBehavior)
+  at System.Data.SQLite.SQLiteCommand.ExecuteReader (System.Data.CommandBehavior behavior) [0x00006] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.ExecuteDbDataReader (System.Data.CommandBehavior behavior) [0x00000] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader (System.Data.CommandBehavior behavior) [0x00000] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.FillInternal (System.Data.DataSet dataset, System.Data.DataTable[] datatables, System.Int32 startRecord, System.Int32 maxRecords, System.String srcTable, System.Data.IDbCommand command, System.Data.CommandBehavior behavior) [0x0003f] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.Fill (System.Data.DataTable[] dataTables, System.Int32 startRecord, System.Int32 maxRecords, System.Data.IDbCommand command, System.Data.CommandBehavior behavior) [0x0007c] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.Fill (System.Data.DataTable dataTable) [0x00034] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.Common.DbDataAdapter.Fill(System.Data.DataTable)
+  at ln+b.e () [0x000a5] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at ln.p (System.String A_0, System.Data.SQLite.SQLiteParameter[] A_1) [0x0001c] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at ln.h (System.String A_0) [0x0003c] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at agc.a (afy A_0) [0x00174] in <0cc771bd405b4eb8871ae99296c4a171>:0 
+06/20/2020 10:58:56 Connection step WaitReady
+06/20/2020 10:58:56 DoWaitReady before InitService
+06/20/2020 10:58:56 DoWaitReady end InitService
+06/20/2020 10:58:56 Connection end IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000 Recovery
+06/20/2020 10:58:56 Connection step Completed
+06/20/2020 10:58:57 Read device database error:System.Data.SQLite.SQLiteException (0x80004005): SQLite error
+no such table: t_deviceinfo
+  at System.Data.SQLite.SQLite3.Prepare (System.Data.SQLite.SQLiteConnection cnn, System.String strSql, System.Data.SQLite.SQLiteStatement previous, System.UInt32 timeoutMS, System.String& strRemain) [0x00236] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.BuildNextCommand () [0x000eb] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.GetStatement (System.Int32 index) [0x0000b] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.SQLite.SQLiteCommand.GetStatement(int)
+  at System.Data.SQLite.SQLiteDataReader.NextResult () [0x000db] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteDataReader..ctor (System.Data.SQLite.SQLiteCommand cmd, System.Data.CommandBehavior behave) [0x00051] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.SQLite.SQLiteDataReader..ctor(System.Data.SQLite.SQLiteCommand,System.Data.CommandBehavior)
+  at System.Data.SQLite.SQLiteCommand.ExecuteReader (System.Data.CommandBehavior behavior) [0x00006] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.ExecuteDbDataReader (System.Data.CommandBehavior behavior) [0x00000] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader (System.Data.CommandBehavior behavior) [0x00000] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.FillInternal (System.Data.DataSet dataset, System.Data.DataTable[] datatables, System.Int32 startRecord, System.Int32 maxRecords, System.String srcTable, System.Data.IDbCommand command, System.Data.CommandBehavior behavior) [0x0003f] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.Fill (System.Data.DataTable[] dataTables, System.Int32 startRecord, System.Int32 maxRecords, System.Data.IDbCommand command, System.Data.CommandBehavior behavior) [0x0007c] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.Fill (System.Data.DataTable dataTable) [0x00034] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.Common.DbDataAdapter.Fill(System.Data.DataTable)
+  at ln+b.e () [0x000a5] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at ln.p (System.String A_0, System.Data.SQLite.SQLiteParameter[] A_1) [0x0001c] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at ln.h (System.String A_0) [0x0003c] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at agc.a (afy A_0) [0x00174] in <0cc771bd405b4eb8871ae99296c4a171>:0 
+06/20/2020 10:58:57 Read device database error:System.Data.SQLite.SQLiteException (0x80004005): SQLite error
+no such table: t_deviceinfo
+  at System.Data.SQLite.SQLite3.Prepare (System.Data.SQLite.SQLiteConnection cnn, System.String strSql, System.Data.SQLite.SQLiteStatement previous, System.UInt32 timeoutMS, System.String& strRemain) [0x00236] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.BuildNextCommand () [0x000eb] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.GetStatement (System.Int32 index) [0x0000b] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.SQLite.SQLiteCommand.GetStatement(int)
+  at System.Data.SQLite.SQLiteDataReader.NextResult () [0x000db] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteDataReader..ctor (System.Data.SQLite.SQLiteCommand cmd, System.Data.CommandBehavior behave) [0x00051] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.SQLite.SQLiteDataReader..ctor(System.Data.SQLite.SQLiteCommand,System.Data.CommandBehavior)
+  at System.Data.SQLite.SQLiteCommand.ExecuteReader (System.Data.CommandBehavior behavior) [0x00006] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.SQLite.SQLiteCommand.ExecuteDbDataReader (System.Data.CommandBehavior behavior) [0x00000] in <11ca4cdea1f442cc9806e1ea6da122b4>:0 
+  at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader (System.Data.CommandBehavior behavior) [0x00000] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.FillInternal (System.Data.DataSet dataset, System.Data.DataTable[] datatables, System.Int32 startRecord, System.Int32 maxRecords, System.String srcTable, System.Data.IDbCommand command, System.Data.CommandBehavior behavior) [0x0003f] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.Fill (System.Data.DataTable[] dataTables, System.Int32 startRecord, System.Int32 maxRecords, System.Data.IDbCommand command, System.Data.CommandBehavior behavior) [0x0007c] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at System.Data.Common.DbDataAdapter.Fill (System.Data.DataTable dataTable) [0x00034] in <d9067a07a82148d1800232c0302a3e4e>:0 
+  at (wrapper remoting-invoke-with-check) System.Data.Common.DbDataAdapter.Fill(System.Data.DataTable)
+  at ln+b.e () [0x000a5] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at ln.p (System.String A_0, System.Data.SQLite.SQLiteParameter[] A_1) [0x0001c] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at ln.h (System.String A_0) [0x0003c] in <4718072d6be1414eb9be0b1ce1ad9d33>:0 
+  at agc.a (afy A_0) [0x00174] in <0cc771bd405b4eb8871ae99296c4a171>:0 
+06/20/2020 10:58:57 Download Driver DB Ok, Version=4.0.1428646627
+06/20/2020 10:58:57 Replace DriverDb Ok
+06/20/2020 10:58:58 ConnectionHub.RemoveConnection(IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000, ffffffffffffffffffffffffffffffffffffffff)
+06/20/2020 10:58:58 ConnectionHub.OnConnectionLost(IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000)
+06/20/2020 10:58:58 Device manager remove device SerialNumber: ffffffffffffffffffffffffffffffffffffffff
+06/20/2020 11:00:12 MacUsbNotifier  StopMonitor

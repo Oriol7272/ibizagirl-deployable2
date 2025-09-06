@@ -1,0 +1,1193 @@
+DEBUG Loaded flyctl config from/Users/oriolcabre/.fly/config.yml
+DEBUG determined hostname: "iMac-de-Oriol-2.local"
+DEBUG determined working directory: "/Users/oriolcabre/Downloads/viral-daily2"
+DEBUG determined config directory: "/Users/oriolcabre/.fly"
+DEBUG ensured config directory exists.
+DEBUG ensured config directory perms.
+DEBUG cache loaded.
+DEBUG config initialized.
+DEBUG skipped querying for new release
+DEBUG checking for updates...
+DEBUG started querying for statuspage incidents
+DEBUG client initialized.
+DEBUG app config loaded from /Users/oriolcabre/Downloads/viral-daily2/fly.toml
+DEBUG started querying for host issues
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "query($admin: Boolean!) { organizations(admin: $admin) { nodes { id slug rawSlug name type paidPlan billable viewerRole internalNumericId } } }",
+  "variables": {
+    "admin": false
+  }
+}
+
+
+DEBUG {}
+DEBUG {
+  "query": "query($appName: String!) { apphostissues:app(name: $appName) { hostIssues { nodes { internalId message createdAt updatedAt } } } }",
+  "variables": {
+    "appName": "viral-daily-oriol-2025"
+  }
+}
+
+
+DEBUG {}
+DEBUG <-- 200 https://api.fly.io/graphql (249.93ms)
+
+DEBUG {
+  "data": {
+    "organizations": {
+      "nodes": [
+        {
+          "id": "YJAZL8pwnmAYbTlNOp6KxGDjAKhBLVb8K",
+          "slug": "personal",
+          "rawSlug": "oct-oct",
+          "name": "Oct Oct",
+          "type": "PERSONAL",
+          "paidPlan": true,
+          "billable": true,
+          "viewerRole": "admin",
+          "internalNumericId": "1213612"
+        }
+      ]
+    }
+  }
+}
+
+DEBUG app config loaded from /Users/oriolcabre/Downloads/viral-daily2/fly.toml
+DEBUG Starting task manager
+DEBUG monitoring tokens at /Users/oriolcabre/.fly/config.yml
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "query { viewer { ... on User { id email enablePaidHobby } ... on Macaroon { email } } }",
+  "variables": null
+}
+
+
+DEBUG {}
+DEBUG <-- 200 https://api.fly.io/graphql (305ms)
+
+DEBUG {
+  "data": {
+    "apphostissues": {
+      "hostIssues": {
+        "nodes": []
+      }
+    }
+  }
+}
+
+DEBUG <-- 200 https://api.fly.io/graphql (159.33ms)
+
+DEBUG {
+  "data": {
+    "viewer": {
+      "id": "mjK5vxJp5yjo1Tqja0Q4",
+      "email": "oriolcabre@googlemail.com",
+      "enablePaidHobby": true
+    }
+  }
+}
+
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "query ($appName: String!) { appcompact:app(name: $appName) { id name hostname deployed network status appUrl platformVersion organization { id internalNumericId slug paidPlan } postgresAppRole: role { name } } }",
+  "variables": {
+    "appName": "viral-daily-oriol-2025"
+  }
+}
+
+
+DEBUG {}
+DEBUG <-- 200 https://api.fly.io/graphql (180.46ms)
+
+DEBUG {
+  "data": {
+    "appcompact": {
+      "id": "viral-daily-oriol-2025",
+      "name": "viral-daily-oriol-2025",
+      "hostname": "viral-daily-oriol-2025.fly.dev",
+      "deployed": true,
+      "network": "",
+      "status": "suspended",
+      "appUrl": "https://2a09:8280:1::8d:3af5:0",
+      "platformVersion": "machines",
+      "postgresAppRole": null,
+      "organization": {
+        "id": "YJAZL8pwnmAYbTlNOp6KxGDjAKhBLVb8K",
+        "internalNumericId": "1213612",
+        "slug": "personal",
+        "paidPlan": true
+      }
+    }
+  }
+}
+
+DEBUG trying remote docker daemon
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "\nmutation CreateBuild ($input: CreateBuildInput!) {\n\tcreateBuild(input: $input) {\n\t\tid\n\t\tstatus\n\t}\n}\n",
+  "variables": {
+    "input": {
+      "appName": "viral-daily-oriol-2025",
+      "builderType": "depot.dev",
+      "clientMutationId": "",
+      "imageOpts": {
+        "buildArgs": {},
+        "buildPacks": null,
+        "builder": "",
+        "builtIn": "",
+        "builtInSettings": null,
+        "dockerfilePath": "",
+        "extraBuildArgs": null,
+        "imageLabel": "",
+        "imageRef": "",
+        "noCache": true,
+        "publish": true,
+        "tag": "registry.fly.io/viral-daily-oriol-2025:deployment-01K207349XZN913T11NET98Z0Z",
+        "target": ""
+      },
+      "machineId": "",
+      "strategiesAvailable": [
+        "depot.dev"
+      ]
+    }
+  },
+  "operationName": "CreateBuild"
+}
+
+DEBUG {0x140009e5ad0}
+DEBUG <-- 200 https://api.fly.io/graphql (330.97ms)
+
+DEBUG {
+  "data": {
+    "createBuild": {
+      "id": "7742852",
+      "status": "started"
+    }
+  }
+}
+
+DEBUG Trying 'depot.dev' strategy
+
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "\nmutation EnsureDepotRemoteBuilder ($input: EnsureDepotRemoteBuilderInput!) {\n\tensureDepotRemoteBuilder(input: $input) {\n\t\tbuildId\n\t\tbuildToken\n\t}\n}\n",
+  "variables": {
+    "input": {
+      "appName": "viral-daily-oriol-2025",
+      "builderScope": "organization",
+      "clientMutationId": null,
+      "organizationId": null,
+      "region": ""
+    }
+  },
+  "operationName": "EnsureDepotRemoteBuilder"
+}
+
+DEBUG {0x14000617e00}
+DEBUG <-- 200 https://api.fly.io/graphql (304.92ms)
+
+DEBUG {
+  "data": {
+    "ensureDepotRemoteBuilder": {
+      "buildId": "sz6xf6nt1t",
+      "buildToken": "311568ed-c10f-4080-870a-e0e42f3132a8"
+    }
+  }
+}
+
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "query($admin: Boolean!) { organizations(admin: $admin) { nodes { id slug rawSlug name type paidPlan billable viewerRole internalNumericId } } }",
+  "variables": {
+    "admin": false
+  }
+}
+
+
+DEBUG {}
+DEBUG <-- 200 https://api.fly.io/graphql (240.28ms)
+
+DEBUG {
+  "data": {
+    "organizations": {
+      "nodes": [
+        {
+          "id": "YJAZL8pwnmAYbTlNOp6KxGDjAKhBLVb8K",
+          "slug": "personal",
+          "rawSlug": "oct-oct",
+          "name": "Oct Oct",
+          "type": "PERSONAL",
+          "paidPlan": true,
+          "billable": true,
+          "viewerRole": "admin",
+          "internalNumericId": "1213612"
+        }
+      ]
+    }
+  }
+}
+
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "query($admin: Boolean!) { organizations(admin: $admin) { nodes { id slug rawSlug name type paidPlan billable viewerRole internalNumericId } } }",
+  "variables": {
+    "admin": false
+  }
+}
+
+
+DEBUG {}
+DEBUG <-- 200 https://api.fly.io/graphql (254.32ms)
+
+DEBUG {
+  "data": {
+    "organizations": {
+      "nodes": [
+        {
+          "id": "YJAZL8pwnmAYbTlNOp6KxGDjAKhBLVb8K",
+          "slug": "personal",
+          "rawSlug": "oct-oct",
+          "name": "Oct Oct",
+          "type": "PERSONAL",
+          "paidPlan": true,
+          "billable": true,
+          "viewerRole": "admin",
+          "internalNumericId": "1213612"
+        }
+      ]
+    }
+  }
+}
+
+DEBUG result image:registry.fly.io/viral-daily-oriol-2025:deployment-01K207349XZN913T11NET98Z0Z error:<nil>
+
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "\nmutation FinishBuild ($input: FinishBuildInput!) {\n\tfinishBuild(input: $input) {\n\t\tid\n\t\tstatus\n\t\twallclockTimeMs\n\t}\n}\n",
+  "variables": {
+    "input": {
+      "appName": "viral-daily-oriol-2025",
+      "buildId": "7742852",
+      "builderMeta": {
+        "builderType": "depot.dev",
+        "buildkitEnabled": false,
+        "dockerVersion": "",
+        "platform": "",
+        "remoteAppName": "",
+        "remoteMachineId": ""
+      },
+      "clientMutationId": "",
+      "finalImage": {
+        "id": "sha256:501441cc527bc7a855f1bc8a14739b77ec62cf53e1b6b0289fe29a8f5fd0293d",
+        "sizeBytes": 265435773,
+        "tag": "registry.fly.io/viral-daily-oriol-2025:deployment-01K207349XZN913T11NET98Z0Z"
+      },
+      "logs": "",
+      "machineId": "",
+      "status": "completed",
+      "strategiesAttempted": [
+        {
+          "error": "",
+          "note": "",
+          "result": "success",
+          "strategy": "depot.dev"
+        }
+      ],
+      "timings": {
+        "buildAndPushMs": 97886,
+        "buildMs": 124022,
+        "builderInitMs": 15904,
+        "contextBuildMs": -1,
+        "imageBuildMs": 124022,
+        "pushMs": -1
+      }
+    }
+  },
+  "operationName": "FinishBuild"
+}
+
+DEBUG {0x14000882f30}
+DEBUG <-- 200 https://api.fly.io/graphql (188.73ms)
+
+DEBUG {
+  "data": {
+    "finishBuild": {
+      "id": "7742852",
+      "status": "completed",
+      "wallclockTimeMs": 124292
+    }
+  }
+}
+
+DEBUG --> GET https://api.machines.dev/v1/apps/viral-daily-oriol-2025/machines
+
+DEBUG <-- 200 https://api.machines.dev/v1/apps/viral-daily-oriol-2025/machines (488.5ms)
+
+DEBUG [
+  {
+    "id": "d8d31eeb206328",
+    "name": "lively-dawn-4246",
+    "state": "stopped",
+    "region": "sjc",
+    "instance_id": "01K206GQ97R410CQ8JBYAWYKGQ",
+    "private_ip": "fdaa:24:e40a:a7b:4f1:25d4:b069:2",
+    "config": {
+      "env": {
+        "FLY_PROCESS_GROUP": "app",
+        "NODE_ENV": "production",
+        "PRIMARY_REGION": "sjc",
+        "PYTHONPATH": "/app"
+      },
+      "init": {},
+      "guest": {
+        "cpu_kind": "shared",
+        "cpus": 1,
+        "memory_mb": 1024
+      },
+      "metadata": {
+        "fly_flyctl_version": "0.3.166",
+        "fly_platform_version": "v2",
+        "fly_process_group": "app",
+        "fly_release_id": "q1yZlz2KK40yVc7mpno3PjYJ6",
+        "fly_release_version": "2"
+      },
+      "services": [
+        {
+          "protocol": "tcp",
+          "internal_port": 8001,
+          "autostop": true,
+          "autostart": true,
+          "min_machines_running": 0,
+          "ports": [
+            {
+              "port": 80,
+              "handlers": [
+                "http"
+              ],
+              "force_https": true
+            },
+            {
+              "port": 443,
+              "handlers": [
+                "http",
+                "tls"
+              ]
+            }
+          ],
+          "force_instance_key": null
+        },
+        {
+          "protocol": "tcp",
+          "internal_port": 8001,
+          "ports": [
+            {
+              "port": 80,
+              "handlers": [
+                "http"
+              ]
+            },
+            {
+              "port": 443,
+              "handlers": [
+                "tls",
+                "http"
+              ]
+            }
+          ],
+          "checks": [
+            {
+              "type": "tcp",
+              "interval": "15s",
+              "timeout": "2s",
+              "grace_period": "10s"
+            },
+            {
+              "type": "http",
+              "interval": "30s",
+              "timeout": "5s",
+              "grace_period": "10s",
+              "method": "get",
+              "path": "/api/health",
+              "protocol": "http"
+            }
+          ],
+          "concurrency": {
+            "hard_limit": 25,
+            "soft_limit": 20
+          },
+          "force_instance_key": null
+        }
+      ],
+      "image": "registry.fly.io/viral-daily-oriol-2025:deployment-01K206E9C8VJ3TW0AWPVADWX5H",
+      "restart": {
+        "policy": "on-failure",
+        "max_retries": 10
+      }
+    },
+    "incomplete_config": null,
+    "image_ref": {
+      "registry": "registry.fly.io",
+      "repository": "viral-daily-oriol-2025",
+      "tag": "deployment-01K206E9C8VJ3TW0AWPVADWX5H",
+      "digest": "sha256:5131dc657d4c605d805e6038b26e2027dbafa99e2c61a7ee12dd8183e021401a",
+      "labels": null
+    },
+    "created_at": "2025-08-06T17:17:57Z",
+    "updated_at": "2025-08-06T17:30:21Z",
+    "events": [
+      {
+        "id": "01K206Y6QA2982AE5X9K0QTN16",
+        "type": "exit",
+        "status": "stopped",
+        "request": {
+          "exit_event": {
+            "requested_stop": true,
+            "restarting": false,
+            "guest_exit_code": 0,
+            "guest_signal": -1,
+            "guest_error": "",
+            "exit_code": 0,
+            "signal": -1,
+            "error": "",
+            "oom_killed": false,
+            "exited_at": "2025-08-06T17:30:21.512Z"
+          },
+          "restart_count": 0
+        },
+        "source": "flyd",
+        "timestamp": 1754501421802
+      },
+      {
+        "id": "01K206Y59AVZVNT9GJ3EHB5DCC",
+        "type": "stop",
+        "status": "stopping",
+        "source": "user",
+        "timestamp": 1754501420330
+      },
+      {
+        "id": "01K206GTTKDM36TE2ZWS08JBVP",
+        "type": "start",
+        "status": "started",
+        "request": {},
+        "source": "flyd",
+        "timestamp": 1754500983635
+      },
+      {
+        "id": "01K206GQ9QWHB398EZC7TN213J",
+        "type": "launch",
+        "status": "created",
+        "source": "user",
+        "timestamp": 1754500980023
+      }
+    ],
+    "checks": [
+      {
+        "name": "servicecheck-00-tcp-8001",
+        "status": "warning",
+        "output": "the machine hasn't started",
+        "updated_at": "2025-08-06T17:30:21.802Z"
+      },
+      {
+        "name": "servicecheck-01-http-8001",
+        "status": "warning",
+        "output": "the machine hasn't started",
+        "updated_at": "2025-08-06T17:30:21.802Z"
+      }
+    ],
+    "host_status": "ok"
+  }
+]
+
+
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "\nmutation CreateRelease ($input: CreateReleaseInput!) {\n\tcreateRelease(input: $input) {\n\t\trelease {\n\t\t\tid\n\t\t\tversion\n\t\t}\n\t}\n}\n",
+  "variables": {
+    "input": {
+      "appId": "viral-daily-oriol-2025",
+      "buildId": "7742852",
+      "clientMutationId": "",
+      "definition": {
+        "app": "viral-daily-oriol-2025",
+        "primary_region": "sjc",
+        "deploy": {
+          "strategy": "immediate"
+        },
+        "env": {
+          "NODE_ENV": "production",
+          "PYTHONPATH": "/app"
+        },
+        "http_service": {
+          "internal_port": 8001,
+          "force_https": true,
+          "auto_stop_machines": true,
+          "auto_start_machines": true,
+          "min_machines_running": 0,
+          "processes": [
+            "app"
+          ]
+        },
+        "services": [
+          {
+            "protocol": "tcp",
+            "internal_port": 8001,
+            "ports": [
+              {
+                "port": 80,
+                "handlers": [
+                  "http"
+                ]
+              },
+              {
+                "port": 443,
+                "handlers": [
+                  "tls",
+                  "http"
+                ]
+              }
+            ],
+            "concurrency": {
+              "hard_limit": 25,
+              "soft_limit": 20
+            },
+            "tcp_checks": [
+              {
+                "interval": "15s",
+                "timeout": "2s",
+                "grace_period": "10s"
+              }
+            ],
+            "http_checks": [
+              {
+                "interval": "30s",
+                "timeout": "5s",
+                "grace_period": "10s",
+                "method": "get",
+                "path": "/api/health",
+                "protocol": "http"
+              }
+            ]
+          }
+        ],
+        "vm": [
+          {
+            "cpu_kind": "shared",
+            "cpus": 1,
+            "memory_mb": 1024
+          }
+        ]
+      },
+      "image": "registry.fly.io/viral-daily-oriol-2025:deployment-01K207349XZN913T11NET98Z0Z",
+      "platformVersion": "machines",
+      "strategy": "IMMEDIATE"
+    }
+  },
+  "operationName": "CreateRelease"
+}
+
+DEBUG {0x14000bd7920}
+DEBUG <-- 200 https://api.fly.io/graphql (861.86ms)
+
+DEBUG {
+  "data": {
+    "createRelease": {
+      "release": {
+        "id": "9zA0gKNwwbBAqTB7PZnKol45",
+        "version": 3
+      }
+    }
+  }
+}
+
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "\nmutation UpdateRelease ($input: UpdateReleaseInput!) {\n\tupdateRelease(input: $input) {\n\t\trelease {\n\t\t\tid\n\t\t}\n\t}\n}\n",
+  "variables": {
+    "input": {
+      "clientMutationId": "",
+      "metadata": null,
+      "releaseId": "9zA0gKNwwbBAqTB7PZnKol45",
+      "status": "running"
+    }
+  },
+  "operationName": "UpdateRelease"
+}
+
+DEBUG {0x14000cd9290}
+DEBUG <-- 200 https://api.fly.io/graphql (197.85ms)
+
+DEBUG {
+  "data": {
+    "updateRelease": {
+      "release": {
+        "id": "9zA0gKNwwbBAqTB7PZnKol45"
+      }
+    }
+  }
+}
+
+DEBUG --> GET https://api.machines.dev/v1/apps/viral-daily-oriol-2025/machines
+
+DEBUG <-- 200 https://api.machines.dev/v1/apps/viral-daily-oriol-2025/machines (184.86ms)
+
+DEBUG [
+  {
+    "id": "d8d31eeb206328",
+    "name": "lively-dawn-4246",
+    "state": "stopped",
+    "region": "sjc",
+    "instance_id": "01K206GQ97R410CQ8JBYAWYKGQ",
+    "private_ip": "fdaa:24:e40a:a7b:4f1:25d4:b069:2",
+    "config": {
+      "env": {
+        "FLY_PROCESS_GROUP": "app",
+        "NODE_ENV": "production",
+        "PRIMARY_REGION": "sjc",
+        "PYTHONPATH": "/app"
+      },
+      "init": {},
+      "guest": {
+        "cpu_kind": "shared",
+        "cpus": 1,
+        "memory_mb": 1024
+      },
+      "metadata": {
+        "fly_flyctl_version": "0.3.166",
+        "fly_platform_version": "v2",
+        "fly_process_group": "app",
+        "fly_release_id": "q1yZlz2KK40yVc7mpno3PjYJ6",
+        "fly_release_version": "2"
+      },
+      "services": [
+        {
+          "protocol": "tcp",
+          "internal_port": 8001,
+          "autostop": true,
+          "autostart": true,
+          "min_machines_running": 0,
+          "ports": [
+            {
+              "port": 80,
+              "handlers": [
+                "http"
+              ],
+              "force_https": true
+            },
+            {
+              "port": 443,
+              "handlers": [
+                "http",
+                "tls"
+              ]
+            }
+          ],
+          "force_instance_key": null
+        },
+        {
+          "protocol": "tcp",
+          "internal_port": 8001,
+          "ports": [
+            {
+              "port": 80,
+              "handlers": [
+                "http"
+              ]
+            },
+            {
+              "port": 443,
+              "handlers": [
+                "tls",
+                "http"
+              ]
+            }
+          ],
+          "checks": [
+            {
+              "type": "tcp",
+              "interval": "15s",
+              "timeout": "2s",
+              "grace_period": "10s"
+            },
+            {
+              "type": "http",
+              "interval": "30s",
+              "timeout": "5s",
+              "grace_period": "10s",
+              "method": "get",
+              "path": "/api/health",
+              "protocol": "http"
+            }
+          ],
+          "concurrency": {
+            "hard_limit": 25,
+            "soft_limit": 20
+          },
+          "force_instance_key": null
+        }
+      ],
+      "image": "registry.fly.io/viral-daily-oriol-2025:deployment-01K206E9C8VJ3TW0AWPVADWX5H",
+      "restart": {
+        "policy": "on-failure",
+        "max_retries": 10
+      }
+    },
+    "incomplete_config": null,
+    "image_ref": {
+      "registry": "registry.fly.io",
+      "repository": "viral-daily-oriol-2025",
+      "tag": "deployment-01K206E9C8VJ3TW0AWPVADWX5H",
+      "digest": "sha256:5131dc657d4c605d805e6038b26e2027dbafa99e2c61a7ee12dd8183e021401a",
+      "labels": null
+    },
+    "created_at": "2025-08-06T17:17:57Z",
+    "updated_at": "2025-08-06T17:30:21Z",
+    "events": [
+      {
+        "id": "01K206Y6QA2982AE5X9K0QTN16",
+        "type": "exit",
+        "status": "stopped",
+        "request": {
+          "exit_event": {
+            "requested_stop": true,
+            "restarting": false,
+            "guest_exit_code": 0,
+            "guest_signal": -1,
+            "guest_error": "",
+            "exit_code": 0,
+            "signal": -1,
+            "error": "",
+            "oom_killed": false,
+            "exited_at": "2025-08-06T17:30:21.512Z"
+          },
+          "restart_count": 0
+        },
+        "source": "flyd",
+        "timestamp": 1754501421802
+      },
+      {
+        "id": "01K206Y59AVZVNT9GJ3EHB5DCC",
+        "type": "stop",
+        "status": "stopping",
+        "source": "user",
+        "timestamp": 1754501420330
+      },
+      {
+        "id": "01K206GTTKDM36TE2ZWS08JBVP",
+        "type": "start",
+        "status": "started",
+        "request": {},
+        "source": "flyd",
+        "timestamp": 1754500983635
+      },
+      {
+        "id": "01K206GQ9QWHB398EZC7TN213J",
+        "type": "launch",
+        "status": "created",
+        "source": "user",
+        "timestamp": 1754500980023
+      }
+    ],
+    "checks": [
+      {
+        "name": "servicecheck-00-tcp-8001",
+        "status": "warning",
+        "output": "the machine hasn't started",
+        "updated_at": "2025-08-06T17:30:21.802Z"
+      },
+      {
+        "name": "servicecheck-01-http-8001",
+        "status": "warning",
+        "output": "the machine hasn't started",
+        "updated_at": "2025-08-06T17:30:21.802Z"
+      }
+    ],
+    "host_status": "ok"
+  }
+]
+
+
+DEBUG --> POST https://api.machines.dev/v1/apps/viral-daily-oriol-2025/machines/d8d31eeb206328/lease?ttl=13
+
+DEBUG <-- 201 https://api.machines.dev/v1/apps/viral-daily-oriol-2025/machines/d8d31eeb206328/lease?ttl=13 (175.56ms)
+
+DEBUG {
+  "status": "success",
+  "data": {
+    "nonce": "0ab298603c7f",
+    "expires_at": 1754501722,
+    "owner": "1de09506-f916-5213-b07f-c25b8e27900e@tokens.fly.io",
+    "description": "",
+    "version": "01K206GQ97R410CQ8JBYAWYKGQ"
+  }
+}
+
+
+DEBUG --> POST https://api.machines.dev/v1/apps/viral-daily-oriol-2025/machines/d8d31eeb206328
+
+DEBUG {
+  "config": {
+    "env": {
+      "FLY_PROCESS_GROUP": "app",
+      "NODE_ENV": "production",
+      "PRIMARY_REGION": "sjc",
+      "PYTHONPATH": "/app"
+    },
+    "init": {},
+    "guest": {
+      "cpu_kind": "shared",
+      "cpus": 1,
+      "memory_mb": 1024
+    },
+    "metadata": {
+      "fly_flyctl_version": "0.3.166",
+      "fly_platform_version": "v2",
+      "fly_process_group": "app",
+      "fly_release_id": "9zA0gKNwwbBAqTB7PZnKol45",
+      "fly_release_version": "3"
+    },
+    "services": [
+      {
+        "protocol": "tcp",
+        "internal_port": 8001,
+        "autostop": true,
+        "autostart": true,
+        "min_machines_running": 0,
+        "ports": [
+          {
+            "port": 80,
+            "handlers": [
+              "http"
+            ],
+            "force_https": true
+          },
+          {
+            "port": 443,
+            "handlers": [
+              "http",
+              "tls"
+            ]
+          }
+        ],
+        "force_instance_key": null
+      },
+      {
+        "protocol": "tcp",
+        "internal_port": 8001,
+        "ports": [
+          {
+            "port": 80,
+            "handlers": [
+              "http"
+            ]
+          },
+          {
+            "port": 443,
+            "handlers": [
+              "tls",
+              "http"
+            ]
+          }
+        ],
+        "checks": [
+          {
+            "type": "tcp",
+            "interval": "15s",
+            "timeout": "2s",
+            "grace_period": "10s"
+          },
+          {
+            "type": "http",
+            "interval": "30s",
+            "timeout": "5s",
+            "grace_period": "10s",
+            "method": "get",
+            "path": "/api/health",
+            "protocol": "http"
+          }
+        ],
+        "concurrency": {
+          "hard_limit": 25,
+          "soft_limit": 20
+        },
+        "force_instance_key": null
+      }
+    ],
+    "image": "registry.fly.io/viral-daily-oriol-2025:deployment-01K207349XZN913T11NET98Z0Z"
+  },
+  "region": "sjc",
+  "skip_launch": true
+}
+
+DEBUG {0x14000fa2750}
+DEBUG <-- 200 https://api.machines.dev/v1/apps/viral-daily-oriol-2025/machines/d8d31eeb206328 (3.1s)
+
+DEBUG {
+  "id": "d8d31eeb206328",
+  "name": "lively-dawn-4246",
+  "state": "created",
+  "region": "sjc",
+  "instance_id": "01K20772SC1WA4V1R5Z60CGW2M",
+  "private_ip": "fdaa:24:e40a:a7b:4f1:25d4:b069:2",
+  "config": {
+    "env": {
+      "FLY_PROCESS_GROUP": "app",
+      "NODE_ENV": "production",
+      "PRIMARY_REGION": "sjc",
+      "PYTHONPATH": "/app"
+    },
+    "init": {},
+    "guest": {
+      "cpu_kind": "shared",
+      "cpus": 1,
+      "memory_mb": 1024
+    },
+    "metadata": {
+      "fly_flyctl_version": "0.3.166",
+      "fly_platform_version": "v2",
+      "fly_process_group": "app",
+      "fly_release_id": "9zA0gKNwwbBAqTB7PZnKol45",
+      "fly_release_version": "3"
+    },
+    "services": [
+      {
+        "protocol": "tcp",
+        "internal_port": 8001,
+        "autostop": true,
+        "autostart": true,
+        "min_machines_running": 0,
+        "ports": [
+          {
+            "port": 80,
+            "handlers": [
+              "http"
+            ],
+            "force_https": true
+          },
+          {
+            "port": 443,
+            "handlers": [
+              "http",
+              "tls"
+            ]
+          }
+        ],
+        "force_instance_key": null
+      },
+      {
+        "protocol": "tcp",
+        "internal_port": 8001,
+        "ports": [
+          {
+            "port": 80,
+            "handlers": [
+              "http"
+            ]
+          },
+          {
+            "port": 443,
+            "handlers": [
+              "tls",
+              "http"
+            ]
+          }
+        ],
+        "checks": [
+          {
+            "type": "tcp",
+            "interval": "15s",
+            "timeout": "2s",
+            "grace_period": "10s"
+          },
+          {
+            "type": "http",
+            "interval": "30s",
+            "timeout": "5s",
+            "grace_period": "10s",
+            "method": "get",
+            "path": "/api/health",
+            "protocol": "http"
+          }
+        ],
+        "concurrency": {
+          "hard_limit": 25,
+          "soft_limit": 20
+        },
+        "force_instance_key": null
+      }
+    ],
+    "image": "registry.fly.io/viral-daily-oriol-2025:deployment-01K207349XZN913T11NET98Z0Z",
+    "restart": {
+      "policy": "on-failure",
+      "max_retries": 10
+    }
+  },
+  "incomplete_config": null,
+  "image_ref": {
+    "registry": "registry.fly.io",
+    "repository": "viral-daily-oriol-2025",
+    "tag": "deployment-01K207349XZN913T11NET98Z0Z",
+    "digest": "sha256:501441cc527bc7a855f1bc8a14739b77ec62cf53e1b6b0289fe29a8f5fd0293d",
+    "labels": null
+  },
+  "created_at": "2025-08-06T17:17:57Z",
+  "updated_at": "2025-08-06T17:35:12Z",
+  "events": [
+    {
+      "id": "01K20772STBBKW36ZJ9GR375TM",
+      "type": "launch",
+      "status": "created",
+      "source": "user",
+      "timestamp": 1754501712698
+    }
+  ],
+  "checks": [
+    {
+      "name": "servicecheck-00-tcp-8001",
+      "status": "warning",
+      "output": "the machine hasn't started",
+      "updated_at": "2025-08-06T17:35:12.698Z"
+    },
+    {
+      "name": "servicecheck-01-http-8001",
+      "status": "warning",
+      "output": "the machine hasn't started",
+      "updated_at": "2025-08-06T17:35:12.698Z"
+    }
+  ],
+  "host_status": "ok"
+}
+
+
+DEBUG --> DELETE https://api.machines.dev/v1/apps/viral-daily-oriol-2025/machines/d8d31eeb206328/lease
+
+DEBUG <-- 200 https://api.machines.dev/v1/apps/viral-daily-oriol-2025/machines/d8d31eeb206328/lease (174.25ms)
+
+DEBUG {
+  "status": "success",
+  "data": {
+    "ok": true
+  }
+}
+
+
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "\nmutation UpdateRelease ($input: UpdateReleaseInput!) {\n\tupdateRelease(input: $input) {\n\t\trelease {\n\t\t\tid\n\t\t}\n\t}\n}\n",
+  "variables": {
+    "input": {
+      "clientMutationId": "",
+      "metadata": {
+        "post_deployment_info": {
+          "flyctl_version": "0.3.166",
+          "error": ""
+        }
+      },
+      "releaseId": "9zA0gKNwwbBAqTB7PZnKol45",
+      "status": "complete"
+    }
+  },
+  "operationName": "UpdateRelease"
+}
+
+DEBUG {0x14000a2f6e0}
+DEBUG <-- 200 https://api.fly.io/graphql (213.43ms)
+
+DEBUG {
+  "data": {
+    "updateRelease": {
+      "release": {
+        "id": "9zA0gKNwwbBAqTB7PZnKol45"
+      }
+    }
+  }
+}
+
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "query ($appName: String!) { app(name: $appName) { ipAddresses { nodes { id address type region createdAt network { name organization { slug } } serviceName } } sharedIpAddress } }",
+  "variables": {
+    "appName": "viral-daily-oriol-2025"
+  }
+}
+
+
+DEBUG {}
+DEBUG <-- 200 https://api.fly.io/graphql (172.87ms)
+
+DEBUG {
+  "data": {
+    "app": {
+      "sharedIpAddress": "66.241.125.148",
+      "ipAddresses": {
+        "nodes": [
+          {
+            "id": "ip_7pyd9mo5lkk2kelo",
+            "address": "2a09:8280:1::8d:3af5:0",
+            "type": "v6",
+            "region": "global",
+            "createdAt": "2025-08-06T17:17:52Z",
+            "network": null,
+            "serviceName": null
+          }
+        ]
+      }
+    }
+  }
+}
+
+DEBUG --> POST https://api.machines.dev/v1/apps/viral-daily-oriol-2025/machines/d8d31eeb206328/lease?ttl=13
+
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "query($admin: Boolean!) { organizations(admin: $admin) { nodes { id slug rawSlug name type paidPlan billable viewerRole internalNumericId } } }",
+  "variables": {
+    "admin": false
+  }
+}
+
+
+DEBUG {}
+DEBUG <-- 200 https://api.fly.io/graphql (252.98ms)
+
+DEBUG {
+  "data": {
+    "organizations": {
+      "nodes": [
+        {
+          "id": "YJAZL8pwnmAYbTlNOp6KxGDjAKhBLVb8K",
+          "slug": "personal",
+          "rawSlug": "oct-oct",
+          "name": "Oct Oct",
+          "type": "PERSONAL",
+          "paidPlan": true,
+          "billable": true,
+          "viewerRole": "admin",
+          "internalNumericId": "1213612"
+        }
+      ]
+    }
+  }
+}
+
+WARN DNS checks failed: expected 1 AAAA records for viral-daily-oriol-2025.fly.dev., got 0
+
+DEBUG Task manager done
+DEBUG done monitoring tokens
+DEBUG querying for statuspage incidents resulted to &{[]}
+DEBUG querying for host issues resulted to []

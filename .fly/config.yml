@@ -1,0 +1,15 @@
+access_token: fm2_lJPECAAAAAAACZ7SxBDngh6BC89HRJs5wQZQF99PwrVodHRwczovL2FwaS5mbHkuaW8vdjGUAJLOABKErB8Lk7lodHRwczovL2FwaS5mbHkuaW8vYWFhL3YxxDzXSj0CtA2vZepcnNRfQbAwxohnXKfYYPB6cuPS8ZIdPm7eFY9YJwMQMXvI+rB37SNTBh8IbdmV/be6bTLETosGfjdta4ORjB9964eX0h/AxwfJLTtDLXRuwS5+iZFnSTw5CeISeqid1qN831OcUze5LNp7wtd/wx03fYetCn3lS8bWQRlzZPyDz4ePt8QgP90IWfZsCt2ttr5rLcDG+uuLtPD/x4DCjjieXjal/cc=,fm2_lJPETosGfjdta4ORjB9964eX0h/AxwfJLTtDLXRuwS5+iZFnSTw5CeISeqid1qN831OcUze5LNp7wtd/wx03fYetCn3lS8bWQRlzZPyDz4ePt8QQ+LNnM9H2aihkmqRS8nFjB8O5aHR0cHM6Ly9hcGkuZmx5LmlvL2FhYS92MZYEks5ol9RVzmiX1ssXzgARzEYKkc4AEcxGxCCxdFVdY0ypbWd4CLnbwP8XP6gKyWdTd6bOh3NN2ycSew==,fo1_2WsO9ovIMvpS473g4Ri3IDnmDRORLDqy13RO0WfIey4
+auto_update: true
+metrics_token: FlyV1 fm2_lJPECAAAAAAACZ7SxBAPTWjavHn2tRBNgeDu6PLNwrVodHRwczovL2FwaS5mbHkuaW8vdjGUAJLOABKErAALk7lodHRwczovL2FwaS5mbHkuaW8vYWFhL3YxxDwqk38m0a3CIItZodvqST6LW4PdPnXw1jOot9QJ4bnRwpna0sU4Ajhl5hViTOnCbFh2AGDunv9INrz+fmzETttTDqh9CDfkhpWmGg8JrD53h2I7gqT6ZJqfD2xYdEgUjoxNKeHKk26Sn7EekmnreOWs5/7Wy2azRPij4RxMKj6UjKFgKNI6L6PJUDDy8MQgwWfYuO6reWoqwsMMUcXg1Pq5iYeGDvqqM9AAtO92Cbg=,fm2_lJPETttTDqh9CDfkhpWmGg8JrD53h2I7gqT6ZJqfD2xYdEgUjoxNKeHKk26Sn7EekmnreOWs5/7Wy2azRPij4RxMKj6UjKFgKNI6L6PJUDDy8MQQ1J5q6celKpbEa6KY5hCUWcO5aHR0cHM6Ly9hcGkuZmx5LmlvL2FhYS92MZgEks5ojpOWzwAAAAEkhrG0F84AEcxGCpHOABHMRgzEELPlsgHPqbot7fe105l9x7HEIAk4DGFuXgtZRZOjEOf8lWVM7Ab3jeUdE6K5t9jXw7w0
+wire_guard_state:
+    personal:
+        org: personal
+        name: interactive-iMac-de-Oriol-2-oriolcabre-googlemail-com-01K1R7S7TSMR7AG7XGFA6213AC
+        region: cdg
+        localpublic: YSafRwrgDwwn11hSt4cFBc+IhKQnPiK7yWPlw1rg6Q8=
+        localprivate: bfHy6rJFBTFsSyM2X1U+1UygvR71tUBTCFAaFHhMejk=
+        dns: ""
+        peer:
+            peerip: fdaa:24:e40a:a7b:9063:0:a:102
+            endpointip: cdg2.gateway.6pn.dev
+            pubkey: 7BmyEYJggn/s+UGMGxESAmj0Z1/cWD7utIGutePjkx4=

@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2023-11-11T12:34:16.200764Z</date>
+  <millis>1699706056200</millis>
+  <nanos>764000</nanos>
+  <sequence>0</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.standalone.ProxyUtil</class>
+  <method>clearJavaProxy</method>
+  <thread>1</thread>
+  <message>No se usara Proxy para las conexiones de red</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:16.507243Z</date>
+  <millis>1699706056507</millis>
+  <nanos>243000</nanos>
+  <sequence>1</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.standalone.SimpleAfirma</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>No se buscaran nuevas versiones de la aplicacion</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:16.519098Z</date>
+  <millis>1699706056519</millis>
+  <nanos>98000</nanos>
+  <sequence>2</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.standalone.SimpleAfirma</class>
+  <method>printSystemInfo</method>
+  <thread>1</thread>
+  <message>AutoFirma 1.6.5
+Resolucion DPI de pantalla: 0
+Sistema operativo: Mac OS X
+Version del SO: 10.16
+Version de Java: 11.0.2
+Arquitectura del JRE: 64
+Java Vendor: Oracle Corporation
+Localizacion por defecto: ca_ES
+Tamano actual en memoria: 1024MB
+Tamano maximo de memoria: 2048MB
+Memoria actualmente libre: 976MB</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:16.519717Z</date>
+  <millis>1699706056519</millis>
+  <nanos>717000</nanos>
+  <sequence>3</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.standalone.SimpleAfirma</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Apertura como herramienta de escritorio</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:16.673992Z</date>
+  <millis>1699706056673</millis>
+  <nanos>992000</nanos>
+  <sequence>4</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.standalone.SimpleAfirma</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Cargando plugins</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:16.681715Z</date>
+  <millis>1699706056681</millis>
+  <nanos>715000</nanos>
+  <sequence>5</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.standalone.SimpleAfirma</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Iniciando entorno grafico</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:18.262373Z</date>
+  <millis>1699706058262</millis>
+  <nanos>373000</nanos>
+  <sequence>6</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.keystores.AOKeyStoreManager</class>
+  <method>init</method>
+  <thread>25</thread>
+  <message>Inicializamos el almacen de tipo: DNIe y tarjetas FNMT-TIF</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:18.324244Z</date>
+  <millis>1699706058324</millis>
+  <nanos>244000</nanos>
+  <sequence>7</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.keystores.KeyStoreUtilities</class>
+  <method>addPreferredKeyStoreManagers</method>
+  <thread>25</thread>
+  <message>No se ha encontrado un DNIe: java.security.ProviderException: No se ha podido inicializar el proveedor de DNIe: es.gob.jmulticard.apdu.connection.NoReadersFoundException: No se detectaron lectores de tarjetas en el sistema</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:18.326139Z</date>
+  <millis>1699706058326</millis>
+  <nanos>139000</nanos>
+  <sequence>8</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.keystores.AOKeyStoreManager</class>
+  <method>init</method>
+  <thread>25</thread>
+  <message>Inicializamos el almacen de tipo: Tarjeta FNMT-RCM CERES 4.30 o superior</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:18.327898Z</date>
+  <millis>1699706058327</millis>
+  <nanos>898000</nanos>
+  <sequence>9</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.keystores.KeyStoreUtilities</class>
+  <method>addPreferredKeyStoreManagers</method>
+  <thread>25</thread>
+  <message>No se ha encontrado una tarjeta CERES 4.30 o superior: java.security.ProviderException: No se ha podido inicializar el proveedor de Ceres 4.30 y superior: es.gob.jmulticard.apdu.connection.NoReadersFoundException: No se detectaron lectores de tarjetas en el sistema</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:18.329094Z</date>
+  <millis>1699706058329</millis>
+  <nanos>94000</nanos>
+  <sequence>10</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.keystores.AOKeyStoreManager</class>
+  <method>init</method>
+  <thread>25</thread>
+  <message>Inicializamos el almacen de tipo: Tarjeta FNMT-RCM CERES</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:18.332617Z</date>
+  <millis>1699706058332</millis>
+  <nanos>617000</nanos>
+  <sequence>11</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.keystores.KeyStoreUtilities</class>
+  <method>addPreferredKeyStoreManagers</method>
+  <thread>25</thread>
+  <message>No se ha encontrado una tarjeta CERES: java.security.ProviderException: No se ha podido conectar con la tarjeta CERES: es.gob.jmulticard.apdu.connection.NoReadersFoundException: No se detectaron lectores de tarjetas en el sistema</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:18.449783Z</date>
+  <millis>1699706058449</millis>
+  <nanos>783000</nanos>
+  <sequence>12</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.standalone.SimpleAfirma</class>
+  <method>setKeyStoreManager</method>
+  <thread>24</thread>
+  <message>Establecido KeyStoreManager: Gestor de almacenes de claves Mac OS X / Safari con nombre Mac OS X / Safari</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:38.844031Z</date>
+  <millis>1699706078844</millis>
+  <nanos>31000</nanos>
+  <sequence>13</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.keystores.KeyStoreUtilities</class>
+  <method>getAliasesByFriendlyName</method>
+  <thread>30</thread>
+  <message>Se ocultara el certificado 'josep oriol cabre trias' por no ser valido: java.security.cert.CertificateExpiredException: NotAfter: Fri Apr 15 15:39:18 CEST 2022</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:38.847687Z</date>
+  <millis>1699706078847</millis>
+  <nanos>687000</nanos>
+  <sequence>14</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.keystores.KeyStoreUtilities</class>
+  <method>getAliasesByFriendlyName</method>
+  <thread>30</thread>
+  <message>Se ocultara el certificado 'josep oriol cabre trias' por no ser valido: java.security.cert.CertificateExpiredException: NotAfter: Fri Apr 15 15:39:18 CEST 2022</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:52.104825Z</date>
+  <millis>1699706092104</millis>
+  <nanos>825000</nanos>
+  <sequence>15</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>SEVERE</level>
+  <class>es.gob.afirma.ui.core.jse.JSEUIManager</class>
+  <method>showCertificateSelectionDialog</method>
+  <thread>30</thread>
+  <message>Se genero un error en el dialogo de seleccion de certificados: java.lang.reflect.InvocationTargetException</message>
+</record>
+<record>
+  <date>2023-11-11T12:34:52.124174Z</date>
+  <millis>1699706092124</millis>
+  <nanos>174000</nanos>
+  <sequence>16</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>SEVERE</level>
+  <class>es.gob.afirma.standalone.ui.SignPanelSignTask</class>
+  <method>doSignature</method>
+  <thread>30</thread>
+  <message>El almacen no contiene ningun certificado que se pueda usar para firmar: es.gob.afirma.keystores.AOCertificatesNotFoundException: No se han encontrado certificados validos en el almacen</message>
+</record>
+<record>
+  <date>2023-11-11T12:35:32.207095Z</date>
+  <millis>1699706132207</millis>
+  <nanos>95000</nanos>
+  <sequence>17</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.keystores.KeyStoreUtilities</class>
+  <method>getAliasesByFriendlyName</method>
+  <thread>33</thread>
+  <message>Se ocultara el certificado 'josep oriol cabre trias' por no ser valido: java.security.cert.CertificateExpiredException: NotAfter: Fri Apr 15 15:39:18 CEST 2022</message>
+</record>
+<record>
+  <date>2023-11-11T12:35:32.214283Z</date>
+  <millis>1699706132214</millis>
+  <nanos>283000</nanos>
+  <sequence>18</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.keystores.KeyStoreUtilities</class>
+  <method>getAliasesByFriendlyName</method>
+  <thread>33</thread>
+  <message>Se ocultara el certificado 'josep oriol cabre trias' por no ser valido: java.security.cert.CertificateExpiredException: NotAfter: Fri Apr 15 15:39:18 CEST 2022</message>
+</record>
+<record>
+  <date>2023-11-11T12:35:46.707761Z</date>
+  <millis>1699706146707</millis>
+  <nanos>761000</nanos>
+  <sequence>19</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>SEVERE</level>
+  <class>es.gob.afirma.ui.core.jse.JSEUIManager</class>
+  <method>showCertificateSelectionDialog</method>
+  <thread>33</thread>
+  <message>Se genero un error en el dialogo de seleccion de certificados: java.lang.reflect.InvocationTargetException</message>
+</record>
+<record>
+  <date>2023-11-11T12:35:46.730231Z</date>
+  <millis>1699706146730</millis>
+  <nanos>231000</nanos>
+  <sequence>20</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>SEVERE</level>
+  <class>es.gob.afirma.standalone.ui.SignPanelSignTask</class>
+  <method>doSignature</method>
+  <thread>33</thread>
+  <message>El almacen no contiene ningun certificado que se pueda usar para firmar: es.gob.afirma.keystores.AOCertificatesNotFoundException: No se han encontrado certificados validos en el almacen</message>
+</record>
+<record>
+  <date>2023-11-11T12:35:48.828842Z</date>
+  <millis>1699706148828</millis>
+  <nanos>842000</nanos>
+  <sequence>21</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.keystores.KeyStoreUtilities</class>
+  <method>getAliasesByFriendlyName</method>
+  <thread>34</thread>
+  <message>Se ocultara el certificado 'josep oriol cabre trias' por no ser valido: java.security.cert.CertificateExpiredException: NotAfter: Fri Apr 15 15:39:18 CEST 2022</message>
+</record>
+<record>
+  <date>2023-11-11T12:35:48.834091Z</date>
+  <millis>1699706148834</millis>
+  <nanos>91000</nanos>
+  <sequence>22</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.keystores.KeyStoreUtilities</class>
+  <method>getAliasesByFriendlyName</method>
+  <thread>34</thread>
+  <message>Se ocultara el certificado 'josep oriol cabre trias' por no ser valido: java.security.cert.CertificateExpiredException: NotAfter: Fri Apr 15 15:39:18 CEST 2022</message>
+</record>
+<record>
+  <date>2023-11-11T12:35:51.803638Z</date>
+  <millis>1699706151803</millis>
+  <nanos>638000</nanos>
+  <sequence>23</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>SEVERE</level>
+  <class>es.gob.afirma.ui.core.jse.JSEUIManager</class>
+  <method>showCertificateSelectionDialog</method>
+  <thread>34</thread>
+  <message>Se genero un error en el dialogo de seleccion de certificados: java.lang.reflect.InvocationTargetException</message>
+</record>
+<record>
+  <date>2023-11-11T12:35:51.827562Z</date>
+  <millis>1699706151827</millis>
+  <nanos>562000</nanos>
+  <sequence>24</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>SEVERE</level>
+  <class>es.gob.afirma.standalone.ui.SignPanelSignTask</class>
+  <method>doSignature</method>
+  <thread>34</thread>
+  <message>El almacen no contiene ningun certificado que se pueda usar para firmar: es.gob.afirma.keystores.AOCertificatesNotFoundException: No se han encontrado certificados validos en el almacen</message>
+</record>
+<record>
+  <date>2023-11-11T12:36:03.322023Z</date>
+  <millis>1699706163322</millis>
+  <nanos>23000</nanos>
+  <sequence>25</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.keystores.KeyStoreUtilities</class>
+  <method>getAliasesByFriendlyName</method>
+  <thread>35</thread>
+  <message>Se ocultara el certificado 'josep oriol cabre trias' por no ser valido: java.security.cert.CertificateExpiredException: NotAfter: Fri Apr 15 15:39:18 CEST 2022</message>
+</record>
+<record>
+  <date>2023-11-11T12:36:03.329151Z</date>
+  <millis>1699706163329</millis>
+  <nanos>151000</nanos>
+  <sequence>26</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>INFO</level>
+  <class>es.gob.afirma.keystores.KeyStoreUtilities</class>
+  <method>getAliasesByFriendlyName</method>
+  <thread>35</thread>
+  <message>Se ocultara el certificado 'josep oriol cabre trias' por no ser valido: java.security.cert.CertificateExpiredException: NotAfter: Fri Apr 15 15:39:18 CEST 2022</message>
+</record>
+<record>
+  <date>2023-11-11T12:36:06.259718Z</date>
+  <millis>1699706166259</millis>
+  <nanos>718000</nanos>
+  <sequence>27</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>SEVERE</level>
+  <class>es.gob.afirma.ui.core.jse.JSEUIManager</class>
+  <method>showCertificateSelectionDialog</method>
+  <thread>35</thread>
+  <message>Se genero un error en el dialogo de seleccion de certificados: java.lang.reflect.InvocationTargetException</message>
+</record>
+<record>
+  <date>2023-11-11T12:36:06.274939Z</date>
+  <millis>1699706166274</millis>
+  <nanos>939000</nanos>
+  <sequence>28</sequence>
+  <logger>es.gob.afirma</logger>
+  <level>SEVERE</level>
+  <class>es.gob.afirma.standalone.ui.SignPanelSignTask</class>
+  <method>doSignature</method>
+  <thread>35</thread>
+  <message>El almacen no contiene ningun certificado que se pueda usar para firmar: es.gob.afirma.keystores.AOCertificatesNotFoundException: No se han encontrado certificados validos en el almacen</message>
+</record>
+</log>

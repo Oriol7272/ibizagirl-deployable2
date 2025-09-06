@@ -1,0 +1,38 @@
+20/06/2020 10:59:08 Program.InitCustomize
+20/06/2020 10:59:12 RegisterUSBDevicesNotify handle:105553118362880
+20/06/2020 10:59:12 Start read iTunesApp Dir
+20/06/2020 10:59:12 Start read current iTunesApp Dir is: 
+20/06/2020 10:59:12 <iTunes_Dir_Path> 
+20/06/2020 10:59:12 <CheckEnvironment> iTunes version is null
+20/06/2020 11:01:11 ConnectionHub.AddConnection(IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000, iOS, ffffffffffffffffffffffffffffffffffffffff)
+20/06/2020 11:01:11 start connectApple iPad
+20/06/2020 11:01:11 Connection begin IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000
+20/06/2020 11:01:11 Connection step Checking
+20/06/2020 11:01:11 ......device_ConnectStepChanged Step: Checking
+20/06/2020 11:01:11 Connection step WaitReady
+20/06/2020 11:01:11 ......device_ConnectStepChanged Step: WaitReady
+20/06/2020 11:01:11 Connection end IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000 Recovery
+20/06/2020 11:01:11 Connection step Completed
+20/06/2020 11:01:11 ......device_ConnectStepChanged Step: Completed
+20/06/2020 11:02:12 start connectiPad de: Oriol Cabré
+20/06/2020 11:02:13 Connection begin IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000
+20/06/2020 11:02:13 Connection step Checking
+20/06/2020 11:02:13 ......device_ConnectStepChanged Step: Checking
+20/06/2020 11:02:13 Connection step WaitReady
+20/06/2020 11:02:13 ......device_ConnectStepChanged Step: WaitReady
+20/06/2020 11:02:13 Connection end IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000 Recovery
+20/06/2020 11:02:13 Connection step Completed
+20/06/2020 11:02:13 ......device_ConnectStepChanged Step: Completed
+20/06/2020 11:02:29 ConnectionHub.RemoveConnection(IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000, ffffffffffffffffffffffffffffffffffffffff)
+20/06/2020 11:02:29 ConnectionHub.OnConnectionLost(IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000)
+20/06/2020 11:02:37 Connection IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000 disposed.
+20/06/2020 11:05:32 ConnectionHub.AddConnection(IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000, iOS, ffffffffffffffffffffffffffffffffffffffff)
+20/06/2020 11:05:36 start connectiPad de: Oriol Cabré
+20/06/2020 11:05:36 Connection begin IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000
+20/06/2020 11:05:36 Connection step Checking
+20/06/2020 11:05:36 ......device_ConnectStepChanged Step: Checking
+20/06/2020 11:05:36 Connection step WaitReady
+20/06/2020 11:05:36 ......device_ConnectStepChanged Step: WaitReady
+20/06/2020 11:05:36 Connection end IOService:/IOResources/AppleUSBHostResources/AppleUSBLegacyRoot/AppleUSBEHCI@24000000/iPad@24340000 Recovery
+20/06/2020 11:05:36 Connection step Completed
+20/06/2020 11:05:36 ......device_ConnectStepChanged Step: Completed

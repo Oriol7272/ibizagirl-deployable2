@@ -1,0 +1,327 @@
+DEBUG Loaded flyctl config from/Users/oriolcabre/.fly/config.yml
+DEBUG determined hostname: "iMac-de-Oriol-2.local"
+DEBUG determined working directory: "/Users/oriolcabre/Downloads/viral-daily2"
+DEBUG determined config directory: "/Users/oriolcabre/.fly"
+DEBUG ensured config directory exists.
+DEBUG ensured config directory perms.
+DEBUG cache loaded.
+DEBUG config initialized.
+DEBUG skipped querying for new release
+DEBUG checking for updates...
+DEBUG started querying for statuspage incidents
+DEBUG client initialized.
+DEBUG app config loaded from /Users/oriolcabre/Downloads/viral-daily2/fly.toml
+DEBUG started querying for host issues
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "query($admin: Boolean!) { organizations(admin: $admin) { nodes { id slug rawSlug name type paidPlan billable viewerRole internalNumericId } } }",
+  "variables": {
+    "admin": false
+  }
+}
+
+
+DEBUG {}
+DEBUG {
+  "query": "query($appName: String!) { apphostissues:app(name: $appName) { hostIssues { nodes { internalId message createdAt updatedAt } } } }",
+  "variables": {
+    "appName": "viral-daily-oriol-2025"
+  }
+}
+
+
+DEBUG {}
+DEBUG <-- 200 https://api.fly.io/graphql (261.28ms)
+
+DEBUG {
+  "data": {
+    "organizations": {
+      "nodes": [
+        {
+          "id": "YJAZL8pwnmAYbTlNOp6KxGDjAKhBLVb8K",
+          "slug": "personal",
+          "rawSlug": "oct-oct",
+          "name": "Oct Oct",
+          "type": "PERSONAL",
+          "paidPlan": true,
+          "billable": true,
+          "viewerRole": "admin",
+          "internalNumericId": "1213612"
+        }
+      ]
+    }
+  }
+}
+
+DEBUG Starting task manager
+DEBUG monitoring tokens at /Users/oriolcabre/.fly/config.yml
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "query ($appName: String!) { app(name: $appName) { id internalNumericId name hostname deployed status version appUrl platformVersion currentRelease { evaluationId status inProgress version } config { definition } organization { id slug paidPlan } services { description protocol internalPort ports { port handlers } } ipAddresses { nodes { id address type createdAt } } sharedIpAddress cnameTarget imageDetails { registry repository tag digest version } machines{ nodes { id name config state region createdAt app { name } ips { nodes { family kind ip maskSize } } host { id } } } postgresAppRole: role { name } limitedAccessTokens { nodes { id name expiresAt } } } }",
+  "variables": {
+    "appName": "viral-daily-oriol-2025"
+  }
+}
+
+
+DEBUG {}
+DEBUG <-- 200 https://api.fly.io/graphql (331.32ms)
+
+DEBUG {
+  "data": {
+    "apphostissues": {
+      "hostIssues": {
+        "nodes": []
+      }
+    }
+  }
+}
+
+DEBUG <-- 200 https://api.fly.io/graphql (242.17ms)
+
+DEBUG {
+  "data": {
+    "app": {
+      "id": "viral-daily-oriol-2025",
+      "internalNumericId": 9255669,
+      "name": "viral-daily-oriol-2025",
+      "hostname": "viral-daily-oriol-2025.fly.dev",
+      "deployed": true,
+      "status": "suspended",
+      "version": 0,
+      "appUrl": "https://2a09:8280:1::8d:3af5:0",
+      "platformVersion": "machines",
+      "currentRelease": {
+        "evaluationId": null,
+        "status": "complete",
+        "inProgress": false,
+        "version": 3
+      },
+      "config": {
+        "definition": {
+          "kill_timeout": 5,
+          "kill_signal": "SIGINT",
+          "processes": [],
+          "mounts": [],
+          "services": [
+            {
+              "processes": [
+                "app"
+              ],
+              "protocol": "tcp",
+              "internal_port": 8080,
+              "concurrency": {
+                "soft_limit": 20,
+                "hard_limit": 25,
+                "type": "connections"
+              },
+              "ports": [
+                {
+                  "port": 80,
+                  "handlers": [
+                    "http"
+                  ],
+                  "force_https": true
+                },
+                {
+                  "port": 443,
+                  "handlers": [
+                    "tls",
+                    "http"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "services": [],
+      "sharedIpAddress": "66.241.125.148",
+      "cnameTarget": "j5pg61g.viral-daily-oriol-2025.fly.dev",
+      "imageDetails": {
+        "registry": "unknown",
+        "repository": "unknown",
+        "tag": "unknown",
+        "digest": "unknown",
+        "version": "unknown"
+      },
+      "postgresAppRole": null,
+      "ipAddresses": {
+        "nodes": [
+          {
+            "id": "ip_7pyd9mo5lkk2kelo",
+            "address": "2a09:8280:1::8d:3af5:0",
+            "type": "v6",
+            "createdAt": "2025-08-06T17:17:52Z"
+          }
+        ]
+      },
+      "machines": {
+        "nodes": [
+          {
+            "id": "d8d31eeb206328",
+            "name": "lively-dawn-4246",
+            "config": {
+              "env": {
+                "NODE_ENV": "production",
+                "PYTHONPATH": "/app",
+                "PRIMARY_REGION": "sjc",
+                "FLY_PROCESS_GROUP": "app"
+              },
+              "init": {
+                "cmd": [],
+                "tty": false,
+                "exec": [],
+                "entrypoint": []
+              },
+              "size": "shared-cpu-1x",
+              "image": "viral-daily-oriol-2025:deployment-01K207349XZN913T11NET98Z0Z",
+              "image_ref": {
+                "registry": "registry.fly.io",
+                "repository": "viral-daily-oriol-2025",
+                "tag": "deployment-01K207349XZN913T11NET98Z0Z",
+                "digest": "sha256:501441cc527bc7a855f1bc8a14739b77ec62cf53e1b6b0289fe29a8f5fd0293d",
+                "labels": {}
+              },
+              "restart": {
+                "policy": "RESTART_POLICY_ON_FAILURE",
+                "max_retries": 10,
+                "gpu_bid_price": 0
+              },
+              "metadata": {
+                "fly_release_id": "9zA0gKNwwbBAqTB7PZnKol45",
+                "fly_process_group": "app",
+                "fly_flyctl_version": "0.3.166",
+                "fly_release_version": "3",
+                "fly_platform_version": "v2"
+              },
+              "mounts": []
+            },
+            "state": "stopped",
+            "region": "sjc",
+            "createdAt": "2025-08-06T17:17:58Z",
+            "app": {
+              "name": "viral-daily-oriol-2025"
+            },
+            "host": {
+              "id": "0c0b"
+            },
+            "ips": {
+              "nodes": [
+                {
+                  "family": "v6",
+                  "kind": "public",
+                  "ip": "2a02:6ea0:e618:b:8000:25d4:b069:1",
+                  "maskSize": 127
+                },
+                {
+                  "family": "v4",
+                  "kind": "private",
+                  "ip": "172.19.18.210",
+                  "maskSize": 29
+                },
+                {
+                  "family": "v6",
+                  "kind": "privatenet",
+                  "ip": "fdaa:24:e40a:a7b:4f1:25d4:b069:2",
+                  "maskSize": 112
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "limitedAccessTokens": {
+        "nodes": []
+      },
+      "organization": {
+        "id": "YJAZL8pwnmAYbTlNOp6KxGDjAKhBLVb8K",
+        "slug": "personal",
+        "paidPlan": true
+      }
+    }
+  }
+}
+
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "query($slug: String!) { organization(slug: $slug) { id internalNumericId slug rawSlug name type billable limitedAccessTokens { nodes { id name expiresAt revokedAt user { email } } } } }",
+  "variables": {
+    "slug": "personal"
+  }
+}
+
+
+DEBUG {}
+DEBUG <-- 200 https://api.fly.io/graphql (216.96ms)
+
+DEBUG {
+  "data": {
+    "organization": {
+      "id": "YJAZL8pwnmAYbTlNOp6KxGDjAKhBLVb8K",
+      "internalNumericId": "1213612",
+      "slug": "personal",
+      "rawSlug": "oct-oct",
+      "name": "Oct Oct",
+      "type": "PERSONAL",
+      "billable": true,
+      "limitedAccessTokens": {
+        "nodes": []
+      }
+    }
+  }
+}
+
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "\nquery ListAddOns ($addOnType: AddOnType) {\n\taddOns(type: $addOnType) {\n\t\tnodes {\n\t\t\tid\n\t\t\tname\n\t\t\taddOnPlan {\n\t\t\t\tdisplayName\n\t\t\t\tdescription\n\t\t\t}\n\t\t\tprivateIp\n\t\t\tprimaryRegion\n\t\t\treadRegions\n\t\t\toptions\n\t\t\tmetadata\n\t\t\torganization {\n\t\t\t\tid\n\t\t\t\tslug\n\t\t\t}\n\t\t}\n\t}\n}\n",
+  "variables": {
+    "addOnType": "tigris"
+  },
+  "operationName": "ListAddOns"
+}
+
+DEBUG {0x1400047e750}
+DEBUG <-- 200 https://api.fly.io/graphql (154.64ms)
+
+DEBUG {
+  "data": {
+    "addOns": {
+      "nodes": []
+    }
+  }
+}
+
+DEBUG --> POST https://api.fly.io/graphql
+
+DEBUG {
+  "query": "mutation($appId: ID!) { deleteApp(appId: $appId) { organization { id } } }",
+  "variables": {
+    "appId": "viral-daily-oriol-2025"
+  }
+}
+
+
+DEBUG {}
+DEBUG <-- 200 https://api.fly.io/graphql (195.85ms)
+
+DEBUG {
+  "data": {
+    "deleteApp": {
+      "organization": {
+        "id": "YJAZL8pwnmAYbTlNOp6KxGDjAKhBLVb8K"
+      }
+    }
+  }
+}
+
+DEBUG Task manager done
+DEBUG done monitoring tokens
+DEBUG querying for statuspage incidents resulted to &{[]}
+DEBUG querying for host issues resulted to []
