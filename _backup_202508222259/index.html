@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>IbizaGirl.pics — Home</title>
+  <link rel="stylesheet" href="/css/site.css"/>
+</head>
+<body>
+  <header class="topbar">
+    <nav>
+      <a href="/">Home</a>
+      <a href="/premium">Premium</a>
+      <a href="/videos">Vídeos</a>
+      <a href="/subscription">Suscripción</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Galería (20 aleatorias de FULL)</h1>
+    <section id="grid" class="grid"></section>
+  </main>
+
+  <!-- Módulos de contenido: deben cargarse todos para evitar warnings de dependencias -->
+  <script src="/js/content-data1.js"></script>
+  <script src="/js/content-data2.js"></script>
+  <script src="/js/content-data3.js"></script>
+  <script src="/js/content-data4.js"></script>
+  <script src="/js/content-data5.js"></script>
+  <script src="/js/content-data6.js"></script>
+
+  <script>
+  (function () {
+    const G = (window.IBG_CONFIG || window.IBG || {});
+    const ASSETS = (G.assets && G.assets.baseUrl) || 'https://ibizagirl-assets.s3.eu-north-1.amazonaws.com';
+
+    // Intentamos tomar FULL desde UnifiedContentAPI; si no, desde window.FULL_IMAGES_POOL
+    const U = window.UnifiedContentAPI || {};
+    let pool = [];
+    if (U.getFullPool) {
+      try { pool = U.getFullPool(); } catch (_) {}
+    }
+    if (!pool || !pool.length) {
+      pool = (window.FULL_IMAGES_POOL || []).map(fn => ({ filename: fn }));
+    }
+
+    // Shuffle sencillo
+    function sample(arr, n) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a.slice(0, n);
+    }
+
+    const chosen = sample(pool, 20);
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+
+    chosen.forEach((it) => {
+      const file = it.filename || it;
+      const url  = file.startsWith('full/') ? `${ASSETS}/${file}` : `${ASSETS}/full/${file}`;
+      const a = document.createElement('a');
+      a.href = url; a.target = '_blank'; a.rel = 'noopener';
+      a.className = 'card';
+      a.innerHTML = `<img loading="lazy" src="${url}" alt="full"/>`;
+      grid.appendChild(a);
+    });
+
+    console.log('Home: FULL pool =', pool.length, '| render =', chosen.length);
+  })();
+  </script>
+</body>
+</html>

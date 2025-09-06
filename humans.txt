@@ -1,0 +1,24 @@
+# humanstxt.org
+
+/* TEAM */
+Website: IbizaGirl.pics
+Location: Ibiza, Spain
+
+/* SITE */
+Last update: 2025/08/21
+Language: Spanish / English / French / German / Italian
+Doctype: HTML5
+IDE: Visual Studio Code
+
+/* COMPONENTS */
+Framework: Vanilla JavaScript
+Fonts: Google Fonts (Allura, Inter)
+Images: WebP/JPG format for optimization
+Payment: PayPal SDK Live Mode
+Analytics: Google Analytics G-DBXYNPBSPY
+Ad Networks: JuicyAds, ExoClick, EroAdvertising, PopAds
+Design: Ocean theme with wave effects, night mode
+
+/* THANKS */
+Ibiza for the inspiration
+Community for the support

@@ -1,49 +1,49 @@
-(function(W){
-  function planIdFromEnv(prefix){
-    var E=W.__ENV||{}; 
-    if(prefix==='monthly' && E.PAYPAL_PLAN_MONTHLY_1499) return E.PAYPAL_PLAN_MONTHLY_1499;
-    if(prefix==='annual'  && E.PAYPAL_PLAN_ANNUAL_4999)  return E.PAYPAL_PLAN_ANNUAL_4999;
-    var k=Object.keys(E).find(function(x){return x.startsWith('PAYPAL_PLAN_'+(prefix==='monthly'?'MONTHLY':'ANNUAL'))});
-    return k?E[k]:'';
-  }
-  function loadPayPal(){
-    var C=(W.__ENV||{}).PAYPAL_CLIENT_ID||"";
-    if(!C){console.warn("PAYPAL_CLIENT_ID vacío; no cargo SDK");return;}
-    if(document.getElementById('paypal-sdk')) return;
-    var s=document.createElement('script');
-    s.id='paypal-sdk';
-    s.src="https://www.paypal.com/sdk/js?client-id="+encodeURIComponent(C)+"&components=buttons&vault=true&intent=subscription&currency=EUR";
-    s.async=true; document.head.appendChild(s);
-  }
-  function mountSubButtons(){
-    if(!W.paypal) return;
-    var m=document.getElementById('paypal-monthly');
-    var y=document.getElementById('paypal-yearly');
-    var l=document.getElementById('paypal-lifetime');
-    if(m){
-      var pm=planIdFromEnv('monthly');
-      if(pm){ paypal.Buttons({style:{shape:'pill',layout:'vertical'},
-        createSubscription:(_,a)=>a.subscription.create({plan_id:pm}),
-        onApprove:()=>{localStorage.setItem('ibg_subscribed','1');alert("¡Mensual activada!")}
-      }).render('#paypal-monthly'); }
+export const PRICES={ photo:10, video:30, monthly:1499, yearly:4999, lifetime:10000 };
+
+function loadSDK({subs=false}={}){
+  return new Promise((resolve,reject)=>{
+    // Quita SDK previo si el modo cambia
+    if(window.paypal){
+      const s=document.getElementById('pp-sdk');
+      const wantSubs=subs;
+      if(s && ((s.dataset.subs==='1')!==wantSubs)){ s.remove(); delete window.paypal; }
+      else return resolve();
     }
-    if(y){
-      var py=planIdFromEnv('annual');
-      if(py){ paypal.Buttons({style:{shape:'pill',layout:'vertical'},
-        createSubscription:(_,a)=>a.subscription.create({plan_id:py}),
-        onApprove:()=>{localStorage.setItem('ibg_subscribed','1');alert("¡Anual activada!")}
-      }).render('#paypal-yearly'); }
-    }
-    if(l && (W.__ENV||{}).LIFETIME_PRICE_EUR){
-      var price=(W.__ENV||{}).LIFETIME_PRICE_EUR;
-      paypal.Buttons({style:{shape:'pill',layout:'vertical'},
-        createOrder:(_,a)=>a.order.create({purchase_units:[{amount:{currency_code:'EUR',value:price}}]}),
-        onApprove:(_,a)=>a.order.capture().then(()=>{localStorage.setItem('ibg_lifetime','1');alert("¡Lifetime activado!")})
-      }).render('#paypal-lifetime');
-    }
-  }
-  function initPaywallUnlockButton(){
-    var b=document.getElementById('unlock-now'); if(b){ b.onclick=function(){if(W.IBG_UNLOCK) IBG_UNLOCK();}; }
-  }
-  W.IBG_PAYMENTS={loadPayPal,mountSubButtons,initPaywallUnlockButton};
-})(window);
+    const cid = window.__ENV && window.__ENV.PAYPAL_CLIENT_ID;
+    if(!cid){ alert('PAYPAL_CLIENT_ID vacío. Revisa ENV en Vercel.'); return reject(new Error('missing client id')); }
+    const comps = subs ? 'buttons,subscriptions,marks' : 'buttons,marks';
+    const intent = subs ? 'subscription' : 'capture';
+    const vault = subs ? '&vault=true' : '';
+    const url = 'https://www.paypal.com/sdk/js?client-id='+encodeURIComponent(cid)+'&currency=EUR&intent='+intent+vault+'&components='+comps;
+    const s=document.createElement('script'); s.id='pp-sdk'; s.dataset.subs=subs?'1':'0'; s.src=url;
+    s.onload=()=> resolve();
+    s.onerror=()=>{ alert('No se pudo cargar PayPal (400/401). Si es suscripción, activa Subscriptions en tu cuenta LIVE o revisa los Plan IDs.'); reject(new Error('sdk load fail')); };
+    document.head.appendChild(s);
+  });
+}
+
+export async function buyItem(itemId, kind='photo'){
+  await loadSDK({subs:false});
+  window.paypal.Buttons({
+    createOrder:(_d,a)=>a.order.create({ purchase_units:[{ amount:{ currency_code:'EUR', value:(PRICES[kind]/100).toFixed(2) }, description:kind+':'+itemId }] }),
+    onApprove:async(_d,a)=>{ const d=await a.order.capture(); if(d.status==='COMPLETED'){ localStorage.setItem('unlocks_'+itemId,'1'); alert('Desbloqueado'); location.reload(); } }
+  }).render('#paypal-modal-target');
+}
+
+export async function subscribe(planKey='monthly'){
+  await loadSDK({subs:true});
+  const MAP={ monthly:window.__ENV?.PAYPAL_PLAN_MONTHLY, yearly:window.__ENV?.PAYPAL_PLAN_YEARLY };
+  const pid=MAP[planKey]; if(!pid){ alert('Plan no disponible (PAYPAL_PLAN_* en Vercel).'); return; }
+  window.paypal.Buttons({
+    createSubscription:(_d,a)=>a.subscription.create({ plan_id:pid }),
+    onApprove:()=>{ localStorage.setItem('plan', planKey); alert('Suscripción activa'); location.reload(); }
+  }).render('#paypal-modal-target');
+}
+
+export async function buyLifetime(){
+  await loadSDK({subs:false});
+  window.paypal.Buttons({
+    createOrder:(_d,a)=>a.order.create({ purchase_units:[{ amount:{ currency_code:'EUR', value:(PRICES.lifetime/100).toFixed(2) }, description:'lifetime:all' }] }),
+    onApprove:async(_d,a)=>{ const d=await a.order.capture(); if(d.status==='COMPLETED'){ localStorage.setItem('plan','lifetime'); document.documentElement.classList.add('hide-ads'); alert('Lifetime activo (sin anuncios)'); location.reload(); } }
+  }).render('#paypal-modal-target');
+}

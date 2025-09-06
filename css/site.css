@@ -1,0 +1,71 @@
+:root{
+  --ocean-900:#06223b; --ocean-800:#0a304f; --ocean-700:#0e3d63; --ocean-600:#124a77; --ocean-500:#16578b;
+  --text:#ffffff; --sidebar-w:300px; --gap:14px;
+}
+*{box-sizing:border-box} html,body{height:100%}
+body{
+  margin:0; color:var(--text);
+  background:#051a2b url("/decorative-images/paradise-beach.png") center/cover fixed no-repeat;
+  font-family:'Alex Brush','Great Vibes','Dancing Script',cursive,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  font-size:18px;
+}
+a{text-decoration:none;color:inherit}
+
+/* Header + nav */
+header.site{position:relative;padding:28px 16px 10px;text-align:center;background:linear-gradient(180deg,rgba(10,48,79,.70),rgba(14,61,99,.35));border-bottom:1px solid rgba(255,255,255,.08);z-index:10}
+header .brand h1{margin:0;font-size:70px;line-height:1;text-shadow:0 3px 18px rgba(0,0,0,.45)}
+header .brand p{margin:6px 0 4px;font-size:28px;opacity:.98}
+.navbar{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin:8px auto 0}
+.navbar .btn{padding:9px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:linear-gradient(180deg,rgba(22,87,139,.95),rgba(6,34,59,.95));font-weight:700;display:inline-flex;align-items:center;gap:.45rem}
+.langbox{position:absolute;top:14px;right:14px;display:flex;gap:8px;align-items:center}
+.langbox select{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:4px 8px}
+
+/* Icons */
+.ico{width:16px;height:16px;display:inline-block;background-size:contain;background-repeat:no-repeat}
+.ico-home{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M12 3l9 8h-3v10h-5V14H11v7H6V11H3z'/%3E%3C/svg%3E")}
+.ico-prem{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M12 17.3 5.8 21l1.2-7.1L2 8.9l7.2-1L12 1.5l2.8 6.4 7.2 1-5 4.9 1.2 7.2z'/%3E%3C/svg%3E")}
+.ico-vid{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M4 5h11a2 2 0 012 2v2l3-2v10l-3-2v2a2 2 0 01-2 2H4a2 2 0 01-2-2V7a2 2 0 012-2z'/%3E%3C/svg%3E")}
+.ico-sub{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M4 6h16v4H4zm0 6h10v6H4z'/%3E%3C/svg%3E")}
+.ico-life{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='9' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath fill='white' d='M11 6h2v6h-2zM11 14h2v4h-2z'/%3E%3C/svg%3E")}
+
+/* Side ads (columnas laterales) */
+.sidebar-fixed{position:fixed;top:120px;width:var(--sidebar-w);display:flex;flex-direction:column;gap:var(--gap);z-index:5}
+.sidebar-left{left:10px}
+.sidebar-right{right:10px}
+.ad-slot{width:300px;min-height:250px;background:#0b1f33;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+/* Wrapper de contenido: SIEMPRE entre columnas */
+.page{position:relative;z-index:6}
+.section{max-width:1200px;margin:14px auto;padding:0 12px}
+@media (min-width:1300px){
+  .section{margin-left:calc(var(--sidebar-w) + 28px); margin-right:calc(var(--sidebar-w) + 28px);}
+}
+.hide-ads .ad-slot{display:none!important}
+
+/* Bloques y cards */
+.hbar{display:flex;align-items:center;gap:.5rem}
+.hbar h2{margin:.5rem 0}
+.counter{opacity:.9;font-size:.95rem}
+.carousel{position:relative;width:100%;overflow:hidden}
+.carousel-track{display:flex;gap:.6rem;transition:transform .5s ease}
+.carousel-item{min-width:340px;height:220px;border-radius:.7rem;overflow:hidden}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.9rem}
+.card{position:relative;border-radius:.7rem;background:#0c2137;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.card img,.card video{width:100%;height:240px;object-fit:cover;display:block}
+.locked{filter:blur(10px);transform:scale(1.03)}
+.badge-price{position:absolute;right:.4rem;bottom:.4rem;font-size:.85rem;padding:.22rem .44rem;background:#000a;border-radius:.45rem}
+.badge-new{position:absolute;left:.4rem;top:.4rem;font-size:.8rem;padding:.18rem .42rem;background:#ff2a6d;border-radius:.45rem}
+
+/* Botón PayPal */
+.buy-btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:.45rem;align-items:center;background:#003087;color:#fff;border:none;border-radius:.55rem;padding:.46rem .72rem;font-weight:800;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.buy-btn .pp-icon{display:inline-block;width:18px;height:18px;background:url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 48 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23fff' d='M17 7h16c6 0 9 3.8 8 9.4S34 26 28 26h-5l-2 12h-8L17 7z'/%3E%3C/svg%3E") center/contain no-repeat}
+
+/* Modal PayPal */
+#paypal-modal.hidden{display:none}
+#paypal-modal{position:fixed;inset:0;z-index:9999}
+#paypal-modal-bg{position:absolute;inset:0;background:#0008;display:flex;align-items:center;justify-content:center}
+#paypal-modal-card{background:#fff;min-width:320px;max-width:90vw;border-radius:.8rem;padding:1rem;position:relative;color:#111}
+#paypal-modal-close{position:absolute;top:.6rem;right:.8rem;background:none;border:none;font-size:1.2rem;cursor:pointer}
+
+/* Responsive: oculta columnas en pantallas pequeñas */
+@media (max-width:1299px){.sidebar-fixed{display:none}}

@@ -1,0 +1,5 @@
+.blur{filter:blur(8px);transform:scale(1.02);transition:filter .25s ease}
+.locked .card img,.locked .card video{filter:blur(8px)}
+@supports(backdrop-filter:blur(4px)){
+  .price{backdrop-filter:blur(4px)}
+}

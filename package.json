@@ -1,5 +1,7 @@
 {
-  "name": "ibizagirl-final",
+  "name": "ibizagirl-deployable2",
   "private": true,
-  "type": "module"
+  "scripts": {
+    "build": "node tools/inject_env.mjs"
+  }
 }
