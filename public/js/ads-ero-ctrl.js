@@ -1,7 +1,12 @@
 (function(){
   function ensureHost(){
     let h=document.getElementById("ad-ero");
-    if(!h){ h=document.createElement("div"); h.id="ad-ero"; h.style.cssText="width:300px;height:250px;margin:24px auto;"; document.body.appendChild(h); }
+    if(!h){
+      h=document.createElement("div");
+      h.id="ad-ero";
+      h.style.cssText="width:300px;height:250px;margin:24px auto;display:block";
+      document.body.appendChild(h);
+    }
     return h;
   }
   function mount(){

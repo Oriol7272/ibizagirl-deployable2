@@ -1,27 +1,39 @@
 (function(){
-  let logged=false;
-  function host(){
+  let mounted=false, warned=false;
+  function ensureBar(){
     let h=document.getElementById("exo-bottom");
-    if(!h){ h=document.createElement("div"); h.id="exo-bottom"; document.body.appendChild(h); }
-    h.style.cssText="position:fixed; left:50%; transform:translateX(-50%); bottom:12px; z-index:2147483646; width:min(100%,1200px); max-width:98vw; pointer-events:auto;";
+    if(!h){
+      h=document.createElement("div");
+      h.id="exo-bottom";
+      document.body.appendChild(h);
+    }
+    // Oculto hasta que haya iframe (evita barras grises/vacías)
+    h.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:10px;z-index:2147483646;width:min(100%,1200px);max-width:98vw;pointer-events:auto;display:none";
     return h;
   }
+  function pickZone(E){
+    const list=String(E.EXOCLICK_ZONES||"").split(",").map(s=>s.trim()).filter(Boolean);
+    const z = String(E.EXOCLICK_BOTTOM_ZONE||"").trim() || list[2] || "";
+    if(!z && !warned){ console.log("[exo-bottom] sin zona (define EXOCLICK_BOTTOM_ZONE o pon 3ª en EXOCLICK_ZONES)"); warned=true; }
+    if(!E.EXOCLICK_BOTTOM_ZONE && z){ console.log("[exo-bottom] fallback ->", z); }
+    return z;
+  }
   function mount(){
-    const E=window.__ENV||{}, zid=String(E.EXOCLICK_BOTTOM_ZONE||"").trim();
-    if(!zid){ if(!logged){console.log("[exo-bottom] missing EXOCLICK_BOTTOM_ZONE"); logged=true;} return; }
-    const H=host(); H.innerHTML="";
+    if(mounted) return;
+    const E=window.__ENV||{}, zid=pickZone(E);
+    if(!zid) return;
+    const H=ensureBar(); H.innerHTML="";
     IBG_ADS.ensureProvider(ok=>{
       if(!ok){ console.log("[exo-bottom] provider KO"); return; }
       IBG_ADS.mountExo(zid, H);
-      console.log("IBG_ADS: EXO bottom mounted ->", zid);
-      let n=0,t=setInterval(()=>{
-        if(H.querySelector("iframe")){ clearInterval(t); document.documentElement.style.paddingBottom="120px"; }
-        else if(++n>=60){ clearInterval(t); H.remove(); console.log("[exo-bottom] no fill -> removed"); }
-      },100);
+      let n=0;
+      (function probe(){
+        const ifr=H.querySelector("iframe");
+        if(ifr){ H.style.display="block"; mounted=true; console.log("IBG_ADS: EXO bottom mounted ->", zid); return; }
+        if(++n<=14){ IBG_ADS.serve(); setTimeout(probe, 1500); }
+        else { console.log("[exo-bottom] no fill, sin más reintentos"); }
+      })();
     });
   }
-  IBG_ADS.waitForEnv(["EXOCLICK_BOTTOM_ZONE"], ok=>{
-    if(!ok){ console.log("[exo-bottom] __ENV KO"); return; }
-    (document.readyState==="complete")?mount():addEventListener("load", mount, {once:true});
-  });
+  IBG_ADS.waitForEnv(["EXOCLICK_ZONES"], ()=>{ (document.readyState==="complete")?mount():addEventListener("load", mount,{once:true}); });
 })();
