@@ -1,21 +1,24 @@
 (function(){
+  function ensureHost(){
+    let h=document.getElementById("ad-ero");
+    if(!h){ h=document.createElement("div"); h.id="ad-ero"; h.style.cssText="width:300px;height:250px;margin:24px auto;"; document.body.appendChild(h); }
+    return h;
+  }
   function mount(){
-    var E=window.__ENV||{};
-    var space=String(E.EROADVERTISING_SPACE||"").trim(),
-        pid  =String(E.EROADVERTISING_PID  ||"").trim(),
-        ctrl =String(E.EROADVERTISING_CTRL ||"").trim();
-    var host=document.getElementById("ad-ero");
-    if(!host){ console.log("[ads-ero-ctrl] no #ad-ero, skip"); return; }
-    if(!(space&&pid&&ctrl)){ console.log("[ads-ero-ctrl] faltan ERO vars, skip"); return; }
+    const E=window.__ENV||{};
+    const space=(E.EROADVERTISING_SPACE||"").toString().trim();
+    const pid  =(E.EROADVERTISING_PID  ||"").toString().trim();
+    const ctrl =(E.EROADVERTISING_CTRL ||"").toString().trim();
+    if(!(space&&pid&&ctrl)){ console.log("[ads-ero-ctrl] faltan vars, skip"); return; }
+    const host=ensureHost();
     host.innerHTML="";
-    var ifr=document.createElement("iframe");
+    const ifr=document.createElement("iframe");
     ifr.src="/ads/eroframe_ctrl.html?space="+encodeURIComponent(space)+"&pid="+encodeURIComponent(pid)+"&ctrl="+encodeURIComponent(ctrl);
-    ifr.loading="lazy";
-    ifr.referrerPolicy="unsafe-url";
     ifr.setAttribute("sandbox","allow-scripts allow-same-origin allow-popups");
+    ifr.loading="lazy"; ifr.referrerPolicy="unsafe-url";
     ifr.style.cssText="border:0;display:block;margin:0 auto;width:300px;height:250px";
     host.appendChild(ifr);
-    console.log("[ads-ero-ctrl] mounted ->", ifr.src);
+    console.log("[ads-ero-ctrl] mounted →", ifr.src);
   }
-  if(document.readyState==="complete") mount(); else addEventListener("load", mount, {once:true});
+  (document.readyState==="complete")?mount():addEventListener("load", mount, {once:true});
 })();

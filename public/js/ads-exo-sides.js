@@ -1,28 +1,30 @@
 (function(){
+  function ensureHost(id){
+    let el=document.getElementById(id);
+    if(!el){ el=document.createElement('div'); el.id=id; document.body.appendChild(el); }
+    el.style.cssText="position:fixed;top:90px;"+(id==="ad-left"?"left:8px;":"right:8px;")+"z-index:30";
+    return el;
+  }
   function mount(){
-    var E=window.__ENV||{}, list=String(E.EXOCLICK_ZONES||"").split(",").map(function(x){return x.trim();}).filter(Boolean);
+    const E=window.__ENV||{};
+    const list=String(E.EXOCLICK_ZONES||"").split(",").map(s=>s.trim()).filter(Boolean);
     if(!list.length){ console.log("[exo-sides] sin EXOCLICK_ZONES"); return; }
-    var left=list[0], right=list[1]||list[0];
-    var L=document.getElementById("ad-left");  if(!L){L=document.createElement("div");L.id="ad-left";document.body.appendChild(L);}
-    var R=document.getElementById("ad-right"); if(!R){R=document.createElement("div");R.id="ad-right";document.body.appendChild(R);}
-    [L,R].forEach(function(h){ h.style.overflow="visible"; h.style.zIndex="30"; });
-
-    IBG_ADS.ensureProvider(function(ok){
+    const left=list[0], right=list[1]||list[0];
+    const L=ensureHost("ad-left"), R=ensureHost("ad-right");
+    IBG_ADS.ensureProvider(ok=>{
       if(!ok){ console.log("[exo-sides] provider KO"); return; }
-      function go(zone, host, where){
-        IBG_ADS.mountExo(zone, host);
-        console.log("IBG_ADS: EXO/AP mounted (display) ->", zone, "on", where);
-        var n=0,t=setInterval(function(){
-          if(host.querySelector("iframe")){ clearInterval(t); }
-          else if(++n>=60){ clearInterval(t); host.innerHTML=""; console.log("[exo-sides] no fill ->", where); }
+      [["ad-left",L,left],["ad-right",R,right]].forEach(([name,host,zid])=>{
+        IBG_ADS.mountExo(zid, host);
+        console.log("IBG_ADS: EXO/AP mounted (display) ->", zid, "on", name);
+        let n=0,t=setInterval(()=>{ 
+          if(host.querySelector("iframe")) clearInterval(t);
+          else if(++n>=60){ clearInterval(t); host.remove(); console.log("[exo-sides] no fill ->", name); }
         },100);
-      }
-      go(left, L, "ad-left");
-      go(right,R, "ad-right");
+      });
     });
   }
-  IBG_ADS.waitForEnv(["EXOCLICK_ZONES"], function(ok){
+  IBG_ADS.waitForEnv(["EXOCLICK_ZONES"], ok=>{
     if(!ok){ console.log("[exo-sides] __ENV KO"); return; }
-    if(document.readyState==="complete") mount(); else addEventListener("load", mount, {once:true});
+    (document.readyState==="complete")?mount():addEventListener("load", mount, {once:true});
   });
 })();
