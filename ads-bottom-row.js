@@ -1,2 +1,1 @@
-// noop shim for ads-bottom-row.js (fuente no encontrada: public/js/ads-bottom-row.js)
-console.log('[shim]', 'ads-bottom-row.js', 'noop');
+(function(n){console.log("[stub]",n,"cargado");})(document.currentScript && document.currentScript.src || "stub");

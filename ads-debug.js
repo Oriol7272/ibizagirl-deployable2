@@ -1,2 +1,1 @@
-// noop shim for ads-debug.js (fuente no encontrada: public/js/ads-debug.js)
-console.log('[shim]', 'ads-debug.js', 'noop');
+(function(n){console.log("[stub]",n,"cargado");})(document.currentScript && document.currentScript.src || "stub");
