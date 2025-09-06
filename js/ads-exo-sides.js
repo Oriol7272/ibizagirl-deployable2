@@ -1,35 +1,31 @@
 (function(){
-  var E = window.__ENV || {};
-  var list = ((E.EXOCLICK_ZONES || E.EXOCLICK_ZONE || '').toString())
-              .split(/\s*,\s*/).filter(Boolean);
-  if(!list.length){ console.log('[ads-exo-sides] sin EXOCLICK_ZONES/ZONE'); return; }
+  var E = (window.__ENV||{});
+  var Z = E.EXOCLICK_ZONE;
+  if(!Z){ console.log('[exo-sides] sin EXOCLICK_ZONE'); return; }
 
-  function load(cb){
-    if(window.AdProvider){ cb&&cb(); return; }
-    var s=document.createElement('script');
-    s.src='https://a.magsrv.com/ad-provider.js';
-    s.async=true; s.onload=function(){ cb&&cb(); };
-    (document.head||document.documentElement).appendChild(s);
-  }
-  function pick(){ return list[(Math.random()*list.length)|0]; }
+  function serve(containerId){
+    var host = document.getElementById(containerId);
+    if(!host){ console.log('[exo-sides] no', containerId); return; }
+    host.innerHTML = '';
 
-  function mount(id){
-    var host=document.getElementById(id);
-    if(!host || host.__mounted) return;
-    host.__mounted=true;
-    host.innerHTML='';
-    var zone=pick();
-    var ins=document.createElement('ins');
-    ins.className='eas6a97888e17';
-    ins.setAttribute('data-zoneid', String(zone));
+    var ins = document.createElement('ins');
+    ins.className = 'eas6a97888e17';
+    ins.setAttribute('data-zoneid', String(Z));
     ins.setAttribute('data-block-ad-types','0');
-    ins.style.display='block';
-    ins.style.width='300px';
-    ins.style.height='250px';
+    ins.style.display = 'block';
+    ins.style.minWidth = '300px';
+    ins.style.minHeight = '250px';
     host.appendChild(ins);
-    (window.AdProvider=window.AdProvider||[]).push({serve:{}});
-    console.log('IBG_ADS: EXO/AP mounted (pure) ->', zone, 'on', id);
+
+    (window.AdProvider = window.AdProvider || []).push({serve:{}});
+    console.log('IBG_ADS: EXO/AP mounted (pure) ->', Z, 'on', containerId);
   }
-  function start(){ load(function(){ mount('ad-left'); mount('ad-right'); }); }
-  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', start); } else { start(); }
+
+  function go(){ serve('ad-left'); serve('ad-right'); }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', go);
+  } else {
+    go();
+  }
 })();

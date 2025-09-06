@@ -1,28 +1,28 @@
 (function(){
-  var E = window.__ENV || {};
-  if(E.POPADS_ENABLED===0 || E.POPADS_ENABLED==='0'){ console.log('[ads-popads] disabled'); return; }
-  var SITE = Number(E.POPADS_SITE_ID || 5226758);
+  var E = (window.__ENV||{});
+  var SID = E.POPADS_SITE_ID;
+  if(!SID){ console.log('[ads-popads] disabled or no site id'); return; }
 
-  function inject(){
-    if(window.__POPADS_DONE) return; window.__POPADS_DONE = true;
-    var code = '/*<![CDATA[/* */\n'
-      + '(function(){var x=window,u="e494ffb82839a29122608e933394c091",a=[["siteId",'+SITE+'],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],d=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL2Vmb3JjZS5taW4uY3Nz","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvcllYUi9sYWZyYW1lLWFyLm1pbi5qcw==","d3d3LmRkc3Z3dnBycXYuY29tL2Zmb3JjZS5taW4uY3Nz","d3d3LmZqdGVkdHhxYWd1YmphLmNvbS9pcFUvYWFmcmFtZS1hci5taW4uanM="],h=-1,w,t,f=function(){clearTimeout(t);h++;if(d[h]&&!(1782994233000<(new Date).getTime()&&1<h)){w=x.document.createElement("script");w.type="text/javascript";w.async=!0;var n=x.document.getElementsByTagName("script")[0];w.src="https://"+atob(d[h]);w.crossOrigin="anonymous";w.onerror=f;w.onload=function(){clearTimeout(t);x[u.slice(0,16)+u.slice(0,16)]||f()};t=setTimeout(f,5E3);n.parentNode.insertBefore(w,n)}};if(!x[u]){try{Object.freeze(x[u]=a)}catch(e){}f()}})();\n'
-      + '/*]]>/* */';
+  // Config PopAds
+  window._pop = window._pop || [];
+  window._pop.push(['siteId', SID]);
+  //window._pop.push(['minBid', 0.000001]); // opcional
+
+  function tryLoad(url, next){
     var s = document.createElement('script');
-    s.type='text/javascript'; s.setAttribute('data-cfasync','false'); s.text = code;
-    document.documentElement.appendChild(s);
-    console.log('IBG_ADS: POP mounted ->', SITE);
+    s.async = true;
+    s.src = url;
+    s.onerror = function(){ next && next(); };
+    s.onload = function(){ console.log('IBG_ADS: POP mounted ->', SID); };
+    (document.head||document.documentElement).appendChild(s);
   }
 
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', function(){
-      window.addEventListener('click', inject, {once:true});
-      window.addEventListener('keydown', inject, {once:true});
-      setTimeout(inject, 5000);
+  // Orden de intentos (algunos DNS bloquean cdn.*)
+  tryLoad(('https:'===location.protocol?'https':'http')+'://popads.net/pop.js', function(){
+    tryLoad(('https:'===location.protocol?'https':'http')+'://c1.popads.net/pop.js', function(){
+      tryLoad(('https:'===location.protocol?'https':'http')+'://cdn.popads.net/pop.js', function(){
+        console.log('[ads-popads] no pudo cargar ningún endpoint PopAds');
+      });
     });
-  } else {
-    window.addEventListener('click', inject, {once:true});
-    window.addEventListener('keydown', inject, {once:true});
-    setTimeout(inject, 5000);
-  }
+  });
 })();

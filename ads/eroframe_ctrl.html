@@ -1,17 +1,24 @@
 <!doctype html><html><head><meta charset="utf-8">
-<meta name="referrer" content="unsafe-url"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ero ctrl</title><style>html,body{margin:0;padding:0}#sp{width:300px;height:250px}</style>
+<meta name="referrer" content="unsafe-url"><title>Ero ctrl</title>
+<style>html,body{margin:0;padding:0}#sp{display:block;width:300px;height:250px}</style>
 </head><body>
-<div id="sp"></div>
+<div id="sp">&nbsp;</div>
 <script>
 (function(){
-  function q(k){return new URLSearchParams(location.search).get(k)||"";}
-  var space=q("space"), pid=q("pid"), ctrl=q("ctrl");
-  if(!window.eaCtrl){ var Q=[], eaCtrl={add:function(x){Q.push(x)}};
-    window.eaCtrl=eaCtrl;
-    var s=document.createElement("script");
-    s.src="https://go.easrv.cl/loadeactrl.go?pid="+encodeURIComponent(pid)+"&spaceid="+encodeURIComponent(space)+"&ctrlid="+encodeURIComponent(ctrl);
-    s.async=true; document.head.appendChild(s);
+  function get(k){ return new URLSearchParams(location.search).get(k)||""; }
+  var space = get("space") || "8182057";
+  var pid   = get("pid")   || "152716";
+  var ctrl  = get("ctrl")  || "798544";
+
+  if (typeof window.eaCtrl == "undefined"){
+    var queue=[], eaCtrl={add:function(x){queue.push(x)}};
+    window.eaCtrl = eaCtrl;
+    var js = document.createElement("script");
+    js.src = "//go.easrv.cl/loadeactrl.go?pid="+encodeURIComponent(pid)
+           + "&spaceid="+encodeURIComponent(space)
+           + "&ctrlid="+encodeURIComponent(ctrl);
+    js.async = true;
+    document.head.appendChild(js);
   }
   window.eaCtrl.add({"display":"sp","sid":Number(space),"plugin":"banner"});
 })();
