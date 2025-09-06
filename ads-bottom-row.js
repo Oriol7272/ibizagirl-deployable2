@@ -1,7 +1,2 @@
-/*! shim:ads-bottom-row.js -> /js/ads-bottom-row.js */
-(function(){
-  var s=document.createElement('script'); s.src='/js/ads-bottom-row.js'; s.async=false;
-  (document.currentScript && document.currentScript.parentNode)
-    ? document.currentScript.parentNode.insertBefore(s, document.currentScript.nextSibling)
-    : document.head.appendChild(s);
-})();
+// noop shim for ads-bottom-row.js (fuente no encontrada: public/js/ads-bottom-row.js)
+console.log('[shim]', 'ads-bottom-row.js', 'noop');

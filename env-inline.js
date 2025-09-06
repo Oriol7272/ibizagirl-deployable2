@@ -1,5 +1,17 @@
-/*! shim:env-inline.js -> /js/env-ads-inline.js */
-(function(){var s=document.createElement('script');s.src='/js/env-ads-inline.js';s.async=false;
-(document.currentScript&&document.currentScript.parentNode)
-? document.currentScript.parentNode.insertBefore(s,document.currentScript.nextSibling)
-: document.head.appendChild(s);})();
+window.__ENV = {
+  IBG_ASSETS_BASE_URL: "",
+  PAYPAL_CLIENT_ID: "",
+  PAYPAL_PLAN_MONTHLY_1499: "",
+  PAYPAL_PLAN_ANNUAL_4999: "",
+  LIFETIME_PRICE_EUR: "49.00",
+  PRICE_IMAGE_EUR: "0.10",
+  PRICE_VIDEO_EUR: "0.30",
+  CRISP_WEBSITE_ID: "",
+  EXOCLICK_ZONE: "",
+  JUICYADS_ZONE: "",
+  JUICYADS_SNIPPET_B64: "",
+  EROADVERTISING_ZONE: "",
+  EROADVERTISING_SNIPPET_B64: "",
+  POPADS_ENABLE: "",
+  POPADS_SITE_ID: ""
+};
