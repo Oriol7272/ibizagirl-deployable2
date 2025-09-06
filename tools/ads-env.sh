@@ -3,8 +3,9 @@ set -e
 
 mkdir -p public/js
 
-# Normaliza entradas
+# Normaliza EXOCLICK_ZONES (coma-separado)
 EXOCLICK_ZONES_CLEAN="$(echo "${EXOCLICK_ZONES:-}" | tr ' ' '\n' | tr -d '\r' | tr -s '\n' | tr '\n' ',' | sed 's/,,*/,/g;s/^,//;s/,$//')"
+
 LEFT_ZONE=""
 RIGHT_ZONE=""
 
@@ -13,12 +14,12 @@ IFS=',' read -r Z1 Z2 _ <<< "${EXOCLICK_ZONES_CLEAN}"
 if [ -n "$Z1" ] && [ -n "$Z2" ]; then
   LEFT_ZONE="$Z1"
   RIGHT_ZONE="$Z2"
-elif [ -n "$Z1" ] && -n "$EXOCLICK_ZONE"; then
+elif [ -n "$Z1" ] && [ -n "$EXOCLICK_ZONE" ]; then
   LEFT_ZONE="$Z1"
   RIGHT_ZONE="$EXOCLICK_ZONE"
 elif [ -n "$Z1" ]; then
   LEFT_ZONE="$Z1"
-  RIGHT_ZONE="$Z1"   # fallback (se avisará en consola)
+  RIGHT_ZONE="$Z1"   # fallback (aviso en consola)
 elif [ -n "$EXOCLICK_ZONE" ]; then
   LEFT_ZONE="$EXOCLICK_ZONE"
   RIGHT_ZONE="$EXOCLICK_ZONE"  # fallback
@@ -43,9 +44,8 @@ cat > public/js/env-ads-inline.js <<EOF
     Z.EROADVERTISING_PID   = ${EROADVERTISING_PID:-0};
     Z.EROADVERTISING_SPACE = ${EROADVERTISING_SPACE:-0};
 
-    // Avisos útiles:
     if (Z.EXOCLICK_LEFT_ZONE && Z.EXOCLICK_RIGHT_ZONE && String(Z.EXOCLICK_LEFT_ZONE)===String(Z.EXOCLICK_RIGHT_ZONE)) {
-      console.warn("[ads-env] LEFT/RIGHT usan el MISMO zoneId. EXO puede limitar fill; recomendable 2 zonas distintas.");
+      console.warn("[ads-env] LEFT/RIGHT usan el MISMO zoneId. Recomendable 2 zonas distintas.");
     }
     console.log("IBG_ADS ZONES ->", Z);
   }catch(e){
@@ -54,4 +54,5 @@ cat > public/js/env-ads-inline.js <<EOF
 })();
 EOF
 
-echo "✅ Generado public/js/env-ads-inline.js con envs de Vercel"
+echo "== IBG build: start =="
+echo "✅ Build listo (env de anuncios generado en public/js/env-ads-inline.js)"
