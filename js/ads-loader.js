@@ -2,8 +2,7 @@
   function exo(){
     var A=window.IBG_ADS||{}, exo=A.exoclick||{}, Z=exo.zones||[];
     var left=Z[0]||exo.zone, right=Z[1]||Z[0]||exo.zone;
-    var STICKY_FALLBACK=5716852; // de tu captura (Sticky Banner 300x250)
-    var under=exo.stickyZone||STICKY_FALLBACK||exo.zone;
+    var under=exo.stickyZone||exo.zone;
     var bottom=exo.bottomZone||exo.zone;
 
     function ensure(cb){
@@ -32,15 +31,18 @@
         });
       }catch(_){}
     }
-
+    function collapseBlanks(){
+      document.querySelectorAll('.ad-box').forEach(function(box){
+        var hasContent = box.querySelector('iframe, ins');
+        if(!hasContent) box.style.display='none';
+      });
+    }
     ensure(function(){
-      mount('ad-left',left);
-      mount('ad-right',right);
+      mount('ad-left',left); mount('ad-right',right);
       mount('ad-under-hero',under);
-      mount('ad-bottom',bottom);
-      mount('ad-bottom-2',right||left);
+      mount('ad-bottom',bottom); mount('ad-bottom-2',right||left);
       setTimeout(relocateFloating,1200);
-      setInterval(relocateFloating,4000);
+      setTimeout(collapseBlanks,4500);
     });
   }
 
@@ -54,8 +56,13 @@
       s.src='https://go.ero-advertising.com/loadeactrl.go?pid='+encodeURIComponent(e.pid)+'&spaceid='+encodeURIComponent(spaceId||e.space)+'&ctrlid='+encodeURIComponent(e.ctrl);
       s.async=true; document.body.appendChild(s);
     }
-    mount('ad-bottom-ero', e.space);     // 300x250 (8182057)
-    mount('ad-bottom-ero-2', e.zone);    // 80x468 (8177575) como segunda caja
+    mount('ad-bottom-ero', e.space);
+    mount('ad-bottom-ero-2', e.zone);
+    setTimeout(function(){ // colapsar si no aparece iframe
+      document.querySelectorAll('#ad-bottom-ero,#ad-bottom-ero-2').forEach(function(box){
+        if(!box.querySelector('iframe')) box.style.display='none';
+      });
+    }, 5000);
   }
 
   function pop(){
