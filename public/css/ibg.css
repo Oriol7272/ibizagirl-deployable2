@@ -1,7 +1,7 @@
 @font-face{
   font-family:"Sexy Beachy";
-  src:url("/decorative-images/Sexy Beachy.otf") format("opentype"),
-      url("/decorative-images/Sexy Beachy.ttf") format("truetype");
+  src:url("/assets/fonts/SexyBeachy.otf") format("opentype"),
+      url("/assets/fonts/SexyBeachy.ttf") format("truetype");
   font-display:swap;
 }
 html,body{
