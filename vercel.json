@@ -1,17 +1,17 @@
 {
   "headers": [
     {
-      "source": "/decorative-images/(.*\\.otf)",
+      "source": "/decorative-images/(.*\\.woff2)",
       "headers": [
-        {"key":"Content-Type","value":"font/otf"},
+        {"key":"Content-Type","value":"font/woff2"},
         {"key":"Cache-Control","value":"public, max-age=31536000, immutable"},
         {"key":"Access-Control-Allow-Origin","value":"*"}
       ]
     },
     {
-      "source": "/decorative-images/(.*\\.ttf)",
+      "source": "/decorative-images/(.*\\.otf)",
       "headers": [
-        {"key":"Content-Type","value":"font/ttf"},
+        {"key":"Content-Type","value":"font/otf"},
         {"key":"Cache-Control","value":"public, max-age=31536000, immutable"},
         {"key":"Access-Control-Allow-Origin","value":"*"}
       ]

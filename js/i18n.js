@@ -1,17 +1,51 @@
 (function(){
-  var KEY='lang_v1';
-  var D={
-    es:{gallery:'Galeria',premium:'Premium',videos:'Videos',subscribe:'Suscripciones',lifetime:'Lifetime',prices:'Precios',noads:'Sin anuncios con Lifetime',buy:'Comprar',allvisible:'Todo el contenido visible mientras este activo.',welcome:'Bienvenido al paraiso para tu disfrute'},
-    en:{gallery:'Gallery',premium:'Premium',videos:'Videos',subscribe:'Subscriptions',lifetime:'Lifetime',prices:'Prices',noads:'No ads with Lifetime',buy:'Buy',allvisible:'All content visible while active.',welcome:'Welcome to paradise for your pleasure'}
+  const STRINGS = {
+    es: {
+      home:"Home", premium:"Premium", videos:"Videos", subs:"Suscripciones",
+      title:"beachgirl.pics", tagline:"Bienvenido al paraíso",
+      carousel:"Carrusel", gallery:"Galería"
+    },
+    en: {
+      home:"Home", premium:"Premium", videos:"Videos", subs:"Subscriptions",
+      title:"beachgirl.pics", tagline:"Welcome to paradise",
+      carousel:"Carousel", gallery:"Gallery"
+    }
   };
-  function get(){ try{return localStorage.getItem(KEY)||'es';}catch(e){return 'es';} }
-  function set(l){ try{localStorage.setItem(KEY,l);}catch(e){} tr(); }
-  function t(k){ var d=D[get()]||D.es; return d[k]||k; }
-  function tr(){
-    Array.from(document.querySelectorAll('[data-i18n]')).forEach(function(el){ var k=el.getAttribute('data-i18n'); var v=t(k); if(v) el.textContent=v; });
-    Array.from(document.querySelectorAll('.buy-btn .buy-label')).forEach(function(el){ el.textContent=t('buy'); });
-    var sel=document.getElementById('lang-select'); if(sel) sel.value=get();
+  const LS_KEY="ibg_lang";
+  function getLang(){
+    const s = localStorage.getItem(LS_KEY);
+    if(s) return s;
+    const n = (navigator.language||"es").slice(0,2);
+    return (n==="en")?"en":"es";
   }
-  window.I18N={ currentLang:get, setLang:set, t:t, translate:tr };
-  document.addEventListener('DOMContentLoaded', tr);
+  function apply(lang){
+    const t = STRINGS[lang]||STRINGS.es;
+    const $ = (sel)=>document.querySelector(sel);
+    $('[data-i18n="home"]').textContent = t.home;
+    $('[data-i18n="premium"]').textContent = t.premium;
+    $('[data-i18n="videos"]').textContent = t.videos;
+    $('[data-i18n="subs"]').textContent = t.subs;
+    $('[data-i18n="title"]').textContent = t.title;
+    $('[data-i18n="tagline"]').textContent = t.tagline;
+    $('[data-i18n="carousel"]').textContent = t.carousel;
+    $('[data-i18n="gallery"]').textContent = t.gallery;
+    const sel = document.getElementById('lang');
+    if(sel && sel.value!==lang) sel.value=lang;
+  }
+  function init(){
+    const lang = getLang();
+    apply(lang);
+    const sel = document.getElementById('lang');
+    if(sel){
+      sel.addEventListener('change', function(){
+        const v=this.value==="en"?"en":"es";
+        localStorage.setItem(LS_KEY, v);
+        apply(v);
+      });
+    }
+    document.documentElement.lang = (localStorage.getItem(LS_KEY)||"es");
+  }
+  if(document.readyState!=='loading') init();
+  else document.addEventListener('DOMContentLoaded', init);
+  window.__IBG_I18N_APPLY__ = apply;
 })();
