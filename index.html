@@ -1,36 +1,36 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>beachgirl.pics — Bienvenido al paraíso</title>
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="/ibg.css">
   <style>
+    /* Beachy como fallback (tu OTF falla). Tipografía visible: Poppins/system-ui */
     @font-face{
       font-family:'Beachy';
-      src: url('/decorative-images/Sexy Beachy.woff2') format('woff2'),
-           url('/decorative-images/Sexy Beachy.otf') format('opentype');
+      src: url('/decorative-images/Sexy Beachy.otf') format('opentype');
       font-weight:400;font-style:normal;font-display:swap;
     }
     :root{--hero-h:44vh}
-    body{margin:0;background:#fff}
-    .page-bg{position:fixed;inset:0;background: center/cover no-repeat;opacity:.18;z-index:-1}
-    .topbar{position:sticky;top:0;z-index:40;background:#ffffffcc;backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,.06)}
-    .nav{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 14px}
-    .nav a{color:#222;text-decoration:none;padding:8px 12px;border-radius:14px;font-family:'Beachy',system-ui}
+    body{margin:0;background:#fff;font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
+    .page-bg{position:fixed;inset:0;background: center/cover no-repeat;opacity:.16;z-index:-1}
+    .topbar{position:sticky;top:0;z-index:50;background:#ffffffcc;backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,.06)}
+    .nav{max-width:1500px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 14px}
+    .nav a{color:#111;text-decoration:none;padding:8px 12px;border-radius:14px;font-weight:700}
     .nav a:hover{background:#f2f2f2}
     .nav .spacer{flex:1}
     #lang{padding:6px 8px;border-radius:8px}
     .hero{height:var(--hero-h);display:grid;place-items:center;position:relative;background: center/cover no-repeat}
     .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.55))}
-    .hero h1,.hero p{position:relative;z-index:1;color:#fff;font-family:'Beachy',system-ui}
+    .hero h1,.hero p{position:relative;z-index:1;color:#fff;font-family:'Poppins','Beachy',system-ui}
     .hero h1{font-size:66px;margin:0}
     .hero p{font-size:28px;margin:.35rem 0 0}
-    .shell{max-width:1800px;margin:0 auto}
-    .layout{display:grid;grid-template-columns:280px minmax(960px,1fr) 280px;gap:16px;align-items:start;padding:14px}
-    @media(max-width:1200px){.layout{grid-template-columns:1fr}}
-    .ad-col{position:sticky;top:70px;height:calc(100vh - 90px);display:flex;flex-direction:column;gap:12px}
+    .shell{max-width:1900px;margin:0 auto}
+    /* 280-320 laterales para que el centro quede encajado entre anuncios */
+    .layout{display:grid;grid-template-columns:300px minmax(980px,1fr) 300px;gap:18px;align-items:start;padding:14px}
+    @media(max-width:1240px){.layout{grid-template-columns:1fr}}
+    .ad-col{position:sticky;top:76px;height:calc(100vh - 90px);display:flex;flex-direction:column;gap:12px}
     .ad-box{min-height:250px;background:#f6f6f7;border:1px dashed #ddd;border-radius:14px;display:grid;place-items:center;overflow:hidden}
     .ad-under-hero{max-width:1200px;margin:14px auto 0 auto}
     .container{max-width:1200px;margin:12px auto;padding:0 10px}
@@ -44,8 +44,11 @@
     @media(min-width:1100px){.grid{grid-template-columns:repeat(6,1fr)}}
     .g-item{display:block;border-radius:12px;overflow:hidden;background:#f6f6f7;border:1px solid rgba(0,0,0,.06)}
     .g-item img{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:1/1}
+    /* reduce espacio enorme inferior */
+    footer{margin:16px 0 24px 0}
   </style>
   <script>
+    /* Fondo general fijo: paradise-beach.png (evita 404 de variants) */
     (function(){
       var ts=Date.now();
       var css=".page-bg{background-image:url('/decorative-images/paradise-beach.png?v="+ts+"')}";
@@ -64,8 +67,9 @@
       <a href="/subscription.html" data-i18n="subs">Suscripciones</a>
       <div class="spacer"></div>
       <select id="lang" aria-label="Language">
-        <option value="es">ES</option>
-        <option value="en">EN</option>
+        <option value="es">ES</option><option value="en">EN</option>
+        <option value="fr">FR</option><option value="pt">PT</option>
+        <option value="de">DE</option><option value="it">IT</option>
       </select>
     </nav>
   </header>
@@ -84,9 +88,7 @@
 
   <div class="shell">
     <div class="layout">
-      <aside class="ad-col">
-        <div id="ad-left" class="ad-box">Ad Left</div>
-      </aside>
+      <aside class="ad-col"><div id="ad-left" class="ad-box">Ad Left</div></aside>
 
       <main>
         <div class="container">
@@ -99,23 +101,23 @@
         </div>
       </main>
 
-      <aside class="ad-col">
-        <div id="ad-right" class="ad-box">Ad Right</div>
-      </aside>
+      <aside class="ad-col"><div id="ad-right" class="ad-box">Ad Right</div></aside>
     </div>
   </div>
 
-  <!-- env + contenido -->
+  <!-- ENV + contenido -->
   <script src="/js/env-ads-inline.js"></script>
   <script src="/env-inline.js"></script>
   <script src="/decorative-manifest.js"></script>
   <script src="/content-data1.js"></script>
   <script src="/content-data2.js"></script>
 
-  <!-- i18n + banner rotativo + home + ads -->
+  <!-- i18n + rotación banner + home + ads -->
   <script src="/js/i18n.js"></script>
   <script src="/js/banner-rotator.js"></script>
   <script src="/js/home.js"></script>
   <script src="/js/ads-loader.js"></script>
+
+  <footer></footer>
 </body>
 </html>
