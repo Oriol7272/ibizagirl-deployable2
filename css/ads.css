@@ -1,0 +1,9 @@
+/* ocupa caja y centra */
+#ad-left,#ad-right,#ad-under-hero,#ad-bottom,#ad-bottom-ero{min-height:250px}
+ins.adsbyexoclick{display:block;width:100%;height:100%}
+.ad-box iframe{width:100%!important;height:100%!important}
+
+/* layout entre laterales (300px) */
+.shell{max-width:1900px;margin:0 auto}
+.layout{display:grid;grid-template-columns:300px minmax(980px,1fr) 300px;gap:18px;align-items:start;padding:14px}
+@media(max-width:1240px){.layout{grid-template-columns:1fr}}
