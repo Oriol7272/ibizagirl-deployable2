@@ -2,12 +2,12 @@
 <html lang="es">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>IBIZAGIRL.PICS — Bienvenido al paraíso</title>
+  <title>IBIZAGIRL.PICS — Bienvenido al paraiso</title>
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="/ibg.css">
   <link rel="stylesheet" href="/css/ibg-home.css">
   <style>
-    /* Usar la fuente de decorative-images; si falla, cae a Poppins/system-ui */
+    /* Fuente de decorative-images; si no decodifica en tu navegador, caerá a Poppins */
     @font-face{
       font-family:'Beachy';
       src: url('/decorative-images/Sexy Beachy.otf') format('opentype'),
@@ -35,31 +35,39 @@
   <section class="hero">
     <div class="hero-wrap">
       <h1 style="text-transform:uppercase" data-i18n="title">IBIZAGIRL.PICS</h1>
-      <p data-i18n="tagline">Bienvenido al paraíso</p>
+      <p data-i18n="tagline">Bienvenido al paraiso</p>
     </div>
   </section>
 
-  <!-- anuncio DEBAJO DEL BANNER -->
+  <!-- ANUNCIO debajo del banner (aquí relocamos cualquier flotante) -->
   <div class="ad-under-hero"><div id="ad-under-hero" class="ad-box">Ad Under Banner</div></div>
 
   <div class="shell">
     <div class="layout">
       <aside class="ad-col"><div id="ad-left" class="ad-box">Ad Left</div></aside>
+
       <main>
         <div class="container">
           <h2 class="section-title" data-i18n="carousel">Carrusel</h2>
           <section id="carousel" class="carousel"></section>
           <h2 class="section-title" data-i18n="gallery">Galería</h2>
           <section id="gallery" class="grid"></section>
-          <div id="ad-bottom" class="ad-box" style="margin-top:14px">Ad Bottom (Exo)</div>
-          <div id="ad-bottom-ero" class="ad-box" style="margin-top:14px">Ad Bottom (Ero)</div>
+
+          <!-- PARTE INFERIOR: rellenamos huecos con varios slots -->
+          <div class="bottom-ads">
+            <div id="ad-bottom" class="ad-box">Ad Bottom (Exo)</div>
+            <div id="ad-bottom-2" class="ad-box">Ad Bottom 2 (Exo)</div>
+            <div id="ad-bottom-ero" class="ad-box">Ad Bottom (Ero)</div>
+            <div id="ad-bottom-ero-2" class="ad-box">Ad Bottom 2 (Ero)</div>
+          </div>
         </div>
       </main>
+
       <aside class="ad-col"><div id="ad-right" class="ad-box">Ad Right</div></aside>
     </div>
   </div>
 
-  <!-- ENV + datos -->
+  <!-- ENV + MANIFEST/DATOS -->
   <script src="/js/env-ads-inline.js"></script>
   <script src="/env-inline.js"></script>
   <script src="/decorative-manifest.js"></script>

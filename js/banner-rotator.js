@@ -1,7 +1,12 @@
 (function(){
   function pool(){
     var P=(window.DECORATIVE_IMAGES||[]);
-    return P.map(function(n){return n?(n.startsWith('/')?n:'/decorative-images/'+n):null}).filter(Boolean);
+    return P.map(function(n){
+      if(!n) return null;
+      if(/^https?:\/\//i.test(n)) return n;
+      if(n.startsWith('/')) return n;
+      return '/decorative-images/'+n;
+    }).filter(Boolean);
   }
   function start(){
     var hero=document.querySelector('.hero'); if(!hero) return;
