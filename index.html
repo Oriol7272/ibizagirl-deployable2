@@ -2,57 +2,21 @@
 <html lang="es">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>beachgirl.pics — Bienvenido al paraíso</title>
+  <title>IBIZAGIRL.PICS — Bienvenido al paraíso</title>
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="/ibg.css">
-  <link rel="stylesheet" href="/css/ads.css">
+  <link rel="stylesheet" href="/css/ibg-home.css">
   <style>
-    /* Beachy (fallback). Tipografía visible: Poppins/system-ui */
-    @font-face{font-family:'Beachy';src:url('/decorative-images/Sexy Beachy.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap;}
-    :root{--hero-h:44vh}
-    body{margin:0;background:#fff;font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
-    .page-bg{position:fixed;inset:0;background: center/cover no-repeat;opacity:.14;z-index:-1}
-    .topbar{position:sticky;top:0;z-index:50;background:#ffffffcc;backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,.06)}
-    .nav{max-width:1500px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 14px}
-    .nav a{color:#111;text-decoration:none;padding:8px 12px;border-radius:14px;font-weight:700}
-    .nav a:hover{background:#f2f2f2}
-    .nav .spacer{flex:1}
-    #lang{padding:6px 8px;border-radius:8px}
-    .hero{height:var(--hero-h);display:grid;place-items:center;position:relative;background: center/cover no-repeat}
-    .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.55))}
-    .hero h1,.hero p{position:relative;z-index:1;color:#fff;font-family:'Poppins','Beachy',system-ui}
-    .hero h1{font-size:66px;margin:0}
-    .hero p{font-size:28px;margin:.35rem 0 0}
-    .ad-under-hero{max-width:1200px;margin:14px auto 0 auto}
-    .container{max-width:1200px;margin:12px auto;padding:0 10px}
-    .section-title{font-weight:800;margin:14px 0 10px 6px}
-    .carousel{overflow:hidden;border-radius:16px;border:1px solid rgba(0,0,0,.08);background:#fff}
-    .carousel-track{display:flex;gap:10px;transition:transform .7s ease;padding:10px}
-    .carousel-item{flex:0 0 250px;height:160px;border-radius:14px;overflow:hidden;background:#f6f6f7}
-    .carousel-item img{width:100%;height:100%;object-fit:cover}
-    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-    @media(min-width:900px){.grid{grid-template-columns:repeat(5,1fr)}}
-    @media(min-width:1100px){.grid{grid-template-columns:repeat(6,1fr)}}
-    .g-item{display:block;border-radius:12px;overflow:hidden;background:#f6f6f7;border:1px solid rgba(0,0,0,.06)}
-    .g-item img{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:1/1}
-    footer{margin:16px 0 24px 0}
+    /* Usar la fuente de decorative-images; si falla, cae a Poppins/system-ui */
+    @font-face{
+      font-family:'Beachy';
+      src: url('/decorative-images/Sexy Beachy.otf') format('opentype'),
+           url('/decorative-images/Sexy Beachy.ttf') format('truetype');
+      font-weight:400;font-style:normal;font-display:swap;
+    }
   </style>
-  <script>
-    /* Fondo general suave usando la primera decorativa si existe */
-    (function(){
-      function pick(){
-        var P=(window.DECORATIVE_IMAGES||[]); if(!P.length) return null;
-        var n=P[0]; return n?(n.startsWith('/')?n:'/decorative-images/'+n):null;
-      }
-      function set(){var u=pick(); if(!u) return;
-        var s=document.createElement('style'); s.textContent=".page-bg{background-image:url('"+u+"')}"; document.head.appendChild(s);}
-      if(document.readyState!=='loading') set(); else document.addEventListener('DOMContentLoaded',set);
-    })();
-  </script>
 </head>
 <body>
-  <div class="page-bg"></div>
-
   <header class="topbar">
     <nav class="nav">
       <a href="/index.html" data-i18n="home">Home</a>
@@ -70,12 +34,12 @@
 
   <section class="hero">
     <div class="hero-wrap">
-      <h1 data-i18n="title">beachgirl.pics</h1>
+      <h1 style="text-transform:uppercase" data-i18n="title">IBIZAGIRL.PICS</h1>
       <p data-i18n="tagline">Bienvenido al paraíso</p>
     </div>
   </section>
 
-  <!-- anuncio REUBICADO: debajo del banner -->
+  <!-- anuncio DEBAJO DEL BANNER -->
   <div class="ad-under-hero"><div id="ad-under-hero" class="ad-box">Ad Under Banner</div></div>
 
   <div class="shell">
@@ -95,14 +59,14 @@
     </div>
   </div>
 
-  <!-- ENV + contenido -->
+  <!-- ENV + datos -->
   <script src="/js/env-ads-inline.js"></script>
   <script src="/env-inline.js"></script>
   <script src="/decorative-manifest.js"></script>
   <script src="/content-data1.js"></script>
   <script src="/content-data2.js"></script>
 
-  <!-- i18n + rotación + home + ads -->
+  <!-- i18n + ROTADOR + home (carrusel/galería) + ads -->
   <script src="/js/i18n.js"></script>
   <script src="/js/banner-rotator.js"></script>
   <script src="/js/home.js"></script>
