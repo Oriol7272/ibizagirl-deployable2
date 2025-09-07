@@ -1,5 +1,20 @@
 {
-  "framework": null,
-  "buildCommand": ":",
-  "outputDirectory": "."
+  "headers": [
+    {
+      "source": "/decorative-images/(.*\\.otf)",
+      "headers": [
+        {"key":"Content-Type","value":"font/otf"},
+        {"key":"Cache-Control","value":"public, max-age=31536000, immutable"},
+        {"key":"Access-Control-Allow-Origin","value":"*"}
+      ]
+    },
+    {
+      "source": "/decorative-images/(.*\\.ttf)",
+      "headers": [
+        {"key":"Content-Type","value":"font/ttf"},
+        {"key":"Cache-Control","value":"public, max-age=31536000, immutable"},
+        {"key":"Access-Control-Allow-Origin","value":"*"}
+      ]
+    }
+  ]
 }
