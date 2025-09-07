@@ -1,0 +1,30 @@
+:root{--ibg-left:340px;--ibg-right:340px}
+html,body{height:100%}
+body{
+  background: url('/decorative-images/paradise-beach.png') center/cover fixed no-repeat !important;
+  font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  margin:0;
+}
+@font-face{
+  font-family:'Beachy';
+  src: url('/decorative-images/Sexy Beachy.otf') format('opentype'),
+       url('/decorative-images/Sexy Beachy.ttf') format('truetype');
+  font-weight:400;font-style:normal;font-display:swap;
+}
+/* Hero inyectado por el parche */
+#ibg-hero{height:46vh;position:relative;display:grid;place-items:center;background:center/cover no-repeat}
+#ibg-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.55))}
+#ibg-hero .t{position:relative;z-index:1;color:#fff;text-align:center}
+#ibg-hero h1{margin:0;font:700 70px/1 'Beachy','Poppins',system-ui;letter-spacing:1.5px;text-transform:uppercase}
+#ibg-hero p{margin:.35rem 0 0;font:500 28px/1 'Beachy','Poppins',system-ui}
+#ibg-under-hero{max-width:1200px;margin:14px auto 0}
+/* Ensanchar centro entre laterales sin tocar tu HTML */
+@media(min-width:1440px){
+  main,.container,#root,.shell,.wrap,.page,.content{max-width:1200px;margin:0 auto}
+  body:has(#ad-left), body:has(#ad-right){--ibg-left:340px;--ibg-right:340px}
+}
+/* Cajas de anuncios y colapso si no hay fill */
+.ibg-ad{min-height:250px;background:rgba(255,255,255,.78);border:1px dashed #ddd;border-radius:14px;display:grid;place-items:center;overflow:hidden}
+.ibg-grid-bottom{max-width:1200px;margin:12px auto 16px auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:900px){.ibg-grid-bottom{grid-template-columns:1fr}}
+.ibg-hidden{display:none !important}
