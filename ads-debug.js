@@ -1,1 +1,1 @@
-(function(n){console.log("[stub]",n,"cargado");})(document.currentScript && document.currentScript.src || "stub");
+console.log("[ads-debug] active");
