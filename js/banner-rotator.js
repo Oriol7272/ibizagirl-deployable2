@@ -1,10 +1,27 @@
-import {seedToday, shuffleSeeded} from './utils.js';
-export function startBannerRotation(){
-  const el=document.getElementById('banner-rotator'); if(!el) return;
-  const all=(window.DECOR_IMAGES||[]).filter(p=>!/paradise-beach\.png$/i.test(p));
-  if(!all.length){ el.style.background='#0b1f33'; return; }
-  const arr=shuffleSeeded(all, seedToday());
-  let i=0;
-  const apply=()=>{ el.style.backgroundImage='url("'+arr[i%arr.length]+'")'; i++; };
-  apply(); setInterval(apply, 5000);
-}
+(function(){
+  function getPool(){
+    var pool = (window.DECORATIVE_IMAGES||window.IBG_DECOR||[]);
+    if(!Array.isArray(pool) || !pool.length) return [];
+    return pool.map(function(n){
+      if(!n) return null;
+      if(/^https?:\/\//i.test(n)) return n;
+      if(n.startsWith('/')) return n;
+      return '/decorative-images/'+n;
+    }).filter(Boolean);
+  }
+  function start(){
+    var hero=document.querySelector('.hero');
+    if(!hero) return;
+    var imgs=getPool(); if(!imgs.length) return;
+    var i=0;
+    function tick(){
+      var u=imgs[i%imgs.length];
+      hero.style.backgroundImage='url("'+u+'")';
+      i++;
+    }
+    tick();
+    setInterval(tick, 5000);
+  }
+  if(document.readyState!=='loading') start();
+  else document.addEventListener('DOMContentLoaded', start);
+})();

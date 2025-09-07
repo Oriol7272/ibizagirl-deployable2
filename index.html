@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>beachgirl.pics</title>
+  <title>beachgirl.pics — Bienvenido al paraíso</title>
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="/ibg.css">
   <style>
@@ -13,26 +13,28 @@
            url('/decorative-images/Sexy Beachy.otf') format('opentype');
       font-weight:400;font-style:normal;font-display:swap;
     }
-    :root{--hero-h:42vh}
-    body{margin:0;background:#fff;font-family:'Poppins','Beachy',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
-    .page-bg{position:fixed;inset:0;background: center/cover no-repeat;opacity:.22;z-index:-1}
-    .topbar{position:sticky;top:0;z-index:20;background:#ffffffcc;backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,.06)}
-    .nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:8px 14px}
-    .nav a{color:#222;text-decoration:none;padding:8px 10px;border-radius:14px}
+    :root{--hero-h:44vh}
+    body{margin:0;background:#fff}
+    .page-bg{position:fixed;inset:0;background: center/cover no-repeat;opacity:.18;z-index:-1}
+    .topbar{position:sticky;top:0;z-index:40;background:#ffffffcc;backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,.06)}
+    .nav{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 14px}
+    .nav a{color:#222;text-decoration:none;padding:8px 12px;border-radius:14px;font-family:'Beachy',system-ui}
     .nav a:hover{background:#f2f2f2}
     .nav .spacer{flex:1}
+    #lang{padding:6px 8px;border-radius:8px}
     .hero{height:var(--hero-h);display:grid;place-items:center;position:relative;background: center/cover no-repeat}
-    .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.5))}
-    .hero h1,.hero p{position:relative;z-index:1;color:#fff;font-family:'Beachy','Poppins',system-ui}
-    .hero h1{font-size:64px;margin:0}
-    .hero p{font-size:28px;margin:.25rem 0 0}
-    .container{max-width:1200px;margin:18px auto;padding:0 14px}
-    .section-title{font-weight:800;margin:14px 0 10px 6px}
-    .layout{display:grid;grid-template-columns:200px 1fr 200px;gap:10px}
-    @media(max-width:1024px){.layout{grid-template-columns:1fr}}
-    .ad-col{position:sticky;top:60px;height:calc(100vh - 80px);display:flex;flex-direction:column;gap:10px}
+    .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.55))}
+    .hero h1,.hero p{position:relative;z-index:1;color:#fff;font-family:'Beachy',system-ui}
+    .hero h1{font-size:66px;margin:0}
+    .hero p{font-size:28px;margin:.35rem 0 0}
+    .shell{max-width:1800px;margin:0 auto}
+    .layout{display:grid;grid-template-columns:280px minmax(960px,1fr) 280px;gap:16px;align-items:start;padding:14px}
+    @media(max-width:1200px){.layout{grid-template-columns:1fr}}
+    .ad-col{position:sticky;top:70px;height:calc(100vh - 90px);display:flex;flex-direction:column;gap:12px}
     .ad-box{min-height:250px;background:#f6f6f7;border:1px dashed #ddd;border-radius:14px;display:grid;place-items:center;overflow:hidden}
-    .ad-bottom{margin-top:14px}
+    .ad-under-hero{max-width:1200px;margin:14px auto 0 auto}
+    .container{max-width:1200px;margin:12px auto;padding:0 10px}
+    .section-title{font-weight:800;margin:14px 0 10px 6px}
     .carousel{overflow:hidden;border-radius:16px;border:1px solid rgba(0,0,0,.08);background:#fff}
     .carousel-track{display:flex;gap:10px;transition:transform .7s ease;padding:10px}
     .carousel-item{flex:0 0 250px;height:160px;border-radius:14px;overflow:hidden;background:#f6f6f7}
@@ -44,16 +46,16 @@
     .g-item img{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:1/1}
   </style>
   <script>
-    // Fondo forzado por CSS (sin JS dependiente) + cache-bust
     (function(){
-      var css="."+ "page-bg{background-image:url('/decorative-images/paradise-beach.png?v="+Date.now()+"')}" +
-              ".hero{background-image:url('/decorative-images/paradise-beach.png?v="+Date.now()+"')}";
+      var ts=Date.now();
+      var css=".page-bg{background-image:url('/decorative-images/paradise-beach.png?v="+ts+"')}";
       var s=document.createElement('style'); s.textContent=css; document.head.appendChild(s);
     })();
   </script>
 </head>
 <body>
   <div class="page-bg"></div>
+
   <header class="topbar">
     <nav class="nav">
       <a href="/index.html" data-i18n="home">Home</a>
@@ -75,41 +77,45 @@
     </div>
   </section>
 
-  <main class="container">
+  <!-- anuncio REUBICADO: debajo del banner, centrado -->
+  <div class="ad-under-hero">
+    <div id="ad-under-hero" class="ad-box">Ad Under Banner</div>
+  </div>
+
+  <div class="shell">
     <div class="layout">
       <aside class="ad-col">
         <div id="ad-left" class="ad-box">Ad Left</div>
       </aside>
 
-      <section>
-        <h2 class="section-title" data-i18n="carousel">Carrusel</h2>
-        <section id="carousel" class="carousel"></section>
-        <h2 class="section-title" data-i18n="gallery">Galería</h2>
-        <section id="gallery" class="grid"></section>
-        <div id="ad-bottom" class="ad-box ad-bottom">Ad Bottom</div>
-      </section>
+      <main>
+        <div class="container">
+          <h2 class="section-title" data-i18n="carousel">Carrusel</h2>
+          <section id="carousel" class="carousel"></section>
+          <h2 class="section-title" data-i18n="gallery">Galería</h2>
+          <section id="gallery" class="grid"></section>
+          <div id="ad-bottom" class="ad-box" style="margin-top:14px">Ad Bottom (Exo)</div>
+          <div id="ad-bottom-ero" class="ad-box" style="margin-top:14px">Ad Bottom (Ero)</div>
+        </div>
+      </main>
 
       <aside class="ad-col">
         <div id="ad-right" class="ad-box">Ad Right</div>
       </aside>
     </div>
-  </main>
+  </div>
 
+  <!-- env + contenido -->
   <script src="/js/env-ads-inline.js"></script>
   <script src="/env-inline.js"></script>
-
   <script src="/decorative-manifest.js"></script>
   <script src="/content-data1.js"></script>
   <script src="/content-data2.js"></script>
 
+  <!-- i18n + banner rotativo + home + ads -->
   <script src="/js/i18n.js"></script>
+  <script src="/js/banner-rotator.js"></script>
   <script src="/js/home.js"></script>
   <script src="/js/ads-loader.js"></script>
-  <script>
-    // Si la fuente falla, aseguramos fallback visual (añade clase sin romper)
-    document.fonts && document.fonts.ready.then(function(){
-      document.documentElement.classList.add('fonts-ready');
-    });
-  </script>
 </body>
 </html>
