@@ -2,52 +2,72 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>beachgirl.pics — Bienvenido al paraíso</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="beachgirl.pics — Bienvenido al paraíso. Galería y carrusel con lo mejor de la playa.">
-  <!-- Preloads de fuente (si existen) -->
-  <link rel="preload" href="/decorative-images/Sexy%20Beachy.otf" as="font" type="font/otf" crossorigin>
-  <link rel="preload" href="/decorative-images/Sexy%20Beachy.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="/css/home.v1.css">
-  <!-- Intento de manifest decorativo (si existe, lo carga; si 404, no pasa nada) -->
-  <script src="/decorative-manifest.js" defer></script>
-  <link rel="preload" href="/decorative-images/Sexy Beachy.otf" as="font" type="font/otf" crossorigin>
+  <link rel="icon" href="/favicon.ico">
   <link rel="preload" href="/decorative-images/Sexy Beachy.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="/public/css/ibg.css">
-  <link rel="stylesheet" href="/public/css/home.v1.css">
+  <link rel="preload" href="/decorative-images/Sexy Beachy.otf" as="font" type="font/otf" crossorigin>
+  <link rel="stylesheet" href="/ibg.css">
+  <style>
+    @font-face{
+      font-family:'Beachy';
+      src: url('/decorative-images/Sexy Beachy.ttf') format('truetype'),
+           url('/decorative-images/Sexy Beachy.otf') format('opentype');
+      font-weight:400;font-style:normal;font-display:swap;
+    }
+    :root{--hero-h: 42vh;}
+    body{margin:0;background:#fff;}
+    .page-bg{position:fixed;inset:0;background:#f3f6fb center/cover no-repeat;opacity:.25;z-index:-1;filter:blur(1px);}
+    .topbar{position:sticky;top:0;z-index:10;backdrop-filter:saturate(1.2) blur(6px);background:rgba(255,255,255,.8);border-bottom:1px solid rgba(0,0,0,.06);}
+    .nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:10px 14px;font-weight:600}
+    .nav a{color:#222;text-decoration:none;padding:8px 12px;border-radius:999px;}
+    .nav a:hover{background:#f2f2f2}
+    .hero{height:var(--hero-h);display:grid;place-items:center;text-align:center;position:relative;background:#cfe8ff center/cover no-repeat;isolation:isolate}
+    .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.45));z-index:0}
+    .hero-wrap{position:relative;z-index:1;color:#fff}
+    .hero h1{font-family:'Beachy',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:64px;line-height:1;margin:0;}
+    .hero p{font-family:'Beachy',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:28px;letter-spacing:.5px;margin:.35rem 0 0 0}
+    .container{max-width:1200px;margin:16px auto;padding:0 14px}
+    .section-title{font-weight:800;margin:20px 0 10px 6px;font-size:18px;color:#222}
+    .carousel{overflow:hidden;border-radius:18px;border:1px solid rgba(0,0,0,.08);background:#fff}
+    .carousel-track{display:flex;gap:10px;transition:transform .7s ease;padding:10px}
+    .carousel-item{flex:0 0 250px;height:160px;border-radius:14px;overflow:hidden;display:grid;place-items:center;background:#f6f6f7}
+    .carousel-item img{width:100%;height:100%;object-fit:cover;display:block}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    @media(min-width:900px){.grid{grid-template-columns:repeat(5,1fr)}}
+    @media(min-width:1100px){.grid{grid-template-columns:repeat(6,1fr)}}
+    .g-item{display:block;border-radius:12px;overflow:hidden;background:#f6f6f7;border:1px solid rgba(0,0,0,.06)}
+    .g-item img{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:1/1}
+  </style>
 </head>
-<body class="bg-paradise">
+<body>
+  <div class="page-bg"></div>
   <header class="topbar">
     <nav class="nav">
-      <a href="/" class="brand">beachgirl.pics</a>
-      <ul class="menu">
-        <li><a href="/" class="active">Home</a></li>
-        <li><a href="/premium">Premium</a></li>
-        <li><a href="/videos">Videos</a></li>
-        <li><a href="/subscriptions">Subscriptions</a></li>
-      </ul>
+      <a href="/index.html">Home</a>
+      <a href="/premium.html">Premium</a>
+      <a href="/videos.html">Videos</a>
+      <a href="/subscription.html">Subscriptions</a>
     </nav>
   </header>
-
-  <section id="hero">
-    <div class="hero-bg" aria-hidden="true"></div>
-    <div class="hero-content">
-      <h1 class="logo sexy">beachgirl.pics</h1>
-      <p class="tag sexy">bienvenido al paraiso</p>
+  <section class="hero">
+    <div class="hero-wrap">
+      <h1>beachgirl.pics</h1>
+      <p>Bienvenido al paraíso</p>
     </div>
   </section>
-
-  <main>
-    <section id="carousel" class="carousel">
-      <button class="btn prev" aria-label="Anterior">‹</button>
-      <div class="strip" id="carousel-strip"></div>
-      <button class="btn next" aria-label="Siguiente">›</button>
-    </section>
-
-    <section id="gallery" class="gallery"></section>
+  <main class="container">
+    <h2 class="section-title">Carrusel</h2>
+    <section id="carousel" class="carousel"></section>
+    <h2 class="section-title">Galería</h2>
+    <section id="gallery" class="grid"></section>
   </main>
 
-  <script src="/js/home.v1.js" defer></script>
-<script src="/public/js/home.v1.js"></script>
+  <script src="/env-inline.js"></script>
+  <script src="/decorative-manifest.js"></script>
+  <script src="/content-data1.js"></script>
+  <script src="/content-data2.js"></script>
+  <script src="/js/home.js"></script>
 </body>
 </html>
