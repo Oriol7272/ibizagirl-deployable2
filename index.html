@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="/ibg.css">
   <link rel="stylesheet" href="/css/ibg-home.css">
   <style>
-    /* Fuente de decorative-images; si no decodifica en tu navegador, caerá a Poppins */
     @font-face{
       font-family:'Beachy';
       src: url('/decorative-images/Sexy Beachy.otf') format('opentype'),
@@ -39,21 +38,17 @@
     </div>
   </section>
 
-  <!-- ANUNCIO debajo del banner (aquí relocamos cualquier flotante) -->
   <div class="ad-under-hero"><div id="ad-under-hero" class="ad-box">Ad Under Banner</div></div>
 
   <div class="shell">
     <div class="layout">
       <aside class="ad-col"><div id="ad-left" class="ad-box">Ad Left</div></aside>
-
       <main>
         <div class="container">
           <h2 class="section-title" data-i18n="carousel">Carrusel</h2>
           <section id="carousel" class="carousel"></section>
           <h2 class="section-title" data-i18n="gallery">Galería</h2>
           <section id="gallery" class="grid"></section>
-
-          <!-- PARTE INFERIOR: rellenamos huecos con varios slots -->
           <div class="bottom-ads">
             <div id="ad-bottom" class="ad-box">Ad Bottom (Exo)</div>
             <div id="ad-bottom-2" class="ad-box">Ad Bottom 2 (Exo)</div>
@@ -62,19 +57,18 @@
           </div>
         </div>
       </main>
-
       <aside class="ad-col"><div id="ad-right" class="ad-box">Ad Right</div></aside>
     </div>
   </div>
 
-  <!-- ENV + MANIFEST/DATOS -->
+  <!-- ENV + datos -->
   <script src="/js/env-ads-inline.js"></script>
   <script src="/env-inline.js"></script>
   <script src="/decorative-manifest.js"></script>
   <script src="/content-data1.js"></script>
   <script src="/content-data2.js"></script>
 
-  <!-- i18n + ROTADOR + home (carrusel/galería) + ads -->
+  <!-- i18n + rotador + home + ads -->
   <script src="/js/i18n.js"></script>
   <script src="/js/banner-rotator.js"></script>
   <script src="/js/home.js"></script>

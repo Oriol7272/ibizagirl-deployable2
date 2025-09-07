@@ -18,8 +18,7 @@
       i++;
     }
     tick();
-    setInterval(tick, 5000);
+    setInterval(tick,5000);
   }
-  if(document.readyState!=='loading') start();
-  else document.addEventListener('DOMContentLoaded', start);
+  document.readyState!=='loading'?start():document.addEventListener('DOMContentLoaded',start);
 })();
