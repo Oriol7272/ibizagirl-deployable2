@@ -1,12 +1,23 @@
 {
+  "rewrites": [
+    { "source": "/full/(.*)", "destination": "https://ibizagirl-assets.s3.eu-north-1.amazonaws.com/full/$1" }
+  ],
   "headers": [
-    { "source": "/decorative-images/(.*\\.otf)", "headers": [
-      {"key":"Content-Type","value":"font/otf"},
-      {"key":"Access-Control-Allow-Origin","value":"*"},
-      {"key":"Cache-Control","value":"public, max-age=31536000, immutable"} ] },
-    { "source": "/decorative-images/(.*\\.ttf)", "headers": [
-      {"key":"Content-Type","value":"font/ttf"},
-      {"key":"Access-Control-Allow-Origin","value":"*"},
-      {"key":"Cache-Control","value":"public, max-age=31536000, immutable"} ] }
+    {
+      "source": "/decorative-images/(.*\\.otf)",
+      "headers": [
+        { "key":"Content-Type","value":"font/otf" },
+        { "key":"Access-Control-Allow-Origin","value":"*" },
+        { "key":"Cache-Control","value":"public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/decorative-images/(.*\\.ttf)",
+      "headers": [
+        { "key":"Content-Type","value":"font/ttf" },
+        { "key":"Access-Control-Allow-Origin","value":"*" },
+        { "key":"Cache-Control","value":"public, max-age=31536000, immutable" }
+      ]
+    }
   ]
 }
