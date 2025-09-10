@@ -1,0 +1,22 @@
+<!-- Añadir a todas las páginas en <head> -->
+
+<!-- Preconexión a dominios externos -->
+<link rel="preconnect" href="https://www.paypal.com">
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="dns-prefetch" href="https://a.magsrv.com">
+
+<!-- Preload de recursos críticos -->
+<link rel="preload" href="/decorative-images/SexyBeachy.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="/ocean-theme.css" as="style">
+
+<!-- CSS crítico inline -->
+<style>
+/* Critical CSS - Above the fold */
+body{margin:0;background:#001f3f}
+header{background:rgba(255,255,255,0.1);backdrop-filter:blur(10px)}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:15px}
+.skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);animation:loading 1.5s infinite}
+</style>
+
+<!-- Defer non-critical CSS -->
+<link rel="stylesheet" href="/ocean-theme.css" media="print" onload="this.media='all'">

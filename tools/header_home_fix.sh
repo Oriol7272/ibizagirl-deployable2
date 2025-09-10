@@ -9,7 +9,7 @@ inject_top(){ f="$1"; html="$2"
 }
 
 ensure_header(){ f="$1"
-  grep -q 'header class="site"' "$f" || inject_top "$f" '<header class="site"><div class="brand"><h1>IBIZAGIRL.PICS</h1><p data-i18n="welcome">Bienvenido al paraiso para tu disfrute</p></div><div class="langbox"><select id="lang-select"><option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option></select></div><nav class="navbar"><a class="btn" href="/index.html">Home</a><a class="btn" href="/premium.html">Premium</a><a class="btn" href="/videos.html">Videos</a><a class="btn" href="/subscription.html" data-i18n="subscribe">Suscripciones</a><button id="buy-lifetime" class="btn" style="display:inline-flex;align-items:center;gap:.4rem"><span class="pp-icon"></span><span>Lifetime 100€</span></button></nav></header>'
+  grep -q 'header class="site"' "$f" || inject_top "$f" '<header class="site"><div class="brand"><h1>beachgirl.pics</h1><p data-i18n="welcome">Bienvenido al paraiso para tu disfrute</p></div><div class="langbox"><select id="lang-select"><option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option></select></div><nav class="navbar"><a class="btn" href="/index.html">Home</a><a class="btn" href="/premium.html">Premium</a><a class="btn" href="/videos.html">Videos</a><a class="btn" href="/subscription.html" data-i18n="subscribe">Suscripciones</a><button id="buy-lifetime" class="btn" style="display:inline-flex;align-items:center;gap:.4rem"><span class="pp-icon"></span><span>Lifetime 100€</span></button></nav></header>'
 }
 
 ensure_home_sections(){ f="index.html"; [ -f "$f" ] || return 0

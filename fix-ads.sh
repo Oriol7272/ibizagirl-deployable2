@@ -126,7 +126,7 @@ git add index.html js/ads-exo-bottom.js js/ads-popads.js vercel-build.sh 2>/dev/
 git commit -m "ads: EXO sticky bottom + PopAds robusto; contenedor bottom; refs en index" || true
 
 echo "== Deploy =="
-vercel link --project ibizagirl-final --yes
+vercel link --project beachgirl-final --yes
 LOG="$(mktemp)"
 vercel deploy --prod --yes | tee "$LOG"
 URL="$(awk '/Production: https:\/\//{print $3}' "$LOG" | tail -n1)"

@@ -53,7 +53,7 @@ git add js/ads-popads.js js/ads-ero-ctrl.js 2>/dev/null || true
 git commit -m "ads: PopAds robusto (espera __ENV; una sola inyección) + Ero sandbox allow-same-origin" || true
 
 echo "== 4) Deploy =="
-vercel link --project ibizagirl-final --yes
+vercel link --project beachgirl-final --yes
 LOG="$(mktemp)"
 vercel deploy --prod --yes | tee "$LOG" >/dev/null
 URL="$(awk '/Production: https:\/\//{print $3}' "$LOG" | tail -n1)"

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>BeachGirl.me - Bienvenido al Paraíso</title>
+   
+   <!-- Verificación de dominio para redes de anuncios -->
+   <meta name="6a97888e-site-verification" content="bf3f5f168a9431855cc539f7527694a6">
+   <meta name="eroads_" content="3f03fafc63a57888f362260694b4ef60" />
+   
+   <!-- MagSrv/ExoClick Ad Provider -->
+   <script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
+   
+   <style>
+       * { margin: 0; padding: 0; box-sizing: border-box; }
+       
+       @font-face {
+           font-family: 'BeachFont';
+           src: url('/decorative-images/SexyBeachy.ttf') format('truetype'),
+                url('/decorative-images/SexyBeachy.otf') format('opentype');
+           font-display: swap;
+       }
+       
+       body {
+           font-family: 'BeachFont', cursive, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+           background: url('/decorative-images/paradise-beach.png') no-repeat center center fixed;
+           background-size: cover;
+           min-height: 100vh;
+           position: relative;
+           padding-bottom: 120px;
+       }
+       
+       body::before {
+           content: '';
+           position: fixed;
+           top: 0; left: 0; right: 0; bottom: 0;
+           background: rgba(0, 0, 0, 0.3);
+           z-index: -1;
+       }
+       
+       /* Anuncios laterales */
+       .ad-left, .ad-right {
+           position: fixed;
+           top: 80px;
+           width: 160px;
+           height: 600px;
+           z-index: 100;
+       }
+       
+       .ad-left { left: 10px; }
+       .ad-right { right: 10px; }
+       
+       /* Anuncio inferior */
+       .ad-bottom {
+           position: fixed;
+           bottom: 0;
+           left: 0;
+           right: 0;
+           min-height: 90px;
+           background: rgba(255,255,255,0.95);
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           z-index: 100;
+           padding: 5px;
+       }
+       
+       /* Contenido principal */
+       .main-content {
+           margin: 0 180px;
+           min-height: 100vh;
+       }
+       
+       .menu-top {
+           background: rgba(255, 255, 255, 0.95);
+           padding: 15px 0;
+           box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+           position: sticky;
+           top: 0;
+           z-index: 1000;
+       }
+       
+       .menu-top nav {
+           display: flex;
+           justify-content: center;
+           gap: 40px;
+           max-width: 1200px;
+           margin: 0 auto;
+       }
+       
+       .menu-top a {
+           text-decoration: none;
+           color: #333;
+           font-weight: 600;
+           font-size: 22px;
+           font-family: 'BeachFont', cursive;
+           letter-spacing: 2px;
+           transition: all 0.3s;
+           padding: 8px 16px;
+           border-radius: 25px;
+       }
+       
+       .menu-top a:hover {
+           background: linear-gradient(135deg, #667eea, #764ba2);
+           color: white;
+           transform: translateY(-2px);
+       }
+       
+       .banner {
+           height: 500px;
+           position: relative;
+           overflow: hidden;
+           margin-bottom: 40px;
+       }
+       
+       .banner-bg {
+           position: absolute;
+           top: 0; left: 0;
+           width: 100%; height: 100%;
+       }
+       
+       .banner-bg img {
+           position: absolute;
+           width: 100%; height: 100%;
+           object-fit: cover;
+           opacity: 0;
+           animation: rotateImages 12s infinite;
+       }
+       
+       .banner-bg img:nth-child(1) { animation-delay: 0s; }
+       .banner-bg img:nth-child(2) { animation-delay: 4s; }
+       .banner-bg img:nth-child(3) { animation-delay: 8s; }
+       
+       @keyframes rotateImages {
+           0%, 33.33% { opacity: 0; }
+           8.33%, 25% { opacity: 1; }
+       }
+       
+       .banner-content {
+           position: relative;
+           z-index: 2;
+           height: 100%;
+           display: flex;
+           flex-direction: column;
+           justify-content: center;
+           align-items: center;
+           background: rgba(0,0,0,0.4);
+           color: white;
+           text-align: center;
+       }
+       
+       .banner-content h1 {
+           font-family: 'BeachFont', cursive;
+           font-size: 6em;
+           text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+           margin-bottom: 20px;
+           letter-spacing: 3px;
+       }
+       
+       .banner-content p {
+           font-family: 'BeachFont', cursive;
+           font-size: 3em;
+           text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+           letter-spacing: 2px;
+       }
+       
+       .carousel-section, .gallery-section {
+           margin: 40px 20px;
+           background: rgba(255,255,255,0.95);
+           border-radius: 20px;
+           padding: 30px;
+           box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+       }
+       
+       .carousel-section h2, .gallery-section h2 {
+           font-family: 'BeachFont', cursive;
+           text-align: center;
+           font-size: 3em;
+           margin-bottom: 30px;
+           color: #333;
+           letter-spacing: 2px;
+       }
+       
+       .carousel {
+           display: flex;
+           overflow-x: auto;
+           gap: 20px;
+           padding: 20px 0;
+           scroll-behavior: smooth;
+       }
+       
+       .carousel::-webkit-scrollbar { height: 10px; }
+       .carousel::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+       .carousel::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; }
+       
+       .carousel-item {
+           flex: 0 0 280px;
+           height: 380px;
+           border-radius: 15px;
+           overflow: hidden;
+           box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+           transition: transform 0.3s;
+           cursor: pointer;
+       }
+       
+       .carousel-item:hover {
+           transform: scale(1.05) translateY(-10px);
+       }
+       
+       .carousel-item img {
+           width: 100%;
+           height: 100%;
+           object-fit: cover;
+       }
+       
+       .gallery {
+           display: grid;
+           grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+           gap: 25px;
+       }
+       
+       .gallery-item {
+           height: 350px;
+           border-radius: 15px;
+           overflow: hidden;
+           box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+           transition: all 0.3s;
+           cursor: pointer;
+       }
+       
+       .gallery-item:hover {
+           transform: translateY(-10px);
+           box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+       }
+       
+       .gallery-item img {
+           width: 100%;
+           height: 100%;
+           object-fit: cover;
+       }
+       
+       /* Anuncio entre secciones */
+       .ad-middle {
+           margin: 30px 20px;
+           padding: 10px;
+           background: rgba(255,255,255,0.95);
+           border-radius: 15px;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           min-height: 100px;
+       }
+       
+       @media (max-width: 1200px) {
+           .ad-left, .ad-right { display: none; }
+           .main-content { margin-left: 20px; margin-right: 20px; }
+       }
+       
+       @media (max-width: 768px) {
+           .menu-top nav { flex-wrap: wrap; gap: 15px; }
+           .banner-content h1 { font-size: 3em; }
+           .banner-content p { font-size: 1.5em; }
+           .carousel-item { flex: 0 0 200px; height: 280px; }
+           .gallery { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+           .gallery-item { height: 200px; }
+       }
+   </style>
+</head>
+<body>
+   <!-- Anuncio lateral izquierdo - MagSrv 160x600 -->
+   <div class="ad-left">
+       <ins class="eas6a97888e2" data-zoneid="5717756"></ins>
+       <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
+   </div>
+   
+   <!-- Anuncio lateral derecho - MagSrv 160x600 -->
+   <div class="ad-right">
+       <ins class="eas6a97888e17" data-zoneid="5717758"></ins>
+       <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
+   </div>
+   
+   <!-- Contenido principal -->
+   <div class="main-content">
+       <div class="menu-top">
+           <nav>
+               <a href="/">HOME</a>
+               <a href="/premium.html">PREMIUM</a>
+               <a href="/videos.html">VIDEOS</a>
+               <a href="/subscription.html">SUBSCRIPTIONS</a>
+           </nav>
+       </div>
+       
+       <div class="banner">
+           <div class="banner-bg" id="bannerBg"></div>
+           <div class="banner-content">
+               <h1>BEACHGIRL.ME</h1>
+               <p>Bienvenido al Paraiso</p>
+           </div>
+       </div>
+       
+       <div class="carousel-section">
+           <h2>Daily Selection</h2>
+           <div class="carousel" id="carousel"></div>
+       </div>
+       
+       <!-- Anuncio medio - MagSrv Native -->
+       <div class="ad-middle">
+           <ins class="eas6a97888e14" data-zoneid="5717760"></ins>
+           <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
+       </div>
+       
+       <div class="gallery-section">
+           <h2>Explore Gallery</h2>
+           <div class="gallery" id="gallery"></div>
+       </div>
+   </div>
+   
+   <!-- Anuncio inferior - MagSrv 728x90 -->
+   <div class="ad-bottom">
+       <ins class="eas6a97888e17" data-zoneid="5717764"></ins>
+       <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
+   </div>
+   
+   <!-- PopUnder de MagSrv -->
+   <script type="text/javascript">
+       (function() {
+           var script = document.createElement('script');
+           script.src = 'https://s.magsrv.com/splash.php?idzone=5717762';
+           script.async = true;
+           document.body.appendChild(script);
+       })();
+   </script>
+   
+   <!-- Cargar archivos EXISTENTES -->
+   <script src="/content-data2.js"></script>
+   <script src="/js/decorative-list.js"></script>
+   
+   <script>
+       // Usar imágenes decorativas EXISTENTES para el banner
+       function loadBannerImages() {
+           const bannerBg = document.getElementById('bannerBg');
+           const decorImages = window.DECOR_IMAGES || [];
+           
+           const bannerImages = decorImages.filter(img => img.includes('.jpg'));
+           
+           if (bannerImages.length > 0) {
+               bannerImages.slice(0, 3).forEach(src => {
+                   const img = document.createElement('img');
+                   img.src = src;
+                   bannerBg.appendChild(img);
+               });
+           }
+       }
+       
+       // Obtener 40 imágenes aleatorias del pool EXISTENTE
+       function getRandomImages(count) {
+           const pool = window.FULL_IMAGES_POOL || [];
+           if (pool.length === 0) return [];
+           
+           const shuffled = [...pool].sort(() => 0.5 - Math.random());
+           return shuffled.slice(0, Math.min(count, shuffled.length));
+       }
+       
+       // Cargar carousel con 40 imágenes
+       function loadCarousel() {
+           const carousel = document.getElementById('carousel');
+           const images = getRandomImages(40);
+           
+           images.forEach(imgPath => {
+               const item = document.createElement('div');
+               item.className = 'carousel-item';
+               item.innerHTML = `<img src="/${imgPath}" alt="Beach photo" loading="lazy">`;
+               carousel.appendChild(item);
+           });
+       }
+       
+       // Cargar gallery con 40 imágenes diferentes
+       function loadGallery() {
+           const gallery = document.getElementById('gallery');
+           const images = getRandomImages(40);
+           
+           images.forEach(imgPath => {
+               const item = document.createElement('div');
+               item.className = 'gallery-item';
+               item.innerHTML = `<img src="/${imgPath}" alt="Beach photo" loading="lazy">`;
+               gallery.appendChild(item);
+           });
+       }
+       
+       // Inicializar cuando cargue la página
+       window.addEventListener('DOMContentLoaded', function() {
+           setTimeout(function() {
+               loadBannerImages();
+               loadCarousel();
+               loadGallery();
+           }, 100);
+       });
+   </script>
+</body>
+</html>

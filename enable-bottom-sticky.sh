@@ -118,7 +118,7 @@ fi
 git add index.html js/ads-exo-bottom.js js/ads-ero-ctrl.js 2>/dev/null || true
 git commit -m "ads: EXO sticky bottom (sin rellenos), padding dinámico + sandbox Ero" || true
 
-vercel link --project ibizagirl-final --yes >/dev/null
+vercel link --project beachgirl-final --yes >/dev/null
 LOG="$(mktemp)"
 vercel deploy --prod --yes | tee "$LOG" >/dev/null
 URL="$(awk '/Production: https:\/\//{print $3}' "$LOG" | tail -n1)"

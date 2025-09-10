@@ -1,0 +1,280 @@
+/* Reset y variables mejoradas */
+:root {
+    --ocean-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --sand-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    --depth-1: rgba(0, 31, 63, 0.02);
+    --depth-2: rgba(0, 31, 63, 0.05);
+    --depth-3: rgba(0, 31, 63, 0.1);
+    --glass: rgba(255, 255, 255, 0.1);
+    --blur: blur(20px);
+}
+
+/* Layout principal fluido */
+body {
+    background: 
+        linear-gradient(180deg, #001f3f 0%, #0074D9 50%, #39CCCC 100%),
+        url('/decorative-images/paradise-beach.png');
+    background-attachment: fixed;
+    background-blend-mode: multiply;
+    min-height: 100vh;
+}
+
+/* Header flotante mejorado */
+header {
+    background: var(--glass);
+    backdrop-filter: var(--blur);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 30px var(--depth-3);
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+header.scrolled {
+    background: rgba(0, 31, 63, 0.95);
+    box-shadow: 0 5px 20px var(--depth-3);
+}
+
+/* Navegación estilo Apple */
+nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.menu {
+    display: flex;
+    gap: 30px;
+    background: var(--glass);
+    padding: 10px 20px;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.menu a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--ocean-gradient);
+    transition: all 0.3s;
+    transform: translateX(-50%);
+}
+
+.menu a:hover::after {
+    width: 80%;
+}
+
+/* Cards estilo glassmorphism */
+.glass-card {
+    background: var(--glass);
+    backdrop-filter: var(--blur);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 25px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    animation: shimmer-line 3s infinite;
+}
+
+@keyframes shimmer-line {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.glass-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px var(--depth-3);
+}
+
+/* Galería estilo Pinterest */
+.masonry-gallery {
+    column-count: 4;
+    column-gap: 20px;
+    padding: 20px;
+}
+
+.masonry-item {
+    break-inside: avoid;
+    margin-bottom: 20px;
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.masonry-item:hover {
+    transform: scale(1.05);
+    z-index: 10;
+}
+
+/* Botones flotantes modernos */
+.modern-button {
+    background: var(--ocean-gradient);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    box-shadow: 0 10px 30px var(--depth-2);
+}
+
+.modern-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.modern-button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.modern-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px var(--depth-3);
+}
+
+/* Sección hero mejorada */
+.hero-section {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    z-index: 2;
+}
+
+.hero-title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    background: linear-gradient(90deg, #fff, #39CCCC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Grid de ofertas mejorado */
+.offers-modern {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.offer-modern {
+    background: var(--glass);
+    backdrop-filter: var(--blur);
+    border-radius: 25px;
+    padding: 30px;
+    text-align: center;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.4s;
+}
+
+.offer-modern:hover {
+    transform: translateY(-10px);
+    border-color: rgba(255,255,255,0.3);
+}
+
+.price-tag {
+    font-size: 3rem;
+    font-weight: 700;
+    background: var(--ocean-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 20px 0;
+}
+
+/* Footer elegante */
+footer {
+    background: var(--depth-3);
+    backdrop-filter: var(--blur);
+    padding: 40px 20px;
+    margin-top: 100px;
+    text-align: center;
+    color: white;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Responsive mejorado */
+@media (max-width: 768px) {
+    .masonry-gallery {
+        column-count: 2;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .offers-modern {
+        grid-template-columns: 1fr;
+        padding: 20px 10px;
+    }
+}
+
+/* Animaciones de entrada */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s forwards;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up:nth-child(1) { animation-delay: 0.1s; }
+.fade-in-up:nth-child(2) { animation-delay: 0.2s; }
+.fade-in-up:nth-child(3) { animation-delay: 0.3s; }

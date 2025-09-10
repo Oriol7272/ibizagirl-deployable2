@@ -1,7 +1,0 @@
-User-agent: *
-Disallow: /premium/
-Disallow: /uncensored/
-Disallow: /uncensored-videos/
-Allow: /
-
-Sitemap: /sitemap.xml

@@ -28,7 +28,7 @@
                 footer: 5696328     // Misma zona
             },
             eroadvertising: {
-                ibizagirl: 8177575, // Zone para ibizagirl
+                beachgirl: 8177575, // Zone para beachgirl
                 beach: 8179717      // Zone para beach
             }
         }
@@ -306,7 +306,7 @@
             // ExoClick zone (solo 1)
             else if (container.id.includes('5696328')) { zoneId = '5696328'; network = 'ExoClick Banner'; }
             // EroAdvertising zones
-            else if (container.id.includes('8177575')) { zoneId = '8177575'; network = 'EroAds ibizagirl'; }
+            else if (container.id.includes('8177575')) { zoneId = '8177575'; network = 'EroAds beachgirl'; }
             else if (container.id.includes('8179717')) { zoneId = '8179717'; network = 'EroAds beach'; }
             
             // También verificar atributos

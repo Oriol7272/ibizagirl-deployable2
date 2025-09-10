@@ -194,7 +194,7 @@ fi
 git add js/*.js ads/selftest.html index.html || true
 git commit -m "ads: auditoría y passbacks (EXO sides+bottom), testers y debug overlay" || true
 
-vercel link --project ibizagirl-final --yes
+vercel link --project beachgirl-final --yes
 LOG="$(mktemp)"
 vercel deploy --prod --yes | tee "$LOG" >/dev/null
 URL=$(awk '/Production: https:\/\//{print $3}' "$LOG" | tail -n1)

@@ -56,7 +56,7 @@
                 name: 'EroAdvertising',
                 scriptUrl: 'https://www.eroadvertising.com/js/erojs.js',
                 zones: {
-                    ibizagirl: 8177575,  // Zone ID para ibizagirl
+                    beachgirl: 8177575,  // Zone ID para beachgirl
                     beach: 8179717       // Zone ID para beach
                 },
                 testMode: false
@@ -400,9 +400,9 @@
             
             const zones = AD_CONFIG.networks.eroadvertising.zones;
             
-            // Crear contenedor para ibizagirl
-            const containerIbiza = this.createAdContainer('eroadvertising', 'header', zones.ibizagirl);
-            this.loadEroAdZone(containerIbiza, zones.ibizagirl, 'ibizagirl');
+            // Crear contenedor para beachgirl
+            const containerbeach = this.createAdContainer('eroadvertising', 'header', zones.beachgirl);
+            this.loadEroAdZone(containerbeach, zones.beachgirl, 'beachgirl');
             
             // Crear contenedor para beach
             const containerBeach = this.createAdContainer('eroadvertising', 'footer', zones.beach);

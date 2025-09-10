@@ -1,7 +1,7 @@
 /**
  * content-data1.js - Configuration and Base Utilities v4.1.0 FIXED
  * Configuración base y utilidades para el sistema modular
- * IbizaGirl.pics - Paradise Gallery System
+ * ibizagirl.pics - Paradise Gallery System
  */
 
 'use strict';
@@ -265,7 +265,7 @@ class EventManager {
 // ============================
 
 class StorageManager {
-    constructor(prefix = 'ibizagirl_') {
+    constructor(prefix = 'beachgirl_') {
         this.prefix = prefix;
         this.storage = this.isAvailable() ? localStorage : this.memoryStorage();
     }

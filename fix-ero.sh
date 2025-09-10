@@ -86,7 +86,7 @@ fi
 git add js/ads-ero-ctrl.js ads/eroframe_ctrl.html js/env-inline.js index.html || true
 git commit -m "ads: Ero por iframe; desactivado en Home con EROADVERTISING_ENABLE=0" || true
 
-vercel link --project ibizagirl-final --yes
+vercel link --project beachgirl-final --yes
 LOG="$(mktemp)"
 vercel deploy --prod --yes | tee "$LOG" >/dev/null
 URL=$(awk "/Production: https:\/\//{print \$3}" "$LOG" | tail -n1)

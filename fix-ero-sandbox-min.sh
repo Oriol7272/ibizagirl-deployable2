@@ -21,7 +21,7 @@ echo "== Commit & Deploy =="
 git add "$FILE" || true
 git commit -m "ads: force Ero iframe sandbox to allow-same-origin" || true
 
-vercel link --project ibizagirl-final --yes
+vercel link --project beachgirl-final --yes
 LOG=$(mktemp)
 vercel deploy --prod --yes | tee "$LOG" >/dev/null
 URL=$(awk '/Production: https:\/\//{print $3}' "$LOG" | tail -n1)

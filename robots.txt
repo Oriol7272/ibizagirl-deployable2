@@ -1,4 +1,4 @@
-# IbizaGirl.pics - Robots.txt Optimizado SEO
+# BeachGirl.pics - Robots.txt Optimizado SEO
 # Última actualización: 2025-01-15
 
 # ============================
@@ -143,10 +143,10 @@ Allow: /*_verification.html
 # SITEMAP
 # ============================
 
-Sitemap: https://ibizagirl.pics/sitemap.xml
+Sitemap: https://beachgirl.pics/sitemap.xml
 
 # ============================
 # HOST PREFERIDO
 # ============================
 
-Host: ibizagirl.pics
+Host: beachgirl.pics

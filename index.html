@@ -1,123 +1,291 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>beachgirl.pics — Bienvenido al paraíso</title>
-  <link rel="icon" href="/favicon.ico">
-  <link rel="stylesheet" href="/ibg.css">
-  <style>
-    /* Beachy como fallback (tu OTF falla). Tipografía visible: Poppins/system-ui */
-    @font-face{
-      font-family:'Beachy';
-      src: url('/decorative-images/Sexy Beachy.otf') format('opentype');
-      font-weight:400;font-style:normal;font-display:swap;
-    }
-    :root{--hero-h:44vh}
-    body{margin:0;background:#fff;font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
-    .page-bg{position:fixed;inset:0;background: center/cover no-repeat;opacity:.16;z-index:-1}
-    .topbar{position:sticky;top:0;z-index:50;background:#ffffffcc;backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,.06)}
-    .nav{max-width:1500px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 14px}
-    .nav a{color:#111;text-decoration:none;padding:8px 12px;border-radius:14px;font-weight:700}
-    .nav a:hover{background:#f2f2f2}
-    .nav .spacer{flex:1}
-    #lang{padding:6px 8px;border-radius:8px}
-    .hero{height:var(--hero-h);display:grid;place-items:center;position:relative;background: center/cover no-repeat}
-    .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.55))}
-    .hero h1,.hero p{position:relative;z-index:1;color:#fff;font-family:'Poppins','Beachy',system-ui}
-    .hero h1{font-size:66px;margin:0}
-    .hero p{font-size:28px;margin:.35rem 0 0}
-    .shell{max-width:1900px;margin:0 auto}
-    /* 280-320 laterales para que el centro quede encajado entre anuncios */
-    .layout{display:grid;grid-template-columns:300px minmax(980px,1fr) 300px;gap:18px;align-items:start;padding:14px}
-    @media(max-width:1240px){.layout{grid-template-columns:1fr}}
-    .ad-col{position:sticky;top:76px;height:calc(100vh - 90px);display:flex;flex-direction:column;gap:12px}
-    .ad-box{min-height:250px;background:#f6f6f7;border:1px dashed #ddd;border-radius:14px;display:grid;place-items:center;overflow:hidden}
-    .ad-under-hero{max-width:1200px;margin:14px auto 0 auto}
-    .container{max-width:1200px;margin:12px auto;padding:0 10px}
-    .section-title{font-weight:800;margin:14px 0 10px 6px}
-    .carousel{overflow:hidden;border-radius:16px;border:1px solid rgba(0,0,0,.08);background:#fff}
-    .carousel-track{display:flex;gap:10px;transition:transform .7s ease;padding:10px}
-    .carousel-item{flex:0 0 250px;height:160px;border-radius:14px;overflow:hidden;background:#f6f6f7}
-    .carousel-item img{width:100%;height:100%;object-fit:cover}
-    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-    @media(min-width:900px){.grid{grid-template-columns:repeat(5,1fr)}}
-    @media(min-width:1100px){.grid{grid-template-columns:repeat(6,1fr)}}
-    .g-item{display:block;border-radius:12px;overflow:hidden;background:#f6f6f7;border:1px solid rgba(0,0,0,.06)}
-    .g-item img{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:1/1}
-    /* reduce espacio enorme inferior */
-    footer{margin:16px 0 24px 0}
-  </style>
-  <script>
-    /* Fondo general fijo: paradise-beach.png (evita 404 de variants) */
-    (function(){
-      var ts=Date.now();
-      var css=".page-bg{background-image:url('/decorative-images/paradise-beach.png?v="+ts+"')}";
-      var s=document.createElement('style'); s.textContent=css; document.head.appendChild(s);
-    })();
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IbizaGirl.pics - Bienvenido al Paraíso</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Caveat', cursive; 
+            background: url('/decorative-images/paradise-beach.png') center/cover fixed;
+            min-height: 100vh;
+        }
+        
+        /* Selector de idiomas */
+        .lang-selector {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* Menú navegación */
+        .menu {
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .menu a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+        
+        .menu a:hover {
+            color: #4A90E2;
+        }
+        
+        /* Banner principal */
+        .banner {
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+        
+        .banner h1 {
+            font-size: 72px;
+            margin: 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+        }
+        
+        .banner p {
+            font-size: 32px;
+            margin: 10px 0;
+        }
+        
+        /* Carrusel */
+        .carousel {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 20px;
+            background: rgba(255,255,255,0.9);
+            margin: 20px;
+            border-radius: 10px;
+            scroll-behavior: smooth;
+        }
+        
+        .carousel-item {
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+            margin: 0 10px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Galería */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            margin: 20px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 10px;
+        }
+        
+        .gallery-item {
+            aspect-ratio: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        /* Anuncios laterales */
+        .ad-left {
+            position: fixed;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 160px;
+            height: 600px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        
+        .ad-right {
+            position: fixed;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 160px;
+            height: 600px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        
+        /* Anuncio sticky bottom */
+        .ad-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 90px;
+            background: rgba(255,255,255,0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        
+        @media (max-width: 1200px) {
+            .ad-left, .ad-right { display: none; }
+        }
+        
+        @media (max-width: 768px) {
+            .carousel-item { width: 150px; height: 150px; }
+            .gallery { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+        }
+    </style>
 </head>
 <body>
-  <div class="page-bg"></div>
-
-  <header class="topbar">
-    <nav class="nav">
-      <a href="/index.html" data-i18n="home">Home</a>
-      <a href="/premium.html" data-i18n="premium">Premium</a>
-      <a href="/videos.html" data-i18n="videos">Videos</a>
-      <a href="/subscription.html" data-i18n="subs">Suscripciones</a>
-      <div class="spacer"></div>
-      <select id="lang" aria-label="Language">
-        <option value="es">ES</option><option value="en">EN</option>
-        <option value="fr">FR</option><option value="pt">PT</option>
-        <option value="de">DE</option><option value="it">IT</option>
-      </select>
-    </nav>
-  </header>
-
-  <section class="hero">
-    <div class="hero-wrap">
-      <h1 data-i18n="title">beachgirl.pics</h1>
-      <p data-i18n="tagline">Bienvenido al paraíso</p>
+    <!-- Selector de idiomas -->
+    <div class="lang-selector">
+        <select id="lang-select">
+            <option value="es">🇪🇸 ES</option>
+            <option value="en">🇬🇧 EN</option>
+            <option value="fr">🇫🇷 FR</option>
+            <option value="de">🇩🇪 DE</option>
+            <option value="it">🇮🇹 IT</option>
+        </select>
     </div>
-  </section>
 
-  <!-- anuncio REUBICADO: debajo del banner, centrado -->
-  <div class="ad-under-hero">
-    <div id="ad-under-hero" class="ad-box">Ad Under Banner</div>
-  </div>
+    <!-- Menú de navegación -->
+    <div class="menu">
+        <a href="/">Home</a>
+        <a href="/premium.html">Premium</a>
+        <a href="/videos.html">Videos</a>
+        <a href="/subscription.html">Suscripciones</a>
+    </div>
 
-  <div class="shell">
-    <div class="layout">
-      <aside class="ad-col"><div id="ad-left" class="ad-box">Ad Left</div></aside>
-
-      <main>
-        <div class="container">
-          <h2 class="section-title" data-i18n="carousel">Carrusel</h2>
-          <section id="carousel" class="carousel"></section>
-          <h2 class="section-title" data-i18n="gallery">Galería</h2>
-          <section id="gallery" class="grid"></section>
-          <div id="ad-bottom" class="ad-box" style="margin-top:14px">Ad Bottom (Exo)</div>
-          <div id="ad-bottom-ero" class="ad-box" style="margin-top:14px">Ad Bottom (Ero)</div>
+    <!-- Banner principal -->
+    <div class="banner">
+        <div>
+            <h1>ibizagirl.pics</h1>
+            <p>bienvenido al paraíso</p>
         </div>
-      </main>
-
-      <aside class="ad-col"><div id="ad-right" class="ad-box">Ad Right</div></aside>
     </div>
-  </div>
 
-  <!-- ENV + contenido -->
-  <script src="/js/env-ads-inline.js"></script>
-  <script src="/env-inline.js"></script>
-  <script src="/decorative-manifest.js"></script>
-  <script src="/content-data1.js"></script>
-  <script src="/content-data2.js"></script>
+    <!-- Carrusel -->
+    <h2 style="text-align:center; margin:30px; color:white; text-shadow:2px 2px 4px rgba(0,0,0,0.5);">
+        🌺 Carrusel - 40 Imágenes Aleatorias
+    </h2>
+    <div class="carousel" id="carousel"></div>
 
-  <!-- i18n + rotación banner + home + ads -->
-  <script src="/js/i18n.js"></script>
-  <script src="/js/banner-rotator.js"></script>
-  <script src="/js/home.js"></script>
-  <script src="/js/ads-loader.js"></script>
+    <!-- Galería -->
+    <h2 style="text-align:center; margin:30px; color:white; text-shadow:2px 2px 4px rgba(0,0,0,0.5);">
+        🏖️ Galería - 40 Imágenes Aleatorias
+    </h2>
+    <div class="gallery" id="gallery"></div>
 
-  <footer></footer>
+    <!-- Anuncios laterales -->
+    <div class="ad-left" id="ad-left">
+        <div>Anuncio Lateral Izquierdo</div>
+    </div>
+    <div class="ad-right" id="ad-right">
+        <div>Anuncio Lateral Derecho</div>
+    </div>
+
+    <!-- Anuncio sticky bottom -->
+    <div class="ad-bottom" id="ad-bottom">
+        <div>Anuncio Sticky Bottom</div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="content-data2.js"></script>
+    <script>
+        // Esperar a que cargue content-data2.js
+        window.addEventListener('DOMContentLoaded', function() {
+            // Verificar que FULL_IMAGES_POOL existe
+            if (typeof FULL_IMAGES_POOL === 'undefined') {
+                console.error('FULL_IMAGES_POOL no está definido');
+                return;
+            }
+            
+            // Mezclar imágenes aleatoriamente
+            const shuffled = [...FULL_IMAGES_POOL].sort(() => 0.5 - Math.random());
+            
+            // Cargar 40 imágenes en el carrusel
+            const carousel = document.getElementById('carousel');
+            const carouselImages = shuffled.slice(0, 40);
+            
+            carouselImages.forEach(function(img) {
+                const item = document.createElement('div');
+                item.className = 'carousel-item';
+                const imgEl = document.createElement('img');
+                // Las imágenes ya vienen con la ruta completa
+                imgEl.src = '/' + img;
+                imgEl.alt = 'Beach photo';
+                imgEl.loading = 'lazy';
+                item.appendChild(imgEl);
+                carousel.appendChild(item);
+            });
+            
+            // Cargar otras 40 imágenes en la galería
+            const gallery = document.getElementById('gallery');
+            const galleryImages = shuffled.slice(40, 80);
+            
+            galleryImages.forEach(function(img) {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                const imgEl = document.createElement('img');
+                imgEl.src = '/' + img;
+                imgEl.alt = 'Beach photo';
+                imgEl.loading = 'lazy';
+                item.appendChild(imgEl);
+                gallery.appendChild(item);
+            });
+            
+            // Auto-scroll del carrusel
+            let scrollPos = 0;
+            setInterval(function() {
+                scrollPos += 1;
+                if (scrollPos > carousel.scrollWidth - carousel.clientWidth) {
+                    scrollPos = 0;
+                }
+                carousel.scrollLeft = scrollPos;
+            }, 30);
+            
+            console.log('✅ Home cargado con ' + carouselImages.length + ' imágenes en carrusel y ' + galleryImages.length + ' en galería');
+        });
+    </script>
 </body>
 </html>

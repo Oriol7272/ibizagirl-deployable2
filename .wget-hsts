@@ -1,4 +1,0 @@
-# HSTS 1.0 Known Hosts database for GNU Wget.
-# Edit at your own risk.
-# <hostname>	<port>	<incl. subdomains>	<created>	<max-age>
-ibizagirl-deployable2-b3wan5lce-oriols-projects-ed6b9b04.vercel.app	0	1	1756968553	63072000

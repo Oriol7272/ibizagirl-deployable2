@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>IBIZAGIRL.PICS — Home</title>
+  <title>beachgirl.pics — Home</title>
   <!-- IBG-FP: vZERO -->
   <link rel="stylesheet" href="css/ibg.css">
   <script src="env.js"></script>
@@ -21,7 +21,7 @@
   <section id="banner" class="banner">
     <div class="img"></div>
     <div class="title">
-      <h1>ibizagirl.pics</h1>
+      <h1>beachgirl.pics</h1>
       <p>bienvenidos al paraíso</p>
     </div>
   </section>
@@ -40,7 +40,7 @@
   <div class="ad left"></div>
   <div class="ad right"></div>
 
-  <div class="footer container">© IbizaGirl.pics</div>
+  <div class="footer container">© beachgirl.pics</div>
 
   <!-- SW killer 1 sola vez (si existe el archivo) -->
 

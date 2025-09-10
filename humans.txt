@@ -1,8 +1,8 @@
 # humanstxt.org
 
 /* TEAM */
-Website: IbizaGirl.pics
-Location: Ibiza, Spain
+Website: BeachGirl.pics
+Location: Beach, Spain
 
 /* SITE */
 Last update: 2025/08/21
@@ -20,5 +20,5 @@ Ad Networks: JuicyAds, ExoClick, EroAdvertising, PopAds
 Design: Ocean theme with wave effects, night mode
 
 /* THANKS */
-Ibiza for the inspiration
+Beach for the inspiration
 Community for the support

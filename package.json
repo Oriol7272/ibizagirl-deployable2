@@ -1,7 +1,7 @@
 {
-  "name": "ibizagirl-deployable2",
-  "private": true,
-  "scripts": {
-    "build": ":"
+  "name": "beachgirl",
+  "version": "1.0.0",
+  "dependencies": {
+    "@sendgrid/mail": "^7.7.0"
   }
 }

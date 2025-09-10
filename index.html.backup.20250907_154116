@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeachGirl.me - Bienvenido al Paraíso</title>
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- Meta tags para anuncios -->
+    <meta name="6a97888e-site-verification" content="bf3f5f168a9431855cc539f7527694a6">
+    <meta name="eroads_" content="3f03fafc63a57888f362260694b4ef60">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- MagSrv/ExoClick Ad Provider -->
+    <script async src="https://a.magsrv.com/ad-provider.js"></script>
+</head>
+<body>
+    <!-- Anuncio lateral izquierdo (5717756) -->
+    <div id="ad-left" class="ad-lateral"></div>
+    
+    <!-- Anuncio lateral derecho (5717758) -->
+    <div id="ad-right" class="ad-lateral"></div>
+    
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">🌴 BeachGirl</div>
+            <div class="menu">
+                <a href="/" class="active">Home</a>
+                <a href="/premium.html">Premium</a>
+                <a href="/videos.html">Videos</a>
+                <a href="/subscription.html">Subscriptions</a>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Banner principal -->
+    <div class="banner">
+        <div class="banner-bg" id="banner-bg"></div>
+        <div class="banner-content">
+            <h1>beachgirl.me</h1>
+            <p>Bienvenido al Paraíso</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Anuncio bajo el banner (5717760) -->
+        <div class="ad-banner-bottom" id="ad-banner-bottom"></div>
+        
+        <!-- Carousel Section -->
+        <div class="content-section">
+            <h2>🌺 Galería Destacada</h2>
+            <div class="carousel">
+                <div class="carousel-track" id="carousel-track">
+                    <!-- Las imágenes se cargarán dinámicamente -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Anuncio bajo el carousel (5717762) -->
+        <div class="ad-carousel-bottom" id="ad-carousel-bottom"></div>
+        
+        <!-- Gallery Section -->
+        <div class="content-section">
+            <h2>🏖️ Galería Principal</h2>
+            <div class="gallery-grid" id="gallery-grid">
+                <!-- Las imágenes se cargarán dinámicamente -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Anuncio inferior sticky (5717764) -->
+    <div id="ad-bottom"></div>
+    
+    <!-- Scripts de datos -->
+    <script src="/content-data2.js"></script>
+    
+    <script>
+    (function() {
+        'use strict';
+        
+        // Configuración de zonas de anuncios
+        const AD_ZONES = {
+            left: '5717756',      // Lateral izquierdo
+            right: '5717758',     // Lateral derecho
+            banner: '5717760',    // Bajo el banner
+            carousel: '5717762',  // Bajo el carousel
+            bottom: '5717764'     // Inferior sticky
+        };
+        
+        // Imágenes decorativas para el banner
+        const bannerImages = [
+            '/decorative-images/1115ae7d-909f-4760-a3a1-037a05ad9931.jpg',
+            '/decorative-images/1618cbb2-8dd1-4127-99d9-d9f30536de72.jpg',
+            '/decorative-images/49830c0a-2fd8-439c-a583-029a0b39c4d6.jpg',
+            '/decorative-images/4bfb7a8b-b81e-49d7-a160-90b834d0b751.jpg',
+            '/decorative-images/81f55fd4-b0df-49f4-9020-cbb0f5042c08.jpg'
+        ];
+        
+        // Inicializar banner rotatorio
+        function initBanner() {
+            const bannerBg = document.getElementById('banner-bg');
+            if (!bannerBg) return;
+            
+            let currentIndex = 0;
+            
+            // Crear imágenes
+            bannerImages.forEach((src, i) => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.className = i === 0 ? 'active' : '';
+                img.alt = 'Beach Paradise';
+                bannerBg.appendChild(img);
+            });
+            
+            // Rotar cada 5 segundos
+            setInterval(() => {
+                const images = bannerBg.querySelectorAll('img');
+                if (images.length === 0) return;
+                
+                images[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % images.length;
+                images[currentIndex].classList.add('active');
+            }, 5000);
+        }
+        
+        // Cargar carousel
+        function loadCarousel() {
+            const track = document.getElementById('carousel-track');
+            if (!track) return;
+            
+            if (window.contentData && window.contentData.images) {
+                const images = window.contentData.images;
+                const shuffled = [...images].sort(() => Math.random() - 0.5);
+                const selected = shuffled.slice(0, 40);
+                
+                selected.forEach(filename => {
+                    const item = document.createElement('div');
+                    item.className = 'carousel-item';
+                    const img = document.createElement('img');
+                    img.src = '/full/' + filename;
+                    img.alt = 'Beach Girl';
+                    img.loading = 'lazy';
+                    item.appendChild(img);
+                    track.appendChild(item);
+                });
+            }
+        }
+        
+        // Cargar galería
+        function loadGallery() {
+            const grid = document.getElementById('gallery-grid');
+            if (!grid) return;
+            
+            if (window.contentData && window.contentData.images) {
+                const images = window.contentData.images;
+                const shuffled = [...images].sort(() => Math.random() - 0.5);
+                const selected = shuffled.slice(40, 80);
+                
+                selected.forEach(filename => {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    const img = document.createElement('img');
+                    img.src = '/full/' + filename;
+                    img.alt = 'Beach Girl';
+                    img.loading = 'lazy';
+                    item.appendChild(img);
+                    grid.appendChild(item);
+                });
+            }
+        }
+        
+        // Montar anuncio ExoClick/MagSrv
+        function mountAd(elementId, zoneId) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            element.innerHTML = '';
+            const ins = document.createElement('ins');
+            ins.className = 'eas6a97888e2';
+            ins.setAttribute('data-zoneid', zoneId);
+            ins.style.display = 'block';
+            ins.style.width = '100%';
+            ins.style.height = '100%';
+            ins.style.minHeight = elementId.includes('lateral') ? '600px' : '90px';
+            
+            element.appendChild(ins);
+            console.log('Anuncio montado:', elementId, 'Zona:', zoneId);
+        }
+        
+        // Inicializar todos los anuncios
+        function initAds() {
+            console.log('🚀 Inicializando anuncios...');
+            
+            // Montar anuncios laterales (solo en desktop)
+            if (window.innerWidth > 1200) {
+                mountAd('ad-left', AD_ZONES.left);
+                mountAd('ad-right', AD_ZONES.right);
+            }
+            
+            // Montar anuncios horizontales
+            mountAd('ad-banner-bottom', AD_ZONES.banner);
+            mountAd('ad-carousel-bottom', AD_ZONES.carousel);
+            mountAd('ad-bottom', AD_ZONES.bottom);
+            
+            // Activar AdProvider
+            if (window.AdProvider) {
+                window.AdProvider.push({"serve": {}});
+                console.log('✅ AdProvider activado');
+            } else {
+                // Reintentar en 1 segundo
+                setTimeout(() => {
+                    if (window.AdProvider) {
+                        window.AdProvider.push({"serve": {}});
+                        console.log('✅ AdProvider activado (retry)');
+                    }
+                }, 1000);
+            }
+        }
+        
+        // PopAds
+        function initPopAds() {
+            window._pop = window._pop || [];
+            window._pop.push(['siteId', 5226758]);
+            window._pop.push(['minBid', 0]);
+            window._pop.push(['popundersPerIP', 0]);
+            
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = '//c1.popads.net/pop.js';
+            document.body.appendChild(script);
+            
+            console.log('✅ PopAds configurado');
+        }
+        
+        // Inicializar todo cuando el DOM esté listo
+        function init() {
+            console.log('🌴 BeachGirl.me iniciando...');
+            console.log('📍 Zonas de anuncios:', AD_ZONES);
+            
+            initBanner();
+            
+            // Esperar a content-data2.js
+            setTimeout(() => {
+                loadCarousel();
+                loadGallery();
+            }, 500);
+            
+            initAds();
+            initPopAds();
+            
+            console.log('✅ Inicialización completada');
+        }
+        
+        // Iniciar
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+        
+        // Reintentar AdProvider al cargar la ventana
+        window.addEventListener('load', function() {
+            if (window.AdProvider && !window._adsInitialized) {
+                window.AdProvider.push({"serve": {}});
+                window._adsInitialized = true;
+                console.log('✅ AdProvider reactivado en window.load');
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

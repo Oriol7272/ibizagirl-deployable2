@@ -105,3 +105,6 @@ html,body{
 @media (max-width:1024px){ .ad-lateral{ display:none; } }
 /* #ad-bottom-test: quitar al finalizar debug */
 #ad-bottom{ outline:1px dashed rgba(255,255,255,.35); min-height:250px; }
+/* DEBUG anuncios: quitar al finalizar */
+#ad-bottom{ outline:1px dashed rgba(255,255,255,.35); min-height:250px; }
+#ad-bottom iframe{ width:300px; height:250px; display:block; border:0; }

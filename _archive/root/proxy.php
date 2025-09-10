@@ -1,6 +1,6 @@
 <?php
 /**
- * IbizaGirl.pics - Advanced Proxy v3.0.0
+ * beachgirl.pics - Advanced Proxy v3.0.0
  * Enhanced security, performance and reliability
  */
 
@@ -138,8 +138,8 @@ $context_options = [
             'Accept-Language: es-ES,es;q=0.9,en;q=0.8',
             'Accept-Encoding: gzip, deflate, br',
             'Connection: keep-alive',
-            'Referer: https://ibizagirl.pics/',
-            'Origin: https://ibizagirl.pics',
+            'Referer: https://beachgirl.pics/',
+            'Origin: https://beachgirl.pics',
             'Cache-Control: no-cache',
             'Pragma: no-cache',
             'DNT: 1',
@@ -211,8 +211,8 @@ if ($content === false || $http_code >= 400) {
                 'Accept: */*',
                 'Accept-Language: es-ES,es;q=0.9,en;q=0.8',
                 'Accept-Encoding: gzip, deflate, br',
-                'Referer: https://ibizagirl.pics/',
-                'Origin: https://ibizagirl.pics',
+                'Referer: https://beachgirl.pics/',
+                'Origin: https://beachgirl.pics',
                 'Cache-Control: no-cache',
                 'DNT: 1'
             ],
@@ -303,10 +303,10 @@ if ($extension === 'js' || $extension === 'css') {
 }
 
 // CORS headers para compatibilidad
-header('Access-Control-Allow-Origin: https://ibizagirl.pics');
+header('Access-Control-Allow-Origin: https://beachgirl.pics');
 header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Max-Age: 3600');
-header('Timing-Allow-Origin: https://ibizagirl.pics');
+header('Timing-Allow-Origin: https://beachgirl.pics');
 
 // Logging exitoso para debugging
 if ($rate_data['count'] % 10 === 0) {

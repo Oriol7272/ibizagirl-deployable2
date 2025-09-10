@@ -1,6 +1,6 @@
 # IbizaGirl.pics 🌴
 
-Premium content from the paradise of Ibiza.
+Premium content from the paradise of Beach.
 
 ## 🚀 Live Site
 [https://ibizagirl.pics](https://ibizagirl.pics)
@@ -77,4 +77,4 @@ yarn build
 
 ---
 
-*Built with ❤️ for the paradise of Ibiza* 🌴
+*Built with ❤️ for the paradise of Beach* 🌴

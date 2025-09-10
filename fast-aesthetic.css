@@ -1,0 +1,119 @@
+/* Diseño minimalista y rápido */
+
+/* Eliminar animaciones pesadas */
+* {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.2s !important;
+}
+
+/* Layout simplificado */
+body {
+    background: linear-gradient(180deg, #001f3f 0%, #0074D9 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Cards ultra ligeras */
+.light-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    will-change: transform;
+}
+
+.light-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255,255,255,0.08);
+}
+
+/* Imágenes optimizadas */
+img, video {
+    loading: lazy;
+    decoding: async;
+    contain: layout style paint;
+}
+
+/* Grid eficiente */
+.performance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
+    gap: 1rem;
+    contain: layout;
+}
+
+/* Eliminar sombras complejas */
+* {
+    box-shadow: none !important;
+}
+
+.light-shadow {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Botones simples pero elegantes */
+.fast-button {
+    background: #0074D9;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 600;
+    cursor: pointer;
+    transform: scale(1);
+    will-change: transform;
+}
+
+.fast-button:active {
+    transform: scale(0.98);
+}
+
+/* Header fijo simplificado */
+.minimal-header {
+    position: sticky;
+    top: 0;
+    background: rgba(0,31,63,0.95);
+    backdrop-filter: blur(5px);
+    padding: 15px;
+    z-index: 100;
+}
+
+/* Texto legible */
+h1, h2, h3 {
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* Lazy loading placeholder */
+.lazy-placeholder {
+    background: linear-gradient(90deg, 
+        rgba(255,255,255,0.05) 0%, 
+        rgba(255,255,255,0.1) 50%, 
+        rgba(255,255,255,0.05) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1s linear infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Mobile first */
+@media (max-width: 768px) {
+    .performance-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+    
+    /* Desactivar efectos en móvil */
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+    
+    /* Reducir blur para performance */
+    .premium-item img {
+        filter: blur(4px) !important;
+    }
+}

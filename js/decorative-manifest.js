@@ -1,0 +1,1 @@
+window.DECORATIVE_IMAGES = [];

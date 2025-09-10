@@ -69,7 +69,7 @@ fi
 git add js/ads-exo-sides.js index.html 2>/dev/null || true
 git commit -m "ads: EXO laterales (usa EXOCLICK_ZONES/ZONE, sin fallback)" || true
 
-vercel link --project ibizagirl-final --yes
+vercel link --project beachgirl-final --yes
 LOG="$(mktemp)"
 vercel deploy --prod --yes | tee "$LOG" >/dev/null
 awk '/Production: https:\/\//{print "🔗 Production:", $3}' "$LOG" | tail -n1

@@ -265,7 +265,7 @@ class EventManager {
 // ============================
 
 class StorageManager {
-    constructor(prefix = 'ibizagirl_') {
+    constructor(prefix = 'beachgirl_') {
         this.prefix = prefix;
         this.storage = this.isAvailable() ? localStorage : this.memoryStorage();
     }

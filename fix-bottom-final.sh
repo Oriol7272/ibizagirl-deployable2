@@ -96,7 +96,7 @@ fi
 git add index.html js/ads-exo-bottom.js || true
 git commit -m "fix(sticky): bottom EXO robusto leyendo data-zone + __ENV; orden de carga" || true
 
-vercel link --project ibizagirl-final --yes
+vercel link --project beachgirl-final --yes
 LOG="$(mktemp)"; vercel deploy --prod --yes | tee "$LOG"
 URL="$(awk "/Production: https:\/\//{print \$3}" "$LOG" | tail -n1)"
 echo "🔗 Production: $URL"

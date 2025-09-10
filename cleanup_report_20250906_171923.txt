@@ -1,5 +1,5 @@
 == IBG Audit Cleanup ==
-Repo: /Users/oriolcabre/ibizagirl-deployable2
+Repo: /Users/oriolcabre/beachgirl-deployable2
 Fecha: dissabte,  6 de setembre de 2025, 17:19:23 CEST
 
 == Archivos de gran tamaño (>100MB) (solo aviso) ==
@@ -103,19 +103,19 @@ Fecha: dissabte,  6 de setembre de 2025, 17:19:23 CEST
   • (huérfano) ./partials/navbar.html
   • (huérfano) ./partials/head-libs.html
   • (huérfano) ./partials/ads-crisp.html
-  • (huérfano) ./ibizagirl-complete-with-secrets/public/snippets/ads-body.html
-  • (huérfano) ./ibizagirl-complete-with-secrets/public/snippets/head.html
-  • (huérfano) ./ibizagirl-complete-with-secrets/public/snippets/footer.html
-  • (huérfano) ./ibizagirl-complete-with-secrets/public/subscribe.html
-  • (huérfano) ./ibizagirl-complete-with-secrets/public/age-check.html
-  • (huérfano) ./ibizagirl-complete-with-secrets/public/legal/terms-es.html
-  • (huérfano) ./ibizagirl-complete-with-secrets/public/legal/privacy-es.html
-  • (huérfano) ./ibizagirl-complete-with-secrets/public/legal/cookies-es.html
-  • (huérfano) ./ibizagirl-complete-with-secrets/scripts/migrate-premium.js
-  • (huérfano) ./ibizagirl-complete-with-secrets/scripts/injector.js
-  • (huérfano) ./ibizagirl-complete-with-secrets/api/issue-token.js
-  • (huérfano) ./ibizagirl-complete-with-secrets/api/protect.js
-  • (huérfano) ./ibizagirl-complete-with-secrets/api/paypal-webhook.js
+  • (huérfano) ./beachgirl-complete-with-secrets/public/snippets/ads-body.html
+  • (huérfano) ./beachgirl-complete-with-secrets/public/snippets/head.html
+  • (huérfano) ./beachgirl-complete-with-secrets/public/snippets/footer.html
+  • (huérfano) ./beachgirl-complete-with-secrets/public/subscribe.html
+  • (huérfano) ./beachgirl-complete-with-secrets/public/age-check.html
+  • (huérfano) ./beachgirl-complete-with-secrets/public/legal/terms-es.html
+  • (huérfano) ./beachgirl-complete-with-secrets/public/legal/privacy-es.html
+  • (huérfano) ./beachgirl-complete-with-secrets/public/legal/cookies-es.html
+  • (huérfano) ./beachgirl-complete-with-secrets/scripts/migrate-premium.js
+  • (huérfano) ./beachgirl-complete-with-secrets/scripts/injector.js
+  • (huérfano) ./beachgirl-complete-with-secrets/api/issue-token.js
+  • (huérfano) ./beachgirl-complete-with-secrets/api/protect.js
+  • (huérfano) ./beachgirl-complete-with-secrets/api/paypal-webhook.js
   • (huérfano) ./_head_common.html
 
 == Comprobación de ficheros polémicos ==
@@ -190,21 +190,21 @@ Fecha: dissabte,  6 de setembre de 2025, 17:19:23 CEST
 ./ibg_vercel_public_and_domains.sh
 ./ibg_vercel_setup.sh
 ./ibg_vercel_steps.sh
-./ibizagirl-complete-with-secrets/.DS_Store
-./ibizagirl-complete-with-secrets/api/issue-token.js
-./ibizagirl-complete-with-secrets/api/paypal-webhook.js
-./ibizagirl-complete-with-secrets/api/protect.js
-./ibizagirl-complete-with-secrets/public/.DS_Store
-./ibizagirl-complete-with-secrets/public/age-check.html
-./ibizagirl-complete-with-secrets/public/legal/cookies-es.html
-./ibizagirl-complete-with-secrets/public/legal/privacy-es.html
-./ibizagirl-complete-with-secrets/public/legal/terms-es.html
-./ibizagirl-complete-with-secrets/public/snippets/ads-body.html
-./ibizagirl-complete-with-secrets/public/snippets/footer.html
-./ibizagirl-complete-with-secrets/public/snippets/head.html
-./ibizagirl-complete-with-secrets/public/subscribe.html
-./ibizagirl-complete-with-secrets/scripts/injector.js
-./ibizagirl-complete-with-secrets/scripts/migrate-premium.js
+./beachgirl-complete-with-secrets/.DS_Store
+./beachgirl-complete-with-secrets/api/issue-token.js
+./beachgirl-complete-with-secrets/api/paypal-webhook.js
+./beachgirl-complete-with-secrets/api/protect.js
+./beachgirl-complete-with-secrets/public/.DS_Store
+./beachgirl-complete-with-secrets/public/age-check.html
+./beachgirl-complete-with-secrets/public/legal/cookies-es.html
+./beachgirl-complete-with-secrets/public/legal/privacy-es.html
+./beachgirl-complete-with-secrets/public/legal/terms-es.html
+./beachgirl-complete-with-secrets/public/snippets/ads-body.html
+./beachgirl-complete-with-secrets/public/snippets/footer.html
+./beachgirl-complete-with-secrets/public/snippets/head.html
+./beachgirl-complete-with-secrets/public/subscribe.html
+./beachgirl-complete-with-secrets/scripts/injector.js
+./beachgirl-complete-with-secrets/scripts/migrate-premium.js
 ./index.html.__tmp4
 ./index.html.__tmp5
 ./index.html.__tmpD
