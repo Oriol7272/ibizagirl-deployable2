@@ -56,6 +56,10 @@ jobs:
           vercel alias set "${{ steps.deploy.outputs.url }}" "$DOMAIN_W" --token="$VERCEL_TOKEN" || true
 
       - name: Tag & Release
+      - name: Setup git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         if: steps.deploy.outputs.url != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
