@@ -1,0 +1,20 @@
+name: Tag on stable
+on:
+  push:
+    branches: [ stable ]
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tag with date
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TS=$(date +'%Y%m%d-%H%M%S')
+          TAG="stable-${TS}"
+          git tag -a "$TAG" -m "Auto tag from stable @ ${TS}"
+          git push origin "$TAG"

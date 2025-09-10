@@ -1,0 +1,28 @@
+name: Backup weekly
+on:
+  schedule:
+    - cron: '17 3 * * 1'
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Create archive
+        run: |
+          TS=$(date +'%Y%m%d-%H%M%S')
+          OUT="backup-${TS}.zip"
+          git archive --format zip --output "$OUT" HEAD
+          echo "OUT=$OUT" >> $GITHUB_ENV
+          echo "TS=$TS" >> $GITHUB_ENV
+      - name: Create release and upload
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "backup-${TS}" --notes "Automated weekly backup ${TS}" || true
+          gh release upload "backup-${TS}" "$OUT" --clobber
