@@ -1,0 +1,100 @@
+/* Animaciones y transiciones fluidas */
+* {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efecto parallax para fondos */
+.parallax-bg {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* Loading animation sensual */
+@keyframes wave-loading {
+    0% { transform: translateY(0px); opacity: 0.6; }
+    50% { transform: translateY(-20px); opacity: 1; }
+    100% { transform: translateY(0px); opacity: 0.6; }
+}
+
+.loading-wave {
+    display: inline-block;
+    animation: wave-loading 1.5s ease-in-out infinite;
+}
+
+.loading-wave:nth-child(2) { animation-delay: 0.1s; }
+.loading-wave:nth-child(3) { animation-delay: 0.2s; }
+
+/* Paleta de colores océano */
+:root {
+    --navy-dark: #001f3f;
+    --ocean-blue: #0074D9;
+    --sea-foam: #7FDBFF;
+    --sand-beige: #F4E4C1;
+    --sand-light: #FAF0DC;
+    --wave-gradient: linear-gradient(135deg, #001f3f, #0074D9, #7FDBFF);
+}
+
+/* Tipografía elegante con brillo */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap');
+
+h1, h2 {
+    font-family: 'Playfair Display', serif;
+    background: linear-gradient(45deg, var(--ocean-blue), var(--sea-foam));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(127, 219, 255, 0.5);
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; filter: brightness(1.2); }
+}
+
+/* Bordes ondulados */
+.wave-border {
+    position: relative;
+}
+
+.wave-border::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%230074D9' fill-opacity='0.3' d='M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,133.3C960,128,1056,96,1152,96C1248,96,1344,128,1392,144L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+    background-size: cover;
+}
+
+/* Efecto agua en hover */
+@keyframes water-ripple {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+.water-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+.water-effect::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(127, 219, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.water-effect:hover::before {
+    width: 300px;
+    height: 300px;
+    animation: water-ripple 0.6s ease-out;
+}

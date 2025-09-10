@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeachGirl.me - Premium Content</title>
+    <link rel="icon" href="/favicon.ico">
+    <meta name="google-site-verification" content="K4K5jxLup8_F3wDpbUG-Z4riFf_lgVorF62RFCQbnIY" />
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-13HE3GTF9N"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-13HE3GTF9N');
+    </script>
+    
+    <!-- PayPal SDK con currency EUR -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        @font-face {
+            font-family: 'SexyBeachy';
+            src: url('/decorative-images/SexyBeachy.ttf') format('truetype');
+            font-display: swap;
+        }
+        
+        html, body {
+            font-family: 'SexyBeachy', cursive, Arial, sans-serif;
+            background: url('/decorative-images/paradise-beach.png') center/cover fixed;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+        
+        header {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        nav {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 48px;
+            color: #00a8ff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .menu {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .menu a {
+            color: #333;
+            text-decoration: none;
+            font-size: 32px;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+        
+        .menu a:hover {
+            background: rgba(0,168,255,0.8);
+            color: white;
+        }
+        
+        /* Menú de ofertas */
+        .offers-menu {
+            background: linear-gradient(135deg, #ffd700, #ff6b6b);
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        .offers-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .offer-item {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .offer-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .offer-price {
+            font-size: 36px;
+            color: #00a8ff;
+            font-weight: bold;
+        }
+        
+        .offer-desc {
+            font-size: 20px;
+            color: #333;
+            margin-top: 10px;
+        }
+        
+        .lifetime-badge {
+            background: gold;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        
+        /* Galería Premium */
+        .premium-gallery {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .premium-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .premium-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(15px);
+            transition: filter 0.3s;
+        }
+        
+        .premium-item:hover img {
+            filter: blur(8px);
+        }
+        
+        .paypal-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.95);
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .paypal-icon {
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* Anuncios laterales */
+        .side-ad-left, .side-ad-right {
+            position: fixed;
+            width: 300px;
+            height: 250px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            overflow: hidden;
+            z-index: 100;
+            top: 120px;
+        }
+        
+        .side-ad-left {
+            left: 10px;
+        }
+        
+        .side-ad-right {
+            right: 10px;
+        }
+        
+        /* Modal de pago */
+        .payment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .close-modal {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 1400px) {
+            .side-ad-left, .side-ad-right {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .logo { font-size: 36px; }
+            .menu a { font-size: 24px; }
+            .offer-price { font-size: 28px; }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">🌴 BeachGirl</div>
+            <div class="menu">
+                <a href="/">Home</a>
+                <a href="/premium.html">Premium</a>
+                <a href="/videos.html">Videos</a>
+                <a href="/subscription.html">Subscriptions</a>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Menú de ofertas -->
+    <div class="offers-menu">
+        <div class="offers-container">
+            <div class="offer-item" onclick="purchaseBundle()">
+                <div class="offer-price">0.80€</div>
+                <div class="offer-desc">Pack 10 Imágenes</div>
+            </div>
+            <div class="offer-item" onclick="subscribeMonthly()">
+                <div class="offer-price">14.99€</div>
+                <div class="offer-desc">Suscripción Mensual</div>
+            </div>
+            <div class="offer-item" onclick="subscribeAnnual()">
+                <div class="offer-price">49.99€</div>
+                <div class="offer-desc">Suscripción Anual</div>
+            </div>
+            <div class="offer-item" onclick="purchaseLifetime()">
+                <div class="offer-price">100€</div>
+                <div class="offer-desc">Acceso Vitalicio</div>
+                <div class="lifetime-badge">¡SIN ANUNCIOS!</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Anuncios laterales -->
+    <div class="side-ad-left" id="side-ad-left"></div>
+    <div class="side-ad-right" id="side-ad-right"></div>
+    
+    <!-- Galería Premium -->
+    <div class="premium-gallery">
+        <div class="gallery-grid" id="premium-gallery"></div>
+    </div>
+    
+    <!-- Modal de pago -->
+    <div class="payment-modal" id="payment-modal">
+        <div class="modal-content">
+            <h2>Procesando pago...</h2>
+            <div id="paypal-button-container"></div>
+            <button class="close-modal" onclick="closeModal()">Cancelar</button>
+        </div>
+    </div>
+    
+    <script src="/content-data3.js"></script>
+    <script src="/content-data4.js"></script>
+    
+    <script>
+    // Esperar a que los scripts carguen
+    setTimeout(() => {
+        // Combinar pools de imágenes
+        const pool1 = window.UNCENSORED_IMAGES_POOL || [];
+        const pool2 = window.UNCENSORED_IMAGES_POOL_2 || [];
+        const allImages = [...pool1, ...pool2];
+        
+        console.log('Total imágenes disponibles:', allImages.length);
+        
+        // Inicializar galería premium
+        const gallery = document.getElementById('premium-gallery');
+        const shuffled = [...allImages].sort(() => Math.random() - 0.5);
+        
+        shuffled.slice(0, 100).forEach((img, index) => {
+            const div = document.createElement('div');
+            div.className = 'premium-item';
+            div.onclick = () => purchaseImage(img, index);
+            
+            const imgEl = document.createElement('img');
+            imgEl.src = img.startsWith('/') ? img : '/' + img;
+            imgEl.loading = 'lazy';
+            
+            const badge = document.createElement('div');
+            badge.className = 'paypal-badge';
+            badge.innerHTML = `
+                <svg class="paypal-icon" viewBox="0 0 24 24" fill="#003087">
+                    <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.765.765 0 0 1 .755-.655h7.416c2.467 0 4.143.361 4.988 1.078.846.715 1.272 1.893 1.272 3.507 0 .938-.139 1.772-.416 2.491-.277.721-.703 1.333-1.273 1.834-.568.501-1.277.884-2.12 1.148-.843.265-1.839.397-2.975.397H9.778l-.682 5.817a.641.641 0 0 1-.634.538h-1.386zm1.428-8.662h2.155c1.605 0 2.76-.257 3.454-.77.695-.514 1.042-1.313 1.042-2.394 0-.806-.254-1.372-.763-1.696-.508-.325-1.352-.487-2.53-.487H9.071l-.567 5.347zM18.487 13.706c0 .775-.137 1.507-.41 2.197a5.378 5.378 0 0 1-1.15 1.766 5.26 5.26 0 0 1-1.764 1.172c-.683.283-1.437.425-2.265.425h-3.59a.64.64 0 0 1-.633-.537l1.416-12.106a.765.765 0 0 1 .755-.655h4.187c1.579 0 2.764.293 3.556.879.791.586 1.187 1.509 1.187 2.769 0 .639-.094 1.218-.281 1.735a3.796 3.796 0 0 1-.801 1.318 3.476 3.476 0 0 1-1.251.863c.646.168 1.149.486 1.509.953.36.468.54 1.088.54 1.863v.358z"/>
+                </svg>
+                0.10€
+            `;
+            
+            div.appendChild(imgEl);
+            div.appendChild(badge);
+            gallery.appendChild(div);
+        });
+    }, 1000);
+    
+    // Funciones de pago
+    function purchaseImage(img, index) {
+        showPayPalButton('image', 0.10, `Imagen ${index + 1}`);
+    }
+    
+    function purchaseBundle() {
+        showPayPalButton('bundle', 0.80, 'Pack 10 Imágenes');
+    }
+    
+    function purchaseLifetime() {
+        showPayPalButton('lifetime', 100.00, 'Acceso Vitalicio');
+    }
+    
+    function subscribeMonthly() {
+        window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-3WE8037612641383DNCUKNJI', '_blank');
+    }
+    
+    function subscribeAnnual() {
+        window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-43K261214Y571983RNCUKN7I', '_blank');
+    }
+    
+    function showPayPalButton(type, amount, description) {
+        document.getElementById('payment-modal').style.display = 'flex';
+        document.getElementById('paypal-button-container').innerHTML = '';
+        
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        description: description,
+                        amount: {
+                            currency_code: 'EUR',
+                            value: amount.toFixed(2)
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('¡Pago completado! Gracias ' + details.payer.name.given_name);
+                    closeModal();
+                    // Aquí deberías desbloquear el contenido
+                    if (type === 'lifetime') {
+                        localStorage.setItem('lifetime_access', 'true');
+                        localStorage.setItem('no_ads', 'true');
+                    }
+                });
+            },
+            onError: function(err) {
+                console.error('Error PayPal:', err);
+                alert('Error procesando el pago. Por favor intenta de nuevo.');
+            }
+        }).render('#paypal-button-container');
+    }
+    
+    function closeModal() {
+        document.getElementById('payment-modal').style.display = 'none';
+        document.getElementById('paypal-button-container').innerHTML = '';
+    }
+    
+    // Anuncios laterales
+    function initSideAds() {
+        const leftAd = document.getElementById('side-ad-left');
+        if (leftAd) {
+            const ins = document.createElement('ins');
+            ins.className = 'eas6a97888e2';
+            ins.setAttribute('data-zoneid', '5696328');
+            ins.style.display = 'block';
+            ins.style.width = '100%';
+            ins.style.height = '100%';
+            leftAd.appendChild(ins);
+        }
+        
+        const rightAd = document.getElementById('side-ad-right');
+        if (rightAd) {
+            const ins = document.createElement('ins');
+            ins.className = 'eas6a97888e2';
+            ins.setAttribute('data-zoneid', '5705186');
+            ins.style.display = 'block';
+            ins.style.width = '100%';
+            ins.style.height = '100%';
+            rightAd.appendChild(ins);
+        }
+        
+        if (window.AdProvider) {
+            window.AdProvider.push({"serve": {}});
+        }
+    }
+    
+    // Inicializar todo
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🌴 BeachGirl Premium - Cargado');
+        setTimeout(initSideAds, 1500);
+    });
+    
+    // Cargar AdProvider
+    const adScript = document.createElement('script');
+    adScript.async = true;
+    adScript.src = 'https://a.magsrv.com/ad-provider.js';
+    document.head.appendChild(adScript);
+    </script>
+</body>
+</html>

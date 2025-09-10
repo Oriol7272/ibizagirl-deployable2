@@ -1,2 +1,7 @@
-(function(W){ W.IBG_ADS = W.IBG_ADS || {}; if(typeof W.IBG_ADS.initAds!=="function"){W.IBG_ADS.initAds=function(){}} })(window);
-console.log("[ads-exo-common] active");
+/*! shim:ads-exo-common.js -> /js/ads-exo-common.js */
+(function(){
+  var s=document.createElement('script'); s.src='/js/ads-exo-common.js'; s.async=false;
+  (document.currentScript && document.currentScript.parentNode)
+    ? document.currentScript.parentNode.insertBefore(s, document.currentScript.nextSibling)
+    : document.head.appendChild(s);
+})();

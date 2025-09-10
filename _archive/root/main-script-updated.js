@@ -924,7 +924,7 @@ function showFallbackContent() {
             padding: 2rem;
         ">
             <div>
-                <h1>🌊 IbizaGirl.pics</h1>
+                <h1>🌊 ibizagirl.pics</h1>
                 <p>Estamos experimentando dificultades técnicas.</p>
                 <p>Por favor, recarga la página en unos momentos.</p>
                 <button onclick="window.location.reload()" style="

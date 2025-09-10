@@ -1,0 +1,294 @@
+/* Variables de colores océano */
+:root {
+    --navy-deep: #001f3f;
+    --ocean-medium: #0074D9;
+    --sea-light: #39CCCC;
+    --foam-white: #E6F3F7;
+    --sand-warm: #F4E4C1;
+    --sand-light: #FFF8E7;
+    --wave-gradient: linear-gradient(135deg, #001f3f 0%, #0074D9 50%, #39CCCC 100%);
+}
+
+/* Transiciones fluidas globales */
+* {
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Efecto Parallax mejorado */
+body {
+    background-attachment: fixed;
+    background-size: 120% 120%;
+    animation: gentle-drift 20s ease-in-out infinite;
+}
+
+@keyframes gentle-drift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Loading animation ondas sensuales */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+}
+
+.wave-dot {
+    width: 15px;
+    height: 15px;
+    margin: 0 5px;
+    background: var(--ocean-medium);
+    border-radius: 50%;
+    animation: wave-dance 1.4s ease-in-out infinite;
+}
+
+.wave-dot:nth-child(1) { animation-delay: 0s; }
+.wave-dot:nth-child(2) { animation-delay: 0.2s; }
+.wave-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes wave-dance {
+    0%, 60%, 100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    30% {
+        transform: translateY(-30px) scale(1.2);
+        opacity: 0.7;
+    }
+}
+
+/* Tipografía elegante con brillo dinámico */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Quicksand:wght@300;400;500&display=swap');
+
+h1, h2, h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, var(--navy-deep), var(--ocean-medium), var(--sea-light));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 3s linear infinite;
+}
+
+@keyframes shine {
+    to { background-position: 200% center; }
+}
+
+/* Tamaños dinámicos responsive */
+h1 { font-size: clamp(2rem, 5vw, 4rem); }
+h2 { font-size: clamp(1.5rem, 4vw, 3rem); }
+p { font-size: clamp(1rem, 2vw, 1.25rem); }
+
+/* Bordes ondulados SVG */
+.wave-separator {
+    width: 100%;
+    height: 150px;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 1200 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='%230074D9' opacity='0.3'/%3E%3C/svg%3E");
+    background-size: cover;
+}
+
+/* Efecto agua en hover */
+.water-ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.water-ripple::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(57,204,204,0.4) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.water-ripple:hover::before {
+    width: 500px;
+    height: 500px;
+}
+
+/* Efecto goteo */
+@keyframes drip {
+    0% { 
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    100% { 
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+.water-drop {
+    position: fixed;
+    width: 4px;
+    height: 100px;
+    background: linear-gradient(transparent, var(--sea-light));
+    animation: drip 3s infinite;
+    pointer-events: none;
+}
+
+/* Cards con efecto profundidad océano */
+.ocean-card {
+    background: linear-gradient(180deg, rgba(0,31,63,0.1) 0%, rgba(0,116,217,0.1) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(57,204,204,0.3);
+    box-shadow: 
+        0 8px 32px rgba(0,31,63,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+}
+
+.ocean-card:hover {
+    transform: rotateY(5deg) rotateX(5deg) translateZ(20px);
+}
+
+/* Botones con efecto ola */
+.wave-button {
+    position: relative;
+    overflow: hidden;
+    background: var(--ocean-medium);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.wave-button::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.2);
+    transform: skewX(-15deg);
+    transition: left 0.5s;
+}
+
+.wave-button:hover::after {
+    left: 100%;
+}
+
+/* Scroll suave con indicador de profundidad */
+.depth-indicator {
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 200px;
+    background: rgba(0,31,63,0.2);
+    border-radius: 2px;
+}
+
+.depth-marker {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: var(--ocean-medium);
+    border-radius: 50%;
+    left: -4px;
+    transition: top 0.3s;
+}
+
+/* Mejoras adicionales */
+
+/* 1. Efecto de niebla marina */
+.sea-mist {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 0%, rgba(230,243,247,0.1) 100%);
+    animation: mist-flow 10s ease-in-out infinite;
+}
+
+@keyframes mist-flow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.1; }
+}
+
+/* 2. Partículas flotantes (burbujas) */
+.bubble {
+    position: fixed;
+    bottom: -100px;
+    background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float-up 10s infinite linear;
+}
+
+@keyframes float-up {
+    to {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* 3. Texto con reflejo de agua */
+.water-reflection {
+    position: relative;
+    display: inline-block;
+}
+
+.water-reflection::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    transform: scaleY(-1);
+    background: linear-gradient(180deg, rgba(0,116,217,0.3) 0%, transparent 70%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0.3;
+    filter: blur(1px);
+}
+
+/* 4. Grid con efecto marea */
+.tide-grid {
+    display: grid;
+    gap: 20px;
+    animation: tide-motion 8s ease-in-out infinite;
+}
+
+@keyframes tide-motion {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(10px); }
+}
+
+/* 5. Hover con ondulación */
+.ripple-hover {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple-hover::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, var(--sea-light) 0%, transparent 70%);
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: transform 0.5s, opacity 0.5s;
+}
+
+.ripple-hover:hover::after {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0.3;
+}

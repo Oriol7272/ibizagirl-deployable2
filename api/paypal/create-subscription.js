@@ -33,7 +33,7 @@ module.exports = async (req,res)=>{
       body: JSON.stringify({
         plan_id: planId,
         application_context: {
-          brand_name: 'IbizaGirl.pics',
+          brand_name: 'ibizagirl.pics',
           user_action: 'SUBSCRIBE_NOW',
           return_url, cancel_url
         }

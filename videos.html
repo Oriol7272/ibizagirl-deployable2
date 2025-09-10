@@ -1,89 +1,568 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<script src="/content-data.js"></script>
-
-<script src="/js/env.js"></script>
-
-<script>
-  window.$crisp=[]; window.CRISP_WEBSITE_ID=(window.__ENV&&window.__ENV.CRISP_WEBSITE_ID)||'';
-  (function(){var d=document;var s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
-</script>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>IbizaGirl.pics — Vídeos</title>
-  <link rel="stylesheet" href="/styles.css">
-  <meta name="juicyads-site-verification" content="d9a76b9c250ba1823d821e651e04497c">
-  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="59e184b1-e679-4c93-b3ea-d60b63c1c04c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
-  <script src="/js/i18n.js" defer></script>
-  <script src="/js/paywall.js" defer></script>
-  <script src="/content-data1.js" defer></script>
-  <script src="/content-data2.js" defer></script>
-  <script src="/content-data3.js" defer></script>
-  <script src="/content-data4.js" defer></script>
-  <script src="/content-data5.js" defer></script>
-  <script src="/content-data6.js" defer></script>
-  <script src="/js/unified-content.js" defer></script>
-  <link rel="stylesheet" href="/css/paywall.css">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DBXYNPBSPY"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-DBXYNPBSPY");</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IbizaGirl.me - Premium Videos</title>
+    <meta name="description" content="IbizaGirl Premium - Exclusive beach photography and videos. Special discount for new members!">
+    <meta name="keywords" content="beach girls, summer photos, bikini content, beach photography, exclusive content, premium beach photos">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="IbizaGirl Premium Content">
+    <meta property="og:description" content="Exclusive beach photography and videos">
+    <meta property="og:image" content="/decorative-images/paradise-beach.png">
+    <meta property="og:url" content="https://ibizagirl.pics">
+    <link rel="canonical" href="https://ibizagirl.pics">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="google-site-verification" content="K4K5jxLup8_F3wDpbUG-Z4riFf_lgVorF62RFCQbnIY" />
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-13HE3GTF9N"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-13HE3GTF9N');
+    </script>
+    
+    <!-- PayPal SDK con currency EUR -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        @font-face {
+            font-family: 'SexyBeachy';
+            src: url('/decorative-images/SexyBeachy.ttf') format('truetype');
+            font-display: swap;
+        }
+        
+        html, body {
+            font-family: 'SexyBeachy', cursive, Arial, sans-serif;
+            background: url('/decorative-images/paradise-beach.png') center/cover fixed;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+        
+        header {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        nav {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 48px;
+            color: #00a8ff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .menu {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .menu a {
+            color: #333;
+            text-decoration: none;
+            font-size: 32px;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+        
+        .menu a:hover {
+            background: rgba(0,168,255,0.8);
+            color: white;
+        }
+        
+        /* Menú de ofertas */
+        .offers-menu {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        .offers-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .offer-item {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: 2px solid #00a8ff;
+        }
+        
+        .offer-item:hover {
+            transform: scale(1.05);
+            background: #f0f8ff;
+        }
+        
+        .offer-price {
+            font-size: 36px;
+            color: #00a8ff;
+            font-weight: bold;
+        }
+        
+        .offer-desc {
+            font-size: 20px;
+            color: #333;
+            margin-top: 10px;
+        }
+        
+        .lifetime-badge {
+            background: gold;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        
+        /* Galería de Videos */
+        .video-gallery {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .video-item {
+            position: relative;
+            aspect-ratio: 16/9;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            background: #000;
+        }
+        
+        .video-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(8px);
+            transition: filter 0.3s;
+        }
+        
+        .video-item:hover video {
+            filter: blur(4px);
+        }
+        
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-left: 25px solid #00a8ff;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            margin-left: 5px;
+        }
+        
+        .paypal-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.95);
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .paypal-icon {
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* Anuncios laterales */
+        .side-ad-left, .side-ad-right {
+            position: fixed;
+            width: 300px;
+            height: 250px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            overflow: hidden;
+            z-index: 100;
+            top: 120px;
+        }
+        
+        .side-ad-left {
+            left: 10px;
+        }
+        
+        .side-ad-right {
+            right: 10px;
+        }
+        
+        /* Anuncio inferior */
+        .ero-ad-container {
+            padding: 10px;
+            margin: 15px 0;
+            text-align: center;
+            min-height: 100px;
+        }
+        
+        /* Modal de pago */
+        .payment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .close-modal {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 1400px) {
+            .side-ad-left, .side-ad-right {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .logo { font-size: 36px; }
+            .menu a { font-size: 24px; }
+            .offer-price { font-size: 28px; }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+        }
+    </style>
+    <link rel="stylesheet" href="ocean-theme.css">
+    <link rel="stylesheet" href="mobile-responsive.css">
+    <!-- Monetización -->
+    <meta name="juicyads-site-verification" content="99208fe48d1ba4e7fa31b27728c201df">
+    <script type="text/javascript" data-cfasync="false">
+    /*<![CDATA[/* */
+    (function(){var c=window,f="a3b297d423f54ba336afc5933cd315fe",q=[["siteId",578*496*694*799-723-158964978942],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],p=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL3QvaFVhcVEvbnBvbHlmaWxsLm1pbi5qcw==","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQveWxlLm1pbi5qcw==","d3d3LnJ6Z2ZkdWV6ZnlwLmNvbS9uemEvSVpFSi93cG9seWZpbGwubWluLmpz","d3d3LnNsZHlsZ2lxbi5jb20vZWxlLm1pbi5qcw=="],g=-1,a,l,v=function(){clearTimeout(l);g++;if(p[g]&&!(1783313115000<(new Date).getTime()&&1<g)){a=c.document.createElement("script");a.type="text/javascript";a.async=!0;var n=c.document.getElementsByTagName("script")[0];a.src="https://"+atob(p[g]);a.crossOrigin="anonymous";a.onerror=v;a.onload=function(){clearTimeout(l);c[f.slice(0,16)+f.slice(0,16)]||v()};l=setTimeout(v,5E3);n.parentNode.insertBefore(a,n)}};if(!c[f]){try{Object.freeze(c[f]=q)}catch(e){}v()}})();
+    /*]]>/* */
+    </script>
+    <link rel="stylesheet" href="email-languages.css">
+<link rel="stylesheet" href="final-styles.css">
+<script src="language-dropdown.js"></script>
+<link rel="stylesheet" href="language-dropdown-improved.css">
+<script src="language-system-complete.js"></script>
 </head>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Alex+Brush&display=swap" rel="stylesheet">
-  <script src="/js/decorative-list.js"></script>
-  <link rel="stylesheet" href="/css/site.css">
-<body>
-<header class="site"><div class="brand"><h1>IBIZAGIRL.PICS</h1><p data-i18n="welcome">Bienvenido al paraiso para tu disfrute</p></div><nav class="navbar"><a class="btn" href="/index.html">Home</a><a class="btn" href="/premium.html">Premium</a><a class="btn" href="/videos.html">Videos</a><a class="btn" href="/subscription.html" data-i18n="subscribe">Suscripciones</a><button id="buy-lifetime" class="btn" style="display:inline-flex;align-items:center;gap:.4rem"><span class="pp-icon"></span><span>Lifetime 100€</span></button></nav></header>
-<div class="page">
-
-
-
-<div class="langbox"><select id="lang-select"><option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option></select></div>
-<aside class="sidebar-fixed sidebar-left" id="side-ads-left"><div class="ad-slot" data-net="juicy"></div><div class="ad-slot" data-net="exo"></div><div class="ad-slot" data-net="ero"></div></aside><aside class="sidebar-fixed sidebar-right" id="side-ads-right"><div class="ad-slot" data-net="juicy"></div><div class="ad-slot" data-net="exo"></div><div class="ad-slot" data-net="ero"></div></aside>
-<div class="top-strip"><span class="plan-pill">Lifetime 100€</span><span class="plan-pill">Anual 49,99€</span><span class="plan-pill">Mensual 14,99€</span><span>Todo el contenido visible mientras esté activo.</span></div><div class="main-wrap"><aside class="sidebar" id="sb-left"><div class="ad-slot" data-network="juicy"></div><div class="ad-slot" data-network="exo"></div><div class="ad-slot" data-network="ero"></div></aside><main class="content" id="page-main">
-<div id="main-section"></div></main><aside class="sidebar" id="sb-right"><div class="ad-slot" data-network="juicy"></div><div class="ad-slot" data-network="exo"></div><div class="ad-slot" data-network="ero"></div></aside></div>
-<div id="lifetime-strip" style="background:#00457C;color:#fff;padding:.5rem 1rem;display:flex;gap:.75rem;align-items:center;justify-content:center;flex-wrap:wrap"><strong>Lifetime</strong> — desbloquea todo y sin anuncios por <strong>100,00€</strong> <button id="buy-lifetime" class="buy-btn" style="position:static;transform:none"><span class="pp-icon"></span><span class="buy-label">Comprar</span></button></div>
-<div id="main-section" style="padding:1rem"  id="main-section" style="padding:1rem"><h2 data-i18n="videos">Vídeos</h2><div id="videos-grid"></div></div>
-<div class="ad-slot" data-network="juicy"></div>
-<div class="ad-slot" data-network="exo"></div>
-
-<nav class="nav" style="display:flex;gap:1rem;align-items:center;padding:.6rem 1rem;background:#0b0b0b;color:#fff">
-  <a href="/index.html" data-i18n="gallery" style="color:#fff">Galería</a>
-  <a href="/premium.html" data-i18n="premium" style="color:#fff">Premium</a>
-  <a href="/videos.html" data-i18n="videos" style="color:#fff">Vídeos</a>
-  <a href="/subscription.html" data-i18n="subscribe" style="color:#fff">Suscripción</a>
-  <span style="flex:1 1 auto"></span>
-  <select id="lang-select" class="lang-switch">
-    <option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option>
-  </select>
-</nav>
-
-  <nav class="wrap">
-    <a href="/" data-i18n="home"></a>
-    <a href="/premium" data-i18n="premium"></a>
-    <a href="/videos" data-i18n="videos"></a>
-    <a href="/subscription" data-i18n="subscription"></a>
-    <select id="lang-picker">
-      <option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="it">IT</option>
-    </select>
-  </nav>
-  <main class="wrap">
-    <h1 data-i18n="videos_title"></h1>
-    <div class="notice" data-i18n="lifetime_note"></div>
-    <div id="main-section" style="padding:1rem"  id="main-section" id="grid-videos" class="grid"></div>
-  </main>
-  <!-- Modal de pago -->
-  <div id="pay-modal" class="modal hidden"><div class="modal-backdrop"></div><div class="modal-card"><h3 id="pm-title">PayPal</h3><div id="paypal-mini"></div><button id="pm-close" class="btn-close">×</button></div></div>
-  <script>document.getElementById("pm-close").onclick=()=>document.getElementById("pay-modal").classList.add("hidden");document.querySelector("#pay-modal .modal-backdrop").onclick=()=>document.getElementById("pay-modal").classList.add("hidden");</script>
-  <script src="/js/payments.config.js?v=20250823173337"></script>
-  <script src="/js/lazyfix.js?v=20250823173345"></script>
-  <script src="/js/lazyfix.js?v=20250823173941"></script>
-  <script src="/js/payments.config.js?v=20250823173941"></script>
-  
-  
-<div id="paypal-modal" class="hidden"><div id="paypal-modal-bg"><div id="paypal-modal-card"><button id="paypal-modal-close" aria-label="Close">✕</button><div id="paypal-modal-target"></div></div></div></div>
+<body class="parallax-bg">
+    <div id="first-time-discount" style="background: linear-gradient(90deg, #001f3f, #0074D9); color: white; text-align: center; padding: 10px; display: none;">
+        🎁 Primera compra: 20% DESCUENTO - Código: BEACH20
+        <button onclick="this.parentElement.style.display='none'" style="margin-left: 20px; background: #7FDBFF; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">✕</button>
+    </div>
+    <script>
+        if (!localStorage.getItem("visited")) {
+            document.getElementById("first-time-discount").style.display = "block";
+            localStorage.setItem("visited", "true");
+        }
+    </script>
+    <header>
+    <nav>
+        <div class="logo">🌴 IbizaGirl</div>
+        <div class="menu">
+            <a href="/" data-translate="home">Inicio</a>
+            <a href="/premium.html" data-translate="premium">Premium</a>
+            <a href="/videos.html" data-translate="videos">Videos</a>
+            <a href="/subscription.html" data-translate="subscriptions">Suscripciones</a>
+        </div>
+<div class="language-selector">
+    <div class="language-dropdown">
+        <button class="lang-current" onclick="toggleDropdown()">
+            <span id="current-lang">🇪🇸 ES</span>
+            <svg viewBox="0 0 12 8" fill="currentColor">
+                <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+        </button>
+        <div class="lang-options" id="lang-options">
+            <button onclick="setLanguage('es')">🇪🇸 Español</button>
+            <button onclick="setLanguage('en')">🇬🇧 English</button>
+            <button onclick="setLanguage('fr')">🇫🇷 Français</button>
+            <button onclick="setLanguage('de')">🇩🇪 Deutsch</button>
+            <button onclick="setLanguage('it')">🇮🇹 Italiano</button>
+            <button onclick="setLanguage('pt')">🇵🇹 Português</button>
+        </div>
+    </div>
 </div>
-</body>
-  <script type="module" src="/js/page-init.js"></script>
-</html>
+    </nav>
+    </header>
 
+<!-- Email Capture -->
+<div class="email-capture-bar">
+    <form id="email-form" onsubmit="handleEmailSubmit(event)">
+        <span data-translate="emailTitle">Recibe contenido exclusivo diario</span>
+        <input type="email" placeholder="tu@email.com" data-translate-placeholder="emailPlaceholder" data-translate-placeholder="emailPlaceholder" required>
+        <button type="submit" data-translate="subscribe">Suscribir</button>
+    </form>
+</div>
+    
+    <!-- Menú de ofertas -->
+    <div class="offers-menu">
+        <div class="offers-container">
+            <div class="offer-item ocean-card water-ripple" onclick="purchaseBundle()">
+                <div class="offer-price">1€</div>
+                <div class="offer-desc" data-translate="packVideos">Pack 5 Videos</div>
+            </div>
+            <div class="offer-item ocean-card water-ripple" onclick="subscribeMonthly()">
+                <div class="offer-price">14.99€</div>
+                <div class="offer-desc" data-translate="monthly">Suscripción Mensual</div>
+            </div>
+            <div class="offer-item ocean-card water-ripple" onclick="subscribeAnnual()">
+                <div class="offer-price">49.99€</div>
+                <div class="offer-desc" data-translate="annual">Suscripción Anual</div>
+            </div>
+            <div class="offer-item ocean-card water-ripple" onclick="purchaseLifetime()">
+                <div class="offer-price">100€</div>
+                <div class="offer-desc" data-translate="lifetime">Acceso Vitalicio</div>
+                <div class="lifetime-badge"><span data-translate="noAds"><span data-translate="noAds">¡SIN ANUNCIOS!</span></span></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Anuncios laterales -->
+    <div class="side-ad-left" id="side-ad-left"></div>
+    <div class="side-ad-right" id="side-ad-right"></div>
+    
+    <!-- Galería de Videos -->
+    <div class="video-gallery">
+        <div class="gallery-grid tide-grid" id="video-gallery"></div>
+    </div>
+    
+    <!-- Anuncio inferior -->
+    <div class="ero-ad-container">
+        <div id="sp_8182222_node">&nbsp;</div>
+    </div>
+    
+    <!-- Modal de pago -->
+    <div class="payment-modal" id="payment-modal">
+        <div class="modal-content">
+            <h2<span data-translate="processing"<span data-translate="processing">Procesando pago...</span></span></h2>
+            <div id="paypal-button-container"></div>
+            <button class="close-modal" onclick="closeModal()"><<span data-translate="cancel"><<span data-translate="cancel">Cancelar</span></span></button>
+        </div>
+    </div>
+    
+    <script src="/content-data5.js"></script>
+    
+    <script type="text/javascript" charset="utf-8">
+    if (typeof eaCtrl =="undefined"){ 
+        var eaCtrlRecs=[];
+        var eaCtrl = {add:function(ag){eaCtrlRecs.push(ag)}};
+        var js = document.createElement('script');
+        js.setAttribute("src","//go.easrv.cl/loadeactrl.go?pid=152716&spaceid=8182219&ctrlid=798931");
+        document.head.appendChild(js);
+    }
+    eaCtrl.add({"display":"sp_8182222_node","sid":8182222,"plugin":"banner"});
+    </script>
+    
+    <script src="https://a.magsrv.com/ad-provider.js"></script>
+    
+    <script>
+    // Función para inicializar la galería de videos
+    function initVideoGallery() {
+        // Usar la variable correcta del archivo content-data5.js
+        const videos = window.PREMIUM_VIDEOS_POOL || [];
+        
+        if (videos.length === 0) {
+            setTimeout(initVideoGallery, 2000);
+            return;
+        }
+        
+        const gallery = document.getElementById('video-gallery');
+        const fixPath = (path) => path.startsWith('/') ? path : '/' + path;
+        const videoList = videos.map(fixPath);
+        
+        // Mostrar solo 40 videos
+        videoList.slice(0, 40).forEach((video, index) => {
+            const div = document.createElement('div');
+            div.className = 'video-item';
+            div.onclick = () => purchaseVideo(video, index);
+            
+            const videoEl = document.createElement('video');
+            videoEl.src = video;
+            videoEl.muted = true;
+            videoEl.loop = true;
+            
+            const playOverlay = document.createElement('div');
+            playOverlay.className = 'play-overlay';
+            playOverlay.innerHTML = '<div class="play-icon"></div>';
+            
+            const badge = document.createElement('div');
+            badge.className = 'paypal-badge';
+            badge.innerHTML = '<svg class="paypal-icon" viewBox="0 0 24 24" fill="#003087"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.765.765 0 0 1 .755-.655h7.416c2.467 0 4.143.361 4.988 1.078.846.715 1.272 1.893 1.272 3.507 0 .938-.139 1.772-.416 2.491-.277.721-.703 1.333-1.273 1.834-.568.501-1.277.884-2.12 1.148-.843.265-1.839.397-2.975.397H9.778l-.682 5.817a.641.641 0 0 1-.634.538h-1.386zm1.428-8.662h2.155c1.605 0 2.76-.257 3.454-.77.695-.514 1.042-1.313 1.042-2.394 0-.806-.254-1.372-.763-1.696-.508-.325-1.352-.487-2.53-.487H9.071l-.567 5.347zM18.487 13.706c0 .775-.137 1.507-.41 2.197a5.378 5.378 0 0 1-1.15 1.766 5.26 5.26 0 0 1-1.764 1.172c-.683.283-1.437.425-2.265.425h-3.59a.64.64 0 0 1-.633-.537l1.416-12.106a.765.765 0 0 1 .755-.655h4.187c1.579 0 2.764.293 3.556.879.791.586 1.187 1.509 1.187 2.769 0 .639-.094 1.218-.281 1.735a3.796 3.796 0 0 1-.801 1.318 3.476 3.476 0 0 1-1.251.863c.646.168 1.149.486 1.509.953.36.468.54 1.088.54 1.863v.358z"/></svg> 0.30€';
+            
+            div.appendChild(videoEl);
+            div.appendChild(playOverlay);
+            div.appendChild(badge);
+            gallery.appendChild(div);
+        });
+    }
+    
+    // Funciones de pago
+    function purchaseVideo(video, index) {
+        showPayPalButton('video', 0.30, 'Video ' + (index + 1));
+    }
+    
+    function purchaseBundle() {
+        showPayPalButton('bundle', 1.00, 'Pack 5 Videos');
+    }
+    
+    function purchaseLifetime() {
+        showPayPalButton('lifetime', 100.00, 'Acceso Vitalicio');
+    }
+    
+    function subscribeMonthly() {
+        window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-3WE8037612641383DNCUKNJI', '_blank');
+    }
+    
+    function subscribeAnnual() {
+        window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-43K261214Y571983RNCUKN7I', '_blank');
+    }
+    
+    function showPayPalButton(type, amount, description) {
+        document.getElementById('payment-modal').style.display = 'flex';
+        document.getElementById('paypal-button-container').innerHTML = '';
+        
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        description: description,
+                        amount: {
+                            currency_code: 'EUR',
+                            value: amount.toFixed(2)
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('¡Pago completado! Gracias ' + details.payer.name.given_name);
+                    closeModal();
+                    if (type === 'lifetime') {
+                        localStorage.setItem('lifetime_access', 'true');
+                        localStorage.setItem('no_ads', 'true');
+                    }
+                });
+            },
+            onError: function(err) {
+                console.error('Error PayPal:', err);
+                alert('Error procesando el pago. Por favor intenta de nuevo.');
+            }
+        }).render('#paypal-button-container');
+    }
+    
+    function closeModal() {
+        document.getElementById('payment-modal').style.display = 'none';
+        document.getElementById('paypal-button-container').innerHTML = '';
+    }
+    
+    // Anuncios laterales
+    function initSideAds() {
+        const leftAd = document.getElementById('side-ad-left');
+        if (leftAd) {
+            const ins = document.createElement('ins');
+            ins.className = 'eas6a97888e2';
+            ins.setAttribute('data-zoneid', '5696328');
+            ins.style.display = 'block';
+            ins.style.width = '100%';
+            ins.style.height = '100%';
+            leftAd.appendChild(ins);
+        }
+        
+        const rightAd = document.getElementById('side-ad-right');
+        if (rightAd) {
+            const ins = document.createElement('ins');
+            ins.className = 'eas6a97888e2';
+            ins.setAttribute('data-zoneid', '5705186');
+            ins.style.display = 'block';
+            ins.style.width = '100%';
+            ins.style.height = '100%';
+            rightAd.appendChild(ins);
+        }
+        
+        if (window.AdProvider) {
+            window.AdProvider.push({"serve": {}});
+        }
+    }
+    
+    // Inicializar todo cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(initVideoGallery, 3000);
+        setTimeout(initSideAds, 1500);
+    });
+    </script>
+    <!-- Email Capture -->
+    <div class="email-capture-section">
+        <div class="email-container">
+            <h3 data-translate="dailyUpdates">🌊 Recibe actualizaciones diarias</h3>
+            <form id="email-form" onsubmit="handleEmailSubmit(event)">
+                <input type="email" placeholder="tu@email.com" data-translate-placeholder="emailPlaceholder" data-translate-placeholder="emailPlaceholder" required>
+                <button type="submit" data-translate="subscribe">Suscribir</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

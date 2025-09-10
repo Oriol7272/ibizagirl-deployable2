@@ -1,4 +1,3 @@
-console.log("📦 Cargando módulo content-data4.js - Imágenes premium parte 2...");
 
 const PREMIUM_IMAGES_PART2 = [
     "uncensored/TgxnDUvTym3gq8YTlsJ2.webp",
@@ -289,6 +288,5 @@ const PREMIUM_IMAGES_PART2 = [
     "uncensored/zqpBmzZ1EfnsMxLnnSNS.webp"
 ];
 
-console.log("✅ 286 imágenes premium parte 2 cargadas desde /uncensored/");
 
 window.PREMIUM_IMAGES_PART2 = PREMIUM_IMAGES_PART2;

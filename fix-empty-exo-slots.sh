@@ -95,7 +95,7 @@ if ! grep -q 'id="ad-right"' index.html; then awk 'f==0&&/<\/main>/{print "  <as
 git add js/ads-exo-sides.js index.html 2>/dev/null || true
 git commit -m "ads: EXO laterales con reintentos y fallback de casa; slots saneados" || true
 
-vercel link --project ibizagirl-final --yes
+vercel link --project beachgirl-final --yes
 LOG="$(mktemp)"
 vercel deploy --prod --yes | tee "$LOG" >/dev/null
 awk '/Production: https:\/\//{print "🔗 Production:", $3}' "$LOG" | tail -n1

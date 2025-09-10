@@ -1,0 +1,60 @@
+<!-- Añadir a todos los headers -->
+<div class="language-selector">
+    <div class="language-dropdown">
+        <button class="lang-current" onclick="toggleDropdown()">
+            <span id="current-lang">🇪🇸 ES</span>
+            <svg viewBox="0 0 12 8" fill="currentColor">
+                <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+        </button>
+        <div class="lang-options" id="lang-options">
+            <button onclick="setLanguage('es')">🇪🇸 Español</button>
+            <button onclick="setLanguage('en')">🇬🇧 English</button>
+            <button onclick="setLanguage('fr')">🇫🇷 Français</button>
+            <button onclick="setLanguage('de')">🇩🇪 Deutsch</button>
+            <button onclick="setLanguage('it')">🇮🇹 Italiano</button>
+            <button onclick="setLanguage('pt')">🇵🇹 Português</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.language-selector {
+    display: flex;
+    gap: 5px;
+    background: rgba(255,255,255,0.1);
+    padding: 5px;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+}
+
+.lang-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.lang-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.lang-btn.active {
+    background: var(--ocean-medium);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .language-selector {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 10000;
+    }
+}
+</style>

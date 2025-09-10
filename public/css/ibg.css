@@ -1,77 +1,107 @@
-/* --- Tipografía Sexy Beachy desde /decorative-images --- */
 @font-face{
   font-family:"Sexy Beachy";
   src:url("/decorative-images/Sexy Beachy.otf") format("opentype"),
       url("/decorative-images/Sexy Beachy.ttf") format("truetype");
   font-display:swap;
-  font-style:normal;
-  font-weight:400;
 }
+html,body{
+  margin:0; padding:0; color:#fff;
+  background:#0b0b0f url("/decorative-images/paradise-beach.png") center/cover fixed no-repeat;
+  font-family:"Sexy Beachy", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+@media(min-width:1024px){ body{padding-left:190px;padding-right:190px;} }
+.container{max-width:1200px;margin:0 auto;padding:0 16px}
 
-/* Reset suave + dark auto */
-:root{color-scheme:light dark}
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,"Helvetica Neue",Arial,sans-serif;
-  background: center/cover no-repeat url("/decorative-images/paradise-beach.png"), #0b0b0b;
-  color:#111;
-}
-@media (prefers-color-scheme:dark){
-  body{color:#e7e7e7}
-}
-
-/* Layout ancho par/* cercar a laterales */
-.container{max-width:1280px;margin:0 auto;padding:0 12px}
-
-/* Header / Nav */
-#site-header{position:sticky;top:0;z-index:1000;background:rgba(255,255,255,.7);backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid rgba(0,0,0,.06)}
-@media (prefers-color-scheme:dark){
-  #site-header{background:rgba(16,16,16,.6);border-color:rgba(255,255,255,.08)}
-}
-.navbar{display:flex;align-items:center;gap:16px;padding:10px 0}
-.navbar .brand{font-family:"Sexy Beachy",cursive;font-size:28px;letter-spacing:.5px;text-shadow:0 1px 0 rgba(0,0,0,.2)}
-.navbar nav{margin-left:auto;display:flex;gap:14px;flex-wrap:wrap}
-.navbar a{color:inherit;text-decoration:none;padding:6px 10px;border-radius:12px}
-.navbar a:hover{background:rgba(0,0,0,.06)}
-@media (prefers-color-scheme:dark){ .navbar a:hover{background:rgba(255,255,255,.08)}}
-
-/* Selector idiomas (único) */
-#lang-switch{display:flex;gap:8px;align-items:center}
-#lang-switch button{border:0;background:rgba(0,0,0,.06);padding:6px 10px;border-radius:12px;cursor:pointer}
-#lang-switch button.active{background:#2563eb;color:#fff}
-@media (prefers-color-scheme:dark){
-  #lang-switch button{background:rgba(255,255,255,.08);color:#e7e7e7}
-  #lang-switch button.active{background:#2563eb;color:#fff}
-}
+/* Nav */
+.nav{position:sticky;top:0;z-index:30;background:rgba(10,10,14,.85);backdrop-filter:blur(10px);border-bottom:1px solid #1f1f26}
+.nav-inner{display:flex;align-items:center;gap:20px;padding:16px}
+.nav .brand{font-weight:900;letter-spacing:.8px;font-size:24px}
+.nav .menu{margin-left:auto;display:flex;gap:18px}
+.nav .menu a{font-size:18px;padding:6px 8px;border-radius:8px;color:#fff;opacity:.95;text-decoration:none}
+.nav .menu a:hover{background:rgba(255,255,255,.08)}
 
 /* Banner */
-#hero{position:relative;min-height:280px;display:flex;align-items:center;justify-content:center;margin:0;border-bottom:1px solid rgba(0,0,0,.07)}
-#hero .hero-inner{text-align:center;padding:48px 12px}
-.hero-title{font-family:"Sexy Beachy",cursive;font-size:56px;line-height:1;margin:0 0 8px;color:#111;text-shadow: 0 2px 0 rgba(0,0,0,.18), 0 8px 18px rgba(0,0,0,.15)}
-.hero-sub{font-family:"Sexy Beachy",cursive;font-size:24px;opacity:.9;margin:0}
-@media (prefers-color-scheme:dark){
-  .hero-title{color:#f3f3f3;text-shadow: 0 2px 0 rgba(0,0,0,.35), 0 10px 26px rgba(0,0,0,.35)}
-  .hero-sub{color:#ddd}
-}
+.banner{position:relative;display:grid;place-items:center;min-height:54vh;background-size:cover;background-position:center}
+.banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.55))}
+.banner-inner{position:relative;text-align:center;padding:64px 16px}
+.banner h1{margin:0 0 10px;line-height:1.02;text-shadow:0 2px 22px rgba(0,0,0,.5)}
+.banner p{margin:0;opacity:.98}
+#decorative-rotator{position:absolute;inset:0;z-index:-1;opacity:.20;filter:blur(2px)}
+.banner h1{font-size:72px}
+.banner p{font-size:24px}
+@media(min-width:768px){ .banner h1{font-size:108px} .banner p{font-size:30px} }
+@media(min-width:1200px){ .banner h1{font-size:132px} .banner p{font-size:38px} }
+
+/* Secciones */
+.section{padding:24px 0}
+.h2{font-size:32px;margin:0 0 12px 6px;opacity:.95}
 
 /* Carrusel */
-#carousel{margin:18px auto 8px}
-.carousel-track{display:flex;gap:8px;overflow:hidden;scroll-behavior:smooth}
-.carousel-track img{height:180px;flex:0 0 auto;border-radius:18px;object-fit:cover;display:block;filter:saturate(1.05)}
-@media (max-width:920px){ .carousel-track img{height:140px} }
+.carousel{position:relative;overflow:hidden;border-radius:18px}
+.carousel-track{display:flex;transition:transform .6s ease}
+.carousel img{width:100%;height:360px;object-fit:cover;flex:0 0 100%}
 
-/* Galería */
-#gallery{margin:8px auto 32px}
-.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:8px}
-@media (max-width:1200px){ .grid{grid-template-columns:repeat(8,1fr)} }
-@media (max-width:920px){ .grid{grid-template-columns:repeat(5,1fr)} }
-@media (max-width:640px){ .grid{grid-template-columns:repeat(3,1fr)} }
-.grid img{width:100%;height:100%;aspect-ratio:1/1;object-fit:cover;border-radius:16px;display:block}
+/* Gallery */
+.grid{display:grid;gap:10px}
+@media(min-width:520px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:820px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:1120px){.grid{grid-template-columns:repeat(5,1fr)}}
+.card{position:relative;border-radius:14px;overflow:hidden;background:#121219;border:1px solid #1f1f26}
+.card .thumb{width:100%;aspect-ratio:3/4;position:relative;overflow:hidden}
+.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.03)}
+.card .title{display:none}
 
-/* Lazy fade-in */
-img[loading="lazy"]{opacity:.001;transition:opacity .4s ease}
-img.is-visible{opacity:1}
+/* Slots publicitarios (nombres neutros) */
+.slot-bottom{display:grid;place-items:center;min-height:100px;border:1px dashed rgba(255,255,255,.35);border-radius:12px;margin:14px 0;background:rgba(0,0,0,.2)}
+.slot-lateral{position:fixed;top:86px;bottom:20px;width:160px;display:none;z-index:40}
+.slot-lateral .box{height:100%;border:1px dashed rgba(255,255,255,.35);border-radius:12px;display:grid;place-items:center;padding:10px;background:rgba(0,0,0,.25)}
+.slot-lateral.left{left:14px}
+.slot-lateral.right{right:14px}
+@media(min-width:1024px){ .slot-lateral{display:block} }
 
-/* Bordes suaves generales */
-.card{border-radius:18px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+/* === IBG Ads (laterales + inferior) === */
+.ad-lateral{position:fixed;top:90px;width:300px;z-index:50}
+.ad-lateral.left{left:10px}
+.ad-lateral.right{right:10px}
+.ad-lateral iframe{display:block;width:100%;min-height:260px;border:0}
+@media(max-width: 1200px){
+  .ad-lateral{display:none} /* oculta laterales en pantallas pequeñas */
+}
+.ad-bottom{position:relative;max-width:1140px;margin:24px auto;padding:0 12px}
+.ad-bottom iframe{display:block;width:100%;min-height:260px;border:0}
+
+/* === IBG Ads (laterales + inferior) === */
+.ad-lateral{position:fixed;top:90px;width:300px;z-index:50}
+.ad-lateral.left{left:10px}
+.ad-lateral.right{right:10px}
+.ad-lateral iframe{display:block;width:100%;min-height:260px;border:0}
+@media(max-width: 1200px){
+  .ad-lateral{display:none} /* oculta laterales en pantallas pequeñas */
+}
+.ad-bottom{position:relative;max-width:1140px;margin:24px auto;padding:0 12px}
+.ad-bottom iframe{display:block;width:100%;min-height:260px;border:0}
+
+/* ===== Banner ===== */
+#banner{
+  min-height: 420px;
+  background-size: cover;
+  background-position: center center;
+  position: relative;
+}
+#banner .banner-inner{
+  position:relative; z-index:1;
+  color:#fff; text-align:center; padding:48px 16px;
+}
+#banner::after{
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.35));
+}
+
+/* === Ads slots === */
+.ad-lateral{ position:fixed; top:100px; width:300px; min-height:250px; z-index:30; }
+#ad-left{ left:8px; }
+#ad-right{ right:8px; }
+.ad-bottom{ position:fixed; left:0; right:0; bottom:0; min-height:90px; display:flex; justify-content:center; z-index:30; }
+@media (max-width:1024px){ .ad-lateral{ display:none; } }
+/* #ad-bottom-test: quitar al finalizar debug */
+#ad-bottom{ outline:1px dashed rgba(255,255,255,.35); min-height:250px; }

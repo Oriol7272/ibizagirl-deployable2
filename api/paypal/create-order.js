@@ -41,7 +41,7 @@ module.exports = async (req, res) => {
         intent: 'CAPTURE',
         purchase_units: [{ amount: { currency_code: currency, value: amount.toFixed(2) } }],
         application_context: {
-          brand_name: 'IbizaGirl.pics',
+          brand_name: 'ibizagirl.pics',
           landing_page: 'LOGIN',
           user_action: 'PAY_NOW',
           return_url,

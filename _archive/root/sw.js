@@ -1,14 +1,14 @@
 // ============================
-// IBIZAGIRL.PICS SERVICE WORKER v4.1.0
+// ibizagirl.pics SERVICE WORKER v4.1.0
 // PWA + Performance + Cache Optimization
 // ============================
 
 const CACHE_VERSION = '4.1.0';
-const CACHE_NAME = `ibizagirl-v${CACHE_VERSION}`;
-const STATIC_CACHE = `ibizagirl-static-v${CACHE_VERSION}`;
-const DYNAMIC_CACHE = `ibizagirl-dynamic-v${CACHE_VERSION}`;
-const IMAGE_CACHE = `ibizagirl-images-v${CACHE_VERSION}`;
-const VIDEO_CACHE = `ibizagirl-videos-v${CACHE_VERSION}`;
+const CACHE_NAME = `beachgirl-v${CACHE_VERSION}`;
+const STATIC_CACHE = `beachgirl-static-v${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `beachgirl-dynamic-v${CACHE_VERSION}`;
+const IMAGE_CACHE = `beachgirl-images-v${CACHE_VERSION}`;
+const VIDEO_CACHE = `beachgirl-videos-v${CACHE_VERSION}`;
 
 // Archivos críticos para cachear
 const STATIC_ASSETS = [
@@ -119,7 +119,7 @@ self.addEventListener('activate', event => {
                 return Promise.all(
                     cacheNames
                         .filter(cacheName => {
-                            return cacheName.startsWith('ibizagirl-') && 
+                            return cacheName.startsWith('beachgirl-') && 
                                    !cacheName.includes(CACHE_VERSION);
                         })
                         .map(cacheName => {
@@ -340,7 +340,7 @@ self.addEventListener('push', event => {
     };
     
     event.waitUntil(
-        self.registration.showNotification('IbizaGirl.pics', options)
+        self.registration.showNotification('ibizagirl.pics', options)
     );
 });
 

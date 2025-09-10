@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>BeachGirl.pics - Bienvenido al Paraíso</title>
+    <meta name="description" content="BeachGirl Premium - Exclusive beach photography and videos. Special discount for new members!">
+    <meta name="keywords" content="beach girls, summer photos, bikini content, beach photography, exclusive content, premium beach photos">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="BeachGirl Premium Content">
+    <meta property="og:description" content="Exclusive beach photography and videos">
+    <meta property="og:image" content="/decorative-images/paradise-beach.png">
+    <meta property="og:url" content="https://beachgirl.pics">
+    <link rel="canonical" href="https://beachgirl.pics">
+    
+    <!-- Fuente decorativa -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/site.css">
+    
+    <!-- Environment variables -->
+    <script src="/js/env.js"></script>
+    
+    <!-- Decorative images list -->
+    <script src="/js/decorative-list.js"></script>
+</head>
+<body class="paradise-theme">
+    <!-- Top subscription strip -->
+    <div class="top-strip">
+        <span class="plan-pill">Lifetime 100 EUR</span>
+        <span class="plan-pill">Anual 49.99 EUR</span>
+        <span class="plan-pill">Mensual 14.99 EUR</span>
+        <span>Todo el contenido visible mientras este activo. Lifetime ademas elimina anuncios.</span>
+        <button id="buy-lifetime" class="buy-btn">
+            <span class="pp-icon"></span>
+            <span>PayPal</span>
+        </button>
+    </div>
+
+    <!-- Navigation Menu -->
+    <header class="topbar">
+        <nav class="nav-container">
+            <a href="/" class="nav-link active">Home</a>
+            <a href="/premium" class="nav-link">Premium</a>
+            <a href="/videos" class="nav-link">Videos</a>
+            <a href="/subscription" class="nav-link">Subscriptions</a>
+        </nav>
+        
+        <!-- Language selector -->
+        <div class="language-selector">
+            <select id="language-select">
+                <option value="es">🇪🇸 Español</option>
+                <option value="en">🇺🇸 English</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="it">🇮🇹 Italiano</option>
+            </select>
+        </div>
+    </header>
+
+    <!-- Paradise background -->
+    <div class="paradise-background"></div>
+
+    <!-- Main banner -->
+    <section class="banner-section">
+        <div class="banner-container">
+            <div class="rotating-images" id="banner-rotator">
+                <!-- Las imágenes rotatorias se cargarán aquí -->
+            </div>
+            <div class="banner-content">
+                <h1 class="site-title">beachgirl.pics</h1>
+                <p class="site-subtitle">bienvenido al paraíso</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main content -->
+    <main class="main-container">
+        <!-- Carousel section -->
+        <section class="carousel-section">
+            <h2 class="section-title">Destacadas del Día</h2>
+            <div class="carousel-container">
+                <div class="carousel-wrapper" id="main-carousel">
+                    <!-- 40 imágenes aleatorias del carrusel -->
+                </div>
+                <button class="carousel-btn prev" id="carousel-prev">❮</button>
+                <button class="carousel-btn next" id="carousel-next">❯</button>
+            </div>
+        </section>
+
+        <!-- Gallery section -->
+        <section class="gallery-section">
+            <h2 class="section-title">Galería Completa</h2>
+            <div class="gallery-grid" id="main-gallery">
+                <!-- 40 imágenes aleatorias de la galería -->
+            </div>
+            <div class="gallery-load-more">
+                <button class="load-more-btn" id="load-more">Cargar Más</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Sidebar ads -->
+    <aside class="sidebar-fixed sidebar-left" id="side-ads-left">
+        <div class="ad-slot" data-net="juicy"></div>
+        <div class="ad-slot" data-net="exo"></div>
+        <div class="ad-slot" data-net="ero"></div>
+    </aside>
+    
+    <aside class="sidebar-fixed sidebar-right" id="side-ads-right">
+        <div class="ad-slot" data-net="juicy"></div>
+        <div class="ad-slot" data-net="exo"></div>
+        <div class="ad-slot" data-net="ero"></div>
+    </aside>
+
+    <!-- Bottom sticky ad -->
+    <div id="ad-sticky-bottom" class="ad-sticky-bottom">
+        <div class="ad-slot" data-net="popads"></div>
+    </div>
+
+    <!-- PayPal modal -->
+    <div id="paypal-modal" class="hidden">
+        <div id="paypal-modal-bg">
+            <div id="paypal-modal-card">
+                <button id="paypal-modal-close" aria-label="close">×</button>
+                <div id="paypal-modal-target"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts de contenido (ORDEN IMPORTANTE) -->
+    <script src="/content-data1.js"></script>
+    <script src="/content-data2.js"></script>
+    <script src="/content-data3.js"></script>
+    <script src="/content-data4.js"></script>
+    <script src="/content-data5.js"></script>
+    <script src="/content-data6.js"></script>
+
+    <!-- Scripts funcionales -->
+    <script src="/js/i18n.js"></script>
+    <script src="/js/paywall.js"></script>
+    <script src="/js/unified-content.js"></script>
+    
+    <!-- Crisp Chat -->
+    <script>
+        window.$crisp=[];
+        window.CRISP_WEBSITE_ID=(window.__ENV&&window.__ENV.CRISP_WEBSITE_ID)||"59e184b1-e679-4c93-b3ea-d60b63c1c04c";
+        (function(){
+            var d=document;
+            var s=d.createElement("script");
+            s.src="https://client.crisp.chat/l.js";
+            s.async=1;
+            d.getElementsByTagName("head")[0].appendChild(s);
+        })();
+    </script>
+
+    <!-- Main application script -->
+    <script>
+        // Función principal para inicializar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeBeachGirl();
+        });
+
+        function initializeBeachGirl() {
+            console.log('🏖️ Inicializando BeachGirl.pics...');
+            
+            // Configurar el fondo paradise
+            setupParadiseBackground();
+            
+            // Configurar las imágenes rotatorias del banner
+            setupBannerRotator();
+            
+            // Inicializar carrusel con 40 imágenes aleatorias
+            initializeCarousel();
+            
+            // Inicializar galería con 40 imágenes aleatorias
+            initializeGallery();
+            
+            // Configurar selector de idiomas
+            setupLanguageSelector();
+            
+            // Inicializar anuncios
+            initializeAds();
+            
+            console.log('✅ BeachGirl.pics inicializado correctamente');
+        }
+
+        function setupParadiseBackground() {
+            const background = document.querySelector('.paradise-background');
+            if (background) {
+                background.style.backgroundImage = 'url(/decorative-images/paradise-beach.png)';
+            }
+        }
+
+        function setupBannerRotator() {
+            const rotator = document.getElementById('banner-rotator');
+            if (!rotator) return;
+
+            // Usar imágenes de decorative-images para el banner
+            const bannerImages = window.DECOR_IMAGES || [];
+            const validBannerImages = bannerImages.filter(img => 
+                img.includes('.jpg') || img.includes('.png') || img.includes('.webp')
+            );
+
+            if (validBannerImages.length === 0) return;
+
+            let currentIndex = 0;
+            
+            function showImage(index) {
+                const img = validBannerImages[index];
+                if (img) {
+                    rotator.style.backgroundImage = `url(${img})`;
+                }
+            }
+
+            function nextImage() {
+                currentIndex = (currentIndex + 1) % validBannerImages.length;
+                showImage(currentIndex);
+            }
+
+            // Mostrar primera imagen
+            showImage(0);
+            
+            // Rotar cada 4 segundos
+            setInterval(nextImage, 4000);
+        }
+
+        function initializeCarousel() {
+            const carousel = document.getElementById('main-carousel');
+            if (!carousel) return;
+
+            // Obtener 40 imágenes aleatorias de la carpeta full
+            const fullImages = window.FULL_IMAGES_POOL || [];
+            const shuffledImages = shuffleArray([...fullImages]);
+            const carouselImages = shuffledImages.slice(0, 40);
+
+            // Limpiar carrusel
+            carousel.innerHTML = '';
+
+            // Crear elementos del carrusel
+            carouselImages.forEach((imageName, index) => {
+                const item = document.createElement('div');
+                item.className = 'carousel-item';
+                item.innerHTML = `
+                    <img src="/${imageName}" alt="Beach photo ${index + 1}" loading="lazy">
+                `;
+                carousel.appendChild(item);
+            });
+
+            // Configurar navegación del carrusel
+            setupCarouselNavigation();
+        }
+
+        function initializeGallery() {
+            const gallery = document.getElementById('main-gallery');
+            if (!gallery) return;
+
+            // Obtener 40 imágenes aleatorias diferentes al carrusel
+            const fullImages = window.FULL_IMAGES_POOL || [];
+            const shuffledImages = shuffleArray([...fullImages]);
+            const galleryImages = shuffledImages.slice(40, 80); // Diferentes al carrusel
+
+            // Limpiar galería
+            gallery.innerHTML = '';
+
+            // Crear elementos de la galería
+            galleryImages.forEach((imageName, index) => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.innerHTML = `
+                    <img src="/${imageName}" alt="Beach photo ${index + 1}" loading="lazy">
+                    <div class="gallery-overlay">
+                        <button class="view-btn">Ver</button>
+                    </div>
+                `;
+                gallery.appendChild(item);
+            });
+        }
+
+        function setupCarouselNavigation() {
+            const prevBtn = document.getElementById('carousel-prev');
+            const nextBtn = document.getElementById('carousel-next');
+            const carousel = document.getElementById('main-carousel');
+            
+            if (!prevBtn || !nextBtn || !carousel) return;
+
+            let currentSlide = 0;
+            const itemsPerView = 4;
+            const totalItems = carousel.children.length;
+            const maxSlide = Math.max(0, totalItems - itemsPerView);
+
+            function updateCarousel() {
+                const offset = -currentSlide * (100 / itemsPerView);
+                carousel.style.transform = `translateX(${offset}%)`;
+            }
+
+            prevBtn.addEventListener('click', () => {
+                currentSlide = Math.max(0, currentSlide - 1);
+                updateCarousel();
+            });
+
+            nextBtn.addEventListener('click', () => {
+                currentSlide = Math.min(maxSlide, currentSlide + 1);
+                updateCarousel();
+            });
+        }
+
+        function setupLanguageSelector() {
+            const select = document.getElementById('language-select');
+            if (!select) return;
+
+            select.addEventListener('change', function() {
+                const lang = this.value;
+                // Aquí se implementaría el cambio de idioma
+                console.log('Cambio de idioma a:', lang);
+            });
+        }
+
+        function initializeAds() {
+            // Los anuncios se cargan desde los scripts externos
+            console.log('🎯 Inicializando anuncios...');
+        }
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+    </script>
+</body>
+</html>

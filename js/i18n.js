@@ -1,30 +1,79 @@
-(function(){
-  const STR = {
-    es:{home:"Home",premium:"Premium",videos:"Videos",subs:"Suscripciones",title:"beachgirl.pics",tagline:"Bienvenido al paraíso",carousel:"Carrusel",gallery:"Galería"},
-    en:{home:"Home",premium:"Premium",videos:"Videos",subs:"Subscriptions",title:"beachgirl.pics",tagline:"Welcome to paradise",carousel:"Carousel",gallery:"Gallery"},
-    fr:{home:"Accueil",premium:"Premium",videos:"Vidéos",subs:"Abonnements",title:"beachgirl.pics",tagline:"Bienvenue au paradis",carousel:"Carrousel",gallery:"Galerie"},
-    pt:{home:"Início",premium:"Premium",videos:"Vídeos",subs:"Assinaturas",title:"beachgirl.pics",tagline:"Bem-vindo ao paraíso",carousel:"Carrossel",gallery:"Galeria"},
-    de:{home:"Start",premium:"Premium",videos:"Videos",subs:"Abos",title:"beachgirl.pics",tagline:"Willkommen im Paradies",carousel:"Karussell",gallery:"Galerie"},
-    it:{home:"Home",premium:"Premium",videos:"Video",subs:"Abbonamenti",title:"beachgirl.pics",tagline:"Benvenuto in paradiso",carousel:"Carosello",gallery:"Galleria"}
-  };
-  const KEY="ibg_lang";
-  function lang(){return localStorage.getItem(KEY)||((navigator.language||"es").slice(0,2) in STR ? (navigator.language||"es").slice(0,2):"es");}
-  function $(s){return document.querySelector(s)}
-  function apply(L){
-    const t=STR[L]||STR.es;
-    $('[data-i18n="home"]').textContent=t.home;
-    $('[data-i18n="premium"]').textContent=t.premium;
-    $('[data-i18n="videos"]').textContent=t.videos;
-    $('[data-i18n="subs"]').textContent=t.subs;
-    $('[data-i18n="title"]').textContent=t.title;
-    $('[data-i18n="tagline"]').textContent=t.tagline;
-    $('[data-i18n="carousel"]').textContent=t.carousel;
-    $('[data-i18n="gallery"]').textContent=t.gallery;
-    document.documentElement.lang=L;
-  }
-  function init(){
-    const L=lang(); apply(L);
-    const sel=$('#lang'); if(sel){ sel.value=L; sel.onchange=function(){ localStorage.setItem(KEY,this.value); apply(this.value); }; }
-  }
-  document.readyState!=='loading'?init():document.addEventListener('DOMContentLoaded',init);
-})();
+// Sistema de internacionalización para IbizaGirl.pics
+const translations = {
+    es: {
+        welcome: "bienvenido al paraíso",
+        featured: "Destacadas del Día", 
+        gallery: "Galería Completa",
+        loadMore: "Cargar Más",
+        view: "Ver"
+    },
+    en: {
+        welcome: "welcome to paradise",
+        featured: "Featured Today",
+        gallery: "Complete Gallery", 
+        loadMore: "Load More",
+        view: "View"
+    },
+    fr: {
+        welcome: "bienvenue au paradis",
+        featured: "En Vedette Aujourd'hui",
+        gallery: "Galerie Complète",
+        loadMore: "Charger Plus", 
+        view: "Voir"
+    },
+    de: {
+        welcome: "willkommen im paradies",
+        featured: "Heute Vorgestellt", 
+        gallery: "Komplette Galerie",
+        loadMore: "Mehr Laden",
+        view: "Ansehen"
+    },
+    it: {
+        welcome: "benvenuto in paradiso",
+        featured: "In Evidenza Oggi",
+        gallery: "Galleria Completa", 
+        loadMore: "Carica Altro",
+        view: "Visualizza"
+    }
+};
+
+window.IbizaGirlI18n = {
+    currentLang: 'es',
+    
+    setLanguage(lang) {
+        this.currentLang = lang;
+        this.updateUI();
+    },
+    
+    t(key) {
+        return translations[this.currentLang]?.[key] || translations.es[key] || key;
+    },
+    
+    updateUI() {
+        // Actualizar textos traducibles
+        const subtitle = document.querySelector('.site-subtitle');
+        if (subtitle) subtitle.textContent = this.t('welcome');
+        
+        const featured = document.querySelector('.carousel-section .section-title');
+        if (featured) featured.textContent = this.t('featured');
+        
+        const gallery = document.querySelector('.gallery-section .section-title');
+        if (gallery) gallery.textContent = this.t('gallery');
+        
+        const loadMore = document.getElementById('load-more');
+        if (loadMore) loadMore.textContent = this.t('loadMore');
+        
+        const viewBtns = document.querySelectorAll('.view-btn');
+        viewBtns.forEach(btn => btn.textContent = this.t('view'));
+    }
+};
+
+// Auto-inicializar
+document.addEventListener('DOMContentLoaded', () => {
+    const select = document.getElementById('language-select');
+    if (select) {
+        select.addEventListener('change', (e) => {
+            window.IbizaGirlI18n.setLanguage(e.target.value);
+        });
+    }
+});

@@ -1,5 +1,5 @@
 // ============================
-// IBIZAGIRL.PICS - MAIN SCRIPT v4.1.0
+// ibizagirl.pics - MAIN SCRIPT v4.1.0
 // Sistema Principal con Integración Modular
 // ============================
 
@@ -474,7 +474,7 @@ function selectPlan(planType) {
                             value: price.toFixed(2),
                             currency_code: 'EUR'
                         },
-                        description: `VIP ${planType} - IbizaGirl.pics`
+                        description: `VIP ${planType} - ibizagirl.pics`
                     }]
                 });
             },
@@ -517,7 +517,7 @@ function initializePayment(type, item, price) {
                             value: price.toFixed(2),
                             currency_code: 'EUR'
                         },
-                        description: `${type} - ${item} - IbizaGirl.pics`
+                        description: `${type} - ${item} - ibizagirl.pics`
                     }]
                 });
             },
@@ -750,7 +750,7 @@ function toggleIsabella() {
 
 async function initializeApplication() {
     try {
-        console.log('🚀 Initializing IbizaGirl.pics v' + CONFIG.version);
+        console.log('🚀 Initializing ibizagirl.pics v' + CONFIG.version);
         
         // Generar ID de sesión
         state.sessionId = generateSessionId();
@@ -991,7 +991,7 @@ function showFallbackContent() {
             padding: 2rem;
         ">
             <div>
-                <h1>🌊 IbizaGirl.pics</h1>
+                <h1>🌊 ibizagirl.pics</h1>
                 <p>Estamos experimentando dificultades técnicas.</p>
                 <p>Por favor, recarga la página en unos momentos.</p>
                 <button onclick="window.location.reload()" style="

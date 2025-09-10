@@ -122,7 +122,7 @@ fi
 git add js/ads-exo-bottom.js js/env-inline.js index.html || true
 git commit -m "ads: EXO sticky bottom (sin srcdoc), env EXOCLICK_BOTTOM_ZONE=5717078" || true
 
-vercel link --project ibizagirl-final --yes
+vercel link --project beachgirl-final --yes
 LOG="$(mktemp)"
 vercel deploy --prod --yes | tee "$LOG" >/dev/null
 URL=$(awk '/Production: https:\/\//{print $3}' "$LOG" | tail -n1)

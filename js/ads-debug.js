@@ -1,1 +1,2 @@
-(function(){console.log("[ads-debug] active");})();
+// Ads debug
+window.adsDebug = false;

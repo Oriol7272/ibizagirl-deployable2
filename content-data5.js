@@ -1,4 +1,3 @@
-console.log("📦 Cargando módulo content-data5.js - Videos premium...");
 
 const PREMIUM_VIDEOS_POOL = [
     "uncensored-videos/0nF138CMxl1eGWUxaG2d.mp4",
@@ -96,6 +95,5 @@ const PREMIUM_VIDEOS_POOL = [
     "uncensored-videos/zX53TSjhlQj4Gy76iK0H.mp4"
 ];
 
-console.log("✅ 93 videos premium cargados desde /uncensored-videos/");
 
 window.PREMIUM_VIDEOS_POOL = PREMIUM_VIDEOS_POOL;

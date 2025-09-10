@@ -69,7 +69,7 @@
     const wrap = document.querySelector(sel);
     if (!wrap){ console.warn('container not found', sel); return; }
     wrap.innerHTML = '';
-    const paid = localStorage.getItem('ibg_paid')==='1';
+    const paid = localStorage.getItem('bg_paid')==='1';
     const lockedClass = (opts.lockWhenNotPaid && !paid) ? 'locked' : '';
     for (const it of items) {
       const card = document.createElement('a');

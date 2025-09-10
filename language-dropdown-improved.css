@@ -1,0 +1,94 @@
+/* Language Dropdown Mejorado */
+.language-dropdown {
+    position: relative;
+    margin-left: auto;
+    z-index: 10000;
+}
+
+.lang-current {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    color: #001f3f;
+    border: 2px solid #0074D9;
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s;
+    min-width: 100px;
+}
+
+.lang-current:hover {
+    background: #0074D9;
+    color: white;
+    transform: scale(1.05);
+}
+
+.lang-current svg {
+    width: 12px;
+    height: 8px;
+    transition: transform 0.3s;
+}
+
+.lang-options {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: white;
+    border: 2px solid #0074D9;
+    border-radius: 10px;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s;
+    min-width: 160px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.lang-options.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.lang-options button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 20px;
+    background: white;
+    border: none;
+    color: #001f3f;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.lang-options button:hover {
+    background: #0074D9;
+    color: white;
+    padding-left: 25px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .language-dropdown {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+    }
+    
+    .lang-current {
+        background: white;
+        min-width: 80px;
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}

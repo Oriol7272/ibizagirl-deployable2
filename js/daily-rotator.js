@@ -33,8 +33,8 @@
   }
   function hasAccess(src){
     const c = readCookies();
-    if (c.ibg_sub_ui && /^(monthly|annual|lifetime)$/.test(c.ibg_sub_ui)) return true;
-    const list = (c.ibg_items_ui||'').split(',').map(s=>s.trim()).filter(Boolean);
+    if (c.bg_sub_ui && /^(monthly|annual|lifetime)$/.test(c.bg_sub_ui)) return true;
+    const list = (c.bg_items_ui||'').split(',').map(s=>s.trim()).filter(Boolean);
     return list.includes(base(src));
   }
 
@@ -112,7 +112,7 @@
         e.preventDefault();
         const src = btn.getAttribute('data-src');
         const amt = parseFloat(btn.getAttribute('data-amount')||'0.10');
-        if (window.IBG_PAY?.buyItem) window.IBG_PAY.buyItem({ src, amount: amt, currency:'EUR', kind: opts.kind||'photo' });
+        if (window.BG_PAY?.buyItem) window.BG_PAY.buyItem({ src, amount: amt, currency:'EUR', kind: opts.kind||'photo' });
       });
     });
   }
@@ -123,7 +123,7 @@
     const photos100 = pickWithNew(unc, 100, 0.30);
     const videos20  = pickWithNew(vids, 20, 0.30).map(v=>({...v, kind:'video'}));
 
-    window.IBG_CURRENT = { gallery:gallery20, uncensored:photos100, videos:videos20 };
+    window.BG_CURRENT = { gallery:gallery20, uncensored:photos100, videos:videos20 };
 
     renderGrid('galleryGrid',    gallery20, { censored:false, kind:'photo' });
     renderGrid('uncensoredGrid', photos100, { censored:true,  kind:'photo' });

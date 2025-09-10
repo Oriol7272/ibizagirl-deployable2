@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>beachgirl.pics - Bienvenido al Paraíso</title>
+    <meta name="description" content="BeachGirl Premium - Exclusive beach photography and videos. Special discount for new members!">
+    <meta name="keywords" content="beach girls, summer photos, bikini content, beach photography, exclusive content, premium beach photos">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="BeachGirl Premium Content">
+    <meta property="og:description" content="Exclusive beach photography and videos">
+    <meta property="og:image" content="/decorative-images/paradise-beach.png">
+    <meta property="og:url" content="https://beachgirl.pics">
+    <link rel="canonical" href="https://beachgirl.pics">
+    
+    <!-- Fuente decorativa -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS existente -->
+    <link rel="stylesheet" href="/css/site.css">
+    
+    <!-- Scripts existentes en orden correcto -->
+    <script src="/js/env.js"></script>
+    <script src="/js/decorative-list.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Dancing Script', 'Caveat', cursive;
+            background: url('/decorative-images/paradise-beach.png') center/cover fixed;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            color: #001f3f;
+        }
+        
+        /* Top strip */
+        .top-strip {
+            background: linear-gradient(90deg, #001f3f, #0074D9);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            position: relative;
+            z-index: 1000;
+        }
+        
+        .plan-pill {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin: 0 8px;
+            font-weight: 600;
+        }
+        
+        .buy-btn {
+            background: #0074D9;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            margin-left: 16px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        /* Navigation */
+        .topbar {
+            background: rgba(0, 31, 63, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .menu {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .menu a:hover,
+        .menu a.active {
+            color: #7FDBFF;
+            text-shadow: 0 0 10px rgba(127, 219, 255, 0.5);
+        }
+        
+        .menu a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #7FDBFF;
+            border-radius: 2px;
+        }
+        
+        /* Language selector */
+        .language-selector select {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        /* Banner section con imágenes rotatorias */
+        .banner-section {
+            position: relative;
+            height: 60vh;
+            min-height: 400px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .banner-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .rotating-images {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: all 1s ease-in-out;
+            opacity: 0.3;
+        }
+        
+        .banner-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            color: white;
+        }
+        
+        .site-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            background: linear-gradient(45deg, #7FDBFF, #0074D9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .site-subtitle {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            font-weight: 400;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            color: #7FDBFF;
+        }
+        
+        /* Main content */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .section-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        /* Carousel */
+        .carousel-section {
+            margin-bottom: 60px;
+        }
+        
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+        }
+        
+        .carousel-wrapper {
+            display: flex;
+            transition: transform 0.3s ease;
+            gap: 15px;
+        }
+        
+        .carousel-item {
+            flex: 0 0 calc(25% - 12px);
+            aspect-ratio: 3/4;
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .carousel-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,116,217,0.8);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 20;
+        }
+        
+        .carousel-btn:hover {
+            background: rgba(0,116,217,1);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .carousel-btn.prev { left: 10px; }
+        .carousel-btn.next { right: 10px; }
+        
+        /* Gallery */
+        .gallery-section {
+            margin-bottom: 60px;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 3/4;
+            border-radius: 15px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        .view-btn {
+            background: #0074D9;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .view-btn:hover {
+            background: #7FDBFF;
+            transform: scale(1.05);
+        }
+        
+        .load-more-btn {
+            background: linear-gradient(45deg, #0074D9, #7FDBFF);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+        
+        .load-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,116,217,0.3);
+        }
+        
+        /* Sidebar ads */
+        .sidebar-fixed {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 160px;
+            z-index: 100;
+        }
+        
+        .sidebar-left { left: 20px; }
+        .sidebar-right { right: 20px; }
+        
+        .ad-slot {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+            border-radius: 10px;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 12px;
+        }
+        
+        /* Bottom sticky ad */
+        .ad-sticky-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0,31,63,0.95);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .site-title { font-size: 2.5rem; }
+            .site-subtitle { font-size: 1.5rem; }
+            .nav-container { flex-direction: column; gap: 15px; }
+            .menu { gap: 15px; }
+            .menu a { font-size: 16px; }
+            .carousel-item { flex: 0 0 calc(50% - 8px); }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+            .sidebar-fixed { display: none; }
+            .main-container { padding: 20px 10px; }
+            .banner-section { height: 40vh; min-height: 300px; }
+        }
+        
+        @media (max-width: 480px) {
+            .carousel-item { flex: 0 0 calc(100% - 8px); }
+            .topbar { padding: 10px 0; }
+            .top-strip { font-size: 12px; }
+            .plan-pill { margin: 0 4px; padding: 2px 8px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top subscription strip -->
+    <div class="top-strip">
+        <span class="plan-pill">Lifetime 100 EUR</span>
+        <span class="plan-pill">Anual 49.99 EUR</span>
+        <span class="plan-pill">Mensual 14.99 EUR</span>
+        <span>Todo el contenido visible mientras este activo. Lifetime ademas elimina anuncios.</span>
+        <button id="buy-lifetime" class="buy-btn">
+            <span class="pp-icon"></span>
+            <span>PayPal</span>
+        </button>
+    </div>
+
+    <!-- Navigation Menu -->
+    <header class="topbar">
+        <nav class="nav-container">
+            <div class="menu">
+                <a href="/" class="active">Home</a>
+                <a href="/premium">Premium</a>
+                <a href="/videos">Videos</a>
+                <a href="/subscription">Subscriptions</a>
+            </div>
+            
+            <!-- Language selector -->
+            <div class="language-selector">
+                <select id="language-select">
+                    <option value="es">🇪🇸 Español</option>
+                    <option value="en">🇺🇸 English</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="de">🇩🇪 Deutsch</option>
+                    <option value="it">🇮🇹 Italiano</option>
+                </select>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main banner con imágenes rotatorias de decorative-images -->
+    <section class="banner-section">
+        <div class="banner-container">
+            <div class="rotating-images" id="banner-rotator">
+                <!-- Las imágenes rotatorias se cargarán aquí -->
+            </div>
+            <div class="banner-content">
+                <h1 class="site-title">beachgirl.pics</h1>
+                <p class="site-subtitle">bienvenido al paraíso</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main content -->
+    <main class="main-container">
+        <!-- Carousel section con 40 imágenes aleatorias de full/ -->
+        <section class="carousel-section">
+            <h2 class="section-title">Destacadas del Día</h2>
+            <div class="carousel-container">
+                <div class="carousel-wrapper" id="main-carousel">
+                    <!-- 40 imágenes aleatorias del carrusel -->
+                </div>
+                <button class="carousel-btn prev" id="carousel-prev">❮</button>
+                <button class="carousel-btn next" id="carousel-next">❯</button>
+            </div>
+        </section>
+
+        <!-- Gallery section con 40 imágenes aleatorias de full/ -->
+        <section class="gallery-section">
+            <h2 class="section-title">Galería Completa</h2>
+            <div class="gallery-grid" id="main-gallery">
+                <!-- 40 imágenes aleatorias de la galería -->
+            </div>
+            <div class="gallery-load-more">
+                <button class="load-more-btn" id="load-more">Cargar Más</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Sidebar ads (TODOS los anuncios) -->
+    <aside class="sidebar-fixed sidebar-left" id="side-ads-left">
+        <div class="ad-slot" data-net="juicy"></div>
+        <div class="ad-slot" data-net="exo"></div>
+        <div class="ad-slot" data-net="ero"></div>
+    </aside>
+    
+    <aside class="sidebar-fixed sidebar-right" id="side-ads-right">
+        <div class="ad-slot" data-net="juicy"></div>
+        <div class="ad-slot" data-net="exo"></div>
+        <div class="ad-slot" data-net="ero"></div>
+    </aside>
+
+    <!-- Bottom sticky ad -->
+    <div id="ad-sticky-bottom" class="ad-sticky-bottom">
+        <div class="ad-slot" data-net="popads"></div>
+    </div>
+
+    <!-- Scripts de contenido (ORDEN CRÍTICO) -->
+    <script src="/content-data1.js"></script>
+    <script src="/content-data2.js"></script>
+    <script src="/content-data3.js"></script>
+    <script src="/content-data4.js"></script>
+    <script src="/content-data5.js"></script>
+    <script src="/content-data6.js"></script>
+
+    <!-- Crisp Chat -->
+    <script>
+        window.$crisp=[];
+        window.CRISP_WEBSITE_ID=(window.__ENV&&window.__ENV.CRISP_WEBSITE_ID)||"59e184b1-e679-4c93-b3ea-d60b63c1c04c";
+        (function(){
+            var d=document;
+            var s=d.createElement("script");
+            s.src="https://client.crisp.chat/l.js";
+            s.async=1;
+            d.getElementsByTagName("head")[0].appendChild(s);
+        })();
+    </script>
+
+    <!-- Main application script -->
+    <script>
+        // Función principal para inicializar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeBeachGirl();
+        });
+
+        function initializeBeachGirl() {
+            console.log('🏖️ Inicializando BeachGirl.pics...');
+            
+            // Configurar las imágenes rotatorias del banner desde decorative-images
+            setupBannerRotator();
+            
+            // Inicializar carrusel con 40 imágenes aleatorias de full/
+            initializeCarousel();
+            
+            // Inicializar galería con 40 imágenes aleatorias de full/
+            initializeGallery();
+            
+            // Configurar selector de idiomas
+            setupLanguageSelector();
+            
+            console.log('✅ BeachGirl.pics inicializado correctamente');
+        }
+
+        function setupBannerRotator() {
+            const rotator = document.getElementById('banner-rotator');
+            if (!rotator) return;
+
+            // Usar imágenes de decorative-images para el banner
+            const bannerImages = window.DECOR_IMAGES || [];
+            const validBannerImages = bannerImages.filter(img => 
+                img.includes('.jpg') || img.includes('.png') || img.includes('.webp')
+            );
+
+            if (validBannerImages.length === 0) return;
+
+            let currentIndex = 0;
+            
+            function showImage(index) {
+                const img = validBannerImages[index];
+                if (img) {
+                    rotator.style.backgroundImage = `url(${img})`;
+                }
+            }
+
+            function nextImage() {
+                currentIndex = (currentIndex + 1) % validBannerImages.length;
+                showImage(currentIndex);
+            }
+
+            // Mostrar primera imagen
+            showImage(0);
+            
+            // Rotar cada 4 segundos
+            setInterval(nextImage, 4000);
+        }
+
+        function initializeCarousel() {
+            const carousel = document.getElementById('main-carousel');
+            if (!carousel) return;
+
+            // Obtener 40 imágenes aleatorias de la carpeta full desde content-data2.js
+            const fullImages = window.FULL_IMAGES_POOL || [];
+            const shuffledImages = shuffleArray([...fullImages]);
+            const carouselImages = shuffledImages.slice(0, 40);
+
+            // Limpiar carrusel
+            carousel.innerHTML = '';
+
+            // Crear elementos del carrusel
+            carouselImages.forEach((imageName, index) => {
+                const item = document.createElement('div');
+                item.className = 'carousel-item';
+                item.innerHTML = `
+                    <img src="/${imageName}" alt="Beach photo ${index + 1}" loading="lazy">
+                `;
+                carousel.appendChild(item);
+            });
+
+            // Configurar navegación del carrusel
+            setupCarouselNavigation();
+        }
+
+        function initializeGallery() {
+            const gallery = document.getElementById('main-gallery');
+            if (!gallery) return;
+
+            // Obtener 40 imágenes aleatorias diferentes al carrusel de full/
+            const fullImages = window.FULL_IMAGES_POOL || [];
+            const shuffledImages = shuffleArray([...fullImages]);
+            const galleryImages = shuffledImages.slice(40, 80); // Diferentes al carrusel
+
+            // Limpiar galería
+            gallery.innerHTML = '';
+
+            // Crear elementos de la galería
+            galleryImages.forEach((imageName, index) => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.innerHTML = `
+                    <img src="/${imageName}" alt="Beach photo ${index + 1}" loading="lazy">
+                    <div class="gallery-overlay">
+                        <button class="view-btn">Ver</button>
+                    </div>
+                `;
+                gallery.appendChild(item);
+            });
+        }
+
+        function setupCarouselNavigation() {
+            const prevBtn = document.getElementById('carousel-prev');
+            const nextBtn = document.getElementById('carousel-next');
+            const carousel = document.getElementById('main-carousel');
+            
+            if (!prevBtn || !nextBtn || !carousel) return;
+
+            let currentSlide = 0;
+            const itemsPerView = 4;
+            const totalItems = carousel.children.length;
+            const maxSlide = Math.max(0, totalItems - itemsPerView);
+
+            function updateCarousel() {
+                const offset = -currentSlide * (100 / itemsPerView);
+                carousel.style.transform = `translateX(${offset}%)`;
+            }
+
+            prevBtn.addEventListener('click', () => {
+                currentSlide = Math.max(0, currentSlide - 1);
+                updateCarousel();
+            });
+
+            nextBtn.addEventListener('click', () => {
+                currentSlide = Math.min(maxSlide, currentSlide + 1);
+                updateCarousel();
+            });
+        }
+
+        function setupLanguageSelector() {
+            const select = document.getElementById('language-select');
+            if (!select) return;
+
+            select.addEventListener('change', function() {
+                const lang = this.value;
+                console.log('Cambio de idioma a:', lang);
+                // Aquí se implementaría el cambio de idioma
+            });
+        }
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+    </script>
+</body>
+</html>

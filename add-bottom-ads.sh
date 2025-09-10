@@ -133,7 +133,7 @@ done
 # 6) Commit + deploy
 git add index.html js/ads-bottom-row.js 2>/dev/null || true
 git commit -m "ads: fila inferior (Exo+Ero) sin rellenos; oculta si no hay fill" || true
-vercel link --project ibizagirl-final --yes
+vercel link --project beachgirl-final --yes
 LOG="$(mktemp)"; vercel deploy --prod --yes | tee "$LOG" >/dev/null
 awk '/Production: https:\/\//{print "🔗 Production:", $3}' "$LOG" | tail -n1
 echo "✅ Hecho"

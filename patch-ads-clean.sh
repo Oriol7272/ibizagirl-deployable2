@@ -231,7 +231,7 @@ add_script "ads-popads.js"
 git add index.html js/*.js api/ads/popjs.js ads/eroframe_ctrl.html || true
 git commit -m "ads clean: Exo in sandboxed iframes (no sticky bottom), Ero in its own slot, PopAds proxy & wait env, removed bottom leftovers" || true
 
-vercel link --project ibizagirl-final --yes
+vercel link --project beachgirl-final --yes
 LOG="$(mktemp)"
 vercel deploy --prod --yes | tee "$LOG" >/dev/null
 URL="$(awk '/Production: https:\/\//{print $3}' "$LOG" | tail -n1)"

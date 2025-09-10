@@ -1,7 +1,7 @@
-console.log("[bootstrap] shim run");
-(function(W){
-  function onReady(){
-    try{ (W.IBG_ADS.initAds||function(){})(); }catch(e){ console.error(e); }
-  }
-  if(document.readyState!=="loading") onReady(); else document.addEventListener("DOMContentLoaded",onReady);
-})(window);
+/*! shim:bootstrap.js -> /js/bootstrap.js */
+(function(){
+  var s=document.createElement('script'); s.src='/js/bootstrap.js'; s.async=false;
+  (document.currentScript && document.currentScript.parentNode)
+    ? document.currentScript.parentNode.insertBefore(s, document.currentScript.nextSibling)
+    : document.head.appendChild(s);
+})();

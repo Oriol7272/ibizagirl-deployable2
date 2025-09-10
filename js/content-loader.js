@@ -1,1 +1,2 @@
-(function(){console.log("[content-loader] stub");})();
+// Content loader
+window.contentLoaded = true;

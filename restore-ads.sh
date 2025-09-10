@@ -175,7 +175,7 @@ add_script "ads-popads.js"
 git add index.html js/ads-exo-sides.js js/ads-ero-ctrl.js js/ads-popads.js ads/eroframe_ctrl.html 2>/dev/null || true
 git commit -m "restore: 2x EXO sides (magsrv) + ERO iframe ctrl + PopAds on interaction; no bottom" || true
 
-vercel link --project ibizagirl-final --yes
+vercel link --project beachgirl-final --yes
 LOG="$(mktemp)"
 vercel deploy --prod --yes | tee "$LOG" >/dev/null
 awk '/Production: https:\/\//{print "🔗 Production:", $3}' "$LOG" | tail -n1

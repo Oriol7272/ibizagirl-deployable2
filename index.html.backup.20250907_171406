@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeachGirl.me - Bienvenido al Paraíso</title>
+    <link rel="icon" href="/favicon.ico">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        @font-face {
+            font-family: 'SexyBeachy';
+            src: url('/decorative-images/SexyBeachy.ttf') format('truetype');
+            font-display: swap;
+        }
+        
+        html, body {
+            font-family: 'SexyBeachy', cursive, Arial, sans-serif;
+            background: url('/decorative-images/paradise-beach.png') center/cover fixed;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+        
+        body {
+            padding-bottom: 100px;
+        }
+        
+        header {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        nav {
+            max-width: 1100px; /* AMPLIADO */
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 30px;
+            color: #00a8ff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .menu {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .menu a {
+            color: #333;
+            text-decoration: none;
+            font-size: 20px;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+        
+        .menu a:hover {
+            background: rgba(0,168,255,0.8);
+            color: white;
+        }
+        
+        .main-banner {
+            position: relative;
+            height: 450px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .banner-bg {
+            position: absolute;
+            inset: 0;
+        }
+        
+        .banner-bg img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 2s;
+        }
+        
+        .banner-bg img.active {
+            opacity: 0.7;
+        }
+        
+        .banner-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 2;
+        }
+        
+        .banner-content h1 {
+            font-size: 72px;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.9);
+        }
+        
+        .banner-content p {
+            font-size: 32px;
+            color: #ffd700;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.9);
+        }
+        
+        /* Contenedor principal AMPLIADO */
+        .main-wrapper {
+            max-width: 1100px; /* AMPLIADO hasta el margen */
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .section {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .section h2 {
+            font-size: 32px;
+            color: #00a8ff;
+            text-align: center;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+        
+        /* Espacio para anuncios Ero-Advertising */
+        .ero-ad-container {
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+            min-height: 100px;
+        }
+        
+        .carousel-container {
+            overflow: hidden;
+            height: 200px;
+            border-radius: 10px;
+        }
+        
+        .carousel-track {
+            display: flex;
+            gap: 15px;
+            transition: transform 0.5s ease;
+        }
+        
+        .carousel-item {
+            flex: 0 0 200px;
+            height: 200px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        
+        .gallery-item {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Anuncios laterales a los lados */
+        .side-ads-container {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .side-ad-left, .side-ad-right {
+            width: 300px;
+            height: 250px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            pointer-events: auto;
+            overflow: hidden;
+        }
+        
+        @media (max-width: 1400px) {
+            .side-ads-container {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-banner { height: 350px; }
+            .banner-content h1 { font-size: 48px; }
+            .banner-content p { font-size: 24px; }
+            .carousel-item { flex: 0 0 150px; height: 150px; }
+            .gallery { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">🌴 BeachGirl</div>
+            <div class="menu">
+                <a href="/">Home</a>
+                <a href="/premium.html">Premium</a>
+                <a href="/videos.html">Videos</a>
+                <a href="/subscription.html">Subscriptions</a>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="main-banner">
+        <div class="banner-bg" id="banner-bg"></div>
+        <div class="banner-content">
+            <h1>beachgirl.me</h1>
+            <p>Bienvenido al Paraíso</p>
+        </div>
+    </div>
+    
+    <div class="main-wrapper">
+            <div id="sp_8182219_node">&nbsp;</div>
+        </div>
+        
+        <div class="section">
+            <h2>🌺 Galería en Movimiento</h2>
+            <div class="carousel-container">
+                <div class="carousel-track" id="carousel"></div>
+            </div>
+        </div>
+        
+        <!-- Anuncio Ero-Advertising 2 -->
+        <div class="ero-ad-container">
+            <div id="sp_8182222_node">&nbsp;</div>
+        </div>
+        
+        <div class="section">
+            <h2>🏖️ Galería Principal</h2>
+            <div class="gallery" id="gallery"></div>
+        </div>
+        
+        <!-- Anuncio Ero-Advertising 3 -->
+        <div class="ero-ad-container">
+            <div id="sp_8182225_node">&nbsp;</div>
+        </div>
+    </div>
+    
+    <!-- Anuncios laterales en las esquinas -->
+    <div class="side-ads-container">
+        <div class="side-ad-left" id="side-ad-left"></div>
+        <div class="side-ad-right" id="side-ad-right"></div>
+    </div>
+    
+    <script src="/content-data2.js"></script>
+    
+    <!-- Scripts de Ero-Advertising -->
+    <script type="text/javascript" charset="utf-8">
+    if (typeof eaCtrl =="undefined"){ 
+        var eaCtrlRecs=[];
+        var eaCtrl = {add:function(ag){eaCtrlRecs.push(ag)}};
+        var js = document.createElement('script');
+        js.setAttribute("src","//go.easrv.cl/loadeactrl.go?pid=152716&spaceid=8182219&ctrlid=798931");
+        document.head.appendChild(js);
+    }
+    eaCtrl.add({"display":"sp_8182222_node","sid":8182222,"plugin":"banner"});
+    eaCtrl.add({"display":"sp_8182225_node","sid":8182225,"plugin":"banner"});
+    </script>
+    
+    <script>
+    // Banner rotatorio
+    const bannerImages = [
+        '/decorative-images/1115ae7d-909f-4760-a3a1-037a05ad9931.jpg',
+        '/decorative-images/1618cbb2-8dd1-4127-99d9-d9f30536de72.jpg',
+        '/decorative-images/49830c0a-2fd8-439c-a583-029a0b39c4d6.jpg',
+        '/decorative-images/4bfb7a8b-b81e-49d7-a160-90b834d0b751.jpg',
+        '/decorative-images/81f55fd4-b0df-49f4-9020-cbb0f5042c08.jpg'
+    ];
+    
+    function initBanner() {
+        const bannerBg = document.getElementById('banner-bg');
+        let currentIndex = 0;
+        
+        bannerImages.forEach((src, i) => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.className = i === 0 ? 'active' : '';
+            bannerBg.appendChild(img);
+        });
+        
+        setInterval(() => {
+            const imgs = bannerBg.querySelectorAll('img');
+            imgs[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % imgs.length;
+            imgs[currentIndex].classList.add('active');
+        }, 5000);
+    }
+    
+    // Carousel automático
+    let carouselPosition = 0;
+    function initCarousel() {
+        const carousel = document.getElementById('carousel');
+        const images = window.FULL_IMAGES_POOL || [];
+        
+        if (!images || images.length === 0) {
+            setTimeout(initCarousel, 500);
+            return;
+        }
+        
+        const carouselImages = [...images.slice(0, 40), ...images.slice(0, 40)];
+        
+        carouselImages.forEach(img => {
+            const div = document.createElement('div');
+            div.className = 'carousel-item';
+            const imgEl = document.createElement('img');
+            imgEl.src = img.startsWith('/') ? img : '/' + img;
+            imgEl.loading = 'lazy';
+            div.appendChild(imgEl);
+            carousel.appendChild(div);
+        });
+        
+        setInterval(() => {
+            carouselPosition -= 215;
+            if (Math.abs(carouselPosition) >= (215 * 40)) {
+                carousel.style.transition = 'none';
+                carouselPosition = 0;
+                carousel.style.transform = 'translateX(0)';
+                setTimeout(() => {
+                    carousel.style.transition = 'transform 0.5s ease';
+                }, 50);
+            } else {
+                carousel.style.transform = `translateX(${carouselPosition}px)`;
+            }
+        }, 2000);
+    }
+    
+    // Gallery
+    function initGallery() {
+        const gallery = document.getElementById('gallery');
+        const images = window.FULL_IMAGES_POOL || [];
+        
+        if (!images || images.length === 0) {
+            setTimeout(initGallery, 500);
+            return;
+        }
+        
+        const shuffled = [...images].sort(() => Math.random() - 0.5);
+        shuffled.slice(0, 40).forEach(img => {
+            const div = document.createElement('div');
+            div.className = 'gallery-item';
+            const imgEl = document.createElement('img');
+            imgEl.src = img.startsWith('/') ? img : '/' + img;
+            imgEl.loading = 'lazy';
+            div.appendChild(imgEl);
+            gallery.appendChild(div);
+        });
+    }
+    
+    // Anuncios laterales (ExoClick)
+    function initSideAds() {
+        // Anuncio lateral izquierdo
+        const leftAd = document.getElementById('side-ad-left');
+        if (leftAd) {
+            const ins = document.createElement('ins');
+            ins.className = 'eas6a97888e2';
+            ins.setAttribute('data-zoneid', '5696328');
+            ins.style.display = 'block';
+            ins.style.width = '100%';
+            ins.style.height = '100%';
+            leftAd.appendChild(ins);
+        }
+        
+        // Anuncio lateral derecho
+        const rightAd = document.getElementById('side-ad-right');
+        if (rightAd) {
+            const ins = document.createElement('ins');
+            ins.className = 'eas6a97888e2';
+            ins.setAttribute('data-zoneid', '5705186');
+            ins.style.display = 'block';
+            ins.style.width = '100%';
+            ins.style.height = '100%';
+            rightAd.appendChild(ins);
+        }
+        
+        // Activar AdProvider para ExoClick
+        if (window.AdProvider) {
+            window.AdProvider.push({"serve": {}});
+        }
+    }
+    
+    // PopAds
+    window._pop = window._pop || [];
+    window._pop.push(['siteId', 5226758]);
+    window._pop.push(['minBid', 0]);
+    
+    // Inicializar todo
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🌴 BeachGirl.me - Versión final');
+        initBanner();
+        initCarousel();
+        initGallery();
+        
+        // Esperar para cargar anuncios de ExoClick
+        setTimeout(initSideAds, 1500);
+    });
+    
+    // Cargar AdProvider
+    const adScript = document.createElement('script');
+    adScript.async = true;
+    adScript.src = 'https://a.magsrv.com/ad-provider.js';
+    document.head.appendChild(adScript);
+    
+    // PopAds
+    setTimeout(() => {
+        const pa = document.createElement('script');
+        pa.async = true;
+        pa.src = '//c1.popads.net/pop.js';
+        document.body.appendChild(pa);
+    }, 2000);
+    </script>
+</body>
+</html>
