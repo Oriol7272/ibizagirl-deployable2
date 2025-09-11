@@ -23,12 +23,14 @@ jobs:
       DOMAIN_W: www.ibizagirl.pics
 
     steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup git identity
         run: |
-          git config user.name "github-actions[bot]"
+          git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Use Node
@@ -40,8 +42,9 @@ jobs:
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
 
-      - name: Setup Vercel auth
-        env: { VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }} }
+      - name: Setup Vercel auth (non-interactive)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           mkdir -p "$HOME/.vercel"
           printf '{"token":"%s"}' "$VERCEL_TOKEN" > "$HOME/.vercel/auth.json"
@@ -51,13 +54,13 @@ jobs:
         run: |
           mkdir -p .vercel
           printf '{"orgId":"%s","projectId":"%s"}' "$VERCEL_ORG_ID" "$VERCEL_PROJECT_ID" > .vercel/project.json
-          echo "Linked project:"; cat .vercel/project.json
+          echo "Linked:"; cat .vercel/project.json
 
       - name: Pull env (production, non-blocking)
         continue-on-error: true
         run: vercel env pull .env.production.local --environment=production || true
 
-      - name: Debug whoami/team (non-blocking)
+      - name: Debug whoami / projects (non-blocking)
         continue-on-error: true
         run: |
           vercel --version
@@ -83,17 +86,22 @@ jobs:
         id: deploy
         run: |
           URL=$(vercel deploy --prebuilt --prod | awk '/https:\/\/.*\.vercel\.app/ {print $1; exit}')
+          if [ -z "$URL" ]; then
+            echo "No se obtuvo URL de deploy" >&2
+            exit 1
+          fi
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Deploy URL: $URL"
 
-      - name: Alias domains
+      - name: Alias domains (non-blocking)
         if: steps.deploy.outputs.url != ''
         run: |
           vercel alias set "${{ steps.deploy.outputs.url }}" "${{ env.DOMAIN_A }}" || true
           vercel alias set "${{ steps.deploy.outputs.url }}" "${{ env.DOMAIN_W }}" || true
 
       - name: Tag & Release
-        env: { GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TS=$(date +'%Y%m%d-%H%M%S')
           TAG="rel-${TS}"
