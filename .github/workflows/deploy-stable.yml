@@ -24,8 +24,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        with: { fetch-depth: 0 }
 
       - name: Setup git identity
         run: |
@@ -41,30 +40,31 @@ jobs:
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
 
-      # <<< CLAVE: autenticar Vercel sin imprimir el token >>>
-      - name: Setup Vercel auth (non-interactive)
-        shell: bash
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      # Autenticación Vercel sin imprimir token
+      - name: Setup Vercel auth
+        env: { VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }} }
         run: |
           mkdir -p "$HOME/.vercel"
           printf '{"token":"%s"}' "$VERCEL_TOKEN" > "$HOME/.vercel/auth.json"
           chmod 600 "$HOME/.vercel/auth.json"
 
-      - name: Vercel whoami (debug)
+      # Link del proyecto directo desde secrets (evita vercel pull)
+      - name: Create .vercel/project.json
+        run: |
+          mkdir -p .vercel
+          printf '{"orgId":"%s","projectId":"%s"}' "$VERCEL_ORG_ID" "$VERCEL_PROJECT_ID" > .vercel/project.json
+          cat .vercel/project.json
+
+      # Traer variables de entorno (si no hay, no falla)
+      - name: Pull env (production)
+        continue-on-error: true
+        run: vercel env pull .env.production.local --environment=production
+
+      - name: Debug whoami / team
         run: |
           vercel --version
-          vercel whoami || echo "whoami sin salida (continúo)"
-
-      - name: Select team (debug)
-        run: |
-          vercel switch "oriols-projects-ed6b9b04" || true
+          vercel whoami || true
           vercel projects ls --scope "oriols-projects-ed6b9b04" | head -n 50 || true
-
-      # No bloqueante: si falla el pull por envs, seguimos
-      - name: Vercel Pull (prod env)
-        continue-on-error: true
-        run: vercel pull --yes --environment=production
 
       - name: Install deps (lockfile aware)
         run: |
@@ -75,7 +75,6 @@ jobs:
           elif [ -f yarn.lock ]; then
             corepack enable && yarn install --frozen-lockfile
           else
-            echo "No lockfile; installing"
             npm i
           fi
 
@@ -96,8 +95,7 @@ jobs:
           vercel alias set "${{ steps.deploy.outputs.url }}" "${{ env.DOMAIN_W }}" || true
 
       - name: Tag & Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env: { GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} }
         run: |
           TS=$(date +'%Y%m%d-%H%M%S')
           TAG="rel-${TS}"
