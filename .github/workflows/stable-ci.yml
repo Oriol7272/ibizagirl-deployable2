@@ -1,0 +1,26 @@
+name: stable-ci
+on:
+  push:
+    branches: [stable]
+  pull_request:
+    branches: [stable]
+jobs:
+  sanity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Basic checks
+        run: |
+          set -euo pipefail
+          PAGES="index.html premium.html subscription.html videos.html"
+          for p in $PAGES; do
+            [ -f "$p" ] || { echo "FALTA $p"; exit 1; }
+          done
+          if grep -R --include='*.html' --include='*.js' -nE '/public/' . ; then
+            echo "Se encontraron referencias a /public/. Unifica rutas antes de mergear a stable."
+            exit 1
+          fi
+          for d in full uncensored uncensored-videos fonts js; do
+            [ -d "$d" ] || echo "AVISO: directorio opcional faltante: $d"
+          done
+          echo "OK"

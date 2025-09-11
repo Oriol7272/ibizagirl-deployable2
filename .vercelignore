@@ -1,0 +1,12 @@
+node_modules
+.vscode
+_archive
+_backup
+_backup_*/
+ibg_backup_*/
+Library
+Library/**
+*.log
+*.zip
+*.tar
+*.tgz
