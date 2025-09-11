@@ -8,42 +8,37 @@ jobs:
     permissions:
       contents: write
     env:
-      EXPECTED_USER: oriolcabre-5364
-      VERCEL_ORG_SLUG: oriols-projects-ed6b9b04
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       DOMAIN_A: ibizagirl.pics
       DOMAIN_W: www.ibizagirl.pics
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20.11.1'
           cache: npm
-      - run: npm i -g vercel@latest
-      - name: Sanity token
+
+      - name: Check VERCEL_TOKEN
         run: |
-          test -n "$VERCEL_TOKEN" || { echo "VERCEL_TOKEN vacío"; exit 1; }
-          echo "len(VERCEL_TOKEN)=${#VERCEL_TOKEN}"
-      - name: Write Vercel auth
+          if [ -z "$VERCEL_TOKEN" ] || [ "${#VERCEL_TOKEN}" -lt 20 ]; then
+            echo "::error::VERCEL_TOKEN vacío o demasiado corto (${#VERCEL_TOKEN} chars). Define el secret en GitHub → Settings → Secrets → Actions."
+            exit 1
+          fi
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel@latest
+
+      - name: Auth & use linked project.json
         run: |
           mkdir -p "$HOME/.vercel"
           printf '{"token":"%s"}\n' "$VERCEL_TOKEN" > "$HOME/.vercel/auth.json"
-      - name: Whoami
-        run: |
-          U=$(vercel whoami --token "$VERCEL_TOKEN" 2>/dev/null | tr -d '\r')
-          echo "whoami=$U"
-          [ -n "$U" ] || { echo "Sin whoami"; exit 1; }
-          [ "$U" = "$EXPECTED_USER" ] || { echo "Token NO es de $EXPECTED_USER"; exit 1; }
-      - name: Link by IDs
-        run: |
-          mkdir -p .vercel
-          printf '{"orgId":"%s","projectId":"%s"}\n' "$VERCEL_ORG_ID" "$VERCEL_PROJECT_ID" > .vercel/project.json
-          cat .vercel/project.json
-      - name: Pull env (prod)
-        run: vercel env pull --yes --environment=production --scope "$VERCEL_ORG_SLUG" --token "$VERCEL_TOKEN" || true
-      - name: Install deps
+          test -f .vercel/project.json || { echo "::error::.vercel/project.json no existe. Ejecuta 'vercel link' en local y commitea ese archivo."; exit 1; }
+
+      - name: Pull env (production) — best effort
+        run: vercel env pull --yes --environment=production || true
+
+      - name: Install deps (if any)
         run: |
           if [ -f package-lock.json ]; then
             npm ci || npm install --no-audit --no-fund
@@ -52,20 +47,23 @@ jobs:
           elif [ -f yarn.lock ]; then
             corepack enable && (yarn install --frozen-lockfile || yarn install)
           else
-            npm install --no-audit --no-fund
+            echo "No lockfile; skipping heavy installs."
           fi
-      - name: Deploy (prod)
+
+      - name: Deploy to Production (cloud build)
         id: deploy
         run: |
-          URL=$(vercel deploy --prod --yes --scope "$VERCEL_ORG_SLUG" --token "$VERCEL_TOKEN" | awk '/https:\/\/.*\.vercel\.app/ {print $1; exit}')
-          [ -n "$URL" ] || { echo "No obtuve URL de deploy"; exit 1; }
+          URL=$(vercel deploy --prod --yes | awk '/https:\/\/.*\.vercel\.app/ {print $1; exit}')
+          [ -n "$URL" ] || { echo "::error::No obtuve URL de deploy"; exit 1; }
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Deploy URL: $URL"
-      - name: Alias domains
+
+      - name: Alias domains (best-effort)
         if: steps.deploy.outputs.url != ''
         run: |
-          vercel alias set "${{ steps.deploy.outputs.url }}" "$DOMAIN_A" --scope "$VERCEL_ORG_SLUG" --token "$VERCEL_TOKEN" || true
-          vercel alias set "${{ steps.deploy.outputs.url }}" "$DOMAIN_W" --scope "$VERCEL_ORG_SLUG" --token "$VERCEL_TOKEN" || true
+          vercel alias set "${{ steps.deploy.outputs.url }}" "$DOMAIN_A" || true
+          vercel alias set "${{ steps.deploy.outputs.url }}" "$DOMAIN_W" || true
+
       - name: Tag release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
