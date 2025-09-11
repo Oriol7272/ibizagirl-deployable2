@@ -42,7 +42,7 @@ jobs:
         run: npm i -g vercel@latest
 
       - name: Vercel Pull (prod env)
-        run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+        run: vercel pull --yes --environment=production
 
       - name: Install deps (lockfile aware)
         run: |
@@ -57,20 +57,20 @@ jobs:
           fi
 
       - name: Build prebuilt (Vercel)
-        run: vercel build --prod --token="$VERCEL_TOKEN"
+        run: vercel build --prod
 
       - name: Deploy prebuilt → Production
         id: deploy
         run: |
-          URL=$(vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN" | awk '/https:\/\/.*\.vercel\.app/ {print $1; exit}')
+          URL=$(vercel deploy --prebuilt --prod | awk '/https:\/\/.*\.vercel\.app/ {print $1; exit}')
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Deploy URL: $URL"
 
       - name: Alias domains
         if: steps.deploy.outputs.url != ''
         run: |
-          vercel alias set "${{ steps.deploy.outputs.url }}" "$DOMAIN_A" --token="$VERCEL_TOKEN" || true
-          vercel alias set "${{ steps.deploy.outputs.url }}" "$DOMAIN_W" --token="$VERCEL_TOKEN" || true
+          vercel alias set "${{ steps.deploy.outputs.url }}" "$DOMAIN_A" || true
+          vercel alias set "${{ steps.deploy.outputs.url }}" "$DOMAIN_W" || true
 
       - name: Tag & Release
         env:
