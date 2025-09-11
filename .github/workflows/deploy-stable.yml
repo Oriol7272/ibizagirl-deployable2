@@ -41,19 +41,30 @@ jobs:
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
 
+      # <<< CLAVE: autenticar Vercel sin imprimir el token >>>
+      - name: Setup Vercel auth (non-interactive)
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          mkdir -p "$HOME/.vercel"
+          printf '{"token":"%s"}' "$VERCEL_TOKEN" > "$HOME/.vercel/auth.json"
+          chmod 600 "$HOME/.vercel/auth.json"
+
       - name: Vercel whoami (debug)
         run: |
           vercel --version
-          vercel whoami || echo "whoami sin salida (continuo)"
+          vercel whoami || echo "whoami sin salida (continúo)"
 
       - name: Select team (debug)
         run: |
           vercel switch "oriols-projects-ed6b9b04" || true
           vercel projects ls --scope "oriols-projects-ed6b9b04" | head -n 50 || true
 
-      # ⚠️ No-bloqueante: si pull falla por token/env, seguimos con build/deploy
+      # No bloqueante: si falla el pull por envs, seguimos
       - name: Vercel Pull (prod env)
-        run: vercel pull --yes --environment=production || echo "Vercel pull fallido/omitido, continúo"
+        continue-on-error: true
+        run: vercel pull --yes --environment=production
 
       - name: Install deps (lockfile aware)
         run: |
@@ -64,7 +75,8 @@ jobs:
           elif [ -f yarn.lock ]; then
             corepack enable && yarn install --frozen-lockfile
           else
-            echo "No lockfile; skipping deterministic install"
+            echo "No lockfile; installing"
+            npm i
           fi
 
       - name: Build prebuilt (Vercel)
@@ -73,7 +85,7 @@ jobs:
       - name: Deploy prebuilt → Production
         id: deploy
         run: |
-          URL=
+          URL=$(vercel deploy --prebuilt --prod | awk '/https:\/\/.*\.vercel\.app/ {print $1; exit}')
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Deploy URL: $URL"
 
