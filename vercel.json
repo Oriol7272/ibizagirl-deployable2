@@ -1,21 +1,9 @@
 {
-  "name": "beachgirlpics",
-  "version": 2,
-  "builds": [],
-  "routes": [
-    {
-      "src": "/premium",
-      "dest": "/premium.html"
-    },
-    {
-      "src": "/videos",
-      "dest": "/videos.html"
-    },
-    {
-      "src": "/subscription",
-      "dest": "/subscription.html"
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "functions": {
+    "api/**": {
+      "runtime": "nodejs20.x"
     }
-  ],
-  "outputDirectory": ".",
-  "framework": null
+  }
 }
