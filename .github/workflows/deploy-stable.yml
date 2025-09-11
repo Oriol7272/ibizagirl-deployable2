@@ -1,8 +1,7 @@
 name: Deploy stable to Production
 
 on:
-  push:
-    branches: [ stable ]
+  push: { branches: [ stable ] }
   workflow_dispatch:
 
 concurrency:
@@ -15,52 +14,52 @@ jobs:
     permissions:
       contents: write
     env:
-      # Vercel
+      EXPECTED_USER: oriolcabre-5364
+      VERCEL_ORG_SLUG: oriols-projects-ed6b9b04
+      DOMAIN_A: ibizagirl.pics
+      DOMAIN_W: www.ibizagirl.pics
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      TEAM_SLUG: oriols-projects-ed6b9b04
-      # Build
-      NODE_VERSION: 20.11.1
-      # Dominios
-      DOMAIN_A: ibizagirl.pics
-      DOMAIN_W: www.ibizagirl.pics
 
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Setup git identity
+      - name: Setup git identity (para tag)
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Use Node
+      - name: Use Node 20.11.1 + cache npm
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: '20.11.1'
           cache: npm
 
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
 
-      - name: Write Vercel auth + project settings
+      - name: Write Vercel auth.json
         run: |
-          mkdir -p ~/.vercel .vercel
-          printf '{ "token": "%s" }\n' "${VERCEL_TOKEN}" > ~/.vercel/auth.json
-          printf '{ "orgId": "%s", "projectId": "%s" }\n' "${VERCEL_ORG_ID}" "${VERCEL_PROJECT_ID}" > .vercel/project.json
-          echo "== .vercel/project.json ==" && cat .vercel/project.json
+          mkdir -p "$HOME/.vercel"
+          printf '{"token":"%s"}\n' "$VERCEL_TOKEN" > "$HOME/.vercel/auth.json"
 
-      - name: Debug whoami / projects
+      - name: Vercel whoami (validación estricta)
         run: |
-          vercel --version
-          vercel whoami || true
-          vercel projects ls --scope "${TEAM_SLUG}" | head -n 20 || true
+          U=$(vercel whoami --token "$VERCEL_TOKEN" 2>/dev/null | tail -n1 | tr -d '\r')
+          echo "whoami=$U"
+          if [ -z "$U" ]; then echo "No se pudo obtener whoami"; exit 1; fi
+          if [ "$U" != "$EXPECTED_USER" ]; then echo "Token no pertenece a $EXPECTED_USER"; exit 1; fi
 
-      - name: Pull env (production, non-blocking)
-        continue-on-error: true
-        run: vercel env pull --environment=production --yes
+      - name: Vincular proyecto por IDs (sin interacción)
+        run: |
+          mkdir -p .vercel
+          printf '{"orgId":"%s","projectId":"%s"}\n' "$VERCEL_ORG_ID" "$VERCEL_PROJECT_ID" > .vercel/project.json
+          cat .vercel/project.json
+
+      - name: Pull env (production, no bloqueante)
+        run: vercel env pull --yes --scope "$VERCEL_ORG_SLUG" --token "$VERCEL_TOKEN" || true
 
       - name: Install deps (lockfile aware)
         run: |
@@ -75,26 +74,26 @@ jobs:
           fi
 
       - name: Build prebuilt (Vercel)
-        run: vercel build --prod --yes
+        run: vercel build --prod --yes --scope "$VERCEL_ORG_SLUG" --token "$VERCEL_TOKEN"
 
       - name: Deploy prebuilt → Production
         id: deploy
         run: |
-          URL=$(vercel deploy --prebuilt --prod --yes | awk '/https:\/\/.*\.vercel\.app/ {print $1; exit}')
+          URL=$(vercel deploy --prebuilt --prod --yes --scope "$VERCEL_ORG_SLUG" --token "$VERCEL_TOKEN" \
+            | awk '/https:\/\/.*\.vercel\.app/ {print $1; exit}')
+          [ -n "$URL" ] || { echo "No obtuve URL de deploy"; exit 1; }
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Deploy URL: $URL"
 
       - name: Alias domains (non-blocking)
         if: steps.deploy.outputs.url != ''
-        continue-on-error: true
         run: |
-          vercel alias set "${{ steps.deploy.outputs.url }}" "${{ env.DOMAIN_A }}"
-          vercel alias set "${{ steps.deploy.outputs.url }}" "${{ env.DOMAIN_W }}"
+          vercel alias set "${{ steps.deploy.outputs.url }}" "${{ env.DOMAIN_A }}" --scope "$VERCEL_ORG_SLUG" --token "$VERCEL_TOKEN" || true
+          vercel alias set "${{ steps.deploy.outputs.url }}" "${{ env.DOMAIN_W }}" --scope "$VERCEL_ORG_SLUG" --token "$VERCEL_TOKEN" || true
 
       - name: Tag & Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env: { GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} }
         run: |
-          TS=$(date +'%Y%m%d-%H%M%S')
-          git tag -a "stable-${TS}" -m "Production deploy @ ${TS}" || true
-          git push origin --tags || true
+          TS=$(date +'%Y%m%d-%H%M%S'); TAG="rel-$TS"
+          git tag -a "$TAG" -m "Production deploy from stable @ $TS"
+          git push origin "$TAG"
