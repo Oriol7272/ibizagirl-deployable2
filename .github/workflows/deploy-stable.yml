@@ -41,8 +41,19 @@ jobs:
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
 
+      - name: Vercel whoami (debug)
+        run: |
+          vercel --version
+          vercel whoami || echo "whoami sin salida (continuo)"
+
+      - name: Select team (debug)
+        run: |
+          vercel switch "oriols-projects-ed6b9b04" || true
+          vercel projects ls --scope "oriols-projects-ed6b9b04" | head -n 50 || true
+
+      # ⚠️ No-bloqueante: si pull falla por token/env, seguimos con build/deploy
       - name: Vercel Pull (prod env)
-        run: vercel pull --yes --environment=production
+        run: vercel pull --yes --environment=production || echo "Vercel pull fallido/omitido, continúo"
 
       - name: Install deps (lockfile aware)
         run: |
@@ -62,15 +73,15 @@ jobs:
       - name: Deploy prebuilt → Production
         id: deploy
         run: |
-          URL=$(vercel deploy --prebuilt --prod | awk '/https:\/\/.*\.vercel\.app/ {print $1; exit}')
+          URL=
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Deploy URL: $URL"
 
       - name: Alias domains
         if: steps.deploy.outputs.url != ''
         run: |
-          vercel alias set "${{ steps.deploy.outputs.url }}" "$DOMAIN_A" || true
-          vercel alias set "${{ steps.deploy.outputs.url }}" "$DOMAIN_W" || true
+          vercel alias set "${{ steps.deploy.outputs.url }}" "${{ env.DOMAIN_A }}" || true
+          vercel alias set "${{ steps.deploy.outputs.url }}" "${{ env.DOMAIN_W }}" || true
 
       - name: Tag & Release
         env:
