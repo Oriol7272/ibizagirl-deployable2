@@ -1,28 +1,37 @@
 name: Deploy stable to Production
+
 on:
   push:
     branches: [ stable ]
   workflow_dispatch:
 
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: true
+
 jobs:
   deploy:
+    runs-on: ubuntu-latest
     permissions:
       contents: write
-    runs-on: ubuntu-latest
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       NODE_VERSION: 20.11.1
-      PROJECT_NAME: ibizagirl-deployable2
       DOMAIN_A: ibizagirl.pics
       DOMAIN_W: www.ibizagirl.pics
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
 
-  with:
-    fetch-depth: 0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
       - name: Use Node
         uses: actions/setup-node@v4
         with:
@@ -35,11 +44,19 @@ jobs:
       - name: Vercel Pull (prod env)
         run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
 
-      - name: Install deps (ci)
+      - name: Install deps (lockfile aware)
         run: |
-          if [ -f package-lock.json ]; then npm ci; fi
+          if [ -f package-lock.json ]; then
+            npm ci
+          elif [ -f pnpm-lock.yaml ]; then
+            npm i -g pnpm && pnpm i --frozen-lockfile
+          elif [ -f yarn.lock ]; then
+            corepack enable && yarn install --frozen-lockfile
+          else
+            echo "No lockfile; skipping deterministic install"
+          fi
 
-      - name: Build prebuilt (vercel)
+      - name: Build prebuilt (Vercel)
         run: vercel build --prod --token="$VERCEL_TOKEN"
 
       - name: Deploy prebuilt → Production
@@ -56,11 +73,6 @@ jobs:
           vercel alias set "${{ steps.deploy.outputs.url }}" "$DOMAIN_W" --token="$VERCEL_TOKEN" || true
 
       - name: Tag & Release
-      - name: Setup git identity
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        if: steps.deploy.outputs.url != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
