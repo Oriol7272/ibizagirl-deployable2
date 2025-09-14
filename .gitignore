@@ -19,3 +19,9 @@ ibizagirl-complete-with-secrets/
 *.pem
 *.key
 .vercel
+
+# --- Vercel: trackear solo el enlace del proyecto ---
+!.vercel/
+.vercel/*
+!.vercel/project.json
+# -----------------------------------------------
