@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      # <- AQUÍ INYECTAMOS EL SECRET AL ENTORNO DEL JOB
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -20,8 +24,9 @@ jobs:
 
       - name: Sanity VERCEL_TOKEN
         run: |
-          if [ -z "${VERCEL_TOKEN:-}" ] || [ "${#VERCEL_TOKEN}" -lt 20 ]; then
-            echo "::error::VERCEL_TOKEN vacío o demasiado corto. Defínelo en GitHub → Settings → Secrets → Actions."
+          L=$(printf %s "${VERCEL_TOKEN:-}" | wc -c | tr -d ' ')
+          if [ "$L" -lt 20 ]; then
+            echo "::error::VERCEL_TOKEN vacío o demasiado corto (len=$L). Define el secret en GitHub → Settings → Secrets → Actions."
             exit 1
           fi
 
@@ -30,14 +35,20 @@ jobs:
           mkdir -p "$HOME/.vercel"
           printf '{"token":"%s"}\n' "$VERCEL_TOKEN" > "$HOME/.vercel/auth.json"
           if [ ! -f ".vercel/project.json" ]; then
-            echo "::error::.vercel/project.json no existe. Ejecuta 'vercel link --project ibizagirl-deployable2 --scope oriols-projects-ed6b9b04' en local y súbelo."
+            echo "::error::.vercel/project.json no existe. Ejecuta en local:
+            vercel link --yes --project \"ibizagirl-deployable2\" --scope \"oriols-projects-ed6b9b04\"
+            y sube el archivo."
             exit 1
           fi
+
+      - name: Pull env (no bloqueante)
+        run: vercel env pull --yes --environment=production --token "$VERCEL_TOKEN" || true
 
       - name: Deploy (cloud build)
         id: deploy
         run: |
-          URL=$(vercel deploy --prod --yes | awk '/https:\/\/[^ ]+\.vercel\.app/ {print $1; exit}')
+          URL=$(vercel deploy --prod --yes --token "$VERCEL_TOKEN" \
+               | awk '/https:\/\/[^ ]+\.vercel\.app/ {print $1; exit}')
           if [ -z "$URL" ]; then
             echo "::error::No obtuve URL de deploy"
             exit 1
@@ -48,8 +59,8 @@ jobs:
       - name: Alias (best-effort)
         if: steps.deploy.outputs.url != ''
         run: |
-          vercel alias set "${{ steps.deploy.outputs.url }}" ibizagirl.pics || true
-          vercel alias set "${{ steps.deploy.outputs.url }}" www.ibizagirl.pics || true
+          vercel alias set "${{ steps.deploy.outputs.url }}" ibizagirl.pics --token "$VERCEL_TOKEN" || true
+          vercel alias set "${{ steps.deploy.outputs.url }}" www.ibizagirl.pics --token "$VERCEL_TOKEN" || true
 
       - name: Tag release
         env:
