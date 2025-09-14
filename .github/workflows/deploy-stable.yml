@@ -70,6 +70,10 @@ jobs:
           vercel alias set "${{ steps.deploy.outputs.url }}" ibizagirl.pics --token "$VERCEL_TOKEN" || true
           vercel alias set "${{ steps.deploy.outputs.url }}" www.ibizagirl.pics --token "$VERCEL_TOKEN" || true
 
+      - name: Git identity (for tagging)
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
       - name: Tag release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
