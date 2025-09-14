@@ -18,3 +18,4 @@ ibizagirl-complete-with-secrets/
 .env.*
 *.pem
 *.key
+.vercel
