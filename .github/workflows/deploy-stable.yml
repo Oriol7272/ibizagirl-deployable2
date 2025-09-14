@@ -2,67 +2,54 @@ name: deploy-stable
 on:
   push:
     branches: [stable]
+  workflow_dispatch: {}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    env:
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      DOMAIN_A: ibizagirl.pics
-      DOMAIN_W: www.ibizagirl.pics
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Node + Vercel CLI
+        uses: actions/setup-node@v4
         with:
-          node-version: '20.11.1'
-          cache: npm
+          node-version: '20'
+      - run: npm i -g vercel@latest
 
-      - name: Check VERCEL_TOKEN
+      - name: Sanity VERCEL_TOKEN
         run: |
-          if [ -z "$VERCEL_TOKEN" ] || [ "${#VERCEL_TOKEN}" -lt 20 ]; then
-            echo "::error::VERCEL_TOKEN vacío o demasiado corto (${#VERCEL_TOKEN} chars). Define el secret en GitHub → Settings → Secrets → Actions."
+          if [ -z "${VERCEL_TOKEN:-}" ] || [ "${#VERCEL_TOKEN}" -lt 20 ]; then
+            echo "::error::VERCEL_TOKEN vacío o demasiado corto. Defínelo en GitHub → Settings → Secrets → Actions."
             exit 1
           fi
 
-      - name: Install Vercel CLI
-        run: npm i -g vercel@latest
-
-      - name: Auth & use linked project.json
+      - name: Auth (usa token) y project.json
         run: |
           mkdir -p "$HOME/.vercel"
           printf '{"token":"%s"}\n' "$VERCEL_TOKEN" > "$HOME/.vercel/auth.json"
-          test -f .vercel/project.json || { echo "::error::.vercel/project.json no existe. Ejecuta 'vercel link' en local y commitea ese archivo."; exit 1; }
-
-      - name: Pull env (production) — best effort
-        run: vercel env pull --yes --environment=production || true
-
-      - name: Install deps (if any)
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci || npm install --no-audit --no-fund
-          elif [ -f pnpm-lock.yaml ]; then
-            npm i -g pnpm && (pnpm i --frozen-lockfile || pnpm i)
-          elif [ -f yarn.lock ]; then
-            corepack enable && (yarn install --frozen-lockfile || yarn install)
-          else
-            echo "No lockfile; skipping heavy installs."
+          if [ ! -f ".vercel/project.json" ]; then
+            echo "::error::.vercel/project.json no existe. Ejecuta 'vercel link --project ibizagirl-deployable2 --scope oriols-projects-ed6b9b04' en local y súbelo."
+            exit 1
           fi
 
-      - name: Deploy to Production (cloud build)
+      - name: Deploy (cloud build)
         id: deploy
         run: |
-          URL=$(vercel deploy --prod --yes | awk '/https:\/\/.*\.vercel\.app/ {print $1; exit}')
-          [ -n "$URL" ] || { echo "::error::No obtuve URL de deploy"; exit 1; }
+          URL=$(vercel deploy --prod --yes | awk '/https:\/\/[^ ]+\.vercel\.app/ {print $1; exit}')
+          if [ -z "$URL" ]; then
+            echo "::error::No obtuve URL de deploy"
+            exit 1
+          fi
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Deploy URL: $URL"
 
-      - name: Alias domains (best-effort)
+      - name: Alias (best-effort)
         if: steps.deploy.outputs.url != ''
         run: |
-          vercel alias set "${{ steps.deploy.outputs.url }}" "$DOMAIN_A" || true
-          vercel alias set "${{ steps.deploy.outputs.url }}" "$DOMAIN_W" || true
+          vercel alias set "${{ steps.deploy.outputs.url }}" ibizagirl.pics || true
+          vercel alias set "${{ steps.deploy.outputs.url }}" www.ibizagirl.pics || true
 
       - name: Tag release
         env:
