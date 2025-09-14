@@ -10,7 +10,6 @@ jobs:
     permissions:
       contents: write
     env:
-      # <- AQUÍ INYECTAMOS EL SECRET AL ENTORNO DEL JOB
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
     steps:
@@ -30,26 +29,35 @@ jobs:
             exit 1
           fi
 
-      - name: Auth (usa token) y project.json
+      - name: Whoami (con token)
         run: |
-          mkdir -p "$HOME/.vercel"
-          printf '{"token":"%s"}\n' "$VERCEL_TOKEN" > "$HOME/.vercel/auth.json"
+          U=$(vercel whoami --token "$VERCEL_TOKEN" 2>/dev/null | tr -d '\r')
+          echo "whoami=$U"
+          [ -n "$U" ] || { echo "::error::El token no autenticó contra Vercel (whoami vacío)."; exit 1; }
+
+      - name: Comprobar .vercel/project.json
+        run: |
           if [ ! -f ".vercel/project.json" ]; then
             echo "::error::.vercel/project.json no existe. Ejecuta en local:
             vercel link --yes --project \"ibizagirl-deployable2\" --scope \"oriols-projects-ed6b9b04\"
             y sube el archivo."
             exit 1
           fi
+          echo "OK: .vercel/project.json presente"
 
       - name: Pull env (no bloqueante)
         run: vercel env pull --yes --environment=production --token "$VERCEL_TOKEN" || true
 
-      - name: Deploy (cloud build)
+      - name: Deploy (cloud build + debug)
         id: deploy
         run: |
-          URL=$(vercel deploy --prod --yes --token "$VERCEL_TOKEN" \
-               | awk '/https:\/\/[^ ]+\.vercel\.app/ {print $1; exit}')
+          set -o pipefail
+          OUT=$(vercel deploy --prod --yes --token "$VERCEL_TOKEN" --debug | tee /tmp/vercel.out)
+          URL=$(echo "$OUT" | awk '/https:\/\/[^ ]+\.vercel\.app/ {print $1; exit}')
           if [ -z "$URL" ]; then
+            echo "::group::Vercel raw output"
+            tail -n +1 /tmp/vercel.out || true
+            echo "::endgroup::"
             echo "::error::No obtuve URL de deploy"
             exit 1
           fi
