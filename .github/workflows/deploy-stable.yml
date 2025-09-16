@@ -1,8 +1,8 @@
-name: deploy-stable
 on:
   push:
-    branches: [stable]
-  workflow_dispatch: {}
+    branches:
+      - stable
+  workflow_dispatch:
 
 jobs:
   deploy:
